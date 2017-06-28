@@ -1,0 +1,3 @@
+routes.add("/#(url_model_name)", #(first_upper_model_name)Controller.class);
+
+activeRecordPlugin.addMapping("table_#(lower_model_name)", "#(lower_model_name)_id", #(first_upper_model_name).class);

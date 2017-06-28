@@ -1,0 +1,56 @@
+package com.nowui.chuangshi.model;
+
+import com.nowui.chuangshi.constant.Column;
+import com.nowui.chuangshi.type.ColumnType;
+
+public class #(first_upper_model_name) extends Model<#(first_upper_model_name)> {
+
+    #for(column : columnList)
+    #if(column.data_type == "TEXT")
+    @Column(type = ColumnType.VARCHAR, length = #(column.character_maximum_length), comment = "#(column.column_comment)")
+    #else
+    @Column(type = ColumnType.#(column.data_type), length = #(column.character_maximum_length), comment = "#(column.column_comment)")
+    #end
+    public static final String #(column.upper_column_name) = "#(column.column_name)";
+
+    #end
+    #for(column : columnList)
+    #if(column.data_type == "TINYINT")
+    public Boolean get#(column.first_column_name)() {
+        return getBoolean(#(column.upper_column_name));
+    }
+
+    public void set#(column.first_column_name)(Boolean #(column.column_name)) {
+        set(#(column.upper_column_name), #(column.column_name));
+    }
+
+    #elseif(column.data_type == "INT")
+    public Integer get#(column.first_column_name)() {
+        return getInt(#(column.upper_column_name));
+    }
+
+    public void set#(column.first_column_name)(Integer #(column.column_name)) {
+        set(#(column.upper_column_name), #(column.column_name));
+    }
+
+    #elseif(column.data_type == "INT")
+    public BigDecimal get#(column.first_column_name)() {
+        return getBigDecimal(#(column.upper_column_name));
+    }
+
+    public void set#(column.first_column_name)(BigDecimal #(column.column_name)) {
+        set(#(column.upper_column_name), #(column.column_name));
+    }
+
+    #else
+    public String get#(column.first_column_name)() {
+        return getStr(#(column.upper_column_name));
+    }
+
+    public void set#(column.first_column_name)(String #(column.column_name)) {
+        set(#(column.upper_column_name), #(column.column_name));
+    }
+
+    #end
+    #end
+}
