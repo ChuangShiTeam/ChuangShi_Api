@@ -29,6 +29,7 @@ public class WebConfig extends JFinalConfig {
     }
 
     public void configRoute(Routes routes) {
+        routes.add("/admin", AdminController.class);
         routes.add("/code", CodeController.class);
         routes.add("/http", HttpController.class);
         routes.add("/sql", SqlController.class);

@@ -50,7 +50,7 @@ class #(first_upper_model_name)Detail extends Component {
         });
 
         http.request({
-            url: '/#(url_model_name)/system/find',
+            url: '/#(url_model_name)/' + constant.action + '/find',
             data: {
                 #(column_key): this.state.#(column_key)
             },
@@ -91,7 +91,7 @@ class #(first_upper_model_name)Detail extends Component {
             });
 
             http.request({
-                url: '/#(url_model_name)/system/' + this.state.action,
+                url: '/#(url_model_name)/' + constant.action + '/' + this.state.action,
                 data: values,
                 success: function (data) {
                     message.success(constant.success);

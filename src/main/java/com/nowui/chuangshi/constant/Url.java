@@ -2,6 +2,8 @@ package com.nowui.chuangshi.constant;
 
 public class Url {
 
+    public static final String ADMIN_LOGIN = "/admin/login";
+
     public static final String CODE_SYSTEM_LIST = "/code/system/list";
     public static final String CODE_SYSTEM_SAVE = "/code/system/save";
 
@@ -119,7 +121,7 @@ public class Url {
     public static final String USER_ADMIN_DELETE = "/user/admin/delete";
     public static final String USER_SYSTEM_LIST = "/user/system/list";
     public static final String USER_SYSTEM_FIND = "/user/system/find";
-    public static final String USER_SYSTEM_SAVE = "/user/system/save";
+    public static final String USER_SYSTEM_ADMIN_SAVE = "/user/system/admin/save";
     public static final String USER_SYSTEM_UPDATE = "/user/system/update";
     public static final String USER_SYSTEM_DELETE = "/user/system/delete";
 

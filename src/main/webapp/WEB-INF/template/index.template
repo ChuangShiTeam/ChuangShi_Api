@@ -38,7 +38,7 @@ class #(first_upper_model_name)Index extends Component {
 
     handleLoadApp() {
         http.request({
-            url: '/app/system/all/list',
+            url: '/app/' + constant.action + '/all/list',
             data: {},
             success: function (data) {
                 this.props.dispatch({
@@ -81,7 +81,7 @@ class #(first_upper_model_name)Index extends Component {
         });
 
         http.request({
-            url: '/#(url_model_name)/system/list',
+            url: '/#(url_model_name)/' + constant.action + '/list',
             data: {
                 app_id: this.props.#(lower_model_name).app_id,
                 page_index: this.props.#(lower_model_name).page_index,
@@ -151,7 +151,7 @@ class #(first_upper_model_name)Index extends Component {
         });
 
         http.request({
-            url: '/#(url_model_name)/system/delete',
+            url: '/#(url_model_name)/' + constant.action + '/delete',
             data: {
                 #(column_key): #(column_key),
                 system_version: system_version

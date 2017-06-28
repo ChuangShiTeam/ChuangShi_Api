@@ -6,6 +6,7 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.UserService;
+import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
 
@@ -207,7 +208,7 @@ public class UserController extends Controller {
         List<User> resultList = userService.listByOrApp_idAndLimit(model.getApp_id(), getM(), getN(), request_app_id, request_http_id, request_user_id);
 
         for (User result : resultList) {
-            result.keep(User.USER_ID, User.SYSTEM_VERSION);
+            result.keep(User.USER_ID, User.USER_NAME, User.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -225,29 +226,27 @@ public class UserController extends Controller {
 
         User user = userService.findByUser_id(model.getUser_id(), request_app_id, request_http_id, request_user_id);
 
-        user.keep(User.USER_ID, User.SYSTEM_VERSION);
+        user.keep(User.USER_ID, User.ORGANIZATION_ID, User.ROLE_ID, User.USER_LEVEL_ID, User.USER_TYPE, User.USER_ACCOUNT, User.USER_PHONE, User.USER_EMAIL, User.USER_PASSWORD, User.USER_NAME, User.USER_AVATAR, User.WECHAT_OPEN_ID, User.WECHAT_UNION_ID, User.SYSTEM_VERSION);
 
         renderSuccessJson(user);
     }
 
-    @ActionKey(Url.USER_SYSTEM_SAVE)
-    public void systemSave() {
-//        validateRequest_app_id();
-//        validate(User.APP_ID, User.ORGANIZATION_ID, User.ROLE_ID, User.USER_LEVEL_ID, User.USER_TYPE, User.USER_ACCOUNT, User.USER_PHONE, User.USER_EMAIL, User.USER_PASSWORD, User.USER_NAME, User.USER_AVATAR, User.WECHAT_OPEN_ID, User.WECHAT_UNION_ID);
-//
-//        authenticateRequest_app_idAndRequest_user_id();
-//
-//        User model = getModel(User.class);
-//        String user_id = Util.getRandomUUID();
-//        String request_app_id = getRequest_app_id();
-//        String request_http_id = getRequest_http_id();
-//        String request_user_id = getRequest_user_id();
-//
-//        Boolean result = userService.save(user_id, model.getApp_id(), model.getOrganization_id(), model.getRole_id(), model.getUser_level_id(), model.getUser_type(), model.getUser_account(), model.getUser_phone(), model.getUser_email(), model.getUser_password(), model.getUser_name(), model.getUser_avatar(), model.getWechat_open_id(), model.getWechat_union_id(), request_user_id, request_app_id, request_http_id, request_user_id);
-//
-//        renderSuccessJson(result);
+    @ActionKey(Url.USER_SYSTEM_ADMIN_SAVE)
+    public void systemAdminSave() {
+        validateRequest_app_id();
+        validate(User.APP_ID, User.USER_TYPE, User.USER_ACCOUNT, User.USER_PASSWORD, User.USER_NAME);
 
-        renderSuccessJson();
+        authenticateRequest_app_idAndRequest_user_id();
+
+        User model = getModel(User.class);
+        String user_id = Util.getRandomUUID();
+        String request_app_id = getRequest_app_id();
+        String request_http_id = getRequest_http_id();
+        String request_user_id = getRequest_user_id();
+
+        Boolean result = userService.saveByUser_idAndApp_idAndUser_typeAndUser_accountAndUser_passwordAndUser_name(user_id, model.getApp_id(), model.getUser_type(), model.getUser_account(), model.getUser_password(), model.getUser_name(), request_user_id, request_app_id, request_http_id, request_user_id);
+
+        renderSuccessJson(result);
     }
 
     @ActionKey(Url.USER_SYSTEM_UPDATE)
