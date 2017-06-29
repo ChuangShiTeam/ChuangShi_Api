@@ -22,6 +22,8 @@ public class FeijiuRecommendProductController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         List<FeijiuRecommendProduct> resultList = feijiuRecommendProductService.listByApp_id(request_app_id, request_app_id, request_http_id, request_user_id);
 
         for (FeijiuRecommendProduct result : resultList) {
@@ -41,9 +43,10 @@ public class FeijiuRecommendProductController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
 
-        authenticateRequest_app_idAndRequest_user_id();
         authenticateApp_id(feijiu_recommend_product.getApp_id());
         authenticateSystem_create_user_id(feijiu_recommend_product.getSystem_create_user_id());
 
@@ -57,13 +60,13 @@ public class FeijiuRecommendProductController extends Controller {
         validateRequest_app_id();
         validate(FeijiuRecommendProduct.PRODUCT_NAME, FeijiuRecommendProduct.PRODUCT_IMAGE, FeijiuRecommendProduct.PRODUCT_CONTENT);
 
-        authenticateRequest_app_idAndRequest_user_id();
-
         FeijiuRecommendProduct model = getModel(FeijiuRecommendProduct.class);
         String product_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         Boolean result = feijiuRecommendProductService.save(product_id, request_app_id, model.getProduct_name(), model.getProduct_image(), model.getProduct_content(), request_user_id, request_app_id, request_http_id, request_user_id);
 
@@ -80,8 +83,10 @@ public class FeijiuRecommendProductController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
         authenticateRequest_app_idAndRequest_user_id();
+
+        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(feijiu_recommend_product.getApp_id());
         authenticateSystem_create_user_id(feijiu_recommend_product.getSystem_create_user_id());
 
@@ -100,7 +105,10 @@ public class FeijiuRecommendProductController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(feijiu_recommend_product.getApp_id());
         authenticateSystem_create_user_id(feijiu_recommend_product.getSystem_create_user_id());
 
@@ -117,6 +125,8 @@ public class FeijiuRecommendProductController extends Controller {
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         Integer total = feijiuRecommendProductService.countByApp_id(request_app_id, request_app_id, request_http_id, request_user_id);
         List<FeijiuRecommendProduct> resultList = feijiuRecommendProductService.listByApp_idAndLimit(request_app_id, getM(), getN(), request_app_id, request_http_id, request_user_id);
@@ -138,9 +148,10 @@ public class FeijiuRecommendProductController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
 
-        authenticateRequest_app_idAndRequest_user_id();
         authenticateApp_id(feijiu_recommend_product.getApp_id());
 
         feijiu_recommend_product.keep(FeijiuRecommendProduct.PRODUCT_ID, FeijiuRecommendProduct.PRODUCT_NAME, FeijiuRecommendProduct.PRODUCT_IMAGE, FeijiuRecommendProduct.PRODUCT_CONTENT, FeijiuRecommendProduct.SYSTEM_VERSION);
@@ -163,8 +174,10 @@ public class FeijiuRecommendProductController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
         authenticateRequest_app_idAndRequest_user_id();
+
+        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(feijiu_recommend_product.getApp_id());
 
         Boolean result = feijiuRecommendProductService.updateValidateSystem_version(model.getProduct_id(), model.getProduct_name(), model.getProduct_image(), model.getProduct_content(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
@@ -181,6 +194,8 @@ public class FeijiuRecommendProductController extends Controller {
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
         authenticateApp_id(feijiu_recommend_product.getApp_id());

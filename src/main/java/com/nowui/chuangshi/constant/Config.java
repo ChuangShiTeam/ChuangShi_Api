@@ -15,7 +15,7 @@ public class Config {
 
     static {
         PropKit.clear();
-        PropKit.use("Config.properties");
+        PropKit.use("config.properties");
 
         private_key = PropKit.get("private_key");
         driver_class = PropKit.get("driver_class");

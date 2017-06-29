@@ -32,8 +32,8 @@
     WHERE system_status = 1
     AND app_id = #p(app_id)
     #if(prize_name)
-      #set(prize_name = "%" + prize_name + "%")
-      AND prize_name LIKE #p(prize_name)
+    #set(prize_name = "%" + prize_name + "%")
+    AND prize_name LIKE #p(prize_name)
     #end
     ORDER BY prize_sort ASC, system_create_time DESC
     LIMIT #p(m), #p(n)
@@ -54,7 +54,7 @@
     FROM table_guangqi_prize
     WHERE system_status = 1
     #if(app_id)
-      AND app_id = #p(app_id)
+    AND app_id = #p(app_id)
     #end
     ORDER BY prize_sort ASC, system_create_time DESC
     LIMIT #p(m), #p(n)

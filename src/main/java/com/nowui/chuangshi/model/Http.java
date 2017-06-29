@@ -23,7 +23,7 @@ public class Http extends Model<Http> {
     @Column(type = ColumnType.LONGTEXT, length = 0, comment = "请求返回")
     public static final String HTTP_RESPONSE = "http_response";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "授权编号")
+    @Column(type = ColumnType.VARCHAR, length = 120, comment = "授权编号")
     public static final String HTTP_TOKEN = "http_token";
 
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "请求平台")

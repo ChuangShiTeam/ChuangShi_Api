@@ -1,16 +1,24 @@
 #namespace("app")
 
-  #sql("countByApp_id")
+  #sql("countByApp_idOrLikeApp_name")
     SELECT COUNT(*) FROM table_app
     WHERE system_status = 1
     AND app_id = #p(app_id)
+    #if(app_name)
+    #set(app_name = "%" + app_name + "%")
+    AND app_name LIKE #p(app_name)
+    #end
   #end
 
-  #sql("countByOrApp_id")
+  #sql("countByOrApp_idOrLikeApp_name")
     SELECT COUNT(*) FROM table_app
     WHERE system_status = 1
     #if(app_id)
     AND app_id = #p(app_id)
+    #end
+    #if(app_name)
+    #set(app_name = "%" + app_name + "%")
+    AND app_name LIKE #p(app_name)
     #end
   #end
 
@@ -25,23 +33,31 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByApp_idAndLimit")
+  #sql("listByApp_idOrLikeApp_nameAndLimit")
     SELECT
     app_id
     FROM table_app
     WHERE system_status = 1
     AND app_id = #p(app_id)
+    #if(app_name)
+    #set(app_name = "%" + app_name + "%")
+    AND app_name LIKE #p(app_name)
+    #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idAndLimit")
+  #sql("listByOrApp_idOrLikeApp_nameAndLimit")
     SELECT
     app_id
     FROM table_app
     WHERE system_status = 1
     #if(app_id)
-      AND app_id = #p(app_id)
+    AND app_id = #p(app_id)
+    #end
+    #if(app_name)
+    #set(app_name = "%" + app_name + "%")
+    AND app_name LIKE #p(app_name)
     #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)

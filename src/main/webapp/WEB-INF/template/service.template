@@ -10,24 +10,24 @@ public class #(first_upper_model_name)Service extends Service {
 
     private #(first_upper_model_name)Cache #(first_lower_model_name)Cache = new #(first_upper_model_name)Cache();
 
-    public Integer countByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
-        return #(first_lower_model_name)Cache.countByApp_id(app_id, request_app_id, request_http_id, request_user_id);
+    public Integer countByApp_idOrLike#(first_upper_model_name)_name(String app_id, String #(lower_model_name)_name, String request_app_id, String request_http_id, String request_user_id) {
+        return #(first_lower_model_name)Cache.countByApp_idOrLike#(first_upper_model_name)_name(app_id, #(lower_model_name)_name, request_app_id, request_http_id, request_user_id);
     }
 
-    public Integer countByOrApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
-        return #(first_lower_model_name)Cache.countByOrApp_id(app_id, request_app_id, request_http_id, request_user_id);
+    public Integer countByOrApp_idOrLike#(first_upper_model_name)_name(String app_id, String #(lower_model_name)_name, String request_app_id, String request_http_id, String request_user_id) {
+        return #(first_lower_model_name)Cache.countByOrApp_idOrLike#(first_upper_model_name)_name(app_id, #(lower_model_name)_name, request_app_id, request_http_id, request_user_id);
     }
 
     public List<#(first_upper_model_name)> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
         return #(first_lower_model_name)Cache.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n, request_app_id, request_http_id, request_user_id);
     }
 
-    public List<#(first_upper_model_name)> listByApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
-        return #(first_lower_model_name)Cache.listByApp_idAndLimit(app_id, m, n, request_app_id, request_http_id, request_user_id);
+    public List<#(first_upper_model_name)> listByApp_idOrLike#(first_upper_model_name)_nameAndLimit(String app_id, String #(lower_model_name)_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+        return #(first_lower_model_name)Cache.listByApp_idOrLike#(first_upper_model_name)_nameAndLimit(app_id, #(lower_model_name)_name, m, n, request_app_id, request_http_id, request_user_id);
     }
 
-    public List<#(first_upper_model_name)> listByOrApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
-        return #(first_lower_model_name)Cache.listByOrApp_idAndLimit(app_id, m, n, request_app_id, request_http_id, request_user_id);
+    public List<#(first_upper_model_name)> listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit(String app_id, String #(lower_model_name)_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+        return #(first_lower_model_name)Cache.listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit(app_id, #(lower_model_name)_name, m, n, request_app_id, request_http_id, request_user_id);
     }
 
     public #(first_upper_model_name) findBy#(first_upper_column_key)(String #(column_key), String request_app_id, String request_http_id, String request_user_id) {

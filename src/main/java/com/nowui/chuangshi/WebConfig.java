@@ -36,6 +36,7 @@ public class WebConfig extends JFinalConfig {
         routes.add("/exception", ExceptionController.class);
         routes.add("/app", AppController.class);
         routes.add("/category", CategoryController.class);
+        routes.add("/menu", MenuController.class);
         routes.add("/api", ApiController.class);
         routes.add("/user", UserController.class);
         routes.add("/file", FileController.class);

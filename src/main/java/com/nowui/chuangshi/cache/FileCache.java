@@ -22,6 +22,14 @@ public class FileCache extends Cache {
         return fileDao.countByOrApp_id(app_id, request_app_id, request_http_id, request_user_id);
     }
 
+    public Integer countByApp_idAndFile_typeAndSystem_create_user_id(String app_id, String file_type, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+        return fileDao.countByApp_idAndFile_typeAndSystem_create_user_id(app_id, file_type, system_create_user_id, request_app_id, request_http_id, request_user_id);
+    }
+
+    public Integer countByOrApp_idAndFile_type(String app_id, String file_type, String request_app_id, String request_http_id, String request_user_id) {
+        return fileDao.countByOrApp_idAndFile_type(app_id, file_type, request_app_id, request_http_id, request_user_id);
+    }
+
     public List<File> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
         List<File> fileList = fileDao.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n, request_app_id, request_http_id, request_user_id);
 
@@ -44,6 +52,26 @@ public class FileCache extends Cache {
 
     public List<File> listByOrApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
         List<File> fileList = fileDao.listByOrApp_idAndLimit(app_id, m, n, request_app_id, request_http_id, request_user_id);
+
+        for (File file : fileList) {
+            file.put(findByFile_id(file.getFile_id(), request_app_id, request_http_id, request_user_id));
+        }
+
+        return fileList;
+    }
+
+    public List<File> listByApp_idAndFile_typeAndSystem_create_user_idAndLimit(String app_id, String file_type, String system_create_user_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+        List<File> fileList = fileDao.listByApp_idAndFile_typeAndSystem_create_user_idAndLimit(app_id, file_type, system_create_user_id, m, n, request_app_id, request_http_id, request_user_id);
+
+        for (File file : fileList) {
+            file.put(findByFile_id(file.getFile_id(), request_app_id, request_http_id, request_user_id));
+        }
+
+        return fileList;
+    }
+
+    public List<File> listByOrApp_idAndFile_typeAndLimit(String app_id, String file_type, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+        List<File> fileList = fileDao.listByOrApp_idAndFile_typeAndLimit(app_id, file_type, m, n, request_app_id, request_http_id, request_user_id);
 
         for (File file : fileList) {
             file.put(findByFile_id(file.getFile_id(), request_app_id, request_http_id, request_user_id));

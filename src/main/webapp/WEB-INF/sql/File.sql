@@ -14,6 +14,23 @@
     #end
   #end
 
+  #sql("countByApp_idAndFile_typeAndSystem_create_user_id")
+    SELECT COUNT(*) FROM table_file
+    WHERE system_status = 1
+    AND app_id = #p(app_id)
+    AND file_type = #p(file_type)
+    AND system_create_user_id = #p(system_create_user_id)
+  #end
+
+  #sql("countByOrApp_idAndFile_type")
+    SELECT COUNT(*) FROM table_file
+    WHERE system_status = 1
+    #if(app_id)
+    AND app_id = #p(app_id)
+    #end
+    AND file_type = #p(file_type)
+  #end
+
   #sql("listByApp_idAndSystem_create_timeAndLimit")
     SELECT
     file_id
@@ -41,8 +58,33 @@
     FROM table_file
     WHERE system_status = 1
     #if(app_id)
-      AND app_id = #p(app_id)
+    AND app_id = #p(app_id)
     #end
+    ORDER BY system_create_time DESC
+    LIMIT #p(m), #p(n)
+  #end
+
+  #sql("listByApp_idAndFile_typeAndSystem_create_user_idAndLimit")
+    SELECT
+    file_id
+    FROM table_file
+    WHERE system_status = 1
+    AND app_id = #p(app_id)
+    AND file_type = #p(file_type)
+    AND system_create_user_id = #p(system_create_user_id)
+    ORDER BY system_create_time DESC
+    LIMIT #p(m), #p(n)
+  #end
+
+  #sql("listByOrApp_idAndFile_typeAndLimit")
+    SELECT
+    file_id
+    FROM table_file
+    WHERE system_status = 1
+    #if(app_id)
+    AND app_id = #p(app_id)
+    #end
+    AND file_type = #p(file_type)
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
   #end

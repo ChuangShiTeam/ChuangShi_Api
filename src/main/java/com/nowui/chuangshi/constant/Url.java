@@ -2,8 +2,8 @@ package com.nowui.chuangshi.constant;
 
 public class Url {
 
-    public static final String ADMIN_LOGIN = "/admin/login";
-
+    public static final String CODE_ADMIN_LIST = "/code/admin/list";
+    public static final String CODE_ADMIN_SAVE = "/code/admin/save";
     public static final String CODE_SYSTEM_LIST = "/code/system/list";
     public static final String CODE_SYSTEM_SAVE = "/code/system/save";
 
@@ -61,6 +61,7 @@ public class Url {
     public static final String APP_UPDATE = "/app/update";
     public static final String APP_DELETE = "/app/delete";
     public static final String APP_ADMIN_LIST = "/app/admin/list";
+    public static final String APP_ADMIN_ALL_LIST = "/app/admin/all/list";
     public static final String APP_ADMIN_FIND = "/app/admin/find";
     public static final String APP_ADMIN_SAVE = "/app/admin/save";
     public static final String APP_ADMIN_UPDATE = "/app/admin/update";
@@ -79,6 +80,7 @@ public class Url {
     public static final String CATEGORY_DELETE = "/category/delete";
     public static final String CATEGORY_ADMIN_LIST = "/category/admin/list";
     public static final String CATEGORY_ADMIN_FIND = "/category/admin/find";
+    public static final String CATEGORY_ADMIN_CHILDREN_FIND = "/category/admin/children/find";
     public static final String CATEGORY_ADMIN_SAVE = "/category/admin/save";
     public static final String CATEGORY_ADMIN_UPDATE = "/category/admin/update";
     public static final String CATEGORY_ADMIN_DELETE = "/category/admin/delete";
@@ -88,9 +90,15 @@ public class Url {
     public static final String CATEGORY_SYSTEM_SAVE = "/category/system/save";
     public static final String CATEGORY_SYSTEM_UPDATE = "/category/system/update";
     public static final String CATEGORY_SYSTEM_DELETE = "/category/system/delete";
-    public static final String CATEGORY_SYSTEM_MENU_LIST = "/category/system/menu/list";
-    public static final String CATEGORY_SYSTEM_MENU_API_SAVE = "/category/system/menu/api/save";
-    public static final String CATEGORY_SYSTEM_MENU_API_DELETE = "/category/system/menu/api/delete";
+
+    public static final String MENU_ADMIN_LIST = "/menu/admin/list";
+    public static final String MENU_API_ADMIN_LIST = "/menu/api/admin/list";
+    public static final String MENU_API_ADMIN_SAVE = "/menu/api/admin/save";
+    public static final String MENU_API_ADMIN_DELETE = "/menu/api/admin/delete";
+    public static final String MENU_SYSTEM_LIST = "/menu/system/list";
+    public static final String MENU_API_SYSTEM_LIST = "/menu/api/system/list";
+    public static final String MENU_API_SYSTEM_SAVE = "/menu/api/system/save";
+    public static final String MENU_API_SYSTEM_DELETE = "/menu/api/system/delete";
 
     public static final String API_LIST = "/api/list";
     public static final String API_FIND = "/api/find";
@@ -103,7 +111,6 @@ public class Url {
     public static final String API_ADMIN_UPDATE = "/api/admin/update";
     public static final String API_ADMIN_DELETE = "/api/admin/delete";
     public static final String API_SYSTEM_LIST = "/api/system/list";
-    public static final String API_SYSTEM_UNUSED_LIST = "/api/system/unused/list";
     public static final String API_SYSTEM_FIND = "/api/system/find";
     public static final String API_SYSTEM_SAVE = "/api/system/save";
     public static final String API_SYSTEM_UPDATE = "/api/system/update";
@@ -121,21 +128,28 @@ public class Url {
     public static final String USER_ADMIN_DELETE = "/user/admin/delete";
     public static final String USER_SYSTEM_LIST = "/user/system/list";
     public static final String USER_SYSTEM_FIND = "/user/system/find";
-    public static final String USER_SYSTEM_ADMIN_SAVE = "/user/system/admin/save";
     public static final String USER_SYSTEM_UPDATE = "/user/system/update";
     public static final String USER_SYSTEM_DELETE = "/user/system/delete";
+
+    public static final String ADMIN_LOGIN = "/admin/login";
+    public static final String ADMIN_ADMIN_SAVE = "/admin/admin/save";
+    public static final String ADMIN_SYSTEM_SAVE = "/admin/system/save";
 
     public static final String FILE_LIST = "/file/list";
     public static final String FILE_FIND = "/file/find";
     public static final String FILE_SAVE = "/file/save";
     public static final String FILE_UPDATE = "/file/update";
     public static final String FILE_DELETE = "/file/delete";
+    public static final String FILE_UPLOAD = "/file/upload";
     public static final String FILE_ADMIN_LIST = "/file/admin/list";
+    public static final String FILE_ADMIN_IMAGE_LIST = "/file/admin/image/list";
     public static final String FILE_ADMIN_FIND = "/file/admin/find";
     public static final String FILE_ADMIN_SAVE = "/file/admin/save";
     public static final String FILE_ADMIN_UPDATE = "/file/admin/update";
     public static final String FILE_ADMIN_DELETE = "/file/admin/delete";
+    public static final String FILE_ADMIN_UPLOAD = "/file/admin/upload";
     public static final String FILE_SYSTEM_LIST = "/file/system/list";
+    public static final String FILE_SYSTEM_IMAGE_LIST = "/file/system/image/list";
     public static final String FILE_SYSTEM_FIND = "/file/system/find";
     public static final String FILE_SYSTEM_SAVE = "/file/system/save";
     public static final String FILE_SYSTEM_UPDATE = "/file/system/update";

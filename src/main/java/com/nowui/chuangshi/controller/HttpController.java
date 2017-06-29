@@ -22,6 +22,8 @@ public class HttpController extends Controller {
         String request_app_id = getRequest_app_id();
         JSONObject jsonObject = getParameterJSONObject();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         List<Http> resultList = httpService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
 
         for (Http result : resultList) {
@@ -38,9 +40,10 @@ public class HttpController extends Controller {
 
         Http model = getModel(Http.class);
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         Http http = httpService.findByHttp_id(model.getHttp_id());
 
-        authenticateRequest_app_idAndRequest_user_id();
         authenticateApp_id(http.getApp_id());
         authenticateSystem_create_user_id(http.getSystem_create_user_id());
 
@@ -54,12 +57,12 @@ public class HttpController extends Controller {
         validateRequest_app_id();
         validate(Http.HTTP_URL, Http.HTTP_CODE, Http.HTTP_REQUEST, Http.HTTP_RESPONSE, Http.HTTP_TOKEN, Http.HTTP_PLATFORM, Http.HTTP_VERSION, Http.HTTP_IP_ADDRESS, Http.HTTP_RUN_TIME);
 
-        authenticateRequest_app_idAndRequest_user_id();
-
         Http model = getModel(Http.class);
         String http_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         Boolean result = httpService.save(http_id, request_app_id, model.getHttp_url(), model.getHttp_code(), model.getHttp_request(), model.getHttp_response(), model.getHttp_token(), model.getHttp_platform(), model.getHttp_version(), model.getHttp_ip_address(), model.getHttp_run_time(), request_user_id);
 
@@ -74,8 +77,10 @@ public class HttpController extends Controller {
         Http model = getModel(Http.class);
         String request_user_id = getRequest_user_id();
 
-        Http http = httpService.findByHttp_id(model.getHttp_id());
         authenticateRequest_app_idAndRequest_user_id();
+
+        Http http = httpService.findByHttp_id(model.getHttp_id());
+
         authenticateApp_id(http.getApp_id());
         authenticateSystem_create_user_id(http.getSystem_create_user_id());
 
@@ -92,6 +97,8 @@ public class HttpController extends Controller {
         Http model = getModel(Http.class);
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         Http http = httpService.findByHttp_id(model.getHttp_id());
         authenticateApp_id(http.getApp_id());
         authenticateSystem_create_user_id(http.getSystem_create_user_id());
@@ -107,6 +114,8 @@ public class HttpController extends Controller {
         validate(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         String request_app_id = getRequest_app_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         Integer total = httpService.countByApp_id(request_app_id);
         List<Http> resultList = httpService.listByApp_idAndLimit(request_app_id, getM(), getN());
@@ -125,9 +134,10 @@ public class HttpController extends Controller {
 
         Http model = getModel(Http.class);
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         Http http = httpService.findByHttp_id(model.getHttp_id());
 
-        authenticateRequest_app_idAndRequest_user_id();
         authenticateApp_id(http.getApp_id());
 
         http.keep(Http.HTTP_ID, Http.SYSTEM_VERSION);
@@ -148,8 +158,10 @@ public class HttpController extends Controller {
         Http model = getModel(Http.class);
         String request_user_id = getRequest_user_id();
 
-        Http http = httpService.findByHttp_id(model.getHttp_id());
         authenticateRequest_app_idAndRequest_user_id();
+
+        Http http = httpService.findByHttp_id(model.getHttp_id());
+
         authenticateApp_id(http.getApp_id());
 
         Boolean result = httpService.updateValidateSystem_version(model.getHttp_id(), model.getHttp_url(), model.getHttp_code(), model.getHttp_request(), model.getHttp_response(), model.getHttp_token(), model.getHttp_platform(), model.getHttp_version(), model.getHttp_ip_address(), model.getHttp_run_time(), request_user_id, model.getSystem_version());
@@ -164,6 +176,8 @@ public class HttpController extends Controller {
 
         Http model = getModel(Http.class);
         String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         Http http = httpService.findByHttp_id(model.getHttp_id());
         authenticateApp_id(http.getApp_id());

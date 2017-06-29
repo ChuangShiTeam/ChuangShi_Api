@@ -1,29 +1,48 @@
 #namespace("category")
 
-  #sql("countByApp_id")
+  #sql("countByApp_idAndParent_idOrLikeCategory_nameOrCategory_type")
     SELECT COUNT(*) FROM table_category
     WHERE system_status = 1
     AND app_id = #p(app_id)
-  #end
-
-  #sql("countByOrApp_id")
-    SELECT COUNT(*) FROM table_category
-    WHERE system_status = 1
-    #if(app_id)
-    AND app_id = #p(app_id)
+    AND parent_id = #p(parent_id)
+    #if(category_name)
+    #set(category_name = "%" + category_name + "%")
+    AND category_name LIKE #p(category_name)
+    #end
+    #if(category_type)
+    AND category_type = #p(category_type)
     #end
   #end
 
-  #sql("countByOrApp_idAndParent_id")
+  #sql("countByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_type")
     SELECT COUNT(*) FROM table_category
     WHERE system_status = 1
     #if(app_id)
     AND app_id = #p(app_id)
     #end
     AND parent_id = #p(parent_id)
+    #if(category_name)
+    #set(category_name = "%" + category_name + "%")
+    AND category_name LIKE #p(category_name)
+    #end
+    #if(category_type)
+    AND category_type = #p(category_type)
+    #end
   #end
 
-  #sql("countByOrApp_idAndNotParent_idAndCategory_nameAndCategory_type")
+  #sql("countByApp_idAndNotParent_idOrLikeCategory_nameAndCategory_type")
+    SELECT COUNT(*) FROM table_category
+    WHERE system_status = 1
+    AND app_id = #p(app_id)
+    AND parent_id != #p(parent_id)
+    #if(category_name)
+    #set(category_name = "%" + category_name + "%")
+    AND category_name LIKE #p(category_name)
+    #end
+    AND category_type = #p(category_type)
+  #end
+
+  #sql("countByOrApp_idAndNotParent_idOrLikeCategory_nameAndCategory_type")
     SELECT COUNT(*) FROM table_category
     WHERE system_status = 1
     #if(app_id)
@@ -31,8 +50,8 @@
     #end
     AND parent_id != #p(parent_id)
     #if(category_name)
-      #set(category_name = "%" + category_name + "%")
-      AND category_name LIKE #p(category_name)
+    #set(category_name = "%" + category_name + "%")
+    AND category_name LIKE #p(category_name)
     #end
     AND category_type = #p(category_type)
   #end
@@ -48,41 +67,72 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByApp_idAndLimit")
+  #sql("listByApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit")
     SELECT
     category_id
     FROM table_category
     WHERE system_status = 1
     AND app_id = #p(app_id)
+    AND parent_id = #p(parent_id)
+    #if(category_name)
+    #set(category_name = "%" + category_name + "%")
+    AND category_name LIKE #p(category_name)
+    #end
+    #if(category_type)
+    AND category_type = #p(category_type)
+    #end
     ORDER BY category_sort ASC, system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idAndParent_idAndLimit")
+  #sql("listByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit")
     SELECT
     category_id
     FROM table_category
     WHERE system_status = 1
     #if(app_id)
-      AND app_id = #p(app_id)
+    AND app_id = #p(app_id)
     #end
     AND parent_id = #p(parent_id)
+    #if(category_name)
+    #set(category_name = "%" + category_name + "%")
+    AND category_name LIKE #p(category_name)
+    #end
+    #if(category_type)
+    AND category_type = #p(category_type)
+    #end
     ORDER BY category_sort ASC, system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idAndNotParent_idAndCategory_nameAndCategory_typeAndLimit")
+  #sql("listByApp_idAndNotParent_idOrLikeCategory_nameAndCategory_typeAndLimit")
+    SELECT
+    category_id
+    FROM table_category
+    WHERE system_status = 1
+    AND app_id = #p(app_id)
+    AND parent_id != #p(parent_id)
+    #if(category_name)
+    #set(category_name = "%" + category_name + "%")
+    AND category_name LIKE #p(category_name)
+    #end
+    AND category_type = #p(category_type)
+    ORDER BY category_sort ASC, system_create_time DESC
+    LIMIT #p(m), #p(n)
+  #end
+
+  #sql("listByOrApp_idAndNotParent_idOrLikeCategory_nameAndCategory_typeAndLimit")
     SELECT
     category_id
     FROM table_category
     WHERE system_status = 1
     #if(app_id)
-      AND app_id = #p(app_id)
+    AND app_id = #p(app_id)
     #end
     AND parent_id != #p(parent_id)
     #if(category_name)
-      #set(category_name = "%" + category_name + "%")
-      AND category_name LIKE #p(category_name)
+    #set(category_name = "%" + category_name + "%")
+    AND category_name LIKE #p(category_name)
     #end
     AND category_type = #p(category_type)
     ORDER BY category_sort ASC, system_create_time DESC
@@ -95,7 +145,7 @@
     FROM table_category
     WHERE system_status = 1
     #if(app_id)
-      AND app_id = #p(app_id)
+    AND app_id = #p(app_id)
     #end
     ORDER BY category_sort ASC, system_create_time DESC
     LIMIT #p(m), #p(n)

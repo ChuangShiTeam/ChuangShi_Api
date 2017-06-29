@@ -7,12 +7,12 @@ import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.plugin.activerecord.DbKit;
+import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
+import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Http;
-import com.nowui.chuangshi.util.MQUtil;
-import com.nowui.chuangshi.util.HttpUtil;
-import com.nowui.chuangshi.util.Util;
-import com.nowui.chuangshi.util.ValidateUtil;
+import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.util.*;
 import org.apache.http.HttpStatus;
 
 import java.sql.Connection;
@@ -48,7 +48,16 @@ public class GlobalActionInterceptor implements Interceptor {
             request_app_id = controller.getRequest().getHeader(Constant.APP_ID);
             http_platform = controller.getRequest().getHeader(Constant.PLATFORM);
             http_version = controller.getRequest().getHeader(Constant.VERSION);
-            http_request = JSONObject.parseObject(HttpKit.readData(controller.getRequest()));
+            http_token = controller.getRequest().getHeader(Constant.TOKEN);
+
+            JSONObject jsonObject = JSONObject.parseObject(AesUtil.aesDecrypt(http_token, Config.private_key));
+            request_user_id = jsonObject.getString(User.USER_ID);
+
+            if (http_url.equals(Url.FILE_UPLOAD) || http_url.equals(Url.FILE_ADMIN_UPLOAD)) {
+
+            } else {
+                http_request = JSONObject.parseObject(HttpKit.readData(controller.getRequest()));
+            }
 
             if (ValidateUtil.isNull(http_request)) {
                 http_request = new JSONObject();

@@ -11,23 +11,25 @@ import java.util.List;
 
 public class #(first_upper_model_name)Dao extends Dao {
 
-    public Integer countByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByApp_idOrLike#(first_upper_model_name)_name(String app_id, String #(lower_model_name)_name, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(#(first_upper_model_name).APP_ID, app_id);
-        SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).countByApp_id", sqlMap);
+        sqlMap.put(#(first_upper_model_name).#(upper_model_name)_NAME, #(lower_model_name)_name);
+        SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).countByApp_idOrLike#(first_upper_model_name)_name", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "countByApp_id", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "countByApp_idOrLike#(first_upper_model_name)_name", sqlPara, request_user_id);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByOrApp_idOrLike#(first_upper_model_name)_name(String app_id, String #(lower_model_name)_name, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(#(first_upper_model_name).APP_ID, app_id);
-        SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).countByOrApp_id", sqlMap);
+        sqlMap.put(#(first_upper_model_name).#(upper_model_name)_NAME, #(lower_model_name)_name);
+        SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).countByOrApp_idOrLike#(first_upper_model_name)_name", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "countByOrApp_id", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "countByOrApp_idOrLike#(first_upper_model_name)_name", sqlPara, request_user_id);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
@@ -46,26 +48,28 @@ public class #(first_upper_model_name)Dao extends Dao {
         return new #(first_upper_model_name)().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<#(first_upper_model_name)> listByApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<#(first_upper_model_name)> listByApp_idOrLike#(first_upper_model_name)_nameAndLimit(String app_id, String #(lower_model_name)_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(#(first_upper_model_name).APP_ID, app_id);
+        sqlMap.put(#(first_upper_model_name).#(upper_model_name)_NAME, #(lower_model_name)_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).listByApp_idAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).listByApp_idOrLike#(first_upper_model_name)_nameAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "listByApp_idAndLimit", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "listByApp_idOrLike#(first_upper_model_name)_nameAndLimit", sqlPara, request_user_id);
 
         return new #(first_upper_model_name)().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<#(first_upper_model_name)> listByOrApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<#(first_upper_model_name)> listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit(String app_id, String #(lower_model_name)_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(#(first_upper_model_name).APP_ID, app_id);
+        sqlMap.put(#(first_upper_model_name).#(upper_model_name)_NAME, #(lower_model_name)_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).listByOrApp_idAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "listByOrApp_idAndLimit", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit", sqlPara, request_user_id);
 
         return new #(first_upper_model_name)().find(sqlPara.getSql(), sqlPara.getPara());
     }

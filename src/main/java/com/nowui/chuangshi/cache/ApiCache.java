@@ -14,12 +14,12 @@ public class ApiCache extends Cache {
 
     private ApiDao apiDao = new ApiDao();
 
-    public Integer countByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
-        return apiDao.countByApp_id(app_id, request_app_id, request_http_id, request_user_id);
+    public Integer countByApp_idOrLikeApi_name(String app_id, String api_name, String request_app_id, String request_http_id, String request_user_id) {
+        return apiDao.countByApp_idOrLikeApi_name(app_id, api_name, request_app_id, request_http_id, request_user_id);
     }
 
-    public Integer countByOrApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
-        return apiDao.countByOrApp_id(app_id, request_app_id, request_http_id, request_user_id);
+    public Integer countByOrApp_idOrLikeApi_name(String app_id, String api_name, String request_app_id, String request_http_id, String request_user_id) {
+        return apiDao.countByOrApp_idOrLikeApi_name(app_id, api_name, request_app_id, request_http_id, request_user_id);
     }
 
     public List<Api> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
@@ -32,8 +32,8 @@ public class ApiCache extends Cache {
         return apiList;
     }
 
-    public List<Api> listUnusedByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
-        List<Api> apiList = apiDao.listUnusedByApp_id(app_id, request_app_id, request_http_id, request_user_id);
+    public List<Api> listNotInMenuByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
+        List<Api> apiList = apiDao.listNotInMenuByApp_id(app_id, request_app_id, request_http_id, request_user_id);
 
         for (Api api : apiList) {
             api.put(findByApi_id(api.getApi_id(), request_app_id, request_http_id, request_user_id));
@@ -42,8 +42,8 @@ public class ApiCache extends Cache {
         return apiList;
     }
 
-    public List<Api> listByApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
-        List<Api> apiList = apiDao.listByApp_idAndLimit(app_id, m, n, request_app_id, request_http_id, request_user_id);
+    public List<Api> listByApp_idOrLikeApi_nameAndLimit(String app_id, String api_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+        List<Api> apiList = apiDao.listByApp_idOrLikeApi_nameAndLimit(app_id, api_name, m, n, request_app_id, request_http_id, request_user_id);
 
         for (Api api : apiList) {
             api.put(findByApi_id(api.getApi_id(), request_app_id, request_http_id, request_user_id));
@@ -52,8 +52,8 @@ public class ApiCache extends Cache {
         return apiList;
     }
 
-    public List<Api> listByOrApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
-        List<Api> apiList = apiDao.listByOrApp_idAndLimit(app_id, m, n, request_app_id, request_http_id, request_user_id);
+    public List<Api> listByOrApp_idOrLikeApi_nameAndLimit(String app_id, String api_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+        List<Api> apiList = apiDao.listByOrApp_idOrLikeApi_nameAndLimit(app_id, api_name, m, n, request_app_id, request_http_id, request_user_id);
 
         for (Api api : apiList) {
             api.put(findByApi_id(api.getApi_id(), request_app_id, request_http_id, request_user_id));

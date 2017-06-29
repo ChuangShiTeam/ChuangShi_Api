@@ -50,7 +50,7 @@
     FROM table_feijiu_recommend_product
     WHERE system_status = 1
     #if(app_id)
-      AND app_id = #p(app_id)
+    AND app_id = #p(app_id)
     #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)

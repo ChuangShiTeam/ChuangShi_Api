@@ -24,6 +24,8 @@ public class FeijiuRecommendCustomerController extends Controller {
         String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         List<FeijiuRecommendCustomer> resultList = feijiuRecommendCustomerService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN(), request_app_id, request_http_id, request_user_id);
 
         for (FeijiuRecommendCustomer result : resultList) {
@@ -43,9 +45,10 @@ public class FeijiuRecommendCustomerController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         FeijiuRecommendCustomer feijiu_recommend_customer = feijiuRecommendCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
 
-        authenticateRequest_app_idAndRequest_user_id();
         authenticateApp_id(feijiu_recommend_customer.getApp_id());
         authenticateSystem_create_user_id(feijiu_recommend_customer.getSystem_create_user_id());
 
@@ -59,13 +62,13 @@ public class FeijiuRecommendCustomerController extends Controller {
         validateRequest_app_id();
         validate(FeijiuRecommendCustomer.CUSTOMER_NAME, FeijiuRecommendCustomer.CUSTOMER_PHONE, FeijiuRecommendCustomer.CUSTOMER_CITY);
 
-        authenticateRequest_app_idAndRequest_user_id();
-
         FeijiuRecommendCustomer model = getModel(FeijiuRecommendCustomer.class);
         String customer_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         Boolean result = feijiuRecommendCustomerService.save(customer_id, request_app_id, model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_city(), request_user_id, request_app_id, request_http_id, request_user_id);
 
@@ -82,8 +85,10 @@ public class FeijiuRecommendCustomerController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        FeijiuRecommendCustomer feijiu_recommend_customer = feijiuRecommendCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
         authenticateRequest_app_idAndRequest_user_id();
+
+        FeijiuRecommendCustomer feijiu_recommend_customer = feijiuRecommendCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(feijiu_recommend_customer.getApp_id());
         authenticateSystem_create_user_id(feijiu_recommend_customer.getSystem_create_user_id());
 
@@ -102,7 +107,10 @@ public class FeijiuRecommendCustomerController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         FeijiuRecommendCustomer feijiu_recommend_customer = feijiuRecommendCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(feijiu_recommend_customer.getApp_id());
         authenticateSystem_create_user_id(feijiu_recommend_customer.getSystem_create_user_id());
 
@@ -120,6 +128,8 @@ public class FeijiuRecommendCustomerController extends Controller {
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         Integer total = feijiuRecommendCustomerService.countByApp_idAndCustomer_name(request_app_id, model.getCustomer_name(), request_app_id, request_http_id, request_user_id);
         List<FeijiuRecommendCustomer> resultList = feijiuRecommendCustomerService.listByApp_idAndCustomer_nameAndLimit(request_app_id, model.getCustomer_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
@@ -141,9 +151,10 @@ public class FeijiuRecommendCustomerController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         FeijiuRecommendCustomer feijiu_recommend_customer = feijiuRecommendCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
 
-        authenticateRequest_app_idAndRequest_user_id();
         authenticateApp_id(feijiu_recommend_customer.getApp_id());
 
         feijiu_recommend_customer.keep(FeijiuRecommendCustomer.CUSTOMER_ID, FeijiuRecommendCustomer.CUSTOMER_NAME, FeijiuRecommendCustomer.CUSTOMER_PHONE, FeijiuRecommendCustomer.CUSTOMER_CITY, FeijiuRecommendCustomer.SYSTEM_VERSION);
@@ -166,8 +177,10 @@ public class FeijiuRecommendCustomerController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        FeijiuRecommendCustomer feijiu_recommend_customer = feijiuRecommendCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
         authenticateRequest_app_idAndRequest_user_id();
+
+        FeijiuRecommendCustomer feijiu_recommend_customer = feijiuRecommendCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(feijiu_recommend_customer.getApp_id());
 
         Boolean result = feijiuRecommendCustomerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_city(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
@@ -185,7 +198,10 @@ public class FeijiuRecommendCustomerController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         FeijiuRecommendCustomer feijiu_recommend_customer = feijiuRecommendCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(feijiu_recommend_customer.getApp_id());
 
         Boolean result = feijiuRecommendCustomerService.deleteByCustomer_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
@@ -234,8 +250,6 @@ public class FeijiuRecommendCustomerController extends Controller {
     public void systemSave() {
         validateRequest_app_id();
         validate(FeijiuRecommendCustomer.APP_ID, FeijiuRecommendCustomer.CUSTOMER_NAME, FeijiuRecommendCustomer.CUSTOMER_PHONE, FeijiuRecommendCustomer.CUSTOMER_CITY);
-
-        authenticateRequest_app_idAndRequest_user_id();
 
         FeijiuRecommendCustomer model = getModel(FeijiuRecommendCustomer.class);
         String customer_id = Util.getRandomUUID();

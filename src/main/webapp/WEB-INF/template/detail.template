@@ -55,6 +55,12 @@ class #(first_upper_model_name)Detail extends Component {
                 #(column_key): this.state.#(column_key)
             },
             success: function (data) {
+                if (constant.action === 'system') {
+                    this.props.form.setFieldsValue({
+                        app_id: data.app_id
+                    });
+                }
+
                 this.props.form.setFieldsValue({
                     #for(column : columnList)
                     #if(column.column_name == column_key || column.column_name == "app_id")
@@ -139,35 +145,40 @@ class #(first_upper_model_name)Detail extends Component {
             >
                 <Spin spinning={this.state.is_load}>
                     <form>
-                        <Row>
-                            <Col span={8}>
-                                <FormItem hasFeedback {...{
-                                    labelCol: {span: 6},
-                                    wrapperCol: {span: 18}
-                                }} className="content-search-item" label="应用名称">
-                                    {
-                                        getFieldDecorator('app_id', {
-                                            rules: [{
-                                                required: true,
-                                                message: constant.required
-                                            }],
-                                            initialValue: ''
-                                        })(
-                                            <Select allowClear placeholder="请选择应用">
-                                                {
-                                                    this.props.api.app_list.map(function (item) {
-                                                        return (
-                                                            <Option key={item.app_id}
-                                                                    value={item.app_id}>{item.app_name}</Option>
-                                                        )
-                                                    })
-                                                }
-                                            </Select>
-                                        )
-                                    }
-                                </FormItem>
-                            </Col>
-                        </Row>
+                        {
+                            constant.action === 'system' ?
+                                <Row>
+                                    <Col span={8}>
+                                        <FormItem hasFeedback {...{
+                                            labelCol: {span: 6},
+                                            wrapperCol: {span: 18}
+                                        }} className="content-search-item" label="应用名称">
+                                            {
+                                                getFieldDecorator('app_id', {
+                                                    rules: [{
+                                                        required: true,
+                                                        message: constant.required
+                                                    }],
+                                                    initialValue: ''
+                                                })(
+                                                    <Select allowClear placeholder="请选择应用">
+                                                        {
+                                                            this.props.#(lower_model_name).app_list.map(function (item) {
+                                                                return (
+                                                                    <Option key={item.app_id}
+                                                                            value={item.app_id}>{item.app_name}</Option>
+                                                                )
+                                                            })
+                                                        }
+                                                    </Select>
+                                                )
+                                            }
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                :
+                                ''
+                        }
                         #for(column : columnList)
                         #if(column.column_name == column_key || column.column_name == "app_id")
                         #else

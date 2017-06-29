@@ -33,6 +33,31 @@ public class FileDao extends Dao {
         return count.intValue();
     }
 
+    public Integer countByApp_idAndFile_typeAndSystem_create_user_id(String app_id, String file_type, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(File.APP_ID, app_id);
+        sqlMap.put(File.FILE_TYPE, file_type);
+        sqlMap.put(File.SYSTEM_CREATE_USER_ID, system_create_user_id);
+        SqlPara sqlPara = Db.getSqlPara("file.countByApp_idAndFile_typeAndSystem_create_user_id", sqlMap);
+
+        logSql(request_app_id, request_http_id, "table_file", "countByApp_idAndFile_typeAndSystem_create_user_id", sqlPara, request_user_id);
+
+        Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
+        return count.intValue();
+    }
+
+    public Integer countByOrApp_idAndFile_type(String app_id, String file_type, String request_app_id, String request_http_id, String request_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(File.APP_ID, app_id);
+        sqlMap.put(File.FILE_TYPE, file_type);
+        SqlPara sqlPara = Db.getSqlPara("file.countByOrApp_idAndFile_type", sqlMap);
+
+        logSql(request_app_id, request_http_id, "table_file", "countByOrApp_idAndFile_type", sqlPara, request_user_id);
+
+        Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
+        return count.intValue();
+    }
+
     public List<File> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.APP_ID, app_id);
@@ -66,6 +91,33 @@ public class FileDao extends Dao {
         SqlPara sqlPara = Db.getSqlPara("file.listByOrApp_idAndLimit", sqlMap);
 
         logSql(request_app_id, request_http_id, "table_file", "listByOrApp_idAndLimit", sqlPara, request_user_id);
+
+        return new File().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+
+    public List<File> listByApp_idAndFile_typeAndSystem_create_user_idAndLimit(String app_id, String file_type, String system_create_user_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(File.APP_ID, app_id);
+        sqlMap.put(File.FILE_TYPE, file_type);
+        sqlMap.put(File.SYSTEM_CREATE_USER_ID, system_create_user_id);
+        sqlMap.put(Constant.M, m);
+        sqlMap.put(Constant.N, n);
+        SqlPara sqlPara = Db.getSqlPara("file.listByApp_idAndFile_typeAndSystem_create_user_idAndLimit", sqlMap);
+
+        logSql(request_app_id, request_http_id, "table_file", "listByApp_idAndFile_typeAndSystem_create_user_idAndLimit", sqlPara, request_user_id);
+
+        return new File().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+
+    public List<File> listByOrApp_idAndFile_typeAndLimit(String app_id, String file_type, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(File.APP_ID, app_id);
+        sqlMap.put(File.FILE_TYPE, file_type);
+        sqlMap.put(Constant.M, m);
+        sqlMap.put(Constant.N, n);
+        SqlPara sqlPara = Db.getSqlPara("file.listByOrApp_idAndFile_typeAndLimit", sqlMap);
+
+        logSql(request_app_id, request_http_id, "table_file", "listByOrApp_idAndFile_typeAndLimit", sqlPara, request_user_id);
 
         return new File().find(sqlPara.getSql(), sqlPara.getPara());
     }

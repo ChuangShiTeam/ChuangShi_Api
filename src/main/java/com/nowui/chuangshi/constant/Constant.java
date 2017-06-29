@@ -38,7 +38,7 @@ public class Constant {
 
     public static final String TOKEN = "token";
 
-    public static final String MENU = "menu";
+    public static final String EXPIRE_TIME = "expire_time";
 
     public static final String IP_ADDRESS = "ip_address";
 

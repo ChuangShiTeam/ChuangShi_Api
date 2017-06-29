@@ -11,23 +11,25 @@ import java.util.List;
 
 public class AppDao extends Dao {
 
-    public Integer countByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByApp_idOrLikeApp_name(String app_id, String app_name, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
-        SqlPara sqlPara = Db.getSqlPara("app.countByApp_id", sqlMap);
+        sqlMap.put(App.APP_NAME, app_name);
+        SqlPara sqlPara = Db.getSqlPara("app.countByApp_idOrLikeApp_name", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_app", "countByApp_id", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_app", "countByApp_idOrLikeApp_name", sqlPara, request_user_id);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByOrApp_idOrLikeApp_name(String app_id, String app_name, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
-        SqlPara sqlPara = Db.getSqlPara("app.countByOrApp_id", sqlMap);
+        sqlMap.put(App.APP_NAME, app_name);
+        SqlPara sqlPara = Db.getSqlPara("app.countByOrApp_idOrLikeApp_name", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_app", "countByOrApp_id", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_app", "countByOrApp_idOrLikeApp_name", sqlPara, request_user_id);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
@@ -46,26 +48,28 @@ public class AppDao extends Dao {
         return new App().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<App> listByApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<App> listByApp_idOrLikeApp_nameAndLimit(String app_id, String app_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
+        sqlMap.put(App.APP_NAME, app_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("app.listByApp_idAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("app.listByApp_idOrLikeApp_nameAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_app", "listByApp_idAndLimit", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_app", "listByApp_idOrLikeApp_nameAndLimit", sqlPara, request_user_id);
 
         return new App().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<App> listByOrApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<App> listByOrApp_idOrLikeApp_nameAndLimit(String app_id, String app_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
+        sqlMap.put(App.APP_NAME, app_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("app.listByOrApp_idAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("app.listByOrApp_idOrLikeApp_nameAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_app", "listByOrApp_idAndLimit", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_app", "listByOrApp_idOrLikeApp_nameAndLimit", sqlPara, request_user_id);
 
         return new App().find(sqlPara.getSql(), sqlPara.getPara());
     }

@@ -1,16 +1,24 @@
 #namespace("api")
 
-  #sql("countByApp_id")
+  #sql("countByApp_idOrLikeApi_name")
     SELECT COUNT(*) FROM table_api
     WHERE system_status = 1
     AND app_id = #p(app_id)
+    #if(api_name)
+    #set(api_name = "%" + api_name + "%")
+    AND api_name LIKE #p(api_name)
+    #end
   #end
 
-  #sql("countByOrApp_id")
+  #sql("countByOrApp_idOrLikeApi_name")
     SELECT COUNT(*) FROM table_api
     WHERE system_status = 1
     #if(app_id)
     AND app_id = #p(app_id)
+    #end
+    #if(api_name)
+    #set(api_name = "%" + api_name + "%")
+    AND api_name LIKE #p(api_name)
     #end
   #end
 
@@ -25,7 +33,7 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listUnusedByApp_id")
+  #sql("listNotInMenuByApp_id")
     SELECT
     api_id
     FROM table_api
@@ -35,23 +43,31 @@
     ORDER BY system_create_time DESC
   #end
 
-  #sql("listByApp_idAndLimit")
+  #sql("listByApp_idOrLikeApi_nameAndLimit")
     SELECT
     api_id
     FROM table_api
     WHERE system_status = 1
     AND app_id = #p(app_id)
+    #if(api_name)
+    #set(api_name = "%" + api_name + "%")
+    AND api_name LIKE #p(api_name)
+    #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idAndLimit")
+  #sql("listByOrApp_idOrLikeApi_nameAndLimit")
     SELECT
     api_id
     FROM table_api
     WHERE system_status = 1
     #if(app_id)
-      AND app_id = #p(app_id)
+    AND app_id = #p(app_id)
+    #end
+    #if(api_name)
+    #set(api_name = "%" + api_name + "%")
+    AND api_name LIKE #p(api_name)
     #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)

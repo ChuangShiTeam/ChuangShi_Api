@@ -5,8 +5,8 @@
     WHERE system_status = 1
     AND app_id = #p(app_id)
     #if(customer_name)
-      #set(customer_name = "%" + customer_name + "%")
-      AND customer_name LIKE #p(customer_name)
+    #set(customer_name = "%" + customer_name + "%")
+    AND customer_name LIKE #p(customer_name)
     #end
   #end
 
@@ -45,8 +45,8 @@
     WHERE system_status = 1
     AND app_id = #p(app_id)
     #if(customer_name)
-      #set(customer_name = "%" + customer_name + "%")
-      AND customer_name LIKE #p(customer_name)
+    #set(customer_name = "%" + customer_name + "%")
+    AND customer_name LIKE #p(customer_name)
     #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
@@ -58,7 +58,7 @@
     FROM table_feijiu_fast_customer
     WHERE system_status = 1
     #if(app_id)
-      AND app_id = #p(app_id)
+    AND app_id = #p(app_id)
     #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)

@@ -22,6 +22,8 @@ public class ExceptionController extends Controller {
         String request_app_id = getRequest_app_id();
         JSONObject jsonObject = getParameterJSONObject();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         List<Exception> resultList = exceptionService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
 
         for (Exception result : resultList) {
@@ -38,9 +40,10 @@ public class ExceptionController extends Controller {
 
         Exception model = getModel(Exception.class);
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         Exception exception = exceptionService.findByException_id(model.getException_id());
 
-        authenticateRequest_app_idAndRequest_user_id();
         authenticateApp_id(exception.getApp_id());
         authenticateSystem_create_user_id(exception.getSystem_create_user_id());
 
@@ -54,12 +57,12 @@ public class ExceptionController extends Controller {
         validateRequest_app_id();
         validate(Exception.HTTP_ID, Exception.EXCEPTION_CONTENT, Exception.EXCEPTION_IS_CONFIRM, Exception.EXCEPTION_REMARK);
 
-        authenticateRequest_app_idAndRequest_user_id();
-
         Exception model = getModel(Exception.class);
         String exception_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         Boolean result = exceptionService.save(exception_id, request_app_id, model.getHttp_id(), model.getException_content(), model.getException_is_confirm(), model.getException_remark(), request_user_id);
 
@@ -74,8 +77,10 @@ public class ExceptionController extends Controller {
         Exception model = getModel(Exception.class);
         String request_user_id = getRequest_user_id();
 
-        Exception exception = exceptionService.findByException_id(model.getException_id());
         authenticateRequest_app_idAndRequest_user_id();
+
+        Exception exception = exceptionService.findByException_id(model.getException_id());
+
         authenticateApp_id(exception.getApp_id());
         authenticateSystem_create_user_id(exception.getSystem_create_user_id());
 
@@ -92,7 +97,10 @@ public class ExceptionController extends Controller {
         Exception model = getModel(Exception.class);
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         Exception exception = exceptionService.findByException_id(model.getException_id());
+
         authenticateApp_id(exception.getApp_id());
         authenticateSystem_create_user_id(exception.getSystem_create_user_id());
 
@@ -107,6 +115,8 @@ public class ExceptionController extends Controller {
         validate(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         String request_app_id = getRequest_app_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         Integer total = exceptionService.countByApp_id(request_app_id);
         List<Exception> resultList = exceptionService.listByApp_idAndLimit(request_app_id, getM(), getN());
@@ -125,9 +135,10 @@ public class ExceptionController extends Controller {
 
         Exception model = getModel(Exception.class);
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         Exception exception = exceptionService.findByException_id(model.getException_id());
 
-        authenticateRequest_app_idAndRequest_user_id();
         authenticateApp_id(exception.getApp_id());
 
         exception.keep(Exception.EXCEPTION_ID, Exception.SYSTEM_VERSION);
@@ -148,8 +159,10 @@ public class ExceptionController extends Controller {
         Exception model = getModel(Exception.class);
         String request_user_id = getRequest_user_id();
 
-        Exception exception = exceptionService.findByException_id(model.getException_id());
         authenticateRequest_app_idAndRequest_user_id();
+
+        Exception exception = exceptionService.findByException_id(model.getException_id());
+
         authenticateApp_id(exception.getApp_id());
 
         Boolean result = exceptionService.updateValidateSystem_version(model.getException_id(), model.getHttp_id(), model.getException_content(), model.getException_is_confirm(), model.getException_remark(), request_user_id, model.getSystem_version());
@@ -164,6 +177,8 @@ public class ExceptionController extends Controller {
 
         Exception model = getModel(Exception.class);
         String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         Exception exception = exceptionService.findByException_id(model.getException_id());
         authenticateApp_id(exception.getApp_id());

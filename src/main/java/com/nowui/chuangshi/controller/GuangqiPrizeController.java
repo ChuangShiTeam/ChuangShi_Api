@@ -24,6 +24,8 @@ public class GuangqiPrizeController extends Controller {
         String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         List<GuangqiPrize> resultList = guangqiPrizeService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN(), request_app_id, request_http_id, request_user_id);
 
         for (GuangqiPrize result : resultList) {
@@ -43,9 +45,10 @@ public class GuangqiPrizeController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         GuangqiPrize guangqi_prize = guangqiPrizeService.findByPrize_id(model.getPrize_id(), request_app_id, request_http_id, request_user_id);
 
-        authenticateRequest_app_idAndRequest_user_id();
         authenticateApp_id(guangqi_prize.getApp_id());
         authenticateSystem_create_user_id(guangqi_prize.getSystem_create_user_id());
 
@@ -59,13 +62,13 @@ public class GuangqiPrizeController extends Controller {
         validateRequest_app_id();
         validate(GuangqiPrize.PRIZE_NAME, GuangqiPrize.PRIZE_PROBABILITY, GuangqiPrize.PRIZE_QUANTITY, GuangqiPrize.PRIZE_LIMIT, GuangqiPrize.PRIZE_IS_DEFAULT);
 
-        authenticateRequest_app_idAndRequest_user_id();
-
         GuangqiPrize model = getModel(GuangqiPrize.class);
         String prize_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         Boolean result = guangqiPrizeService.save(prize_id, request_app_id, model.getPrize_name(), model.getPrize_probability(), model.getPrize_quantity(), model.getPrize_limit(), model.getPrize_sort(), model.getPrize_is_default(), request_user_id, request_app_id, request_http_id, request_user_id);
 
@@ -80,10 +83,12 @@ public class GuangqiPrizeController extends Controller {
         GuangqiPrize model = getModel(GuangqiPrize.class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
         String request_user_id = getRequest_user_id();
 
         GuangqiPrize guangqi_prize = guangqiPrizeService.findByPrize_id(model.getPrize_id(), request_app_id, request_http_id, request_user_id);
-        authenticateRequest_app_idAndRequest_user_id();
+
         authenticateApp_id(guangqi_prize.getApp_id());
         authenticateSystem_create_user_id(guangqi_prize.getSystem_create_user_id());
 
@@ -102,7 +107,10 @@ public class GuangqiPrizeController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         GuangqiPrize guangqi_prize = guangqiPrizeService.findByPrize_id(model.getPrize_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(guangqi_prize.getApp_id());
         authenticateSystem_create_user_id(guangqi_prize.getSystem_create_user_id());
 
@@ -120,6 +128,8 @@ public class GuangqiPrizeController extends Controller {
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         Integer total = guangqiPrizeService.countByApp_id(request_app_id, request_app_id, request_http_id, request_user_id);
         List<GuangqiPrize> resultList = guangqiPrizeService.listByApp_idAndPrize_nameAndLimit(request_app_id, model.getPrize_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
@@ -141,9 +151,10 @@ public class GuangqiPrizeController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         GuangqiPrize guangqi_prize = guangqiPrizeService.findByPrize_id(model.getPrize_id(), request_app_id, request_http_id, request_user_id);
 
-        authenticateRequest_app_idAndRequest_user_id();
         authenticateApp_id(guangqi_prize.getApp_id());
 
         guangqi_prize.keep(GuangqiPrize.PRIZE_ID, GuangqiPrize.PRIZE_NAME, GuangqiPrize.PRIZE_PROBABILITY, GuangqiPrize.PRIZE_QUANTITY, GuangqiPrize.PRIZE_LIMIT, GuangqiPrize.PRIZE_SORT, GuangqiPrize.PRIZE_IS_DEFAULT, GuangqiPrize.SYSTEM_VERSION);
@@ -166,8 +177,10 @@ public class GuangqiPrizeController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        GuangqiPrize guangqi_prize = guangqiPrizeService.findByPrize_id(model.getPrize_id(), request_app_id, request_http_id, request_user_id);
         authenticateRequest_app_idAndRequest_user_id();
+
+        GuangqiPrize guangqi_prize = guangqiPrizeService.findByPrize_id(model.getPrize_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(guangqi_prize.getApp_id());
 
         Boolean result = guangqiPrizeService.updateValidateSystem_version(model.getPrize_id(), model.getPrize_name(), model.getPrize_probability(), model.getPrize_quantity(), model.getPrize_limit(), model.getPrize_sort(), model.getPrize_is_default(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
@@ -185,7 +198,10 @@ public class GuangqiPrizeController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         GuangqiPrize guangqi_prize = guangqiPrizeService.findByPrize_id(model.getPrize_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(guangqi_prize.getApp_id());
 
         Boolean result = guangqiPrizeService.deleteByPrize_idAndSystem_update_user_idValidateSystem_version(model.getPrize_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);

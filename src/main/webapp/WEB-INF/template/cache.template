@@ -14,12 +14,12 @@ public class #(first_upper_model_name)Cache extends Cache {
 
     private #(first_upper_model_name)Dao #(first_lower_model_name)Dao = new #(first_upper_model_name)Dao();
 
-    public Integer countByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
-        return #(first_lower_model_name)Dao.countByApp_id(app_id, request_app_id, request_http_id, request_user_id);
+    public Integer countByApp_idOrLike#(first_upper_model_name)_name(String app_id, String #(lower_model_name)_name, String request_app_id, String request_http_id, String request_user_id) {
+        return #(first_lower_model_name)Dao.countByApp_idOrLike#(first_upper_model_name)_name(app_id, #(lower_model_name)_name, request_app_id, request_http_id, request_user_id);
     }
 
-    public Integer countByOrApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
-        return #(first_lower_model_name)Dao.countByOrApp_id(app_id, request_app_id, request_http_id, request_user_id);
+    public Integer countByOrApp_idOrLike#(first_upper_model_name)_name(String app_id, String #(lower_model_name)_name, String request_app_id, String request_http_id, String request_user_id) {
+        return #(first_lower_model_name)Dao.countByOrApp_idOrLike#(first_upper_model_name)_name(app_id, #(lower_model_name)_name, request_app_id, request_http_id, request_user_id);
     }
 
     public List<#(first_upper_model_name)> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
@@ -32,8 +32,8 @@ public class #(first_upper_model_name)Cache extends Cache {
         return #(lower_model_name)List;
     }
 
-    public List<#(first_upper_model_name)> listByApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
-        List<#(first_upper_model_name)> #(lower_model_name)List = #(first_lower_model_name)Dao.listByApp_idAndLimit(app_id, m, n, request_app_id, request_http_id, request_user_id);
+    public List<#(first_upper_model_name)> listByApp_idOrLike#(first_upper_model_name)_nameAndLimit(String app_id, String #(lower_model_name)_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+        List<#(first_upper_model_name)> #(lower_model_name)List = #(first_lower_model_name)Dao.listByApp_idOrLike#(first_upper_model_name)_nameAndLimit(app_id, #(lower_model_name)_name, m, n, request_app_id, request_http_id, request_user_id);
 
         for (#(first_upper_model_name) #(lower_model_name) : #(lower_model_name)List) {
             #(lower_model_name).put(findBy#(first_upper_column_key)(#(lower_model_name).get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id));
@@ -42,8 +42,8 @@ public class #(first_upper_model_name)Cache extends Cache {
         return #(lower_model_name)List;
     }
 
-    public List<#(first_upper_model_name)> listByOrApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
-        List<#(first_upper_model_name)> #(lower_model_name)List = #(first_lower_model_name)Dao.listByOrApp_idAndLimit(app_id, m, n, request_app_id, request_http_id, request_user_id);
+    public List<#(first_upper_model_name)> listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit(String app_id, String #(lower_model_name)_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+        List<#(first_upper_model_name)> #(lower_model_name)List = #(first_lower_model_name)Dao.listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit(app_id, #(lower_model_name)_name, m, n, request_app_id, request_http_id, request_user_id);
 
         for (#(first_upper_model_name) #(lower_model_name) : #(lower_model_name)List) {
             #(lower_model_name).put(findBy#(first_upper_column_key)(#(lower_model_name).get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id));

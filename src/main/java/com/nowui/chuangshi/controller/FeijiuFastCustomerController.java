@@ -24,6 +24,8 @@ public class FeijiuFastCustomerController extends Controller {
         String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         List<FeijiuFastCustomer> resultList = feijiuFastCustomerService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN(), request_app_id, request_http_id, request_user_id);
 
         for (FeijiuFastCustomer result : resultList) {
@@ -43,9 +45,10 @@ public class FeijiuFastCustomerController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         FeijiuFastCustomer feijiu_fast_customer = feijiuFastCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
 
-        authenticateRequest_app_idAndRequest_user_id();
         authenticateApp_id(feijiu_fast_customer.getApp_id());
         authenticateSystem_create_user_id(feijiu_fast_customer.getSystem_create_user_id());
 
@@ -59,13 +62,13 @@ public class FeijiuFastCustomerController extends Controller {
         validateRequest_app_id();
         validate(FeijiuFastCustomer.CUSTOMER_NAME, FeijiuFastCustomer.CUSTOMER_PHONE, FeijiuFastCustomer.CUSTOMER_BIRTHDAY, FeijiuFastCustomer.CUSTOMER_CITY, FeijiuFastCustomer.CUSTOMER_SEX, FeijiuFastCustomer.CUSTOMER_ID_CARD, FeijiuFastCustomer.CUSTOMER_MONEY, FeijiuFastCustomer.CUSTOMER_FANG, FeijiuFastCustomer.CUSTOMER_CHE, FeijiuFastCustomer.CUSTOMER_XIN, FeijiuFastCustomer.CUSTOMER_SHOU, FeijiuFastCustomer.CUSTOMER_DAI, FeijiuFastCustomer.CUSTOMER_GONG);
 
-        authenticateRequest_app_idAndRequest_user_id();
-
         FeijiuFastCustomer model = getModel(FeijiuFastCustomer.class);
         String customer_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         Boolean result = feijiuFastCustomerService.save(customer_id, request_app_id, model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_birthday(), model.getCustomer_city(), model.getCustomer_sex(), model.getCustomer_id_card(), model.getCustomer_money(), model.getCustomer_fang(), model.getCustomer_che(), model.getCustomer_xin(), model.getCustomer_shou(), model.getCustomer_dai(), model.getCustomer_gong(), request_user_id, request_app_id, request_http_id, request_user_id);
 
@@ -82,8 +85,10 @@ public class FeijiuFastCustomerController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        FeijiuFastCustomer feijiu_fast_customer = feijiuFastCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
         authenticateRequest_app_idAndRequest_user_id();
+
+        FeijiuFastCustomer feijiu_fast_customer = feijiuFastCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(feijiu_fast_customer.getApp_id());
         authenticateSystem_create_user_id(feijiu_fast_customer.getSystem_create_user_id());
 
@@ -102,7 +107,10 @@ public class FeijiuFastCustomerController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         FeijiuFastCustomer feijiu_fast_customer = feijiuFastCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(feijiu_fast_customer.getApp_id());
         authenticateSystem_create_user_id(feijiu_fast_customer.getSystem_create_user_id());
 
@@ -120,6 +128,8 @@ public class FeijiuFastCustomerController extends Controller {
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         Integer total = feijiuFastCustomerService.countByApp_idAndCustomer_name(request_app_id, model.getCustomer_name(), request_app_id, request_http_id, request_user_id);
         List<FeijiuFastCustomer> resultList = feijiuFastCustomerService.listByApp_idAndCustomer_nameAndLimit(request_app_id, model.getCustomer_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
@@ -141,9 +151,10 @@ public class FeijiuFastCustomerController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         FeijiuFastCustomer feijiu_fast_customer = feijiuFastCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
 
-        authenticateRequest_app_idAndRequest_user_id();
         authenticateApp_id(feijiu_fast_customer.getApp_id());
 
         feijiu_fast_customer.keep(FeijiuFastCustomer.CUSTOMER_ID, FeijiuFastCustomer.CUSTOMER_NAME, FeijiuFastCustomer.CUSTOMER_PHONE, FeijiuFastCustomer.CUSTOMER_BIRTHDAY, FeijiuFastCustomer.CUSTOMER_CITY, FeijiuFastCustomer.CUSTOMER_SEX, FeijiuFastCustomer.CUSTOMER_ID_CARD, FeijiuFastCustomer.CUSTOMER_MONEY, FeijiuFastCustomer.CUSTOMER_FANG, FeijiuFastCustomer.CUSTOMER_CHE, FeijiuFastCustomer.CUSTOMER_XIN, FeijiuFastCustomer.CUSTOMER_SHOU, FeijiuFastCustomer.CUSTOMER_DAI, FeijiuFastCustomer.CUSTOMER_GONG, FeijiuFastCustomer.SYSTEM_VERSION);
@@ -166,8 +177,10 @@ public class FeijiuFastCustomerController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        FeijiuFastCustomer feijiu_fast_customer = feijiuFastCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
         authenticateRequest_app_idAndRequest_user_id();
+
+        FeijiuFastCustomer feijiu_fast_customer = feijiuFastCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(feijiu_fast_customer.getApp_id());
 
         Boolean result = feijiuFastCustomerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_birthday(), model.getCustomer_city(), model.getCustomer_sex(), model.getCustomer_id_card(), model.getCustomer_money(), model.getCustomer_fang(), model.getCustomer_che(), model.getCustomer_xin(), model.getCustomer_shou(), model.getCustomer_dai(), model.getCustomer_gong(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
@@ -185,7 +198,10 @@ public class FeijiuFastCustomerController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         FeijiuFastCustomer feijiu_fast_customer = feijiuFastCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(feijiu_fast_customer.getApp_id());
 
         Boolean result = feijiuFastCustomerService.deleteByCustomer_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);

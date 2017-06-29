@@ -2,13 +2,16 @@ package com.nowui.chuangshi.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.jfinal.upload.UploadFile;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.File;
 import com.nowui.chuangshi.service.FileService;
+import com.nowui.chuangshi.type.FileType;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
+import java.util.Map;
 
 public class FileController extends Controller {
 
@@ -23,6 +26,8 @@ public class FileController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         List<File> resultList = fileService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN(), request_app_id, request_http_id, request_user_id);
 
@@ -43,9 +48,10 @@ public class FileController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         File file = fileService.findByFile_id(model.getFile_id(), request_app_id, request_http_id, request_user_id);
 
-        authenticateRequest_app_idAndRequest_user_id();
         authenticateApp_id(file.getApp_id());
         authenticateSystem_create_user_id(file.getSystem_create_user_id());
 
@@ -59,13 +65,13 @@ public class FileController extends Controller {
         validateRequest_app_id();
         validate(File.FILE_TYPE, File.FILE_NAME, File.FILE_SUFFIX, File.FILE_SIZE, File.FILE_PATH, File.FILE_THUMBNAIL_PATH, File.FILE_ORIGINAL_PATH, File.FILE_IMAGE);
 
-        authenticateRequest_app_idAndRequest_user_id();
-
         File model = getModel(File.class);
         String file_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
 
         Boolean result = fileService.save(file_id, request_app_id, model.getFile_type(), model.getFile_name(), model.getFile_suffix(), model.getFile_size(), model.getFile_path(), model.getFile_thumbnail_path(), model.getFile_original_path(), model.getFile_image(), request_user_id, request_app_id, request_http_id, request_user_id);
 
@@ -82,8 +88,10 @@ public class FileController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        File file = fileService.findByFile_id(model.getFile_id(), request_app_id, request_http_id, request_user_id);
         authenticateRequest_app_idAndRequest_user_id();
+
+        File file = fileService.findByFile_id(model.getFile_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(file.getApp_id());
         authenticateSystem_create_user_id(file.getSystem_create_user_id());
 
@@ -102,13 +110,34 @@ public class FileController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         File file = fileService.findByFile_id(model.getFile_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(file.getApp_id());
         authenticateSystem_create_user_id(file.getSystem_create_user_id());
 
         Boolean result = fileService.deleteByFile_idAndSystem_update_user_idValidateSystem_version(model.getFile_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
 
         renderSuccessJson(result);
+    }
+
+    @ActionKey(Url.FILE_UPLOAD)
+    public void upload() {
+        validateRequest_app_id();
+        validate(File.FILE_ID);
+
+        String request_app_id = getRequest_app_id();
+        String request_http_id = getRequest_http_id();
+        String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        List<UploadFile> uploadFileList = getFiles(request_user_id, 1024 * 1024);
+
+        List<Map<String, Object>> resultList = fileService.upload(uploadFileList, request_app_id, request_http_id, request_user_id);
+
+        renderSuccessJson(resultList);
     }
 
     @ActionKey(Url.FILE_ADMIN_LIST)
@@ -120,11 +149,34 @@ public class FileController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         Integer total = fileService.countByApp_id(request_app_id, request_app_id, request_http_id, request_user_id);
         List<File> resultList = fileService.listByApp_idAndLimit(request_app_id, getM(), getN(), request_app_id, request_http_id, request_user_id);
 
         for (File result : resultList) {
             result.keep(File.FILE_ID, File.SYSTEM_VERSION);
+        }
+
+        renderSuccessJson(total, resultList);
+    }
+
+    @ActionKey(Url.FILE_ADMIN_IMAGE_LIST)
+    public void adminImageList() {
+        validateRequest_app_id();
+        validate(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+
+        String request_app_id = getRequest_app_id();
+        String request_http_id = getRequest_http_id();
+        String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        Integer total = fileService.countByApp_idAndFile_typeAndSystem_create_user_id(request_app_id, FileType.IMAGE.getKey(), request_user_id, request_app_id, request_http_id, request_user_id);
+        List<File> resultList = fileService.listByApp_idAndFile_typeAndSystem_create_user_idAndLimit(request_app_id, FileType.IMAGE.getKey(), request_user_id, getM(), getN(), request_app_id, request_http_id, request_user_id);
+
+        for (File result : resultList) {
+            result.keep(File.FILE_ID, File.FILE_PATH, File.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -140,9 +192,10 @@ public class FileController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
+        authenticateRequest_app_idAndRequest_user_id();
+
         File file = fileService.findByFile_id(model.getFile_id(), request_app_id, request_http_id, request_user_id);
 
-        authenticateRequest_app_idAndRequest_user_id();
         authenticateApp_id(file.getApp_id());
 
         file.keep(File.FILE_ID, File.SYSTEM_VERSION);
@@ -165,8 +218,10 @@ public class FileController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        File file = fileService.findByFile_id(model.getFile_id(), request_app_id, request_http_id, request_user_id);
         authenticateRequest_app_idAndRequest_user_id();
+
+        File file = fileService.findByFile_id(model.getFile_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(file.getApp_id());
 
         Boolean result = fileService.updateValidateSystem_version(model.getFile_id(), model.getFile_type(), model.getFile_name(), model.getFile_suffix(), model.getFile_size(), model.getFile_path(), model.getFile_thumbnail_path(), model.getFile_original_path(), model.getFile_image(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
@@ -185,11 +240,29 @@ public class FileController extends Controller {
         String request_user_id = getRequest_user_id();
 
         File file = fileService.findByFile_id(model.getFile_id(), request_app_id, request_http_id, request_user_id);
+
         authenticateApp_id(file.getApp_id());
 
         Boolean result = fileService.deleteByFile_idAndSystem_update_user_idValidateSystem_version(model.getFile_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
 
         renderSuccessJson(result);
+    }
+
+    @ActionKey(Url.FILE_ADMIN_UPLOAD)
+    public void adminUpload() {
+        validateRequest_app_id();
+
+        String request_app_id = getRequest_app_id();
+        String request_http_id = getRequest_http_id();
+        String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        List<UploadFile> uploadFileList = getFiles(request_user_id, 1024 * 1024 * 2);
+
+        List<Map<String, Object>> resultList = fileService.upload(uploadFileList, request_app_id, request_http_id, request_user_id);
+
+        renderSuccessJson(resultList);
     }
 
     @ActionKey(Url.FILE_SYSTEM_LIST)
@@ -204,6 +277,26 @@ public class FileController extends Controller {
 
         Integer total = fileService.countByOrApp_id(model.getApp_id(), request_app_id, request_http_id, request_user_id);
         List<File> resultList = fileService.listByOrApp_idAndLimit(model.getApp_id(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+
+        for (File result : resultList) {
+            result.keep(File.FILE_ID, File.SYSTEM_VERSION);
+        }
+
+        renderSuccessJson(total, resultList);
+    }
+
+    @ActionKey(Url.FILE_SYSTEM_IMAGE_LIST)
+    public void systemImageList() {
+        validateRequest_app_id();
+        validate(File.APP_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+
+        File model = getModel(File.class);
+        String request_app_id = getRequest_app_id();
+        String request_http_id = getRequest_http_id();
+        String request_user_id = getRequest_user_id();
+
+        Integer total = fileService.countByOrApp_idAndFile_type(model.getApp_id(), FileType.IMAGE.getKey(), request_app_id, request_http_id, request_user_id);
+        List<File> resultList = fileService.listByOrApp_idAndFile_typeAndLimit(model.getApp_id(), FileType.IMAGE.getKey(), getM(), getN(), request_app_id, request_http_id, request_user_id);
 
         for (File result : resultList) {
             result.keep(File.FILE_ID, File.SYSTEM_VERSION);
@@ -233,8 +326,6 @@ public class FileController extends Controller {
     public void systemSave() {
         validateRequest_app_id();
         validate(File.APP_ID, File.FILE_TYPE, File.FILE_NAME, File.FILE_SUFFIX, File.FILE_SIZE, File.FILE_PATH, File.FILE_THUMBNAIL_PATH, File.FILE_ORIGINAL_PATH, File.FILE_IMAGE);
-
-        authenticateRequest_app_idAndRequest_user_id();
 
         File model = getModel(File.class);
         String file_id = Util.getRandomUUID();
