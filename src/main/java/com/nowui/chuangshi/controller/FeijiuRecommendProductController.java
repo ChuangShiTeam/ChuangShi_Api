@@ -5,14 +5,18 @@ import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.FeijiuRecommendProduct;
+import com.nowui.chuangshi.model.File;
 import com.nowui.chuangshi.service.FeijiuRecommendProductService;
+import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.List;
 
 public class FeijiuRecommendProductController extends Controller {
 
     private final FeijiuRecommendProductService feijiuRecommendProductService = new FeijiuRecommendProductService();
+    private final FileService fileService = new FileService();
 
     @ActionKey(Url.FEIJIU_RECOMMEND_PRODUCT_LIST)
     public void list() {
@@ -27,6 +31,12 @@ public class FeijiuRecommendProductController extends Controller {
         List<FeijiuRecommendProduct> resultList = feijiuRecommendProductService.listByApp_id(request_app_id, request_app_id, request_http_id, request_user_id);
 
         for (FeijiuRecommendProduct result : resultList) {
+            if (!ValidateUtil.isNullOrEmpty(result.getProduct_image())) {
+                File file = fileService.findByFile_id(result.getProduct_image(), request_app_id, request_http_id, request_user_id);
+
+                result.setProduct_image(file.getFile_path());
+            }
+
             result.keep(FeijiuRecommendProduct.PRODUCT_ID, FeijiuRecommendProduct.PRODUCT_NAME, FeijiuRecommendProduct.PRODUCT_IMAGE, FeijiuRecommendProduct.PRODUCT_CONTENT, FeijiuRecommendProduct.SYSTEM_VERSION);
         }
 
@@ -156,6 +166,13 @@ public class FeijiuRecommendProductController extends Controller {
 
         feijiu_recommend_product.keep(FeijiuRecommendProduct.PRODUCT_ID, FeijiuRecommendProduct.PRODUCT_NAME, FeijiuRecommendProduct.PRODUCT_IMAGE, FeijiuRecommendProduct.PRODUCT_CONTENT, FeijiuRecommendProduct.SYSTEM_VERSION);
 
+        if (ValidateUtil.isNullOrEmpty(feijiu_recommend_product.getProduct_image())) {
+            feijiu_recommend_product.put(FeijiuRecommendProduct.PRODUCT_IMAGE, "");
+        } else {
+            File file = fileService.findByFile_id(feijiu_recommend_product.getProduct_image(), request_app_id, request_http_id, request_user_id);
+            feijiu_recommend_product.put(FeijiuRecommendProduct.PRODUCT_IMAGE_FILE, file.keep(File.FILE_ID, File.FILE_PATH));
+        }
+
         renderSuccessJson(feijiu_recommend_product);
     }
 
@@ -238,6 +255,13 @@ public class FeijiuRecommendProductController extends Controller {
         FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
 
         feijiu_recommend_product.keep(FeijiuRecommendProduct.PRODUCT_ID, FeijiuRecommendProduct.SYSTEM_VERSION);
+
+        if (ValidateUtil.isNullOrEmpty(feijiu_recommend_product.getProduct_image())) {
+            feijiu_recommend_product.put(FeijiuRecommendProduct.PRODUCT_IMAGE, "");
+        } else {
+            File file = fileService.findByFile_id(feijiu_recommend_product.getProduct_image(), request_app_id, request_http_id, request_user_id);
+            feijiu_recommend_product.put(FeijiuRecommendProduct.PRODUCT_IMAGE_FILE, file.keep(File.FILE_ID, File.FILE_PATH));
+        }
 
         renderSuccessJson(feijiu_recommend_product);
     }

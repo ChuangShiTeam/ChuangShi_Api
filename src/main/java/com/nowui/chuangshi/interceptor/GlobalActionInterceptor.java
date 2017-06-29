@@ -50,8 +50,10 @@ public class GlobalActionInterceptor implements Interceptor {
             http_version = controller.getRequest().getHeader(Constant.VERSION);
             http_token = controller.getRequest().getHeader(Constant.TOKEN);
 
-            JSONObject jsonObject = JSONObject.parseObject(AesUtil.aesDecrypt(http_token, Config.private_key));
-            request_user_id = jsonObject.getString(User.USER_ID);
+            if (!ValidateUtil.isNullOrEmpty(http_token)) {
+                JSONObject jsonObject = JSONObject.parseObject(AesUtil.aesDecrypt(http_token, Config.private_key));
+                request_user_id = jsonObject.getString(User.USER_ID);
+            }
 
             if (http_url.equals(Url.FILE_UPLOAD) || http_url.equals(Url.FILE_ADMIN_UPLOAD)) {
 
@@ -121,7 +123,7 @@ public class GlobalActionInterceptor implements Interceptor {
             }
 
             Date end = new Date();
-            String http_run_time =  String.valueOf((end.getTime() - start.getTime()));
+            String http_run_time = String.valueOf((end.getTime() - start.getTime()));
 
             Http http = new Http();
             http.setHttp_id(request_http_id);

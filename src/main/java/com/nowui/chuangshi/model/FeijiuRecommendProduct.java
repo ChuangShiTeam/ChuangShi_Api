@@ -20,6 +20,8 @@ public class FeijiuRecommendProduct extends Model<FeijiuRecommendProduct> {
     @Column(type = ColumnType.VARCHAR, length = 200, comment = "商品介绍")
     public static final String PRODUCT_CONTENT = "product_content";
 
+    public static final String PRODUCT_IMAGE_FILE = "product_image_file";
+
     public String getProduct_id() {
         return getStr(PRODUCT_ID);
     }
