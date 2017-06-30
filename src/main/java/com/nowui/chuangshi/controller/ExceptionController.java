@@ -122,7 +122,7 @@ public class ExceptionController extends Controller {
         List<Exception> resultList = exceptionService.listByApp_idAndLimit(request_app_id, getM(), getN());
 
         for (Exception result : resultList) {
-            result.keep(Exception.EXCEPTION_ID, Exception.SYSTEM_VERSION);
+            result.keep(Exception.EXCEPTION_ID, Exception.EXCEPTION_CONTENT, Exception.EXCEPTION_IS_CONFIRM, Exception.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -141,7 +141,7 @@ public class ExceptionController extends Controller {
 
         authenticateApp_id(exception.getApp_id());
 
-        exception.keep(Exception.EXCEPTION_ID, Exception.SYSTEM_VERSION);
+        exception.keep(Exception.EXCEPTION_ID, Exception.EXCEPTION_CONTENT, Exception.EXCEPTION_IS_CONFIRM, Exception.EXCEPTION_REMARK, Exception.SYSTEM_VERSION);
 
         renderSuccessJson(exception);
     }

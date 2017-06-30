@@ -6,7 +6,7 @@ import constant from '../../util/constant';
 import notification from '../../util/notification';
 import http from '../../util/http';
 
-class #(first_upper_model_name)Detail extends Component {
+class #(first_upper_model_name_without_underline)Detail extends Component {
     constructor(props) {
         super(props);
 
@@ -234,8 +234,8 @@ class #(first_upper_model_name)Detail extends Component {
     }
 }
 
-#(first_upper_model_name)Detail.propTypes = {};
+#(first_upper_model_name_without_underline)Detail.propTypes = {};
 
-#(first_upper_model_name)Detail = Form.create({})(#(first_upper_model_name)Detail);
+#(first_upper_model_name_without_underline)Detail = Form.create({})(#(first_upper_model_name_without_underline)Detail);
 
-export default connect(({#(lower_model_name)}) => ({#(lower_model_name)}))(#(first_upper_model_name)Detail);
+export default connect(({#(lower_model_name)}) => ({#(lower_model_name)}))(#(first_upper_model_name_without_underline)Detail);

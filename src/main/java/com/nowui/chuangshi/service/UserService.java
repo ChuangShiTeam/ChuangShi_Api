@@ -10,24 +10,24 @@ public class UserService extends Service {
 
     private UserCache userCache = new UserCache();
 
-    public Integer countByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
-        return userCache.countByApp_id(app_id, request_app_id, request_http_id, request_user_id);
+    public Integer countByApp_idOrLikeUser_name(String app_id, String user_name, String request_app_id, String request_http_id, String request_user_id) {
+        return userCache.countByApp_idOrLikeUser_name(app_id, user_name, request_app_id, request_http_id, request_user_id);
     }
 
-    public Integer countByOrApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
-        return userCache.countByOrApp_id(app_id, request_app_id, request_http_id, request_user_id);
+    public Integer countByOrApp_idOrLikeUser_name(String app_id, String user_name, String request_app_id, String request_http_id, String request_user_id) {
+        return userCache.countByOrApp_idOrLikeUser_name(app_id, user_name, request_app_id, request_http_id, request_user_id);
     }
 
     public List<User> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
         return userCache.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n, request_app_id, request_http_id, request_user_id);
     }
 
-    public List<User> listByApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
-        return userCache.listByApp_idAndLimit(app_id, m, n, request_app_id, request_http_id, request_user_id);
+    public List<User> listByApp_idOrLikeUser_nameAndLimit(String app_id, String user_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+        return userCache.listByApp_idOrLikeUser_nameAndLimit(app_id, user_name, m, n, request_app_id, request_http_id, request_user_id);
     }
 
-    public List<User> listByOrApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
-        return userCache.listByOrApp_idAndLimit(app_id, m, n, request_app_id, request_http_id, request_user_id);
+    public List<User> listByOrApp_idOrLikeUser_nameAndLimit(String app_id, String user_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+        return userCache.listByOrApp_idOrLikeUser_nameAndLimit(app_id, user_name, m, n, request_app_id, request_http_id, request_user_id);
     }
 
     public User findByUser_id(String user_id, String request_app_id, String request_http_id, String request_user_id) {

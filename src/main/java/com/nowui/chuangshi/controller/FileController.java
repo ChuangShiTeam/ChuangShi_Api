@@ -155,7 +155,7 @@ public class FileController extends Controller {
         List<File> resultList = fileService.listByApp_idAndLimit(request_app_id, getM(), getN(), request_app_id, request_http_id, request_user_id);
 
         for (File result : resultList) {
-            result.keep(File.FILE_ID, File.SYSTEM_VERSION);
+            result.keep(File.FILE_ID, File.FILE_PATH, File.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);

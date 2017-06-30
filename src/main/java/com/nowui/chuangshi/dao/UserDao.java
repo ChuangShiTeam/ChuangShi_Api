@@ -22,23 +22,25 @@ public class UserDao extends Dao {
         return HashKit.sha512(Config.private_key + user_password);
     }
 
-    public Integer countByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByApp_idOrLikeUser_name(String app_id, String user_name, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(User.APP_ID, app_id);
-        SqlPara sqlPara = Db.getSqlPara("user.countByApp_id", sqlMap);
+        sqlMap.put(User.USER_NAME, user_name);
+        SqlPara sqlPara = Db.getSqlPara("user.countByApp_idOrLikeUser_name", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_user", "countByApp_id", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_user", "countByApp_idOrLikeUser_name", sqlPara, request_user_id);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByOrApp_idOrLikeUser_name(String app_id, String user_name, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(User.APP_ID, app_id);
-        SqlPara sqlPara = Db.getSqlPara("user.countByOrApp_id", sqlMap);
+        sqlMap.put(User.USER_NAME, user_name);
+        SqlPara sqlPara = Db.getSqlPara("user.countByOrApp_idOrLikeUser_name", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_user", "countByOrApp_id", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_user", "countByOrApp_idOrLikeUser_name", sqlPara, request_user_id);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
@@ -57,26 +59,28 @@ public class UserDao extends Dao {
         return new User().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<User> listByApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<User> listByApp_idOrLikeUser_nameAndLimit(String app_id, String user_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(User.APP_ID, app_id);
+        sqlMap.put(User.USER_NAME, user_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("user.listByApp_idAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("user.listByApp_idOrLikeUser_nameAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_user", "listByApp_idAndLimit", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_user", "listByApp_idOrLikeUser_nameAndLimit", sqlPara, request_user_id);
 
         return new User().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<User> listByOrApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<User> listByOrApp_idOrLikeUser_nameAndLimit(String app_id, String user_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(User.APP_ID, app_id);
+        sqlMap.put(User.USER_NAME, user_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("user.listByOrApp_idAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("user.listByOrApp_idOrLikeUser_nameAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_user", "listByOrApp_idAndLimit", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_user", "listByOrApp_idOrLikeUser_nameAndLimit", sqlPara, request_user_id);
 
         return new User().find(sqlPara.getSql(), sqlPara.getPara());
     }

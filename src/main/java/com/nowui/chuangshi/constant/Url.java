@@ -131,6 +131,22 @@ public class Url {
     public static final String USER_SYSTEM_UPDATE = "/user/system/update";
     public static final String USER_SYSTEM_DELETE = "/user/system/delete";
 
+    public static final String USER_LEVEL_LIST = "/user/level/list";
+    public static final String USER_LEVEL_FIND = "/user/level/find";
+    public static final String USER_LEVEL_SAVE = "/user/level/save";
+    public static final String USER_LEVEL_UPDATE = "/user/level/update";
+    public static final String USER_LEVEL_DELETE = "/user/level/delete";
+    public static final String USER_LEVEL_ADMIN_LIST = "/user/level/admin/list";
+    public static final String USER_LEVEL_ADMIN_FIND = "/user/level/admin/find";
+    public static final String USER_LEVEL_ADMIN_SAVE = "/user/level/admin/save";
+    public static final String USER_LEVEL_ADMIN_UPDATE = "/user/level/admin/update";
+    public static final String USER_LEVEL_ADMIN_DELETE = "/user/level/admin/delete";
+    public static final String USER_LEVEL_SYSTEM_LIST = "/user/level/system/list";
+    public static final String USER_LEVEL_SYSTEM_FIND = "/user/level/system/find";
+    public static final String USER_LEVEL_SYSTEM_SAVE = "/user/level/system/save";
+    public static final String USER_LEVEL_SYSTEM_UPDATE = "/user/level/system/update";
+    public static final String USER_LEVEL_SYSTEM_DELETE = "/user/level/system/delete";
+
     public static final String ADMIN_LOGIN = "/admin/login";
     public static final String ADMIN_ADMIN_SAVE = "/admin/admin/save";
     public static final String ADMIN_SYSTEM_SAVE = "/admin/system/save";
@@ -154,6 +170,22 @@ public class Url {
     public static final String FILE_SYSTEM_SAVE = "/file/system/save";
     public static final String FILE_SYSTEM_UPDATE = "/file/system/update";
     public static final String FILE_SYSTEM_DELETE = "/file/system/delete";
+
+    public static final String BRAND_LIST = "/brand/list";
+    public static final String BRAND_FIND = "/brand/find";
+    public static final String BRAND_SAVE = "/brand/save";
+    public static final String BRAND_UPDATE = "/brand/update";
+    public static final String BRAND_DELETE = "/brand/delete";
+    public static final String BRAND_ADMIN_LIST = "/brand/admin/list";
+    public static final String BRAND_ADMIN_FIND = "/brand/admin/find";
+    public static final String BRAND_ADMIN_SAVE = "/brand/admin/save";
+    public static final String BRAND_ADMIN_UPDATE = "/brand/admin/update";
+    public static final String BRAND_ADMIN_DELETE = "/brand/admin/delete";
+    public static final String BRAND_SYSTEM_LIST = "/brand/system/list";
+    public static final String BRAND_SYSTEM_FIND = "/brand/system/find";
+    public static final String BRAND_SYSTEM_SAVE = "/brand/system/save";
+    public static final String BRAND_SYSTEM_UPDATE = "/brand/system/update";
+    public static final String BRAND_SYSTEM_DELETE = "/brand/system/delete";
 
     public static final String GUANGQI_CUSTOMER_LIST = "/guangqi/customer/list";
     public static final String GUANGQI_CUSTOMER_FIND = "/guangqi/customer/find";

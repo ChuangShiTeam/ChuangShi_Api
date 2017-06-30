@@ -39,7 +39,9 @@ public class WebConfig extends JFinalConfig {
         routes.add("/menu", MenuController.class);
         routes.add("/api", ApiController.class);
         routes.add("/user", UserController.class);
+        routes.add("/user/level", UserLevelController.class);
         routes.add("/file", FileController.class);
+        routes.add("/brand", BrandController.class);
 
         routes.add("/guangqi/customer", GuangqiCustomerController.class);
         routes.add("/guangqi/prize", GuangqiPrizeController.class);
@@ -84,7 +86,9 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_api", "api_id", Api.class);
         activeRecordPlugin.addMapping("table_menu_api", "menu_api_id", MenuApi.class);
         activeRecordPlugin.addMapping("table_user", "user_id", User.class);
+        activeRecordPlugin.addMapping("table_user_level", "user_level_id", UserLevel.class);
         activeRecordPlugin.addMapping("table_file", "file_id", File.class);
+        activeRecordPlugin.addMapping("table_brand", "brand_id", Brand.class);
 
         activeRecordPlugin.addMapping("table_guangqi_customer", "guangqi_customer_id", GuangqiCustomer.class);
         activeRecordPlugin.addMapping("table_guangqi_prize", "guangqi_prize_id", GuangqiPrize.class);

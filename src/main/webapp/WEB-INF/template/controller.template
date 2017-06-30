@@ -4,15 +4,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.#(first_upper_model_name);
-import com.nowui.chuangshi.service.#(first_upper_model_name)Service;
+import com.nowui.chuangshi.model.#(first_upper_model_name_without_underline);
+import com.nowui.chuangshi.service.#(first_upper_model_name_without_underline)Service;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
 
-public class #(first_upper_model_name)Controller extends Controller {
+public class #(first_upper_model_name_without_underline)Controller extends Controller {
 
-    private final #(first_upper_model_name)Service #(first_lower_model_name)Service = new #(first_upper_model_name)Service();
+    private final #(first_upper_model_name_without_underline)Service #(first_lower_model_name_without_underline)Service = new #(first_upper_model_name_without_underline)Service();
 
     @ActionKey(Url.#(upper_model_name)_LIST)
     public void list() {
@@ -26,10 +26,10 @@ public class #(first_upper_model_name)Controller extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<#(first_upper_model_name)> resultList = #(first_lower_model_name)Service.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN(), request_app_id, request_http_id, request_user_id);
+        List<#(first_upper_model_name_without_underline)> resultList = #(first_lower_model_name_without_underline)Service.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN(), request_app_id, request_http_id, request_user_id);
 
-        for (#(first_upper_model_name) result : resultList) {
-            result.keep(#(first_upper_model_name).#(upper_column_key), #(first_upper_model_name).SYSTEM_VERSION);
+        for (#(first_upper_model_name_without_underline) result : resultList) {
+            result.keep(#(first_upper_model_name_without_underline).#(upper_column_key), #(first_upper_model_name_without_underline).SYSTEM_VERSION);
         }
 
         renderSuccessJson(resultList);
@@ -38,21 +38,21 @@ public class #(first_upper_model_name)Controller extends Controller {
     @ActionKey(Url.#(upper_model_name)_FIND)
     public void find() {
         validateRequest_app_id();
-        validate(#(first_upper_model_name).#(upper_column_key));
+        validate(#(first_upper_model_name_without_underline).#(upper_column_key));
 
-        #(first_upper_model_name) model = getModel(#(first_upper_model_name).class);
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        #(first_upper_model_name) #(lower_model_name) = #(first_lower_model_name)Service.findBy#(first_upper_column_key)(model.get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id);
+        #(first_upper_model_name_without_underline) #(lower_model_name) = #(first_lower_model_name_without_underline)Service.findBy#(first_upper_column_key)(model.get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id);
 
         authenticateApp_id(#(lower_model_name).getApp_id());
         authenticateSystem_create_user_id(#(lower_model_name).getSystem_create_user_id());
 
-        #(lower_model_name).keep(#(first_upper_model_name).#(upper_column_key), #(first_upper_model_name).SYSTEM_VERSION);
+        #(lower_model_name).keep(#(first_upper_model_name_without_underline).#(upper_column_key), #(first_upper_model_name_without_underline).SYSTEM_VERSION);
 
         renderSuccessJson(#(lower_model_name));
     }
@@ -60,9 +60,9 @@ public class #(first_upper_model_name)Controller extends Controller {
     @ActionKey(Url.#(upper_model_name)_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(#for(column : columnList)#if(column.column_name == column_key || column.column_name == "app_id")#else #(first_upper_model_name).#(column.upper_column_name)#if(!for.last), #end #end #end);
+        validate(#for(column : columnList)#if(column.column_name == column_key || column.column_name == "app_id")#else #(first_upper_model_name_without_underline).#(column.upper_column_name)#if(!for.last), #end #end #end);
 
-        #(first_upper_model_name) model = getModel(#(first_upper_model_name).class);
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
         String #(column_key) = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
@@ -70,7 +70,7 @@ public class #(first_upper_model_name)Controller extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = #(first_lower_model_name)Service.save(#(column_key), request_app_id, #for(column : columnList)# if(column.column_name == column_key || column.column_name == "app_id")#else model.get#(column.first_column_name)(), #end #end request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = #(first_lower_model_name_without_underline)Service.save(#(column_key), request_app_id, #for(column : columnList)# if(column.column_name == column_key || column.column_name == "app_id")#else model.get#(column.first_column_name)(), #end #end request_user_id, request_app_id, request_http_id, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -78,21 +78,21 @@ public class #(first_upper_model_name)Controller extends Controller {
     @ActionKey(Url.#(upper_model_name)_UPDATE)
     public void update() {
         validateRequest_app_id();
-        validate(#for(column : columnList)#if(column.column_name != "app_id")#(first_upper_model_name).#(column.upper_column_name), #end #end #(first_upper_model_name).SYSTEM_VERSION);
+        validate(#for(column : columnList)#if(column.column_name != "app_id")#(first_upper_model_name_without_underline).#(column.upper_column_name), #end #end #(first_upper_model_name_without_underline).SYSTEM_VERSION);
 
-        #(first_upper_model_name) model = getModel(#(first_upper_model_name).class);
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        #(first_upper_model_name) #(lower_model_name) = #(first_lower_model_name)Service.findBy#(first_upper_column_key)(model.get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id);
+        #(first_upper_model_name_without_underline) #(lower_model_name) = #(first_lower_model_name_without_underline)Service.findBy#(first_upper_column_key)(model.get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id);
 
         authenticateApp_id(#(lower_model_name).getApp_id());
         authenticateSystem_create_user_id(#(lower_model_name).getSystem_create_user_id());
 
-        Boolean result = #(first_lower_model_name)Service.updateValidateSystem_version(#for(column : columnList)# if(column.column_name != "app_id")model.get#(column.first_column_name)(), #end #end request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = #(first_lower_model_name_without_underline)Service.updateValidateSystem_version(#for(column : columnList)# if(column.column_name != "app_id")model.get#(column.first_column_name)(), #end #end request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -100,21 +100,21 @@ public class #(first_upper_model_name)Controller extends Controller {
     @ActionKey(Url.#(upper_model_name)_DELETE)
     public void delete() {
         validateRequest_app_id();
-        validate(#(first_upper_model_name).#(upper_column_key), #(first_upper_model_name).SYSTEM_VERSION);
+        validate(#(first_upper_model_name_without_underline).#(upper_column_key), #(first_upper_model_name_without_underline).SYSTEM_VERSION);
 
-        #(first_upper_model_name) model = getModel(#(first_upper_model_name).class);
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        #(first_upper_model_name) #(lower_model_name) = #(first_lower_model_name)Service.findBy#(first_upper_column_key)(model.get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id);
+        #(first_upper_model_name_without_underline) #(lower_model_name) = #(first_lower_model_name_without_underline)Service.findBy#(first_upper_column_key)(model.get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id);
 
         authenticateApp_id(#(lower_model_name).getApp_id());
         authenticateSystem_create_user_id(#(lower_model_name).getSystem_create_user_id());
 
-        Boolean result = #(first_lower_model_name)Service.deleteBy#(first_upper_column_key)AndSystem_update_user_idValidateSystem_version(model.get#(first_upper_column_key)(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = #(first_lower_model_name_without_underline)Service.deleteBy#(first_upper_column_key)AndSystem_update_user_idValidateSystem_version(model.get#(first_upper_column_key)(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -122,20 +122,20 @@ public class #(first_upper_model_name)Controller extends Controller {
     @ActionKey(Url.#(upper_model_name)_ADMIN_LIST)
     public void adminList() {
         validateRequest_app_id();
-        validate(#(first_upper_model_name).#(lower_model_name)_name, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validate(#(first_upper_model_name_without_underline).#(upper_model_name)_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
-        #(first_upper_model_name) model = getModel(#(first_upper_model_name).class);
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = #(first_lower_model_name)Service.countByApp_idOrLike#(first_upper_model_name)_name(request_app_id, model.get#(first_upper_model_name)_name(), request_app_id, request_http_id, request_user_id);
-        List<#(first_upper_model_name)> resultList = #(first_lower_model_name)Service.listByApp_idOrLike#(first_upper_model_name)_nameAndLimit(request_app_id, model.get#(first_upper_model_name)_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = #(first_lower_model_name_without_underline)Service.countByApp_idOrLike#(first_upper_model_name)_name(request_app_id, model.get#(first_upper_model_name)_name(), request_app_id, request_http_id, request_user_id);
+        List<#(first_upper_model_name_without_underline)> resultList = #(first_lower_model_name_without_underline)Service.listByApp_idOrLike#(first_upper_model_name)_nameAndLimit(request_app_id, model.get#(first_upper_model_name)_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
 
-        for (#(first_upper_model_name) result : resultList) {
-            result.keep(#(first_upper_model_name).#(upper_column_key), #(first_upper_model_name).SYSTEM_VERSION);
+        for (#(first_upper_model_name_without_underline) result : resultList) {
+            result.keep(#(first_upper_model_name_without_underline).#(upper_column_key), #(first_upper_model_name_without_underline).SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -144,20 +144,20 @@ public class #(first_upper_model_name)Controller extends Controller {
     @ActionKey(Url.#(upper_model_name)_ADMIN_FIND)
     public void adminFind() {
         validateRequest_app_id();
-        validate(#(first_upper_model_name).#(upper_column_key));
+        validate(#(first_upper_model_name_without_underline).#(upper_column_key));
 
-        #(first_upper_model_name) model = getModel(#(first_upper_model_name).class);
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        #(first_upper_model_name) #(lower_model_name) = #(first_lower_model_name)Service.findBy#(first_upper_column_key)(model.get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id);
+        #(first_upper_model_name_without_underline) #(lower_model_name) = #(first_lower_model_name_without_underline)Service.findBy#(first_upper_column_key)(model.get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id);
 
         authenticateApp_id(#(lower_model_name).getApp_id());
 
-        #(lower_model_name).keep(#(first_upper_model_name).#(upper_column_key), #(first_upper_model_name).SYSTEM_VERSION);
+        #(lower_model_name).keep(#(first_upper_model_name_without_underline).#(upper_column_key), #(first_upper_model_name_without_underline).SYSTEM_VERSION);
 
         renderSuccessJson(#(lower_model_name));
     }
@@ -170,20 +170,20 @@ public class #(first_upper_model_name)Controller extends Controller {
     @ActionKey(Url.#(upper_model_name)_ADMIN_UPDATE)
     public void adminUpdate() {
         validateRequest_app_id();
-        validate(#for(column : columnList)#if(column.column_name != "app_id")#(first_upper_model_name).#(column.upper_column_name), #end #end #(first_upper_model_name).SYSTEM_VERSION);
+        validate(#for(column : columnList)#if(column.column_name != "app_id")#(first_upper_model_name_without_underline).#(column.upper_column_name), #end #end #(first_upper_model_name_without_underline).SYSTEM_VERSION);
 
-        #(first_upper_model_name) model = getModel(#(first_upper_model_name).class);
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        #(first_upper_model_name) #(lower_model_name) = #(first_lower_model_name)Service.findBy#(first_upper_column_key)(model.get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id);
+        #(first_upper_model_name_without_underline) #(lower_model_name) = #(first_lower_model_name_without_underline)Service.findBy#(first_upper_column_key)(model.get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id);
 
         authenticateApp_id(#(lower_model_name).getApp_id());
 
-        Boolean result = #(first_lower_model_name)Service.updateValidateSystem_version(#for(column : columnList)# if(column.column_name != "app_id")model.get#(column.first_column_name)(), #end #end request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = #(first_lower_model_name_without_underline)Service.updateValidateSystem_version(#for(column : columnList)# if(column.column_name != "app_id")model.get#(column.first_column_name)(), #end #end request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -191,20 +191,20 @@ public class #(first_upper_model_name)Controller extends Controller {
     @ActionKey(Url.#(upper_model_name)_ADMIN_DELETE)
     public void adminDelete() {
         validateRequest_app_id();
-        validate(#(first_upper_model_name).#(upper_column_key), #(first_upper_model_name).SYSTEM_VERSION);
+        validate(#(first_upper_model_name_without_underline).#(upper_column_key), #(first_upper_model_name_without_underline).SYSTEM_VERSION);
 
-        #(first_upper_model_name) model = getModel(#(first_upper_model_name).class);
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        #(first_upper_model_name) #(lower_model_name) = #(first_lower_model_name)Service.findBy#(first_upper_column_key)(model.get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id);
+        #(first_upper_model_name_without_underline) #(lower_model_name) = #(first_lower_model_name_without_underline)Service.findBy#(first_upper_column_key)(model.get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id);
 
         authenticateApp_id(#(lower_model_name).getApp_id());
 
-        Boolean result = #(first_lower_model_name)Service.deleteBy#(first_upper_column_key)AndSystem_update_user_idValidateSystem_version(model.get#(first_upper_column_key)(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = #(first_lower_model_name_without_underline)Service.deleteBy#(first_upper_column_key)AndSystem_update_user_idValidateSystem_version(model.get#(first_upper_column_key)(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -212,18 +212,18 @@ public class #(first_upper_model_name)Controller extends Controller {
     @ActionKey(Url.#(upper_model_name)_SYSTEM_LIST)
     public void systemList() {
         validateRequest_app_id();
-        validate(#(first_upper_model_name).APP_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validate(#(first_upper_model_name_without_underline).APP_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
-        #(first_upper_model_name) model = getModel(#(first_upper_model_name).class);
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Integer total = #(first_lower_model_name)Service.countByOrApp_idOrLike#(first_upper_model_name)_name(model.getApp_id(), model.get#(first_upper_model_name)_name(), request_app_id, request_http_id, request_user_id);
-        List<#(first_upper_model_name)> resultList = #(first_lower_model_name)Service.listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit(model.getApp_id(), model.get#(first_upper_model_name)_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = #(first_lower_model_name_without_underline)Service.countByOrApp_idOrLike#(first_upper_model_name)_name(model.getApp_id(), model.get#(first_upper_model_name)_name(), request_app_id, request_http_id, request_user_id);
+        List<#(first_upper_model_name_without_underline)> resultList = #(first_lower_model_name_without_underline)Service.listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit(model.getApp_id(), model.get#(first_upper_model_name)_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
 
-        for (#(first_upper_model_name) result : resultList) {
-            result.keep(#(first_upper_model_name).#(upper_column_key), #(first_upper_model_name).SYSTEM_VERSION);
+        for (#(first_upper_model_name_without_underline) result : resultList) {
+            result.keep(#(first_upper_model_name_without_underline).#(upper_column_key), #(first_upper_model_name_without_underline).SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -232,16 +232,16 @@ public class #(first_upper_model_name)Controller extends Controller {
     @ActionKey(Url.#(upper_model_name)_SYSTEM_FIND)
     public void systemFind() {
         validateRequest_app_id();
-        validate(#(first_upper_model_name).#(upper_column_key));
+        validate(#(first_upper_model_name_without_underline).#(upper_column_key));
 
-        #(first_upper_model_name) model = getModel(#(first_upper_model_name).class);
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        #(first_upper_model_name) #(lower_model_name) = #(first_lower_model_name)Service.findBy#(first_upper_column_key)(model.get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id);
+        #(first_upper_model_name_without_underline) #(lower_model_name) = #(first_lower_model_name_without_underline)Service.findBy#(first_upper_column_key)(model.get#(first_upper_column_key)(), request_app_id, request_http_id, request_user_id);
 
-        #(lower_model_name).keep(#(first_upper_model_name).#(upper_column_key), #(first_upper_model_name).SYSTEM_VERSION);
+        #(lower_model_name).keep(#(first_upper_model_name_without_underline).#(upper_column_key), #(first_upper_model_name_without_underline).SYSTEM_VERSION);
 
         renderSuccessJson(#(lower_model_name));
     }
@@ -249,15 +249,15 @@ public class #(first_upper_model_name)Controller extends Controller {
     @ActionKey(Url.#(upper_model_name)_SYSTEM_SAVE)
     public void systemSave() {
         validateRequest_app_id();
-        validate(#for(column : columnList)#if(column.column_name == column_key)#else #(first_upper_model_name).#(column.upper_column_name)#if(!for.last), #end #end #end);
+        validate(#for(column : columnList)#if(column.column_name == column_key)#else #(first_upper_model_name_without_underline).#(column.upper_column_name)#if(!for.last), #end #end #end);
 
-        #(first_upper_model_name) model = getModel(#(first_upper_model_name).class);
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
         String #(column_key) = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = #(first_lower_model_name)Service.save(#(column_key), #for(column : columnList)# if(column.column_name == column_key)#else model.get#(column.first_column_name)(), #end #end request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = #(first_lower_model_name_without_underline)Service.save(#(column_key), #for(column : columnList)# if(column.column_name == column_key)#else model.get#(column.first_column_name)(), #end #end request_user_id, request_app_id, request_http_id, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -265,14 +265,14 @@ public class #(first_upper_model_name)Controller extends Controller {
     @ActionKey(Url.#(upper_model_name)_SYSTEM_UPDATE)
     public void systemUpdate() {
         validateRequest_app_id();
-        validate(#for(column : columnList)#if(column.column_name != "app_id")#(first_upper_model_name).#(column.upper_column_name), #end #end #(first_upper_model_name).SYSTEM_VERSION);
+        validate(#for(column : columnList)#if(column.column_name != "app_id")#(first_upper_model_name_without_underline).#(column.upper_column_name), #end #end #(first_upper_model_name_without_underline).SYSTEM_VERSION);
 
-        #(first_upper_model_name) model = getModel(#(first_upper_model_name).class);
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = #(first_lower_model_name)Service.updateValidateSystem_version(#for(column : columnList)# if(column.column_name != "app_id")model.get#(column.first_column_name)(), #end #end request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = #(first_lower_model_name_without_underline)Service.updateValidateSystem_version(#for(column : columnList)# if(column.column_name != "app_id")model.get#(column.first_column_name)(), #end #end request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -280,14 +280,14 @@ public class #(first_upper_model_name)Controller extends Controller {
     @ActionKey(Url.#(upper_model_name)_SYSTEM_DELETE)
     public void systemDelete() {
         validateRequest_app_id();
-        validate(#(first_upper_model_name).#(upper_column_key), #(first_upper_model_name).SYSTEM_VERSION);
+        validate(#(first_upper_model_name_without_underline).#(upper_column_key), #(first_upper_model_name_without_underline).SYSTEM_VERSION);
 
-        #(first_upper_model_name) model = getModel(#(first_upper_model_name).class);
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = #(first_lower_model_name)Service.deleteBy#(first_upper_column_key)AndSystem_update_user_idValidateSystem_version(model.get#(first_upper_column_key)(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = #(first_lower_model_name_without_underline)Service.deleteBy#(first_upper_column_key)AndSystem_update_user_idValidateSystem_version(model.get#(first_upper_column_key)(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
 
         renderSuccessJson(result);
     }

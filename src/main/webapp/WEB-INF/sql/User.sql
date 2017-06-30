@@ -1,16 +1,24 @@
 #namespace("user")
 
-  #sql("countByApp_id")
+  #sql("countByApp_idOrLikeUser_name")
     SELECT COUNT(*) FROM table_user
     WHERE system_status = 1
     AND app_id = #p(app_id)
+    #if(user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND user_name LIKE #p(user_name)
+    #end
   #end
 
-  #sql("countByOrApp_id")
+  #sql("countByOrApp_idOrLikeUser_name")
     SELECT COUNT(*) FROM table_user
     WHERE system_status = 1
     #if(app_id)
     AND app_id = #p(app_id)
+    #end
+    #if(user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND user_name LIKE #p(user_name)
     #end
   #end
 
@@ -25,23 +33,31 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByApp_idAndLimit")
+  #sql("listByApp_idOrLikeUser_nameAndLimit")
     SELECT
     user_id
     FROM table_user
     WHERE system_status = 1
     AND app_id = #p(app_id)
+    #if(user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND user_name LIKE #p(user_name)
+    #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idAndLimit")
+  #sql("listByOrApp_idOrLikeUser_nameAndLimit")
     SELECT
     user_id
     FROM table_user
     WHERE system_status = 1
     #if(app_id)
     AND app_id = #p(app_id)
+    #end
+    #if(user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND user_name LIKE #p(user_name)
     #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)

@@ -3,13 +3,13 @@ import {connect} from 'dva';
 import QueueAnim from 'rc-queue-anim';
 import {Row, Col, Button, Form, Select, Input, Table, Popconfirm, message} from 'antd';
 
-import #(first_upper_model_name)Detail from './#(first_upper_model_name)Detail';
+import #(first_upper_model_name_without_underline)Detail from './#(first_upper_model_name_without_underline)Detail';
 import constant from '../../util/constant';
 import notification from '../../util/notification';
 import validate from '../../util/validate';
 import http from '../../util/http';
 
-class #(first_upper_model_name)Index extends Component {
+class #(first_upper_model_name_without_underline)Index extends Component {
     constructor(props) {
         super(props);
 
@@ -28,7 +28,7 @@ class #(first_upper_model_name)Index extends Component {
         }
 
         this.props.form.setFieldsValue({
-            #(lower_model_name)_name: this.props.api.#(lower_model_name)_name
+            #(lower_model_name)_name: this.props.#(lower_model_name).#(lower_model_name)_name
         });
 
         this.handleLoad();
@@ -285,16 +285,16 @@ class #(first_upper_model_name)Index extends Component {
                        loading={this.state.is_load} columns={columns}
                        dataSource={this.props.#(lower_model_name).list} pagination={pagination}
                        bordered/>
-                <#(first_upper_model_name)Detail/>
+                <#(first_upper_model_name_without_underline)Detail/>
             </QueueAnim>
         );
     }
 }
 
-#(first_upper_model_name)Index.propTypes = {};
+#(first_upper_model_name_without_underline)Index.propTypes = {};
 
-#(first_upper_model_name)Index = Form.create({})(#(first_upper_model_name)Index);
+#(first_upper_model_name_without_underline)Index = Form.create({})(#(first_upper_model_name_without_underline)Index);
 
 export default connect(({#(lower_model_name)}) => ({
     #(lower_model_name)
-}))(#(first_upper_model_name)Index);
+}))(#(first_upper_model_name_without_underline)Index);

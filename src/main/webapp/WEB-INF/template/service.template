@@ -1,49 +1,49 @@
 package com.nowui.chuangshi.service;
 
-import com.nowui.chuangshi.cache.#(first_upper_model_name)Cache;
-import com.nowui.chuangshi.model.#(first_upper_model_name);
+import com.nowui.chuangshi.cache.#(first_upper_model_name_without_underline)Cache;
+import com.nowui.chuangshi.model.#(first_upper_model_name_without_underline);
 
 import java.util.Date;
 import java.util.List;
 
-public class #(first_upper_model_name)Service extends Service {
+public class #(first_upper_model_name_without_underline)Service extends Service {
 
-    private #(first_upper_model_name)Cache #(first_lower_model_name)Cache = new #(first_upper_model_name)Cache();
+    private #(first_upper_model_name_without_underline)Cache #(first_lower_model_name_without_underline)Cache = new #(first_upper_model_name_without_underline)Cache();
 
     public Integer countByApp_idOrLike#(first_upper_model_name)_name(String app_id, String #(lower_model_name)_name, String request_app_id, String request_http_id, String request_user_id) {
-        return #(first_lower_model_name)Cache.countByApp_idOrLike#(first_upper_model_name)_name(app_id, #(lower_model_name)_name, request_app_id, request_http_id, request_user_id);
+        return #(first_lower_model_name_without_underline)Cache.countByApp_idOrLike#(first_upper_model_name)_name(app_id, #(lower_model_name)_name, request_app_id, request_http_id, request_user_id);
     }
 
     public Integer countByOrApp_idOrLike#(first_upper_model_name)_name(String app_id, String #(lower_model_name)_name, String request_app_id, String request_http_id, String request_user_id) {
-        return #(first_lower_model_name)Cache.countByOrApp_idOrLike#(first_upper_model_name)_name(app_id, #(lower_model_name)_name, request_app_id, request_http_id, request_user_id);
+        return #(first_lower_model_name_without_underline)Cache.countByOrApp_idOrLike#(first_upper_model_name)_name(app_id, #(lower_model_name)_name, request_app_id, request_http_id, request_user_id);
     }
 
-    public List<#(first_upper_model_name)> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
-        return #(first_lower_model_name)Cache.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n, request_app_id, request_http_id, request_user_id);
+    public List<#(first_upper_model_name_without_underline)> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+        return #(first_lower_model_name_without_underline)Cache.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n, request_app_id, request_http_id, request_user_id);
     }
 
-    public List<#(first_upper_model_name)> listByApp_idOrLike#(first_upper_model_name)_nameAndLimit(String app_id, String #(lower_model_name)_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
-        return #(first_lower_model_name)Cache.listByApp_idOrLike#(first_upper_model_name)_nameAndLimit(app_id, #(lower_model_name)_name, m, n, request_app_id, request_http_id, request_user_id);
+    public List<#(first_upper_model_name_without_underline)> listByApp_idOrLike#(first_upper_model_name)_nameAndLimit(String app_id, String #(lower_model_name)_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+        return #(first_lower_model_name_without_underline)Cache.listByApp_idOrLike#(first_upper_model_name)_nameAndLimit(app_id, #(lower_model_name)_name, m, n, request_app_id, request_http_id, request_user_id);
     }
 
-    public List<#(first_upper_model_name)> listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit(String app_id, String #(lower_model_name)_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
-        return #(first_lower_model_name)Cache.listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit(app_id, #(lower_model_name)_name, m, n, request_app_id, request_http_id, request_user_id);
+    public List<#(first_upper_model_name_without_underline)> listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit(String app_id, String #(lower_model_name)_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+        return #(first_lower_model_name_without_underline)Cache.listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit(app_id, #(lower_model_name)_name, m, n, request_app_id, request_http_id, request_user_id);
     }
 
-    public #(first_upper_model_name) findBy#(first_upper_column_key)(String #(column_key), String request_app_id, String request_http_id, String request_user_id) {
-        return #(first_lower_model_name)Cache.findBy#(first_upper_column_key)(#(column_key), request_app_id, request_http_id, request_user_id);
+    public #(first_upper_model_name_without_underline) findBy#(first_upper_column_key)(String #(column_key), String request_app_id, String request_http_id, String request_user_id) {
+        return #(first_lower_model_name_without_underline)Cache.findBy#(first_upper_column_key)(#(column_key), request_app_id, request_http_id, request_user_id);
     }
 
     public Boolean save(#for(column : columnList)#if(column.data_type == "TINYINT")Boolean #elseif(column.data_type == "INT")Integer #elseif(column.data_type == "DECIMAL")BigDecimal #else String #end #(column.column_name), #end String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
-        return #(first_lower_model_name)Cache.save(#for(column : columnList)#(column.column_name), #end system_create_user_id, request_app_id, request_http_id, request_user_id);
+        return #(first_lower_model_name_without_underline)Cache.save(#for(column : columnList)#(column.column_name), #end system_create_user_id, request_app_id, request_http_id, request_user_id);
     }
 
     public Boolean updateValidateSystem_version(String #(column_key), #for(column : columnList)# if(column.column_name == column_key || column.column_name == "app_id")#else #if(column.data_type == "TINYINT")Boolean #elseif(column.data_type == "INT")Integer #elseif(column.data_type == "DECIMAL")BigDecimal #else String #end #(column.column_name), #end #end String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
-        return #(first_lower_model_name)Cache.updateValidateSystem_version(#(column_key), #for(column : columnList)# if(column.column_name == column_key || column.column_name == "app_id")#else #(column.column_name), #end #end system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
+        return #(first_lower_model_name_without_underline)Cache.updateValidateSystem_version(#(column_key), #for(column : columnList)# if(column.column_name == column_key || column.column_name == "app_id")#else #(column.column_name), #end #end system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
     }
 
     public Boolean deleteBy#(first_upper_column_key)AndSystem_update_user_idValidateSystem_version(String #(column_key), String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
-        return #(first_lower_model_name)Cache.deleteBy#(first_upper_column_key)AndSystem_update_user_idValidateSystem_version(#(column_key), system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
+        return #(first_lower_model_name_without_underline)Cache.deleteBy#(first_upper_column_key)AndSystem_update_user_idValidateSystem_version(#(column_key), system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
     }
 
 }

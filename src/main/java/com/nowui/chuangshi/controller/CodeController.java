@@ -109,10 +109,9 @@ public class CodeController extends Controller {
         String upper_model_name = lower_model_name.toUpperCase();
         String first_upper_model_name = lower_model_name.substring(0, 1).toUpperCase() + lower_model_name.substring(1);
         String first_lower_model_name = lower_model_name.substring(0, 1).toLowerCase() + lower_model_name.substring(1);
+        String first_upper_model_name_without_underline = removeUnderline(first_upper_model_name);
+        String first_lower_model_name_without_underline = removeUnderline(first_lower_model_name);
         String column_key = "lower_model_name" + "_id";
-
-        first_upper_model_name = check(first_upper_model_name);
-        first_lower_model_name = check(first_lower_model_name);
 
         for (Record record : codeList) {
             if (!record.getStr("column_name").startsWith("system_")) {
@@ -138,44 +137,39 @@ public class CodeController extends Controller {
             }
         }
 
-//        if (first_upper_model_name.contains("_")) {
-//            int index = first_upper_model_name.indexOf("_");
-//            first_upper_model_name = first_upper_model_name.substring(0, index) + first_upper_model_name.substring(index + 1, index + 2).toUpperCase() + first_upper_model_name.substring(index + 2);
-//        }
-
 
         engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/");
 
-        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, columnList, "url.template", "Url.java");
-        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, columnList, "model.template", first_upper_model_name + ".java");
-        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, columnList, "dao.template", first_upper_model_name + "Dao.java");
-        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, columnList, "service.template", first_upper_model_name + "Service.java");
-        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, columnList, "cache.template", first_upper_model_name + "Cache.java");
-        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, columnList, "controller.template", first_upper_model_name + "Controller.java");
-        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, columnList, "config.template", "WebConfig.java");
-        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, columnList, "state.template", lower_model_name + ".js");
-        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, columnList, "index.template", first_upper_model_name + "Index.js");
-        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, columnList, "detail.template", first_upper_model_name + "Detail.js");
-        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, columnList, "router.template", "Router.js");
-        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, columnList, "app.template", "index.js");
-        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, columnList, "sql.template", first_upper_model_name + ".sql");
+        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, first_upper_model_name_without_underline, first_lower_model_name_without_underline, columnList, "url.template", "Url.java");
+        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, first_upper_model_name_without_underline, first_lower_model_name_without_underline, columnList, "model.template", first_upper_model_name_without_underline + ".java");
+        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, first_upper_model_name_without_underline, first_lower_model_name_without_underline, columnList, "dao.template", first_upper_model_name_without_underline + "Dao.java");
+        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, first_upper_model_name_without_underline, first_lower_model_name_without_underline, columnList, "service.template", first_upper_model_name_without_underline + "Service.java");
+        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, first_upper_model_name_without_underline, first_lower_model_name_without_underline, columnList, "cache.template", first_upper_model_name_without_underline + "Cache.java");
+        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, first_upper_model_name_without_underline, first_lower_model_name_without_underline, columnList, "controller.template", first_upper_model_name_without_underline + "Controller.java");
+        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, first_upper_model_name_without_underline, first_lower_model_name_without_underline, columnList, "config.template", "WebConfig.java");
+        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, first_upper_model_name_without_underline, first_lower_model_name_without_underline, columnList, "state.template", lower_model_name + ".js");
+        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, first_upper_model_name_without_underline, first_lower_model_name_without_underline, columnList, "index.template", first_upper_model_name_without_underline + "Index.js");
+        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, first_upper_model_name_without_underline, first_lower_model_name_without_underline, columnList, "detail.template", first_upper_model_name_without_underline + "Detail.js");
+        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, first_upper_model_name_without_underline, first_lower_model_name_without_underline, columnList, "router.template", "Router.js");
+        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, first_upper_model_name_without_underline, first_lower_model_name_without_underline, columnList, "app.template", "index.js");
+        write(engine, column_key, lower_model_name, upper_model_name, first_upper_model_name, first_lower_model_name, first_upper_model_name_without_underline, first_lower_model_name_without_underline, columnList, "sql.template", first_upper_model_name_without_underline + ".sql");
 
     }
 
-    private String check(String name) {
+    private String removeUnderline(String name) {
         if (name.contains("_")) {
             int index = name.indexOf("_");
             name = name.substring(0, index) + name.substring(index + 1, index + 2).toUpperCase() + name.substring(index + 2);
 
             if (name.contains("_")) {
-                name = check(name);
+                name = removeUnderline(name);
             }
         }
 
         return name;
     }
 
-    private void write(Engine engine, String column_key, String lower_model_name, String upper_model_name, String first_upper_model_name, String first_lower_model_name, List<Record> columnList, String templateName, String fileName) {
+    private void write(Engine engine, String column_key, String lower_model_name, String upper_model_name, String first_upper_model_name, String first_lower_model_name, String first_upper_model_name_without_underline, String first_lower_model_name_without_underline, List<Record> columnList, String templateName, String fileName) {
         String first_upper_column_key = column_key.substring(0, 1).toUpperCase() + column_key.substring(1);
         String upper_column_key = column_key.toUpperCase();
         String url_model_name = lower_model_name.replaceAll("_", "/");
@@ -189,6 +183,8 @@ public class CodeController extends Controller {
         templateMap.put("upper_model_name", upper_model_name);
         templateMap.put("first_upper_model_name", first_upper_model_name);
         templateMap.put("first_lower_model_name", first_lower_model_name);
+        templateMap.put("first_upper_model_name_without_underline", first_upper_model_name_without_underline);
+        templateMap.put("first_lower_model_name_without_underline", first_lower_model_name_without_underline);
         templateMap.put("columnList", columnList);
 
         Template template = engine.getTemplate(templateName);

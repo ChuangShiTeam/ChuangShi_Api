@@ -3,7 +3,7 @@ package com.nowui.chuangshi.model;
 import com.nowui.chuangshi.constant.Column;
 import com.nowui.chuangshi.type.ColumnType;
 
-public class #(first_upper_model_name) extends Model<#(first_upper_model_name)> {
+public class #(first_upper_model_name_without_underline) extends Model<#(first_upper_model_name_without_underline)> {
 
     #for(column : columnList)
     #if(column.data_type == "TEXT")

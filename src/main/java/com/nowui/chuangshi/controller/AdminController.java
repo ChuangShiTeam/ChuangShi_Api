@@ -59,7 +59,7 @@ public class AdminController extends Controller {
     @ActionKey(Url.ADMIN_ADMIN_SAVE)
     public void adminSave() {
         validateRequest_app_id();
-        validate(User.APP_ID, User.USER_TYPE, User.USER_ACCOUNT, User.USER_PASSWORD, User.USER_NAME);
+        validate(User.USER_ACCOUNT, User.USER_PASSWORD, User.USER_NAME);
 
         authenticateRequest_app_idAndRequest_user_id();
 
@@ -69,7 +69,9 @@ public class AdminController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = userService.saveByUser_idAndApp_idAndUser_typeAndUser_accountAndUser_passwordAndUser_name(user_id, model.getApp_id(), model.getUser_type(), model.getUser_account(), model.getUser_password(), model.getUser_name(), request_user_id, request_app_id, request_http_id, request_user_id);
+        String user_type = UserType.ADMIN.getKey();
+
+        Boolean result = userService.saveByUser_idAndApp_idAndUser_typeAndUser_accountAndUser_passwordAndUser_name(user_id, request_app_id, user_type, model.getUser_account(), model.getUser_password(), model.getUser_name(), request_user_id, request_app_id, request_http_id, request_user_id);
 
         renderSuccessJson(result);
     }
