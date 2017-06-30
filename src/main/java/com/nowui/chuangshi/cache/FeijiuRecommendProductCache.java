@@ -74,17 +74,17 @@ public class FeijiuRecommendProductCache extends Cache {
         return feijiu_recommend_product;
     }
 
-    public Boolean save(String product_id, String app_id, String product_name, String product_image, String product_content, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
-        return feijiuRecommendProductDao.save(product_id, app_id, product_name, product_image, product_content, system_create_user_id, request_app_id, request_http_id, request_user_id);
+    public Boolean save(String product_id, String app_id, String product_name, String product_image, String product_link, String product_content, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+        return feijiuRecommendProductDao.save(product_id, app_id, product_name, product_image, product_link, product_content, system_create_user_id, request_app_id, request_http_id, request_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String product_id, String product_name, String product_image, String product_content, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean updateValidateSystem_version(String product_id, String product_name, String product_image, String product_link, String product_content, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
         FeijiuRecommendProduct feijiu_recommend_product = findByProduct_id(product_id, request_app_id, request_http_id, request_user_id);
         if (!feijiu_recommend_product.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = feijiuRecommendProductDao.update(product_id, product_name, product_image, product_content, system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
+        boolean result = feijiuRecommendProductDao.update(product_id, product_name, product_image, product_link, product_content, system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
 
         if (result) {
             CacheUtil.remove(FEIJIU_RECOMMEND_PRODUCT_BY_FEIJIU_RECOMMEND_PRODUCT_ID_CACHE, product_id);

@@ -95,12 +95,13 @@ public class FeijiuRecommendProductDao extends Dao {
         }
     }
 
-    public Boolean save(String product_id, String app_id, String product_name, String product_image, String product_content, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean save(String product_id, String app_id, String product_name, String product_image, String product_link, String product_content, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(FeijiuRecommendProduct.PRODUCT_ID, product_id);
         sqlMap.put(FeijiuRecommendProduct.APP_ID, app_id);
         sqlMap.put(FeijiuRecommendProduct.PRODUCT_NAME, product_name);
         sqlMap.put(FeijiuRecommendProduct.PRODUCT_IMAGE, product_image);
+        sqlMap.put(FeijiuRecommendProduct.PRODUCT_LINK, product_link);
         sqlMap.put(FeijiuRecommendProduct.PRODUCT_CONTENT, product_content);
         sqlMap.put(FeijiuRecommendProduct.SYSTEM_CREATE_USER_ID, system_create_user_id);
         sqlMap.put(FeijiuRecommendProduct.SYSTEM_CREATE_TIME, new Date());
@@ -115,11 +116,12 @@ public class FeijiuRecommendProductDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String product_id, String product_name, String product_image, String product_content, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean update(String product_id, String product_name, String product_image, String product_link, String product_content, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(FeijiuRecommendProduct.PRODUCT_ID, product_id);
         sqlMap.put(FeijiuRecommendProduct.PRODUCT_NAME, product_name);
         sqlMap.put(FeijiuRecommendProduct.PRODUCT_IMAGE, product_image);
+        sqlMap.put(FeijiuRecommendProduct.PRODUCT_LINK, product_link);
         sqlMap.put(FeijiuRecommendProduct.PRODUCT_CONTENT, product_content);
         sqlMap.put(FeijiuRecommendProduct.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(FeijiuRecommendProduct.SYSTEM_UPDATE_TIME, new Date());

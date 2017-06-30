@@ -38,12 +38,12 @@ public class FeijiuRecommendProductService extends Service {
         return feijiuRecommendProductCache.findByProduct_id(product_id, request_app_id, request_http_id, request_user_id);
     }
 
-    public Boolean save(String product_id, String app_id, String product_name, String product_image, String product_content, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
-        return feijiuRecommendProductCache.save(product_id, app_id, product_name, product_image, product_content, system_create_user_id, request_app_id, request_http_id, request_user_id);
+    public Boolean save(String product_id, String app_id, String product_name, String product_image, String product_link, String product_content, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+        return feijiuRecommendProductCache.save(product_id, app_id, product_name, product_image, product_link, product_content, system_create_user_id, request_app_id, request_http_id, request_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String product_id, String product_name, String product_image, String product_content, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
-        return feijiuRecommendProductCache.updateValidateSystem_version(product_id, product_name, product_image, product_content, system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
+    public Boolean updateValidateSystem_version(String product_id, String product_name, String product_image, String product_link, String product_content, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+        return feijiuRecommendProductCache.updateValidateSystem_version(product_id, product_name, product_image, product_link, product_content, system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
     }
 
     public Boolean deleteByProduct_idAndSystem_update_user_idValidateSystem_version(String product_id, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {

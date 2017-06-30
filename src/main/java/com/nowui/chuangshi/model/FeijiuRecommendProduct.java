@@ -17,6 +17,9 @@ public class FeijiuRecommendProduct extends Model<FeijiuRecommendProduct> {
     @Column(type = ColumnType.VARCHAR, length = 100, comment = "商品图片")
     public static final String PRODUCT_IMAGE = "product_image";
 
+    @Column(type = ColumnType.VARCHAR, length = 100, comment = "商品链接")
+    public static final String PRODUCT_LINK = "product_link";
+
     @Column(type = ColumnType.VARCHAR, length = 200, comment = "商品介绍")
     public static final String PRODUCT_CONTENT = "product_content";
 
@@ -52,6 +55,14 @@ public class FeijiuRecommendProduct extends Model<FeijiuRecommendProduct> {
 
     public void setProduct_image(String product_image) {
         set(PRODUCT_IMAGE, product_image);
+    }
+
+    public String getProduct_link() {
+        return getStr(PRODUCT_LINK);
+    }
+
+    public void setProduct_link(String product_link) {
+        set(PRODUCT_LINK, product_link);
     }
 
     public String getProduct_content() {

@@ -70,6 +70,7 @@
       app_id,
       product_name,
       product_image,
+      product_link,
       product_content,
       system_create_user_id,
       system_create_time,
@@ -82,6 +83,7 @@
       #p(app_id),
       #p(product_name),
       #p(product_image),
+      #p(product_link),
       #p(product_content),
       #p(system_create_user_id),
       #p(system_create_time),
@@ -96,6 +98,7 @@
     UPDATE table_feijiu_recommend_product SET
     product_name = #p(product_name),
     product_image = #p(product_image),
+    product_link = #p(product_link),
     product_content = #p(product_content),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
