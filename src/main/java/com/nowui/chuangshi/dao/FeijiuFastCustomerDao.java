@@ -161,7 +161,7 @@ public class FeijiuFastCustomerDao extends Dao {
         sqlMap.put(FeijiuFastCustomer.SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("feijiu_fast_customer.deleteByCustomer_idAndSystem_version", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_feijiu_fast_customer", "deleteBy", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_feijiu_fast_customer", "deleteByCustomer_idAndSystem_version", sqlPara, request_user_id);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }

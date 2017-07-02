@@ -4,6 +4,10 @@
     SELECT table_name
     FROM information_schema.tables
     WHERE table_schema = #p(table_schema)
+    #if(table_name)
+    #set(table_name = "%" + table_name + "%")
+    AND table_name LIKE #p(table_name)
+    #end
   #end
 
   #sql("listByTable_name")

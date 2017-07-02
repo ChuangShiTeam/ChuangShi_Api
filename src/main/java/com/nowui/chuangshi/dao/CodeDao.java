@@ -9,9 +9,10 @@ import java.util.List;
 
 public class CodeDao extends Dao {
 
-    public List<Record> listByTable_schema(String request_app_id, String request_http_id, String request_user_id) {
+    public List<Record> listByTable_schema(String table_name, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put("table_schema", "NowUI");
+        sqlMap.put("table_name", table_name);
         SqlPara sqlPara = Db.getSqlPara("code.listByTable_schema", sqlMap);
 
         logSql(request_app_id, request_http_id, "tables", "listByTable_schema", sqlPara, request_user_id);
@@ -21,8 +22,8 @@ public class CodeDao extends Dao {
 
     public List<Record> listByTable_name(String table_name, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
-        sqlMap.put("table_name", table_name);
         sqlMap.put("table_schema", "NowUI");
+        sqlMap.put("table_name", table_name);
         SqlPara sqlPara = Db.getSqlPara("code.listByTable_name", sqlMap);
 
         logSql(request_app_id, request_http_id, "columns", "listByTable_name", sqlPara, request_user_id);

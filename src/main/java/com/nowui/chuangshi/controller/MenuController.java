@@ -1,223 +1,192 @@
 package com.nowui.chuangshi.controller;
 
-
 import com.jfinal.core.ActionKey;
-import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.Api;
-import com.nowui.chuangshi.model.Category;
-import com.nowui.chuangshi.model.MenuApi;
-import com.nowui.chuangshi.service.ApiService;
-import com.nowui.chuangshi.service.CategoryService;
-import com.nowui.chuangshi.service.MenuApiService;
-import com.nowui.chuangshi.type.CategoryType;
+import com.nowui.chuangshi.model.Menu;
+import com.nowui.chuangshi.service.MenuService;
+import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
+import java.util.Map;
 
 public class MenuController extends Controller {
 
-    private final CategoryService categoryService = new CategoryService();
-    private final MenuApiService menuApiService = new MenuApiService();
-    private final ApiService apiService = new ApiService();
+    private final MenuService menuService = new MenuService();
 
     @ActionKey(Url.MENU_ADMIN_LIST)
     public void adminList() {
         validateRequest_app_id();
-        validate(Category.CATEGORY_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validate(Menu.APP_ID, Menu.MENU_NAME);
 
-        Category model = getModel(Category.class);
+        Menu model = getModel(Menu.class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = categoryService.countByApp_idAndNotParent_idOrLikeCategory_nameAndCategory_type(request_app_id, Constant.PARENT_ID, model.getCategory_name(), CategoryType.MENU.getKey(), request_app_id, request_http_id, request_user_id);
-        List<Category> resultList = categoryService.listByApp_idAndNotParent_idOrLikeCategory_nameAndCategory_typeAndLimit(request_app_id, Constant.PARENT_ID, model.getCategory_name(), CategoryType.MENU.getKey(), getM(), getN(), request_app_id, request_http_id, request_user_id);
-
-        setResultList(resultList, request_app_id, request_http_id, request_user_id);
-
-        renderSuccessJson(total, resultList);
-    }
-
-    @ActionKey(Url.MENU_API_ADMIN_LIST)
-    public void menuApiAdminList() {
-        validateRequest_app_id();
-        validate(MenuApi.MENU_ID);
-
-        MenuApi model = getModel(MenuApi.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        Category menu = categoryService.findByCategory_id(model.getMenu_id(), request_app_id, request_http_id, request_user_id);
-
-        List<Api> resultList = apiService.listNotInMenuByApp_id(menu.getApp_id(),request_app_id, request_http_id, request_user_id);
-
-        for (Api result : resultList) {
-            result.keep(Api.API_ID, Api.API_NAME);
-        }
+        List<Map<String, Object>> resultList = menuService.treeByApp_idOrLikeMenu_name(request_app_id, model.getMenu_name(), request_app_id, request_http_id, request_user_id);
 
         renderSuccessJson(resultList);
     }
 
-    @ActionKey(Url.MENU_API_ADMIN_SAVE)
-    public void menuApiAdminSave() {
+    @ActionKey(Url.MENU_ADMIN_FIND)
+    public void adminFind() {
         validateRequest_app_id();
-        validate(MenuApi.API_ID, MenuApi.MENU_ID, MenuApi.API_ID);
+        validate(Menu.MENU_ID);
 
-        MenuApi model = getModel(MenuApi.class);
+        Menu model = getModel(Menu.class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Category category = categoryService.findByCategory_id(model.getMenu_id(), request_app_id, request_http_id, request_user_id);
+        Menu menu = menuService.findByMenu_id(model.getMenu_id(), request_app_id, request_http_id, request_user_id);
 
-        Integer count = menuApiService.countByApp_idAndApi_id(category.getApp_id(), model.getApi_id(), request_app_id, request_http_id, request_user_id);
+        authenticateApp_id(menu.getApp_id());
 
-        if (count > 0) {
-            throw new RuntimeException("API重复啦");
-        }
+        menu.keep(Menu.MENU_ID, Menu.MENU_NAME, Menu.MENU_IMAGE, Menu.MENU_URL, Menu.MENU_SORT, Menu.MENU_PARENT_ID, Menu.SYSTEM_VERSION);
 
-        Boolean result = menuApiService.save(category.getApp_id(), model.getMenu_id(), model.getApi_id(), model.getMenu_api_sort(), request_user_id, request_app_id, request_http_id, request_user_id);
-
-        if (!result) {
-            throw new RuntimeException("保存不成功");
-        }
-
-        renderSuccessJson();
+        renderSuccessJson(menu);
     }
 
-    @ActionKey(Url.MENU_API_ADMIN_DELETE)
-    public void menuApiAdminDelete() {
+    @ActionKey(Url.MENU_ADMIN_SAVE)
+    public void adminSave() {
         validateRequest_app_id();
-        validate(MenuApi.MENU_ID, MenuApi.API_ID, MenuApi.SYSTEM_VERSION);
+        validate(Menu.MENU_PARENT_ID, Menu.MENU_NAME, Menu.MENU_IMAGE, Menu.MENU_URL, Menu.MENU_SORT);
 
-        MenuApi model = getModel(MenuApi.class);
+        Menu model = getModel(Menu.class);
+        String menu_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = menuApiService.deleteByMenu_idAndApi_id(model.getMenu_id(), model.getApi_id(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = menuService.save(menu_id, request_app_id, model.getMenu_parent_id(), model.getMenu_name(), model.getMenu_image(), model.getMenu_url(), model.getMenu_sort(), request_user_id, request_app_id, request_http_id, request_user_id);
 
-        if (!result) {
-            throw new RuntimeException("删除不成功");
-        }
+        renderSuccessJson(result);
+    }
 
-        renderSuccessJson();
+    @ActionKey(Url.MENU_ADMIN_UPDATE)
+    public void adminUpdate() {
+        validateRequest_app_id();
+        validate(Menu.MENU_ID, Menu.MENU_PARENT_ID, Menu.MENU_NAME, Menu.MENU_IMAGE, Menu.MENU_URL, Menu.MENU_SORT, Menu.SYSTEM_VERSION);
+
+        Menu model = getModel(Menu.class);
+        String request_app_id = getRequest_app_id();
+        String request_http_id = getRequest_http_id();
+        String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        Menu menu = menuService.findByMenu_id(model.getMenu_id(), request_app_id, request_http_id, request_user_id);
+
+        authenticateApp_id(menu.getApp_id());
+
+        Boolean result = menuService.updateValidateSystem_version(model.getMenu_id(), model.getMenu_parent_id(), model.getMenu_name(), model.getMenu_image(), model.getMenu_url(), model.getMenu_sort(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+
+        renderSuccessJson(result);
+    }
+
+    @ActionKey(Url.MENU_ADMIN_DELETE)
+    public void adminDelete() {
+        validateRequest_app_id();
+        validate(Menu.MENU_ID, Menu.SYSTEM_VERSION);
+
+        Menu model = getModel(Menu.class);
+        String request_app_id = getRequest_app_id();
+        String request_http_id = getRequest_http_id();
+        String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        Menu menu = menuService.findByMenu_id(model.getMenu_id(), request_app_id, request_http_id, request_user_id);
+
+        authenticateApp_id(menu.getApp_id());
+
+        Boolean result = menuService.deleteByMenu_idAndSystem_update_user_idValidateSystem_version(model.getMenu_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+
+        renderSuccessJson(result);
     }
 
     @ActionKey(Url.MENU_SYSTEM_LIST)
     public void systemList() {
         validateRequest_app_id();
-        validate(Category.APP_ID, Category.CATEGORY_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validate(Menu.APP_ID, Menu.MENU_NAME);
 
-        Category model = getModel(Category.class);
+        Menu model = getModel(Menu.class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Integer total = categoryService.countByOrApp_idAndNotParent_idOrLikeCategory_nameAndCategory_type(model.getApp_id(), Constant.PARENT_ID, model.getCategory_name(), CategoryType.MENU.getKey(), request_app_id, request_http_id, request_user_id);
-        List<Category> resultList = categoryService.listByOrApp_idAndNotParent_idOrLikeCategory_nameAndCategory_typeAndLimit(model.getApp_id(), Constant.PARENT_ID, model.getCategory_name(), CategoryType.MENU.getKey(), getM(), getN(), request_app_id, request_http_id, request_user_id);
-
-        setResultList(resultList, request_app_id, request_http_id, request_user_id);
-
-        renderSuccessJson(total, resultList);
-    }
-
-    @ActionKey(Url.MENU_API_SYSTEM_LIST)
-    public void menuApiSystemList() {
-        validateRequest_app_id();
-        validate(MenuApi.MENU_ID);
-
-        MenuApi model = getModel(MenuApi.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
-
-        Category menu = categoryService.findByCategory_id(model.getMenu_id(), request_app_id, request_http_id, request_user_id);
-
-        List<Api> resultList = apiService.listNotInMenuByApp_id(menu.getApp_id(),request_app_id, request_http_id, request_user_id);
-
-        for (Api result : resultList) {
-            result.keep(Api.API_ID, Api.API_NAME);
-        }
+        List<Map<String, Object>>  resultList = menuService.treeByOrApp_idOrLikeMenu_name(model.getApp_id(), model.getMenu_name(), request_app_id, request_http_id, request_user_id);
 
         renderSuccessJson(resultList);
     }
 
-    @ActionKey(Url.MENU_API_SYSTEM_SAVE)
-    public void menuApiSystemSave() {
+    @ActionKey(Url.MENU_SYSTEM_FIND)
+    public void systemFind() {
         validateRequest_app_id();
-        validate(MenuApi.API_ID, MenuApi.MENU_ID, MenuApi.API_ID);
+        validate(Menu.MENU_ID);
 
-        MenuApi model = getModel(MenuApi.class);
+        Menu model = getModel(Menu.class);
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Category category = categoryService.findByCategory_id(model.getMenu_id(), request_app_id, request_http_id, request_user_id);
+        Menu menu = menuService.findByMenu_id(model.getMenu_id(), request_app_id, request_http_id, request_user_id);
 
-        Integer count = menuApiService.countByApp_idAndApi_id(category.getApp_id(), model.getApi_id(), request_app_id, request_http_id, request_user_id);
+        menu.keep(Menu.MENU_ID, Menu.MENU_NAME, Menu.MENU_IMAGE, Menu.MENU_URL, Menu.MENU_SORT, Menu.MENU_PARENT_ID, Menu.SYSTEM_VERSION);
 
-        if (count > 0) {
-            throw new RuntimeException("API重复啦");
-        }
-
-        Boolean result = menuApiService.save(category.getApp_id(), model.getMenu_id(), model.getApi_id(), model.getMenu_api_sort(), request_user_id, request_app_id, request_http_id, request_user_id);
-
-        if (!result) {
-            throw new RuntimeException("保存不成功");
-        }
-
-        renderSuccessJson();
+        renderSuccessJson(menu);
     }
 
-    @ActionKey(Url.MENU_API_SYSTEM_DELETE)
-    public void menuApiSystemDelete() {
+    @ActionKey(Url.MENU_SYSTEM_SAVE)
+    public void systemSave() {
         validateRequest_app_id();
-        validate(MenuApi.MENU_ID, MenuApi.API_ID, MenuApi.SYSTEM_VERSION);
+        validate(Menu.APP_ID, Menu.MENU_PARENT_ID, Menu.MENU_NAME, Menu.MENU_IMAGE, Menu.MENU_URL, Menu.MENU_SORT);
 
-        MenuApi model = getModel(MenuApi.class);
+        Menu model = getModel(Menu.class);
+        String menu_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = menuApiService.deleteByMenu_idAndApi_id(model.getMenu_id(), model.getApi_id(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = menuService.save(menu_id, model.getApp_id(), model.getMenu_parent_id(), model.getMenu_name(), model.getMenu_image(), model.getMenu_url(), model.getMenu_sort(), request_user_id, request_app_id, request_http_id, request_user_id);
 
-        if (!result) {
-            throw new RuntimeException("删除不成功");
-        }
-
-        renderSuccessJson();
+        renderSuccessJson(result);
     }
 
-    private void setResultList(List<Category> resultList, String request_app_id, String request_http_id, String request_user_id) {
-        for (Category result : resultList) {
-            result.keep(Category.CATEGORY_ID, Category.APP_ID, Category.CATEGORY_NAME, Category.SYSTEM_VERSION);
+    @ActionKey(Url.MENU_SYSTEM_UPDATE)
+    public void systemUpdate() {
+        validateRequest_app_id();
+        validate(Menu.MENU_ID, Menu.MENU_PARENT_ID, Menu.MENU_NAME, Menu.MENU_IMAGE, Menu.MENU_URL, Menu.MENU_SORT, Menu.SYSTEM_VERSION);
 
-            List<MenuApi> menuApiList = menuApiService.listByMenu_id(result.getCategory_id(), request_app_id, request_http_id, request_user_id);
-            if (menuApiList.size() > 0) {
-                for (MenuApi menuApi : menuApiList) {
+        Menu model = getModel(Menu.class);
+        String request_app_id = getRequest_app_id();
+        String request_http_id = getRequest_http_id();
+        String request_user_id = getRequest_user_id();
 
-                    Api api = apiService.findByApi_id(menuApi.getApi_id(), request_app_id, request_http_id, request_user_id);
+        Boolean result = menuService.updateValidateSystem_version(model.getMenu_id(), model.getMenu_parent_id(), model.getMenu_name(), model.getMenu_image(), model.getMenu_url(), model.getMenu_sort(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
 
-                    menuApi.keep(MenuApi.MENU_ID, MenuApi.SYSTEM_VERSION);
-                    menuApi.put(Api.API_ID, api.getApi_id());
-                    menuApi.put(Api.API_URL, api.getApi_url());
-                    menuApi.put(Category.CATEGORY_ID, api.getApi_id());
-                    menuApi.put(Category.CATEGORY_NAME, api.getApi_name());
-                }
+        renderSuccessJson(result);
+    }
 
-                result.put(Constant.CHILDREN, menuApiList);
-            }
-        }
+    @ActionKey(Url.MENU_SYSTEM_DELETE)
+    public void systemDelete() {
+        validateRequest_app_id();
+        validate(Menu.MENU_ID, Menu.SYSTEM_VERSION);
+
+        Menu model = getModel(Menu.class);
+        String request_app_id = getRequest_app_id();
+        String request_http_id = getRequest_http_id();
+        String request_user_id = getRequest_user_id();
+
+        Boolean result = menuService.deleteByMenu_idAndSystem_update_user_idValidateSystem_version(model.getMenu_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+
+        renderSuccessJson(result);
     }
 
 }

@@ -136,7 +136,7 @@ public class AppController extends Controller {
         List<App> resultList = appService.listByApp_idOrLikeApp_nameAndLimit(request_app_id, model.getApp_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
 
         for (App result : resultList) {
-            result.keep(App.APP_ID, App.SYSTEM_VERSION);
+            result.keep(App.APP_ID, App.APP_NAME, App.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -177,7 +177,7 @@ public class AppController extends Controller {
 
         authenticateApp_id(app.getApp_id());
 
-        app.keep(App.APP_ID, App.SYSTEM_VERSION);
+        app.keep(App.APP_ID, App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.SYSTEM_VERSION);
 
         renderSuccessJson(app);
     }

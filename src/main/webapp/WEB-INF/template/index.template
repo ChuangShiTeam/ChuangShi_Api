@@ -270,7 +270,7 @@ class #(first_upper_model_name_without_underline)Index extends Component {
                                     getFieldDecorator('#(lower_model_name)_name', {
                                         initialValue: ''
                                     })(
-                                        <Input type="text" placeholder="请输入名称"/>
+                                        <Input type="text" placeholder="请输入名称" onPressEnter={this.handleSearch.bind(this)}/>
                                     )
                                 }
                             </FormItem>

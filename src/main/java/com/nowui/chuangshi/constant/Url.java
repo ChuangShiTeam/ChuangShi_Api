@@ -7,53 +7,20 @@ public class Url {
     public static final String CODE_SYSTEM_LIST = "/code/system/list";
     public static final String CODE_SYSTEM_SAVE = "/code/system/save";
 
-    public static final String HTTP_LIST = "/http/list";
-    public static final String HTTP_FIND = "/http/find";
-    public static final String HTTP_SAVE = "/http/save";
-    public static final String HTTP_UPDATE = "/http/update";
-    public static final String HTTP_DELETE = "/http/delete";
     public static final String HTTP_ADMIN_LIST = "/http/admin/list";
     public static final String HTTP_ADMIN_FIND = "/http/admin/find";
-    public static final String HTTP_ADMIN_SAVE = "/http/admin/save";
-    public static final String HTTP_ADMIN_UPDATE = "/http/admin/update";
-    public static final String HTTP_ADMIN_DELETE = "/http/admin/delete";
     public static final String HTTP_SYSTEM_LIST = "/http/system/list";
     public static final String HTTP_SYSTEM_FIND = "/http/system/find";
-    public static final String HTTP_SYSTEM_SAVE = "/http/system/save";
-    public static final String HTTP_SYSTEM_UPDATE = "/http/system/update";
-    public static final String HTTP_SYSTEM_DELETE = "/http/system/delete";
 
-    public static final String SQL_LIST = "/sql/list";
-    public static final String SQL_FIND = "/sql/find";
-    public static final String SQL_SAVE = "/sql/save";
-    public static final String SQL_UPDATE = "/sql/update";
-    public static final String SQL_DELETE = "/sql/delete";
     public static final String SQL_ADMIN_LIST = "/sql/admin/list";
     public static final String SQL_ADMIN_FIND = "/sql/admin/find";
-    public static final String SQL_ADMIN_SAVE = "/sql/admin/save";
-    public static final String SQL_ADMIN_UPDATE = "/sql/admin/update";
-    public static final String SQL_ADMIN_DELETE = "/sql/admin/delete";
     public static final String SQL_SYSTEM_LIST = "/sql/system/list";
     public static final String SQL_SYSTEM_FIND = "/sql/system/find";
-    public static final String SQL_SYSTEM_SAVE = "/sql/system/save";
-    public static final String SQL_SYSTEM_UPDATE = "/sql/system/update";
-    public static final String SQL_SYSTEM_DELETE = "/sql/system/delete";
 
-    public static final String EXCEPTION_LIST = "/exception/list";
-    public static final String EXCEPTION_FIND = "/exception/find";
-    public static final String EXCEPTION_SAVE = "/exception/save";
-    public static final String EXCEPTION_UPDATE = "/exception/update";
-    public static final String EXCEPTION_DELETE = "/exception/delete";
     public static final String EXCEPTION_ADMIN_LIST = "/exception/admin/list";
     public static final String EXCEPTION_ADMIN_FIND = "/exception/admin/find";
-    public static final String EXCEPTION_ADMIN_SAVE = "/exception/admin/save";
-    public static final String EXCEPTION_ADMIN_UPDATE = "/exception/admin/update";
-    public static final String EXCEPTION_ADMIN_DELETE = "/exception/admin/delete";
     public static final String EXCEPTION_SYSTEM_LIST = "/exception/system/list";
     public static final String EXCEPTION_SYSTEM_FIND = "/exception/system/find";
-    public static final String EXCEPTION_SYSTEM_SAVE = "/exception/system/save";
-    public static final String EXCEPTION_SYSTEM_UPDATE = "/exception/system/update";
-    public static final String EXCEPTION_SYSTEM_DELETE = "/exception/system/delete";
 
     public static final String APP_LIST = "/app/list";
     public static final String APP_FIND = "/app/find";
@@ -92,13 +59,15 @@ public class Url {
     public static final String CATEGORY_SYSTEM_DELETE = "/category/system/delete";
 
     public static final String MENU_ADMIN_LIST = "/menu/admin/list";
-    public static final String MENU_API_ADMIN_LIST = "/menu/api/admin/list";
-    public static final String MENU_API_ADMIN_SAVE = "/menu/api/admin/save";
-    public static final String MENU_API_ADMIN_DELETE = "/menu/api/admin/delete";
+    public static final String MENU_ADMIN_FIND = "/menu/admin/find";
+    public static final String MENU_ADMIN_SAVE = "/menu/admin/save";
+    public static final String MENU_ADMIN_UPDATE = "/menu/admin/update";
+    public static final String MENU_ADMIN_DELETE = "/menu/admin/delete";
     public static final String MENU_SYSTEM_LIST = "/menu/system/list";
-    public static final String MENU_API_SYSTEM_LIST = "/menu/api/system/list";
-    public static final String MENU_API_SYSTEM_SAVE = "/menu/api/system/save";
-    public static final String MENU_API_SYSTEM_DELETE = "/menu/api/system/delete";
+    public static final String MENU_SYSTEM_FIND = "/menu/system/find";
+    public static final String MENU_SYSTEM_SAVE = "/menu/system/save";
+    public static final String MENU_SYSTEM_UPDATE = "/menu/system/update";
+    public static final String MENU_SYSTEM_DELETE = "/menu/system/delete";
 
     public static final String API_LIST = "/api/list";
     public static final String API_FIND = "/api/find";
@@ -116,40 +85,27 @@ public class Url {
     public static final String API_SYSTEM_UPDATE = "/api/system/update";
     public static final String API_SYSTEM_DELETE = "/api/system/delete";
 
-    public static final String USER_LIST = "/user/list";
-    public static final String USER_FIND = "/user/find";
-    public static final String USER_SAVE = "/user/save";
-    public static final String USER_UPDATE = "/user/update";
-    public static final String USER_DELETE = "/user/delete";
+    public static final String MENU_API_ADMIN_LIST = "/menu/api/admin/list";
+    public static final String MENU_API_ADMIN_SAVE = "/menu/api/admin/save";
+    public static final String MENU_API_ADMIN_DELETE = "/menu/api/admin/delete";
+    public static final String MENU_API_SYSTEM_LIST = "/menu/api/system/list";
+    public static final String MENU_API_SYSTEM_SAVE = "/menu/api/system/save";
+    public static final String MENU_API_SYSTEM_DELETE = "/menu/api/system/delete";
+
     public static final String USER_ADMIN_LIST = "/user/admin/list";
     public static final String USER_ADMIN_FIND = "/user/admin/find";
-    public static final String USER_ADMIN_SAVE = "/user/admin/save";
-    public static final String USER_ADMIN_UPDATE = "/user/admin/update";
-    public static final String USER_ADMIN_DELETE = "/user/admin/delete";
     public static final String USER_SYSTEM_LIST = "/user/system/list";
-    public static final String USER_SYSTEM_FIND = "/user/system/find";
-    public static final String USER_SYSTEM_UPDATE = "/user/system/update";
-    public static final String USER_SYSTEM_DELETE = "/user/system/delete";
 
-    public static final String USER_LEVEL_LIST = "/user/level/list";
-    public static final String USER_LEVEL_FIND = "/user/level/find";
-    public static final String USER_LEVEL_SAVE = "/user/level/save";
-    public static final String USER_LEVEL_UPDATE = "/user/level/update";
-    public static final String USER_LEVEL_DELETE = "/user/level/delete";
-    public static final String USER_LEVEL_ADMIN_LIST = "/user/level/admin/list";
-    public static final String USER_LEVEL_ADMIN_FIND = "/user/level/admin/find";
-    public static final String USER_LEVEL_ADMIN_SAVE = "/user/level/admin/save";
-    public static final String USER_LEVEL_ADMIN_UPDATE = "/user/level/admin/update";
-    public static final String USER_LEVEL_ADMIN_DELETE = "/user/level/admin/delete";
-    public static final String USER_LEVEL_SYSTEM_LIST = "/user/level/system/list";
-    public static final String USER_LEVEL_SYSTEM_FIND = "/user/level/system/find";
-    public static final String USER_LEVEL_SYSTEM_SAVE = "/user/level/system/save";
-    public static final String USER_LEVEL_SYSTEM_UPDATE = "/user/level/system/update";
-    public static final String USER_LEVEL_SYSTEM_DELETE = "/user/level/system/delete";
-
-    public static final String ADMIN_LOGIN = "/admin/login";
+    public static final String ADMIN_ADMIN_LIST = "/admin/admin/list";
+    public static final String ADMIN_ADMIN_FIND = "/admin/admin/find";
     public static final String ADMIN_ADMIN_SAVE = "/admin/admin/save";
-    public static final String ADMIN_SYSTEM_SAVE = "/admin/system/save";
+    public static final String ADMIN_ADMIN_DELETE = "/admin/admin/delete";
+    public static final String ADMIN_SYSTEM_LIST = "/admin/system/list";
+    public static final String ADMIN_SYSTEM_FIND = "/admin/system/find";
+    public static final String ADMIN_SYSTEM_UPDATE = "/admin/system/update";
+    public static final String ADMIN_SYSTEM_DELETE = "/admin/system/delete";
+    public static final String ADMIN_LOGIN = "/admin/login";
+    public static final String ADMIN_MENU_LIST = "/admin/menu/list";
 
     public static final String FILE_LIST = "/file/list";
     public static final String FILE_FIND = "/file/find";
@@ -170,22 +126,6 @@ public class Url {
     public static final String FILE_SYSTEM_SAVE = "/file/system/save";
     public static final String FILE_SYSTEM_UPDATE = "/file/system/update";
     public static final String FILE_SYSTEM_DELETE = "/file/system/delete";
-
-    public static final String BRAND_LIST = "/brand/list";
-    public static final String BRAND_FIND = "/brand/find";
-    public static final String BRAND_SAVE = "/brand/save";
-    public static final String BRAND_UPDATE = "/brand/update";
-    public static final String BRAND_DELETE = "/brand/delete";
-    public static final String BRAND_ADMIN_LIST = "/brand/admin/list";
-    public static final String BRAND_ADMIN_FIND = "/brand/admin/find";
-    public static final String BRAND_ADMIN_SAVE = "/brand/admin/save";
-    public static final String BRAND_ADMIN_UPDATE = "/brand/admin/update";
-    public static final String BRAND_ADMIN_DELETE = "/brand/admin/delete";
-    public static final String BRAND_SYSTEM_LIST = "/brand/system/list";
-    public static final String BRAND_SYSTEM_FIND = "/brand/system/find";
-    public static final String BRAND_SYSTEM_SAVE = "/brand/system/save";
-    public static final String BRAND_SYSTEM_UPDATE = "/brand/system/update";
-    public static final String BRAND_SYSTEM_DELETE = "/brand/system/delete";
 
     public static final String GUANGQI_CUSTOMER_LIST = "/guangqi/customer/list";
     public static final String GUANGQI_CUSTOMER_FIND = "/guangqi/customer/find";

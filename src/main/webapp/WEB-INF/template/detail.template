@@ -206,7 +206,7 @@ class #(first_upper_model_name_without_underline)Detail extends Component {
                                             }],
                                             initialValue: 0
                                         })(
-                                            <InputNumber min={0} max={999} placeholder={constant.placeholder + '#(column.column_comment)'}/>
+                                            <InputNumber min={0} max={999} placeholder={constant.placeholder + '#(column.column_comment)'} onPressEnter={this.handleSubmit.bind(this)}/>
                                         )
                                     }
                                     #else
@@ -218,7 +218,7 @@ class #(first_upper_model_name_without_underline)Detail extends Component {
                                             }],
                                             initialValue: ''
                                         })(
-                                            <Input type="text" placeholder={constant.placeholder + '#(column.column_comment)'}/>
+                                            <Input type="text" placeholder={constant.placeholder + '#(column.column_comment)'} onPressEnter={this.handleSubmit.bind(this)}/>
                                         )
                                     }
                                     #end

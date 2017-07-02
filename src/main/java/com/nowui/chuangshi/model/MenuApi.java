@@ -5,9 +5,6 @@ import com.nowui.chuangshi.type.ColumnType;
 
 public class MenuApi extends Model<MenuApi> {
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号")
-    public static final String APP_ID = "app_id";
-
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "菜单编号")
     public static final String MENU_ID = "menu_id";
 
@@ -16,14 +13,6 @@ public class MenuApi extends Model<MenuApi> {
 
     @Column(type = ColumnType.INT, length = 3, comment = "菜单接口排序")
     public static final String MENU_API_SORT = "menu_api_sort";
-
-    public String getApp_id() {
-        return getStr(APP_ID);
-    }
-
-    public void setApp_id(String app_id) {
-        set(APP_ID, app_id);
-    }
 
     public String getMenu_id() {
         return getStr(MENU_ID);

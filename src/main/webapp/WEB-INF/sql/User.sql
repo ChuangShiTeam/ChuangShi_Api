@@ -1,5 +1,13 @@
 #namespace("user")
 
+  #sql("countByApp_idAndNotUser_idAndUser_account")
+    SELECT COUNT(*) FROM table_user
+    WHERE system_status = 1
+    AND app_id = #p(app_id)
+    AND user_id != #p(user_id)
+    AND user_name = #p(user_name)
+  #end
+
   #sql("countByApp_idOrLikeUser_name")
     SELECT COUNT(*) FROM table_user
     WHERE system_status = 1
@@ -97,19 +105,16 @@
     INSERT INTO table_user (
       user_id,
       app_id,
-      organization_id,
-      role_id,
-      user_level_id,
+      object_id,
       user_type,
+      user_name,
+      user_avatar,
       user_account,
       user_phone,
       user_email,
       user_password,
-      user_name,
-      user_avatar,
       wechat_open_id,
       wechat_union_id,
-      extend_id,
       system_create_user_id,
       system_create_time,
       system_update_user_id,
@@ -119,19 +124,16 @@
     ) VALUES (
       #p(user_id),
       #p(app_id),
-      #p(organization_id),
-      #p(role_id),
-      #p(user_level_id),
+      #p(object_id),
       #p(user_type),
+      #p(user_name),
+      #p(user_avatar),
       #p(user_account),
       #p(user_phone),
       #p(user_email),
       #p(user_password),
-      #p(user_name),
-      #p(user_avatar),
       #p(wechat_open_id),
       #p(wechat_union_id),
-      #p(extend_id),
       #p(system_create_user_id),
       #p(system_create_time),
       #p(system_update_user_id),
@@ -141,20 +143,9 @@
     )
   #end
 
-  #sql("update")
+  #sql("updateByUser_password")
     UPDATE table_user SET
-    organization_id = #p(organization_id),
-    role_id = #p(role_id),
-    user_level_id = #p(user_level_id),
-    user_type = #p(user_type),
-    user_account = #p(user_account),
-    user_phone = #p(user_phone),
-    user_email = #p(user_email),
     user_password = #p(user_password),
-    user_name = #p(user_name),
-    user_avatar = #p(user_avatar),
-    wechat_open_id = #p(wechat_open_id),
-    wechat_union_id = #p(wechat_union_id),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1

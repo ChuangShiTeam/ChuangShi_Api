@@ -10,9 +10,9 @@ import java.util.List;
 
 public class MenuApiDao extends Dao {
 
-    public Integer countByApp_idAndApi_id(String app_id, String api_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByMenu_idAndApi_id(String menu_id, String api_id, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
-        sqlMap.put(MenuApi.APP_ID, app_id);
+        sqlMap.put(MenuApi.MENU_ID, menu_id);
         sqlMap.put(MenuApi.API_ID, api_id);
         SqlPara sqlPara = Db.getSqlPara("menu_api.countByApp_idAndApi_id", sqlMap);
 
@@ -32,9 +32,8 @@ public class MenuApiDao extends Dao {
         return new MenuApi().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public Boolean save(String app_id, String menu_id, String api_id, Integer menu_api_sort, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean save(String menu_id, String api_id, Integer menu_api_sort, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
-        sqlMap.put(MenuApi.APP_ID, app_id);
         sqlMap.put(MenuApi.MENU_ID, menu_id);
         sqlMap.put(MenuApi.API_ID, api_id);
         sqlMap.put(MenuApi.MENU_API_SORT, menu_api_sort);

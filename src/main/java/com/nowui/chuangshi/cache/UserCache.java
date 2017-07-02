@@ -14,6 +14,10 @@ public class UserCache extends Cache {
 
     private UserDao userDao = new UserDao();
 
+    public Integer countByApp_idAndNotUser_idAndUser_account(String user_id, String app_id, String user_account, String request_app_id, String request_http_id, String request_user_id) {
+        return userDao.countByApp_idAndNotUser_idAndUser_account(user_id, app_id, user_account, request_app_id, request_http_id, request_user_id);
+    }
+
     public Integer countByApp_idOrLikeUser_name(String app_id, String user_name, String request_app_id, String request_http_id, String request_user_id) {
         return userDao.countByApp_idOrLikeUser_name(app_id, user_name, request_app_id, request_http_id, request_user_id);
     }
@@ -84,17 +88,17 @@ public class UserCache extends Cache {
         return user;
     }
 
-    public Boolean save(String user_id, String app_id, String organization_id, String role_id, String user_level_id, String user_type, String user_account, String user_phone, String user_email, String user_password, String user_name, String user_avatar, String wechat_open_id, String wechat_union_id, String extend_id, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
-        return userDao.save(user_id, app_id, organization_id, role_id, user_level_id, user_type, user_account, user_phone, user_email, user_password, user_name, user_avatar, wechat_open_id, wechat_union_id, extend_id, system_create_user_id, request_app_id, request_http_id, request_user_id);
+    public Boolean save(String user_id, String app_id, String object_id, String user_type, String user_name, String user_avatar, String user_account, String user_phone, String user_email, String user_password, String wechat_open_id, String wechat_union_id, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+        return userDao.save(user_id, app_id, object_id, user_type, user_name, user_avatar, user_account, user_phone, user_email, user_password, wechat_open_id, wechat_union_id, system_create_user_id, request_app_id, request_http_id, request_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String user_id, String organization_id, String role_id, String user_level_id, String user_type, String user_account, String user_phone, String user_email, String user_password, String user_name, String user_avatar, String wechat_open_id, String wechat_union_id, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean updateByUser_password(String user_id, String user_password, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
         User user = findByUser_id(user_id, request_app_id, request_http_id, request_user_id);
         if (!user.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = userDao.update(user_id, organization_id, role_id, user_level_id, user_type, user_account, user_phone, user_email, user_password, user_name, user_avatar, wechat_open_id, wechat_union_id, system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
+        boolean result = userDao.updateByUser_password(user_id, user_password, system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
 
         if (result) {
             CacheUtil.remove(USER_BY_USER_ID_CACHE, user_id);

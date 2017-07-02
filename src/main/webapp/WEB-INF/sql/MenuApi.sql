@@ -1,9 +1,9 @@
 #namespace("menu_api")
 
-  #sql("countByApp_idAndApi_id")
+  #sql("countByMenu_idAndApi_id")
     SELECT COUNT(*) FROM table_menu_api
     WHERE system_status = 1
-    AND app_id = #p(app_id)
+    AND menu_id = #p(menu_id)
     AND api_id = #p(api_id)
   #end
 
@@ -18,7 +18,6 @@
 
   #sql("save")
     INSERT INTO table_menu_api (
-      app_id,
       menu_id,
       api_id,
       menu_api_sort,
@@ -29,7 +28,6 @@
       system_version,
       system_status
     ) VALUES (
-      #p(app_id),
       #p(menu_id),
       #p(api_id),
       #p(menu_api_sort),

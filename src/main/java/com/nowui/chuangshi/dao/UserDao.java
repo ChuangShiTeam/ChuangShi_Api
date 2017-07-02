@@ -22,6 +22,18 @@ public class UserDao extends Dao {
         return HashKit.sha512(Config.private_key + user_password);
     }
 
+    public Integer countByApp_idAndNotUser_idAndUser_account(String user_id, String app_id, String user_account, String request_app_id, String request_http_id, String request_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(User.APP_ID, app_id);
+        sqlMap.put(User.USER_ACCOUNT, user_account);
+        SqlPara sqlPara = Db.getSqlPara("user.countByApp_idAndNotUser_idAndUser_account", sqlMap);
+
+        logSql(request_app_id, request_http_id, "table_user", "countByApp_idAndNotUser_idAndUser_account", sqlPara, request_user_id);
+
+        Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
+        return count.intValue();
+    }
+
     public Integer countByApp_idOrLikeUser_name(String app_id, String user_name, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(User.APP_ID, app_id);
@@ -138,25 +150,22 @@ public class UserDao extends Dao {
         }
     }
 
-    public Boolean save(String user_id, String app_id, String organization_id, String role_id, String user_level_id, String user_type, String user_account, String user_phone, String user_email, String user_password, String user_name, String user_avatar, String wechat_open_id, String wechat_union_id, String extend_id, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean save(String user_id, String app_id, String object_id, String user_type, String user_name, String user_avatar, String user_account, String user_phone, String user_email, String user_password, String wechat_open_id, String wechat_union_id, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
         user_password = generatePassword(user_password);
 
         Kv sqlMap = Kv.create();
         sqlMap.put(User.USER_ID, user_id);
         sqlMap.put(User.APP_ID, app_id);
-        sqlMap.put(User.ORGANIZATION_ID, organization_id);
-        sqlMap.put(User.ROLE_ID, role_id);
-        sqlMap.put(User.USER_LEVEL_ID, user_level_id);
+        sqlMap.put(User.OBJECT_ID, object_id);
         sqlMap.put(User.USER_TYPE, user_type);
+        sqlMap.put(User.USER_NAME, user_name);
+        sqlMap.put(User.USER_AVATAR, user_avatar);
         sqlMap.put(User.USER_ACCOUNT, user_account);
         sqlMap.put(User.USER_PHONE, user_phone);
         sqlMap.put(User.USER_EMAIL, user_email);
         sqlMap.put(User.USER_PASSWORD, user_password);
-        sqlMap.put(User.USER_NAME, user_name);
-        sqlMap.put(User.USER_AVATAR, user_avatar);
         sqlMap.put(User.WECHAT_OPEN_ID, wechat_open_id);
         sqlMap.put(User.WECHAT_UNION_ID, wechat_union_id);
-        sqlMap.put(User.EXTEND_ID, extend_id);
         sqlMap.put(User.SYSTEM_CREATE_USER_ID, system_create_user_id);
         sqlMap.put(User.SYSTEM_CREATE_TIME, new Date());
         sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_create_user_id);
@@ -170,27 +179,16 @@ public class UserDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String user_id, String organization_id, String role_id, String user_level_id, String user_type, String user_account, String user_phone, String user_email, String user_password, String user_name, String user_avatar, String wechat_open_id, String wechat_union_id, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean updateByUser_password(String user_id, String user_password, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(User.USER_ID, user_id);
-        sqlMap.put(User.ORGANIZATION_ID, organization_id);
-        sqlMap.put(User.ROLE_ID, role_id);
-        sqlMap.put(User.USER_LEVEL_ID, user_level_id);
-        sqlMap.put(User.USER_TYPE, user_type);
-        sqlMap.put(User.USER_ACCOUNT, user_account);
-        sqlMap.put(User.USER_PHONE, user_phone);
-        sqlMap.put(User.USER_EMAIL, user_email);
         sqlMap.put(User.USER_PASSWORD, user_password);
-        sqlMap.put(User.USER_NAME, user_name);
-        sqlMap.put(User.USER_AVATAR, user_avatar);
-        sqlMap.put(User.WECHAT_OPEN_ID, wechat_open_id);
-        sqlMap.put(User.WECHAT_UNION_ID, wechat_union_id);
         sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(User.SYSTEM_UPDATE_TIME, new Date());
         sqlMap.put(User.SYSTEM_VERSION, system_version);
-        SqlPara sqlPara = Db.getSqlPara("user.update", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("user.updateByUser_password", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_user", "update", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_user", "updateByUser_password", sqlPara, request_user_id);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
@@ -203,7 +201,7 @@ public class UserDao extends Dao {
         sqlMap.put(User.SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("user.deleteByUser_idAndSystem_version", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_user", "deleteBy", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_user", "deleteByUser_idAndSystem_version", sqlPara, request_user_id);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
