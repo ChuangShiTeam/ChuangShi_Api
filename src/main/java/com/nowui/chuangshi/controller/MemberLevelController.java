@@ -119,6 +119,25 @@ public class MemberLevelController extends Controller {
         renderSuccessJson(result);
     }
 
+    @ActionKey(Url.MEMBER_LEVEL_ADMIN_ALL_LIST)
+    public void adminAllList() {
+        validateRequest_app_id();
+
+        String request_app_id = getRequest_app_id();
+        String request_http_id = getRequest_http_id();
+        String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        List<MemberLevel> resultList = memberLevelService.listByApp_id(request_app_id, request_app_id, request_http_id, request_user_id);
+
+        for (MemberLevel result : resultList) {
+            result.keep(MemberLevel.MEMBER_LEVEL_ID, MemberLevel.MEMBER_LEVEL_NAME);
+        }
+
+        renderSuccessJson(resultList);
+    }
+
     @ActionKey(Url.MEMBER_LEVEL_ADMIN_LIST)
     public void adminList() {
         validateRequest_app_id();

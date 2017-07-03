@@ -18,6 +18,10 @@ public class MemberLevelService extends Service {
         return memberLevelCache.countByOrApp_idOrLikeMember_level_name(app_id, member_level_name, request_app_id, request_http_id, request_user_id);
     }
 
+    public List<MemberLevel> listByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
+        return memberLevelCache.listByApp_id(app_id, request_app_id, request_http_id, request_user_id);
+    }
+
     public List<MemberLevel> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
         return memberLevelCache.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n, request_app_id, request_http_id, request_user_id);
     }

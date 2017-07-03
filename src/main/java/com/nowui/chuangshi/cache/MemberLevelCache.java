@@ -22,6 +22,16 @@ public class MemberLevelCache extends Cache {
         return memberLevelDao.countByOrApp_idOrLikeMember_level_name(app_id, member_level_name, request_app_id, request_http_id, request_user_id);
     }
 
+    public List<MemberLevel> listByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
+        List<MemberLevel> member_levelList = memberLevelDao.listByApp_id(app_id, request_app_id, request_http_id, request_user_id);
+
+        for (MemberLevel member_level : member_levelList) {
+            member_level.put(findByMember_level_id(member_level.getMember_level_id(), request_app_id, request_http_id, request_user_id));
+        }
+
+        return member_levelList;
+    }
+
     public List<MemberLevel> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
         List<MemberLevel> member_levelList = memberLevelDao.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n, request_app_id, request_http_id, request_user_id);
 

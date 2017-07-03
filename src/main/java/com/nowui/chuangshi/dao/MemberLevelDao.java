@@ -35,6 +35,16 @@ public class MemberLevelDao extends Dao {
         return count.intValue();
     }
 
+    public List<MemberLevel> listByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(MemberLevel.APP_ID, app_id);
+        SqlPara sqlPara = Db.getSqlPara("member_level.listByApp_id", sqlMap);
+
+        logSql(request_app_id, request_http_id, "table_member_level", "listByApp_id", sqlPara, request_user_id);
+
+        return new MemberLevel().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+
     public List<MemberLevel> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberLevel.APP_ID, app_id);

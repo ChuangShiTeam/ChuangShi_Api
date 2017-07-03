@@ -95,6 +95,7 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_product", "product_id", Product.class);
         activeRecordPlugin.addMapping("table_product_brand", "product_brand_id", ProductBrand.class);
         activeRecordPlugin.addMapping("table_product_category", "product_category_id", ProductCategory.class);
+        activeRecordPlugin.addMapping("table_product_sku", "product_sku_id", ProductSku.class);
         activeRecordPlugin.addMapping("table_member", "member_id", Member.class);
         activeRecordPlugin.addMapping("table_member_level", "member_level_id", MemberLevel.class);
 

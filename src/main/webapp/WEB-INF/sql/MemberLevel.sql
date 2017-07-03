@@ -22,6 +22,15 @@
     #end
   #end
 
+  #sql("listByApp_id")
+    SELECT
+    member_level_id
+    FROM table_member_level
+    WHERE system_status = 1
+    AND app_id = #p(app_id)
+    ORDER BY member_level_sort ASC, system_create_time DESC
+  #end
+
   #sql("listByApp_idAndSystem_create_timeAndLimit")
     SELECT
     member_level_id
@@ -29,7 +38,7 @@
     WHERE system_status = 1
     AND app_id = #p(app_id)
     AND system_create_time < UNIX_TIMESTAMP(#p(system_create_time))
-    ORDER BY system_create_time DESC
+    ORDER BY member_level_sort ASC, system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
@@ -43,7 +52,7 @@
     #set(member_level_name = "%" + member_level_name + "%")
     AND member_level_name LIKE #p(member_level_name)
     #end
-    ORDER BY system_create_time DESC
+    ORDER BY member_level_sort ASC, system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
@@ -59,7 +68,7 @@
     #set(member_level_name = "%" + member_level_name + "%")
     AND member_level_name LIKE #p(member_level_name)
     #end
-    ORDER BY system_create_time DESC
+    ORDER BY member_level_sort ASC, system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 

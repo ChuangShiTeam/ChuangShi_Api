@@ -197,6 +197,7 @@ public class Url {
     public static final String MEMBER_LEVEL_UPDATE = "/member/level/update";
     public static final String MEMBER_LEVEL_DELETE = "/member/level/delete";
     public static final String MEMBER_LEVEL_ADMIN_LIST = "/member/level/admin/list";
+    public static final String MEMBER_LEVEL_ADMIN_ALL_LIST = "/member/level/admin/all/list";
     public static final String MEMBER_LEVEL_ADMIN_FIND = "/member/level/admin/find";
     public static final String MEMBER_LEVEL_ADMIN_SAVE = "/member/level/admin/save";
     public static final String MEMBER_LEVEL_ADMIN_UPDATE = "/member/level/admin/update";
