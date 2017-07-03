@@ -45,13 +45,7 @@ public class GuangqiCustomerPrizeCache extends Cache {
     }
 
     public List<GuangqiCustomerPrize> listByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
-        List<GuangqiCustomerPrize> guangqi_customer_prizeList = guangqiCustomerPrizeDao.listByApp_id(app_id, request_app_id, request_http_id, request_user_id);
-
-        for (GuangqiCustomerPrize guangqi_customer_prize : guangqi_customer_prizeList) {
-            guangqi_customer_prize.put(findByCustomer_prize_id(guangqi_customer_prize.getCustomer_prize_id(), request_app_id, request_http_id, request_user_id));
-        }
-
-        return guangqi_customer_prizeList;
+        return guangqiCustomerPrizeDao.listByApp_id(app_id, request_app_id, request_http_id, request_user_id);
     }
 
     public List<GuangqiCustomerPrize> listByApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {

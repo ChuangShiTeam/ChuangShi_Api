@@ -19,14 +19,14 @@
 
   #sql("listByApp_idOrLikeMenu_name")
     SELECT
-    menu_id, menu_sort, system_create_time
+    *
     FROM table_menu
     WHERE system_status = 1
     AND app_id = #p(app_id)
     AND menu_parent_id != "0"
     UNION ALL
     SELECT
-    menu_id, menu_sort, system_create_time
+    *
     FROM table_menu
     WHERE system_status = 1
     AND app_id = #p(app_id)

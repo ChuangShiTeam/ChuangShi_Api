@@ -146,7 +146,7 @@ public class GuangqiController extends Controller {
 
     @ActionKey(Url.GUANGQI_EXPORT)
     public void export() {
-        String request_app_id = getRequest_app_id();
+        String request_app_id = "b0f1cf1b4705403ea4e2567c7d860f33";
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 

@@ -18,13 +18,7 @@ public class MenuCache extends Cache {
     }
 
     public List<Menu> listByApp_idOrLikeMenu_name(String app_id, String menu_name, String request_app_id, String request_http_id, String request_user_id) {
-        List<Menu> menuList = menuDao.listByApp_idOrLikeMenu_name(app_id, menu_name, request_app_id, request_http_id, request_user_id);
-
-        for (Menu menu : menuList) {
-            menu.put(findByMenu_id(menu.getMenu_id(), request_app_id, request_http_id, request_user_id));
-        }
-
-        return menuList;
+        return menuDao.listByApp_idOrLikeMenu_name(app_id, menu_name, request_app_id, request_http_id, request_user_id);
     }
 
     public List<Menu> listByOrApp_idOrLikeMenu_name(String app_id, String menu_name, String request_app_id, String request_http_id, String request_user_id) {

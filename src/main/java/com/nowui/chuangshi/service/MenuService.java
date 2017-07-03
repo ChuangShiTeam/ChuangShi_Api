@@ -46,13 +46,13 @@ public class MenuService extends Service {
     public List<Map<String, Object>> treeByApp_idOrLikeMenu_name(String app_id, String menu_name, String request_app_id, String request_http_id, String request_user_id) {
         List<Menu> menuList =  menuCache.listByApp_idOrLikeMenu_name(app_id, menu_name, request_app_id, request_http_id, request_user_id);
 
-        return getChildren(menuList, Constant.PARENT_ID, Menu.MENU_IMAGE, Menu.MENU_SORT, Menu.SYSTEM_VERSION);
+        return getChildren(menuList, Constant.PARENT_ID, Menu.MENU_IMAGE, Menu.MENU_URL, Menu.MENU_SORT, Menu.SYSTEM_VERSION);
     }
 
     public List<Map<String, Object>> treeByOrApp_idOrLikeMenu_name(String app_id, String menu_name, String request_app_id, String request_http_id, String request_user_id) {
         List<Menu> menuList = menuCache.listByOrApp_idOrLikeMenu_name(app_id, menu_name, request_app_id, request_http_id, request_user_id);
 
-        return getChildren(menuList, Constant.PARENT_ID, Menu.MENU_IMAGE, Menu.MENU_SORT, Menu.SYSTEM_VERSION);
+        return getChildren(menuList, Constant.PARENT_ID, Menu.MENU_IMAGE, Menu.MENU_URL, Menu.MENU_SORT, Menu.SYSTEM_VERSION);
     }
 
     public Menu findByMenu_id(String menu_id, String request_app_id, String request_http_id, String request_user_id) {
@@ -71,8 +71,6 @@ public class MenuService extends Service {
             menu_path = jsonArray.toJSONString();
         } else {
             Menu parent = menuCache.findByMenu_id(menu_parent_id, request_app_id, request_http_id, request_user_id);
-
-            menu_parent_id = parent.getMenu_id();
 
             JSONArray jsonArray = JSONArray.parseArray(parent.getMenu_path());
             jsonArray.add(menu_parent_id);

@@ -49,7 +49,7 @@
 
   #sql("listByApp_id")
     SELECT
-    customer_prize_id
+    *
     FROM table_guangqi_customer_prize
     WHERE system_status = 1
     AND app_id = #p(app_id)

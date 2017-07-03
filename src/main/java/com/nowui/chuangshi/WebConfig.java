@@ -40,6 +40,11 @@ public class WebConfig extends JFinalConfig {
         routes.add("/user", UserController.class);
         routes.add("/admin", AdminController.class);
         routes.add("/file", FileController.class);
+        routes.add("/product", ProductController.class);
+        routes.add("/product/brand", ProductBrandController.class);
+        routes.add("/product/category", ProductCategoryController.class);
+        routes.add("/member", MemberController.class);
+        routes.add("/member/level", MemberLevelController.class);
 
         routes.add("/guangqi/customer", GuangqiCustomerController.class);
         routes.add("/guangqi/prize", GuangqiPrizeController.class);
@@ -87,6 +92,11 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_user", "user_id", User.class);
         activeRecordPlugin.addMapping("table_admin", "admin_id", Admin.class);
         activeRecordPlugin.addMapping("table_file", "file_id", File.class);
+        activeRecordPlugin.addMapping("table_product", "product_id", Product.class);
+        activeRecordPlugin.addMapping("table_product_brand", "product_brand_id", ProductBrand.class);
+        activeRecordPlugin.addMapping("table_product_category", "product_category_id", ProductCategory.class);
+        activeRecordPlugin.addMapping("table_member", "member_id", Member.class);
+        activeRecordPlugin.addMapping("table_member_level", "member_level_id", MemberLevel.class);
 
         activeRecordPlugin.addMapping("table_guangqi_customer", "guangqi_customer_id", GuangqiCustomer.class);
         activeRecordPlugin.addMapping("table_guangqi_prize", "guangqi_prize_id", GuangqiPrize.class);
@@ -116,6 +126,51 @@ public class WebConfig extends JFinalConfig {
         apiConfig.setAppId("wx934f793803320ecd");
         apiConfig.setAppSecret("05dd33adcc905769a119fb84cf258617");
         ApiConfigKit.putApiConfig(apiConfig);
+
+
+
+//        List<Record> recordList = Db.find("select * from table_http where http_url = '/guangqi/prize/draw' and system_create_time > '2017-06-22 19:30:34' order by system_create_time desc");
+//        int index = 0;
+//        for (Record record : recordList) {
+//            String customer_prize_id = Util.getRandomUUID();
+//            String app_id = "b0f1cf1b4705403ea4e2567c7d860f33";
+//            JSONObject request = JSONObject.parseObject(record.getStr("http_request"));
+//            String customer_id = request.getString("customer_id");
+//            JSONObject response = JSONObject.parseObject(record.getStr("http_response"));
+//            int code = response.getIntValue("code");
+//            if (code == 200) {
+//                String prize_id = response.getJSONObject("data").getString("prize_id");
+//                Date system_create_time = record.getDate("system_create_time");
+//                String customer_prize_date = DateUtil.getDateString(system_create_time);ou
+//                String system_create_user_id = "";
+//
+//                Number count = Db.queryFirst("select count(*) from table_guangqi_customer_prize where customer_id = '" + customer_id + "'");
+//                if (count.intValue() == 0) {
+//
+//                    Kv sqlMap = Kv.create();
+//                    sqlMap.put(GuangqiCustomerPrize.CUSTOMER_PRIZE_ID, customer_prize_id);
+//                    sqlMap.put(GuangqiCustomerPrize.APP_ID, app_id);
+//                    sqlMap.put(GuangqiCustomerPrize.CUSTOMER_ID, customer_id);
+//                    sqlMap.put(GuangqiCustomerPrize.PRIZE_ID, prize_id);
+//                    sqlMap.put(GuangqiCustomerPrize.CUSTOMER_PRIZE_DATE, customer_prize_date);
+//                    sqlMap.put(GuangqiCustomerPrize.SYSTEM_CREATE_USER_ID, system_create_user_id);
+//                    sqlMap.put(GuangqiCustomerPrize.SYSTEM_CREATE_TIME, system_create_time);
+//                    sqlMap.put(GuangqiCustomerPrize.SYSTEM_UPDATE_USER_ID, system_create_user_id);
+//                    sqlMap.put(GuangqiCustomerPrize.SYSTEM_UPDATE_TIME, system_create_time);
+//                    sqlMap.put(GuangqiCustomerPrize.SYSTEM_VERSION, 0);
+//                    sqlMap.put(GuangqiCustomerPrize.SYSTEM_STATUS, true);
+//                    sqlMap.put(GuangqiPrize.PRIZE_QUANTITY, 0);
+//                    sqlMap.put(GuangqiPrize.PRIZE_LIMIT, 0);
+//                    SqlPara sqlPara = Db.getSqlPara("guangqi_customer_prize.save", sqlMap);
+//
+//                    Boolean result = Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+//
+//                    if (!result) {
+//                        System.out.println("123456");
+//                    }
+//                }
+//            }
+//        }
     }
 
 }
