@@ -7,6 +7,7 @@ import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.template.Engine;
 import com.jfinal.template.Template;
+import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.service.CodeService;
 import com.nowui.chuangshi.util.Util;
@@ -196,7 +197,7 @@ public class CodeController extends Controller {
         String result = template.renderToString(templateMap);
 
         try {
-            Writer writer = new FileWriter(new File("/Users/yongqiangzhong/Documents/Publish/" + fileName), false);
+            Writer writer = new FileWriter(new File(Config.code_generate_url + fileName), false);
             writer.write(result.toCharArray());
             writer.close();
         } catch (IOException e) {

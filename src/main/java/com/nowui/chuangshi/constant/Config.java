@@ -12,6 +12,8 @@ public class Config {
     public static Integer initial_size = 0;
     public static Integer min_idle = 0;
     public static Integer max_activee = 0;
+    public static String code_generate_url = "";
+    public static String table_schema = "";
 
     static {
         PropKit.clear();
@@ -25,6 +27,8 @@ public class Config {
         initial_size = Integer.valueOf(PropKit.get("initial_size"));
         min_idle = Integer.valueOf(PropKit.get("min_idle"));
         max_activee = Integer.valueOf(PropKit.get("max_activee"));
+        code_generate_url = PropKit.get("code_generate_url");
+        table_schema = PropKit.get("table_schema");
     }
 
 }
