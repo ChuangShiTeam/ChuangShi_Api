@@ -5,3 +5,12 @@ target
 assets
 upload
 /src/main/resources
+*.class
+/target/
+/.settings/
+*.project
+*.classpath
+*.mymetadata
+/.metadata/
+/.externalToolBuilders/
+/bin/
