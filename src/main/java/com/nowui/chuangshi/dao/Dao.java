@@ -25,7 +25,9 @@ public class Dao {
     private String getSql(String sql, Object[] params) {
         //1 如果没有参数，说明是不是动态SQL语句
         int paramNum = 0;
-        if (null != params) paramNum = params.length;
+        if (null != params) {
+            paramNum = params.length;
+        }
         if (1 > paramNum) return sql;
         //2 如果有参数，则是动态SQL语句
         StringBuffer returnSQL = new StringBuffer();

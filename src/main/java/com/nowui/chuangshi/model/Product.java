@@ -48,6 +48,9 @@ public class Product extends Model<Product> {
     public static final String PRODUCT_STATUS = "product_status";
 
     public static final String PRODUCT_IMAGE_FILE = "product_image_file";
+    public static final String PRODUCT_SKU_LIST = "product_sku_list";
+    public static final String PRODUCT_SKU_COMMISSION_LIST = "product_sku_commission_list";
+    public static final String PRODUCT_SKU_PRICE_LIST = "product_sku_price_list";
 
     public String getProduct_id() {
         return getStr(PRODUCT_ID);

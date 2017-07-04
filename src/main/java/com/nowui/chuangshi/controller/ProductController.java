@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
@@ -7,11 +8,13 @@ import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.FeijiuRecommendProduct;
 import com.nowui.chuangshi.model.File;
 import com.nowui.chuangshi.model.Product;
+import com.nowui.chuangshi.model.ProductSku;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.ProductService;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductController extends Controller {
@@ -309,6 +312,35 @@ public class ProductController extends Controller {
         Boolean result = productService.deleteByProduct_idAndSystem_update_user_idValidateSystem_version(model.getProduct_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
 
         renderSuccessJson(result);
+    }
+
+    private List<ProductSku> getProductSkuList(String product_id, JSONObject jsonObject) {
+        JSONArray productSkuJSONArray = jsonObject.getJSONArray(Product.PRODUCT_SKU_LIST);
+
+        List<ProductSku> productSkuList = new ArrayList<ProductSku>();
+
+        for (int i = 0; i < productSkuJSONArray.size(); i++) {
+            JSONObject productSkuJsonObject = productSkuJSONArray.getJSONObject(i);
+
+            Boolean product_sku_is_default = productSkuJsonObject.getBoolean(ProductSku.PRODUCT_SKU_IS_DEFAULT);
+
+            ProductSku productSku = new ProductSku();
+            productSku.setProduct_sku_id(Util.getRandomUUID());
+            productSku.setProduct_id(product_id);
+            productSku.setProduct_sku_is_default(product_sku_is_default);
+            productSkuList.add(productSku);
+
+            //保存SKU属性
+            if (!product_sku_is_default) {
+
+            }
+
+            JSONArray productSkuPriceJSONArray = jsonObject.getJSONArray(Product.PRODUCT_SKU_PRICE_LIST);
+
+//            List<ProductSkuPrice> productSkuList = new ArrayList<ProductSku>();
+        }
+
+        return productSkuList;
     }
 
 }

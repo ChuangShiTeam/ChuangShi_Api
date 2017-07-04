@@ -5,7 +5,7 @@ import com.nowui.chuangshi.type.ColumnType;
 
 public class ProductSku extends Model<ProductSku> {
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "商品SKU编号")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "SKU编号")
     public static final String PRODUCT_SKU_ID = "product_sku_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "商品编号")
