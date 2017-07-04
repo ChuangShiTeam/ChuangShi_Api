@@ -3,7 +3,6 @@ package com.nowui.chuangshi.service;
 import com.nowui.chuangshi.cache.ProductSkuPriceCache;
 import com.nowui.chuangshi.model.ProductSkuPrice;
 
-import java.util.Date;
 import java.util.List;
 
 public class ProductSkuPriceService extends Service {

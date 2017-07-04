@@ -3,6 +3,8 @@ package com.nowui.chuangshi.model;
 import com.nowui.chuangshi.constant.Column;
 import com.nowui.chuangshi.type.ColumnType;
 
+import java.math.BigDecimal;
+
 public class ProductSkuPrice extends Model<ProductSkuPrice> {
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
@@ -41,11 +43,11 @@ public class ProductSkuPrice extends Model<ProductSkuPrice> {
         set(MEMBER_LEVEL_NAME, member_level_name);
     }
 
-    public String getProduct_sku_price() {
-        return getStr(PRODUCT_SKU_PRICE);
+    public BigDecimal getProduct_sku_price() {
+        return getBigDecimal(PRODUCT_SKU_PRICE);
     }
 
-    public void setProduct_sku_price(String product_sku_price) {
+    public void setProduct_sku_price(BigDecimal product_sku_price) {
         set(PRODUCT_SKU_PRICE, product_sku_price);
     }
 

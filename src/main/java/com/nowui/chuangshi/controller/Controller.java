@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.plugin.activerecord.Model;
 import com.nowui.chuangshi.constant.Constant;
-import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 import org.apache.http.HttpStatus;
 

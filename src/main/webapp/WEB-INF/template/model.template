@@ -33,7 +33,7 @@ public class #(first_upper_model_name_without_underline) extends Model<#(first_u
         set(#(column.upper_column_name), #(column.column_name));
     }
 
-    #elseif(column.data_type == "INT")
+    #elseif(column.data_type == "DECIMAL")
     public BigDecimal get#(column.first_column_name)() {
         return getBigDecimal(#(column.upper_column_name));
     }

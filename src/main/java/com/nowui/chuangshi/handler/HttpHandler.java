@@ -7,6 +7,7 @@ import com.jfinal.plugin.zbus.annotation.Topic;
 import com.jfinal.plugin.zbus.handler.TMsgHandler;
 import com.nowui.chuangshi.model.Http;
 import com.nowui.chuangshi.service.HttpService;
+import com.nowui.chuangshi.util.DateUtil;
 import com.nowui.chuangshi.util.MQUtil;
 
 import java.util.HashMap;
@@ -24,10 +25,10 @@ public class HttpHandler extends TMsgHandler<String> {
             Http http = JSONObject.parseObject(json, Http.class);
 
             System.out.println("----------------------------------------------------------------------------------------------------------------");
-            System.out.println("url:" + http.getHttp_url());
-            System.out.println("time:" + http.getSystem_create_time());
-            System.out.println("request:" + http.getHttp_request());
-            System.out.println("response:" + http.getHttp_response());
+            System.out.println("url: " + http.getHttp_url());
+            System.out.println("time: " + DateUtil.getDateTimeString(http.getSystem_create_time()));
+            System.out.println("request: " + http.getHttp_request());
+            System.out.println("response: " + http.getHttp_response());
             System.out.println("----------------------------------------------------------------------------------------------------------------");
 
             httpService.save(http.getHttp_id(), http.getApp_id(), http.getHttp_url(), http.getHttp_code(), http.getHttp_request(), http.getHttp_response(), http.getHttp_token(), http.getHttp_platform(), http.getHttp_version(), http.getHttp_ip_address(), http.getHttp_run_time(), http.getSystem_create_user_id());

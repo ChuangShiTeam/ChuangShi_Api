@@ -49,6 +49,7 @@ public class Product extends Model<Product> {
 
     public static final String PRODUCT_IMAGE_FILE = "product_image_file";
     public static final String PRODUCT_SKU_LIST = "product_sku_list";
+    public static final String PRODUCT_SKU_ATTRIBUTE_LIST = "product_sku_attribute_list";
     public static final String PRODUCT_SKU_COMMISSION_LIST = "product_sku_commission_list";
     public static final String PRODUCT_SKU_PRICE_LIST = "product_sku_price_list";
 
