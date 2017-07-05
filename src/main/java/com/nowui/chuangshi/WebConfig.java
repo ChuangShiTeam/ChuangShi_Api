@@ -45,6 +45,7 @@ public class WebConfig extends JFinalConfig {
         routes.add("/product/category", ProductCategoryController.class);
         routes.add("/member", MemberController.class);
         routes.add("/member/level", MemberLevelController.class);
+        routes.add("/member/stock/action", MemberStockActionController.class);
         routes.add("/stock", StockController.class);
         routes.add("/express", ExpressController.class);
 
@@ -101,6 +102,7 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_product_sku_price", "product_sku_price_id", ProductSkuPrice.class);
         activeRecordPlugin.addMapping("table_member", "member_id", Member.class);
         activeRecordPlugin.addMapping("table_member_level", "member_level_id", MemberLevel.class);
+        activeRecordPlugin.addMapping("table_member_stock_action", "member_stock_action_id", MemberStockAction.class);
         activeRecordPlugin.addMapping("table_stock", "stock_id", Stock.class);
         activeRecordPlugin.addMapping("table_express", "express_id", Express.class);
 

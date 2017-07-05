@@ -202,6 +202,22 @@ public class Url {
     public static final String MEMBER_LEVEL_SYSTEM_SAVE = "/member/level/system/save";
     public static final String MEMBER_LEVEL_SYSTEM_UPDATE = "/member/level/system/update";
     public static final String MEMBER_LEVEL_SYSTEM_DELETE = "/member/level/system/delete";
+    
+    public static final String MEMBER_STOCK_ACTION_LIST = "/member/stock/action/list";
+    public static final String MEMBER_STOCK_ACTION_FIND = "/member/stock/action/find";
+    public static final String MEMBER_STOCK_ACTION_SAVE = "/member/stock/action/save";
+    public static final String MEMBER_STOCK_ACTION_UPDATE = "/member/stock/action/update";
+    public static final String MEMBER_STOCK_ACTION_DELETE = "/member/stock/action/delete";
+    public static final String MEMBER_STOCK_ACTION_ADMIN_LIST = "/member/stock/action/admin/list";
+    public static final String MEMBER_STOCK_ACTION_ADMIN_FIND = "/member/stock/action/admin/find";
+    public static final String MEMBER_STOCK_ACTION_ADMIN_SAVE = "/member/stock/action/admin/save";
+    public static final String MEMBER_STOCK_ACTION_ADMIN_UPDATE = "/member/stock/action/admin/update";
+    public static final String MEMBER_STOCK_ACTION_ADMIN_DELETE = "/member/stock/action/admin/delete";
+    public static final String MEMBER_STOCK_ACTION_SYSTEM_LIST = "/member/stock/action/system/list";
+    public static final String MEMBER_STOCK_ACTION_SYSTEM_FIND = "/member/stock/action/system/find";
+    public static final String MEMBER_STOCK_ACTION_SYSTEM_SAVE = "/member/stock/action/system/save";
+    public static final String MEMBER_STOCK_ACTION_SYSTEM_UPDATE = "/member/stock/action/system/update";
+    public static final String MEMBER_STOCK_ACTION_SYSTEM_DELETE = "/member/stock/action/system/delete";
 
     public static final String GUANGQI_CUSTOMER_LIST = "/guangqi/customer/list";
     public static final String GUANGQI_CUSTOMER_FIND = "/guangqi/customer/find";
