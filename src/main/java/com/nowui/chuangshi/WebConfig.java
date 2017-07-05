@@ -71,6 +71,7 @@ import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductBrand;
 import com.nowui.chuangshi.model.ProductCategory;
 import com.nowui.chuangshi.model.ProductSku;
+import com.nowui.chuangshi.model.ProductSkuAttribute;
 import com.nowui.chuangshi.model.ProductSkuPrice;
 import com.nowui.chuangshi.model.Sql;
 import com.nowui.chuangshi.model.Stock;

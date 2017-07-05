@@ -116,7 +116,7 @@ public class CodeController extends Controller {
         String first_lower_model_name = lower_model_name.substring(0, 1).toLowerCase() + lower_model_name.substring(1);
         String first_upper_model_name_without_underline = removeUnderline(first_upper_model_name);
         String first_lower_model_name_without_underline = removeUnderline(first_lower_model_name);
-        String column_key = "lower_model_name" + "_id";
+        String column_key = lower_model_name + "_id";
 
         for (Record record : codeList) {
             if (!record.getStr("column_name").startsWith("system_")) {
