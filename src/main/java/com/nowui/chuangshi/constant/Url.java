@@ -306,5 +306,21 @@ public class Url {
     public static final String STOCK_SYSTEM_SAVE = "/stock/system/save";
     public static final String STOCK_SYSTEM_UPDATE = "/stock/system/update";
     public static final String STOCK_SYSTEM_DELETE = "/stock/system/delete";
+    
+    public static final String EXPRESS_LIST = "/express/list";
+    public static final String EXPRESS_FIND = "/express/find";
+    public static final String EXPRESS_SAVE = "/express/save";
+    public static final String EXPRESS_UPDATE = "/express/update";
+    public static final String EXPRESS_DELETE = "/express/delete";
+    public static final String EXPRESS_ADMIN_LIST = "/express/admin/list";
+    public static final String EXPRESS_ADMIN_FIND = "/express/admin/find";
+    public static final String EXPRESS_ADMIN_SAVE = "/express/admin/save";
+    public static final String EXPRESS_ADMIN_UPDATE = "/express/admin/update";
+    public static final String EXPRESS_ADMIN_DELETE = "/express/admin/delete";
+    public static final String EXPRESS_SYSTEM_LIST = "/express/system/list";
+    public static final String EXPRESS_SYSTEM_FIND = "/express/system/find";
+    public static final String EXPRESS_SYSTEM_SAVE = "/express/system/save";
+    public static final String EXPRESS_SYSTEM_UPDATE = "/express/system/update";
+    public static final String EXPRESS_SYSTEM_DELETE = "/express/system/delete";
 
 }

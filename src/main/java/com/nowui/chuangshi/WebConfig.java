@@ -46,6 +46,7 @@ public class WebConfig extends JFinalConfig {
         routes.add("/member", MemberController.class);
         routes.add("/member/level", MemberLevelController.class);
         routes.add("/stock", StockController.class);
+        routes.add("/express", ExpressController.class);
 
         routes.add("/guangqi/customer", GuangqiCustomerController.class);
         routes.add("/guangqi/prize", GuangqiPrizeController.class);
@@ -101,6 +102,7 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_member", "member_id", Member.class);
         activeRecordPlugin.addMapping("table_member_level", "member_level_id", MemberLevel.class);
         activeRecordPlugin.addMapping("table_stock", "stock_id", Stock.class);
+        activeRecordPlugin.addMapping("table_express", "express_id", Express.class);
 
         activeRecordPlugin.addMapping("table_guangqi_customer", "guangqi_customer_id", GuangqiCustomer.class);
         activeRecordPlugin.addMapping("table_guangqi_prize", "guangqi_prize_id", GuangqiPrize.class);
