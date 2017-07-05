@@ -21,13 +21,11 @@ public class MemberController extends Controller {
         validate(Constant.PAGE_SIZE, Constant.FIRST_CREATE_TIME, Constant.LAST_CREATE_TIME);
 
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<Member> resultList = memberService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN(), request_app_id, request_http_id, request_user_id);
+        List<Member> resultList = memberService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
 
         for (Member result : resultList) {
             result.keep(Member.MEMBER_ID, Member.SYSTEM_VERSION);
@@ -42,13 +40,10 @@ public class MemberController extends Controller {
         validate(Member.MEMBER_ID);
 
         Member model = getModel(Member.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Member member = memberService.findByMember_id(model.getMember_id(), request_app_id, request_http_id, request_user_id);
+        Member member = memberService.findByMember_id(model.getMember_id());
 
         authenticateApp_id(member.getApp_id());
         authenticateSystem_create_user_id(member.getSystem_create_user_id());
@@ -66,12 +61,11 @@ public class MemberController extends Controller {
         Member model = getModel(Member.class);
         String member_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = memberService.save(member_id, request_app_id, model.getUser_id(), model.getMember_parent_id(), model.getFrom_qrcode_id(), model.getQrcode_id(), model.getMember_level_id(), model.getMember_path(), model.getMember_status(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = memberService.save(member_id, request_app_id, model.getUser_id(), model.getMember_parent_id(), model.getFrom_qrcode_id(), model.getQrcode_id(), model.getMember_level_id(), model.getMember_path(), model.getMember_status(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -82,18 +76,16 @@ public class MemberController extends Controller {
         validate(Member.MEMBER_ID, Member.USER_ID, Member.MEMBER_PARENT_ID, Member.FROM_QRCODE_ID, Member.QRCODE_ID, Member.MEMBER_LEVEL_ID, Member.MEMBER_PATH, Member.MEMBER_STATUS, Member.SYSTEM_VERSION);
 
         Member model = getModel(Member.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Member member = memberService.findByMember_id(model.getMember_id(), request_app_id, request_http_id, request_user_id);
+        Member member = memberService.findByMember_id(model.getMember_id());
 
         authenticateApp_id(member.getApp_id());
         authenticateSystem_create_user_id(member.getSystem_create_user_id());
 
-        Boolean result = memberService.updateValidateSystem_version(model.getMember_id(), model.getUser_id(), model.getMember_parent_id(), model.getFrom_qrcode_id(), model.getQrcode_id(), model.getMember_level_id(), model.getMember_path(), model.getMember_status(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberService.updateValidateSystem_version(model.getMember_id(), model.getUser_id(), model.getMember_parent_id(), model.getFrom_qrcode_id(), model.getQrcode_id(), model.getMember_level_id(), model.getMember_path(), model.getMember_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -104,18 +96,16 @@ public class MemberController extends Controller {
         validate(Member.MEMBER_ID, Member.SYSTEM_VERSION);
 
         Member model = getModel(Member.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Member member = memberService.findByMember_id(model.getMember_id(), request_app_id, request_http_id, request_user_id);
+        Member member = memberService.findByMember_id(model.getMember_id());
 
         authenticateApp_id(member.getApp_id());
         authenticateSystem_create_user_id(member.getSystem_create_user_id());
 
-        Boolean result = memberService.deleteByMember_idAndSystem_update_user_idValidateSystem_version(model.getMember_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberService.deleteByMember_idAndSystem_update_user_idValidateSystem_version(model.getMember_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -127,13 +117,11 @@ public class MemberController extends Controller {
 
         User model = getModel(User.class);
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = memberService.countByApp_idOrLikeUser_name(request_app_id, model.getUser_name(), request_app_id, request_http_id, request_user_id);
-        List<Member> resultList = memberService.listByApp_idOrLikeUser_nameAndLimit(request_app_id, model.getUser_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = memberService.countByApp_idOrLikeUser_name(request_app_id, model.getUser_name());
+        List<Member> resultList = memberService.listByApp_idOrLikeUser_nameAndLimit(request_app_id, model.getUser_name(), getM(), getN());
 
         for (Member result : resultList) {
             result.keep(Member.MEMBER_ID, Member.SYSTEM_VERSION);
@@ -148,13 +136,10 @@ public class MemberController extends Controller {
         validate(Member.MEMBER_ID);
 
         Member model = getModel(Member.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Member member = memberService.findByMember_id(model.getMember_id(), request_app_id, request_http_id, request_user_id);
+        Member member = memberService.findByMember_id(model.getMember_id());
 
         authenticateApp_id(member.getApp_id());
 
@@ -174,17 +159,15 @@ public class MemberController extends Controller {
         validate(Member.MEMBER_ID, Member.USER_ID, Member.MEMBER_PARENT_ID, Member.FROM_QRCODE_ID, Member.QRCODE_ID, Member.MEMBER_LEVEL_ID, Member.MEMBER_PATH, Member.MEMBER_STATUS, Member.SYSTEM_VERSION);
 
         Member model = getModel(Member.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Member member = memberService.findByMember_id(model.getMember_id(), request_app_id, request_http_id, request_user_id);
+        Member member = memberService.findByMember_id(model.getMember_id());
 
         authenticateApp_id(member.getApp_id());
 
-        Boolean result = memberService.updateValidateSystem_version(model.getMember_id(), model.getUser_id(), model.getMember_parent_id(), model.getFrom_qrcode_id(), model.getQrcode_id(), model.getMember_level_id(), model.getMember_path(), model.getMember_status(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberService.updateValidateSystem_version(model.getMember_id(), model.getUser_id(), model.getMember_parent_id(), model.getFrom_qrcode_id(), model.getQrcode_id(), model.getMember_level_id(), model.getMember_path(), model.getMember_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -195,17 +178,15 @@ public class MemberController extends Controller {
         validate(Member.MEMBER_ID, Member.SYSTEM_VERSION);
 
         Member model = getModel(Member.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Member member = memberService.findByMember_id(model.getMember_id(), request_app_id, request_http_id, request_user_id);
+        Member member = memberService.findByMember_id(model.getMember_id());
 
         authenticateApp_id(member.getApp_id());
 
-        Boolean result = memberService.deleteByMember_idAndSystem_update_user_idValidateSystem_version(model.getMember_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberService.deleteByMember_idAndSystem_update_user_idValidateSystem_version(model.getMember_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -216,12 +197,9 @@ public class MemberController extends Controller {
         validate(Member.APP_ID, User.USER_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         User model = getModel(User.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        Integer total = memberService.countByOrApp_idOrLikeUser_name(model.getApp_id(), model.getUser_name(), request_app_id, request_http_id, request_user_id);
-        List<Member> resultList = memberService.listByOrApp_idOrLikeUser_nameAndLimit(model.getApp_id(), model.getUser_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = memberService.countByOrApp_idOrLikeUser_name(model.getApp_id(), model.getUser_name());
+        List<Member> resultList = memberService.listByOrApp_idOrLikeUser_nameAndLimit(model.getApp_id(), model.getUser_name(), getM(), getN());
 
         for (Member result : resultList) {
             result.keep(Member.MEMBER_ID, Member.SYSTEM_VERSION);
@@ -236,11 +214,8 @@ public class MemberController extends Controller {
         validate(Member.MEMBER_ID);
 
         Member model = getModel(Member.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        Member member = memberService.findByMember_id(model.getMember_id(), request_app_id, request_http_id, request_user_id);
+        Member member = memberService.findByMember_id(model.getMember_id());
 
         member.keep(Member.MEMBER_ID, Member.SYSTEM_VERSION);
 
@@ -254,11 +229,9 @@ public class MemberController extends Controller {
 
         Member model = getModel(Member.class);
         String member_id = Util.getRandomUUID();
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = memberService.save(member_id, model.getApp_id(), model.getUser_id(), model.getMember_parent_id(), model.getFrom_qrcode_id(), model.getQrcode_id(), model.getMember_level_id(), model.getMember_path(), model.getMember_status(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = memberService.save(member_id, model.getApp_id(), model.getUser_id(), model.getMember_parent_id(), model.getFrom_qrcode_id(), model.getQrcode_id(), model.getMember_level_id(), model.getMember_path(), model.getMember_status(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -269,11 +242,9 @@ public class MemberController extends Controller {
         validate(Member.MEMBER_ID, Member.USER_ID, Member.MEMBER_PARENT_ID, Member.FROM_QRCODE_ID, Member.QRCODE_ID, Member.MEMBER_LEVEL_ID, Member.MEMBER_PATH, Member.MEMBER_STATUS, Member.SYSTEM_VERSION);
 
         Member model = getModel(Member.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = memberService.updateValidateSystem_version(model.getMember_id(), model.getUser_id(), model.getMember_parent_id(), model.getFrom_qrcode_id(), model.getQrcode_id(), model.getMember_level_id(), model.getMember_path(), model.getMember_status(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberService.updateValidateSystem_version(model.getMember_id(), model.getUser_id(), model.getMember_parent_id(), model.getFrom_qrcode_id(), model.getQrcode_id(), model.getMember_level_id(), model.getMember_path(), model.getMember_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -284,11 +255,9 @@ public class MemberController extends Controller {
         validate(Member.MEMBER_ID, Member.SYSTEM_VERSION);
 
         Member model = getModel(Member.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = memberService.deleteByMember_idAndSystem_update_user_idValidateSystem_version(model.getMember_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberService.deleteByMember_idAndSystem_update_user_idValidateSystem_version(model.getMember_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

@@ -9,12 +9,12 @@ public class CodeCache extends Cache {
 
     private CodeDao codeDao = new CodeDao();
 
-    public List<Record> listByTable_schema(String table_name, String request_app_id, String request_http_id, String request_user_id) {
-        return codeDao.listByTable_schema(table_name, request_app_id, request_http_id, request_user_id);
+    public List<Record> listByTable_schema(String table_name) {
+        return codeDao.listByTable_schema(table_name);
     }
 
-    public List<Record> listByTable_name(String table_name, String request_app_id, String request_http_id, String request_user_id) {
-        return codeDao.listByTable_name(table_name, request_app_id, request_http_id, request_user_id);
+    public List<Record> listByTable_name(String table_name) {
+        return codeDao.listByTable_name(table_name);
     }
 
 }

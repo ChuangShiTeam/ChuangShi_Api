@@ -23,13 +23,11 @@ public class GuangqiCustomerController extends Controller {
         validate(Constant.PAGE_SIZE, Constant.FIRST_CREATE_TIME, Constant.LAST_CREATE_TIME);
 
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<GuangqiCustomer> resultList = guangqiCustomerService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN(), request_app_id, request_http_id, request_user_id);
+        List<GuangqiCustomer> resultList = guangqiCustomerService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
 
         for (GuangqiCustomer result : resultList) {
             result.keep(GuangqiCustomer.CUSTOMER_ID, GuangqiCustomer.SYSTEM_VERSION);
@@ -44,13 +42,10 @@ public class GuangqiCustomerController extends Controller {
         validate(GuangqiCustomer.CUSTOMER_ID);
 
         GuangqiCustomer model = getModel(GuangqiCustomer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        GuangqiCustomer guangqi_customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        GuangqiCustomer guangqi_customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id());
 
         authenticateApp_id(guangqi_customer.getApp_id());
         authenticateSystem_create_user_id(guangqi_customer.getSystem_create_user_id());
@@ -68,19 +63,18 @@ public class GuangqiCustomerController extends Controller {
         GuangqiCustomer model = getModel(GuangqiCustomer.class);
         String customer_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         if (!ValidateUtil.isPhone(model.getCustomer_phone())) {
             throw new RuntimeException("手机号码不对");
         }
 
-        Integer count = guangqiCustomerService.countByCustomer_phone(model.getCustomer_phone(), request_app_id, request_http_id, request_user_id);
+        Integer count = guangqiCustomerService.countByCustomer_phone(model.getCustomer_phone());
         if (count > 0) {
             throw new RuntimeException("该手机号码不能重复留资");
         }
 
-        Boolean result = guangqiCustomerService.save(customer_id, request_app_id, model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_province(), model.getCustomer_city(), model.getCostomer_dealer(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = guangqiCustomerService.save(customer_id, request_app_id, model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_province(), model.getCustomer_city(), model.getCostomer_dealer(), request_user_id);
 
         if (!result) {
             throw new RuntimeException("留资不成功");
@@ -98,18 +92,16 @@ public class GuangqiCustomerController extends Controller {
         validate(GuangqiCustomer.CUSTOMER_ID, GuangqiCustomer.CUSTOMER_NAME, GuangqiCustomer.CUSTOMER_PHONE, GuangqiCustomer.CUSTOMER_PROVINCE, GuangqiCustomer.CUSTOMER_CITY, GuangqiCustomer.COSTOMER_DEALER, GuangqiCustomer.SYSTEM_VERSION);
 
         GuangqiCustomer model = getModel(GuangqiCustomer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        GuangqiCustomer guangqi_customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        GuangqiCustomer guangqi_customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id());
 
         authenticateApp_id(guangqi_customer.getApp_id());
         authenticateSystem_create_user_id(guangqi_customer.getSystem_create_user_id());
 
-        Boolean result = guangqiCustomerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_province(), model.getCustomer_city(), model.getCostomer_dealer(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = guangqiCustomerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_province(), model.getCustomer_city(), model.getCostomer_dealer(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -120,18 +112,16 @@ public class GuangqiCustomerController extends Controller {
         validate(GuangqiCustomer.CUSTOMER_ID, GuangqiCustomer.SYSTEM_VERSION);
 
         GuangqiCustomer model = getModel(GuangqiCustomer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        GuangqiCustomer guangqi_customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        GuangqiCustomer guangqi_customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id());
 
         authenticateApp_id(guangqi_customer.getApp_id());
         authenticateSystem_create_user_id(guangqi_customer.getSystem_create_user_id());
 
-        Boolean result = guangqiCustomerService.deleteByCustomer_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = guangqiCustomerService.deleteByCustomer_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -143,13 +133,11 @@ public class GuangqiCustomerController extends Controller {
 
         GuangqiCustomer model = getModel(GuangqiCustomer.class);
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = guangqiCustomerService.countByApp_id(request_app_id, request_app_id, request_http_id, request_user_id);
-        List<GuangqiCustomer> resultList = guangqiCustomerService.listByApp_idAndCustomer_nameAndLimit(request_app_id, model.getCustomer_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = guangqiCustomerService.countByApp_id(request_app_id);
+        List<GuangqiCustomer> resultList = guangqiCustomerService.listByApp_idAndCustomer_nameAndLimit(request_app_id, model.getCustomer_name(), getM(), getN());
 
         for (GuangqiCustomer result : resultList) {
             result.keep(GuangqiCustomer.CUSTOMER_ID, GuangqiCustomer.CUSTOMER_NAME, GuangqiCustomer.CUSTOMER_PHONE, GuangqiCustomer.CUSTOMER_PROVINCE, GuangqiCustomer.CUSTOMER_CITY, GuangqiCustomer.COSTOMER_DEALER, GuangqiCustomer.SYSTEM_CREATE_TIME, GuangqiCustomer.SYSTEM_VERSION);
@@ -164,13 +152,10 @@ public class GuangqiCustomerController extends Controller {
         validate(GuangqiCustomer.CUSTOMER_ID);
 
         GuangqiCustomer model = getModel(GuangqiCustomer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        GuangqiCustomer guangqi_customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        GuangqiCustomer guangqi_customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id());
 
         authenticateApp_id(guangqi_customer.getApp_id());
 
@@ -190,17 +175,15 @@ public class GuangqiCustomerController extends Controller {
         validate(GuangqiCustomer.CUSTOMER_ID, GuangqiCustomer.CUSTOMER_NAME, GuangqiCustomer.CUSTOMER_PHONE, GuangqiCustomer.CUSTOMER_PROVINCE, GuangqiCustomer.CUSTOMER_CITY, GuangqiCustomer.COSTOMER_DEALER, GuangqiCustomer.SYSTEM_VERSION);
 
         GuangqiCustomer model = getModel(GuangqiCustomer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        GuangqiCustomer guangqi_customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        GuangqiCustomer guangqi_customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id());
 
         authenticateApp_id(guangqi_customer.getApp_id());
 
-        Boolean result = guangqiCustomerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_province(), model.getCustomer_city(), model.getCostomer_dealer(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = guangqiCustomerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_province(), model.getCustomer_city(), model.getCostomer_dealer(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -211,17 +194,15 @@ public class GuangqiCustomerController extends Controller {
         validate(GuangqiCustomer.CUSTOMER_ID, GuangqiCustomer.SYSTEM_VERSION);
 
         GuangqiCustomer model = getModel(GuangqiCustomer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        GuangqiCustomer guangqi_customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        GuangqiCustomer guangqi_customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id());
 
         authenticateApp_id(guangqi_customer.getApp_id());
 
-        Boolean result = guangqiCustomerService.deleteByCustomer_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = guangqiCustomerService.deleteByCustomer_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -232,12 +213,9 @@ public class GuangqiCustomerController extends Controller {
         validate(GuangqiCustomer.APP_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         GuangqiCustomer model = getModel(GuangqiCustomer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        Integer total = guangqiCustomerService.countByOrApp_id(model.getApp_id(), request_app_id, request_http_id, request_user_id);
-        List<GuangqiCustomer> resultList = guangqiCustomerService.listByOrApp_idAndLimit(model.getApp_id(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = guangqiCustomerService.countByOrApp_id(model.getApp_id());
+        List<GuangqiCustomer> resultList = guangqiCustomerService.listByOrApp_idAndLimit(model.getApp_id(), getM(), getN());
 
         for (GuangqiCustomer result : resultList) {
             result.keep(GuangqiCustomer.CUSTOMER_ID, GuangqiCustomer.SYSTEM_VERSION);
@@ -252,11 +230,8 @@ public class GuangqiCustomerController extends Controller {
         validate(GuangqiCustomer.CUSTOMER_ID);
 
         GuangqiCustomer model = getModel(GuangqiCustomer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        GuangqiCustomer guangqi_customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        GuangqiCustomer guangqi_customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id());
 
         guangqi_customer.keep(GuangqiCustomer.CUSTOMER_ID, GuangqiCustomer.SYSTEM_VERSION);
 
@@ -274,11 +249,9 @@ public class GuangqiCustomerController extends Controller {
         validate(GuangqiCustomer.CUSTOMER_ID, GuangqiCustomer.CUSTOMER_NAME, GuangqiCustomer.CUSTOMER_PHONE, GuangqiCustomer.CUSTOMER_PROVINCE, GuangqiCustomer.CUSTOMER_CITY, GuangqiCustomer.COSTOMER_DEALER, GuangqiCustomer.SYSTEM_VERSION);
 
         GuangqiCustomer model = getModel(GuangqiCustomer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = guangqiCustomerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_province(), model.getCustomer_city(), model.getCostomer_dealer(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = guangqiCustomerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_province(), model.getCustomer_city(), model.getCostomer_dealer(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -289,11 +262,9 @@ public class GuangqiCustomerController extends Controller {
         validate(GuangqiCustomer.CUSTOMER_ID, GuangqiCustomer.SYSTEM_VERSION);
 
         GuangqiCustomer model = getModel(GuangqiCustomer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = guangqiCustomerService.deleteByCustomer_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = guangqiCustomerService.deleteByCustomer_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

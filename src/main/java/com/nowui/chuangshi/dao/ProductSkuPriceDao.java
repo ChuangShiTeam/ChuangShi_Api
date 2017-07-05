@@ -13,17 +13,17 @@ import java.util.List;
 
 public class ProductSkuPriceDao extends Dao {
 
-    public List<ProductSkuPrice> listByProduct_sku_id(String product_sku_id, String request_app_id, String request_http_id, String request_user_id) {
+    public List<ProductSkuPrice> listByProduct_sku_id(String product_sku_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id);
         SqlPara sqlPara = Db.getSqlPara("product_sku_price.listByProduct_sku_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_product_sku_price", "listByProduct_sku_id", sqlPara, request_user_id);
+        logSql("product_sku_price", "listByProduct_sku_id", sqlPara);
 
         return new ProductSkuPrice().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public Boolean save(List<ProductSkuPrice> productSkuPriceList, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean save(List<ProductSkuPrice> productSkuPriceList, String system_create_user_id) {
         if (productSkuPriceList.size() == 0) {
             return false;
         }
@@ -38,9 +38,9 @@ public class ProductSkuPriceDao extends Dao {
             objectList.add(productSkuPrice.getMember_level_id());
             objectList.add(productSkuPrice.getMember_level_name());
             objectList.add(productSkuPrice.getProduct_sku_price());
-            objectList.add(request_user_id);
+            objectList.add(system_create_user_id);
             objectList.add(new Date());
-            objectList.add(request_user_id);
+            objectList.add(system_create_user_id);
             objectList.add(new Date());
             objectList.add(0);
             objectList.add(true);
@@ -55,12 +55,12 @@ public class ProductSkuPriceDao extends Dao {
             }
         }
 
-        logSql(request_app_id, request_http_id, "table_product_sku_price", "save", sqlPara, request_user_id);
+        logSql("product_sku_price", "save", sqlPara);
 
         return true;
     }
 
-    public Boolean delete(List<String> productSkuIdList, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean delete(List<String> productSkuIdList, String system_update_user_id) {
         if (productSkuIdList.size() == 0) {
             return false;
         }
@@ -71,7 +71,7 @@ public class ProductSkuPriceDao extends Dao {
         List<Object[]> parameterList = new ArrayList<Object[]>();
         for(String product_sku_id : productSkuIdList) {
             List<Object> objectList = new ArrayList<Object>();
-            objectList.add(request_user_id);
+            objectList.add(system_update_user_id);
             objectList.add(new Date());
             objectList.add(product_sku_id);
             parameterList.add(objectList.toArray());
@@ -85,7 +85,7 @@ public class ProductSkuPriceDao extends Dao {
             }
         }
 
-        logSql(request_app_id, request_http_id, "table_product_sku_price", "delete", sqlPara, request_user_id);
+        logSql("product_sku_price", "delete", sqlPara);
 
         return true;
     }

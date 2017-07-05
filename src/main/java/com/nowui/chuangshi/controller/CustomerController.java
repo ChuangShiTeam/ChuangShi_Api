@@ -20,13 +20,11 @@ public class CustomerController extends Controller {
         validate(Constant.PAGE_SIZE, Constant.FIRST_CREATE_TIME, Constant.LAST_CREATE_TIME);
 
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<Customer> resultList = customerService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN(), request_app_id, request_http_id, request_user_id);
+        List<Customer> resultList = customerService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
 
         for (Customer result : resultList) {
             result.keep(Customer.CUSTOMER_ID, Customer.SYSTEM_VERSION);
@@ -41,13 +39,10 @@ public class CustomerController extends Controller {
         validate(Customer.CUSTOMER_ID);
 
         Customer model = getModel(Customer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Customer customer = customerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        Customer customer = customerService.findByCustomer_id(model.getCustomer_id());
 
         authenticateApp_id(customer.getApp_id());
         authenticateSystem_create_user_id(customer.getSystem_create_user_id());
@@ -65,12 +60,11 @@ public class CustomerController extends Controller {
         Customer model = getModel(Customer.class);
         String customer_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = customerService.save(customer_id, request_app_id, model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_birthday(), model.getCustomer_city(), model.getCustomer_sex(), model.getCustomer_id_card(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = customerService.save(customer_id, request_app_id, model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_birthday(), model.getCustomer_city(), model.getCustomer_sex(), model.getCustomer_id_card(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -81,18 +75,16 @@ public class CustomerController extends Controller {
         validate(Customer.CUSTOMER_ID, Customer.CUSTOMER_NAME, Customer.CUSTOMER_PHONE, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_CITY, Customer.CUSTOMER_SEX, Customer.CUSTOMER_ID_CARD, Customer.SYSTEM_VERSION);
 
         Customer model = getModel(Customer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Customer customer = customerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        Customer customer = customerService.findByCustomer_id(model.getCustomer_id());
 
         authenticateApp_id(customer.getApp_id());
         authenticateSystem_create_user_id(customer.getSystem_create_user_id());
 
-        Boolean result = customerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_birthday(), model.getCustomer_city(), model.getCustomer_sex(), model.getCustomer_id_card(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = customerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_birthday(), model.getCustomer_city(), model.getCustomer_sex(), model.getCustomer_id_card(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -103,18 +95,16 @@ public class CustomerController extends Controller {
         validate(Customer.CUSTOMER_ID, Customer.SYSTEM_VERSION);
 
         Customer model = getModel(Customer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Customer customer = customerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        Customer customer = customerService.findByCustomer_id(model.getCustomer_id());
 
         authenticateApp_id(customer.getApp_id());
         authenticateSystem_create_user_id(customer.getSystem_create_user_id());
 
-        Boolean result = customerService.deleteByCustomer_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = customerService.deleteByCustomer_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -126,13 +116,11 @@ public class CustomerController extends Controller {
 
         Customer model = getModel(Customer.class);
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = customerService.countByApp_idOrLikeCustomer_name(request_app_id, model.getCustomer_name(), request_app_id, request_http_id, request_user_id);
-        List<Customer> resultList = customerService.listByApp_idOrLikeCustomer_nameAndLimit(request_app_id, model.getCustomer_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = customerService.countByApp_idOrLikeCustomer_name(request_app_id, model.getCustomer_name());
+        List<Customer> resultList = customerService.listByApp_idOrLikeCustomer_nameAndLimit(request_app_id, model.getCustomer_name(), getM(), getN());
 
 //        for (Customer result : resultList) {
 //            result.keep(Customer.CUSTOMER_ID, Customer.SYSTEM_VERSION);
@@ -147,13 +135,10 @@ public class CustomerController extends Controller {
         validate(Customer.CUSTOMER_ID);
 
         Customer model = getModel(Customer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Customer customer = customerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        Customer customer = customerService.findByCustomer_id(model.getCustomer_id());
 
         authenticateApp_id(customer.getApp_id());
 
@@ -173,17 +158,15 @@ public class CustomerController extends Controller {
         validate(Customer.CUSTOMER_ID, Customer.CUSTOMER_NAME, Customer.CUSTOMER_PHONE, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_CITY, Customer.CUSTOMER_SEX, Customer.CUSTOMER_ID_CARD, Customer.SYSTEM_VERSION);
 
         Customer model = getModel(Customer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Customer customer = customerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        Customer customer = customerService.findByCustomer_id(model.getCustomer_id());
 
         authenticateApp_id(customer.getApp_id());
 
-        Boolean result = customerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_birthday(), model.getCustomer_city(), model.getCustomer_sex(), model.getCustomer_id_card(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = customerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_birthday(), model.getCustomer_city(), model.getCustomer_sex(), model.getCustomer_id_card(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -194,17 +177,15 @@ public class CustomerController extends Controller {
         validate(Customer.CUSTOMER_ID, Customer.SYSTEM_VERSION);
 
         Customer model = getModel(Customer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Customer customer = customerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        Customer customer = customerService.findByCustomer_id(model.getCustomer_id());
 
         authenticateApp_id(customer.getApp_id());
 
-        Boolean result = customerService.deleteByCustomer_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = customerService.deleteByCustomer_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -215,12 +196,9 @@ public class CustomerController extends Controller {
         validate(Customer.APP_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         Customer model = getModel(Customer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        Integer total = customerService.countByOrApp_idOrLikeCustomer_name(model.getApp_id(), model.getCustomer_name(), request_app_id, request_http_id, request_user_id);
-        List<Customer> resultList = customerService.listByOrApp_idOrLikeCustomer_nameAndLimit(model.getApp_id(), model.getCustomer_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = customerService.countByOrApp_idOrLikeCustomer_name(model.getApp_id(), model.getCustomer_name());
+        List<Customer> resultList = customerService.listByOrApp_idOrLikeCustomer_nameAndLimit(model.getApp_id(), model.getCustomer_name(), getM(), getN());
 
         for (Customer result : resultList) {
             result.keep(Customer.CUSTOMER_ID, Customer.SYSTEM_VERSION);
@@ -235,11 +213,8 @@ public class CustomerController extends Controller {
         validate(Customer.CUSTOMER_ID);
 
         Customer model = getModel(Customer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        Customer customer = customerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        Customer customer = customerService.findByCustomer_id(model.getCustomer_id());
 
         customer.keep(Customer.CUSTOMER_ID, Customer.SYSTEM_VERSION);
 
@@ -253,11 +228,9 @@ public class CustomerController extends Controller {
 
         Customer model = getModel(Customer.class);
         String customer_id = Util.getRandomUUID();
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = customerService.save(customer_id, model.getApp_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_birthday(), model.getCustomer_city(), model.getCustomer_sex(), model.getCustomer_id_card(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = customerService.save(customer_id, model.getApp_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_birthday(), model.getCustomer_city(), model.getCustomer_sex(), model.getCustomer_id_card(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -268,11 +241,9 @@ public class CustomerController extends Controller {
         validate(Customer.CUSTOMER_ID, Customer.CUSTOMER_NAME, Customer.CUSTOMER_PHONE, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_CITY, Customer.CUSTOMER_SEX, Customer.CUSTOMER_ID_CARD, Customer.SYSTEM_VERSION);
 
         Customer model = getModel(Customer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = customerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_birthday(), model.getCustomer_city(), model.getCustomer_sex(), model.getCustomer_id_card(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = customerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_phone(), model.getCustomer_birthday(), model.getCustomer_city(), model.getCustomer_sex(), model.getCustomer_id_card(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -283,11 +254,9 @@ public class CustomerController extends Controller {
         validate(Customer.CUSTOMER_ID, Customer.SYSTEM_VERSION);
 
         Customer model = getModel(Customer.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = customerService.deleteByCustomer_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = customerService.deleteByCustomer_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

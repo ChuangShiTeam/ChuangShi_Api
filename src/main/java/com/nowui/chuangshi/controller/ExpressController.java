@@ -20,13 +20,11 @@ public class ExpressController extends Controller {
         validate(Constant.PAGE_SIZE, Constant.FIRST_CREATE_TIME, Constant.LAST_CREATE_TIME);
 
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<Express> resultList = expressService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN(), request_app_id, request_http_id, request_user_id);
+        List<Express> resultList = expressService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
 
         for (Express result : resultList) {
             result.keep(Express.EXPRESS_ID, Express.SYSTEM_VERSION);
@@ -41,13 +39,10 @@ public class ExpressController extends Controller {
         validate(Express.EXPRESS_ID);
 
         Express model = getModel(Express.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Express express = expressService.findByExpress_id(model.getExpress_id(), request_app_id, request_http_id, request_user_id);
+        Express express = expressService.findByExpress_id(model.getExpress_id());
 
         authenticateApp_id(express.getApp_id());
         authenticateSystem_create_user_id(express.getSystem_create_user_id());
@@ -65,12 +60,11 @@ public class ExpressController extends Controller {
         Express model = getModel(Express.class);
         String express_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = expressService.save(express_id, request_app_id, model.getTrade_id(), model.getMember_stock_action_id(), model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_type(), model.getExpress_receiver_company(), model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(), model.getExpress_receiver_postcode(), model.getExpress_receiver_province(), model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(), model.getExpress_sender_company(), model.getExpress_sender_name(), model.getExpress_sender_tel(), model.getExpress_sender_mobile(), model.getExpress_sender_postcode(), model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(), model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(), model.getExpress_pay_way(), model.getExpress_start_date(), model.getExpress_end_date(), model.getExpress_remark(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = expressService.save(express_id, request_app_id, model.getTrade_id(), model.getMember_stock_action_id(), model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_type(), model.getExpress_receiver_company(), model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(), model.getExpress_receiver_postcode(), model.getExpress_receiver_province(), model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(), model.getExpress_sender_company(), model.getExpress_sender_name(), model.getExpress_sender_tel(), model.getExpress_sender_mobile(), model.getExpress_sender_postcode(), model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(), model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(), model.getExpress_pay_way(), model.getExpress_start_date(), model.getExpress_end_date(), model.getExpress_remark(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -81,18 +75,16 @@ public class ExpressController extends Controller {
         validate(Express.EXPRESS_ID, Express.TRADE_ID, Express.MEMBER_STOCK_ACTION_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, Express.EXPRESS_TYPE, Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL, Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE, Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS, Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL, Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE, Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS, Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_START_DATE, Express.EXPRESS_END_DATE, Express.EXPRESS_REMARK, Express.SYSTEM_VERSION);
 
         Express model = getModel(Express.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Express express = expressService.findByExpress_id(model.getExpress_id(), request_app_id, request_http_id, request_user_id);
+        Express express = expressService.findByExpress_id(model.getExpress_id());
 
         authenticateApp_id(express.getApp_id());
         authenticateSystem_create_user_id(express.getSystem_create_user_id());
 
-        Boolean result = expressService.updateValidateSystem_version(model.getExpress_id(), model.getTrade_id(), model.getMember_stock_action_id(), model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_type(), model.getExpress_receiver_company(), model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(), model.getExpress_receiver_postcode(), model.getExpress_receiver_province(), model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(), model.getExpress_sender_company(), model.getExpress_sender_name(), model.getExpress_sender_tel(), model.getExpress_sender_mobile(), model.getExpress_sender_postcode(), model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(), model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(), model.getExpress_pay_way(), model.getExpress_start_date(), model.getExpress_end_date(), model.getExpress_remark(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = expressService.updateValidateSystem_version(model.getExpress_id(), model.getTrade_id(), model.getMember_stock_action_id(), model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_type(), model.getExpress_receiver_company(), model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(), model.getExpress_receiver_postcode(), model.getExpress_receiver_province(), model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(), model.getExpress_sender_company(), model.getExpress_sender_name(), model.getExpress_sender_tel(), model.getExpress_sender_mobile(), model.getExpress_sender_postcode(), model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(), model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(), model.getExpress_pay_way(), model.getExpress_start_date(), model.getExpress_end_date(), model.getExpress_remark(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -103,18 +95,16 @@ public class ExpressController extends Controller {
         validate(Express.EXPRESS_ID, Express.SYSTEM_VERSION);
 
         Express model = getModel(Express.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Express express = expressService.findByExpress_id(model.getExpress_id(), request_app_id, request_http_id, request_user_id);
+        Express express = expressService.findByExpress_id(model.getExpress_id());
 
         authenticateApp_id(express.getApp_id());
         authenticateSystem_create_user_id(express.getSystem_create_user_id());
 
-        Boolean result = expressService.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(model.getExpress_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = expressService.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(model.getExpress_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -126,13 +116,11 @@ public class ExpressController extends Controller {
 
         Express model = getModel(Express.class);
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = expressService.countByApp_idOrLikeExpress_no(request_app_id, model.getExpress_no(), request_app_id, request_http_id, request_user_id);
-        List<Express> resultList = expressService.listByApp_idOrLikeExpress_noAndLimit(request_app_id, model.getExpress_no(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = expressService.countByApp_idOrLikeExpress_no(request_app_id, model.getExpress_no());
+        List<Express> resultList = expressService.listByApp_idOrLikeExpress_noAndLimit(request_app_id, model.getExpress_no(), getM(), getN());
 
         for (Express result : resultList) {
             result.keep(Express.EXPRESS_ID, Express.SYSTEM_VERSION);
@@ -147,13 +135,10 @@ public class ExpressController extends Controller {
         validate(Express.EXPRESS_ID);
 
         Express model = getModel(Express.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Express express = expressService.findByExpress_id(model.getExpress_id(), request_app_id, request_http_id, request_user_id);
+        Express express = expressService.findByExpress_id(model.getExpress_id());
 
         authenticateApp_id(express.getApp_id());
 
@@ -173,17 +158,15 @@ public class ExpressController extends Controller {
         validate(Express.EXPRESS_ID, Express.TRADE_ID, Express.MEMBER_STOCK_ACTION_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, Express.EXPRESS_TYPE, Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL, Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE, Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS, Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL, Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE, Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS, Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_START_DATE, Express.EXPRESS_END_DATE, Express.EXPRESS_REMARK, Express.SYSTEM_VERSION);
 
         Express model = getModel(Express.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Express express = expressService.findByExpress_id(model.getExpress_id(), request_app_id, request_http_id, request_user_id);
+        Express express = expressService.findByExpress_id(model.getExpress_id());
 
         authenticateApp_id(express.getApp_id());
 
-        Boolean result = expressService.updateValidateSystem_version(model.getExpress_id(), model.getTrade_id(), model.getMember_stock_action_id(), model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_type(), model.getExpress_receiver_company(), model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(), model.getExpress_receiver_postcode(), model.getExpress_receiver_province(), model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(), model.getExpress_sender_company(), model.getExpress_sender_name(), model.getExpress_sender_tel(), model.getExpress_sender_mobile(), model.getExpress_sender_postcode(), model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(), model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(), model.getExpress_pay_way(), model.getExpress_start_date(), model.getExpress_end_date(), model.getExpress_remark(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = expressService.updateValidateSystem_version(model.getExpress_id(), model.getTrade_id(), model.getMember_stock_action_id(), model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_type(), model.getExpress_receiver_company(), model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(), model.getExpress_receiver_postcode(), model.getExpress_receiver_province(), model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(), model.getExpress_sender_company(), model.getExpress_sender_name(), model.getExpress_sender_tel(), model.getExpress_sender_mobile(), model.getExpress_sender_postcode(), model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(), model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(), model.getExpress_pay_way(), model.getExpress_start_date(), model.getExpress_end_date(), model.getExpress_remark(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -194,17 +177,15 @@ public class ExpressController extends Controller {
         validate(Express.EXPRESS_ID, Express.SYSTEM_VERSION);
 
         Express model = getModel(Express.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Express express = expressService.findByExpress_id(model.getExpress_id(), request_app_id, request_http_id, request_user_id);
+        Express express = expressService.findByExpress_id(model.getExpress_id());
 
         authenticateApp_id(express.getApp_id());
 
-        Boolean result = expressService.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(model.getExpress_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = expressService.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(model.getExpress_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -215,12 +196,9 @@ public class ExpressController extends Controller {
         validate(Express.APP_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         Express model = getModel(Express.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        Integer total = expressService.countByOrApp_idOrLikeExpress_no(model.getApp_id(), model.getExpress_no(), request_app_id, request_http_id, request_user_id);
-        List<Express> resultList = expressService.listByOrApp_idOrLikeExpress_noAndLimit(model.getApp_id(), model.getExpress_no(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = expressService.countByOrApp_idOrLikeExpress_no(model.getApp_id(), model.getExpress_no());
+        List<Express> resultList = expressService.listByOrApp_idOrLikeExpress_noAndLimit(model.getApp_id(), model.getExpress_no(), getM(), getN());
 
         for (Express result : resultList) {
             result.keep(Express.EXPRESS_ID, Express.SYSTEM_VERSION);
@@ -235,11 +213,8 @@ public class ExpressController extends Controller {
         validate(Express.EXPRESS_ID);
 
         Express model = getModel(Express.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        Express express = expressService.findByExpress_id(model.getExpress_id(), request_app_id, request_http_id, request_user_id);
+        Express express = expressService.findByExpress_id(model.getExpress_id());
 
         express.keep(Express.EXPRESS_ID, Express.SYSTEM_VERSION);
 
@@ -253,11 +228,9 @@ public class ExpressController extends Controller {
 
         Express model = getModel(Express.class);
         String express_id = Util.getRandomUUID();
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = expressService.save(express_id, model.getApp_id(), model.getTrade_id(), model.getMember_stock_action_id(), model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_type(), model.getExpress_receiver_company(), model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(), model.getExpress_receiver_postcode(), model.getExpress_receiver_province(), model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(), model.getExpress_sender_company(), model.getExpress_sender_name(), model.getExpress_sender_tel(), model.getExpress_sender_mobile(), model.getExpress_sender_postcode(), model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(), model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(), model.getExpress_pay_way(), model.getExpress_start_date(), model.getExpress_end_date(), model.getExpress_remark(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = expressService.save(express_id, model.getApp_id(), model.getTrade_id(), model.getMember_stock_action_id(), model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_type(), model.getExpress_receiver_company(), model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(), model.getExpress_receiver_postcode(), model.getExpress_receiver_province(), model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(), model.getExpress_sender_company(), model.getExpress_sender_name(), model.getExpress_sender_tel(), model.getExpress_sender_mobile(), model.getExpress_sender_postcode(), model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(), model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(), model.getExpress_pay_way(), model.getExpress_start_date(), model.getExpress_end_date(), model.getExpress_remark(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -268,11 +241,9 @@ public class ExpressController extends Controller {
         validate(Express.EXPRESS_ID, Express.TRADE_ID, Express.MEMBER_STOCK_ACTION_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, Express.EXPRESS_TYPE, Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL, Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE, Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS, Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL, Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE, Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS, Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_START_DATE, Express.EXPRESS_END_DATE, Express.EXPRESS_REMARK, Express.SYSTEM_VERSION);
 
         Express model = getModel(Express.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = expressService.updateValidateSystem_version(model.getExpress_id(), model.getTrade_id(), model.getMember_stock_action_id(), model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_type(), model.getExpress_receiver_company(), model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(), model.getExpress_receiver_postcode(), model.getExpress_receiver_province(), model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(), model.getExpress_sender_company(), model.getExpress_sender_name(), model.getExpress_sender_tel(), model.getExpress_sender_mobile(), model.getExpress_sender_postcode(), model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(), model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(), model.getExpress_pay_way(), model.getExpress_start_date(), model.getExpress_end_date(), model.getExpress_remark(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = expressService.updateValidateSystem_version(model.getExpress_id(), model.getTrade_id(), model.getMember_stock_action_id(), model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_type(), model.getExpress_receiver_company(), model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(), model.getExpress_receiver_postcode(), model.getExpress_receiver_province(), model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(), model.getExpress_sender_company(), model.getExpress_sender_name(), model.getExpress_sender_tel(), model.getExpress_sender_mobile(), model.getExpress_sender_postcode(), model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(), model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(), model.getExpress_pay_way(), model.getExpress_start_date(), model.getExpress_end_date(), model.getExpress_remark(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -283,11 +254,9 @@ public class ExpressController extends Controller {
         validate(Express.EXPRESS_ID, Express.SYSTEM_VERSION);
 
         Express model = getModel(Express.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = expressService.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(model.getExpress_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = expressService.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(model.getExpress_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

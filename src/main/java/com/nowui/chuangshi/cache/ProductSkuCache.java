@@ -13,11 +13,11 @@ public class ProductSkuCache extends Cache {
 
     private ProductSkuDao productSkuDao = new ProductSkuDao();
 
-    public List<ProductSku> listByProduct_id(String product_id, String request_app_id, String request_http_id, String request_user_id) {
+    public List<ProductSku> listByProduct_id(String product_id) {
         List<ProductSku> productSkuList = CacheUtil.get(PRODUCT_SKU_LIST_BY_PRODUCT_ID_CACHE, product_id);
 
         if (productSkuList == null) {
-            productSkuList = productSkuDao.listByProduct_id(product_id, request_app_id, request_http_id, request_user_id);
+            productSkuList = productSkuDao.listByProduct_id(product_id);
 
             CacheUtil.put(PRODUCT_SKU_LIST_BY_PRODUCT_ID_CACHE, product_id, productSkuList);
         }
@@ -25,11 +25,11 @@ public class ProductSkuCache extends Cache {
         return productSkuList;
     }
 
-    public ProductSku findByProduct_sku_id(String product_sku_id, String request_app_id, String request_http_id, String request_user_id) {
+    public ProductSku findByProduct_sku_id(String product_sku_id) {
         ProductSku product_sku = CacheUtil.get(PRODUCT_SKU_BY_PRODUCT_SKU_ID_CACHE, product_sku_id);
 
         if (product_sku == null) {
-            product_sku = productSkuDao.findByProduct_sku_id(product_sku_id, request_app_id, request_http_id, request_user_id);
+            product_sku = productSkuDao.findByProduct_sku_id(product_sku_id);
 
             CacheUtil.put(PRODUCT_SKU_BY_PRODUCT_SKU_ID_CACHE, product_sku_id, product_sku);
         }
@@ -37,8 +37,8 @@ public class ProductSkuCache extends Cache {
         return product_sku;
     }
 
-    public Boolean save(String product_id, List<ProductSku> productSkuList, String request_app_id, String request_http_id, String request_user_id) {
-        boolean result = productSkuDao.save(productSkuList, request_app_id, request_http_id, request_user_id);
+    public Boolean save(String product_id, List<ProductSku> productSkuList, String system_create_user_id) {
+        boolean result = productSkuDao.save(productSkuList, system_create_user_id);
 
         if (result) {
             CacheUtil.remove(PRODUCT_SKU_LIST_BY_PRODUCT_ID_CACHE, product_id);
@@ -47,8 +47,8 @@ public class ProductSkuCache extends Cache {
         return result;
     }
 
-    public Boolean delete(String product_id, List<String> productSkuIdList, String request_app_id, String request_http_id, String request_user_id) {
-        boolean result = productSkuDao.delete(productSkuIdList, request_app_id, request_http_id, request_user_id);
+    public Boolean delete(String product_id, List<String> productSkuIdList, String system_update_user_id) {
+        boolean result = productSkuDao.delete(productSkuIdList, system_update_user_id);
 
         if (result) {
             CacheUtil.remove(PRODUCT_SKU_LIST_BY_PRODUCT_ID_CACHE, product_id);

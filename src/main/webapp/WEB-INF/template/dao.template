@@ -11,31 +11,31 @@ import java.util.List;
 
 public class #(first_upper_model_name_without_underline)Dao extends Dao {
 
-    public Integer countByApp_idOrLike#(first_upper_model_name)_name(String app_id, String #(lower_model_name)_name, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByApp_idOrLike#(first_upper_model_name)_name(String app_id, String #(lower_model_name)_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(#(first_upper_model_name_without_underline).APP_ID, app_id);
         sqlMap.put(#(first_upper_model_name_without_underline).#(upper_model_name)_NAME, #(lower_model_name)_name);
         SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).countByApp_idOrLike#(first_upper_model_name)_name", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "countByApp_idOrLike#(first_upper_model_name)_name", sqlPara, request_user_id);
+        logSql("#(lower_model_name)", "countByApp_idOrLike#(first_upper_model_name)_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_idOrLike#(first_upper_model_name)_name(String app_id, String #(lower_model_name)_name, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByOrApp_idOrLike#(first_upper_model_name)_name(String app_id, String #(lower_model_name)_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(#(first_upper_model_name_without_underline).APP_ID, app_id);
         sqlMap.put(#(first_upper_model_name_without_underline).#(upper_model_name)_NAME, #(lower_model_name)_name);
         SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).countByOrApp_idOrLike#(first_upper_model_name)_name", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "countByOrApp_idOrLike#(first_upper_model_name)_name", sqlPara, request_user_id);
+        logSql("#(lower_model_name)", "countByOrApp_idOrLike#(first_upper_model_name)_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public List<#(first_upper_model_name_without_underline)> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<#(first_upper_model_name_without_underline)> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(#(first_upper_model_name_without_underline).APP_ID, app_id);
         sqlMap.put(#(first_upper_model_name_without_underline).SYSTEM_CREATE_TIME, system_create_time);
@@ -43,12 +43,12 @@ public class #(first_upper_model_name_without_underline)Dao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).listByApp_idAndSystem_create_timeAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "listByApp_idAndSystem_create_timeAndLimit", sqlPara, request_user_id);
+        logSql("#(lower_model_name)", "listByApp_idAndSystem_create_timeAndLimit", sqlPara);
 
         return new #(first_upper_model_name_without_underline)().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<#(first_upper_model_name_without_underline)> listByApp_idOrLike#(first_upper_model_name)_nameAndLimit(String app_id, String #(lower_model_name)_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<#(first_upper_model_name_without_underline)> listByApp_idOrLike#(first_upper_model_name)_nameAndLimit(String app_id, String #(lower_model_name)_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(#(first_upper_model_name_without_underline).APP_ID, app_id);
         sqlMap.put(#(first_upper_model_name_without_underline).#(upper_model_name)_NAME, #(lower_model_name)_name);
@@ -56,12 +56,12 @@ public class #(first_upper_model_name_without_underline)Dao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).listByApp_idOrLike#(first_upper_model_name)_nameAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "listByApp_idOrLike#(first_upper_model_name)_nameAndLimit", sqlPara, request_user_id);
+        logSql("#(lower_model_name)", "listByApp_idOrLike#(first_upper_model_name)_nameAndLimit", sqlPara);
 
         return new #(first_upper_model_name_without_underline)().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<#(first_upper_model_name_without_underline)> listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit(String app_id, String #(lower_model_name)_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<#(first_upper_model_name_without_underline)> listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit(String app_id, String #(lower_model_name)_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(#(first_upper_model_name_without_underline).APP_ID, app_id);
         sqlMap.put(#(first_upper_model_name_without_underline).#(upper_model_name)_NAME, #(lower_model_name)_name);
@@ -69,17 +69,17 @@ public class #(first_upper_model_name_without_underline)Dao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit", sqlPara, request_user_id);
+        logSql("#(lower_model_name)", "listByOrApp_idOrLike#(first_upper_model_name)_nameAndLimit", sqlPara);
 
         return new #(first_upper_model_name_without_underline)().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public #(first_upper_model_name_without_underline) findBy#(first_upper_column_key)(String #(column_key), String request_app_id, String request_http_id, String request_user_id) {
+    public #(first_upper_model_name_without_underline) findBy#(first_upper_column_key)(String #(column_key)) {
         Kv sqlMap = Kv.create();
         sqlMap.put(#(first_upper_model_name_without_underline).#(upper_column_key), #(column_key));
         SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).findBy#(first_upper_column_key)", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "findBy#(first_upper_column_key)", sqlPara, request_user_id);
+        logSql("#(lower_model_name)", "findBy#(first_upper_column_key)", sqlPara);
 
         List<#(first_upper_model_name_without_underline)> #(lower_model_name)List = new #(first_upper_model_name_without_underline)().find(sqlPara.getSql(), sqlPara.getPara());
         if (#(lower_model_name)List.size() == 0) {
@@ -89,7 +89,7 @@ public class #(first_upper_model_name_without_underline)Dao extends Dao {
         }
     }
 
-    public Boolean save(#for(column : columnList)#if(column.data_type == "TINYINT")Boolean #elseif(column.data_type == "INT")Integer #elseif(column.data_type == "DECIMAL")BigDecimal #else String #end #(column.column_name), #end String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean save(#for(column : columnList)#if(column.data_type == "TINYINT")Boolean #elseif(column.data_type == "INT")Integer #elseif(column.data_type == "DECIMAL")BigDecimal #else String #end #(column.column_name), #end String system_create_user_id) {
         Kv sqlMap = Kv.create();
         #for(column : columnList)
         sqlMap.put(#(first_upper_model_name_without_underline).#(column.upper_column_name), #(column.column_name));
@@ -102,12 +102,12 @@ public class #(first_upper_model_name_without_underline)Dao extends Dao {
         sqlMap.put(#(first_upper_model_name_without_underline).SYSTEM_STATUS, true);
         SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).save", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "save", sqlPara, request_user_id);
+        logSql("#(lower_model_name)", "save", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String #(column_key), #for(column : columnList)# if(column.column_name == column_key || column.column_name == "app_id")#else #if(column.data_type == "TINYINT")Boolean #elseif(column.data_type == "INT")Integer #elseif(column.data_type == "DECIMAL")BigDecimal #else String #end #(column.column_name), #end #end String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean update(String #(column_key), #for(column : columnList)# if(column.column_name == column_key || column.column_name == "app_id")#else #if(column.data_type == "TINYINT")Boolean #elseif(column.data_type == "INT")Integer #elseif(column.data_type == "DECIMAL")BigDecimal #else String #end #(column.column_name), #end #end String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(#(first_upper_model_name_without_underline).#(upper_column_key), #(column_key));
         #for(column : columnList)
@@ -121,12 +121,12 @@ public class #(first_upper_model_name_without_underline)Dao extends Dao {
         sqlMap.put(#(first_upper_model_name_without_underline).SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).update", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "update", sqlPara, request_user_id);
+        logSql("#(lower_model_name)", "update", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean deleteBy#(first_upper_column_key)AndSystem_version(String #(column_key), String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean deleteBy#(first_upper_column_key)AndSystem_version(String #(column_key), String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(#(first_upper_model_name_without_underline).#(upper_column_key), #(column_key));
         sqlMap.put(#(first_upper_model_name_without_underline).SYSTEM_UPDATE_USER_ID, system_update_user_id);
@@ -134,7 +134,7 @@ public class #(first_upper_model_name_without_underline)Dao extends Dao {
         sqlMap.put(#(first_upper_model_name_without_underline).SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("#(lower_model_name).deleteBy#(first_upper_column_key)AndSystem_version", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_#(lower_model_name)", "deleteBy#(first_upper_column_key)AndSystem_version", sqlPara, request_user_id);
+        logSql("#(lower_model_name)", "deleteBy#(first_upper_column_key)AndSystem_version", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }

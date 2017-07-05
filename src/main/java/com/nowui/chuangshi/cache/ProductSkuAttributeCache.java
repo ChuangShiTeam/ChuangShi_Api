@@ -12,11 +12,11 @@ public class ProductSkuAttributeCache extends Cache {
 
     private ProductSkuAttributeDao productSkuAttributeDao = new ProductSkuAttributeDao();
 
-    public List<ProductSkuAttribute> listByProduct_sku_id(String product_sku_id, String request_app_id, String request_http_id, String request_user_id) {
+    public List<ProductSkuAttribute> listByProduct_sku_id(String product_sku_id) {
         List<ProductSkuAttribute> productSkuAttributeList = CacheUtil.get(PRODUCT_SKU_ATTRIBUTE_LIST_BY_PRODUCT_SKU_ID_CACHE, product_sku_id);
 
         if (productSkuAttributeList == null) {
-            productSkuAttributeList = productSkuAttributeDao.listByProduct_sku_id(product_sku_id, request_app_id, request_http_id, request_user_id);
+            productSkuAttributeList = productSkuAttributeDao.listByProduct_sku_id(product_sku_id);
 
             CacheUtil.put(PRODUCT_SKU_ATTRIBUTE_LIST_BY_PRODUCT_SKU_ID_CACHE, product_sku_id, productSkuAttributeList);
         }
@@ -24,8 +24,8 @@ public class ProductSkuAttributeCache extends Cache {
         return productSkuAttributeList;
     }
 
-    public Boolean save(List<ProductSkuAttribute> productSkuAttributeList, String request_app_id, String request_http_id, String request_user_id) {
-        Boolean result = productSkuAttributeDao.save(productSkuAttributeList, request_app_id, request_http_id, request_user_id);
+    public Boolean save(List<ProductSkuAttribute> productSkuAttributeList, String system_create_user_id) {
+        Boolean result = productSkuAttributeDao.save(productSkuAttributeList, system_create_user_id);
 
         if (result) {
             for (ProductSkuAttribute productSkuAttribute : productSkuAttributeList) {
@@ -36,8 +36,8 @@ public class ProductSkuAttributeCache extends Cache {
         return result;
     }
 
-    public Boolean delete(List<String> productSkuIdList, String request_app_id, String request_http_id, String request_user_id) {
-        Boolean result = productSkuAttributeDao.delete(productSkuIdList, request_app_id, request_http_id, request_user_id);
+    public Boolean delete(List<String> productSkuIdList, String system_update_user_id) {
+        Boolean result = productSkuAttributeDao.delete(productSkuIdList, system_update_user_id);
 
         if (result) {
             for (String product_sku_id : productSkuIdList) {

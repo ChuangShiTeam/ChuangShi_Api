@@ -13,17 +13,17 @@ import java.util.List;
 
 public class ProductSkuAttributeDao extends Dao {
 
-    public List<ProductSkuAttribute> listByProduct_sku_id(String product_sku_id, String request_app_id, String request_http_id, String request_user_id) {
+    public List<ProductSkuAttribute> listByProduct_sku_id(String product_sku_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(ProductSkuAttribute.PRODUCT_SKU_ID, product_sku_id);
         SqlPara sqlPara = Db.getSqlPara("product_sku_attribute.listByProduct_sku_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_product_sku_attribute", "listByProduct_sku_id", sqlPara, request_user_id);
+        logSql("product_sku_attribute", "listByProduct_sku_id", sqlPara);
 
         return new ProductSkuAttribute().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public Boolean save(List<ProductSkuAttribute> productSkuAttributeList, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean save(List<ProductSkuAttribute> productSkuAttributeList, String system_create_user_id) {
         if (productSkuAttributeList.size() == 0) {
             return false;
         }
@@ -37,9 +37,9 @@ public class ProductSkuAttributeDao extends Dao {
             objectList.add(productSkuAttribute.getProduct_sku_id());
             objectList.add(productSkuAttribute.getProduct_sku_attribute_name());
             objectList.add(productSkuAttribute.getProduct_sku_attribute_value());
-            objectList.add(request_user_id);
+            objectList.add(system_create_user_id);
             objectList.add(new Date());
-            objectList.add(request_user_id);
+            objectList.add(system_create_user_id);
             objectList.add(new Date());
             objectList.add(0);
             objectList.add(true);
@@ -54,12 +54,12 @@ public class ProductSkuAttributeDao extends Dao {
             }
         }
 
-        logSql(request_app_id, request_http_id, "table_product_sku_attribute", "save", sqlPara, request_user_id);
+        logSql("product_sku_attribute", "save", sqlPara);
 
         return true;
     }
 
-    public Boolean delete(List<String> productSkuIdList, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean delete(List<String> productSkuIdList, String system_update_user_id) {
         if (productSkuIdList.size() == 0) {
             return false;
         }
@@ -70,7 +70,7 @@ public class ProductSkuAttributeDao extends Dao {
         List<Object[]> parameterList = new ArrayList<Object[]>();
         for(String product_sku_id : productSkuIdList) {
             List<Object> objectList = new ArrayList<Object>();
-            objectList.add(request_user_id);
+            objectList.add(system_update_user_id);
             objectList.add(new Date());
             objectList.add(product_sku_id);
             parameterList.add(objectList.toArray());
@@ -84,7 +84,7 @@ public class ProductSkuAttributeDao extends Dao {
             }
         }
 
-        logSql(request_app_id, request_http_id, "table_product_sku_attribute", "delete", sqlPara, request_user_id);
+        logSql("product_sku_attribute", "delete", sqlPara);
 
         return true;
     }

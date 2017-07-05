@@ -31,15 +31,12 @@ public class CodeController extends Controller {
     public void adminList() {
         validateRequest_app_id();
 
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
         String table_name = jsonObject.getString("table_name");
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<Record> recordList = codeService.listByTable_schema(table_name, request_app_id, request_http_id, request_user_id);
+        List<Record> recordList = codeService.listByTable_schema(table_name);
 
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
 
@@ -54,15 +51,12 @@ public class CodeController extends Controller {
 
     @ActionKey(Url.CODE_ADMIN_SAVE)
     public void adminSave() {
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
         String table_name = jsonObject.getString("table_name");
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        save(table_name, request_app_id, request_http_id, request_user_id);
+        save(table_name);
 
         renderSuccessJson();
     }
@@ -71,14 +65,11 @@ public class CodeController extends Controller {
     public void systemList() {
         validateRequest_app_id();
 
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
         String table_name = jsonObject.getString("table_name");
 
 
-        List<Record> recordList = codeService.listByTable_schema(table_name, request_app_id, request_http_id, request_user_id);
+        List<Record> recordList = codeService.listByTable_schema(table_name);
 
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
 
@@ -95,18 +86,15 @@ public class CodeController extends Controller {
     public void systemSave() {
         JSONObject jsonObject = getParameterJSONObject();
 
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
         String table_name = jsonObject.getString("table_name");
 
-        save(table_name, request_app_id, request_http_id, request_user_id);
+        save(table_name);
 
         renderSuccessJson();
     }
 
-    private void save(String table_name, String request_app_id, String request_http_id, String request_user_id) {
-        List<Record> codeList = codeService.listByTable_name(table_name, request_app_id, request_http_id, request_user_id);
+    private void save(String table_name) {
+        List<Record> codeList = codeService.listByTable_name(table_name);
 
         List<Record> columnList = new ArrayList<Record>();
 

@@ -12,11 +12,11 @@ public class ProductSkuPriceCache extends Cache {
 
     private ProductSkuPriceDao productSkuPriceDao = new ProductSkuPriceDao();
 
-    public List<ProductSkuPrice> listByProduct_sku_id(String product_sku_id, String request_app_id, String request_http_id, String request_user_id) {
+    public List<ProductSkuPrice> listByProduct_sku_id(String product_sku_id) {
         List<ProductSkuPrice> productSkuPriceList = CacheUtil.get(PRODUCT_SKU_PRICE_LIST_BY_PRODUCT_SKU_ID_CACHE, product_sku_id);
 
         if (productSkuPriceList == null) {
-            productSkuPriceList = productSkuPriceDao.listByProduct_sku_id(product_sku_id, request_app_id, request_http_id, request_user_id);
+            productSkuPriceList = productSkuPriceDao.listByProduct_sku_id(product_sku_id);
 
             CacheUtil.put(PRODUCT_SKU_PRICE_LIST_BY_PRODUCT_SKU_ID_CACHE, product_sku_id, productSkuPriceList);
         }
@@ -24,8 +24,8 @@ public class ProductSkuPriceCache extends Cache {
         return productSkuPriceList;
     }
 
-    public Boolean save(List<ProductSkuPrice> productSkuPriceList, String request_app_id, String request_http_id, String request_user_id) {
-        Boolean result = productSkuPriceDao.save(productSkuPriceList, request_app_id, request_http_id, request_user_id);
+    public Boolean save(List<ProductSkuPrice> productSkuPriceList, String system_create_user_id) {
+        Boolean result = productSkuPriceDao.save(productSkuPriceList, system_create_user_id);
 
         if (result) {
             for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
@@ -36,8 +36,8 @@ public class ProductSkuPriceCache extends Cache {
         return result;
     }
 
-    public Boolean delete(List<String> productSkuIdList, String request_app_id, String request_http_id, String request_user_id) {
-        Boolean result = productSkuPriceDao.delete(productSkuIdList, request_app_id, request_http_id, request_user_id);
+    public Boolean delete(List<String> productSkuIdList, String system_update_user_id) {
+        Boolean result = productSkuPriceDao.delete(productSkuIdList, system_update_user_id);
 
         if (result) {
             for (String product_sku_id : productSkuIdList) {

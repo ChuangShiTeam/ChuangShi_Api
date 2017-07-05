@@ -20,11 +20,7 @@ public class FeijiuController extends Controller {
 
     @ActionKey(Url.FEIJIU_FAST_EXPORT)
     public void fastExport() {
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
-
-        List<FeijiuFastCustomer> feijiuFastCustomerList = feijiuFastCustomerService.listByApp_id("d49579df8f8342699657335868f90561", request_app_id, request_http_id, request_user_id);
+        List<FeijiuFastCustomer> feijiuFastCustomerList = feijiuFastCustomerService.listByApp_id("d49579df8f8342699657335868f90561");
 
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFCellStyle style = wb.createCellStyle();
@@ -129,11 +125,7 @@ public class FeijiuController extends Controller {
 
     @ActionKey(Url.FEIJIU_RECOMMEND_EXPORT)
     public void recommendExport() {
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
-
-        List<FeijiuRecommendCustomer> feijiuRecommendCustomerList = feijiuRecommendCustomerService.listByApp_id("d49579df8f8342699657335868f90561", request_app_id, request_http_id, request_user_id);
+        List<FeijiuRecommendCustomer> feijiuRecommendCustomerList = feijiuRecommendCustomerService.listByApp_id("d49579df8f8342699657335868f90561");
 
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFCellStyle style = wb.createCellStyle();

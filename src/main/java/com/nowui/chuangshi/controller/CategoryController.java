@@ -30,7 +30,7 @@ public class CategoryController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<Category> resultList = categoryService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN(), request_app_id, request_http_id, request_user_id);
+        List<Category> resultList = categoryService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
 
         for (Category result : resultList) {
             result.keep(Category.CATEGORY_ID, Category.SYSTEM_VERSION);
@@ -51,7 +51,7 @@ public class CategoryController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Category category = categoryService.findByCategory_id(model.getCategory_id(), request_app_id, request_http_id, request_user_id);
+        Category category = categoryService.findByCategory_id(model.getCategory_id());
 
         authenticateApp_id(category.getApp_id());
         authenticateSystem_create_user_id(category.getSystem_create_user_id());
@@ -74,7 +74,7 @@ public class CategoryController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = categoryService.save(category_id, request_app_id, model.getParent_id(), model.getCategory_name(), model.getCategory_image(), model.getCategory_key(), model.getCategory_value(), model.getCategory_sort(), model.getCategory_type(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = categoryService.save(category_id, request_app_id, model.getParent_id(), model.getCategory_name(), model.getCategory_image(), model.getCategory_key(), model.getCategory_value(), model.getCategory_sort(), model.getCategory_type(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -91,12 +91,12 @@ public class CategoryController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Category category = categoryService.findByCategory_id(model.getCategory_id(), request_app_id, request_http_id, request_user_id);
+        Category category = categoryService.findByCategory_id(model.getCategory_id());
 
         authenticateApp_id(category.getApp_id());
         authenticateSystem_create_user_id(category.getSystem_create_user_id());
 
-        Boolean result = categoryService.updateValidateSystem_version(model.getCategory_id(), model.getParent_id(), model.getCategory_name(), model.getCategory_image(), model.getCategory_key(), model.getCategory_value(), model.getCategory_sort(), model.getCategory_type(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = categoryService.updateValidateSystem_version(model.getCategory_id(), model.getParent_id(), model.getCategory_name(), model.getCategory_image(), model.getCategory_key(), model.getCategory_value(), model.getCategory_sort(), model.getCategory_type(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -113,16 +113,16 @@ public class CategoryController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Category category = categoryService.findByCategory_id(model.getCategory_id(), request_app_id, request_http_id, request_user_id);
+        Category category = categoryService.findByCategory_id(model.getCategory_id());
 
         authenticateApp_id(category.getApp_id());
         authenticateSystem_create_user_id(category.getSystem_create_user_id());
 
-        Boolean result = categoryService.deleteByCategory_idAndSystem_update_user_idValidateSystem_version(model.getCategory_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = categoryService.deleteByCategory_idAndSystem_update_user_idValidateSystem_version(model.getCategory_id(), request_user_id, model.getSystem_version());
 
         if (result) {
             if (category.getCategory_type().equals(CategoryType.MENU.getKey())) {
-                menuApiService.deleteByMenu_id(category.getCategory_id(), request_user_id, request_app_id, request_http_id, request_user_id);
+                menuApiService.deleteByMenu_id(category.getCategory_id(), request_user_id);
             }
         }
 
@@ -141,8 +141,8 @@ public class CategoryController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = categoryService.countByApp_idAndParent_idOrLikeCategory_nameOrCategory_type(request_app_id, Constant.PARENT_ID, model.getCategory_name(), model.getCategory_type(), request_app_id, request_http_id, request_user_id);
-        List<Category> resultList = categoryService.listByApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit(request_app_id, Constant.PARENT_ID, model.getCategory_name(), model.getCategory_type(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = categoryService.countByApp_idAndParent_idOrLikeCategory_nameOrCategory_type(request_app_id, Constant.PARENT_ID, model.getCategory_name(), model.getCategory_type());
+        List<Category> resultList = categoryService.listByApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit(request_app_id, Constant.PARENT_ID, model.getCategory_name(), model.getCategory_type(), getM(), getN());
 
         for (Category result : resultList) {
             result.keep(Category.CATEGORY_ID, Category.CATEGORY_NAME, Category.SYSTEM_VERSION);
@@ -163,7 +163,7 @@ public class CategoryController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Category category = categoryService.findByCategory_id(model.getCategory_id(), request_app_id, request_http_id, request_user_id);
+        Category category = categoryService.findByCategory_id(model.getCategory_id());
 
         authenticateApp_id(category.getApp_id());
 
@@ -184,11 +184,11 @@ public class CategoryController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Category category = categoryService.findByCategory_id(model.getCategory_id(), request_app_id, request_http_id, request_user_id);
+        Category category = categoryService.findByCategory_id(model.getCategory_id());
 
         category.keep(Category.CATEGORY_ID, Category.APP_ID, Category.PARENT_ID, Category.CATEGORY_NAME, Category.CATEGORY_TYPE);
 
-        List<Map<String, Object>> childrenLst = categoryService.treeByParent_id(category.getCategory_id(), request_app_id, request_http_id, request_user_id);
+        List<Map<String, Object>> childrenLst = categoryService.treeByParent_id(category.getCategory_id());
         category.put(Constant.CHILDREN, childrenLst);
 
         renderSuccessJson(category);
@@ -211,11 +211,11 @@ public class CategoryController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Category category = categoryService.findByCategory_id(model.getCategory_id(), request_app_id, request_http_id, request_user_id);
+        Category category = categoryService.findByCategory_id(model.getCategory_id());
 
         authenticateApp_id(category.getApp_id());
 
-        Boolean result = categoryService.updateValidateSystem_version(model.getCategory_id(), model.getParent_id(), model.getCategory_name(), model.getCategory_image(), model.getCategory_key(), model.getCategory_value(), model.getCategory_sort(), model.getCategory_type(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = categoryService.updateValidateSystem_version(model.getCategory_id(), model.getParent_id(), model.getCategory_name(), model.getCategory_image(), model.getCategory_key(), model.getCategory_value(), model.getCategory_sort(), model.getCategory_type(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -232,14 +232,14 @@ public class CategoryController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Category category = categoryService.findByCategory_id(model.getCategory_id(), request_app_id, request_http_id, request_user_id);
+        Category category = categoryService.findByCategory_id(model.getCategory_id());
         authenticateApp_id(category.getApp_id());
 
-        Boolean result = categoryService.deleteByCategory_idAndSystem_update_user_idValidateSystem_version(model.getCategory_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = categoryService.deleteByCategory_idAndSystem_update_user_idValidateSystem_version(model.getCategory_id(), request_user_id, model.getSystem_version());
 
         if (result) {
             if (category.getCategory_type().equals(CategoryType.MENU.getKey())) {
-                menuApiService.deleteByMenu_id(category.getCategory_id(), request_user_id, request_app_id, request_http_id, request_user_id);
+                menuApiService.deleteByMenu_id(category.getCategory_id(), request_user_id);
             }
         }
 
@@ -256,8 +256,8 @@ public class CategoryController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Integer total = categoryService.countByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_type(model.getApp_id(), Constant.PARENT_ID, model.getCategory_name(), model.getCategory_type(), request_app_id, request_http_id, request_user_id);
-        List<Category> resultList = categoryService.listByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit(model.getApp_id(), Constant.PARENT_ID, model.getCategory_name(), model.getCategory_type(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = categoryService.countByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_type(model.getApp_id(), Constant.PARENT_ID, model.getCategory_name(), model.getCategory_type());
+        List<Category> resultList = categoryService.listByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit(model.getApp_id(), Constant.PARENT_ID, model.getCategory_name(), model.getCategory_type(), getM(), getN());
 
         for (Category result : resultList) {
             result.keep(Category.CATEGORY_ID, Category.CATEGORY_NAME, Category.CATEGORY_KEY, Category.CATEGORY_VALUE, Category.CATEGORY_SORT, Category.SYSTEM_VERSION);
@@ -276,7 +276,7 @@ public class CategoryController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Category category = categoryService.findByCategory_id(model.getCategory_id(), request_app_id, request_http_id, request_user_id);
+        Category category = categoryService.findByCategory_id(model.getCategory_id());
 
         category.keep(Category.CATEGORY_ID, Category.APP_ID, Category.PARENT_ID, Category.CATEGORY_NAME, Category.CATEGORY_IMAGE, Category.CATEGORY_KEY, Category.CATEGORY_VALUE, Category.CATEGORY_SORT, Category.CATEGORY_TYPE, Category.SYSTEM_VERSION);
 
@@ -293,11 +293,11 @@ public class CategoryController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Category category = categoryService.findByCategory_id(model.getCategory_id(), request_app_id, request_http_id, request_user_id);
+        Category category = categoryService.findByCategory_id(model.getCategory_id());
 
         category.keep(Category.CATEGORY_ID, Category.APP_ID, Category.PARENT_ID, Category.CATEGORY_NAME, Category.CATEGORY_TYPE);
 
-        List<Map<String, Object>> childrenLst = categoryService.treeByParent_id(category.getCategory_id(), request_app_id, request_http_id, request_user_id);
+        List<Map<String, Object>> childrenLst = categoryService.treeByParent_id(category.getCategory_id());
         category.put(Constant.CHILDREN, childrenLst);
 
         renderSuccessJson(category);
@@ -316,7 +316,7 @@ public class CategoryController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = categoryService.save(category_id, model.getApp_id(), model.getParent_id(), model.getCategory_name(), model.getCategory_image(), model.getCategory_key(), model.getCategory_value(), model.getCategory_sort(), model.getCategory_type(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = categoryService.save(category_id, model.getApp_id(), model.getParent_id(), model.getCategory_name(), model.getCategory_image(), model.getCategory_key(), model.getCategory_value(), model.getCategory_sort(), model.getCategory_type(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -331,7 +331,7 @@ public class CategoryController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = categoryService.updateValidateSystem_version(model.getCategory_id(), model.getParent_id(), model.getCategory_name(), model.getCategory_image(), model.getCategory_key(), model.getCategory_value(), model.getCategory_sort(), model.getCategory_type(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = categoryService.updateValidateSystem_version(model.getCategory_id(), model.getParent_id(), model.getCategory_name(), model.getCategory_image(), model.getCategory_key(), model.getCategory_value(), model.getCategory_sort(), model.getCategory_type(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -346,13 +346,13 @@ public class CategoryController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Category category = categoryService.findByCategory_id(model.getCategory_id(), request_app_id, request_http_id, request_user_id);
+        Category category = categoryService.findByCategory_id(model.getCategory_id());
 
-        Boolean result = categoryService.deleteByCategory_idAndSystem_update_user_idValidateSystem_version(model.getCategory_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = categoryService.deleteByCategory_idAndSystem_update_user_idValidateSystem_version(model.getCategory_id(), request_user_id, model.getSystem_version());
 
         if (result) {
             if (category.getCategory_type().equals(CategoryType.MENU.getKey())) {
-                menuApiService.deleteByMenu_id(category.getCategory_id(), request_user_id, request_app_id, request_http_id, request_user_id);
+                menuApiService.deleteByMenu_id(category.getCategory_id(), request_user_id);
             }
         }
 

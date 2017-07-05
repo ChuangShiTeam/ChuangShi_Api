@@ -22,12 +22,10 @@ public class ProductCategoryController extends Controller {
 
         ProductCategory model = getModel(ProductCategory.class);
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<Map<String, Object>>  resultList = productCategoryService.treeByApp_idOrLikeProduct_category_name(request_app_id, model.getProduct_category_name(), request_app_id, request_http_id, request_user_id);
+        List<Map<String, Object>>  resultList = productCategoryService.treeByApp_idOrLikeProduct_category_name(request_app_id, model.getProduct_category_name());
 
         renderSuccessJson(resultList);
     }
@@ -38,13 +36,10 @@ public class ProductCategoryController extends Controller {
         validate(ProductCategory.PRODUCT_CATEGORY_ID);
 
         ProductCategory model = getModel(ProductCategory.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        ProductCategory product_category = productCategoryService.findByProduct_category_id(model.getProduct_category_id(), request_app_id, request_http_id, request_user_id);
+        ProductCategory product_category = productCategoryService.findByProduct_category_id(model.getProduct_category_id());
 
         authenticateApp_id(product_category.getApp_id());
 
@@ -61,12 +56,11 @@ public class ProductCategoryController extends Controller {
         ProductCategory model = getModel(ProductCategory.class);
         String product_category_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = productCategoryService.save(product_category_id, request_app_id, model.getProduct_category_parent_id(), model.getProduct_category_name(), model.getProduct_category_sort(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = productCategoryService.save(product_category_id, request_app_id, model.getProduct_category_parent_id(), model.getProduct_category_name(), model.getProduct_category_sort(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -77,17 +71,15 @@ public class ProductCategoryController extends Controller {
         validate(ProductCategory.PRODUCT_CATEGORY_ID, ProductCategory.PRODUCT_CATEGORY_PARENT_ID, ProductCategory.PRODUCT_CATEGORY_NAME, ProductCategory.PRODUCT_CATEGORY_SORT, ProductCategory.SYSTEM_VERSION);
 
         ProductCategory model = getModel(ProductCategory.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        ProductCategory product_category = productCategoryService.findByProduct_category_id(model.getProduct_category_id(), request_app_id, request_http_id, request_user_id);
+        ProductCategory product_category = productCategoryService.findByProduct_category_id(model.getProduct_category_id());
 
         authenticateApp_id(product_category.getApp_id());
 
-        Boolean result = productCategoryService.updateValidateSystem_version(model.getProduct_category_id(), model.getProduct_category_parent_id(), model.getProduct_category_name(), model.getProduct_category_sort(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = productCategoryService.updateValidateSystem_version(model.getProduct_category_id(), model.getProduct_category_parent_id(), model.getProduct_category_name(), model.getProduct_category_sort(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -98,17 +90,15 @@ public class ProductCategoryController extends Controller {
         validate(ProductCategory.PRODUCT_CATEGORY_ID, ProductCategory.SYSTEM_VERSION);
 
         ProductCategory model = getModel(ProductCategory.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        ProductCategory product_category = productCategoryService.findByProduct_category_id(model.getProduct_category_id(), request_app_id, request_http_id, request_user_id);
+        ProductCategory product_category = productCategoryService.findByProduct_category_id(model.getProduct_category_id());
 
         authenticateApp_id(product_category.getApp_id());
 
-        Boolean result = productCategoryService.deleteByProduct_category_idAndSystem_update_user_idValidateSystem_version(model.getProduct_category_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = productCategoryService.deleteByProduct_category_idAndSystem_update_user_idValidateSystem_version(model.getProduct_category_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -120,10 +110,8 @@ public class ProductCategoryController extends Controller {
 
         ProductCategory model = getModel(ProductCategory.class);
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        List<Map<String, Object>>  resultList = productCategoryService.treeByOrApp_idOrLikeProduct_category_name(request_app_id, model.getProduct_category_name(), request_app_id, request_http_id, request_user_id);
+        List<Map<String, Object>>  resultList = productCategoryService.treeByOrApp_idOrLikeProduct_category_name(request_app_id, model.getProduct_category_name());
 
         renderSuccessJson(resultList);
     }
@@ -134,11 +122,8 @@ public class ProductCategoryController extends Controller {
         validate(ProductCategory.PRODUCT_CATEGORY_ID);
 
         ProductCategory model = getModel(ProductCategory.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        ProductCategory product_category = productCategoryService.findByProduct_category_id(model.getProduct_category_id(), request_app_id, request_http_id, request_user_id);
+        ProductCategory product_category = productCategoryService.findByProduct_category_id(model.getProduct_category_id());
 
         product_category.keep(ProductCategory.PRODUCT_CATEGORY_ID, ProductCategory.SYSTEM_VERSION);
 
@@ -152,11 +137,9 @@ public class ProductCategoryController extends Controller {
 
         ProductCategory model = getModel(ProductCategory.class);
         String product_category_id = Util.getRandomUUID();
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = productCategoryService.save(product_category_id, model.getApp_id(), model.getProduct_category_parent_id(), model.getProduct_category_name(), model.getProduct_category_sort(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = productCategoryService.save(product_category_id, model.getApp_id(), model.getProduct_category_parent_id(), model.getProduct_category_name(), model.getProduct_category_sort(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -167,11 +150,9 @@ public class ProductCategoryController extends Controller {
         validate(ProductCategory.PRODUCT_CATEGORY_ID, ProductCategory.PRODUCT_CATEGORY_PARENT_ID, ProductCategory.PRODUCT_CATEGORY_NAME, ProductCategory.PRODUCT_CATEGORY_SORT, ProductCategory.SYSTEM_VERSION);
 
         ProductCategory model = getModel(ProductCategory.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = productCategoryService.updateValidateSystem_version(model.getProduct_category_id(), model.getProduct_category_parent_id(), model.getProduct_category_name(), model.getProduct_category_sort(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = productCategoryService.updateValidateSystem_version(model.getProduct_category_id(), model.getProduct_category_parent_id(), model.getProduct_category_name(), model.getProduct_category_sort(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -182,11 +163,9 @@ public class ProductCategoryController extends Controller {
         validate(ProductCategory.PRODUCT_CATEGORY_ID, ProductCategory.SYSTEM_VERSION);
 
         ProductCategory model = getModel(ProductCategory.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = productCategoryService.deleteByProduct_category_idAndSystem_update_user_idValidateSystem_version(model.getProduct_category_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = productCategoryService.deleteByProduct_category_idAndSystem_update_user_idValidateSystem_version(model.getProduct_category_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

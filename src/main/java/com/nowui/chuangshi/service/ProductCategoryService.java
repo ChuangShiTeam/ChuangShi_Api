@@ -34,23 +34,23 @@ public class ProductCategoryService extends Service {
         return list;
     }
 
-    public List<Map<String, Object>> treeByApp_idOrLikeProduct_category_name(String app_id, String product_category_name, String request_app_id, String request_http_id, String request_user_id) {
-        List<ProductCategory> productCategoryList = productCategoryCache.listByApp_idOrLikeProduct_category_name(app_id, product_category_name, request_app_id, request_http_id, request_user_id);
+    public List<Map<String, Object>> treeByApp_idOrLikeProduct_category_name(String app_id, String product_category_name) {
+        List<ProductCategory> productCategoryList = productCategoryCache.listByApp_idOrLikeProduct_category_name(app_id, product_category_name);
 
         return getChildren(productCategoryList, Constant.PARENT_ID, ProductCategory.PRODUCT_CATEGORY_NAME, ProductCategory.PRODUCT_CATEGORY_SORT, ProductCategory.SYSTEM_VERSION);
     }
 
-    public List<Map<String, Object>> treeByOrApp_idOrLikeProduct_category_name(String app_id, String product_category_name, String request_app_id, String request_http_id, String request_user_id) {
-        List<ProductCategory> productCategoryList = productCategoryCache.listByOrApp_idOrLikeProduct_category_name(app_id, product_category_name, request_app_id, request_http_id, request_user_id);
+    public List<Map<String, Object>> treeByOrApp_idOrLikeProduct_category_name(String app_id, String product_category_name) {
+        List<ProductCategory> productCategoryList = productCategoryCache.listByOrApp_idOrLikeProduct_category_name(app_id, product_category_name);
 
         return getChildren(productCategoryList, Constant.PARENT_ID, ProductCategory.PRODUCT_CATEGORY_NAME, ProductCategory.PRODUCT_CATEGORY_SORT, ProductCategory.SYSTEM_VERSION);
     }
 
-    public ProductCategory findByProduct_category_id(String product_category_id, String request_app_id, String request_http_id, String request_user_id) {
-        return productCategoryCache.findByProduct_category_id(product_category_id, request_app_id, request_http_id, request_user_id);
+    public ProductCategory findByProduct_category_id(String product_category_id) {
+        return productCategoryCache.findByProduct_category_id(product_category_id);
     }
 
-    public Boolean save(String product_category_id, String app_id, String product_category_parent_id, String product_category_name, Integer product_category_sort, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean save(String product_category_id, String app_id, String product_category_parent_id, String product_category_name, Integer product_category_sort, String system_create_user_id) {
         String product_category_path = "";
 
         if (ValidateUtil.isNullOrEmpty(product_category_parent_id)) {
@@ -61,7 +61,7 @@ public class ProductCategoryService extends Service {
 
             product_category_path = jsonArray.toJSONString();
         } else {
-            ProductCategory parent = productCategoryCache.findByProduct_category_id(product_category_parent_id, request_app_id, request_http_id, request_user_id);
+            ProductCategory parent = productCategoryCache.findByProduct_category_id(product_category_parent_id);
 
             JSONArray jsonArray = JSONArray.parseArray(parent.getProduct_category_path());
             jsonArray.add(product_category_parent_id);
@@ -69,16 +69,16 @@ public class ProductCategoryService extends Service {
             product_category_path = jsonArray.toJSONString();
         }
 
-        return productCategoryCache.save(product_category_id, app_id, product_category_parent_id, product_category_name, product_category_sort, product_category_path, system_create_user_id, request_app_id, request_http_id, request_user_id);
+        return productCategoryCache.save(product_category_id, app_id, product_category_parent_id, product_category_name, product_category_sort, product_category_path, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String product_category_id, String product_category_parent_id, String product_category_name, Integer product_category_sort, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
-        ProductCategory productCategory = productCategoryCache.findByProduct_category_id(product_category_id, request_app_id, request_http_id, request_user_id);
+    public Boolean updateValidateSystem_version(String product_category_id, String product_category_parent_id, String product_category_name, Integer product_category_sort, String system_update_user_id, Integer system_version) {
+        ProductCategory productCategory = productCategoryCache.findByProduct_category_id(product_category_id);
 
         String product_category_path = productCategory.getProduct_category_path();
 
         if (!productCategory.getProduct_category_parent_id().equals(product_category_parent_id)) {
-            ProductCategory parent = productCategoryCache.findByProduct_category_id(product_category_parent_id, request_app_id, request_http_id, request_user_id);
+            ProductCategory parent = productCategoryCache.findByProduct_category_id(product_category_parent_id);
 
             JSONArray jsonArray = JSONArray.parseArray(parent.getProduct_category_path());
             jsonArray.add(product_category_parent_id);
@@ -86,14 +86,14 @@ public class ProductCategoryService extends Service {
             product_category_path = jsonArray.toJSONString();
         }
 
-        return productCategoryCache.updateValidateSystem_version(product_category_id, product_category_parent_id, product_category_name, product_category_sort, product_category_path, system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
+        return productCategoryCache.updateValidateSystem_version(product_category_id, product_category_parent_id, product_category_name, product_category_sort, product_category_path, system_update_user_id, system_version);
     }
 
-    public Boolean deleteByProduct_category_idAndSystem_update_user_idValidateSystem_version(String product_category_id, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
-        Boolean result = productCategoryCache.deleteByProduct_category_idAndSystem_update_user_idValidateSystem_version(product_category_id, system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
+    public Boolean deleteByProduct_category_idAndSystem_update_user_idValidateSystem_version(String product_category_id, String system_update_user_id, Integer system_version) {
+        Boolean result = productCategoryCache.deleteByProduct_category_idAndSystem_update_user_idValidateSystem_version(product_category_id, system_update_user_id, system_version);
 
         if (result) {
-            productCategoryCache.deleteByProduct_category_parent_id(product_category_id, request_user_id, request_app_id, request_http_id, request_user_id);
+            productCategoryCache.deleteByProduct_category_parent_id(product_category_id, system_update_user_id);
         }
 
         return result;

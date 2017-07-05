@@ -19,13 +19,11 @@ public class UserController extends Controller {
 
         User model = getModel(User.class);
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = userService.countByApp_idOrLikeUser_name(request_app_id, model.getUser_name(), request_app_id, request_http_id, request_user_id);
-        List<User> resultList = userService.listByApp_idOrLikeUser_nameAndLimit(request_app_id, model.getUser_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = userService.countByApp_idOrLikeUser_name(request_app_id, model.getUser_name());
+        List<User> resultList = userService.listByApp_idOrLikeUser_nameAndLimit(request_app_id, model.getUser_name(), getM(), getN());
 
         for (User result : resultList) {
             result.keep(User.USER_ID, User.USER_NAME, User.SYSTEM_VERSION);
@@ -40,13 +38,10 @@ public class UserController extends Controller {
         validate(User.USER_ID);
 
         User model = getModel(User.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        User user = userService.findByUser_id(model.getUser_id(), request_app_id, request_http_id, request_user_id);
+        User user = userService.findByUser_id(model.getUser_id());
 
         authenticateApp_id(user.getApp_id());
 
@@ -61,12 +56,9 @@ public class UserController extends Controller {
         validate(User.APP_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         User model = getModel(User.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        Integer total = userService.countByOrApp_idOrLikeUser_name(model.getApp_id(), model.getUser_name(), request_app_id, request_http_id, request_user_id);
-        List<User> resultList = userService.listByOrApp_idOrLikeUser_nameAndLimit(model.getApp_id(), model.getUser_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = userService.countByOrApp_idOrLikeUser_name(model.getApp_id(), model.getUser_name());
+        List<User> resultList = userService.listByOrApp_idOrLikeUser_nameAndLimit(model.getApp_id(), model.getUser_name(), getM(), getN());
 
         for (User result : resultList) {
             result.keep(User.USER_ID, User.USER_NAME, User.SYSTEM_VERSION);

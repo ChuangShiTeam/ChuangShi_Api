@@ -22,16 +22,14 @@ public class FeijiuRecommendProductController extends Controller {
         validateRequest_app_id();
 
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<FeijiuRecommendProduct> resultList = feijiuRecommendProductService.listByApp_id(request_app_id, request_app_id, request_http_id, request_user_id);
+        List<FeijiuRecommendProduct> resultList = feijiuRecommendProductService.listByApp_id(request_app_id);
 
         for (FeijiuRecommendProduct result : resultList) {
             if (!ValidateUtil.isNullOrEmpty(result.getProduct_image())) {
-                File file = fileService.findByFile_id(result.getProduct_image(), request_app_id, request_http_id, request_user_id);
+                File file = fileService.findByFile_id(result.getProduct_image());
 
                 result.setProduct_image(file.getFile_path());
             }
@@ -48,13 +46,10 @@ public class FeijiuRecommendProductController extends Controller {
         validate(FeijiuRecommendProduct.PRODUCT_ID);
 
         FeijiuRecommendProduct model = getModel(FeijiuRecommendProduct.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
+        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id());
 
         authenticateApp_id(feijiu_recommend_product.getApp_id());
         authenticateSystem_create_user_id(feijiu_recommend_product.getSystem_create_user_id());
@@ -72,12 +67,11 @@ public class FeijiuRecommendProductController extends Controller {
         FeijiuRecommendProduct model = getModel(FeijiuRecommendProduct.class);
         String product_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = feijiuRecommendProductService.save(product_id, request_app_id, model.getProduct_name(), model.getProduct_image(), model.getProduct_link(), model.getProduct_content(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = feijiuRecommendProductService.save(product_id, request_app_id, model.getProduct_name(), model.getProduct_image(), model.getProduct_link(), model.getProduct_content(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -88,18 +82,16 @@ public class FeijiuRecommendProductController extends Controller {
         validate(FeijiuRecommendProduct.PRODUCT_ID, FeijiuRecommendProduct.PRODUCT_NAME, FeijiuRecommendProduct.PRODUCT_IMAGE, FeijiuRecommendProduct.PRODUCT_LINK, FeijiuRecommendProduct.PRODUCT_CONTENT, FeijiuRecommendProduct.SYSTEM_VERSION);
 
         FeijiuRecommendProduct model = getModel(FeijiuRecommendProduct.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
+        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id());
 
         authenticateApp_id(feijiu_recommend_product.getApp_id());
         authenticateSystem_create_user_id(feijiu_recommend_product.getSystem_create_user_id());
 
-        Boolean result = feijiuRecommendProductService.updateValidateSystem_version(model.getProduct_id(), model.getProduct_name(), model.getProduct_image(), model.getProduct_link(), model.getProduct_content(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = feijiuRecommendProductService.updateValidateSystem_version(model.getProduct_id(), model.getProduct_name(), model.getProduct_image(), model.getProduct_link(), model.getProduct_content(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -110,18 +102,16 @@ public class FeijiuRecommendProductController extends Controller {
         validate(FeijiuRecommendProduct.PRODUCT_ID, FeijiuRecommendProduct.SYSTEM_VERSION);
 
         FeijiuRecommendProduct model = getModel(FeijiuRecommendProduct.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
+        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id());
 
         authenticateApp_id(feijiu_recommend_product.getApp_id());
         authenticateSystem_create_user_id(feijiu_recommend_product.getSystem_create_user_id());
 
-        Boolean result = feijiuRecommendProductService.deleteByProduct_idAndSystem_update_user_idValidateSystem_version(model.getProduct_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = feijiuRecommendProductService.deleteByProduct_idAndSystem_update_user_idValidateSystem_version(model.getProduct_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -132,13 +122,11 @@ public class FeijiuRecommendProductController extends Controller {
         validate(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = feijiuRecommendProductService.countByApp_id(request_app_id, request_app_id, request_http_id, request_user_id);
-        List<FeijiuRecommendProduct> resultList = feijiuRecommendProductService.listByApp_idAndLimit(request_app_id, getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = feijiuRecommendProductService.countByApp_id(request_app_id);
+        List<FeijiuRecommendProduct> resultList = feijiuRecommendProductService.listByApp_idAndLimit(request_app_id, getM(), getN());
 
         for (FeijiuRecommendProduct result : resultList) {
             result.keep(FeijiuRecommendProduct.PRODUCT_ID, FeijiuRecommendProduct.PRODUCT_NAME, FeijiuRecommendProduct.SYSTEM_VERSION);
@@ -153,13 +141,10 @@ public class FeijiuRecommendProductController extends Controller {
         validate(FeijiuRecommendProduct.PRODUCT_ID);
 
         FeijiuRecommendProduct model = getModel(FeijiuRecommendProduct.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
+        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id());
 
         authenticateApp_id(feijiu_recommend_product.getApp_id());
 
@@ -168,7 +153,7 @@ public class FeijiuRecommendProductController extends Controller {
         if (ValidateUtil.isNullOrEmpty(feijiu_recommend_product.getProduct_image())) {
             feijiu_recommend_product.put(FeijiuRecommendProduct.PRODUCT_IMAGE_FILE, "");
         } else {
-            File file = fileService.findByFile_id(feijiu_recommend_product.getProduct_image(), request_app_id, request_http_id, request_user_id);
+            File file = fileService.findByFile_id(feijiu_recommend_product.getProduct_image());
             feijiu_recommend_product.put(FeijiuRecommendProduct.PRODUCT_IMAGE_FILE, file.keep(File.FILE_ID, File.FILE_PATH));
         }
 
@@ -186,17 +171,15 @@ public class FeijiuRecommendProductController extends Controller {
         validate(FeijiuRecommendProduct.PRODUCT_ID, FeijiuRecommendProduct.PRODUCT_NAME, FeijiuRecommendProduct.PRODUCT_IMAGE, FeijiuRecommendProduct.PRODUCT_LINK, FeijiuRecommendProduct.PRODUCT_CONTENT, FeijiuRecommendProduct.SYSTEM_VERSION);
 
         FeijiuRecommendProduct model = getModel(FeijiuRecommendProduct.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
+        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id());
 
         authenticateApp_id(feijiu_recommend_product.getApp_id());
 
-        Boolean result = feijiuRecommendProductService.updateValidateSystem_version(model.getProduct_id(), model.getProduct_name(), model.getProduct_image(), model.getProduct_link(), model.getProduct_content(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = feijiuRecommendProductService.updateValidateSystem_version(model.getProduct_id(), model.getProduct_name(), model.getProduct_image(), model.getProduct_link(), model.getProduct_content(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -207,16 +190,14 @@ public class FeijiuRecommendProductController extends Controller {
         validate(FeijiuRecommendProduct.PRODUCT_ID, FeijiuRecommendProduct.SYSTEM_VERSION);
 
         FeijiuRecommendProduct model = getModel(FeijiuRecommendProduct.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
+        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id());
         authenticateApp_id(feijiu_recommend_product.getApp_id());
 
-        Boolean result = feijiuRecommendProductService.deleteByProduct_idAndSystem_update_user_idValidateSystem_version(model.getProduct_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = feijiuRecommendProductService.deleteByProduct_idAndSystem_update_user_idValidateSystem_version(model.getProduct_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -227,12 +208,9 @@ public class FeijiuRecommendProductController extends Controller {
         validate(FeijiuRecommendProduct.APP_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         FeijiuRecommendProduct model = getModel(FeijiuRecommendProduct.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        Integer total = feijiuRecommendProductService.countByOrApp_id(model.getApp_id(), request_app_id, request_http_id, request_user_id);
-        List<FeijiuRecommendProduct> resultList = feijiuRecommendProductService.listByOrApp_idAndLimit(model.getApp_id(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = feijiuRecommendProductService.countByOrApp_id(model.getApp_id());
+        List<FeijiuRecommendProduct> resultList = feijiuRecommendProductService.listByOrApp_idAndLimit(model.getApp_id(), getM(), getN());
 
         for (FeijiuRecommendProduct result : resultList) {
             result.keep(FeijiuRecommendProduct.PRODUCT_ID, FeijiuRecommendProduct.SYSTEM_VERSION);
@@ -247,18 +225,15 @@ public class FeijiuRecommendProductController extends Controller {
         validate(FeijiuRecommendProduct.PRODUCT_ID);
 
         FeijiuRecommendProduct model = getModel(FeijiuRecommendProduct.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id(), request_app_id, request_http_id, request_user_id);
+        FeijiuRecommendProduct feijiu_recommend_product = feijiuRecommendProductService.findByProduct_id(model.getProduct_id());
 
         feijiu_recommend_product.keep(FeijiuRecommendProduct.PRODUCT_ID, FeijiuRecommendProduct.PRODUCT_NAME, FeijiuRecommendProduct.PRODUCT_IMAGE, FeijiuRecommendProduct.PRODUCT_LINK, FeijiuRecommendProduct.PRODUCT_CONTENT, FeijiuRecommendProduct.SYSTEM_VERSION);
 
         if (ValidateUtil.isNullOrEmpty(feijiu_recommend_product.getProduct_image())) {
             feijiu_recommend_product.put(FeijiuRecommendProduct.PRODUCT_IMAGE_FILE, "");
         } else {
-            File file = fileService.findByFile_id(feijiu_recommend_product.getProduct_image(), request_app_id, request_http_id, request_user_id);
+            File file = fileService.findByFile_id(feijiu_recommend_product.getProduct_image());
             feijiu_recommend_product.put(FeijiuRecommendProduct.PRODUCT_IMAGE_FILE, file.keep(File.FILE_ID, File.FILE_PATH));
         }
 
@@ -274,11 +249,9 @@ public class FeijiuRecommendProductController extends Controller {
 
         FeijiuRecommendProduct model = getModel(FeijiuRecommendProduct.class);
         String product_id = Util.getRandomUUID();
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = feijiuRecommendProductService.save(product_id, model.getApp_id(), model.getProduct_name(), model.getProduct_image(), model.getProduct_link(), model.getProduct_content(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = feijiuRecommendProductService.save(product_id, model.getApp_id(), model.getProduct_name(), model.getProduct_image(), model.getProduct_link(), model.getProduct_content(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -289,11 +262,9 @@ public class FeijiuRecommendProductController extends Controller {
         validate(FeijiuRecommendProduct.PRODUCT_ID, FeijiuRecommendProduct.PRODUCT_NAME, FeijiuRecommendProduct.PRODUCT_IMAGE, FeijiuRecommendProduct.PRODUCT_LINK, FeijiuRecommendProduct.PRODUCT_CONTENT, FeijiuRecommendProduct.SYSTEM_VERSION);
 
         FeijiuRecommendProduct model = getModel(FeijiuRecommendProduct.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = feijiuRecommendProductService.updateValidateSystem_version(model.getProduct_id(), model.getProduct_name(), model.getProduct_image(), model.getProduct_link(), model.getProduct_content(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = feijiuRecommendProductService.updateValidateSystem_version(model.getProduct_id(), model.getProduct_name(), model.getProduct_image(), model.getProduct_link(), model.getProduct_content(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -304,11 +275,9 @@ public class FeijiuRecommendProductController extends Controller {
         validate(FeijiuRecommendProduct.PRODUCT_ID, FeijiuRecommendProduct.SYSTEM_VERSION);
 
         FeijiuRecommendProduct model = getModel(FeijiuRecommendProduct.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = feijiuRecommendProductService.deleteByProduct_idAndSystem_update_user_idValidateSystem_version(model.getProduct_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = feijiuRecommendProductService.deleteByProduct_idAndSystem_update_user_idValidateSystem_version(model.getProduct_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

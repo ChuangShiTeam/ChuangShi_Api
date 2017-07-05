@@ -26,7 +26,7 @@ public class MemberStockActionController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<MemberStockAction> resultList = memberStockActionService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN(), request_app_id, request_http_id, request_user_id);
+        List<MemberStockAction> resultList = memberStockActionService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
 
         for (MemberStockAction result : resultList) {
             result.keep(MemberStockAction.MEMBER_STOCK_ACTION_ID, MemberStockAction.SYSTEM_VERSION);
@@ -47,7 +47,7 @@ public class MemberStockActionController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        MemberStockAction member_stock_action = memberStockActionService.findByMember_stock_action_id(model.getMember_stock_action_id(), request_app_id, request_http_id, request_user_id);
+        MemberStockAction member_stock_action = memberStockActionService.findByMember_stock_action_id(model.getMember_stock_action_id());
 
         authenticateApp_id(member_stock_action.getApp_id());
         authenticateSystem_create_user_id(member_stock_action.getSystem_create_user_id());
@@ -70,7 +70,7 @@ public class MemberStockActionController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = memberStockActionService.save(member_stock_action_id, request_app_id, model.getMember_id(), model.getUser_id(), model.getProduct_sku_id(), model.getMember_stock_action_name(), model.getMember_stock_quantity(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = memberStockActionService.save(member_stock_action_id, request_app_id, model.getMember_id(), model.getUser_id(), model.getProduct_sku_id(), model.getMember_stock_action_name(), model.getMember_stock_quantity(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -87,12 +87,12 @@ public class MemberStockActionController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        MemberStockAction member_stock_action = memberStockActionService.findByMember_stock_action_id(model.getMember_stock_action_id(), request_app_id, request_http_id, request_user_id);
+        MemberStockAction member_stock_action = memberStockActionService.findByMember_stock_action_id(model.getMember_stock_action_id());
 
         authenticateApp_id(member_stock_action.getApp_id());
         authenticateSystem_create_user_id(member_stock_action.getSystem_create_user_id());
 
-        Boolean result = memberStockActionService.updateValidateSystem_version(model.getMember_stock_action_id(), model.getMember_id(), model.getUser_id(), model.getProduct_sku_id(), model.getMember_stock_action_name(), model.getMember_stock_quantity(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberStockActionService.updateValidateSystem_version(model.getMember_stock_action_id(), model.getMember_id(), model.getUser_id(), model.getProduct_sku_id(), model.getMember_stock_action_name(), model.getMember_stock_quantity(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -109,12 +109,12 @@ public class MemberStockActionController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        MemberStockAction member_stock_action = memberStockActionService.findByMember_stock_action_id(model.getMember_stock_action_id(), request_app_id, request_http_id, request_user_id);
+        MemberStockAction member_stock_action = memberStockActionService.findByMember_stock_action_id(model.getMember_stock_action_id());
 
         authenticateApp_id(member_stock_action.getApp_id());
         authenticateSystem_create_user_id(member_stock_action.getSystem_create_user_id());
 
-        Boolean result = memberStockActionService.deleteByMember_stock_action_idAndSystem_update_user_idValidateSystem_version(model.getMember_stock_action_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberStockActionService.deleteByMember_stock_action_idAndSystem_update_user_idValidateSystem_version(model.getMember_stock_action_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -131,8 +131,8 @@ public class MemberStockActionController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = memberStockActionService.countByApp_idOrLikeMember_stock_action_name(request_app_id, model.getMember_stock_action_name(), request_app_id, request_http_id, request_user_id);
-        List<MemberStockAction> resultList = memberStockActionService.listByApp_idOrLikeMember_stock_action_nameAndLimit(request_app_id, model.getMember_stock_action_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = memberStockActionService.countByApp_idOrLikeMember_stock_action_name(request_app_id, model.getMember_stock_action_name());
+        List<MemberStockAction> resultList = memberStockActionService.listByApp_idOrLikeMember_stock_action_nameAndLimit(request_app_id, model.getMember_stock_action_name(), getM(), getN());
 
         for (MemberStockAction result : resultList) {
             result.keep(MemberStockAction.MEMBER_STOCK_ACTION_ID, MemberStockAction.SYSTEM_VERSION);
@@ -153,7 +153,7 @@ public class MemberStockActionController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        MemberStockAction member_stock_action = memberStockActionService.findByMember_stock_action_id(model.getMember_stock_action_id(), request_app_id, request_http_id, request_user_id);
+        MemberStockAction member_stock_action = memberStockActionService.findByMember_stock_action_id(model.getMember_stock_action_id());
 
         authenticateApp_id(member_stock_action.getApp_id());
 
@@ -179,11 +179,11 @@ public class MemberStockActionController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        MemberStockAction member_stock_action = memberStockActionService.findByMember_stock_action_id(model.getMember_stock_action_id(), request_app_id, request_http_id, request_user_id);
+        MemberStockAction member_stock_action = memberStockActionService.findByMember_stock_action_id(model.getMember_stock_action_id());
 
         authenticateApp_id(member_stock_action.getApp_id());
 
-        Boolean result = memberStockActionService.updateValidateSystem_version(model.getMember_stock_action_id(), model.getMember_id(), model.getUser_id(), model.getProduct_sku_id(), model.getMember_stock_action_name(), model.getMember_stock_quantity(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberStockActionService.updateValidateSystem_version(model.getMember_stock_action_id(), model.getMember_id(), model.getUser_id(), model.getProduct_sku_id(), model.getMember_stock_action_name(), model.getMember_stock_quantity(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -200,11 +200,11 @@ public class MemberStockActionController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        MemberStockAction member_stock_action = memberStockActionService.findByMember_stock_action_id(model.getMember_stock_action_id(), request_app_id, request_http_id, request_user_id);
+        MemberStockAction member_stock_action = memberStockActionService.findByMember_stock_action_id(model.getMember_stock_action_id());
 
         authenticateApp_id(member_stock_action.getApp_id());
 
-        Boolean result = memberStockActionService.deleteByMember_stock_action_idAndSystem_update_user_idValidateSystem_version(model.getMember_stock_action_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberStockActionService.deleteByMember_stock_action_idAndSystem_update_user_idValidateSystem_version(model.getMember_stock_action_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -219,8 +219,8 @@ public class MemberStockActionController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Integer total = memberStockActionService.countByOrApp_idOrLikeMember_stock_action_name(model.getApp_id(), model.getMember_stock_action_name(), request_app_id, request_http_id, request_user_id);
-        List<MemberStockAction> resultList = memberStockActionService.listByOrApp_idOrLikeMember_stock_action_nameAndLimit(model.getApp_id(), model.getMember_stock_action_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = memberStockActionService.countByOrApp_idOrLikeMember_stock_action_name(model.getApp_id(), model.getMember_stock_action_name());
+        List<MemberStockAction> resultList = memberStockActionService.listByOrApp_idOrLikeMember_stock_action_nameAndLimit(model.getApp_id(), model.getMember_stock_action_name(), getM(), getN());
 
         for (MemberStockAction result : resultList) {
             result.keep(MemberStockAction.MEMBER_STOCK_ACTION_ID, MemberStockAction.SYSTEM_VERSION);
@@ -239,7 +239,7 @@ public class MemberStockActionController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        MemberStockAction member_stock_action = memberStockActionService.findByMember_stock_action_id(model.getMember_stock_action_id(), request_app_id, request_http_id, request_user_id);
+        MemberStockAction member_stock_action = memberStockActionService.findByMember_stock_action_id(model.getMember_stock_action_id());
 
         member_stock_action.keep(MemberStockAction.MEMBER_STOCK_ACTION_ID, MemberStockAction.SYSTEM_VERSION);
 
@@ -257,7 +257,7 @@ public class MemberStockActionController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = memberStockActionService.save(member_stock_action_id, model.getApp_id(), model.getMember_id(), model.getUser_id(), model.getProduct_sku_id(), model.getMember_stock_action_name(), model.getMember_stock_quantity(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = memberStockActionService.save(member_stock_action_id, model.getApp_id(), model.getMember_id(), model.getUser_id(), model.getProduct_sku_id(), model.getMember_stock_action_name(), model.getMember_stock_quantity(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -272,7 +272,7 @@ public class MemberStockActionController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = memberStockActionService.updateValidateSystem_version(model.getMember_stock_action_id(), model.getMember_id(), model.getUser_id(), model.getProduct_sku_id(), model.getMember_stock_action_name(), model.getMember_stock_quantity(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberStockActionService.updateValidateSystem_version(model.getMember_stock_action_id(), model.getMember_id(), model.getUser_id(), model.getProduct_sku_id(), model.getMember_stock_action_name(), model.getMember_stock_quantity(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -287,7 +287,7 @@ public class MemberStockActionController extends Controller {
         String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = memberStockActionService.deleteByMember_stock_action_idAndSystem_update_user_idValidateSystem_version(model.getMember_stock_action_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberStockActionService.deleteByMember_stock_action_idAndSystem_update_user_idValidateSystem_version(model.getMember_stock_action_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

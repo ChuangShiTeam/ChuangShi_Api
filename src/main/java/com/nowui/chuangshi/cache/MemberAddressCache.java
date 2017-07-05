@@ -14,49 +14,49 @@ public class MemberAddressCache extends Cache {
 
     private MemberAddressDao memberAddressDao = new MemberAddressDao();
 
-    public Integer countByApp_idOrLikeMember_address_name(String app_id, String member_address_name, String request_app_id, String request_http_id, String request_user_id) {
-        return memberAddressDao.countByApp_idOrLikeMember_address_name(app_id, member_address_name, request_app_id, request_http_id, request_user_id);
+    public Integer countByApp_idOrLikeMember_address_name(String app_id, String member_address_name) {
+        return memberAddressDao.countByApp_idOrLikeMember_address_name(app_id, member_address_name);
     }
 
-    public Integer countByOrApp_idOrLikeMember_address_name(String app_id, String member_address_name, String request_app_id, String request_http_id, String request_user_id) {
-        return memberAddressDao.countByOrApp_idOrLikeMember_address_name(app_id, member_address_name, request_app_id, request_http_id, request_user_id);
+    public Integer countByOrApp_idOrLikeMember_address_name(String app_id, String member_address_name) {
+        return memberAddressDao.countByOrApp_idOrLikeMember_address_name(app_id, member_address_name);
     }
 
-    public List<MemberAddress> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
-        List<MemberAddress> member_addressList = memberAddressDao.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n, request_app_id, request_http_id, request_user_id);
+    public List<MemberAddress> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
+        List<MemberAddress> member_addressList = memberAddressDao.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n);
 
         for (MemberAddress member_address : member_addressList) {
-            member_address.put(findByMember_address_id(member_address.getMember_address_id(), request_app_id, request_http_id, request_user_id));
+            member_address.put(findByMember_address_id(member_address.getMember_address_id()));
         }
 
         return member_addressList;
     }
 
-    public List<MemberAddress> listByApp_idOrLikeMember_address_nameAndLimit(String app_id, String member_address_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
-        List<MemberAddress> member_addressList = memberAddressDao.listByApp_idOrLikeMember_address_nameAndLimit(app_id, member_address_name, m, n, request_app_id, request_http_id, request_user_id);
+    public List<MemberAddress> listByApp_idOrLikeMember_address_nameAndLimit(String app_id, String member_address_name, int m, int n) {
+        List<MemberAddress> member_addressList = memberAddressDao.listByApp_idOrLikeMember_address_nameAndLimit(app_id, member_address_name, m, n);
 
         for (MemberAddress member_address : member_addressList) {
-            member_address.put(findByMember_address_id(member_address.getMember_address_id(), request_app_id, request_http_id, request_user_id));
+            member_address.put(findByMember_address_id(member_address.getMember_address_id()));
         }
 
         return member_addressList;
     }
 
-    public List<MemberAddress> listByOrApp_idOrLikeMember_address_nameAndLimit(String app_id, String member_address_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
-        List<MemberAddress> member_addressList = memberAddressDao.listByOrApp_idOrLikeMember_address_nameAndLimit(app_id, member_address_name, m, n, request_app_id, request_http_id, request_user_id);
+    public List<MemberAddress> listByOrApp_idOrLikeMember_address_nameAndLimit(String app_id, String member_address_name, int m, int n) {
+        List<MemberAddress> member_addressList = memberAddressDao.listByOrApp_idOrLikeMember_address_nameAndLimit(app_id, member_address_name, m, n);
 
         for (MemberAddress member_address : member_addressList) {
-            member_address.put(findByMember_address_id(member_address.getMember_address_id(), request_app_id, request_http_id, request_user_id));
+            member_address.put(findByMember_address_id(member_address.getMember_address_id()));
         }
 
         return member_addressList;
     }
 
-    public MemberAddress findByMember_address_id(String member_address_id, String request_app_id, String request_http_id, String request_user_id) {
+    public MemberAddress findByMember_address_id(String member_address_id) {
         MemberAddress member_address = CacheUtil.get(MEMBER_ADDRESS_BY_MEMBER_ADDRESS_ID_CACHE, member_address_id);
 
         if (member_address == null) {
-            member_address = memberAddressDao.findByMember_address_id(member_address_id, request_app_id, request_http_id, request_user_id);
+            member_address = memberAddressDao.findByMember_address_id(member_address_id);
 
             CacheUtil.put(MEMBER_ADDRESS_BY_MEMBER_ADDRESS_ID_CACHE, member_address_id, member_address);
         }
@@ -64,17 +64,17 @@ public class MemberAddressCache extends Cache {
         return member_address;
     }
 
-    public Boolean save(String member_address_id, String app_id, String member_id, String user_id, String member_address_name, String member_address_phone, String member_address_province, String member_address_city, String member_address_area, String member_address_street, Boolean member_delivery_is_default, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
-        return memberAddressDao.save(member_address_id, app_id, member_id, user_id, member_address_name, member_address_phone, member_address_province, member_address_city, member_address_area, member_address_street, member_delivery_is_default, system_create_user_id, request_app_id, request_http_id, request_user_id);
+    public Boolean save(String member_address_id, String app_id, String member_id, String user_id, String member_address_name, String member_address_phone, String member_address_province, String member_address_city, String member_address_area, String member_address_street, Boolean member_delivery_is_default, String system_create_user_id) {
+        return memberAddressDao.save(member_address_id, app_id, member_id, user_id, member_address_name, member_address_phone, member_address_province, member_address_city, member_address_area, member_address_street, member_delivery_is_default, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String member_address_id, String member_id, String user_id, String member_address_name, String member_address_phone, String member_address_province, String member_address_city, String member_address_area, String member_address_street, Boolean member_delivery_is_default, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
-        MemberAddress member_address = findByMember_address_id(member_address_id, request_app_id, request_http_id, request_user_id);
+    public Boolean updateValidateSystem_version(String member_address_id, String member_id, String user_id, String member_address_name, String member_address_phone, String member_address_province, String member_address_city, String member_address_area, String member_address_street, Boolean member_delivery_is_default, String system_update_user_id, Integer system_version) {
+        MemberAddress member_address = findByMember_address_id(member_address_id);
         if (!member_address.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = memberAddressDao.update(member_address_id, member_id, user_id, member_address_name, member_address_phone, member_address_province, member_address_city, member_address_area, member_address_street, member_delivery_is_default, system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
+        boolean result = memberAddressDao.update(member_address_id, member_id, user_id, member_address_name, member_address_phone, member_address_province, member_address_city, member_address_area, member_address_street, member_delivery_is_default, system_update_user_id, system_version);
 
         if (result) {
             CacheUtil.remove(MEMBER_ADDRESS_BY_MEMBER_ADDRESS_ID_CACHE, member_address_id);
@@ -83,13 +83,13 @@ public class MemberAddressCache extends Cache {
         return result;
     }
 
-    public Boolean deleteByMember_address_idAndSystem_update_user_idValidateSystem_version(String member_address_id, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
-        MemberAddress member_address = findByMember_address_id(member_address_id, request_app_id, request_http_id, request_user_id);
+    public Boolean deleteByMember_address_idAndSystem_update_user_idValidateSystem_version(String member_address_id, String system_update_user_id, Integer system_version) {
+        MemberAddress member_address = findByMember_address_id(member_address_id);
         if (!member_address.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = memberAddressDao.deleteByMember_address_idAndSystem_version(member_address_id, system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
+        boolean result = memberAddressDao.deleteByMember_address_idAndSystem_version(member_address_id, system_update_user_id, system_version);
 
         if (result) {
             CacheUtil.remove(MEMBER_ADDRESS_BY_MEMBER_ADDRESS_ID_CACHE, member_address_id);

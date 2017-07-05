@@ -14,31 +14,31 @@ public class ProductCategoryCache extends Cache {
 
     private ProductCategoryDao productCategoryDao = new ProductCategoryDao();
 
-    public List<ProductCategory> listByApp_idOrLikeProduct_category_name(String app_id, String product_category_name, String request_app_id, String request_http_id, String request_user_id) {
-        List<ProductCategory> product_categoryList = productCategoryDao.listByApp_idOrLikeProduct_category_name(app_id, product_category_name, request_app_id, request_http_id, request_user_id);
+    public List<ProductCategory> listByApp_idOrLikeProduct_category_name(String app_id, String product_category_name) {
+        List<ProductCategory> product_categoryList = productCategoryDao.listByApp_idOrLikeProduct_category_name(app_id, product_category_name);
 
         for (ProductCategory product_category : product_categoryList) {
-            product_category.put(findByProduct_category_id(product_category.getProduct_category_id(), request_app_id, request_http_id, request_user_id));
+            product_category.put(findByProduct_category_id(product_category.getProduct_category_id()));
         }
 
         return product_categoryList;
     }
 
-    public List<ProductCategory> listByOrApp_idOrLikeProduct_category_name(String app_id, String product_category_name, String request_app_id, String request_http_id, String request_user_id) {
-        List<ProductCategory> product_categoryList = productCategoryDao.listByOrApp_idOrLikeProduct_category_name(app_id, product_category_name, request_app_id, request_http_id, request_user_id);
+    public List<ProductCategory> listByOrApp_idOrLikeProduct_category_name(String app_id, String product_category_name) {
+        List<ProductCategory> product_categoryList = productCategoryDao.listByOrApp_idOrLikeProduct_category_name(app_id, product_category_name);
 
         for (ProductCategory product_category : product_categoryList) {
-            product_category.put(findByProduct_category_id(product_category.getProduct_category_id(), request_app_id, request_http_id, request_user_id));
+            product_category.put(findByProduct_category_id(product_category.getProduct_category_id()));
         }
 
         return product_categoryList;
     }
 
-    public ProductCategory findByProduct_category_id(String product_category_id, String request_app_id, String request_http_id, String request_user_id) {
+    public ProductCategory findByProduct_category_id(String product_category_id) {
         ProductCategory product_category = CacheUtil.get(PRODUCT_CATEGORY_BY_PRODUCT_CATEGORY_ID_CACHE, product_category_id);
 
         if (product_category == null) {
-            product_category = productCategoryDao.findByProduct_category_id(product_category_id, request_app_id, request_http_id, request_user_id);
+            product_category = productCategoryDao.findByProduct_category_id(product_category_id);
 
             CacheUtil.put(PRODUCT_CATEGORY_BY_PRODUCT_CATEGORY_ID_CACHE, product_category_id, product_category);
         }
@@ -46,17 +46,17 @@ public class ProductCategoryCache extends Cache {
         return product_category;
     }
 
-    public Boolean save(String product_category_id, String app_id, String product_category_parent_id, String product_category_name, Integer product_category_sort, String product_category_path, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
-        return productCategoryDao.save(product_category_id, app_id, product_category_parent_id, product_category_name, product_category_sort, product_category_path, system_create_user_id, request_app_id, request_http_id, request_user_id);
+    public Boolean save(String product_category_id, String app_id, String product_category_parent_id, String product_category_name, Integer product_category_sort, String product_category_path, String system_create_user_id) {
+        return productCategoryDao.save(product_category_id, app_id, product_category_parent_id, product_category_name, product_category_sort, product_category_path, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String product_category_id, String product_category_parent_id, String product_category_name, Integer product_category_sort, String product_category_path, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
-        ProductCategory product_category = findByProduct_category_id(product_category_id, request_app_id, request_http_id, request_user_id);
+    public Boolean updateValidateSystem_version(String product_category_id, String product_category_parent_id, String product_category_name, Integer product_category_sort, String product_category_path, String system_update_user_id, Integer system_version) {
+        ProductCategory product_category = findByProduct_category_id(product_category_id);
         if (!product_category.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = productCategoryDao.update(product_category_id, product_category_parent_id, product_category_name, product_category_sort, product_category_path, system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
+        boolean result = productCategoryDao.update(product_category_id, product_category_parent_id, product_category_name, product_category_sort, product_category_path, system_update_user_id, system_version);
 
         if (result) {
             CacheUtil.remove(PRODUCT_CATEGORY_BY_PRODUCT_CATEGORY_ID_CACHE, product_category_id);
@@ -65,13 +65,13 @@ public class ProductCategoryCache extends Cache {
         return result;
     }
 
-    public Boolean deleteByProduct_category_idAndSystem_update_user_idValidateSystem_version(String product_category_id, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
-        ProductCategory product_category = findByProduct_category_id(product_category_id, request_app_id, request_http_id, request_user_id);
+    public Boolean deleteByProduct_category_idAndSystem_update_user_idValidateSystem_version(String product_category_id, String system_update_user_id, Integer system_version) {
+        ProductCategory product_category = findByProduct_category_id(product_category_id);
         if (!product_category.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = productCategoryDao.deleteByProduct_category_idAndSystem_version(product_category_id, system_update_user_id, system_version, request_app_id, request_http_id, request_user_id);
+        boolean result = productCategoryDao.deleteByProduct_category_idAndSystem_version(product_category_id, system_update_user_id, system_version);
 
         if (result) {
             CacheUtil.remove(PRODUCT_CATEGORY_BY_PRODUCT_CATEGORY_ID_CACHE, product_category_id);
@@ -80,10 +80,10 @@ public class ProductCategoryCache extends Cache {
         return result;
     }
 
-    public Boolean deleteByProduct_category_parent_id(String product_category_parent_id, String system_update_user_id, String request_app_id, String request_http_id, String request_user_id) {
-        List<ProductCategory> productCategoryList = productCategoryDao.listByLikeProduct_category_parent_id(product_category_parent_id, request_app_id, request_http_id, request_user_id);
+    public Boolean deleteByProduct_category_parent_id(String product_category_parent_id, String system_update_user_id) {
+        List<ProductCategory> productCategoryList = productCategoryDao.listByLikeProduct_category_parent_id(product_category_parent_id);
 
-        boolean result = productCategoryDao.deleteByProduct_category_parent_id(product_category_parent_id, system_update_user_id, request_app_id, request_http_id, request_user_id);
+        boolean result = productCategoryDao.deleteByProduct_category_parent_id(product_category_parent_id, system_update_user_id);
 
         if (result) {
             for (ProductCategory productCategory : productCategoryList) {

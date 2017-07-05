@@ -20,13 +20,11 @@ public class MemberAddressController extends Controller {
         validate(Constant.PAGE_SIZE, Constant.FIRST_CREATE_TIME, Constant.LAST_CREATE_TIME);
 
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<MemberAddress> resultList = memberAddressService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN(), request_app_id, request_http_id, request_user_id);
+        List<MemberAddress> resultList = memberAddressService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
 
         for (MemberAddress result : resultList) {
             result.keep(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.SYSTEM_VERSION);
@@ -41,13 +39,10 @@ public class MemberAddressController extends Controller {
         validate(MemberAddress.MEMBER_ADDRESS_ID);
 
         MemberAddress model = getModel(MemberAddress.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id(), request_app_id, request_http_id, request_user_id);
+        MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id());
 
         authenticateApp_id(member_address.getApp_id());
         authenticateSystem_create_user_id(member_address.getSystem_create_user_id());
@@ -65,12 +60,11 @@ public class MemberAddressController extends Controller {
         MemberAddress model = getModel(MemberAddress.class);
         String member_address_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = memberAddressService.save(member_address_id, request_app_id, model.getMember_id(), model.getUser_id(), model.getMember_address_name(), model.getMember_address_phone(), model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(), model.getMember_address_street(), model.getMember_delivery_is_default(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = memberAddressService.save(member_address_id, request_app_id, model.getMember_id(), model.getUser_id(), model.getMember_address_name(), model.getMember_address_phone(), model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(), model.getMember_address_street(), model.getMember_delivery_is_default(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -81,18 +75,16 @@ public class MemberAddressController extends Controller {
         validate(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ID, MemberAddress.USER_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_PHONE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA, MemberAddress.MEMBER_ADDRESS_STREET, MemberAddress.MEMBER_DELIVERY_IS_DEFAULT, MemberAddress.SYSTEM_VERSION);
 
         MemberAddress model = getModel(MemberAddress.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id(), request_app_id, request_http_id, request_user_id);
+        MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id());
 
         authenticateApp_id(member_address.getApp_id());
         authenticateSystem_create_user_id(member_address.getSystem_create_user_id());
 
-        Boolean result = memberAddressService.updateValidateSystem_version(model.getMember_address_id(), model.getMember_id(), model.getUser_id(), model.getMember_address_name(), model.getMember_address_phone(), model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(), model.getMember_address_street(), model.getMember_delivery_is_default(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberAddressService.updateValidateSystem_version(model.getMember_address_id(), model.getMember_id(), model.getUser_id(), model.getMember_address_name(), model.getMember_address_phone(), model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(), model.getMember_address_street(), model.getMember_delivery_is_default(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -103,18 +95,16 @@ public class MemberAddressController extends Controller {
         validate(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.SYSTEM_VERSION);
 
         MemberAddress model = getModel(MemberAddress.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id(), request_app_id, request_http_id, request_user_id);
+        MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id());
 
         authenticateApp_id(member_address.getApp_id());
         authenticateSystem_create_user_id(member_address.getSystem_create_user_id());
 
-        Boolean result = memberAddressService.deleteByMember_address_idAndSystem_update_user_idValidateSystem_version(model.getMember_address_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberAddressService.deleteByMember_address_idAndSystem_update_user_idValidateSystem_version(model.getMember_address_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -126,13 +116,11 @@ public class MemberAddressController extends Controller {
 
         MemberAddress model = getModel(MemberAddress.class);
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = memberAddressService.countByApp_idOrLikeMember_address_name(request_app_id, model.getMember_address_name(), request_app_id, request_http_id, request_user_id);
-        List<MemberAddress> resultList = memberAddressService.listByApp_idOrLikeMember_address_nameAndLimit(request_app_id, model.getMember_address_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = memberAddressService.countByApp_idOrLikeMember_address_name(request_app_id, model.getMember_address_name());
+        List<MemberAddress> resultList = memberAddressService.listByApp_idOrLikeMember_address_nameAndLimit(request_app_id, model.getMember_address_name(), getM(), getN());
 
 //        for (MemberAddress result : resultList) {
 //            result.keep(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.SYSTEM_VERSION);
@@ -147,13 +135,10 @@ public class MemberAddressController extends Controller {
         validate(MemberAddress.MEMBER_ADDRESS_ID);
 
         MemberAddress model = getModel(MemberAddress.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id(), request_app_id, request_http_id, request_user_id);
+        MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id());
 
         authenticateApp_id(member_address.getApp_id());
 
@@ -173,17 +158,15 @@ public class MemberAddressController extends Controller {
         validate(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ID, MemberAddress.USER_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_PHONE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA, MemberAddress.MEMBER_ADDRESS_STREET, MemberAddress.MEMBER_DELIVERY_IS_DEFAULT, MemberAddress.SYSTEM_VERSION);
 
         MemberAddress model = getModel(MemberAddress.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id(), request_app_id, request_http_id, request_user_id);
+        MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id());
 
         authenticateApp_id(member_address.getApp_id());
 
-        Boolean result = memberAddressService.updateValidateSystem_version(model.getMember_address_id(), model.getMember_id(), model.getUser_id(), model.getMember_address_name(), model.getMember_address_phone(), model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(), model.getMember_address_street(), model.getMember_delivery_is_default(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberAddressService.updateValidateSystem_version(model.getMember_address_id(), model.getMember_id(), model.getUser_id(), model.getMember_address_name(), model.getMember_address_phone(), model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(), model.getMember_address_street(), model.getMember_delivery_is_default(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -194,17 +177,15 @@ public class MemberAddressController extends Controller {
         validate(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.SYSTEM_VERSION);
 
         MemberAddress model = getModel(MemberAddress.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id(), request_app_id, request_http_id, request_user_id);
+        MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id());
 
         authenticateApp_id(member_address.getApp_id());
 
-        Boolean result = memberAddressService.deleteByMember_address_idAndSystem_update_user_idValidateSystem_version(model.getMember_address_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberAddressService.deleteByMember_address_idAndSystem_update_user_idValidateSystem_version(model.getMember_address_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -215,12 +196,9 @@ public class MemberAddressController extends Controller {
         validate(MemberAddress.APP_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         MemberAddress model = getModel(MemberAddress.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        Integer total = memberAddressService.countByOrApp_idOrLikeMember_address_name(model.getApp_id(), model.getMember_address_name(), request_app_id, request_http_id, request_user_id);
-        List<MemberAddress> resultList = memberAddressService.listByOrApp_idOrLikeMember_address_nameAndLimit(model.getApp_id(), model.getMember_address_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = memberAddressService.countByOrApp_idOrLikeMember_address_name(model.getApp_id(), model.getMember_address_name());
+        List<MemberAddress> resultList = memberAddressService.listByOrApp_idOrLikeMember_address_nameAndLimit(model.getApp_id(), model.getMember_address_name(), getM(), getN());
 
         for (MemberAddress result : resultList) {
             result.keep(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.SYSTEM_VERSION);
@@ -235,11 +213,8 @@ public class MemberAddressController extends Controller {
         validate(MemberAddress.MEMBER_ADDRESS_ID);
 
         MemberAddress model = getModel(MemberAddress.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id(), request_app_id, request_http_id, request_user_id);
+        MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id());
 
         member_address.keep(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.SYSTEM_VERSION);
 
@@ -253,11 +228,9 @@ public class MemberAddressController extends Controller {
 
         MemberAddress model = getModel(MemberAddress.class);
         String member_address_id = Util.getRandomUUID();
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = memberAddressService.save(member_address_id, model.getApp_id(), model.getMember_id(), model.getUser_id(), model.getMember_address_name(), model.getMember_address_phone(), model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(), model.getMember_address_street(), model.getMember_delivery_is_default(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = memberAddressService.save(member_address_id, model.getApp_id(), model.getMember_id(), model.getUser_id(), model.getMember_address_name(), model.getMember_address_phone(), model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(), model.getMember_address_street(), model.getMember_delivery_is_default(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -268,11 +241,9 @@ public class MemberAddressController extends Controller {
         validate(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ID, MemberAddress.USER_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_PHONE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA, MemberAddress.MEMBER_ADDRESS_STREET, MemberAddress.MEMBER_DELIVERY_IS_DEFAULT, MemberAddress.SYSTEM_VERSION);
 
         MemberAddress model = getModel(MemberAddress.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = memberAddressService.updateValidateSystem_version(model.getMember_address_id(), model.getMember_id(), model.getUser_id(), model.getMember_address_name(), model.getMember_address_phone(), model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(), model.getMember_address_street(), model.getMember_delivery_is_default(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberAddressService.updateValidateSystem_version(model.getMember_address_id(), model.getMember_id(), model.getUser_id(), model.getMember_address_name(), model.getMember_address_phone(), model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(), model.getMember_address_street(), model.getMember_delivery_is_default(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -283,11 +254,9 @@ public class MemberAddressController extends Controller {
         validate(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.SYSTEM_VERSION);
 
         MemberAddress model = getModel(MemberAddress.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = memberAddressService.deleteByMember_address_idAndSystem_update_user_idValidateSystem_version(model.getMember_address_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = memberAddressService.deleteByMember_address_idAndSystem_update_user_idValidateSystem_version(model.getMember_address_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
