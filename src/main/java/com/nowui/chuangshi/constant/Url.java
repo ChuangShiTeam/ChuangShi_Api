@@ -186,6 +186,23 @@ public class Url {
     public static final String MEMBER_SYSTEM_UPDATE = "/member/system/update";
     public static final String MEMBER_SYSTEM_DELETE = "/member/system/delete";
 
+    // 会员地址
+    public static final String MEMBER_ADDRESS_LIST = "/member/address/list";
+    public static final String MEMBER_ADDRESS_FIND = "/member/address/find";
+    public static final String MEMBER_ADDRESS_SAVE = "/member/address/save";
+    public static final String MEMBER_ADDRESS_UPDATE = "/member/address/update";
+    public static final String MEMBER_ADDRESS_DELETE = "/member/address/delete";
+    public static final String MEMBER_ADDRESS_ADMIN_LIST = "/member/address/admin/list";
+    public static final String MEMBER_ADDRESS_ADMIN_FIND = "/member/address/admin/find";
+    public static final String MEMBER_ADDRESS_ADMIN_SAVE = "/member/address/admin/save";
+    public static final String MEMBER_ADDRESS_ADMIN_UPDATE = "/member/address/admin/update";
+    public static final String MEMBER_ADDRESS_ADMIN_DELETE = "/member/address/admin/delete";
+    public static final String MEMBER_ADDRESS_SYSTEM_LIST = "/member/address/system/list";
+    public static final String MEMBER_ADDRESS_SYSTEM_FIND = "/member/address/system/find";
+    public static final String MEMBER_ADDRESS_SYSTEM_SAVE = "/member/address/system/save";
+    public static final String MEMBER_ADDRESS_SYSTEM_UPDATE = "/member/address/system/update";
+    public static final String MEMBER_ADDRESS_SYSTEM_DELETE = "/member/address/system/delete";
+
     public static final String MEMBER_LEVEL_LIST = "/member/level/list";
     public static final String MEMBER_LEVEL_FIND = "/member/level/find";
     public static final String MEMBER_LEVEL_SAVE = "/member/level/save";
@@ -202,6 +219,39 @@ public class Url {
     public static final String MEMBER_LEVEL_SYSTEM_SAVE = "/member/level/system/save";
     public static final String MEMBER_LEVEL_SYSTEM_UPDATE = "/member/level/system/update";
     public static final String MEMBER_LEVEL_SYSTEM_DELETE = "/member/level/system/delete";
+    
+    public static final String MEMBER_STOCK_ACTION_LIST = "/member/stock/action/list";
+    public static final String MEMBER_STOCK_ACTION_FIND = "/member/stock/action/find";
+    public static final String MEMBER_STOCK_ACTION_SAVE = "/member/stock/action/save";
+    public static final String MEMBER_STOCK_ACTION_UPDATE = "/member/stock/action/update";
+    public static final String MEMBER_STOCK_ACTION_DELETE = "/member/stock/action/delete";
+    public static final String MEMBER_STOCK_ACTION_ADMIN_LIST = "/member/stock/action/admin/list";
+    public static final String MEMBER_STOCK_ACTION_ADMIN_FIND = "/member/stock/action/admin/find";
+    public static final String MEMBER_STOCK_ACTION_ADMIN_SAVE = "/member/stock/action/admin/save";
+    public static final String MEMBER_STOCK_ACTION_ADMIN_UPDATE = "/member/stock/action/admin/update";
+    public static final String MEMBER_STOCK_ACTION_ADMIN_DELETE = "/member/stock/action/admin/delete";
+    public static final String MEMBER_STOCK_ACTION_SYSTEM_LIST = "/member/stock/action/system/list";
+    public static final String MEMBER_STOCK_ACTION_SYSTEM_FIND = "/member/stock/action/system/find";
+    public static final String MEMBER_STOCK_ACTION_SYSTEM_SAVE = "/member/stock/action/system/save";
+    public static final String MEMBER_STOCK_ACTION_SYSTEM_UPDATE = "/member/stock/action/system/update";
+    public static final String MEMBER_STOCK_ACTION_SYSTEM_DELETE = "/member/stock/action/system/delete";
+
+    // 用户管理
+    public static final String CUSTOMER_LIST = "/customer/list";
+    public static final String CUSTOMER_FIND = "/customer/find";
+    public static final String CUSTOMER_SAVE = "/customer/save";
+    public static final String CUSTOMER_UPDATE = "/customer/update";
+    public static final String CUSTOMER_DELETE = "/customer/delete";
+    public static final String CUSTOMER_ADMIN_LIST = "/customer/admin/list";
+    public static final String CUSTOMER_ADMIN_FIND = "/customer/admin/find";
+    public static final String CUSTOMER_ADMIN_SAVE = "/customer/admin/save";
+    public static final String CUSTOMER_ADMIN_UPDATE = "/customer/admin/update";
+    public static final String CUSTOMER_ADMIN_DELETE = "/customer/admin/delete";
+    public static final String CUSTOMER_SYSTEM_LIST = "/customer/system/list";
+    public static final String CUSTOMER_SYSTEM_FIND = "/customer/system/find";
+    public static final String CUSTOMER_SYSTEM_SAVE = "/customer/system/save";
+    public static final String CUSTOMER_SYSTEM_UPDATE = "/customer/system/update";
+    public static final String CUSTOMER_SYSTEM_DELETE = "/customer/system/delete";
 
     public static final String GUANGQI_CUSTOMER_LIST = "/guangqi/customer/list";
     public static final String GUANGQI_CUSTOMER_FIND = "/guangqi/customer/find";
@@ -290,5 +340,37 @@ public class Url {
 
     public static final String FEIJIU_FAST_EXPORT = "/feijiu/fast/export";
     public static final String FEIJIU_RECOMMEND_EXPORT = "/feijiu/recommend/export";
+    
+    public static final String STOCK_LIST = "/stock/list";
+    public static final String STOCK_FIND = "/stock/find";
+    public static final String STOCK_SAVE = "/stock/save";
+    public static final String STOCK_UPDATE = "/stock/update";
+    public static final String STOCK_DELETE = "/stock/delete";
+    public static final String STOCK_ADMIN_LIST = "/stock/admin/list";
+    public static final String STOCK_ADMIN_FIND = "/stock/admin/find";
+    public static final String STOCK_ADMIN_SAVE = "/stock/admin/save";
+    public static final String STOCK_ADMIN_UPDATE = "/stock/admin/update";
+    public static final String STOCK_ADMIN_DELETE = "/stock/admin/delete";
+    public static final String STOCK_SYSTEM_LIST = "/stock/system/list";
+    public static final String STOCK_SYSTEM_FIND = "/stock/system/find";
+    public static final String STOCK_SYSTEM_SAVE = "/stock/system/save";
+    public static final String STOCK_SYSTEM_UPDATE = "/stock/system/update";
+    public static final String STOCK_SYSTEM_DELETE = "/stock/system/delete";
+    
+    public static final String EXPRESS_LIST = "/express/list";
+    public static final String EXPRESS_FIND = "/express/find";
+    public static final String EXPRESS_SAVE = "/express/save";
+    public static final String EXPRESS_UPDATE = "/express/update";
+    public static final String EXPRESS_DELETE = "/express/delete";
+    public static final String EXPRESS_ADMIN_LIST = "/express/admin/list";
+    public static final String EXPRESS_ADMIN_FIND = "/express/admin/find";
+    public static final String EXPRESS_ADMIN_SAVE = "/express/admin/save";
+    public static final String EXPRESS_ADMIN_UPDATE = "/express/admin/update";
+    public static final String EXPRESS_ADMIN_DELETE = "/express/admin/delete";
+    public static final String EXPRESS_SYSTEM_LIST = "/express/system/list";
+    public static final String EXPRESS_SYSTEM_FIND = "/express/system/find";
+    public static final String EXPRESS_SYSTEM_SAVE = "/express/system/save";
+    public static final String EXPRESS_SYSTEM_UPDATE = "/express/system/update";
+    public static final String EXPRESS_SYSTEM_DELETE = "/express/system/delete";
 
 }
