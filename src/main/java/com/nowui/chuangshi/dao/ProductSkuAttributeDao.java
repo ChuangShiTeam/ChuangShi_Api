@@ -4,40 +4,39 @@ import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.constant.Constant;
-import com.nowui.chuangshi.model.ProductSkuPrice;
+import com.nowui.chuangshi.model.ProductSkuAttribute;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProductSkuPriceDao extends Dao {
+public class ProductSkuAttributeDao extends Dao {
 
-    public List<ProductSkuPrice> listByProduct_sku_id(String product_sku_id, String request_app_id, String request_http_id, String request_user_id) {
+    public List<ProductSkuAttribute> listByProduct_sku_id(String product_sku_id, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
-        sqlMap.put(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id);
-        SqlPara sqlPara = Db.getSqlPara("product_sku_price.listByProduct_sku_id", sqlMap);
+        sqlMap.put(ProductSkuAttribute.PRODUCT_SKU_ID, product_sku_id);
+        SqlPara sqlPara = Db.getSqlPara("product_sku_attribute.listByProduct_sku_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_product_sku_price", "listByProduct_sku_id", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_product_sku_attribute", "listByProduct_sku_id", sqlPara, request_user_id);
 
-        return new ProductSkuPrice().find(sqlPara.getSql(), sqlPara.getPara());
+        return new ProductSkuAttribute().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public Boolean save(List<ProductSkuPrice> productSkuPriceList, String request_app_id, String request_http_id, String request_user_id) {
-        if (productSkuPriceList.size() == 0) {
+    public Boolean save(List<ProductSkuAttribute> productSkuAttributeList, String request_app_id, String request_http_id, String request_user_id) {
+        if (productSkuAttributeList.size() == 0) {
             return false;
         }
 
         Kv map = Kv.create();
-        SqlPara sqlPara = Db.getSqlPara("product_sku_price.save", map);
+        SqlPara sqlPara = Db.getSqlPara("product_sku_attribute.save", map);
 
         List<Object[]> parameterList = new ArrayList<Object[]>();
-        for(ProductSkuPrice productSkuPrice : productSkuPriceList) {
+        for(ProductSkuAttribute productSkuAttribute : productSkuAttributeList) {
             List<Object> objectList = new ArrayList<Object>();
-            objectList.add(productSkuPrice.getProduct_sku_id());
-            objectList.add(productSkuPrice.getMember_level_id());
-            objectList.add(productSkuPrice.getMember_level_name());
-            objectList.add(productSkuPrice.getProduct_sku_price());
+            objectList.add(productSkuAttribute.getProduct_sku_id());
+            objectList.add(productSkuAttribute.getProduct_sku_attribute_name());
+            objectList.add(productSkuAttribute.getProduct_sku_attribute_value());
             objectList.add(request_user_id);
             objectList.add(new Date());
             objectList.add(request_user_id);
@@ -51,11 +50,11 @@ public class ProductSkuPriceDao extends Dao {
 
         for (int i : result) {
             if (i == 0) {
-                throw new RuntimeException("SKU价格保存不成功");
+                throw new RuntimeException("SKU属性保存不成功");
             }
         }
 
-        logSql(request_app_id, request_http_id, "table_product_sku_price", "save", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_product_sku_attribute", "save", sqlPara, request_user_id);
 
         return true;
     }
@@ -66,7 +65,7 @@ public class ProductSkuPriceDao extends Dao {
         }
 
         Kv map = Kv.create();
-        SqlPara sqlPara = Db.getSqlPara("product_sku_price.delete", map);
+        SqlPara sqlPara = Db.getSqlPara("product_sku_attribute.delete", map);
 
         List<Object[]> parameterList = new ArrayList<Object[]>();
         for(String product_sku_id : productSkuIdList) {
@@ -81,11 +80,11 @@ public class ProductSkuPriceDao extends Dao {
 
         for (int i : result) {
             if (i == 0) {
-                throw new RuntimeException("SKU价格删除不成功");
+                throw new RuntimeException("SKU属性删除不成功");
             }
         }
 
-        logSql(request_app_id, request_http_id, "table_product_sku_price", "delete", sqlPara, request_user_id);
+        logSql(request_app_id, request_http_id, "table_product_sku_attribute", "delete", sqlPara, request_user_id);
 
         return true;
     }

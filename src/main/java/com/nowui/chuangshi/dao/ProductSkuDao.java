@@ -3,12 +3,25 @@ package com.nowui.chuangshi.dao;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.ProductSku;
+import com.nowui.chuangshi.util.Util;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class ProductSkuDao extends Dao {
+
+    public List<ProductSku> listByProduct_id(String product_id, String request_app_id, String request_http_id, String request_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(ProductSku.PRODUCT_ID, product_id);
+        SqlPara sqlPara = Db.getSqlPara("product_sku.listByProduct_id", sqlMap);
+
+        logSql(request_app_id, request_http_id, "table_product_sku", "listByProduct_id", sqlPara, request_user_id);
+
+        return new ProductSku().find(sqlPara.getSql(), sqlPara.getPara());
+    }
 
     public ProductSku findByProduct_sku_id(String product_sku_id, String request_app_id, String request_http_id, String request_user_id) {
         Kv sqlMap = Kv.create();
@@ -25,50 +38,70 @@ public class ProductSkuDao extends Dao {
         }
     }
 
-    public Boolean save(String product_sku_id, String product_id, Boolean product_sku_is_default, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
-        Kv sqlMap = Kv.create();
-        sqlMap.put(ProductSku.PRODUCT_SKU_ID, product_sku_id);
-        sqlMap.put(ProductSku.PRODUCT_ID, product_id);
-        sqlMap.put(ProductSku.PRODUCT_SKU_IS_DEFAULT, product_sku_is_default);
-        sqlMap.put(ProductSku.SYSTEM_CREATE_USER_ID, system_create_user_id);
-        sqlMap.put(ProductSku.SYSTEM_CREATE_TIME, new Date());
-        sqlMap.put(ProductSku.SYSTEM_UPDATE_USER_ID, system_create_user_id);
-        sqlMap.put(ProductSku.SYSTEM_UPDATE_TIME, new Date());
-        sqlMap.put(ProductSku.SYSTEM_VERSION, 0);
-        sqlMap.put(ProductSku.SYSTEM_STATUS, true);
-        SqlPara sqlPara = Db.getSqlPara("product_sku.save", sqlMap);
+    public Boolean save(List<ProductSku> productSkuList, String request_app_id, String request_http_id, String request_user_id) {
+        if (productSkuList.size() == 0) {
+            return false;
+        }
+
+        Kv map = Kv.create();
+        SqlPara sqlPara = Db.getSqlPara("product_sku.save", map);
+
+        List<Object[]> parameterList = new ArrayList<Object[]>();
+        for(ProductSku productSku : productSkuList) {
+            List<Object> objectList = new ArrayList<Object>();
+            objectList.add(productSku.getProduct_sku_id());
+            objectList.add(productSku.getProduct_id());
+            objectList.add(productSku.getProduct_sku_is_default());
+            objectList.add(request_user_id);
+            objectList.add(new Date());
+            objectList.add(request_user_id);
+            objectList.add(new Date());
+            objectList.add(0);
+            objectList.add(true);
+            parameterList.add(objectList.toArray());
+        }
+
+        int[] result = Db.batch(sqlPara.getSql(), Util.getObjectArray(parameterList), Constant.BATCH_SIZE);
+
+        for (int i : result) {
+            if (i == 0) {
+                throw new RuntimeException("SKU保存不成功");
+            }
+        }
 
         logSql(request_app_id, request_http_id, "table_product_sku", "save", sqlPara, request_user_id);
 
-        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+        return true;
     }
 
-    public Boolean update(String product_sku_id, String product_id, Boolean product_sku_is_default, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
-        Kv sqlMap = Kv.create();
-        sqlMap.put(ProductSku.PRODUCT_SKU_ID, product_sku_id);
-        sqlMap.put(ProductSku.PRODUCT_ID, product_id);
-        sqlMap.put(ProductSku.PRODUCT_SKU_IS_DEFAULT, product_sku_is_default);
-        sqlMap.put(ProductSku.SYSTEM_UPDATE_USER_ID, system_update_user_id);
-        sqlMap.put(ProductSku.SYSTEM_UPDATE_TIME, new Date());
-        sqlMap.put(ProductSku.SYSTEM_VERSION, system_version);
-        SqlPara sqlPara = Db.getSqlPara("product_sku.update", sqlMap);
+    public Boolean delete(List<String> productSkuIdList, String request_app_id, String request_http_id, String request_user_id) {
+        if (productSkuIdList.size() == 0) {
+            return false;
+        }
 
-        logSql(request_app_id, request_http_id, "table_product_sku", "update", sqlPara, request_user_id);
+        Kv map = Kv.create();
+        SqlPara sqlPara = Db.getSqlPara("product_sku.delete", map);
 
-        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
-    }
+        List<Object[]> parameterList = new ArrayList<Object[]>();
+        for(String product_sku_id : productSkuIdList) {
+            List<Object> objectList = new ArrayList<Object>();
+            objectList.add(request_user_id);
+            objectList.add(new Date());
+            objectList.add(product_sku_id);
+            parameterList.add(objectList.toArray());
+        }
 
-    public Boolean deleteByProduct_sku_idAndSystem_version(String product_sku_id, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
-        Kv sqlMap = Kv.create();
-        sqlMap.put(ProductSku.PRODUCT_SKU_ID, product_sku_id);
-        sqlMap.put(ProductSku.SYSTEM_UPDATE_USER_ID, system_update_user_id);
-        sqlMap.put(ProductSku.SYSTEM_UPDATE_TIME, new Date());
-        sqlMap.put(ProductSku.SYSTEM_VERSION, system_version);
-        SqlPara sqlPara = Db.getSqlPara("product_sku.deleteByProduct_sku_idAndSystem_version", sqlMap);
+        int[] result = Db.batch(sqlPara.getSql(), Util.getObjectArray(parameterList), Constant.BATCH_SIZE);
 
-        logSql(request_app_id, request_http_id, "table_product_sku", "deleteByProduct_sku_idAndSystem_version", sqlPara, request_user_id);
+        for (int i : result) {
+            if (i == 0) {
+                throw new RuntimeException("SKU保存不成功");
+            }
+        }
 
-        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+        logSql(request_app_id, request_http_id, "table_product_sku", "delete", sqlPara, request_user_id);
+
+        return true;
     }
 
 }

@@ -7,16 +7,16 @@ import java.math.BigDecimal;
 
 public class ProductSkuPrice extends Model<ProductSkuPrice> {
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "SKU编号")
     public static final String PRODUCT_SKU_ID = "product_sku_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "等级编号")
     public static final String MEMBER_LEVEL_ID = "member_level_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "等级名称")
     public static final String MEMBER_LEVEL_NAME = "member_level_name";
 
-    @Column(type = ColumnType.DECIMAL, length = 0, comment = "")
+    @Column(type = ColumnType.DECIMAL, length = 0, comment = "SKU价格")
     public static final String PRODUCT_SKU_PRICE = "product_sku_price";
 
     public String getProduct_sku_id() {
