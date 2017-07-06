@@ -10,6 +10,16 @@ import java.util.List;
 
 public class ProductCategoryDao extends Dao {
 
+    public List<ProductCategory> listByApp_id(String app_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(ProductCategory.APP_ID, app_id);
+        SqlPara sqlPara = Db.getSqlPara("product_category.listByApp_id", sqlMap);
+
+        logSql("product_category", "listByApp_id", sqlPara);
+
+        return new ProductCategory().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+
     public List<ProductCategory> listByLikeProduct_category_parent_id(String product_category_parent_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(ProductCategory.PRODUCT_CATEGORY_PARENT_ID, product_category_parent_id);

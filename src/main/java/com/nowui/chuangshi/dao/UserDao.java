@@ -150,7 +150,7 @@ public class UserDao extends Dao {
         }
     }
 
-    public Boolean save(String user_id, String app_id, String object_id, String user_type, String user_name, String user_avatar, String user_account, String user_phone, String user_email, String user_password, String wechat_open_id, String wechat_union_id, String system_create_user_id) {
+    public Boolean save(String user_id, String app_id, String object_id, String user_type, String user_name, String user_avatar, String user_account, String user_mobile, String user_email, String user_password, String wechat_open_id, String wechat_union_id, String system_create_user_id) {
         user_password = generatePassword(user_password);
 
         Kv sqlMap = Kv.create();
@@ -161,7 +161,7 @@ public class UserDao extends Dao {
         sqlMap.put(User.USER_NAME, user_name);
         sqlMap.put(User.USER_AVATAR, user_avatar);
         sqlMap.put(User.USER_ACCOUNT, user_account);
-        sqlMap.put(User.USER_PHONE, user_phone);
+        sqlMap.put(User.USER_MOBILE, user_mobile);
         sqlMap.put(User.USER_EMAIL, user_email);
         sqlMap.put(User.USER_PASSWORD, user_password);
         sqlMap.put(User.WECHAT_OPEN_ID, wechat_open_id);

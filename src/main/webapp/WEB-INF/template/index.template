@@ -62,12 +62,12 @@ class #(first_upper_model_name_without_underline)Index extends Component {
 
     handleSearch() {
         new Promise(function (resolve, reject) {
-            var app_id = this.props.form.getFieldValue('app_id');
+            let app_id = this.props.form.getFieldValue('app_id');
             if (validate.isUndefined(app_id)) {
                 app_id = '';
             }
 
-            var #(lower_model_name)_name = this.props.form.getFieldValue('#(lower_model_name)_name');
+            let #(lower_model_name)_name = this.props.form.getFieldValue('#(lower_model_name)_name');
 
             this.props.dispatch({
                 type: '#(lower_model_name)/fetch',

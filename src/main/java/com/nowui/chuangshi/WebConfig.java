@@ -136,6 +136,7 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_product_sku", "product_sku_id", ProductSku.class);
         activeRecordPlugin.addMapping("table_product_sku_attribute", "product_sku_attribute_id", ProductSkuAttribute.class);
         activeRecordPlugin.addMapping("table_product_sku_price", "product_sku_price_id", ProductSkuPrice.class);
+        activeRecordPlugin.addMapping("table_product_sku_commission", "product_sku_commission_id", ProductSkuCommission.class);
         activeRecordPlugin.addMapping("table_member", "member_id", Member.class);
         activeRecordPlugin.addMapping("table_member_address", "member_address_id", MemberAddress.class);
         activeRecordPlugin.addMapping("table_member_level", "member_level_id", MemberLevel.class);

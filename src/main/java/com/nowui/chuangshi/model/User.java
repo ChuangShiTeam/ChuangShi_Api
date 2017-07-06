@@ -27,7 +27,7 @@ public class User extends Model<User> {
     public static final String USER_ACCOUNT = "user_account";
 
     @Column(type = ColumnType.VARCHAR, length = 11, comment = "用户电话")
-    public static final String USER_PHONE = "user_phone";
+    public static final String USER_MOBILE = "user_mobile";
 
     @Column(type = ColumnType.VARCHAR, length = 20, comment = "用户邮箱")
     public static final String USER_EMAIL = "user_email";
@@ -89,12 +89,12 @@ public class User extends Model<User> {
         set(USER_ACCOUNT, user_account);
     }
 
-    public String getUser_phone() {
-        return getStr(USER_PHONE);
+    public String getUser_mobile() {
+        return getStr(USER_MOBILE);
     }
 
-    public void setUser_phone(String user_phone) {
-        set(USER_PHONE, user_phone);
+    public void setUser_mobile(String user_mobile) {
+        set(USER_MOBILE, user_mobile);
     }
 
     public String getUser_email() {

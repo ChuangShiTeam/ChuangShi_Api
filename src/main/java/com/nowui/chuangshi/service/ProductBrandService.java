@@ -18,6 +18,10 @@ public class ProductBrandService extends Service {
         return productBrandCache.countByOrApp_idOrLikeProduct_brand_name(app_id, product_brand_name);
     }
 
+    public List<ProductBrand> listByApp_id(String app_id) {
+        return productBrandCache.listByApp_id(app_id);
+    }
+
     public List<ProductBrand> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         return productBrandCache.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n);
     }

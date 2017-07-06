@@ -35,6 +35,16 @@ public class ProductBrandDao extends Dao {
         return count.intValue();
     }
 
+    public List<ProductBrand> listByApp_id(String app_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(ProductBrand.APP_ID, app_id);
+        SqlPara sqlPara = Db.getSqlPara("product_brand.listByApp_id", sqlMap);
+
+        logSql("product_brand", "listByApp_id", sqlPara);
+
+        return new ProductBrand().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+
     public List<ProductBrand> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(ProductBrand.APP_ID, app_id);

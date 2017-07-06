@@ -89,12 +89,12 @@ public class ProductDao extends Dao {
         }
     }
 
-    public Boolean save(String product_id, String app_id, String category_id, String brand_id, String product_name, String product_image, Boolean product_is_new, Boolean product_is_recommend, Boolean product_is_bargain, Boolean product_is_hot, Boolean product_is_sold_out, Boolean product_is_virtual, String product_content, Boolean product_status, String system_create_user_id) {
+    public Boolean save(String product_id, String app_id, String product_category_id, String product_brand_id, String product_name, String product_image, Boolean product_is_new, Boolean product_is_recommend, Boolean product_is_bargain, Boolean product_is_hot, Boolean product_is_sold_out, Boolean product_is_virtual, String product_content, Boolean product_status, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Product.PRODUCT_ID, product_id);
         sqlMap.put(Product.APP_ID, app_id);
-        sqlMap.put(Product.CATEGORY_ID, category_id);
-        sqlMap.put(Product.BRAND_ID, brand_id);
+        sqlMap.put(Product.PRODUCT_CATEGORY_ID, product_category_id);
+        sqlMap.put(Product.PRODUCT_BRAND_ID, product_brand_id);
         sqlMap.put(Product.PRODUCT_NAME, product_name);
         sqlMap.put(Product.PRODUCT_IMAGE, product_image);
         sqlMap.put(Product.PRODUCT_IS_NEW, product_is_new);
@@ -118,11 +118,11 @@ public class ProductDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String product_id, String category_id, String brand_id, String product_name, String product_image, Boolean product_is_new, Boolean product_is_recommend, Boolean product_is_bargain, Boolean product_is_hot, Boolean product_is_sold_out, Boolean product_is_virtual, String product_content, Boolean product_status, String system_update_user_id, Integer system_version) {
+    public Boolean update(String product_id, String product_category_id, String product_brand_id, String product_name, String product_image, Boolean product_is_new, Boolean product_is_recommend, Boolean product_is_bargain, Boolean product_is_hot, Boolean product_is_sold_out, Boolean product_is_virtual, String product_content, Boolean product_status, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Product.PRODUCT_ID, product_id);
-        sqlMap.put(Product.CATEGORY_ID, category_id);
-        sqlMap.put(Product.BRAND_ID, brand_id);
+        sqlMap.put(Product.PRODUCT_CATEGORY_ID, product_category_id);
+        sqlMap.put(Product.PRODUCT_BRAND_ID, product_brand_id);
         sqlMap.put(Product.PRODUCT_NAME, product_name);
         sqlMap.put(Product.PRODUCT_IMAGE, product_image);
         sqlMap.put(Product.PRODUCT_IS_NEW, product_is_new);

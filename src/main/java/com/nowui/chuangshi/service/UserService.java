@@ -42,21 +42,21 @@ public class UserService extends Service {
         return userCache.findByApp_idAndUser_typeAndUser_accountAndUser_password(app_id, user_type, user_account, user_password);
     }
 
-//    public Boolean save(String user_id, String app_id, String user_type, String user_name, String user_avatar, String user_account, String user_phone, String user_email, String user_password, String wechat_open_id, String wechat_union_id, String system_create_user_id) {
-//        return userCache.save(user_id, app_id, user_type, user_name, user_avatar, user_account, user_phone, user_email, user_password, wechat_open_id, wechat_union_id, system_create_user_id);
+//    public Boolean save(String user_id, String app_id, String user_type, String user_name, String user_avatar, String user_account, String user_mobile, String user_email, String user_password, String wechat_open_id, String wechat_union_id, String system_create_user_id) {
+//        return userCache.save(user_id, app_id, user_type, user_name, user_avatar, user_account, user_mobile, user_email, user_password, wechat_open_id, wechat_union_id, system_create_user_id);
 //    }
 
     public Boolean saveByUser_idAndApp_idAndUser_typeAndUser_nameAndUser_avatarAndWechat_open_idAndWechat_union_id(String user_id, String app_id, String object_id, String user_type, String user_name, String user_avatar, String wechat_open_id, String wechat_union_id, String system_create_user_id) {
         String user_account = "";
-        String user_phone = "";
+        String user_mobile = "";
         String user_email = "";
         String user_password = "";
 
-        return userCache.save(user_id, app_id, object_id, user_type, user_name, user_avatar, user_account, user_phone, user_email, user_password, wechat_open_id, wechat_union_id, system_create_user_id);
+        return userCache.save(user_id, app_id, object_id, user_type, user_name, user_avatar, user_account, user_mobile, user_email, user_password, wechat_open_id, wechat_union_id, system_create_user_id);
     }
 
     public Boolean saveByUser_idAndApp_idAndObject_idAndUser_typeAndUser_nameAndUser_accountAndUser_password(String user_id, String app_id, String object_id, String user_type, String user_name, String user_account, String user_password, String system_create_user_id) {
-        String user_phone = "";
+        String user_mobile = "";
         String user_email = "";
         String user_avatar = "";
         String wechat_open_id = "";
@@ -68,7 +68,7 @@ public class UserService extends Service {
             throw new RuntimeException("账户重复啦");
         }
 
-        return userCache.save(user_id, app_id, object_id, user_type, user_name, user_avatar, user_account, user_phone, user_email, user_password, wechat_open_id, wechat_union_id, system_create_user_id);
+        return userCache.save(user_id, app_id, object_id, user_type, user_name, user_avatar, user_account, user_mobile, user_email, user_password, wechat_open_id, wechat_union_id, system_create_user_id);
     }
 
     public Boolean updateByUser_password(String user_id, String user_password, String system_update_user_id, Integer system_version) {

@@ -34,6 +34,10 @@ public class ProductCategoryService extends Service {
         return list;
     }
 
+    public List<ProductCategory> listByApp_id(String app_id) {
+        return productCategoryCache.listByApp_id(app_id);
+    }
+
     public List<Map<String, Object>> treeByApp_idOrLikeProduct_category_name(String app_id, String product_category_name) {
         List<ProductCategory> productCategoryList = productCategoryCache.listByApp_idOrLikeProduct_category_name(app_id, product_category_name);
 

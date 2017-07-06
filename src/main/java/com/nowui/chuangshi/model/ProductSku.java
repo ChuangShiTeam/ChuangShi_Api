@@ -14,6 +14,10 @@ public class ProductSku extends Model<ProductSku> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "是否默认")
     public static final String PRODUCT_SKU_IS_DEFAULT = "product_sku_is_default";
 
+    public static final String PRODUCT_SKU_PRICE_LIST = "product_sku_price_list";
+    public static final String PRODUCT_SKU_ATTRIBUTE_LIST = "product_sku_attribute_list";
+    public static final String PRODUCT_SKU_COMMISSION_LIST = "product_sku_commission_list";
+
     public String getProduct_sku_id() {
         return getStr(PRODUCT_SKU_ID);
     }

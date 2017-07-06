@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductBrand;
 import com.nowui.chuangshi.service.ProductBrandService;
 import com.nowui.chuangshi.util.Util;
@@ -128,6 +127,23 @@ public class ProductBrandController extends Controller {
         }
 
         renderSuccessJson(total, resultList);
+    }
+
+    @ActionKey(Url.PRODUCT_BRAND_ADMIN_ALL_LIST)
+    public void adminAllList() {
+        validateRequest_app_id();
+
+        String request_app_id = getRequest_app_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        List<ProductBrand> resultList = productBrandService.listByApp_id(request_app_id);
+
+        for (ProductBrand result : resultList) {
+            result.keep(ProductBrand.PRODUCT_BRAND_ID, ProductBrand.PRODUCT_BRAND_NAME);
+        }
+
+        renderSuccessJson(resultList);
     }
 
     @ActionKey(Url.PRODUCT_BRAND_ADMIN_FIND)

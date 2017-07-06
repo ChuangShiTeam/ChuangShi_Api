@@ -75,8 +75,8 @@
     INSERT INTO table_product (
       product_id,
       app_id,
-      category_id,
-      brand_id,
+      product_category_id,
+      product_brand_id,
       product_name,
       product_image,
       product_is_new,
@@ -96,8 +96,8 @@
     ) VALUES (
       #p(product_id),
       #p(app_id),
-      #p(category_id),
-      #p(brand_id),
+      #p(product_category_id),
+      #p(product_brand_id),
       #p(product_name),
       #p(product_image),
       #p(product_is_new),
@@ -119,8 +119,8 @@
 
   #sql("update")
     UPDATE table_product SET
-    category_id = #p(category_id),
-    brand_id = #p(brand_id),
+    product_category_id = #p(product_category_id),
+    product_brand_id = #p(product_brand_id),
     product_name = #p(product_name),
     product_image = #p(product_image),
     product_is_new = #p(product_is_new),
