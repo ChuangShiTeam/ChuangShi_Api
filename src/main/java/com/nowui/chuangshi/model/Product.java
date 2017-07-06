@@ -17,6 +17,9 @@ public class Product extends Model<Product> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "品牌编号")
     public static final String BRAND_ID = "brand_id";
 
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "默认SKU编号")
+    public static final String PRODUCT_DEFAULT_SKU_ID = "product_default_sku_id";
+
     @Column(type = ColumnType.VARCHAR, length = 100, comment = "商品名称")
     public static final String PRODUCT_NAME = "product_name";
 
@@ -83,6 +86,14 @@ public class Product extends Model<Product> {
 
     public void setBrand_id(String brand_id) {
         set(BRAND_ID, brand_id);
+    }
+
+    public String getProduct_default_sku_id() {
+        return getStr(PRODUCT_DEFAULT_SKU_ID);
+    }
+
+    public void setProduct_default_sku_id(String product_default_sku_id) {
+        set(PRODUCT_DEFAULT_SKU_ID, product_default_sku_id);
     }
 
     public String getProduct_name() {

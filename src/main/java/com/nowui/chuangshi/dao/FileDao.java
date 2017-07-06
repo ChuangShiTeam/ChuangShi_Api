@@ -11,54 +11,54 @@ import java.util.List;
 
 public class FileDao extends Dao {
 
-    public Integer countByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByApp_id(String app_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.APP_ID, app_id);
         SqlPara sqlPara = Db.getSqlPara("file.countByApp_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_file", "countByApp_id", sqlPara, request_user_id);
+        logSql("file", "countByApp_id", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByOrApp_id(String app_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.APP_ID, app_id);
         SqlPara sqlPara = Db.getSqlPara("file.countByOrApp_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_file", "countByOrApp_id", sqlPara, request_user_id);
+        logSql("file", "countByOrApp_id", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByApp_idAndFile_typeAndSystem_create_user_id(String app_id, String file_type, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByApp_idAndFile_typeAndSystem_create_user_id(String app_id, String file_type, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.APP_ID, app_id);
         sqlMap.put(File.FILE_TYPE, file_type);
         sqlMap.put(File.SYSTEM_CREATE_USER_ID, system_create_user_id);
         SqlPara sqlPara = Db.getSqlPara("file.countByApp_idAndFile_typeAndSystem_create_user_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_file", "countByApp_idAndFile_typeAndSystem_create_user_id", sqlPara, request_user_id);
+        logSql("file", "countByApp_idAndFile_typeAndSystem_create_user_id", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_idAndFile_type(String app_id, String file_type, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByOrApp_idAndFile_type(String app_id, String file_type) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.APP_ID, app_id);
         sqlMap.put(File.FILE_TYPE, file_type);
         SqlPara sqlPara = Db.getSqlPara("file.countByOrApp_idAndFile_type", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_file", "countByOrApp_idAndFile_type", sqlPara, request_user_id);
+        logSql("file", "countByOrApp_idAndFile_type", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public List<File> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<File> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.APP_ID, app_id);
         sqlMap.put(File.SYSTEM_CREATE_TIME, system_create_time);
@@ -66,36 +66,36 @@ public class FileDao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("file.listByApp_idAndSystem_create_timeAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_file", "listByApp_idAndSystem_create_timeAndLimit", sqlPara, request_user_id);
+        logSql("file", "listByApp_idAndSystem_create_timeAndLimit", sqlPara);
 
         return new File().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<File> listByApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<File> listByApp_idAndLimit(String app_id, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.APP_ID, app_id);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("file.listByApp_idAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_file", "listByApp_idAndLimit", sqlPara, request_user_id);
+        logSql("file", "listByApp_idAndLimit", sqlPara);
 
         return new File().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<File> listByOrApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<File> listByOrApp_idAndLimit(String app_id, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.APP_ID, app_id);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("file.listByOrApp_idAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_file", "listByOrApp_idAndLimit", sqlPara, request_user_id);
+        logSql("file", "listByOrApp_idAndLimit", sqlPara);
 
         return new File().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<File> listByApp_idAndFile_typeAndSystem_create_user_idAndLimit(String app_id, String file_type, String system_create_user_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<File> listByApp_idAndFile_typeAndSystem_create_user_idAndLimit(String app_id, String file_type, String system_create_user_id, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.APP_ID, app_id);
         sqlMap.put(File.FILE_TYPE, file_type);
@@ -104,12 +104,12 @@ public class FileDao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("file.listByApp_idAndFile_typeAndSystem_create_user_idAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_file", "listByApp_idAndFile_typeAndSystem_create_user_idAndLimit", sqlPara, request_user_id);
+        logSql("file", "listByApp_idAndFile_typeAndSystem_create_user_idAndLimit", sqlPara);
 
         return new File().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<File> listByOrApp_idAndFile_typeAndLimit(String app_id, String file_type, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<File> listByOrApp_idAndFile_typeAndLimit(String app_id, String file_type, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.APP_ID, app_id);
         sqlMap.put(File.FILE_TYPE, file_type);
@@ -117,17 +117,17 @@ public class FileDao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("file.listByOrApp_idAndFile_typeAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_file", "listByOrApp_idAndFile_typeAndLimit", sqlPara, request_user_id);
+        logSql("file", "listByOrApp_idAndFile_typeAndLimit", sqlPara);
 
         return new File().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public File findByFile_id(String file_id, String request_app_id, String request_http_id, String request_user_id) {
+    public File findByFile_id(String file_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.FILE_ID, file_id);
         SqlPara sqlPara = Db.getSqlPara("file.findByFile_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_file", "findByFile_id", sqlPara, request_user_id);
+        logSql("file", "findByFile_id", sqlPara);
 
         List<File> fileList = new File().find(sqlPara.getSql(), sqlPara.getPara());
         if (fileList.size() == 0) {
@@ -137,7 +137,7 @@ public class FileDao extends Dao {
         }
     }
 
-    public Boolean save(String file_id, String app_id, String file_type, String file_name, String file_suffix, Integer file_size, String file_path, String file_thumbnail_path, String file_original_path, String file_image, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean save(String file_id, String app_id, String file_type, String file_name, String file_suffix, Integer file_size, String file_path, String file_thumbnail_path, String file_original_path, String file_image, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.FILE_ID, file_id);
         sqlMap.put(File.APP_ID, app_id);
@@ -157,12 +157,12 @@ public class FileDao extends Dao {
         sqlMap.put(File.SYSTEM_STATUS, true);
         SqlPara sqlPara = Db.getSqlPara("file.save", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_file", "save", sqlPara, request_user_id);
+        logSql("file", "save", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String file_id, String file_type, String file_name, String file_suffix, Integer file_size, String file_path, String file_thumbnail_path, String file_original_path, String file_image, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean update(String file_id, String file_type, String file_name, String file_suffix, Integer file_size, String file_path, String file_thumbnail_path, String file_original_path, String file_image, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.FILE_ID, file_id);
         sqlMap.put(File.FILE_TYPE, file_type);
@@ -178,12 +178,12 @@ public class FileDao extends Dao {
         sqlMap.put(File.SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("file.update", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_file", "update", sqlPara, request_user_id);
+        logSql("file", "update", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean deleteByFile_idAndSystem_version(String file_id, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean deleteByFile_idAndSystem_version(String file_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.FILE_ID, file_id);
         sqlMap.put(File.SYSTEM_UPDATE_USER_ID, system_update_user_id);
@@ -191,7 +191,7 @@ public class FileDao extends Dao {
         sqlMap.put(File.SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("file.deleteByFile_idAndSystem_version", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_file", "deleteByFile_idAndSystem_version", sqlPara, request_user_id);
+        logSql("file", "deleteByFile_idAndSystem_version", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }

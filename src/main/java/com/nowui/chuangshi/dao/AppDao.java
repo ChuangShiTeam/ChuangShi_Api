@@ -11,31 +11,31 @@ import java.util.List;
 
 public class AppDao extends Dao {
 
-    public Integer countByApp_idOrLikeApp_name(String app_id, String app_name, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByApp_idOrLikeApp_name(String app_id, String app_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
         sqlMap.put(App.APP_NAME, app_name);
         SqlPara sqlPara = Db.getSqlPara("app.countByApp_idOrLikeApp_name", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_app", "countByApp_idOrLikeApp_name", sqlPara, request_user_id);
+        logSql("app", "countByApp_idOrLikeApp_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_idOrLikeApp_name(String app_id, String app_name, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByOrApp_idOrLikeApp_name(String app_id, String app_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
         sqlMap.put(App.APP_NAME, app_name);
         SqlPara sqlPara = Db.getSqlPara("app.countByOrApp_idOrLikeApp_name", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_app", "countByOrApp_idOrLikeApp_name", sqlPara, request_user_id);
+        logSql("app", "countByOrApp_idOrLikeApp_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public List<App> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<App> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
         sqlMap.put(App.SYSTEM_CREATE_TIME, system_create_time);
@@ -43,12 +43,12 @@ public class AppDao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("app.listByApp_idAndSystem_create_timeAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_app", "listByApp_idAndSystem_create_timeAndLimit", sqlPara, request_user_id);
+        logSql("app", "listByApp_idAndSystem_create_timeAndLimit", sqlPara);
 
         return new App().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<App> listByApp_idOrLikeApp_nameAndLimit(String app_id, String app_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<App> listByApp_idOrLikeApp_nameAndLimit(String app_id, String app_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
         sqlMap.put(App.APP_NAME, app_name);
@@ -56,12 +56,12 @@ public class AppDao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("app.listByApp_idOrLikeApp_nameAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_app", "listByApp_idOrLikeApp_nameAndLimit", sqlPara, request_user_id);
+        logSql("app", "listByApp_idOrLikeApp_nameAndLimit", sqlPara);
 
         return new App().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<App> listByOrApp_idOrLikeApp_nameAndLimit(String app_id, String app_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<App> listByOrApp_idOrLikeApp_nameAndLimit(String app_id, String app_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
         sqlMap.put(App.APP_NAME, app_name);
@@ -69,7 +69,7 @@ public class AppDao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("app.listByOrApp_idOrLikeApp_nameAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_app", "listByOrApp_idOrLikeApp_nameAndLimit", sqlPara, request_user_id);
+        logSql("app", "listByOrApp_idOrLikeApp_nameAndLimit", sqlPara);
 
         return new App().find(sqlPara.getSql(), sqlPara.getPara());
     }
@@ -78,17 +78,17 @@ public class AppDao extends Dao {
         Kv sqlMap = Kv.create();
         SqlPara sqlPara = Db.getSqlPara("app.list", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_app", "list", sqlPara, request_user_id);
+        logSql("app", "list", sqlPara);
 
         return new App().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public App findByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
+    public App findByApp_id(String app_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
         SqlPara sqlPara = Db.getSqlPara("app.findByApp_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_app", "findByApp_id", sqlPara, request_user_id);
+        logSql("app", "findByApp_id", sqlPara);
 
         List<App> appList = new App().find(sqlPara.getSql(), sqlPara.getPara());
         if (appList.size() == 0) {
@@ -98,7 +98,7 @@ public class AppDao extends Dao {
         }
     }
 
-    public Boolean save(String app_id, String app_name, String app_secret, String wechat_app_id, String wechat_app_secret, String wechat_mch_id, String wechat_mch_key, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean save(String app_id, String app_name, String app_secret, String wechat_app_id, String wechat_app_secret, String wechat_mch_id, String wechat_mch_key, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
         sqlMap.put(App.APP_NAME, app_name);
@@ -115,12 +115,12 @@ public class AppDao extends Dao {
         sqlMap.put(App.SYSTEM_STATUS, true);
         SqlPara sqlPara = Db.getSqlPara("app.save", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_app", "save", sqlPara, request_user_id);
+        logSql("app", "save", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String app_id, String app_name, String app_secret, String wechat_app_id, String wechat_app_secret, String wechat_mch_id, String wechat_mch_key, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean update(String app_id, String app_name, String app_secret, String wechat_app_id, String wechat_app_secret, String wechat_mch_id, String wechat_mch_key, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
         sqlMap.put(App.APP_NAME, app_name);
@@ -134,12 +134,12 @@ public class AppDao extends Dao {
         sqlMap.put(App.SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("app.update", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_app", "update", sqlPara, request_user_id);
+        logSql("app", "update", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean deleteByApp_idAndSystem_version(String app_id, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean deleteByApp_idAndSystem_version(String app_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
         sqlMap.put(App.SYSTEM_UPDATE_USER_ID, system_update_user_id);
@@ -147,7 +147,7 @@ public class AppDao extends Dao {
         sqlMap.put(App.SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("app.deleteByApp_idAndSystem_version", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_app", "deleteByApp_idAndSystem_version", sqlPara, request_user_id);
+        logSql("app", "deleteByApp_idAndSystem_version", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }

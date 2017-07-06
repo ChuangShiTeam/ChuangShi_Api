@@ -12,31 +12,31 @@ import java.util.List;
 
 public class AdminDao extends Dao {
 
-    public Integer countByApp_idOrLikeUser_name(String app_id, String user_name, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByApp_idOrLikeUser_name(String app_id, String user_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Admin.APP_ID, app_id);
         sqlMap.put(User.USER_NAME, user_name);
         SqlPara sqlPara = Db.getSqlPara("admin.countByApp_idOrLikeUser_name", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_admin", "countByApp_idOrLikeUser_name", sqlPara, request_user_id);
+        logSql("admin", "countByApp_idOrLikeUser_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_idOrLikeUser_name(String app_id, String user_name, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByOrApp_idOrLikeUser_name(String app_id, String user_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Admin.APP_ID, app_id);
         sqlMap.put(User.USER_NAME, user_name);
         SqlPara sqlPara = Db.getSqlPara("admin.countByOrApp_idOrLikeUser_name", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_admin", "countByOrApp_idOrLikeUser_name", sqlPara, request_user_id);
+        logSql("admin", "countByOrApp_idOrLikeUser_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public List<Admin> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<Admin> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Admin.APP_ID, app_id);
         sqlMap.put(Admin.SYSTEM_CREATE_TIME, system_create_time);
@@ -44,12 +44,12 @@ public class AdminDao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("admin.listByApp_idAndSystem_create_timeAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_admin", "listByApp_idAndSystem_create_timeAndLimit", sqlPara, request_user_id);
+        logSql("admin", "listByApp_idAndSystem_create_timeAndLimit", sqlPara);
 
         return new Admin().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Admin> listByApp_idOrLikeUser_nameAndLimit(String app_id, String user_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<Admin> listByApp_idOrLikeUser_nameAndLimit(String app_id, String user_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Admin.APP_ID, app_id);
         sqlMap.put(User.USER_NAME, user_name);
@@ -57,12 +57,12 @@ public class AdminDao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("admin.listByApp_idOrLikeUser_nameAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_admin", "listByApp_idOrLikeUser_nameAndLimit", sqlPara, request_user_id);
+        logSql("admin", "listByApp_idOrLikeUser_nameAndLimit", sqlPara);
 
         return new Admin().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Admin> listByOrApp_idOrLikeUser_nameAndLimit(String app_id, String user_name, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<Admin> listByOrApp_idOrLikeUser_nameAndLimit(String app_id, String user_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Admin.APP_ID, app_id);
         sqlMap.put(User.USER_NAME, user_name);
@@ -70,17 +70,17 @@ public class AdminDao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("admin.listByOrApp_idOrLikeUser_nameAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_admin", "listByOrApp_idOrLikeUser_nameAndLimit", sqlPara, request_user_id);
+        logSql("admin", "listByOrApp_idOrLikeUser_nameAndLimit", sqlPara);
 
         return new Admin().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public Admin findByAdmin_id(String admin_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Admin findByAdmin_id(String admin_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Admin.ADMIN_ID, admin_id);
         SqlPara sqlPara = Db.getSqlPara("admin.findByAdmin_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_admin", "findByAdmin_id", sqlPara, request_user_id);
+        logSql("admin", "findByAdmin_id", sqlPara);
 
         List<Admin> adminList = new Admin().find(sqlPara.getSql(), sqlPara.getPara());
         if (adminList.size() == 0) {
@@ -90,7 +90,7 @@ public class AdminDao extends Dao {
         }
     }
 
-    public Boolean save(String admin_id, String app_id, String user_id, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean save(String admin_id, String app_id, String user_id, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Admin.ADMIN_ID, admin_id);
         sqlMap.put(Admin.APP_ID, app_id);
@@ -103,12 +103,12 @@ public class AdminDao extends Dao {
         sqlMap.put(Admin.SYSTEM_STATUS, true);
         SqlPara sqlPara = Db.getSqlPara("admin.save", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_admin", "save", sqlPara, request_user_id);
+        logSql("admin", "save", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String admin_id, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean update(String admin_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Admin.ADMIN_ID, admin_id);
         sqlMap.put(Admin.SYSTEM_UPDATE_USER_ID, system_update_user_id);
@@ -116,12 +116,12 @@ public class AdminDao extends Dao {
         sqlMap.put(Admin.SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("admin.update", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_admin", "update", sqlPara, request_user_id);
+        logSql("admin", "update", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean deleteByAdmin_idAndSystem_version(String admin_id, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean deleteByAdmin_idAndSystem_version(String admin_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Admin.ADMIN_ID, admin_id);
         sqlMap.put(Admin.SYSTEM_UPDATE_USER_ID, system_update_user_id);
@@ -129,7 +129,7 @@ public class AdminDao extends Dao {
         sqlMap.put(Admin.SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("admin.deleteByAdmin_idAndSystem_version", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_admin", "deleteByAdmin_idAndSystem_version", sqlPara, request_user_id);
+        logSql("admin", "deleteByAdmin_idAndSystem_version", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }

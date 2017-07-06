@@ -20,12 +20,10 @@ public class MenuController extends Controller {
 
         Menu model = getModel(Menu.class);
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<Map<String, Object>> resultList = menuService.treeByApp_idOrLikeMenu_name(request_app_id, model.getMenu_name(), request_app_id, request_http_id, request_user_id);
+        List<Map<String, Object>> resultList = menuService.treeByApp_idOrLikeMenu_name(request_app_id, model.getMenu_name());
 
         renderSuccessJson(resultList);
     }
@@ -36,13 +34,10 @@ public class MenuController extends Controller {
         validate(Menu.MENU_ID);
 
         Menu model = getModel(Menu.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Menu menu = menuService.findByMenu_id(model.getMenu_id(), request_app_id, request_http_id, request_user_id);
+        Menu menu = menuService.findByMenu_id(model.getMenu_id());
 
         authenticateApp_id(menu.getApp_id());
 
@@ -59,12 +54,11 @@ public class MenuController extends Controller {
         Menu model = getModel(Menu.class);
         String menu_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = menuService.save(menu_id, request_app_id, model.getMenu_parent_id(), model.getMenu_name(), model.getMenu_image(), model.getMenu_url(), model.getMenu_sort(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = menuService.save(menu_id, request_app_id, model.getMenu_parent_id(), model.getMenu_name(), model.getMenu_image(), model.getMenu_url(), model.getMenu_sort(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -75,17 +69,15 @@ public class MenuController extends Controller {
         validate(Menu.MENU_ID, Menu.MENU_PARENT_ID, Menu.MENU_NAME, Menu.MENU_IMAGE, Menu.MENU_URL, Menu.MENU_SORT, Menu.SYSTEM_VERSION);
 
         Menu model = getModel(Menu.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Menu menu = menuService.findByMenu_id(model.getMenu_id(), request_app_id, request_http_id, request_user_id);
+        Menu menu = menuService.findByMenu_id(model.getMenu_id());
 
         authenticateApp_id(menu.getApp_id());
 
-        Boolean result = menuService.updateValidateSystem_version(model.getMenu_id(), model.getMenu_parent_id(), model.getMenu_name(), model.getMenu_image(), model.getMenu_url(), model.getMenu_sort(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = menuService.updateValidateSystem_version(model.getMenu_id(), model.getMenu_parent_id(), model.getMenu_name(), model.getMenu_image(), model.getMenu_url(), model.getMenu_sort(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -96,17 +88,15 @@ public class MenuController extends Controller {
         validate(Menu.MENU_ID, Menu.SYSTEM_VERSION);
 
         Menu model = getModel(Menu.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Menu menu = menuService.findByMenu_id(model.getMenu_id(), request_app_id, request_http_id, request_user_id);
+        Menu menu = menuService.findByMenu_id(model.getMenu_id());
 
         authenticateApp_id(menu.getApp_id());
 
-        Boolean result = menuService.deleteByMenu_idAndSystem_update_user_idValidateSystem_version(model.getMenu_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = menuService.deleteByMenu_idAndSystem_update_user_idValidateSystem_version(model.getMenu_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -117,11 +107,8 @@ public class MenuController extends Controller {
         validate(Menu.APP_ID, Menu.MENU_NAME);
 
         Menu model = getModel(Menu.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        List<Map<String, Object>>  resultList = menuService.treeByOrApp_idOrLikeMenu_name(model.getApp_id(), model.getMenu_name(), request_app_id, request_http_id, request_user_id);
+        List<Map<String, Object>>  resultList = menuService.treeByOrApp_idOrLikeMenu_name(model.getApp_id(), model.getMenu_name());
 
         renderSuccessJson(resultList);
     }
@@ -132,11 +119,8 @@ public class MenuController extends Controller {
         validate(Menu.MENU_ID);
 
         Menu model = getModel(Menu.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        Menu menu = menuService.findByMenu_id(model.getMenu_id(), request_app_id, request_http_id, request_user_id);
+        Menu menu = menuService.findByMenu_id(model.getMenu_id());
 
         menu.keep(Menu.MENU_ID, Menu.MENU_NAME, Menu.MENU_IMAGE, Menu.MENU_URL, Menu.MENU_SORT, Menu.MENU_PARENT_ID, Menu.SYSTEM_VERSION);
 
@@ -150,11 +134,9 @@ public class MenuController extends Controller {
 
         Menu model = getModel(Menu.class);
         String menu_id = Util.getRandomUUID();
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = menuService.save(menu_id, model.getApp_id(), model.getMenu_parent_id(), model.getMenu_name(), model.getMenu_image(), model.getMenu_url(), model.getMenu_sort(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = menuService.save(menu_id, model.getApp_id(), model.getMenu_parent_id(), model.getMenu_name(), model.getMenu_image(), model.getMenu_url(), model.getMenu_sort(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -165,11 +147,9 @@ public class MenuController extends Controller {
         validate(Menu.MENU_ID, Menu.MENU_PARENT_ID, Menu.MENU_NAME, Menu.MENU_IMAGE, Menu.MENU_URL, Menu.MENU_SORT, Menu.SYSTEM_VERSION);
 
         Menu model = getModel(Menu.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = menuService.updateValidateSystem_version(model.getMenu_id(), model.getMenu_parent_id(), model.getMenu_name(), model.getMenu_image(), model.getMenu_url(), model.getMenu_sort(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = menuService.updateValidateSystem_version(model.getMenu_id(), model.getMenu_parent_id(), model.getMenu_name(), model.getMenu_image(), model.getMenu_url(), model.getMenu_sort(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -180,11 +160,9 @@ public class MenuController extends Controller {
         validate(Menu.MENU_ID, Menu.SYSTEM_VERSION);
 
         Menu model = getModel(Menu.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = menuService.deleteByMenu_idAndSystem_update_user_idValidateSystem_version(model.getMenu_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = menuService.deleteByMenu_idAndSystem_update_user_idValidateSystem_version(model.getMenu_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

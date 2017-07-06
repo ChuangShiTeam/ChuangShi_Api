@@ -11,7 +11,7 @@ import java.util.List;
 
 public class CategoryDao extends Dao {
 
-    public Integer countByApp_idAndParent_idOrLikeCategory_nameOrCategory_type(String app_id, String parent_id, String category_name, String category_type, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByApp_idAndParent_idOrLikeCategory_nameOrCategory_type(String app_id, String parent_id, String category_name, String category_type) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.APP_ID, app_id);
         sqlMap.put(Category.PARENT_ID, parent_id);
@@ -19,13 +19,13 @@ public class CategoryDao extends Dao {
         sqlMap.put(Category.CATEGORY_TYPE, category_type);
         SqlPara sqlPara = Db.getSqlPara("category.countByApp_idAndParent_idOrLikeCategory_nameOrCategory_type", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "countByApp_idAndParent_idOrLikeCategory_nameOrCategory_type", sqlPara, request_user_id);
+        logSql("category", "countByApp_idAndParent_idOrLikeCategory_nameOrCategory_type", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_type(String app_id, String parent_id, String category_name, String category_type, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_type(String app_id, String parent_id, String category_name, String category_type) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.APP_ID, app_id);
         sqlMap.put(Category.PARENT_ID, parent_id);
@@ -33,13 +33,13 @@ public class CategoryDao extends Dao {
         sqlMap.put(Category.CATEGORY_TYPE, category_type);
         SqlPara sqlPara = Db.getSqlPara("category.countByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_type", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "countByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_type", sqlPara, request_user_id);
+        logSql("category", "countByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_type", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByApp_idAndNotParent_idOrLikeCategory_nameAndCategory_type(String app_id, String parent_id, String category_name, String category_type, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByApp_idAndNotParent_idOrLikeCategory_nameAndCategory_type(String app_id, String parent_id, String category_name, String category_type) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.APP_ID, app_id);
         sqlMap.put(Category.PARENT_ID, parent_id);
@@ -47,13 +47,13 @@ public class CategoryDao extends Dao {
         sqlMap.put(Category.CATEGORY_TYPE, category_type);
         SqlPara sqlPara = Db.getSqlPara("category.countByApp_idAndNotParent_idOrLikeCategory_nameAndCategory_type", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "countByApp_idAndNotParent_idOrLikeCategory_nameAndCategory_type", sqlPara, request_user_id);
+        logSql("category", "countByApp_idAndNotParent_idOrLikeCategory_nameAndCategory_type", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_idAndNotParent_idOrLikeCategory_nameAndCategory_type(String app_id, String parent_id, String category_name, String category_type, String request_app_id, String request_http_id, String request_user_id) {
+    public Integer countByOrApp_idAndNotParent_idOrLikeCategory_nameAndCategory_type(String app_id, String parent_id, String category_name, String category_type) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.APP_ID, app_id);
         sqlMap.put(Category.PARENT_ID, parent_id);
@@ -61,13 +61,13 @@ public class CategoryDao extends Dao {
         sqlMap.put(Category.CATEGORY_TYPE, category_type);
         SqlPara sqlPara = Db.getSqlPara("category.countByOrApp_idAndNotParent_idOrLikeCategory_nameAndCategory_type", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "countByOrApp_idAndNotParent_idOrLikeCategory_nameAndCategory_type", sqlPara, request_user_id);
+        logSql("category", "countByOrApp_idAndNotParent_idOrLikeCategory_nameAndCategory_type", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public List<Category> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<Category> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.APP_ID, app_id);
         sqlMap.put(Category.SYSTEM_CREATE_TIME, system_create_time);
@@ -75,12 +75,12 @@ public class CategoryDao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("category.listByApp_idAndSystem_create_timeAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "listByApp_idAndSystem_create_timeAndLimit", sqlPara, request_user_id);
+        logSql("category", "listByApp_idAndSystem_create_timeAndLimit", sqlPara);
 
         return new Category().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Category> listByApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit(String app_id, String parent_id, String category_name, String category_type, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<Category> listByApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit(String app_id, String parent_id, String category_name, String category_type, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.APP_ID, app_id);
         sqlMap.put(Category.PARENT_ID, parent_id);
@@ -90,24 +90,24 @@ public class CategoryDao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("category.listByApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "listByApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit", sqlPara, request_user_id);
+        logSql("category", "listByApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit", sqlPara);
 
         return new Category().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Category> listByOrApp_idAndLimit(String app_id, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<Category> listByOrApp_idAndLimit(String app_id, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.APP_ID, app_id);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("category.listByOrApp_idAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "listByOrApp_idAndLimit", sqlPara, request_user_id);
+        logSql("category", "listByOrApp_idAndLimit", sqlPara);
 
         return new Category().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Category> listByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit(String app_id, String parent_id, String category_name, String category_type, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<Category> listByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit(String app_id, String parent_id, String category_name, String category_type, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.APP_ID, app_id);
         sqlMap.put(Category.PARENT_ID, parent_id);
@@ -117,12 +117,12 @@ public class CategoryDao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("category.listByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "listByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit", sqlPara, request_user_id);
+        logSql("category", "listByOrApp_idAndParent_idOrLikeCategory_nameOrCategory_typeAndLimit", sqlPara);
 
         return new Category().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Category> listByApp_idAndNotParent_idOrLikeCategory_nameAndCategory_typeAndLimit(String app_id, String parent_id, String category_name, String category_type, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<Category> listByApp_idAndNotParent_idOrLikeCategory_nameAndCategory_typeAndLimit(String app_id, String parent_id, String category_name, String category_type, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.APP_ID, app_id);
         sqlMap.put(Category.PARENT_ID, parent_id);
@@ -132,12 +132,12 @@ public class CategoryDao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("category.listByApp_idAndNotParent_idOrLikeCategory_nameAndCategory_typeAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "listByApp_idAndNotParent_idOrLikeCategory_nameAndCategory_typeAndLimit", sqlPara, request_user_id);
+        logSql("category", "listByApp_idAndNotParent_idOrLikeCategory_nameAndCategory_typeAndLimit", sqlPara);
 
         return new Category().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Category> listByOrApp_idAndNotParent_idOrLikeCategory_nameAndCategory_typeAndLimit(String app_id, String parent_id, String category_name, String category_type, int m, int n, String request_app_id, String request_http_id, String request_user_id) {
+    public List<Category> listByOrApp_idAndNotParent_idOrLikeCategory_nameAndCategory_typeAndLimit(String app_id, String parent_id, String category_name, String category_type, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.APP_ID, app_id);
         sqlMap.put(Category.PARENT_ID, parent_id);
@@ -147,27 +147,27 @@ public class CategoryDao extends Dao {
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("category.listByOrApp_idAndNotParent_idOrLikeCategory_nameAndCategory_typeAndLimit", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "listByOrApp_idAndNotParent_idOrLikeCategory_nameAndCategory_typeAndLimit", sqlPara, request_user_id);
+        logSql("category", "listByOrApp_idAndNotParent_idOrLikeCategory_nameAndCategory_typeAndLimit", sqlPara);
 
         return new Category().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Category> treeByParent_id(String parent_id, String request_app_id, String request_http_id, String request_user_id) {
+    public List<Category> treeByParent_id(String parent_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.PARENT_ID, parent_id);
         SqlPara sqlPara = Db.getSqlPara("category.treeByParent_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "treeByParent_id", sqlPara, request_user_id);
+        logSql("category", "treeByParent_id", sqlPara);
 
         return new Category().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public Category findByCategory_id(String category_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Category findByCategory_id(String category_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.CATEGORY_ID, category_id);
         SqlPara sqlPara = Db.getSqlPara("category.findByCategory_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "findByCategory_id", sqlPara, request_user_id);
+        logSql("category", "findByCategory_id", sqlPara);
 
         List<Category> categoryList = new Category().find(sqlPara.getSql(), sqlPara.getPara());
         if (categoryList.size() == 0) {
@@ -177,7 +177,7 @@ public class CategoryDao extends Dao {
         }
     }
 
-    public Boolean save(String category_id, String app_id, String parent_id, String category_name, String category_image, String category_key, String category_value, String category_path, Integer category_sort, String category_type, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean save(String category_id, String app_id, String parent_id, String category_name, String category_image, String category_key, String category_value, String category_path, Integer category_sort, String category_type, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.CATEGORY_ID, category_id);
         sqlMap.put(Category.APP_ID, app_id);
@@ -197,12 +197,12 @@ public class CategoryDao extends Dao {
         sqlMap.put(Category.SYSTEM_STATUS, true);
         SqlPara sqlPara = Db.getSqlPara("category.save", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "save", sqlPara, request_user_id);
+        logSql("category", "save", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String category_id, String parent_id, String category_name, String category_image, String category_key, String category_value, String category_path, Integer category_sort, String category_type, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean update(String category_id, String parent_id, String category_name, String category_image, String category_key, String category_value, String category_path, Integer category_sort, String category_type, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.CATEGORY_ID, category_id);
         sqlMap.put(Category.PARENT_ID, parent_id);
@@ -218,12 +218,12 @@ public class CategoryDao extends Dao {
         sqlMap.put(Category.SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("category.update", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "update", sqlPara, request_user_id);
+        logSql("category", "update", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean deleteByCategory_idAndSystem_version(String category_id, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean deleteByCategory_idAndSystem_version(String category_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.CATEGORY_ID, category_id);
         sqlMap.put(Category.SYSTEM_UPDATE_USER_ID, system_update_user_id);
@@ -231,19 +231,19 @@ public class CategoryDao extends Dao {
         sqlMap.put(Category.SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("category.deleteByCategory_idAndSystem_version", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "deleteByCategory_idAndSystem_version", sqlPara, request_user_id);
+        logSql("category", "deleteByCategory_idAndSystem_version", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean deleteByParent_id(String parent_id, String system_update_user_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean deleteByParent_id(String parent_id, String system_update_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Category.PARENT_ID, parent_id);
         sqlMap.put(Category.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(Category.SYSTEM_UPDATE_TIME, new Date());
         SqlPara sqlPara = Db.getSqlPara("category.deleteByParent_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_category", "deleteByParent_id", sqlPara, request_user_id);
+        logSql("category", "deleteByParent_id", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }

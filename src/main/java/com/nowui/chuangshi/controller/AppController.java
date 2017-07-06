@@ -21,13 +21,11 @@ public class AppController extends Controller {
         validate(Constant.PAGE_SIZE, Constant.FIRST_CREATE_TIME, Constant.LAST_CREATE_TIME);
 
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<App> resultList = appService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN(), request_app_id, request_http_id, request_user_id);
+        List<App> resultList = appService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
 
         for (App result : resultList) {
             result.keep(App.APP_ID, App.SYSTEM_VERSION);
@@ -42,13 +40,10 @@ public class AppController extends Controller {
         validate(App.APP_ID);
 
         App model = getModel(App.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        App app = appService.findByApp_id(model.getApp_id(), request_app_id, request_http_id, request_user_id);
+        App app = appService.findByApp_id(model.getApp_id());
 
         authenticateApp_id(app.getApp_id());
         authenticateSystem_create_user_id(app.getSystem_create_user_id());
@@ -65,13 +60,11 @@ public class AppController extends Controller {
 
         App model = getModel(App.class);
         String app_id = Util.getRandomUUID();
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = appService.save(app_id, model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = appService.save(app_id, model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -82,18 +75,16 @@ public class AppController extends Controller {
         validate(App.APP_NAME, App.APP_SECRET, App.SYSTEM_VERSION);
 
         App model = getModel(App.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        App app = appService.findByApp_id(model.getApp_id(), request_app_id, request_http_id, request_user_id);
+        App app = appService.findByApp_id(model.getApp_id());
 
         authenticateApp_id(app.getApp_id());
         authenticateSystem_create_user_id(app.getSystem_create_user_id());
 
-        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -104,18 +95,16 @@ public class AppController extends Controller {
         validate(App.APP_ID, App.SYSTEM_VERSION);
 
         App model = getModel(App.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        App app = appService.findByApp_id(model.getApp_id(), request_app_id, request_http_id, request_user_id);
+        App app = appService.findByApp_id(model.getApp_id());
 
         authenticateApp_id(app.getApp_id());
         authenticateSystem_create_user_id(app.getSystem_create_user_id());
 
-        Boolean result = appService.deleteByApp_idAndSystem_update_user_idValidateSystem_version(model.getApp_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = appService.deleteByApp_idAndSystem_update_user_idValidateSystem_version(model.getApp_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -127,13 +116,11 @@ public class AppController extends Controller {
 
         App model = getModel(App.class);
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = appService.countByApp_idOrLikeApp_name(request_app_id, model.getApp_name(), request_app_id, request_http_id, request_user_id);
-        List<App> resultList = appService.listByApp_idOrLikeApp_nameAndLimit(request_app_id, model.getApp_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = appService.countByApp_idOrLikeApp_name(request_app_id, model.getApp_name());
+        List<App> resultList = appService.listByApp_idOrLikeApp_nameAndLimit(request_app_id, model.getApp_name(), getM(), getN());
 
         for (App result : resultList) {
             result.keep(App.APP_ID, App.APP_NAME, App.SYSTEM_VERSION);
@@ -147,12 +134,10 @@ public class AppController extends Controller {
         validateRequest_app_id();
 
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        App app = appService.findByApp_id(request_app_id, request_app_id, request_http_id, request_user_id);
+        App app = appService.findByApp_id(request_app_id);
         app.keep(App.APP_ID, App.APP_NAME);
 
         List<App> resultList = new ArrayList<App>();
@@ -167,13 +152,10 @@ public class AppController extends Controller {
         validate(App.APP_ID);
 
         App model = getModel(App.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        App app = appService.findByApp_id(model.getApp_id(), request_app_id, request_http_id, request_user_id);
+        App app = appService.findByApp_id(model.getApp_id());
 
         authenticateApp_id(app.getApp_id());
 
@@ -193,17 +175,15 @@ public class AppController extends Controller {
         validate(App.SYSTEM_VERSION);
 
         App model = getModel(App.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        App app = appService.findByApp_id(model.getApp_id(), request_app_id, request_http_id, request_user_id);
+        App app = appService.findByApp_id(model.getApp_id());
 
         authenticateApp_id(app.getApp_id());
 
-        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -214,17 +194,15 @@ public class AppController extends Controller {
         validate(App.APP_ID, App.SYSTEM_VERSION);
 
         App model = getModel(App.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        App app = appService.findByApp_id(model.getApp_id(), request_app_id, request_http_id, request_user_id);
+        App app = appService.findByApp_id(model.getApp_id());
 
         authenticateApp_id(app.getApp_id());
 
-        Boolean result = appService.deleteByApp_idAndSystem_update_user_idValidateSystem_version(model.getApp_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = appService.deleteByApp_idAndSystem_update_user_idValidateSystem_version(model.getApp_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -235,12 +213,9 @@ public class AppController extends Controller {
         validate(App.APP_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         App model = getModel(App.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        Integer total = appService.countByOrApp_idOrLikeApp_name(model.getApp_id(), model.getApp_name(), request_app_id, request_http_id, request_user_id);
-        List<App> resultList = appService.listByOrApp_idOrLikeApp_nameAndLimit(model.getApp_id(), model.getApp_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = appService.countByOrApp_idOrLikeApp_name(model.getApp_id(), model.getApp_name());
+        List<App> resultList = appService.listByOrApp_idOrLikeApp_nameAndLimit(model.getApp_id(), model.getApp_name(), getM(), getN());
 
         for (App result : resultList) {
             result.keep(App.APP_ID, App.APP_NAME, App.SYSTEM_VERSION);
@@ -272,11 +247,8 @@ public class AppController extends Controller {
         validate(App.APP_ID);
 
         App model = getModel(App.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        App app = appService.findByApp_id(model.getApp_id(), request_app_id, request_http_id, request_user_id);
+        App app = appService.findByApp_id(model.getApp_id());
 
         app.keep(App.APP_ID, App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.SYSTEM_VERSION);
 
@@ -294,11 +266,9 @@ public class AppController extends Controller {
         validate(App.SYSTEM_VERSION);
 
         App model = getModel(App.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -309,11 +279,9 @@ public class AppController extends Controller {
         validate(App.APP_ID, App.SYSTEM_VERSION);
 
         App model = getModel(App.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = appService.deleteByApp_idAndSystem_update_user_idValidateSystem_version(model.getApp_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = appService.deleteByApp_idAndSystem_update_user_idValidateSystem_version(model.getApp_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

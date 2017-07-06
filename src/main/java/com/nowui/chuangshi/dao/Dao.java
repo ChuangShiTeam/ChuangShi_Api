@@ -11,14 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Dao {
-    protected void logSql(String app_id, String http_id, String sql_table, String sql_action, SqlPara sqlPara, String system_create_user_id) {
+    protected void logSql(String sql_table, String sql_action, SqlPara sqlPara) {
         Map<String, Object> mqMap = new HashMap<String, Object>();
-        mqMap.put(Sql.APP_ID, app_id);
-        mqMap.put(Sql.HTTP_ID, http_id);
+        mqMap.put(Sql.APP_ID, "");
+        mqMap.put(Sql.HTTP_ID, "");
         mqMap.put(Sql.SQL_TABLE, sql_table);
         mqMap.put(Sql.SQL_ACTION, sql_action);
         mqMap.put(Sql.SQL_CONTENT, getSql(sqlPara.getSql(), sqlPara.getPara()));
-        mqMap.put(Sql.SYSTEM_CREATE_USER_ID, system_create_user_id);
+        mqMap.put(Sql.SYSTEM_CREATE_USER_ID, "");
         MQUtil.sendSync("sql", JSON.toJSONString(mqMap));
     }
 
@@ -28,7 +28,9 @@ public class Dao {
         if (null != params) {
             paramNum = params.length;
         }
-        if (1 > paramNum) return sql;
+        if (1 > paramNum) {
+            return sql;
+        }
         //2 如果有参数，则是动态SQL语句
         StringBuffer returnSQL = new StringBuffer();
         String[] subSQL = sql.split("\\?");

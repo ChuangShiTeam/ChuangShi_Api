@@ -13,7 +13,17 @@ import java.util.List;
 
 public class ProductSkuPriceDao extends Dao {
 
-    public Boolean save(List<ProductSkuPrice> productSkuPriceList, String request_app_id, String request_http_id, String request_user_id) {
+    public List<ProductSkuPrice> listByProduct_sku_id(String product_sku_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id);
+        SqlPara sqlPara = Db.getSqlPara("product_sku_price.listByProduct_sku_id", sqlMap);
+
+        logSql("product_sku_price", "listByProduct_sku_id", sqlPara);
+
+        return new ProductSkuPrice().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+
+    public Boolean save(List<ProductSkuPrice> productSkuPriceList, String system_create_user_id) {
         if (productSkuPriceList.size() == 0) {
             return false;
         }
@@ -28,9 +38,9 @@ public class ProductSkuPriceDao extends Dao {
             objectList.add(productSkuPrice.getMember_level_id());
             objectList.add(productSkuPrice.getMember_level_name());
             objectList.add(productSkuPrice.getProduct_sku_price());
-            objectList.add(request_user_id);
+            objectList.add(system_create_user_id);
             objectList.add(new Date());
-            objectList.add(request_user_id);
+            objectList.add(system_create_user_id);
             objectList.add(new Date());
             objectList.add(0);
             objectList.add(true);
@@ -45,30 +55,25 @@ public class ProductSkuPriceDao extends Dao {
             }
         }
 
-        logSql(request_app_id, request_http_id, "table_product_sku_price", "save", sqlPara, request_user_id);
+        logSql("product_sku_price", "save", sqlPara);
 
-        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+        return true;
     }
 
-    public Boolean update(List<ProductSkuPrice> productSkuPriceList, String request_app_id, String request_http_id, String request_user_id) {
-        if (productSkuPriceList.size() == 0) {
+    public Boolean delete(List<String> productSkuIdList, String system_update_user_id) {
+        if (productSkuIdList.size() == 0) {
             return false;
         }
 
         Kv map = Kv.create();
-        SqlPara sqlPara = Db.getSqlPara("product_sku_price.update", map);
+        SqlPara sqlPara = Db.getSqlPara("product_sku_price.delete", map);
 
         List<Object[]> parameterList = new ArrayList<Object[]>();
-        for(ProductSkuPrice productSkuPrice : productSkuPriceList) {
+        for(String product_sku_id : productSkuIdList) {
             List<Object> objectList = new ArrayList<Object>();
-            objectList.add(productSkuPrice.getMember_level_name());
-            objectList.add(productSkuPrice.getProduct_sku_price());
-            objectList.add(request_user_id);
+            objectList.add(system_update_user_id);
             objectList.add(new Date());
-            objectList.add(request_user_id);
-            objectList.add(new Date());
-            objectList.add(productSkuPrice.getProduct_sku_id());
-            objectList.add(productSkuPrice.getMember_level_id());
+            objectList.add(product_sku_id);
             parameterList.add(objectList.toArray());
         }
 
@@ -76,46 +81,13 @@ public class ProductSkuPriceDao extends Dao {
 
         for (int i : result) {
             if (i == 0) {
-                throw new RuntimeException("SKU价格保存不成功");
+                throw new RuntimeException("SKU价格删除不成功");
             }
         }
 
-        logSql(request_app_id, request_http_id, "table_product_sku_price", "update", sqlPara, request_user_id);
+        logSql("product_sku_price", "delete", sqlPara);
 
-        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
-    }
-
-    public Boolean deleteByProduct_sku_idAndMember_level_id(List<ProductSkuPrice> productSkuPriceList, String request_app_id, String request_http_id, String request_user_id) {
-        if (productSkuPriceList.size() == 0) {
-            return false;
-        }
-
-        Kv map = Kv.create();
-        SqlPara sqlPara = Db.getSqlPara("product_sku_price.deleteByProduct_sku_idAndMember_level_id", map);
-
-        List<Object[]> parameterList = new ArrayList<Object[]>();
-        for(ProductSkuPrice productSkuPrice : productSkuPriceList) {
-            List<Object> objectList = new ArrayList<Object>();
-            objectList.add(request_user_id);
-            objectList.add(new Date());
-            objectList.add(request_user_id);
-            objectList.add(new Date());
-            objectList.add(productSkuPrice.getProduct_sku_id());
-            objectList.add(productSkuPrice.getMember_level_id());
-            parameterList.add(objectList.toArray());
-        }
-
-        int[] result = Db.batch(sqlPara.getSql(), Util.getObjectArray(parameterList), Constant.BATCH_SIZE);
-
-        for (int i : result) {
-            if (i == 0) {
-                throw new RuntimeException("SKU价格保存不成功");
-            }
-        }
-
-        logSql(request_app_id, request_http_id, "table_product_sku_price", "deleteByProduct_sku_idAndMember_level_id", sqlPara, request_user_id);
-
-        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+        return true;
     }
 
 }

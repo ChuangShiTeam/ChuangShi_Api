@@ -36,10 +36,8 @@ public class GuangqiController extends Controller {
         validateRequest_app_id();
 
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        App app = appService.findByApp_id(request_app_id, request_app_id, request_http_id, request_user_id);
+        App app = appService.findByApp_id(request_app_id);
 
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
@@ -69,22 +67,20 @@ public class GuangqiController extends Controller {
 
         GuangqiCustomer model = getModel(GuangqiCustomer.class);
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        GuangqiCustomer customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        GuangqiCustomer customer = guangqiCustomerService.findByCustomer_id(model.getCustomer_id());
         if (customer == null) {
             throw new RuntimeException("没有权限抽奖");
         }
 
-        Integer customerCount = guangqiCustomerPrizeService.countByApp_idAndCustomer_id(request_app_id, customer.getCustomer_id(), request_app_id, request_http_id, request_user_id);
+        Integer customerCount = guangqiCustomerPrizeService.countByApp_idAndCustomer_id(request_app_id, customer.getCustomer_id());
         if (customerCount > 0) {
             throw new RuntimeException("重复抽奖啦");
         }
 
         Integer total = 0;
         GuangqiPrize defaultPrize = null;
-        List<GuangqiPrize> guangqiPrizeList = guangqiPrizeService.listByApp_id(request_app_id, request_app_id, request_http_id, request_user_id);
+        List<GuangqiPrize> guangqiPrizeList = guangqiPrizeService.listByApp_id(request_app_id);
         for (GuangqiPrize guangqiPrize : guangqiPrizeList) {
             if (guangqiPrize.getPrize_is_default()) {
                 defaultPrize = guangqiPrize;
@@ -113,7 +109,7 @@ public class GuangqiController extends Controller {
         }
 
         Boolean isSave = true;
-        Integer totalCount = guangqiCustomerPrizeService.countByApp_idAndPrize_id(request_app_id, prize.getPrize_id(), request_app_id, request_http_id, request_user_id);
+        Integer totalCount = guangqiCustomerPrizeService.countByApp_idAndPrize_id(request_app_id, prize.getPrize_id());
         if (totalCount >= prize.getPrize_quantity()) {
             isSave = false;
         }
@@ -122,7 +118,7 @@ public class GuangqiController extends Controller {
 
         Integer dayCount = 0;
         if (isSave) {
-            dayCount = guangqiCustomerPrizeService.countByApp_idAndPrize_idAndCustomer_prize_date(request_app_id, prize.getPrize_id(), DateUtil.getDateString(new Date()), request_app_id, request_http_id, request_user_id);
+            dayCount = guangqiCustomerPrizeService.countByApp_idAndPrize_idAndCustomer_prize_date(request_app_id, prize.getPrize_id(), DateUtil.getDateString(new Date()));
             if (dayCount >= prize.getPrize_limit()) {
                 isSave = false;
             }
@@ -135,7 +131,7 @@ public class GuangqiController extends Controller {
         String customer_prize_id = Util.getRandomUUID();
         String customer_prize_date = DateUtil.getDateString(new Date());
         String system_create_user_id = "";
-        Boolean result = guangqiCustomerPrizeService.save(customer_prize_id, request_app_id, customer.getCustomer_id(), prize.getPrize_id(), customer_prize_date, system_create_user_id, prize.getPrize_quantity(), prize.getPrize_limit(), request_app_id, request_http_id, request_user_id);
+        Boolean result = guangqiCustomerPrizeService.save(customer_prize_id, request_app_id, customer.getCustomer_id(), prize.getPrize_id(), customer_prize_date, system_create_user_id, prize.getPrize_quantity(), prize.getPrize_limit());
 
         if (!result) {
             throw new RuntimeException("抽奖不成功");
@@ -146,11 +142,7 @@ public class GuangqiController extends Controller {
 
     @ActionKey(Url.GUANGQI_EXPORT)
     public void export() {
-        String request_app_id = "b0f1cf1b4705403ea4e2567c7d860f33";
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
-
-        List<GuangqiCustomerPrize> guangqiCustomerPrizeList = guangqiCustomerPrizeService.listByApp_id("b0f1cf1b4705403ea4e2567c7d860f33", request_app_id, request_http_id, request_user_id);
+        List<GuangqiCustomerPrize> guangqiCustomerPrizeList = guangqiCustomerPrizeService.listByApp_id("b0f1cf1b4705403ea4e2567c7d860f33");
 
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFCellStyle style = wb.createCellStyle();
@@ -184,8 +176,8 @@ public class GuangqiController extends Controller {
         for (int i = 0; i < guangqiCustomerPrizeList.size(); i++) {
             GuangqiCustomerPrize guangqiCustomerPrize = guangqiCustomerPrizeList.get(i);
 
-            GuangqiCustomer guangqiCustomer = guangqiCustomerService.findByCustomer_id(guangqiCustomerPrize.getCustomer_id(), request_app_id, request_http_id, request_user_id);
-            GuangqiPrize guangqiPrize = guangqiPrizeService.findByPrize_id(guangqiCustomerPrize.getPrize_id(), request_app_id, request_http_id, request_user_id);
+            GuangqiCustomer guangqiCustomer = guangqiCustomerService.findByCustomer_id(guangqiCustomerPrize.getCustomer_id());
+            GuangqiPrize guangqiPrize = guangqiPrizeService.findByPrize_id(guangqiCustomerPrize.getPrize_id());
 
             row = sheet.createRow(i + 1);
             cell = row.createCell(0);

@@ -21,13 +21,11 @@ public class ProductBrandController extends Controller {
         validate(Constant.PAGE_SIZE, Constant.FIRST_CREATE_TIME, Constant.LAST_CREATE_TIME);
 
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<ProductBrand> resultList = productBrandService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN(), request_app_id, request_http_id, request_user_id);
+        List<ProductBrand> resultList = productBrandService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
 
         for (ProductBrand result : resultList) {
             result.keep(ProductBrand.PRODUCT_BRAND_ID, ProductBrand.SYSTEM_VERSION);
@@ -42,13 +40,10 @@ public class ProductBrandController extends Controller {
         validate(ProductBrand.PRODUCT_BRAND_ID);
 
         ProductBrand model = getModel(ProductBrand.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        ProductBrand product_brand = productBrandService.findByProduct_brand_id(model.getProduct_brand_id(), request_app_id, request_http_id, request_user_id);
+        ProductBrand product_brand = productBrandService.findByProduct_brand_id(model.getProduct_brand_id());
 
         authenticateApp_id(product_brand.getApp_id());
         authenticateSystem_create_user_id(product_brand.getSystem_create_user_id());
@@ -66,12 +61,11 @@ public class ProductBrandController extends Controller {
         ProductBrand model = getModel(ProductBrand.class);
         String product_brand_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = productBrandService.save(product_brand_id, request_app_id, model.getProduct_brand_name(), model.getProduct_brand_image(), model.getProduct_brand_content(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = productBrandService.save(product_brand_id, request_app_id, model.getProduct_brand_name(), model.getProduct_brand_image(), model.getProduct_brand_content(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -82,18 +76,16 @@ public class ProductBrandController extends Controller {
         validate(ProductBrand.PRODUCT_BRAND_ID, ProductBrand.PRODUCT_BRAND_NAME, ProductBrand.PRODUCT_BRAND_IMAGE, ProductBrand.PRODUCT_BRAND_CONTENT, ProductBrand.SYSTEM_VERSION);
 
         ProductBrand model = getModel(ProductBrand.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        ProductBrand product_brand = productBrandService.findByProduct_brand_id(model.getProduct_brand_id(), request_app_id, request_http_id, request_user_id);
+        ProductBrand product_brand = productBrandService.findByProduct_brand_id(model.getProduct_brand_id());
 
         authenticateApp_id(product_brand.getApp_id());
         authenticateSystem_create_user_id(product_brand.getSystem_create_user_id());
 
-        Boolean result = productBrandService.updateValidateSystem_version(model.getProduct_brand_id(), model.getProduct_brand_name(), model.getProduct_brand_image(), model.getProduct_brand_content(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = productBrandService.updateValidateSystem_version(model.getProduct_brand_id(), model.getProduct_brand_name(), model.getProduct_brand_image(), model.getProduct_brand_content(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -104,18 +96,16 @@ public class ProductBrandController extends Controller {
         validate(ProductBrand.PRODUCT_BRAND_ID, ProductBrand.SYSTEM_VERSION);
 
         ProductBrand model = getModel(ProductBrand.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        ProductBrand product_brand = productBrandService.findByProduct_brand_id(model.getProduct_brand_id(), request_app_id, request_http_id, request_user_id);
+        ProductBrand product_brand = productBrandService.findByProduct_brand_id(model.getProduct_brand_id());
 
         authenticateApp_id(product_brand.getApp_id());
         authenticateSystem_create_user_id(product_brand.getSystem_create_user_id());
 
-        Boolean result = productBrandService.deleteByProduct_brand_idAndSystem_update_user_idValidateSystem_version(model.getProduct_brand_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = productBrandService.deleteByProduct_brand_idAndSystem_update_user_idValidateSystem_version(model.getProduct_brand_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -127,13 +117,11 @@ public class ProductBrandController extends Controller {
 
         ProductBrand model = getModel(ProductBrand.class);
         String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = productBrandService.countByApp_idOrLikeProduct_brand_name(request_app_id, model.getProduct_brand_name(), request_app_id, request_http_id, request_user_id);
-        List<ProductBrand> resultList = productBrandService.listByApp_idOrLikeProduct_brand_nameAndLimit(request_app_id, model.getProduct_brand_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = productBrandService.countByApp_idOrLikeProduct_brand_name(request_app_id, model.getProduct_brand_name());
+        List<ProductBrand> resultList = productBrandService.listByApp_idOrLikeProduct_brand_nameAndLimit(request_app_id, model.getProduct_brand_name(), getM(), getN());
 
         for (ProductBrand result : resultList) {
             result.keep(ProductBrand.PRODUCT_BRAND_ID, ProductBrand.PRODUCT_BRAND_NAME, ProductBrand.SYSTEM_VERSION);
@@ -148,13 +136,10 @@ public class ProductBrandController extends Controller {
         validate(ProductBrand.PRODUCT_BRAND_ID);
 
         ProductBrand model = getModel(ProductBrand.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        ProductBrand product_brand = productBrandService.findByProduct_brand_id(model.getProduct_brand_id(), request_app_id, request_http_id, request_user_id);
+        ProductBrand product_brand = productBrandService.findByProduct_brand_id(model.getProduct_brand_id());
 
         authenticateApp_id(product_brand.getApp_id());
 
@@ -174,17 +159,15 @@ public class ProductBrandController extends Controller {
         validate(ProductBrand.PRODUCT_BRAND_ID, ProductBrand.PRODUCT_BRAND_NAME, ProductBrand.PRODUCT_BRAND_IMAGE, ProductBrand.PRODUCT_BRAND_CONTENT, ProductBrand.SYSTEM_VERSION);
 
         ProductBrand model = getModel(ProductBrand.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        ProductBrand product_brand = productBrandService.findByProduct_brand_id(model.getProduct_brand_id(), request_app_id, request_http_id, request_user_id);
+        ProductBrand product_brand = productBrandService.findByProduct_brand_id(model.getProduct_brand_id());
 
         authenticateApp_id(product_brand.getApp_id());
 
-        Boolean result = productBrandService.updateValidateSystem_version(model.getProduct_brand_id(), model.getProduct_brand_name(), model.getProduct_brand_image(), model.getProduct_brand_content(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = productBrandService.updateValidateSystem_version(model.getProduct_brand_id(), model.getProduct_brand_name(), model.getProduct_brand_image(), model.getProduct_brand_content(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -195,17 +178,15 @@ public class ProductBrandController extends Controller {
         validate(ProductBrand.PRODUCT_BRAND_ID, ProductBrand.SYSTEM_VERSION);
 
         ProductBrand model = getModel(ProductBrand.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        ProductBrand product_brand = productBrandService.findByProduct_brand_id(model.getProduct_brand_id(), request_app_id, request_http_id, request_user_id);
+        ProductBrand product_brand = productBrandService.findByProduct_brand_id(model.getProduct_brand_id());
 
         authenticateApp_id(product_brand.getApp_id());
 
-        Boolean result = productBrandService.deleteByProduct_brand_idAndSystem_update_user_idValidateSystem_version(model.getProduct_brand_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = productBrandService.deleteByProduct_brand_idAndSystem_update_user_idValidateSystem_version(model.getProduct_brand_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -216,12 +197,9 @@ public class ProductBrandController extends Controller {
         validate(ProductBrand.APP_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         ProductBrand model = getModel(ProductBrand.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        Integer total = productBrandService.countByOrApp_idOrLikeProduct_brand_name(model.getApp_id(), model.getProduct_brand_name(), request_app_id, request_http_id, request_user_id);
-        List<ProductBrand> resultList = productBrandService.listByOrApp_idOrLikeProduct_brand_nameAndLimit(model.getApp_id(), model.getProduct_brand_name(), getM(), getN(), request_app_id, request_http_id, request_user_id);
+        Integer total = productBrandService.countByOrApp_idOrLikeProduct_brand_name(model.getApp_id(), model.getProduct_brand_name());
+        List<ProductBrand> resultList = productBrandService.listByOrApp_idOrLikeProduct_brand_nameAndLimit(model.getApp_id(), model.getProduct_brand_name(), getM(), getN());
 
         for (ProductBrand result : resultList) {
             result.keep(ProductBrand.PRODUCT_BRAND_ID, ProductBrand.PRODUCT_BRAND_NAME, ProductBrand.SYSTEM_VERSION);
@@ -236,11 +214,8 @@ public class ProductBrandController extends Controller {
         validate(ProductBrand.PRODUCT_BRAND_ID);
 
         ProductBrand model = getModel(ProductBrand.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
 
-        ProductBrand product_brand = productBrandService.findByProduct_brand_id(model.getProduct_brand_id(), request_app_id, request_http_id, request_user_id);
+        ProductBrand product_brand = productBrandService.findByProduct_brand_id(model.getProduct_brand_id());
 
         product_brand.keep(ProductBrand.PRODUCT_BRAND_ID, ProductBrand.PRODUCT_BRAND_NAME, ProductBrand.PRODUCT_BRAND_IMAGE, ProductBrand.PRODUCT_BRAND_CONTENT, ProductBrand.SYSTEM_VERSION);
 
@@ -254,11 +229,9 @@ public class ProductBrandController extends Controller {
 
         ProductBrand model = getModel(ProductBrand.class);
         String product_brand_id = Util.getRandomUUID();
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = productBrandService.save(product_brand_id, model.getApp_id(), model.getProduct_brand_name(), model.getProduct_brand_image(), model.getProduct_brand_content(), request_user_id, request_app_id, request_http_id, request_user_id);
+        Boolean result = productBrandService.save(product_brand_id, model.getApp_id(), model.getProduct_brand_name(), model.getProduct_brand_image(), model.getProduct_brand_content(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -269,11 +242,9 @@ public class ProductBrandController extends Controller {
         validate(ProductBrand.PRODUCT_BRAND_ID, ProductBrand.PRODUCT_BRAND_NAME, ProductBrand.PRODUCT_BRAND_IMAGE, ProductBrand.PRODUCT_BRAND_CONTENT, ProductBrand.SYSTEM_VERSION);
 
         ProductBrand model = getModel(ProductBrand.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = productBrandService.updateValidateSystem_version(model.getProduct_brand_id(), model.getProduct_brand_name(), model.getProduct_brand_image(), model.getProduct_brand_content(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = productBrandService.updateValidateSystem_version(model.getProduct_brand_id(), model.getProduct_brand_name(), model.getProduct_brand_image(), model.getProduct_brand_content(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -284,11 +255,9 @@ public class ProductBrandController extends Controller {
         validate(ProductBrand.PRODUCT_BRAND_ID, ProductBrand.SYSTEM_VERSION);
 
         ProductBrand model = getModel(ProductBrand.class);
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = productBrandService.deleteByProduct_brand_idAndSystem_update_user_idValidateSystem_version(model.getProduct_brand_id(), request_user_id, model.getSystem_version(), request_app_id, request_http_id, request_user_id);
+        Boolean result = productBrandService.deleteByProduct_brand_idAndSystem_update_user_idValidateSystem_version(model.getProduct_brand_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

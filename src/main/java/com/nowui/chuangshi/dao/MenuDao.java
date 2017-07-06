@@ -10,54 +10,54 @@ import java.util.List;
 
 public class MenuDao extends Dao {
 
-    public List<Menu> listByApp_id(String app_id, String request_app_id, String request_http_id, String request_user_id) {
+    public List<Menu> listByApp_id(String app_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Menu.APP_ID, app_id);
         SqlPara sqlPara = Db.getSqlPara("menu.listByApp_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_menu", "listByApp_id", sqlPara, request_user_id);
+        logSql("menu", "listByApp_id", sqlPara);
 
         return new Menu().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Menu> listByLikeMenu_parent_id(String menu_parent_id, String request_app_id, String request_http_id, String request_user_id) {
+    public List<Menu> listByLikeMenu_parent_id(String menu_parent_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Menu.MENU_PARENT_ID, menu_parent_id);
         SqlPara sqlPara = Db.getSqlPara("menu.listByLikeMenu_parent_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_menu", "listByLikeMenu_parent_id", sqlPara, request_user_id);
+        logSql("menu", "listByLikeMenu_parent_id", sqlPara);
 
         return new Menu().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Menu> listByApp_idOrLikeMenu_name(String app_id, String menu_name, String request_app_id, String request_http_id, String request_user_id) {
+    public List<Menu> listByApp_idOrLikeMenu_name(String app_id, String menu_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Menu.APP_ID, app_id);
         sqlMap.put(Menu.MENU_NAME, menu_name);
         SqlPara sqlPara = Db.getSqlPara("menu.listByApp_idOrLikeMenu_name", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_menu", "listByApp_idOrLikeMenu_name", sqlPara, request_user_id);
+        logSql("menu", "listByApp_idOrLikeMenu_name", sqlPara);
 
         return new Menu().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Menu> listByOrApp_idOrLikeMenu_name(String app_id, String menu_name, String request_app_id, String request_http_id, String request_user_id) {
+    public List<Menu> listByOrApp_idOrLikeMenu_name(String app_id, String menu_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Menu.APP_ID, app_id);
         sqlMap.put(Menu.MENU_NAME, menu_name);
         SqlPara sqlPara = Db.getSqlPara("menu.listByOrApp_idOrLikeMenu_name", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_menu", "listByOrApp_idOrLikeMenu_name", sqlPara, request_user_id);
+        logSql("menu", "listByOrApp_idOrLikeMenu_name", sqlPara);
 
         return new Menu().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public Menu findByMenu_id(String menu_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Menu findByMenu_id(String menu_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Menu.MENU_ID, menu_id);
         SqlPara sqlPara = Db.getSqlPara("menu.findByMenu_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_menu", "findByMenu_id", sqlPara, request_user_id);
+        logSql("menu", "findByMenu_id", sqlPara);
 
         List<Menu> menuList = new Menu().find(sqlPara.getSql(), sqlPara.getPara());
         if (menuList.size() == 0) {
@@ -67,7 +67,7 @@ public class MenuDao extends Dao {
         }
     }
 
-    public Boolean save(String menu_id, String app_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String menu_path, String system_create_user_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean save(String menu_id, String app_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String menu_path, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Menu.MENU_ID, menu_id);
         sqlMap.put(Menu.APP_ID, app_id);
@@ -85,12 +85,12 @@ public class MenuDao extends Dao {
         sqlMap.put(Menu.SYSTEM_STATUS, true);
         SqlPara sqlPara = Db.getSqlPara("menu.save", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_menu", "save", sqlPara, request_user_id);
+        logSql("menu", "save", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String menu_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String menu_path, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean update(String menu_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String menu_path, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Menu.MENU_ID, menu_id);
         sqlMap.put(Menu.MENU_PARENT_ID, menu_parent_id);
@@ -104,12 +104,12 @@ public class MenuDao extends Dao {
         sqlMap.put(Menu.SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("menu.update", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_menu", "update", sqlPara, request_user_id);
+        logSql("menu", "update", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean deleteByMenu_idAndSystem_version(String menu_id, String system_update_user_id, Integer system_version, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean deleteByMenu_idAndSystem_version(String menu_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Menu.MENU_ID, menu_id);
         sqlMap.put(Menu.SYSTEM_UPDATE_USER_ID, system_update_user_id);
@@ -117,19 +117,19 @@ public class MenuDao extends Dao {
         sqlMap.put(Menu.SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("menu.deleteByMenu_idAndSystem_version", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_menu", "deleteByMenu_idAndSystem_version", sqlPara, request_user_id);
+        logSql("menu", "deleteByMenu_idAndSystem_version", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean deleteByMenu_parent_id(String menu_parent_id, String system_update_user_id, String request_app_id, String request_http_id, String request_user_id) {
+    public Boolean deleteByMenu_parent_id(String menu_parent_id, String system_update_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Menu.MENU_PARENT_ID, menu_parent_id);
         sqlMap.put(Menu.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(Menu.SYSTEM_UPDATE_TIME, new Date());
         SqlPara sqlPara = Db.getSqlPara("menu.deleteByMenu_parent_id", sqlMap);
 
-        logSql(request_app_id, request_http_id, "table_menu", "deleteByMenu_parent_id", sqlPara, request_user_id);
+        logSql("menu", "deleteByMenu_parent_id", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
