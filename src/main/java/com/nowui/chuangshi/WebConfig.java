@@ -22,6 +22,7 @@ import com.nowui.chuangshi.controller.ApiController;
 import com.nowui.chuangshi.controller.AppController;
 import com.nowui.chuangshi.controller.CategoryController;
 import com.nowui.chuangshi.controller.CodeController;
+import com.nowui.chuangshi.controller.CustomerAttributeController;
 import com.nowui.chuangshi.controller.CustomerController;
 import com.nowui.chuangshi.controller.ExceptionController;
 import com.nowui.chuangshi.controller.ExpressController;
@@ -37,7 +38,6 @@ import com.nowui.chuangshi.controller.HttpController;
 import com.nowui.chuangshi.controller.MemberAddressController;
 import com.nowui.chuangshi.controller.MemberController;
 import com.nowui.chuangshi.controller.MemberLevelController;
-import com.nowui.chuangshi.controller.MemberStockActionController;
 import com.nowui.chuangshi.controller.MenuController;
 import com.nowui.chuangshi.controller.ProductBrandController;
 import com.nowui.chuangshi.controller.ProductCategoryController;
@@ -46,8 +46,36 @@ import com.nowui.chuangshi.controller.SqlController;
 import com.nowui.chuangshi.controller.StockController;
 import com.nowui.chuangshi.controller.UserController;
 import com.nowui.chuangshi.interceptor.GlobalActionInterceptor;
-import com.nowui.chuangshi.model.*;
+import com.nowui.chuangshi.model.Admin;
+import com.nowui.chuangshi.model.Api;
+import com.nowui.chuangshi.model.App;
+import com.nowui.chuangshi.model.Category;
+import com.nowui.chuangshi.model.Customer;
+import com.nowui.chuangshi.model.CustomerAttribute;
 import com.nowui.chuangshi.model.Exception;
+import com.nowui.chuangshi.model.Express;
+import com.nowui.chuangshi.model.FeijiuFastCustomer;
+import com.nowui.chuangshi.model.FeijiuRecommendCustomer;
+import com.nowui.chuangshi.model.FeijiuRecommendProduct;
+import com.nowui.chuangshi.model.File;
+import com.nowui.chuangshi.model.GuangqiCustomer;
+import com.nowui.chuangshi.model.GuangqiCustomerPrize;
+import com.nowui.chuangshi.model.GuangqiPrize;
+import com.nowui.chuangshi.model.Http;
+import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.MemberAddress;
+import com.nowui.chuangshi.model.MemberLevel;
+import com.nowui.chuangshi.model.Menu;
+import com.nowui.chuangshi.model.MenuApi;
+import com.nowui.chuangshi.model.Product;
+import com.nowui.chuangshi.model.ProductBrand;
+import com.nowui.chuangshi.model.ProductCategory;
+import com.nowui.chuangshi.model.ProductSku;
+import com.nowui.chuangshi.model.ProductSkuAttribute;
+import com.nowui.chuangshi.model.ProductSkuPrice;
+import com.nowui.chuangshi.model.Sql;
+import com.nowui.chuangshi.model.Stock;
+import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.AppService;
 
 public class WebConfig extends JFinalConfig {
@@ -78,11 +106,11 @@ public class WebConfig extends JFinalConfig {
         routes.add("/member", MemberController.class);
         routes.add("/member/address", MemberAddressController.class);
         routes.add("/member/level", MemberLevelController.class);
-        routes.add("/member/stock/action", MemberStockActionController.class);
         routes.add("/stock", StockController.class);
         routes.add("/express", ExpressController.class);
 
         routes.add("/customer", CustomerController.class);
+        routes.add("/customer/attribute", CustomerAttributeController.class);
 
         routes.add("/guangqi/customer", GuangqiCustomerController.class);
         routes.add("/guangqi/prize", GuangqiPrizeController.class);
@@ -140,11 +168,11 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_member", "member_id", Member.class);
         activeRecordPlugin.addMapping("table_member_address", "member_address_id", MemberAddress.class);
         activeRecordPlugin.addMapping("table_member_level", "member_level_id", MemberLevel.class);
-        activeRecordPlugin.addMapping("table_member_stock_action", "member_stock_action_id", MemberStockAction.class);
         activeRecordPlugin.addMapping("table_stock", "stock_id", Stock.class);
         activeRecordPlugin.addMapping("table_express", "express_id", Express.class);
 
         activeRecordPlugin.addMapping("table_customer", "customer_id", Customer.class);
+        activeRecordPlugin.addMapping("table_customer_attribute", "customer_attribute_id", CustomerAttribute.class);
 
         activeRecordPlugin.addMapping("table_guangqi_customer", "guangqi_customer_id", GuangqiCustomer.class);
         activeRecordPlugin.addMapping("table_guangqi_prize", "guangqi_prize_id", GuangqiPrize.class);

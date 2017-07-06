@@ -216,22 +216,6 @@ public class Url {
     public static final String MEMBER_LEVEL_SYSTEM_SAVE = "/member/level/system/save";
     public static final String MEMBER_LEVEL_SYSTEM_UPDATE = "/member/level/system/update";
     public static final String MEMBER_LEVEL_SYSTEM_DELETE = "/member/level/system/delete";
-    
-    public static final String MEMBER_STOCK_ACTION_LIST = "/member/stock/action/list";
-    public static final String MEMBER_STOCK_ACTION_FIND = "/member/stock/action/find";
-    public static final String MEMBER_STOCK_ACTION_SAVE = "/member/stock/action/save";
-    public static final String MEMBER_STOCK_ACTION_UPDATE = "/member/stock/action/update";
-    public static final String MEMBER_STOCK_ACTION_DELETE = "/member/stock/action/delete";
-    public static final String MEMBER_STOCK_ACTION_ADMIN_LIST = "/member/stock/action/admin/list";
-    public static final String MEMBER_STOCK_ACTION_ADMIN_FIND = "/member/stock/action/admin/find";
-    public static final String MEMBER_STOCK_ACTION_ADMIN_SAVE = "/member/stock/action/admin/save";
-    public static final String MEMBER_STOCK_ACTION_ADMIN_UPDATE = "/member/stock/action/admin/update";
-    public static final String MEMBER_STOCK_ACTION_ADMIN_DELETE = "/member/stock/action/admin/delete";
-    public static final String MEMBER_STOCK_ACTION_SYSTEM_LIST = "/member/stock/action/system/list";
-    public static final String MEMBER_STOCK_ACTION_SYSTEM_FIND = "/member/stock/action/system/find";
-    public static final String MEMBER_STOCK_ACTION_SYSTEM_SAVE = "/member/stock/action/system/save";
-    public static final String MEMBER_STOCK_ACTION_SYSTEM_UPDATE = "/member/stock/action/system/update";
-    public static final String MEMBER_STOCK_ACTION_SYSTEM_DELETE = "/member/stock/action/system/delete";
 
     // 用户管理
     public static final String CUSTOMER_LIST = "/customer/list";
@@ -249,6 +233,23 @@ public class Url {
     public static final String CUSTOMER_SYSTEM_SAVE = "/customer/system/save";
     public static final String CUSTOMER_SYSTEM_UPDATE = "/customer/system/update";
     public static final String CUSTOMER_SYSTEM_DELETE = "/customer/system/delete";
+    
+    // 用户模板数据
+    public static final String CUSTOMER_ATTRIBUTE_LIST = "/customer/attribute/list";
+    public static final String CUSTOMER_ATTRIBUTE_FIND = "/customer/attribute/find";
+    public static final String CUSTOMER_ATTRIBUTE_SAVE = "/customer/attribute/save";
+    public static final String CUSTOMER_ATTRIBUTE_UPDATE = "/customer/attribute/update";
+    public static final String CUSTOMER_ATTRIBUTE_DELETE = "/customer/attribute/delete";
+    public static final String CUSTOMER_ATTRIBUTE_ADMIN_LIST = "/customer/attribute/admin/list";
+    public static final String CUSTOMER_ATTRIBUTE_ADMIN_FIND = "/customer/attribute/admin/find";
+    public static final String CUSTOMER_ATTRIBUTE_ADMIN_SAVE = "/customer/attribute/admin/save";
+    public static final String CUSTOMER_ATTRIBUTE_ADMIN_UPDATE = "/customer/attribute/admin/update";
+    public static final String CUSTOMER_ATTRIBUTE_ADMIN_DELETE = "/customer/attribute/admin/delete";
+    public static final String CUSTOMER_ATTRIBUTE_SYSTEM_LIST = "/customer/attribute/system/list";
+    public static final String CUSTOMER_ATTRIBUTE_SYSTEM_FIND = "/customer/attribute/system/find";
+    public static final String CUSTOMER_ATTRIBUTE_SYSTEM_SAVE = "/customer/attribute/system/save";
+    public static final String CUSTOMER_ATTRIBUTE_SYSTEM_UPDATE = "/customer/attribute/system/update";
+    public static final String CUSTOMER_ATTRIBUTE_SYSTEM_DELETE = "/customer/attribute/system/delete";
 
     public static final String GUANGQI_CUSTOMER_LIST = "/guangqi/customer/list";
     public static final String GUANGQI_CUSTOMER_FIND = "/guangqi/customer/find";
