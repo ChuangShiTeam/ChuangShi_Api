@@ -60,6 +60,26 @@ public class ProductDao extends Dao {
 
         return new Product().find(sqlPara.getSql(), sqlPara.getPara());
     }
+    
+    public List<Product> listByApp_id(String app_id) {
+    	Kv sqlMap = Kv.create();
+        sqlMap.put(Product.APP_ID, app_id);
+        SqlPara sqlPara = Db.getSqlPara("product.listByApp_id", sqlMap);
+
+        logSql("product", "listByApp_id", sqlPara);
+
+        return new Product().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+    
+    public List<Product> listByOrApp_id(String app_id) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Product.APP_ID, app_id);
+    	SqlPara sqlPara = Db.getSqlPara("product.listByOrApp_id", sqlMap);
+    	
+    	logSql("product", "listByOrApp_id", sqlPara);
+    	
+    	return new Product().find(sqlPara.getSql(), sqlPara.getPara());
+    }
 
     public List<Product> listByOrApp_idOrLikeProduct_nameAndLimit(String app_id, String product_name, int m, int n) {
         Kv sqlMap = Kv.create();
@@ -89,10 +109,11 @@ public class ProductDao extends Dao {
         }
     }
 
-    public Boolean save(String product_id, String app_id, String product_category_id, String product_brand_id, String product_name, String product_image, Boolean product_is_new, Boolean product_is_recommend, Boolean product_is_bargain, Boolean product_is_hot, Boolean product_is_sold_out, Boolean product_is_virtual, String product_content, Boolean product_status, String system_create_user_id) {
+    public Boolean save(String product_id, String app_id, String product_snap_id, String product_category_id, String product_brand_id, String product_name, String product_image, Boolean product_is_new, Boolean product_is_recommend, Boolean product_is_bargain, Boolean product_is_hot, Boolean product_is_sold_out, Boolean product_is_virtual, String product_content, Boolean product_status, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Product.PRODUCT_ID, product_id);
         sqlMap.put(Product.APP_ID, app_id);
+        sqlMap.put(Product.PRODUCT_SNAP_ID, product_snap_id);
         sqlMap.put(Product.PRODUCT_CATEGORY_ID, product_category_id);
         sqlMap.put(Product.PRODUCT_BRAND_ID, product_brand_id);
         sqlMap.put(Product.PRODUCT_NAME, product_name);

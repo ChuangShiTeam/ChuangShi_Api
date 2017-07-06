@@ -41,6 +41,26 @@ public class MemberCache extends Cache {
 
         return memberList;
     }
+    
+    public List<Member> listByApp_id(String app_id) {
+    	List<Member> memberList = memberDao.listByApp_id(app_id);
+    	
+    	for (Member member : memberList) {
+    		member.put(findByMember_id(member.getMember_id()));
+    	}
+    	
+    	return memberList;
+    }
+    
+    public List<Member> listByOrApp_id(String app_id) {
+    	List<Member> memberList = memberDao.listByOrApp_id(app_id);
+    	
+    	for (Member member : memberList) {
+    		member.put(findByMember_id(member.getMember_id()));
+    	}
+    	
+    	return memberList;
+    }
 
     public List<Member> listByOrApp_idOrLikeUser_nameAndLimit(String app_id, String user_name, int m, int n) {
         List<Member> memberList = memberDao.listByOrApp_idOrLikeUser_nameAndLimit(app_id, user_name, m, n);

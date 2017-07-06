@@ -61,6 +61,26 @@ public class MemberDao extends Dao {
 
         return new Member().find(sqlPara.getSql(), sqlPara.getPara());
     }
+    
+    public List<Member> listByApp_id(String app_id) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Member.APP_ID, app_id);
+    	SqlPara sqlPara = Db.getSqlPara("member.listByApp_id", sqlMap);
+    	
+    	logSql("member", "listByApp_id", sqlPara);
+    	
+    	return new Member().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+    
+    public List<Member> listByOrApp_id(String app_id) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Member.APP_ID, app_id);
+    	SqlPara sqlPara = Db.getSqlPara("member.listByOrApp_id", sqlMap);
+    	
+    	logSql("member", "listByOrApp_id", sqlPara);
+    	
+    	return new Member().find(sqlPara.getSql(), sqlPara.getPara());
+    }
 
     public List<Member> listByOrApp_idOrLikeUser_nameAndLimit(String app_id, String user_name, int m, int n) {
         Kv sqlMap = Kv.create();

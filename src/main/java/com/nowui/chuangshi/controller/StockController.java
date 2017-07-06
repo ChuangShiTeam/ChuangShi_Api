@@ -10,6 +10,8 @@ import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class StockController extends Controller {
 
     private final StockService stockService = new StockService();
@@ -55,12 +57,17 @@ public class StockController extends Controller {
     @ActionKey(Url.STOCK_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(Stock.PRODUCT_SKU_ID, Stock.OBJECT_ID, Stock.PRODUCT_NAME, Stock.PRODUCT_IMAGE, Stock.STOCK_TYPE, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.STOCK_STATUS);
+        validate(Stock.PRODUCT_SKU_ID, Stock.PRODUCT_NAME, Stock.STOCK_TYPE, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION);
 
         Stock model = getModel(Stock.class);
+        
         String stock_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
+        
+        if (StringUtils.isBlank(model.getObject_id())) {
+        	model.setObject_id(request_app_id);
+        }
 
         authenticateRequest_app_idAndRequest_user_id();
 
@@ -72,7 +79,7 @@ public class StockController extends Controller {
     @ActionKey(Url.STOCK_UPDATE)
     public void update() {
         validateRequest_app_id();
-        validate(Stock.STOCK_ID, Stock.PRODUCT_SKU_ID, Stock.OBJECT_ID, Stock.PRODUCT_NAME, Stock.PRODUCT_IMAGE, Stock.STOCK_TYPE, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.STOCK_STATUS, Stock.SYSTEM_VERSION);
+        validate(Stock.STOCK_ID, Stock.PRODUCT_SKU_ID, Stock.OBJECT_ID, Stock.PRODUCT_NAME, Stock.STOCK_TYPE, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.SYSTEM_VERSION);
 
         Stock model = getModel(Stock.class);
         String request_user_id = getRequest_user_id();
@@ -123,7 +130,7 @@ public class StockController extends Controller {
         List<Stock> resultList = stockService.listByApp_idOrStock_typeOrStock_actionOrLikeProduct_nameAndLimit(request_app_id, model.getStock_type(), model.getStock_action(), model.getProduct_name(), getM(), getN());
 
         for (Stock result : resultList) {
-            result.keep(Stock.STOCK_ID, Stock.SYSTEM_VERSION);
+            result.keep(Stock.STOCK_ID, Stock.PRODUCT_NAME, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);

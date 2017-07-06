@@ -129,6 +129,23 @@ public class MemberController extends Controller {
 
         renderSuccessJson(total, resultList);
     }
+    
+    @ActionKey(Url.MEMBER_ADMIN_ALL_LIST)
+    public void adminAllList() {
+    	validateRequest_app_id();
+    	
+    	String request_app_id = getRequest_app_id();
+    	
+    	authenticateRequest_app_idAndRequest_user_id();
+    	
+    	List<Member> resultList = memberService.listByApp_id(request_app_id);
+    	
+    	for (Member result : resultList) {
+    		result.keep(Member.MEMBER_ID, Member.SYSTEM_VERSION);
+    	}
+    	
+    	renderSuccessJson(resultList);
+    }
 
     @ActionKey(Url.MEMBER_ADMIN_FIND)
     public void adminFind() {
@@ -206,6 +223,22 @@ public class MemberController extends Controller {
         }
 
         renderSuccessJson(total, resultList);
+    }
+    
+    @ActionKey(Url.MEMBER_SYSTEM_ALL_LIST)
+    public void systemAllList() {
+    	validateRequest_app_id();
+    	
+    	JSONObject jsonObject = getParameterJSONObject();
+    	String app_id = jsonObject.getString("app_id");
+    	
+    	List<Member> resultList = memberService.listByOrApp_id(app_id);
+    	
+    	for (Member result : resultList) {
+    		result.keep(Member.MEMBER_ID, Member.SYSTEM_VERSION);
+    	}
+    	
+    	renderSuccessJson(resultList);
     }
 
     @ActionKey(Url.MEMBER_SYSTEM_FIND)
