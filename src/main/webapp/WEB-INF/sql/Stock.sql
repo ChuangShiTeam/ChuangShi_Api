@@ -1,24 +1,36 @@
 #namespace("stock")
 
-  #sql("countByApp_idOrLikeStock_type")
+  #sql("countByApp_idOrStock_typeOrStock_actionOrLikeProduct_name")
     SELECT COUNT(*) FROM table_stock
     WHERE system_status = 1
     AND app_id = #p(app_id)
     #if(stock_type)
-    #set(stock_type = "%" + stock_type + "%")
-    AND stock_type LIKE #p(stock_type)
+    AND stock_type = #p(stock_type)
+    #end
+    #if(stock_action)
+    AND stock_action = #p(stock_action)
+    #end
+    #if(product_name)
+    #set(product_name = "%" + product_name + "%")
+    AND product_name LIKE #p(product_name)
     #end
   #end
-
-  #sql("countByOrApp_idOrLikeStock_type")
+  
+  #sql("countByOrApp_idOrStock_typeOrStock_actionOrLikeProduct_name")
     SELECT COUNT(*) FROM table_stock
     WHERE system_status = 1
     #if(app_id)
     AND app_id = #p(app_id)
     #end
     #if(stock_type)
-    #set(stock_type = "%" + stock_type + "%")
-    AND stock_type LIKE #p(stock_type)
+    AND stock_type = #p(stock_type)
+    #end
+    #if(stock_action)
+    AND stock_action = #p(stock_action)
+    #end
+    #if(product_name)
+    #set(product_name = "%" + product_name + "%")
+    AND product_name LIKE #p(product_name)
     #end
   #end
 
@@ -33,21 +45,27 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByApp_idOrLikeStock_typeAndLimit")
+  #sql("listByApp_idOrStock_typeOrStock_actionOrLikeProduct_nameAndLimit")
     SELECT
     stock_id
     FROM table_stock
     WHERE system_status = 1
     AND app_id = #p(app_id)
     #if(stock_type)
-    #set(stock_type = "%" + stock_type + "%")
-    AND stock_type LIKE #p(stock_type)
+    AND stock_type = #p(stock_type)
+    #end
+    #if(stock_action)
+    AND stock_action = #p(stock_action)
+    #end
+    #if(product_name)
+    #set(product_name = "%" + product_name + "%")
+    AND product_name LIKE #p(product_name)
     #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idOrLikeStock_typeAndLimit")
+  #sql("listByOrApp_idOrStock_typeOrStock_actionOrLikeProduct_nameAndLimit")
     SELECT
     stock_id
     FROM table_stock
@@ -56,8 +74,14 @@
     AND app_id = #p(app_id)
     #end
     #if(stock_type)
-    #set(stock_type = "%" + stock_type + "%")
-    AND stock_type LIKE #p(stock_type)
+    AND stock_type = #p(stock_type)
+    #end
+    #if(stock_action)
+    AND stock_action = #p(stock_action)
+    #end
+    #if(product_name)
+    #set(product_name = "%" + product_name + "%")
+    AND product_name LIKE #p(product_name)
     #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
@@ -77,8 +101,12 @@
       app_id,
       product_sku_id,
       object_id,
+      product_name,
+      product_image,
       stock_type,
       stock_quantity,
+      stock_action,
+      stock_status,
       system_create_user_id,
       system_create_time,
       system_update_user_id,
@@ -90,8 +118,12 @@
       #p(app_id),
       #p(product_sku_id),
       #p(object_id),
+      #p(product_name),
+      #p(product_image),
       #p(stock_type),
       #p(stock_quantity),
+      #p(stock_action),
+      #p(stock_status),
       #p(system_create_user_id),
       #p(system_create_time),
       #p(system_update_user_id),
@@ -105,8 +137,12 @@
     UPDATE table_stock SET
     product_sku_id = #p(product_sku_id),
     object_id = #p(object_id),
+    product_name = #p(product_name),
+    product_image = #p(product_image),
     stock_type = #p(stock_type),
     stock_quantity = #p(stock_quantity),
+    stock_action = #p(stock_action),
+    stock_status = #p(stock_status),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1
