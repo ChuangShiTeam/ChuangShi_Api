@@ -90,12 +90,14 @@ public class ExpressDao extends Dao {
         }
     }
 
-    public Boolean save(String express_id, String app_id, String trade_id, String member_stock_action_id, String express_shipper_code, String express_no, String express_type, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile, String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address, String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province, String express_sender_city, String express_sender_area, String express_sender_address, BigDecimal express_cost, Boolean express_is_pay, String express_pay_way, String express_start_date, String express_end_date, String express_remark, String system_create_user_id) {
+    public Boolean save(String express_id, String app_id, String trade_id, String stock_id, String express_receiver_user_id, String express_sender_user_id, String express_shipper_code, String express_no, String express_type, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile, String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address, String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province, String express_sender_city, String express_sender_area, String express_sender_address, BigDecimal express_cost, Boolean express_is_pay, String express_pay_way, String express_start_date, String express_end_date, String express_logistics, String express_status, String express_remark, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Express.EXPRESS_ID, express_id);
         sqlMap.put(Express.APP_ID, app_id);
         sqlMap.put(Express.TRADE_ID, trade_id);
-        sqlMap.put(Express.MEMBER_STOCK_ACTION_ID, member_stock_action_id);
+        sqlMap.put(Express.STOCK_ID, stock_id);
+        sqlMap.put(Express.EXPRESS_RECEIVER_USER_ID, express_receiver_user_id);
+        sqlMap.put(Express.EXPRESS_SENDER_USER_ID, express_sender_user_id);
         sqlMap.put(Express.EXPRESS_SHIPPER_CODE, express_shipper_code);
         sqlMap.put(Express.EXPRESS_NO, express_no);
         sqlMap.put(Express.EXPRESS_TYPE, express_type);
@@ -122,6 +124,8 @@ public class ExpressDao extends Dao {
         sqlMap.put(Express.EXPRESS_PAY_WAY, express_pay_way);
         sqlMap.put(Express.EXPRESS_START_DATE, express_start_date);
         sqlMap.put(Express.EXPRESS_END_DATE, express_end_date);
+        sqlMap.put(Express.EXPRESS_LOGISTICS, express_logistics);
+        sqlMap.put(Express.EXPRESS_STATUS, express_status);
         sqlMap.put(Express.EXPRESS_REMARK, express_remark);
         sqlMap.put(Express.SYSTEM_CREATE_USER_ID, system_create_user_id);
         sqlMap.put(Express.SYSTEM_CREATE_TIME, new Date());
@@ -136,11 +140,13 @@ public class ExpressDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String express_id, String trade_id, String member_stock_action_id, String express_shipper_code, String express_no, String express_type, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile, String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address, String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province, String express_sender_city, String express_sender_area, String express_sender_address, BigDecimal express_cost, Boolean express_is_pay, String express_pay_way, String express_start_date, String express_end_date, String express_remark, String system_update_user_id, Integer system_version) {
+    public Boolean update(String express_id, String trade_id, String stock_id, String express_receiver_user_id, String express_sender_user_id, String express_shipper_code, String express_no, String express_type, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile, String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address, String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province, String express_sender_city, String express_sender_area, String express_sender_address, BigDecimal express_cost, Boolean express_is_pay, String express_pay_way, String express_start_date, String express_end_date, String express_logistics, String express_status, String express_remark, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Express.EXPRESS_ID, express_id);
         sqlMap.put(Express.TRADE_ID, trade_id);
-        sqlMap.put(Express.MEMBER_STOCK_ACTION_ID, member_stock_action_id);
+        sqlMap.put(Express.STOCK_ID, stock_id);
+        sqlMap.put(Express.EXPRESS_RECEIVER_USER_ID, express_receiver_user_id);
+        sqlMap.put(Express.EXPRESS_SENDER_USER_ID, express_sender_user_id);
         sqlMap.put(Express.EXPRESS_SHIPPER_CODE, express_shipper_code);
         sqlMap.put(Express.EXPRESS_NO, express_no);
         sqlMap.put(Express.EXPRESS_TYPE, express_type);
@@ -167,6 +173,8 @@ public class ExpressDao extends Dao {
         sqlMap.put(Express.EXPRESS_PAY_WAY, express_pay_way);
         sqlMap.put(Express.EXPRESS_START_DATE, express_start_date);
         sqlMap.put(Express.EXPRESS_END_DATE, express_end_date);
+        sqlMap.put(Express.EXPRESS_LOGISTICS, express_logistics);
+        sqlMap.put(Express.EXPRESS_STATUS, express_status);
         sqlMap.put(Express.EXPRESS_REMARK, express_remark);
         sqlMap.put(Express.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(Express.SYSTEM_UPDATE_TIME, new Date());
