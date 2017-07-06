@@ -64,17 +64,17 @@ public class CustomerCache extends Cache {
         return customer;
     }
 
-    public Boolean save(String customer_id, String app_id, String customer_name, String customer_phone, String customer_birthday, String customer_city, String customer_sex, String customer_id_card, String system_create_user_id) {
-        return customerDao.save(customer_id, app_id, customer_name, customer_phone, customer_birthday, customer_city, customer_sex, customer_id_card, system_create_user_id);
+    public Boolean save(String customer_id, String app_id, String customer_name, String customer_sex, String customer_birthday, String customer_tel, String customer_mobile, String customer_postcode, String customer_id_card, String customer_province, String customer_city, String customer_area, String customer_address, String system_create_user_id) {
+        return customerDao.save(customer_id, app_id, customer_name, customer_sex, customer_birthday, customer_tel, customer_mobile, customer_postcode, customer_id_card, customer_province, customer_city, customer_area, customer_address, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String customer_id, String customer_name, String customer_phone, String customer_birthday, String customer_city, String customer_sex, String customer_id_card, String system_update_user_id, Integer system_version) {
+    public Boolean updateValidateSystem_version(String customer_id, String customer_name, String customer_sex, String customer_birthday, String customer_tel, String customer_mobile, String customer_postcode, String customer_id_card, String customer_province, String customer_city, String customer_area, String customer_address, String system_update_user_id, Integer system_version) {
         Customer customer = findByCustomer_id(customer_id);
         if (!customer.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = customerDao.update(customer_id, customer_name, customer_phone, customer_birthday, customer_city, customer_sex, customer_id_card, system_update_user_id, system_version);
+        boolean result = customerDao.update(customer_id, customer_name, customer_sex, customer_birthday, customer_tel, customer_mobile, customer_postcode, customer_id_card, customer_province, customer_city, customer_area, customer_address, system_update_user_id, system_version);
 
         if (result) {
             CacheUtil.remove(CUSTOMER_BY_CUSTOMER_ID_CACHE, customer_id);

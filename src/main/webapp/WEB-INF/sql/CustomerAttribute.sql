@@ -35,7 +35,13 @@
 
   #sql("listByApp_idOrLikeCustomer_attribute_nameAndLimit")
     SELECT
-    customer_attribute_id
+    customer_attribute_id,
+    customer_attribute_name,
+    customer_attribute_key,
+    customer_attribute_input_type,
+    customer_attribute_data_type,
+    customer_attribute_default_value,
+    customer_attribute_sort
     FROM table_customer_attribute
     WHERE system_status = 1
     AND app_id = #p(app_id)
@@ -43,7 +49,7 @@
     #set(customer_attribute_name = "%" + customer_attribute_name + "%")
     AND customer_attribute_name LIKE #p(customer_attribute_name)
     #end
-    ORDER BY system_create_time DESC
+    ORDER BY customer_attribute_sort DESC
     LIMIT #p(m), #p(n)
   #end
 
@@ -65,7 +71,14 @@
 
   #sql("findByCustomer_attribute_id")
     SELECT
-    *
+    customer_attribute_id,
+    app_id,
+    customer_attribute_name,
+    customer_attribute_key,
+    customer_attribute_input_type,
+    customer_attribute_data_type,
+    customer_attribute_default_value,
+    customer_attribute_sort
     FROM table_customer_attribute
     WHERE system_status = 1
     AND customer_attribute_id = #p(customer_attribute_id)

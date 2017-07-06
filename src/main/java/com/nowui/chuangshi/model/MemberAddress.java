@@ -14,14 +14,20 @@ public class MemberAddress extends Model<MemberAddress> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员编号")
     public static final String MEMBER_ID = "member_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员编号")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户编号")
     public static final String USER_ID = "user_id";
 
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "收货人")
     public static final String MEMBER_ADDRESS_NAME = "member_address_name";
 
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "电话号码")
+    public static final String MEMBER_ADDRESS_TEL = "member_address_tel";
+
     @Column(type = ColumnType.VARCHAR, length = 20, comment = "手机号码")
-    public static final String MEMBER_ADDRESS_PHONE = "member_address_phone";
+    public static final String MEMBER_ADDRESS_MOBILE = "member_address_mobile";
+
+    @Column(type = ColumnType.VARCHAR, length = 50, comment = "邮编")
+    public static final String MEMBER_ADDRESS_POSTCODE = "member_address_postcode";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "省份")
     public static final String MEMBER_ADDRESS_PROVINCE = "member_address_province";
@@ -33,7 +39,7 @@ public class MemberAddress extends Model<MemberAddress> {
     public static final String MEMBER_ADDRESS_AREA = "member_address_area";
 
     @Column(type = ColumnType.VARCHAR, length = 100, comment = "详细地址")
-    public static final String MEMBER_ADDRESS_STREET = "member_address_street";
+    public static final String MEMBER_ADDRESS_ADDRESS = "member_address_address";
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "是否默认地址")
     public static final String MEMBER_DELIVERY_IS_DEFAULT = "member_delivery_is_default";
@@ -78,12 +84,28 @@ public class MemberAddress extends Model<MemberAddress> {
         set(MEMBER_ADDRESS_NAME, member_address_name);
     }
 
-    public String getMember_address_phone() {
-        return getStr(MEMBER_ADDRESS_PHONE);
+    public String getMember_address_tel() {
+        return getStr(MEMBER_ADDRESS_TEL);
     }
 
-    public void setMember_address_phone(String member_address_phone) {
-        set(MEMBER_ADDRESS_PHONE, member_address_phone);
+    public void setMember_address_tel(String member_address_tel) {
+        set(MEMBER_ADDRESS_TEL, member_address_tel);
+    }
+
+    public String getMember_address_mobile() {
+        return getStr(MEMBER_ADDRESS_MOBILE);
+    }
+
+    public void setMember_address_mobile(String member_address_mobile) {
+        set(MEMBER_ADDRESS_MOBILE, member_address_mobile);
+    }
+
+    public String getMember_address_postcode() {
+        return getStr(MEMBER_ADDRESS_POSTCODE);
+    }
+
+    public void setMember_address_postcode(String member_address_postcode) {
+        set(MEMBER_ADDRESS_POSTCODE, member_address_postcode);
     }
 
     public String getMember_address_province() {
@@ -110,12 +132,12 @@ public class MemberAddress extends Model<MemberAddress> {
         set(MEMBER_ADDRESS_AREA, member_address_area);
     }
 
-    public String getMember_address_street() {
-        return getStr(MEMBER_ADDRESS_STREET);
+    public String getMember_address_address() {
+        return getStr(MEMBER_ADDRESS_ADDRESS);
     }
 
-    public void setMember_address_street(String member_address_street) {
-        set(MEMBER_ADDRESS_STREET, member_address_street);
+    public void setMember_address_address(String member_address_address) {
+        set(MEMBER_ADDRESS_ADDRESS, member_address_address);
     }
 
     public Boolean getMember_delivery_is_default() {

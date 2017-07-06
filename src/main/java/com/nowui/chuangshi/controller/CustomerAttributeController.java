@@ -1,5 +1,7 @@
 package com.nowui.chuangshi.controller;
 
+import java.util.List;
+
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
@@ -7,8 +9,6 @@ import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.CustomerAttribute;
 import com.nowui.chuangshi.service.CustomerAttributeService;
 import com.nowui.chuangshi.util.Util;
-
-import java.util.List;
 
 public class CustomerAttributeController extends Controller {
 
@@ -55,7 +55,8 @@ public class CustomerAttributeController extends Controller {
     @ActionKey(Url.CUSTOMER_ATTRIBUTE_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(CustomerAttribute.CUSTOMER_ATTRIBUTE_NAME, CustomerAttribute.CUSTOMER_ATTRIBUTE_KEY, CustomerAttribute.CUSTOMER_ATTRIBUTE_INPUT_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DATA_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DEFAULT_VALUE, CustomerAttribute.CUSTOMER_ATTRIBUTE_SORT);
+        validate(CustomerAttribute.CUSTOMER_ATTRIBUTE_NAME, CustomerAttribute.CUSTOMER_ATTRIBUTE_KEY, CustomerAttribute.CUSTOMER_ATTRIBUTE_INPUT_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DATA_TYPE,
+                CustomerAttribute.CUSTOMER_ATTRIBUTE_DEFAULT_VALUE, CustomerAttribute.CUSTOMER_ATTRIBUTE_SORT);
 
         CustomerAttribute model = getModel(CustomerAttribute.class);
         String customer_attribute_id = Util.getRandomUUID();
@@ -64,7 +65,8 @@ public class CustomerAttributeController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = customerAttributeService.save(customer_attribute_id, request_app_id, model.getCustomer_attribute_name(), model.getCustomer_attribute_key(), model.getCustomer_attribute_input_type(), model.getCustomer_attribute_data_type(), model.getCustomer_attribute_default_value(), model.getCustomer_attribute_sort(), request_user_id);
+        Boolean result = customerAttributeService.save(customer_attribute_id, request_app_id, model.getCustomer_attribute_name(), model.getCustomer_attribute_key(),
+                model.getCustomer_attribute_input_type(), model.getCustomer_attribute_data_type(), model.getCustomer_attribute_default_value(), model.getCustomer_attribute_sort(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -72,7 +74,8 @@ public class CustomerAttributeController extends Controller {
     @ActionKey(Url.CUSTOMER_ATTRIBUTE_UPDATE)
     public void update() {
         validateRequest_app_id();
-        validate(CustomerAttribute.CUSTOMER_ATTRIBUTE_ID, CustomerAttribute.CUSTOMER_ATTRIBUTE_NAME, CustomerAttribute.CUSTOMER_ATTRIBUTE_KEY, CustomerAttribute.CUSTOMER_ATTRIBUTE_INPUT_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DATA_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DEFAULT_VALUE, CustomerAttribute.CUSTOMER_ATTRIBUTE_SORT, CustomerAttribute.SYSTEM_VERSION);
+        validate(CustomerAttribute.CUSTOMER_ATTRIBUTE_ID, CustomerAttribute.CUSTOMER_ATTRIBUTE_NAME, CustomerAttribute.CUSTOMER_ATTRIBUTE_KEY, CustomerAttribute.CUSTOMER_ATTRIBUTE_INPUT_TYPE,
+                CustomerAttribute.CUSTOMER_ATTRIBUTE_DATA_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DEFAULT_VALUE, CustomerAttribute.CUSTOMER_ATTRIBUTE_SORT, CustomerAttribute.SYSTEM_VERSION);
 
         CustomerAttribute model = getModel(CustomerAttribute.class);
         String request_user_id = getRequest_user_id();
@@ -84,7 +87,9 @@ public class CustomerAttributeController extends Controller {
         authenticateApp_id(customer_attribute.getApp_id());
         authenticateSystem_create_user_id(customer_attribute.getSystem_create_user_id());
 
-        Boolean result = customerAttributeService.updateValidateSystem_version(model.getCustomer_attribute_id(), model.getCustomer_attribute_name(), model.getCustomer_attribute_key(), model.getCustomer_attribute_input_type(), model.getCustomer_attribute_data_type(), model.getCustomer_attribute_default_value(), model.getCustomer_attribute_sort(), request_user_id, model.getSystem_version());
+        Boolean result = customerAttributeService.updateValidateSystem_version(model.getCustomer_attribute_id(), model.getCustomer_attribute_name(), model.getCustomer_attribute_key(),
+                model.getCustomer_attribute_input_type(), model.getCustomer_attribute_data_type(), model.getCustomer_attribute_default_value(), model.getCustomer_attribute_sort(), request_user_id,
+                model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -104,7 +109,8 @@ public class CustomerAttributeController extends Controller {
         authenticateApp_id(customer_attribute.getApp_id());
         authenticateSystem_create_user_id(customer_attribute.getSystem_create_user_id());
 
-        Boolean result = customerAttributeService.deleteByCustomer_attribute_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_attribute_id(), request_user_id, model.getSystem_version());
+        Boolean result = customerAttributeService.deleteByCustomer_attribute_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_attribute_id(), request_user_id,
+                model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -123,7 +129,9 @@ public class CustomerAttributeController extends Controller {
         List<CustomerAttribute> resultList = customerAttributeService.listByApp_idOrLikeCustomer_attribute_nameAndLimit(request_app_id, model.getCustomer_attribute_name(), getM(), getN());
 
         for (CustomerAttribute result : resultList) {
-            result.keep(CustomerAttribute.CUSTOMER_ATTRIBUTE_ID, CustomerAttribute.SYSTEM_VERSION);
+            result.keep(CustomerAttribute.CUSTOMER_ATTRIBUTE_ID, CustomerAttribute.SYSTEM_VERSION, CustomerAttribute.CUSTOMER_ATTRIBUTE_NAME, CustomerAttribute.APP_ID,
+                    CustomerAttribute.CUSTOMER_ATTRIBUTE_KEY, CustomerAttribute.CUSTOMER_ATTRIBUTE_INPUT_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DATA_TYPE,
+                    CustomerAttribute.CUSTOMER_ATTRIBUTE_DEFAULT_VALUE, CustomerAttribute.CUSTOMER_ATTRIBUTE_SORT);
         }
 
         renderSuccessJson(total, resultList);
@@ -142,7 +150,9 @@ public class CustomerAttributeController extends Controller {
 
         authenticateApp_id(customer_attribute.getApp_id());
 
-        customer_attribute.keep(CustomerAttribute.CUSTOMER_ATTRIBUTE_ID, CustomerAttribute.SYSTEM_VERSION);
+        customer_attribute.keep(CustomerAttribute.CUSTOMER_ATTRIBUTE_ID, CustomerAttribute.SYSTEM_VERSION, CustomerAttribute.CUSTOMER_ATTRIBUTE_NAME, CustomerAttribute.APP_ID,
+                CustomerAttribute.CUSTOMER_ATTRIBUTE_KEY, CustomerAttribute.CUSTOMER_ATTRIBUTE_INPUT_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DATA_TYPE,
+                CustomerAttribute.CUSTOMER_ATTRIBUTE_DEFAULT_VALUE, CustomerAttribute.CUSTOMER_ATTRIBUTE_SORT);
 
         renderSuccessJson(customer_attribute);
     }
@@ -155,7 +165,8 @@ public class CustomerAttributeController extends Controller {
     @ActionKey(Url.CUSTOMER_ATTRIBUTE_ADMIN_UPDATE)
     public void adminUpdate() {
         validateRequest_app_id();
-        validate(CustomerAttribute.CUSTOMER_ATTRIBUTE_ID, CustomerAttribute.CUSTOMER_ATTRIBUTE_NAME, CustomerAttribute.CUSTOMER_ATTRIBUTE_KEY, CustomerAttribute.CUSTOMER_ATTRIBUTE_INPUT_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DATA_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DEFAULT_VALUE, CustomerAttribute.CUSTOMER_ATTRIBUTE_SORT, CustomerAttribute.SYSTEM_VERSION);
+        validate(CustomerAttribute.CUSTOMER_ATTRIBUTE_ID, CustomerAttribute.CUSTOMER_ATTRIBUTE_NAME, CustomerAttribute.CUSTOMER_ATTRIBUTE_KEY, CustomerAttribute.CUSTOMER_ATTRIBUTE_INPUT_TYPE,
+                CustomerAttribute.CUSTOMER_ATTRIBUTE_DATA_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DEFAULT_VALUE, CustomerAttribute.CUSTOMER_ATTRIBUTE_SORT, CustomerAttribute.SYSTEM_VERSION);
 
         CustomerAttribute model = getModel(CustomerAttribute.class);
         String request_user_id = getRequest_user_id();
@@ -166,7 +177,9 @@ public class CustomerAttributeController extends Controller {
 
         authenticateApp_id(customer_attribute.getApp_id());
 
-        Boolean result = customerAttributeService.updateValidateSystem_version(model.getCustomer_attribute_id(), model.getCustomer_attribute_name(), model.getCustomer_attribute_key(), model.getCustomer_attribute_input_type(), model.getCustomer_attribute_data_type(), model.getCustomer_attribute_default_value(), model.getCustomer_attribute_sort(), request_user_id, model.getSystem_version());
+        Boolean result = customerAttributeService.updateValidateSystem_version(model.getCustomer_attribute_id(), model.getCustomer_attribute_name(), model.getCustomer_attribute_key(),
+                model.getCustomer_attribute_input_type(), model.getCustomer_attribute_data_type(), model.getCustomer_attribute_default_value(), model.getCustomer_attribute_sort(), request_user_id,
+                model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -185,7 +198,8 @@ public class CustomerAttributeController extends Controller {
 
         authenticateApp_id(customer_attribute.getApp_id());
 
-        Boolean result = customerAttributeService.deleteByCustomer_attribute_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_attribute_id(), request_user_id, model.getSystem_version());
+        Boolean result = customerAttributeService.deleteByCustomer_attribute_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_attribute_id(), request_user_id,
+                model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -224,13 +238,15 @@ public class CustomerAttributeController extends Controller {
     @ActionKey(Url.CUSTOMER_ATTRIBUTE_SYSTEM_SAVE)
     public void systemSave() {
         validateRequest_app_id();
-        validate(CustomerAttribute.APP_ID, CustomerAttribute.CUSTOMER_ATTRIBUTE_NAME, CustomerAttribute.CUSTOMER_ATTRIBUTE_KEY, CustomerAttribute.CUSTOMER_ATTRIBUTE_INPUT_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DATA_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DEFAULT_VALUE, CustomerAttribute.CUSTOMER_ATTRIBUTE_SORT);
+        validate(CustomerAttribute.APP_ID, CustomerAttribute.CUSTOMER_ATTRIBUTE_NAME, CustomerAttribute.CUSTOMER_ATTRIBUTE_KEY, CustomerAttribute.CUSTOMER_ATTRIBUTE_INPUT_TYPE,
+                CustomerAttribute.CUSTOMER_ATTRIBUTE_DATA_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DEFAULT_VALUE, CustomerAttribute.CUSTOMER_ATTRIBUTE_SORT);
 
         CustomerAttribute model = getModel(CustomerAttribute.class);
         String customer_attribute_id = Util.getRandomUUID();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = customerAttributeService.save(customer_attribute_id, model.getApp_id(), model.getCustomer_attribute_name(), model.getCustomer_attribute_key(), model.getCustomer_attribute_input_type(), model.getCustomer_attribute_data_type(), model.getCustomer_attribute_default_value(), model.getCustomer_attribute_sort(), request_user_id);
+        Boolean result = customerAttributeService.save(customer_attribute_id, model.getApp_id(), model.getCustomer_attribute_name(), model.getCustomer_attribute_key(),
+                model.getCustomer_attribute_input_type(), model.getCustomer_attribute_data_type(), model.getCustomer_attribute_default_value(), model.getCustomer_attribute_sort(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -238,12 +254,15 @@ public class CustomerAttributeController extends Controller {
     @ActionKey(Url.CUSTOMER_ATTRIBUTE_SYSTEM_UPDATE)
     public void systemUpdate() {
         validateRequest_app_id();
-        validate(CustomerAttribute.CUSTOMER_ATTRIBUTE_ID, CustomerAttribute.CUSTOMER_ATTRIBUTE_NAME, CustomerAttribute.CUSTOMER_ATTRIBUTE_KEY, CustomerAttribute.CUSTOMER_ATTRIBUTE_INPUT_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DATA_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DEFAULT_VALUE, CustomerAttribute.CUSTOMER_ATTRIBUTE_SORT, CustomerAttribute.SYSTEM_VERSION);
+        validate(CustomerAttribute.CUSTOMER_ATTRIBUTE_ID, CustomerAttribute.CUSTOMER_ATTRIBUTE_NAME, CustomerAttribute.CUSTOMER_ATTRIBUTE_KEY, CustomerAttribute.CUSTOMER_ATTRIBUTE_INPUT_TYPE,
+                CustomerAttribute.CUSTOMER_ATTRIBUTE_DATA_TYPE, CustomerAttribute.CUSTOMER_ATTRIBUTE_DEFAULT_VALUE, CustomerAttribute.CUSTOMER_ATTRIBUTE_SORT, CustomerAttribute.SYSTEM_VERSION);
 
         CustomerAttribute model = getModel(CustomerAttribute.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = customerAttributeService.updateValidateSystem_version(model.getCustomer_attribute_id(), model.getCustomer_attribute_name(), model.getCustomer_attribute_key(), model.getCustomer_attribute_input_type(), model.getCustomer_attribute_data_type(), model.getCustomer_attribute_default_value(), model.getCustomer_attribute_sort(), request_user_id, model.getSystem_version());
+        Boolean result = customerAttributeService.updateValidateSystem_version(model.getCustomer_attribute_id(), model.getCustomer_attribute_name(), model.getCustomer_attribute_key(),
+                model.getCustomer_attribute_input_type(), model.getCustomer_attribute_data_type(), model.getCustomer_attribute_default_value(), model.getCustomer_attribute_sort(), request_user_id,
+                model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -256,7 +275,8 @@ public class CustomerAttributeController extends Controller {
         CustomerAttribute model = getModel(CustomerAttribute.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = customerAttributeService.deleteByCustomer_attribute_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_attribute_id(), request_user_id, model.getSystem_version());
+        Boolean result = customerAttributeService.deleteByCustomer_attribute_idAndSystem_update_user_idValidateSystem_version(model.getCustomer_attribute_id(), request_user_id,
+                model.getSystem_version());
 
         renderSuccessJson(result);
     }
