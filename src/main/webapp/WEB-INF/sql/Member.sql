@@ -55,6 +55,26 @@
     ORDER BY table_member.system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
+  
+  #sql("listByApp_id")
+    SELECT
+    member_id
+    FROM table_member
+    WHERE table_member.system_status = 1
+    AND table_member.app_id = #p(app_id)
+    ORDER BY table_member.system_create_time DESC
+  #end
+  
+  #sql("listByOrApp_id")
+    SELECT
+    member_id
+    FROM table_member
+    WHERE table_member.system_status = 1
+    #if(app_id)
+    AND table_member.app_id = #p(app_id)
+    #end
+    ORDER BY table_member.system_create_time DESC
+  #end
 
   #sql("listByOrApp_idOrLikeUser_nameAndLimit")
     SELECT

@@ -46,6 +46,15 @@
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
+  
+  #sql("listByApp_id")
+    SELECT
+    product_id
+    FROM table_product
+    WHERE system_status = 1
+    AND app_id = #p(app_id)
+    ORDER BY system_create_time DESC
+  #end
 
   #sql("listByOrApp_idOrLikeProduct_nameAndLimit")
     SELECT
@@ -62,7 +71,18 @@
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
-
+  
+  #sql("listByOrApp_id")
+    SELECT
+    product_id
+    FROM table_product
+    WHERE system_status = 1
+    #if(app_id)
+    AND app_id = #p(app_id)
+    #end
+    ORDER BY system_create_time DESC
+  #end
+  
   #sql("findByProduct_id")
     SELECT
     *

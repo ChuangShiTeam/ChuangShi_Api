@@ -25,6 +25,14 @@ public class MemberService extends Service {
     public List<Member> listByApp_idOrLikeUser_nameAndLimit(String app_id, String user_name, int m, int n) {
         return memberCache.listByApp_idOrLikeUser_nameAndLimit(app_id, user_name, m, n);
     }
+    
+    public List<Member> listByApp_id(String app_id) {
+    	return memberCache.listByApp_id(app_id);
+    }
+    
+    public List<Member> listByOrApp_id(String app_id) {
+    	return memberCache.listByOrApp_id(app_id);
+    }
 
     public List<Member> listByOrApp_idOrLikeUser_nameAndLimit(String app_id, String user_name, int m, int n) {
         return memberCache.listByOrApp_idOrLikeUser_nameAndLimit(app_id, user_name, m, n);

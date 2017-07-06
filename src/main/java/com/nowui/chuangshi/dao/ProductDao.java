@@ -60,6 +60,26 @@ public class ProductDao extends Dao {
 
         return new Product().find(sqlPara.getSql(), sqlPara.getPara());
     }
+    
+    public List<Product> listByApp_id(String app_id) {
+    	Kv sqlMap = Kv.create();
+        sqlMap.put(Product.APP_ID, app_id);
+        SqlPara sqlPara = Db.getSqlPara("product.listByApp_id", sqlMap);
+
+        logSql("product", "listByApp_id", sqlPara);
+
+        return new Product().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+    
+    public List<Product> listByOrApp_id(String app_id) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Product.APP_ID, app_id);
+    	SqlPara sqlPara = Db.getSqlPara("product.listByOrApp_id", sqlMap);
+    	
+    	logSql("product", "listByOrApp_id", sqlPara);
+    	
+    	return new Product().find(sqlPara.getSql(), sqlPara.getPara());
+    }
 
     public List<Product> listByOrApp_idOrLikeProduct_nameAndLimit(String app_id, String product_name, int m, int n) {
         Kv sqlMap = Kv.create();

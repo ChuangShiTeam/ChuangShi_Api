@@ -1,17 +1,28 @@
 package com.nowui.chuangshi.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.*;
-import com.nowui.chuangshi.service.*;
+import com.nowui.chuangshi.model.FeijiuRecommendProduct;
+import com.nowui.chuangshi.model.File;
+import com.nowui.chuangshi.model.Product;
+import com.nowui.chuangshi.model.ProductSku;
+import com.nowui.chuangshi.model.ProductSkuAttribute;
+import com.nowui.chuangshi.model.ProductSkuPrice;
+import com.nowui.chuangshi.service.FileService;
+import com.nowui.chuangshi.service.ProductService;
+import com.nowui.chuangshi.service.ProductSkuAttributeService;
+import com.nowui.chuangshi.service.ProductSkuPriceService;
+import com.nowui.chuangshi.service.ProductSkuService;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProductController extends Controller {
 
@@ -39,6 +50,29 @@ public class ProductController extends Controller {
         }
 
         renderSuccessJson(total, resultList);
+    }
+    
+    @ActionKey(Url.PRODUCT_ADMIN_ALL_LIST)
+    public void adminAllList() {
+        validateRequest_app_id();
+
+        String request_app_id = getRequest_app_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        List<Product> productList = productService.listByApp_id(request_app_id);
+        
+        List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+        for (Product product : productList) {
+        	Map<String, Object> resultMap = new HashMap<String, Object>();
+        	product.keep(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.SYSTEM_VERSION);
+        	List<ProductSku> productSkuList = productSkuService.listByProduct_id(product.getProduct_id());        	
+        	resultMap.put("product", product);
+        	resultMap.put("productSkuList", productSkuList);
+        	resultList.add(resultMap);
+        }
+
+        renderSuccessJson(resultList);
     }
 
     @ActionKey(Url.PRODUCT_ADMIN_FIND)
@@ -149,6 +183,30 @@ public class ProductController extends Controller {
 
         renderSuccessJson(total, resultList);
     }
+    
+    @ActionKey(Url.PRODUCT_SYSTEM_ALL_LIST)
+    public void systemAllList() {
+    	validateRequest_app_id();
+    	
+    	JSONObject jsonObject = getParameterJSONObject();
+    	String app_id = jsonObject.getString("app_id");
+    	
+    	List<Product> productList = productService.listByOrApp_id(app_id);
+        
+        List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+        for (Product product : productList) {
+        	Map<String, Object> resultMap = new HashMap<String, Object>();
+        	product.keep(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.SYSTEM_VERSION);
+        	List<ProductSku> productSkuList = productSkuService.listByProduct_id(product.getProduct_id());        	
+        	resultMap.put("product", product);
+        	resultMap.put("productSkuList", productSkuList);
+        	resultList.add(resultMap);
+        }
+
+        renderSuccessJson(resultList);
+    }
+    
+    
 
     @ActionKey(Url.PRODUCT_SYSTEM_FIND)
     public void systemFind() {

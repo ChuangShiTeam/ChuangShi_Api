@@ -128,11 +128,13 @@ public class Url {
     public static final String FILE_SYSTEM_DELETE = "/file/system/delete";
 
     public static final String PRODUCT_ADMIN_LIST = "/product/admin/list";
+    public static final String PRODUCT_ADMIN_ALL_LIST = "/product/admin/all/list";
     public static final String PRODUCT_ADMIN_FIND = "/product/admin/find";
     public static final String PRODUCT_ADMIN_SAVE = "/product/admin/save";
     public static final String PRODUCT_ADMIN_UPDATE = "/product/admin/update";
     public static final String PRODUCT_ADMIN_DELETE = "/product/admin/delete";
     public static final String PRODUCT_SYSTEM_LIST = "/product/system/list";
+    public static final String PRODUCT_SYSTEM_ALL_LIST = "/product/system/all/list";
     public static final String PRODUCT_SYSTEM_FIND = "/product/system/find";
     public static final String PRODUCT_SYSTEM_SAVE = "/product/system/save";
     public static final String PRODUCT_SYSTEM_UPDATE = "/product/system/update";
@@ -176,11 +178,13 @@ public class Url {
     public static final String MEMBER_UPDATE = "/member/update";
     public static final String MEMBER_DELETE = "/member/delete";
     public static final String MEMBER_ADMIN_LIST = "/member/admin/list";
+    public static final String MEMBER_ADMIN_ALL_LIST = "/member/admin/all/list";
     public static final String MEMBER_ADMIN_FIND = "/member/admin/find";
     public static final String MEMBER_ADMIN_SAVE = "/member/admin/save";
     public static final String MEMBER_ADMIN_UPDATE = "/member/admin/update";
     public static final String MEMBER_ADMIN_DELETE = "/member/admin/delete";
     public static final String MEMBER_SYSTEM_LIST = "/member/system/list";
+    public static final String MEMBER_SYSTEM_ALL_LIST = "/member/system/all/list";
     public static final String MEMBER_SYSTEM_FIND = "/member/system/find";
     public static final String MEMBER_SYSTEM_SAVE = "/member/system/save";
     public static final String MEMBER_SYSTEM_UPDATE = "/member/system/update";

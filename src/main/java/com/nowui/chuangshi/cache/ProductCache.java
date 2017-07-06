@@ -41,7 +41,27 @@ public class ProductCache extends Cache {
 
         return productList;
     }
-
+    
+    public List<Product> listByApp_id(String app_id) {
+    	List<Product> productList = productDao.listByApp_id(app_id);
+    	
+    	for (Product product : productList) {
+    		product.put(findByProduct_id(product.getProduct_id()));
+    	}
+    	
+    	return productList;
+    }
+    
+    public List<Product> listByOrApp_id(String app_id) {
+    	List<Product> productList = productDao.listByOrApp_id(app_id);
+    	
+    	for (Product product : productList) {
+    		product.put(findByProduct_id(product.getProduct_id()));
+    	}
+    	
+    	return productList;
+    }
+    
     public List<Product> listByOrApp_idOrLikeProduct_nameAndLimit(String app_id, String product_name, int m, int n) {
         List<Product> productList = productDao.listByOrApp_idOrLikeProduct_nameAndLimit(app_id, product_name, m, n);
 

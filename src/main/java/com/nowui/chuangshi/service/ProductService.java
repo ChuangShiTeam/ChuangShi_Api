@@ -25,6 +25,14 @@ public class ProductService extends Service {
     public List<Product> listByApp_idOrLikeProduct_nameAndLimit(String app_id, String product_name, int m, int n) {
         return productCache.listByApp_idOrLikeProduct_nameAndLimit(app_id, product_name, m, n);
     }
+    
+    public List<Product> listByApp_id(String app_id) {
+    	return productCache.listByApp_id(app_id);
+    }
+    
+    public List<Product> listByOrApp_id(String app_id) {
+    	return productCache.listByOrApp_id(app_id);
+    }
 
     public List<Product> listByOrApp_idOrLikeProduct_nameAndLimit(String app_id, String product_name, int m, int n) {
         return productCache.listByOrApp_idOrLikeProduct_nameAndLimit(app_id, product_name, m, n);
