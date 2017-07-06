@@ -22,6 +22,15 @@
     #end
   #end
 
+  #sql("listByApp_id")
+    SELECT
+    product_brand_id
+    FROM table_product_brand
+    WHERE system_status = 1
+    AND app_id = #p(app_id)
+    ORDER BY system_create_time DESC
+  #end
+
   #sql("listByApp_idAndSystem_create_timeAndLimit")
     SELECT
     product_brand_id

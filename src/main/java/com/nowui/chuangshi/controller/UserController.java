@@ -45,7 +45,7 @@ public class UserController extends Controller {
 
         authenticateApp_id(user.getApp_id());
 
-        user.keep(User.USER_ID, User.USER_TYPE, User.USER_ACCOUNT, User.USER_PHONE, User.USER_EMAIL, User.USER_PASSWORD, User.USER_NAME, User.USER_AVATAR, User.WECHAT_OPEN_ID, User.WECHAT_UNION_ID, User.SYSTEM_VERSION);
+        user.keep(User.USER_ID, User.USER_TYPE, User.USER_ACCOUNT, User.USER_MOBILE, User.USER_EMAIL, User.USER_PASSWORD, User.USER_NAME, User.USER_AVATAR, User.WECHAT_OPEN_ID, User.WECHAT_UNION_ID, User.SYSTEM_VERSION);
 
         renderSuccessJson(user);
     }

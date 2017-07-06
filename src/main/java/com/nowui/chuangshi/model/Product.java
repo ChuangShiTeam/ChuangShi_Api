@@ -11,11 +11,14 @@ public class Product extends Model<Product> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号")
     public static final String APP_ID = "app_id";
 
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "快照编号")
+    public static final String PRODUCT_SNAP_ID = "product_snap_id";
+
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "分类编号")
-    public static final String CATEGORY_ID = "category_id";
+    public static final String PRODUCT_CATEGORY_ID = "product_category_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "品牌编号")
-    public static final String BRAND_ID = "brand_id";
+    public static final String PRODUCT_BRAND_ID = "product_brand_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "默认SKU编号")
     public static final String PRODUCT_DEFAULT_SKU_ID = "product_default_sku_id";
@@ -52,9 +55,6 @@ public class Product extends Model<Product> {
 
     public static final String PRODUCT_IMAGE_FILE = "product_image_file";
     public static final String PRODUCT_SKU_LIST = "product_sku_list";
-    public static final String PRODUCT_SKU_ATTRIBUTE_LIST = "product_sku_attribute_list";
-    public static final String PRODUCT_SKU_COMMISSION_LIST = "product_sku_commission_list";
-    public static final String PRODUCT_SKU_PRICE_LIST = "product_sku_price_list";
 
     public String getProduct_id() {
         return getStr(PRODUCT_ID);
@@ -72,20 +72,28 @@ public class Product extends Model<Product> {
         set(APP_ID, app_id);
     }
 
-    public String getCategory_id() {
-        return getStr(CATEGORY_ID);
+    public String getProduct_snap_id() {
+        return getStr(PRODUCT_SNAP_ID);
     }
 
-    public void setCategory_id(String category_id) {
-        set(CATEGORY_ID, category_id);
+    public void setProduct_snap_id(String product_snap_id) {
+        set(PRODUCT_SNAP_ID, product_snap_id);
     }
 
-    public String getBrand_id() {
-        return getStr(BRAND_ID);
+    public String getProduct_category_id() {
+        return getStr(PRODUCT_CATEGORY_ID);
     }
 
-    public void setBrand_id(String brand_id) {
-        set(BRAND_ID, brand_id);
+    public void setProduct_category_id(String product_category_id) {
+        set(PRODUCT_CATEGORY_ID, product_category_id);
+    }
+
+    public String getProduct_brand_id() {
+        return getStr(PRODUCT_BRAND_ID);
+    }
+
+    public void setProduct_brand_id(String product_brand_id) {
+        set(PRODUCT_BRAND_ID, product_brand_id);
     }
 
     public String getProduct_default_sku_id() {

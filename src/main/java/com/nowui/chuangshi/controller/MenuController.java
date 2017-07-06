@@ -108,7 +108,7 @@ public class MenuController extends Controller {
 
         Menu model = getModel(Menu.class);
 
-        List<Map<String, Object>>  resultList = menuService.treeByOrApp_idOrLikeMenu_name(model.getApp_id(), model.getMenu_name());
+        List<Map<String, Object>> resultList = menuService.treeByOrApp_idOrLikeMenu_name(model.getApp_id(), model.getMenu_name());
 
         renderSuccessJson(resultList);
     }

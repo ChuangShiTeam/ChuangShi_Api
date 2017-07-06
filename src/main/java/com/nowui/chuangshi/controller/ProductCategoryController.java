@@ -25,7 +25,24 @@ public class ProductCategoryController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<Map<String, Object>>  resultList = productCategoryService.treeByApp_idOrLikeProduct_category_name(request_app_id, model.getProduct_category_name());
+        List<Map<String, Object>> resultList = productCategoryService.treeByApp_idOrLikeProduct_category_name(request_app_id, model.getProduct_category_name());
+
+        renderSuccessJson(resultList);
+    }
+
+    @ActionKey(Url.PRODUCT_CATEGORY_ADMIN_ALL_LIST)
+    public void adminAllList() {
+        validateRequest_app_id();
+
+        String request_app_id = getRequest_app_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        List<ProductCategory> resultList = productCategoryService.listByApp_id(request_app_id);
+
+        for (ProductCategory result : resultList) {
+            result.keep(ProductCategory.PRODUCT_CATEGORY_ID, ProductCategory.PRODUCT_CATEGORY_NAME);
+        }
 
         renderSuccessJson(resultList);
     }

@@ -5,7 +5,6 @@ import com.nowui.chuangshi.dao.ProductCategoryDao;
 import com.nowui.chuangshi.model.ProductCategory;
 import com.nowui.chuangshi.util.CacheUtil;
 
-import java.util.Date;
 import java.util.List;
 
 public class ProductCategoryCache extends Cache {
@@ -13,6 +12,16 @@ public class ProductCategoryCache extends Cache {
     public static final String PRODUCT_CATEGORY_BY_PRODUCT_CATEGORY_ID_CACHE = "product_category_by_product_category_id_cache";
 
     private ProductCategoryDao productCategoryDao = new ProductCategoryDao();
+
+    public List<ProductCategory> listByApp_id(String app_id) {
+        List<ProductCategory> product_categoryList = productCategoryDao.listByApp_id(app_id);
+
+        for (ProductCategory product_category : product_categoryList) {
+            product_category.put(findByProduct_category_id(product_category.getProduct_category_id()));
+        }
+
+        return product_categoryList;
+    }
 
     public List<ProductCategory> listByApp_idOrLikeProduct_category_name(String app_id, String product_category_name) {
         List<ProductCategory> product_categoryList = productCategoryDao.listByApp_idOrLikeProduct_category_name(app_id, product_category_name);

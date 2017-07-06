@@ -69,9 +69,9 @@ public class FileService extends Service {
     }
 
     public List<Map<String, Object>> upload(List<UploadFile> uploadFileList, String app_id, String system_create_user_id) {
-        String path = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + system_create_user_id;
-        String thumbnailPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + system_create_user_id + "/" + Constant.THUMBNAIL;
-        String originalPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + system_create_user_id + "/" + Constant.ORIGINAL;
+        String path = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + app_id + "/" + system_create_user_id;
+        String thumbnailPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + app_id + "/" + system_create_user_id + "/" + Constant.THUMBNAIL;
+        String originalPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + app_id + "/" + system_create_user_id + "/" + Constant.ORIGINAL;
 
         FileUtil.createPath(path);
         FileUtil.createPath(thumbnailPath);

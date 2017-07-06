@@ -22,6 +22,16 @@ public class ProductBrandCache extends Cache {
         return productBrandDao.countByOrApp_idOrLikeProduct_brand_name(app_id, product_brand_name);
     }
 
+    public List<ProductBrand> listByApp_id(String app_id) {
+        List<ProductBrand> product_brandList = productBrandDao.listByApp_id(app_id);
+
+        for (ProductBrand product_brand : product_brandList) {
+            product_brand.put(findByProduct_brand_id(product_brand.getProduct_brand_id()));
+        }
+
+        return product_brandList;
+    }
+
     public List<ProductBrand> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         List<ProductBrand> product_brandList = productBrandDao.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n);
 

@@ -1,5 +1,14 @@
 #namespace("product_category")
 
+  #sql("listByApp_id")
+    SELECT
+    product_category_id
+    FROM table_product_category
+    WHERE system_status = 1
+    AND app_id = #p(app_id)
+    ORDER BY system_create_time DESC
+  #end
+
   #sql("listByLikeProduct_category_parent_id")
     SELECT
     product_category_id

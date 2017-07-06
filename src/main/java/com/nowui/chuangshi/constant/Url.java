@@ -146,6 +146,7 @@ public class Url {
     public static final String PRODUCT_BRAND_UPDATE = "/product/brand/update";
     public static final String PRODUCT_BRAND_DELETE = "/product/brand/delete";
     public static final String PRODUCT_BRAND_ADMIN_LIST = "/product/brand/admin/list";
+    public static final String PRODUCT_BRAND_ADMIN_ALL_LIST = "/product/brand/admin/all/list";
     public static final String PRODUCT_BRAND_ADMIN_FIND = "/product/brand/admin/find";
     public static final String PRODUCT_BRAND_ADMIN_SAVE = "/product/brand/admin/save";
     public static final String PRODUCT_BRAND_ADMIN_UPDATE = "/product/brand/admin/update";
@@ -156,12 +157,8 @@ public class Url {
     public static final String PRODUCT_BRAND_SYSTEM_UPDATE = "/product/brand/system/update";
     public static final String PRODUCT_BRAND_SYSTEM_DELETE = "/product/brand/system/delete";
 
-    public static final String PRODUCT_CATEGORY_LIST = "/product/category/list";
-    public static final String PRODUCT_CATEGORY_FIND = "/product/category/find";
-    public static final String PRODUCT_CATEGORY_SAVE = "/product/category/save";
-    public static final String PRODUCT_CATEGORY_UPDATE = "/product/category/update";
-    public static final String PRODUCT_CATEGORY_DELETE = "/product/category/delete";
     public static final String PRODUCT_CATEGORY_ADMIN_LIST = "/product/category/admin/list";
+    public static final String PRODUCT_CATEGORY_ADMIN_ALL_LIST = "/product/category/admin/all/list";
     public static final String PRODUCT_CATEGORY_ADMIN_FIND = "/product/category/admin/find";
     public static final String PRODUCT_CATEGORY_ADMIN_SAVE = "/product/category/admin/save";
     public static final String PRODUCT_CATEGORY_ADMIN_UPDATE = "/product/category/admin/update";
