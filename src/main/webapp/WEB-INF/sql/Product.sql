@@ -75,6 +75,7 @@
     INSERT INTO table_product (
       product_id,
       app_id,
+      product_snap_id,
       product_category_id,
       product_brand_id,
       product_name,
@@ -96,6 +97,7 @@
     ) VALUES (
       #p(product_id),
       #p(app_id),
+      #p(product_snap_id),
       #p(product_category_id),
       #p(product_brand_id),
       #p(product_name),

@@ -11,6 +11,9 @@ public class Product extends Model<Product> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号")
     public static final String APP_ID = "app_id";
 
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "快照编号")
+    public static final String PRODUCT_SNAP_ID = "product_snap_id";
+
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "分类编号")
     public static final String PRODUCT_CATEGORY_ID = "product_category_id";
 
@@ -67,6 +70,14 @@ public class Product extends Model<Product> {
 
     public void setApp_id(String app_id) {
         set(APP_ID, app_id);
+    }
+
+    public String getProduct_snap_id() {
+        return getStr(PRODUCT_SNAP_ID);
+    }
+
+    public void setProduct_snap_id(String product_snap_id) {
+        set(PRODUCT_SNAP_ID, product_snap_id);
     }
 
     public String getProduct_category_id() {

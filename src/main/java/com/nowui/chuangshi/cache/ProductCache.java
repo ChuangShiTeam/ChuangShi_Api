@@ -64,8 +64,8 @@ public class ProductCache extends Cache {
         return product;
     }
 
-    public Boolean save(String product_id, String app_id, String product_category_id, String product_brand_id, String product_name, String product_image, Boolean product_is_new, Boolean product_is_recommend, Boolean product_is_bargain, Boolean product_is_hot, Boolean product_is_sold_out, Boolean product_is_virtual, String product_content, Boolean product_status, String system_create_user_id) {
-        return productDao.save(product_id, app_id, product_category_id, product_brand_id, product_name, product_image, product_is_new, product_is_recommend, product_is_bargain, product_is_hot, product_is_sold_out, product_is_virtual, product_content, product_status, system_create_user_id);
+    public Boolean save(String product_id, String app_id, String product_snap_id, String product_category_id, String product_brand_id, String product_name, String product_image, Boolean product_is_new, Boolean product_is_recommend, Boolean product_is_bargain, Boolean product_is_hot, Boolean product_is_sold_out, Boolean product_is_virtual, String product_content, Boolean product_status, String system_create_user_id) {
+        return productDao.save(product_id, app_id, product_snap_id, product_category_id, product_brand_id, product_name, product_image, product_is_new, product_is_recommend, product_is_bargain, product_is_hot, product_is_sold_out, product_is_virtual, product_content, product_status, system_create_user_id);
     }
 
     public Boolean updateValidateSystem_version(String product_id, String product_category_id, String product_brand_id, String product_name, String product_image, Boolean product_is_new, Boolean product_is_recommend, Boolean product_is_bargain, Boolean product_is_hot, Boolean product_is_sold_out, Boolean product_is_virtual, String product_content, Boolean product_status, String system_update_user_id, Integer system_version) {
