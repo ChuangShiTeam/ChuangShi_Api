@@ -236,6 +236,23 @@ public class Url {
     public static final String CUSTOMER_SYSTEM_SAVE = "/customer/system/save";
     public static final String CUSTOMER_SYSTEM_UPDATE = "/customer/system/update";
     public static final String CUSTOMER_SYSTEM_DELETE = "/customer/system/delete";
+    
+    // 用户模板数据
+    public static final String CUSTOMER_ATTRIBUTE_LIST = "/customer/attribute/list";
+    public static final String CUSTOMER_ATTRIBUTE_FIND = "/customer/attribute/find";
+    public static final String CUSTOMER_ATTRIBUTE_SAVE = "/customer/attribute/save";
+    public static final String CUSTOMER_ATTRIBUTE_UPDATE = "/customer/attribute/update";
+    public static final String CUSTOMER_ATTRIBUTE_DELETE = "/customer/attribute/delete";
+    public static final String CUSTOMER_ATTRIBUTE_ADMIN_LIST = "/customer/attribute/admin/list";
+    public static final String CUSTOMER_ATTRIBUTE_ADMIN_FIND = "/customer/attribute/admin/find";
+    public static final String CUSTOMER_ATTRIBUTE_ADMIN_SAVE = "/customer/attribute/admin/save";
+    public static final String CUSTOMER_ATTRIBUTE_ADMIN_UPDATE = "/customer/attribute/admin/update";
+    public static final String CUSTOMER_ATTRIBUTE_ADMIN_DELETE = "/customer/attribute/admin/delete";
+    public static final String CUSTOMER_ATTRIBUTE_SYSTEM_LIST = "/customer/attribute/system/list";
+    public static final String CUSTOMER_ATTRIBUTE_SYSTEM_FIND = "/customer/attribute/system/find";
+    public static final String CUSTOMER_ATTRIBUTE_SYSTEM_SAVE = "/customer/attribute/system/save";
+    public static final String CUSTOMER_ATTRIBUTE_SYSTEM_UPDATE = "/customer/attribute/system/update";
+    public static final String CUSTOMER_ATTRIBUTE_SYSTEM_DELETE = "/customer/attribute/system/delete";
 
     public static final String GUANGQI_CUSTOMER_LIST = "/guangqi/customer/list";
     public static final String GUANGQI_CUSTOMER_FIND = "/guangqi/customer/find";
