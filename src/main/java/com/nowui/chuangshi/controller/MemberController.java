@@ -74,7 +74,7 @@ public class MemberController extends Controller {
 
         User user = userService.findByUser_id(request_user_id);
 
-        Member member = memberService.findByMember_id(user.getObject_id());
+        Member member = memberService.findByMember_id(user.getObject_Id());
 
         List<Member> memberList = memberService.listByMember_parent_pathLikeMember_parent_id(member.getMember_id());
 

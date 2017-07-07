@@ -84,7 +84,7 @@ public class TradeController extends Controller {
         int trade_product_quantity = 0;
         BigDecimal trade_product_amount = new BigDecimal(0);
         User user = userService.findByUser_id(request_user_id);
-        Member member = memberService.findByMember_id(user.getObjectId());
+        Member member = memberService.findByMember_id(user.getObject_Id());
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
             TradeProductSku tradeProductSku = jsonObject1.toJavaObject(TradeProductSku.class);

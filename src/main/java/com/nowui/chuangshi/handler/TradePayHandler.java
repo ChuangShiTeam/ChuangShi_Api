@@ -46,7 +46,7 @@ public class TradePayHandler extends TMsgHandler<String> {
 
             String user_id = trade.getUser_id();
             User user = userService.findByUser_id(user_id);
-            Member member = memberService.findByMember_id(user.getObjectId());
+            Member member = memberService.findByMember_id(user.getObject_Id());
 
             String member_parent_path = member.getMember_parent_path();
             member_parent_path = member_parent_path.trim().replace("'", "");

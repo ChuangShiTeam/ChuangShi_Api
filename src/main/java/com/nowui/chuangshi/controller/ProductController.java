@@ -62,9 +62,9 @@ public class ProductController extends Controller {
         ret.put("express_freight", BigDecimal.ZERO);
 
         User user = userService.findByUser_id(request_user_id);
-        Member member = memberService.findByMember_id(user.getObjectId());
+        Member member = memberService.findByMember_id(user.getObject_Id());
 
-        ret.put("member_address", memberAddressService.findByMember_id(user.getObjectId()));
+        ret.put("member_address", memberAddressService.findByMember_id(user.getObject_Id()));
 
         ret = productSkuPriceService.listByProduct_sku_idAndMember_level_id(jsonObject.getJSONArray(Product.PRODUCT_SKU_LIST), member.getMember_level_id(), ret);
 
