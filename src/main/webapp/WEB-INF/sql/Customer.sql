@@ -35,7 +35,19 @@
 
   #sql("listByApp_idOrLikeCustomer_nameAndLimit")
     SELECT
-    customer_id
+    customer_id,
+    app_id,
+    customer_name,
+    customer_sex,
+    customer_birthday,
+    customer_tel,
+    customer_mobile,
+    customer_postcode,
+    customer_id_card,
+    customer_province,
+    customer_city,
+    customer_area,
+    customer_address
     FROM table_customer
     WHERE system_status = 1
     AND app_id = #p(app_id)
@@ -65,7 +77,19 @@
 
   #sql("findByCustomer_id")
     SELECT
-    *
+    customer_id,
+    app_id,
+    customer_name,
+    customer_sex,
+    customer_birthday,
+    customer_tel,
+    customer_mobile,
+    customer_postcode,
+    customer_id_card,
+    customer_province,
+    customer_city,
+    customer_area,
+    customer_address
     FROM table_customer
     WHERE system_status = 1
     AND customer_id = #p(customer_id)
