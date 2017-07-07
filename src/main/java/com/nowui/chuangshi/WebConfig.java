@@ -46,6 +46,7 @@ import com.nowui.chuangshi.controller.ProductController;
 import com.nowui.chuangshi.controller.QrcodeController;
 import com.nowui.chuangshi.controller.SqlController;
 import com.nowui.chuangshi.controller.StockController;
+import com.nowui.chuangshi.controller.TradeCommossionController;
 import com.nowui.chuangshi.controller.TradeController;
 import com.nowui.chuangshi.controller.TradePayController;
 import com.nowui.chuangshi.controller.UserController;
@@ -82,6 +83,7 @@ import com.nowui.chuangshi.model.ProductSkuPrice;
 import com.nowui.chuangshi.model.Sql;
 import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.Trade;
+import com.nowui.chuangshi.model.TradeCommossion;
 import com.nowui.chuangshi.model.TradePay;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.AppService;
@@ -118,6 +120,7 @@ public class WebConfig extends JFinalConfig {
         routes.add("/express", ExpressController.class);
 
         routes.add("/trade", TradeController.class);
+        routes.add("/trade/commossion", TradeCommossionController.class);
         routes.add("/trade/pay", TradePayController.class);
         routes.add("/bill", BillController.class);
         routes.add("/qrcode", QrcodeController.class);
@@ -185,6 +188,7 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_express", "express_id", Express.class);
 
         activeRecordPlugin.addMapping("table_trade", "trade_id", Trade.class);
+        activeRecordPlugin.addMapping("table_trade_commossion", "trade_commossion_id", TradeCommossion.class);
         activeRecordPlugin.addMapping("table_trade_pay", "trade_pay_id", TradePay.class);
         activeRecordPlugin.addMapping("table_bill", "bill_id", Bill.class);
         // activeRecordPlugin.addMapping("table_qrcode", "qrcode_id",

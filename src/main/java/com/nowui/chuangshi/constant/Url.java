@@ -407,6 +407,23 @@ public class Url {
     public static final String TRADE_SYSTEM_SAVE = "/trade/system/save";
     public static final String TRADE_SYSTEM_UPDATE = "/trade/system/update";
     public static final String TRADE_SYSTEM_DELETE = "/trade/system/delete";
+    
+    //分成
+    public static final String TRADE_COMMOSSION_LIST = "/trade/commossion/list";
+    public static final String TRADE_COMMOSSION_FIND = "/trade/commossion/find";
+    public static final String TRADE_COMMOSSION_SAVE = "/trade/commossion/save";
+    public static final String TRADE_COMMOSSION_UPDATE = "/trade/commossion/update";
+    public static final String TRADE_COMMOSSION_DELETE = "/trade/commossion/delete";
+    public static final String TRADE_COMMOSSION_ADMIN_LIST = "/trade/commossion/admin/list";
+    public static final String TRADE_COMMOSSION_ADMIN_FIND = "/trade/commossion/admin/find";
+    public static final String TRADE_COMMOSSION_ADMIN_SAVE = "/trade/commossion/admin/save";
+    public static final String TRADE_COMMOSSION_ADMIN_UPDATE = "/trade/commossion/admin/update";
+    public static final String TRADE_COMMOSSION_ADMIN_DELETE = "/trade/commossion/admin/delete";
+    public static final String TRADE_COMMOSSION_SYSTEM_LIST = "/trade/commossion/system/list";
+    public static final String TRADE_COMMOSSION_SYSTEM_FIND = "/trade/commossion/system/find";
+    public static final String TRADE_COMMOSSION_SYSTEM_SAVE = "/trade/commossion/system/save";
+    public static final String TRADE_COMMOSSION_SYSTEM_UPDATE = "/trade/commossion/system/update";
+    public static final String TRADE_COMMOSSION_SYSTEM_DELETE = "/trade/commossion/system/delete";
 
     // 支付
     public static final String TRADE_PAY_LIST = "/trade/pay/list";
