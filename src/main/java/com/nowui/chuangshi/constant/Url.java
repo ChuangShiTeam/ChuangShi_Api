@@ -411,23 +411,6 @@ public class Url {
     
     public static final String WECHAT_API_NOTIFY = "/wechat/api/notify";
 
-    // 支付
-    public static final String TRADE_PAY_LIST = "/trade/pay/list";
-    public static final String TRADE_PAY_FIND = "/trade/pay/find";
-    public static final String TRADE_PAY_SAVE = "/trade/pay/save";
-    public static final String TRADE_PAY_UPDATE = "/trade/pay/update";
-    public static final String TRADE_PAY_DELETE = "/trade/pay/delete";
-    public static final String TRADE_PAY_ADMIN_LIST = "/trade/pay/admin/list";
-    public static final String TRADE_PAY_ADMIN_FIND = "/trade/pay/admin/find";
-    public static final String TRADE_PAY_ADMIN_SAVE = "/trade/pay/admin/save";
-    public static final String TRADE_PAY_ADMIN_UPDATE = "/trade/pay/admin/update";
-    public static final String TRADE_PAY_ADMIN_DELETE = "/trade/pay/admin/delete";
-    public static final String TRADE_PAY_SYSTEM_LIST = "/trade/pay/system/list";
-    public static final String TRADE_PAY_SYSTEM_FIND = "/trade/pay/system/find";
-    public static final String TRADE_PAY_SYSTEM_SAVE = "/trade/pay/system/save";
-    public static final String TRADE_PAY_SYSTEM_UPDATE = "/trade/pay/system/update";
-    public static final String TRADE_PAY_SYSTEM_DELETE = "/trade/pay/system/delete";
-
     // 账单
     public static final String BILL_LIST = "/bill/list";
     public static final String BILL_FIND = "/bill/find";

@@ -132,6 +132,7 @@ public class TradeService extends Service {
             String trade_pay_number, String trade_pay_account, String trade_pay_time, String trade_pay_result,
             Boolean trade_status) {
         
+        
         return false;
     }
 
