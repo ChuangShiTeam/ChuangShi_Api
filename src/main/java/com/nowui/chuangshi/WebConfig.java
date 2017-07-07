@@ -16,11 +16,11 @@ import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
 import com.jfinal.weixin.sdk.api.ApiConfig;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
-import com.nowui.chuangshi.cache.Qrcode;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.controller.AdminController;
 import com.nowui.chuangshi.controller.ApiController;
 import com.nowui.chuangshi.controller.AppController;
+import com.nowui.chuangshi.controller.BillController;
 import com.nowui.chuangshi.controller.CategoryController;
 import com.nowui.chuangshi.controller.CodeController;
 import com.nowui.chuangshi.controller.CustomerAttributeController;
@@ -47,11 +47,13 @@ import com.nowui.chuangshi.controller.QrcodeController;
 import com.nowui.chuangshi.controller.SqlController;
 import com.nowui.chuangshi.controller.StockController;
 import com.nowui.chuangshi.controller.TradeController;
+import com.nowui.chuangshi.controller.TradePayController;
 import com.nowui.chuangshi.controller.UserController;
 import com.nowui.chuangshi.interceptor.GlobalActionInterceptor;
 import com.nowui.chuangshi.model.Admin;
 import com.nowui.chuangshi.model.Api;
 import com.nowui.chuangshi.model.App;
+import com.nowui.chuangshi.model.Bill;
 import com.nowui.chuangshi.model.Category;
 import com.nowui.chuangshi.model.Customer;
 import com.nowui.chuangshi.model.CustomerAttribute;
@@ -80,6 +82,7 @@ import com.nowui.chuangshi.model.ProductSkuPrice;
 import com.nowui.chuangshi.model.Sql;
 import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.Trade;
+import com.nowui.chuangshi.model.TradePay;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.AppService;
 
@@ -113,8 +116,10 @@ public class WebConfig extends JFinalConfig {
         routes.add("/member/level", MemberLevelController.class);
         routes.add("/stock", StockController.class);
         routes.add("/express", ExpressController.class);
-        
+
         routes.add("/trade", TradeController.class);
+        routes.add("/trade/pay", TradePayController.class);
+        routes.add("/bill", BillController.class);
         routes.add("/qrcode", QrcodeController.class);
 
         routes.add("/customer", CustomerController.class);
@@ -178,9 +183,12 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_member_level", "member_level_id", MemberLevel.class);
         activeRecordPlugin.addMapping("table_stock", "stock_id", Stock.class);
         activeRecordPlugin.addMapping("table_express", "express_id", Express.class);
-        
+
         activeRecordPlugin.addMapping("table_trade", "trade_id", Trade.class);
-        activeRecordPlugin.addMapping("table_qrcode", "qrcode_id", Qrcode.class);
+        activeRecordPlugin.addMapping("table_trade_pay", "trade_pay_id", TradePay.class);
+        activeRecordPlugin.addMapping("table_bill", "bill_id", Bill.class);
+        // activeRecordPlugin.addMapping("table_qrcode", "qrcode_id",
+        // Qrcode.class);
 
         activeRecordPlugin.addMapping("table_customer", "customer_id", Customer.class);
         activeRecordPlugin.addMapping("table_customer_attribute", "customer_attribute_id", CustomerAttribute.class);
@@ -276,185 +284,197 @@ public class WebConfig extends JFinalConfig {
     }
 
     private void initXingXiaoDadabase() {
-//        List<Record> userRecordList = Db.find("select * from XingXiao.table_user");
-//        for (Record record : userRecordList) {
-//            String user_id = record.getStr("user_id");
-//            String app_id = "c1af3f1ae00e4e0da9b20f5bd41b4279";
-//            String object_id = record.getStr("object_id");
-//            String user_type = record.getStr("user_type");
-//            String user_account = record.getStr("user_account");
-//            String user_mobile = record.getStr("user_phone");
-//            String user_email = record.getStr("user_email");
-//            String user_password = record.getStr("user_password");
-//            String user_name = record.getStr("user_name");
-//            String user_avatar = Util.getRandomUUID();
-//            String wechat_open_id = record.getStr("wechat_open_id");
-//            String wechat_union_id = record.getStr("wechat_union_id");
-//            String system_create_user_id = record.getStr("system_create_user_id");
-//            Date system_create_time = record.getDate("system_create_time");
-//            String system_update_user_id = record.getStr("system_update_user_id");
-//            Date system_update_time = record.getDate("system_update_time");
-//            Integer system_version = 0;
-//            Boolean system_status = record.getBoolean("system_status");
-//
-//            String file_id = user_avatar;
-//            String file_type = FileType.IMAGE.getKey();
-//            String file_name = "";
-//            String file_suffix = "jpeg";
-//            Integer file_size = 0;
-//            String file_path = record.getStr("user_avatar");
-//            String file_thumbnail_path = record.getStr("user_avatar");
-//            String file_original_path = record.getStr("user_avatar");
-//            String file_image = "";
-//            Boolean file_is_external = true;
-//
-//            Kv sqlMap = Kv.create();
-//            sqlMap.put(File.FILE_ID, file_id);
-//            sqlMap.put(File.APP_ID, app_id);
-//            sqlMap.put(File.FILE_TYPE, file_type);
-//            sqlMap.put(File.FILE_NAME, file_name);
-//            sqlMap.put(File.FILE_SUFFIX, file_suffix);
-//            sqlMap.put(File.FILE_SIZE, file_size);
-//            sqlMap.put(File.FILE_PATH, file_path);
-//            sqlMap.put(File.FILE_THUMBNAIL_PATH, file_thumbnail_path);
-//            sqlMap.put(File.FILE_ORIGINAL_PATH, file_original_path);
-//            sqlMap.put(File.FILE_IMAGE, file_image);
-//            sqlMap.put(File.FILE_IS_EXTERNAL, file_is_external);
-//            sqlMap.put(File.SYSTEM_CREATE_USER_ID, user_id);
-//            sqlMap.put(File.SYSTEM_CREATE_TIME, system_create_time);
-//            sqlMap.put(File.SYSTEM_UPDATE_USER_ID, user_id);
-//            sqlMap.put(File.SYSTEM_UPDATE_TIME, system_update_time);
-//            sqlMap.put(File.SYSTEM_VERSION, 0);
-//            sqlMap.put(File.SYSTEM_STATUS, true);
-//            SqlPara sqlPara = Db.getSqlPara("file.save", sqlMap);
-//            Db.update(sqlPara.getSql(), sqlPara.getPara());
-//
-//            sqlMap = Kv.create();
-//            sqlMap.put(User.USER_ID, user_id);
-//            sqlMap.put(User.APP_ID, app_id);
-//            sqlMap.put(User.OBJECT_ID, object_id);
-//            sqlMap.put(User.USER_TYPE, user_type);
-//            sqlMap.put(User.USER_NAME, user_name);
-//            sqlMap.put(User.USER_AVATAR, user_avatar);
-//            sqlMap.put(User.USER_ACCOUNT, user_account);
-//            sqlMap.put(User.USER_MOBILE, user_mobile);
-//            sqlMap.put(User.USER_EMAIL, user_email);
-//            sqlMap.put(User.USER_PASSWORD, user_password);
-//            sqlMap.put(User.WECHAT_OPEN_ID, wechat_open_id);
-//            sqlMap.put(User.WECHAT_UNION_ID, wechat_union_id);
-//            sqlMap.put(User.SYSTEM_CREATE_USER_ID, system_create_user_id);
-//            sqlMap.put(User.SYSTEM_CREATE_TIME, system_create_time);
-//            sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_update_user_id);
-//            sqlMap.put(User.SYSTEM_UPDATE_TIME, system_update_time);
-//            sqlMap.put(User.SYSTEM_VERSION, system_version);
-//            sqlMap.put(User.SYSTEM_STATUS, system_status);
-//            sqlPara = Db.getSqlPara("user.save", sqlMap);
-//            Db.update(sqlPara.getSql(), sqlPara.getPara());
-//        }
+        // List<Record> userRecordList = Db.find("select * from
+        // XingXiao.table_user");
+        // for (Record record : userRecordList) {
+        // String user_id = record.getStr("user_id");
+        // String app_id = "c1af3f1ae00e4e0da9b20f5bd41b4279";
+        // String object_id = record.getStr("object_id");
+        // String user_type = record.getStr("user_type");
+        // String user_account = record.getStr("user_account");
+        // String user_mobile = record.getStr("user_phone");
+        // String user_email = record.getStr("user_email");
+        // String user_password = record.getStr("user_password");
+        // String user_name = record.getStr("user_name");
+        // String user_avatar = Util.getRandomUUID();
+        // String wechat_open_id = record.getStr("wechat_open_id");
+        // String wechat_union_id = record.getStr("wechat_union_id");
+        // String system_create_user_id =
+        // record.getStr("system_create_user_id");
+        // Date system_create_time = record.getDate("system_create_time");
+        // String system_update_user_id =
+        // record.getStr("system_update_user_id");
+        // Date system_update_time = record.getDate("system_update_time");
+        // Integer system_version = 0;
+        // Boolean system_status = record.getBoolean("system_status");
+        //
+        // String file_id = user_avatar;
+        // String file_type = FileType.IMAGE.getKey();
+        // String file_name = "";
+        // String file_suffix = "jpeg";
+        // Integer file_size = 0;
+        // String file_path = record.getStr("user_avatar");
+        // String file_thumbnail_path = record.getStr("user_avatar");
+        // String file_original_path = record.getStr("user_avatar");
+        // String file_image = "";
+        // Boolean file_is_external = true;
+        //
+        // Kv sqlMap = Kv.create();
+        // sqlMap.put(File.FILE_ID, file_id);
+        // sqlMap.put(File.APP_ID, app_id);
+        // sqlMap.put(File.FILE_TYPE, file_type);
+        // sqlMap.put(File.FILE_NAME, file_name);
+        // sqlMap.put(File.FILE_SUFFIX, file_suffix);
+        // sqlMap.put(File.FILE_SIZE, file_size);
+        // sqlMap.put(File.FILE_PATH, file_path);
+        // sqlMap.put(File.FILE_THUMBNAIL_PATH, file_thumbnail_path);
+        // sqlMap.put(File.FILE_ORIGINAL_PATH, file_original_path);
+        // sqlMap.put(File.FILE_IMAGE, file_image);
+        // sqlMap.put(File.FILE_IS_EXTERNAL, file_is_external);
+        // sqlMap.put(File.SYSTEM_CREATE_USER_ID, user_id);
+        // sqlMap.put(File.SYSTEM_CREATE_TIME, system_create_time);
+        // sqlMap.put(File.SYSTEM_UPDATE_USER_ID, user_id);
+        // sqlMap.put(File.SYSTEM_UPDATE_TIME, system_update_time);
+        // sqlMap.put(File.SYSTEM_VERSION, 0);
+        // sqlMap.put(File.SYSTEM_STATUS, true);
+        // SqlPara sqlPara = Db.getSqlPara("file.save", sqlMap);
+        // Db.update(sqlPara.getSql(), sqlPara.getPara());
+        //
+        // sqlMap = Kv.create();
+        // sqlMap.put(User.USER_ID, user_id);
+        // sqlMap.put(User.APP_ID, app_id);
+        // sqlMap.put(User.OBJECT_ID, object_id);
+        // sqlMap.put(User.USER_TYPE, user_type);
+        // sqlMap.put(User.USER_NAME, user_name);
+        // sqlMap.put(User.USER_AVATAR, user_avatar);
+        // sqlMap.put(User.USER_ACCOUNT, user_account);
+        // sqlMap.put(User.USER_MOBILE, user_mobile);
+        // sqlMap.put(User.USER_EMAIL, user_email);
+        // sqlMap.put(User.USER_PASSWORD, user_password);
+        // sqlMap.put(User.WECHAT_OPEN_ID, wechat_open_id);
+        // sqlMap.put(User.WECHAT_UNION_ID, wechat_union_id);
+        // sqlMap.put(User.SYSTEM_CREATE_USER_ID, system_create_user_id);
+        // sqlMap.put(User.SYSTEM_CREATE_TIME, system_create_time);
+        // sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        // sqlMap.put(User.SYSTEM_UPDATE_TIME, system_update_time);
+        // sqlMap.put(User.SYSTEM_VERSION, system_version);
+        // sqlMap.put(User.SYSTEM_STATUS, system_status);
+        // sqlPara = Db.getSqlPara("user.save", sqlMap);
+        // Db.update(sqlPara.getSql(), sqlPara.getPara());
+        // }
 
-//        List<Record> memberRecordList = Db.find("select * from XingXiao.table_member");
-//        for (Record record : memberRecordList) {
-//            String member_id = record.getStr("member_id");
-//            String app_id = "c1af3f1ae00e4e0da9b20f5bd41b4279";
-//            String user_id = record.getStr("user_id");
-//            String member_parent_id = record.getStr("parent_id");
-//            String from_qrcode_id = record.getStr("from_scene_id");
-//            String qrcode_id = record.getStr("scene_id");
-//            String member_level_id = record.getStr("member_level_id");
-//            String member_parent_path = record.getStr("parent_path");
-//            Boolean member_status = record.getBoolean("member_status");
-//            String system_create_user_id = record.getStr("system_create_user_id");
-//            Date system_create_time = record.getDate("system_create_time");
-//            String system_update_user_id = record.getStr("system_update_user_id");
-//            Date system_update_time = record.getDate("system_update_time");
-//            Integer system_version = 0;
-//            Boolean system_status = record.getBoolean("system_status");
-//
-//            Kv sqlMap = Kv.create();
-//            sqlMap.put(Member.MEMBER_ID, member_id);
-//            sqlMap.put(Member.APP_ID, app_id);
-//            sqlMap.put(Member.USER_ID, user_id);
-//            sqlMap.put(Member.MEMBER_PARENT_ID, member_parent_id);
-//            sqlMap.put(Member.FROM_QRCODE_ID, from_qrcode_id);
-//            sqlMap.put(Member.QRCODE_ID, qrcode_id);
-//            sqlMap.put(Member.MEMBER_LEVEL_ID, member_level_id);
-//            sqlMap.put(Member.MEMBER_PARENT_PATH, member_parent_path);
-//            sqlMap.put(Member.MEMBER_STATUS, member_status);
-//            sqlMap.put(User.SYSTEM_CREATE_USER_ID, system_create_user_id);
-//            sqlMap.put(User.SYSTEM_CREATE_TIME, system_create_time);
-//            sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_update_user_id);
-//            sqlMap.put(User.SYSTEM_UPDATE_TIME, system_update_time);
-//            sqlMap.put(User.SYSTEM_VERSION, system_version);
-//            sqlMap.put(User.SYSTEM_STATUS, system_status);
-//            SqlPara sqlPara = Db.getSqlPara("member.save", sqlMap);
-//            Db.update(sqlPara.getSql(), sqlPara.getPara());
-//        }
+        // List<Record> memberRecordList = Db.find("select * from
+        // XingXiao.table_member");
+        // for (Record record : memberRecordList) {
+        // String member_id = record.getStr("member_id");
+        // String app_id = "c1af3f1ae00e4e0da9b20f5bd41b4279";
+        // String user_id = record.getStr("user_id");
+        // String member_parent_id = record.getStr("parent_id");
+        // String from_qrcode_id = record.getStr("from_scene_id");
+        // String qrcode_id = record.getStr("scene_id");
+        // String member_level_id = record.getStr("member_level_id");
+        // String member_parent_path = record.getStr("parent_path");
+        // Boolean member_status = record.getBoolean("member_status");
+        // String system_create_user_id =
+        // record.getStr("system_create_user_id");
+        // Date system_create_time = record.getDate("system_create_time");
+        // String system_update_user_id =
+        // record.getStr("system_update_user_id");
+        // Date system_update_time = record.getDate("system_update_time");
+        // Integer system_version = 0;
+        // Boolean system_status = record.getBoolean("system_status");
+        //
+        // Kv sqlMap = Kv.create();
+        // sqlMap.put(Member.MEMBER_ID, member_id);
+        // sqlMap.put(Member.APP_ID, app_id);
+        // sqlMap.put(Member.USER_ID, user_id);
+        // sqlMap.put(Member.MEMBER_PARENT_ID, member_parent_id);
+        // sqlMap.put(Member.FROM_QRCODE_ID, from_qrcode_id);
+        // sqlMap.put(Member.QRCODE_ID, qrcode_id);
+        // sqlMap.put(Member.MEMBER_LEVEL_ID, member_level_id);
+        // sqlMap.put(Member.MEMBER_PARENT_PATH, member_parent_path);
+        // sqlMap.put(Member.MEMBER_STATUS, member_status);
+        // sqlMap.put(User.SYSTEM_CREATE_USER_ID, system_create_user_id);
+        // sqlMap.put(User.SYSTEM_CREATE_TIME, system_create_time);
+        // sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        // sqlMap.put(User.SYSTEM_UPDATE_TIME, system_update_time);
+        // sqlMap.put(User.SYSTEM_VERSION, system_version);
+        // sqlMap.put(User.SYSTEM_STATUS, system_status);
+        // SqlPara sqlPara = Db.getSqlPara("member.save", sqlMap);
+        // Db.update(sqlPara.getSql(), sqlPara.getPara());
+        // }
 
-//        List<Record> memberRecordList = Db.find("select * from XingXiao.table_member_level");
-//        for (Record record : memberRecordList) {
-//            String member_level_id = record.getStr("member_level_id");
-//            String app_id = "c1af3f1ae00e4e0da9b20f5bd41b4279";
-//            String member_level_name = record.getStr("member_level_name");
-//            Integer member_level_value = record.getInt("member_level_value");
-//            Integer member_level_sort = record.getInt("member_level_sort");
-//            String system_create_user_id = record.getStr("system_create_user_id");
-//            Date system_create_time = record.getDate("system_create_time");
-//            String system_update_user_id = record.getStr("system_update_user_id");
-//            Date system_update_time = record.getDate("system_update_time");
-//            Integer system_version = 0;
-//            Boolean system_status = record.getBoolean("system_status");
-//
-//            Kv sqlMap = Kv.create();
-//            sqlMap.put(MemberLevel.MEMBER_LEVEL_ID, member_level_id);
-//            sqlMap.put(MemberLevel.APP_ID, app_id);
-//            sqlMap.put(MemberLevel.MEMBER_LEVEL_NAME, member_level_name);
-//            sqlMap.put(MemberLevel.MEMBER_LEVEL_VALUE, member_level_value);
-//            sqlMap.put(MemberLevel.MEMBER_LEVEL_SORT, member_level_sort);
-//            sqlMap.put(User.SYSTEM_CREATE_USER_ID, system_create_user_id);
-//            sqlMap.put(User.SYSTEM_CREATE_TIME, system_create_time);
-//            sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_update_user_id);
-//            sqlMap.put(User.SYSTEM_UPDATE_TIME, system_update_time);
-//            sqlMap.put(User.SYSTEM_VERSION, system_version);
-//            sqlMap.put(User.SYSTEM_STATUS, system_status);
-//            SqlPara sqlPara = Db.getSqlPara("member_level.save", sqlMap);
-//            Db.update(sqlPara.getSql(), sqlPara.getPara());
-//        }
+        // List<Record> memberRecordList = Db.find("select * from
+        // XingXiao.table_member_level");
+        // for (Record record : memberRecordList) {
+        // String member_level_id = record.getStr("member_level_id");
+        // String app_id = "c1af3f1ae00e4e0da9b20f5bd41b4279";
+        // String member_level_name = record.getStr("member_level_name");
+        // Integer member_level_value = record.getInt("member_level_value");
+        // Integer member_level_sort = record.getInt("member_level_sort");
+        // String system_create_user_id =
+        // record.getStr("system_create_user_id");
+        // Date system_create_time = record.getDate("system_create_time");
+        // String system_update_user_id =
+        // record.getStr("system_update_user_id");
+        // Date system_update_time = record.getDate("system_update_time");
+        // Integer system_version = 0;
+        // Boolean system_status = record.getBoolean("system_status");
+        //
+        // Kv sqlMap = Kv.create();
+        // sqlMap.put(MemberLevel.MEMBER_LEVEL_ID, member_level_id);
+        // sqlMap.put(MemberLevel.APP_ID, app_id);
+        // sqlMap.put(MemberLevel.MEMBER_LEVEL_NAME, member_level_name);
+        // sqlMap.put(MemberLevel.MEMBER_LEVEL_VALUE, member_level_value);
+        // sqlMap.put(MemberLevel.MEMBER_LEVEL_SORT, member_level_sort);
+        // sqlMap.put(User.SYSTEM_CREATE_USER_ID, system_create_user_id);
+        // sqlMap.put(User.SYSTEM_CREATE_TIME, system_create_time);
+        // sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        // sqlMap.put(User.SYSTEM_UPDATE_TIME, system_update_time);
+        // sqlMap.put(User.SYSTEM_VERSION, system_version);
+        // sqlMap.put(User.SYSTEM_STATUS, system_status);
+        // SqlPara sqlPara = Db.getSqlPara("member_level.save", sqlMap);
+        // Db.update(sqlPara.getSql(), sqlPara.getPara());
+        // }
 
-//        List<Record> memberRecordList = Db.find("select * from XingXiao.table_scene");
-//        for (Record record : memberRecordList) {
-//            String qrcode_id = record.getStr("scene_id");
-//            String app_id = "c1af3f1ae00e4e0da9b20f5bd41b4279";
-//            String object_id = record.getStr("object_id");
-//            String qrcode_type = record.getStr("scene_type");
-//            String qrcode_url = record.getStr("scene_qrcode");
-//            Integer qrcode_add = record.getInt("scene_add");
-//            Integer qrcode_cancel = record.getInt("scene_add");
-//            Boolean qrcode_status = !record.getBoolean("scene_is_expire");
-//            String system_create_user_id = record.getStr("system_create_user_id");
-//            Date system_create_time = record.getDate("system_create_time");
-//            String system_update_user_id = record.getStr("system_update_user_id");
-//            Date system_update_time = record.getDate("system_update_time");
-//            Integer system_version = 0;
-//            Boolean system_status = record.getBoolean("system_status");
-//
-//            Kv sqlMap = Kv.create();
-//            sqlMap.put(Qrcode.QRCODE_ID, qrcode_id);
-//            sqlMap.put(Qrcode.APP_ID, app_id);
-//            sqlMap.put(Qrcode.OBJECT_ID, object_id);
-//            sqlMap.put(Qrcode.QRCODE_TYPE, qrcode_type);
-//            sqlMap.put(Qrcode.QRCODE_URL, qrcode_url);
-//            sqlMap.put(Qrcode.QRCODE_ADD, qrcode_add);
-//            sqlMap.put(Qrcode.QRCODE_CANCEL, qrcode_cancel);
-//            sqlMap.put(Qrcode.QRCODE_STATUS, qrcode_status);
-//            sqlMap.put(User.SYSTEM_CREATE_USER_ID, system_create_user_id);
-//            sqlMap.put(User.SYSTEM_CREATE_TIME, system_create_time);
-//            sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_update_user_id);
-//            sqlMap.put(User.SYSTEM_UPDATE_TIME, system_update_time);
-//            sqlMap.put(User.SYSTEM_VERSION, system_version);
-//            sqlMap.put(User.SYSTEM_STATUS, system_status);
-//            SqlPara sqlPara = Db.getSqlPara("qrcode.save", sqlMap);
-//            Db.update(sqlPara.getSql(), sqlPara.getPara());
-//        }
+        // List<Record> memberRecordList = Db.find("select * from
+        // XingXiao.table_scene");
+        // for (Record record : memberRecordList) {
+        // String qrcode_id = record.getStr("scene_id");
+        // String app_id = "c1af3f1ae00e4e0da9b20f5bd41b4279";
+        // String object_id = record.getStr("object_id");
+        // String qrcode_type = record.getStr("scene_type");
+        // String qrcode_url = record.getStr("scene_qrcode");
+        // Integer qrcode_add = record.getInt("scene_add");
+        // Integer qrcode_cancel = record.getInt("scene_add");
+        // Boolean qrcode_status = !record.getBoolean("scene_is_expire");
+        // String system_create_user_id =
+        // record.getStr("system_create_user_id");
+        // Date system_create_time = record.getDate("system_create_time");
+        // String system_update_user_id =
+        // record.getStr("system_update_user_id");
+        // Date system_update_time = record.getDate("system_update_time");
+        // Integer system_version = 0;
+        // Boolean system_status = record.getBoolean("system_status");
+        //
+        // Kv sqlMap = Kv.create();
+        // sqlMap.put(Qrcode.QRCODE_ID, qrcode_id);
+        // sqlMap.put(Qrcode.APP_ID, app_id);
+        // sqlMap.put(Qrcode.OBJECT_ID, object_id);
+        // sqlMap.put(Qrcode.QRCODE_TYPE, qrcode_type);
+        // sqlMap.put(Qrcode.QRCODE_URL, qrcode_url);
+        // sqlMap.put(Qrcode.QRCODE_ADD, qrcode_add);
+        // sqlMap.put(Qrcode.QRCODE_CANCEL, qrcode_cancel);
+        // sqlMap.put(Qrcode.QRCODE_STATUS, qrcode_status);
+        // sqlMap.put(User.SYSTEM_CREATE_USER_ID, system_create_user_id);
+        // sqlMap.put(User.SYSTEM_CREATE_TIME, system_create_time);
+        // sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        // sqlMap.put(User.SYSTEM_UPDATE_TIME, system_update_time);
+        // sqlMap.put(User.SYSTEM_VERSION, system_version);
+        // sqlMap.put(User.SYSTEM_STATUS, system_status);
+        // SqlPara sqlPara = Db.getSqlPara("qrcode.save", sqlMap);
+        // Db.update(sqlPara.getSql(), sqlPara.getPara());
+        // }
     }
 
 }
