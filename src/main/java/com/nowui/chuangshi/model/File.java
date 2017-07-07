@@ -35,6 +35,9 @@ public class File extends Model<File> {
     @Column(type = ColumnType.VARCHAR, length = 200, comment = "文件封面")
     public static final String FILE_IMAGE = "file_image";
 
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否外部链接")
+    public static final String FILE_IS_EXTERNAL = "file_is_external";
+
     public String getFile_id() {
         return getStr(FILE_ID);
     }
@@ -113,6 +116,14 @@ public class File extends Model<File> {
 
     public void setFile_image(String file_image) {
         set(FILE_IMAGE, file_image);
+    }
+
+    public Boolean getFile_is_external() {
+        return getBoolean(FILE_IS_EXTERNAL);
+    }
+
+    public void setFile_is_external(Boolean file_is_external) {
+        set(FILE_IS_EXTERNAL, file_is_external);
     }
 
 }

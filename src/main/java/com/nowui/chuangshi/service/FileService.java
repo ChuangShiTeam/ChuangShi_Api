@@ -56,8 +56,8 @@ public class FileService extends Service {
         return fileCache.findByFile_id(file_id);
     }
 
-    public Boolean save(String file_id, String app_id, String file_type, String file_name, String file_suffix, Integer file_size, String file_path, String file_thumbnail_path, String file_original_path, String file_image, String system_create_user_id) {
-        return fileCache.save(file_id, app_id, file_type, file_name, file_suffix, file_size, file_path, file_thumbnail_path, file_original_path, file_image, system_create_user_id);
+    public Boolean save(String file_id, String app_id, String file_type, String file_name, String file_suffix, Integer file_size, String file_path, String file_thumbnail_path, String file_original_path, String file_image, Boolean file_is_external, String system_create_user_id) {
+        return fileCache.save(file_id, app_id, file_type, file_name, file_suffix, file_size, file_path, file_thumbnail_path, file_original_path, file_image, file_is_external, system_create_user_id);
     }
 
     public Boolean updateValidateSystem_version(String file_id, String file_type, String file_name, String file_suffix, Integer file_size, String file_path, String file_thumbnail_path, String file_original_path, String file_image, String system_update_user_id, Integer system_version) {
@@ -110,8 +110,9 @@ public class FileService extends Service {
             String file_thumbnail_path = thumbnailPath.replace(PathKit.getWebRootPath(), "");
             String file_original_path = originalPath.replace(PathKit.getWebRootPath(), "");
             String file_image = "";
+            Boolean file_is_external = false;
 
-            Boolean result = save(file_id, app_id, file_type, file_name, file_suffix, file_size, file_path, file_thumbnail_path, file_original_path, file_image, system_create_user_id);
+            Boolean result = save(file_id, app_id, file_type, file_name, file_suffix, file_size, file_path, file_thumbnail_path, file_original_path, file_image, file_is_external, system_create_user_id);
 
             if (!result) {
                 throw new RuntimeException("上传不成功");

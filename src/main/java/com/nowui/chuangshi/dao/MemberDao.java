@@ -110,7 +110,7 @@ public class MemberDao extends Dao {
         }
     }
 
-    public Boolean save(String member_id, String app_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_path, Boolean member_status, String system_create_user_id) {
+    public Boolean save(String member_id, String app_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_parent_path, Boolean member_status, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Member.MEMBER_ID, member_id);
         sqlMap.put(Member.APP_ID, app_id);
@@ -119,7 +119,7 @@ public class MemberDao extends Dao {
         sqlMap.put(Member.FROM_QRCODE_ID, from_qrcode_id);
         sqlMap.put(Member.QRCODE_ID, qrcode_id);
         sqlMap.put(Member.MEMBER_LEVEL_ID, member_level_id);
-        sqlMap.put(Member.MEMBER_PATH, member_path);
+        sqlMap.put(Member.MEMBER_PARENT_PATH, member_parent_path);
         sqlMap.put(Member.MEMBER_STATUS, member_status);
         sqlMap.put(Member.SYSTEM_CREATE_USER_ID, system_create_user_id);
         sqlMap.put(Member.SYSTEM_CREATE_TIME, new Date());
@@ -134,7 +134,7 @@ public class MemberDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String member_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_path, Boolean member_status, String system_update_user_id, Integer system_version) {
+    public Boolean update(String member_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_parent_path, Boolean member_status, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Member.MEMBER_ID, member_id);
         sqlMap.put(Member.USER_ID, user_id);
@@ -142,7 +142,7 @@ public class MemberDao extends Dao {
         sqlMap.put(Member.FROM_QRCODE_ID, from_qrcode_id);
         sqlMap.put(Member.QRCODE_ID, qrcode_id);
         sqlMap.put(Member.MEMBER_LEVEL_ID, member_level_id);
-        sqlMap.put(Member.MEMBER_PATH, member_path);
+        sqlMap.put(Member.MEMBER_PARENT_PATH, member_parent_path);
         sqlMap.put(Member.MEMBER_STATUS, member_status);
         sqlMap.put(Member.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(Member.SYSTEM_UPDATE_TIME, new Date());

@@ -7,6 +7,7 @@ import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.Date;
@@ -151,6 +152,7 @@ public class UserDao extends Dao {
     }
 
     public Boolean save(String user_id, String app_id, String object_id, String user_type, String user_name, String user_avatar, String user_account, String user_mobile, String user_email, String user_password, String wechat_open_id, String wechat_union_id, String system_create_user_id) {
+        user_name = Util.getEmoji(user_name);
         user_password = generatePassword(user_password);
 
         Kv sqlMap = Kv.create();
