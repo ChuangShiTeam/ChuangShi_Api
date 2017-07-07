@@ -46,7 +46,6 @@ import com.nowui.chuangshi.controller.ProductController;
 import com.nowui.chuangshi.controller.QrcodeController;
 import com.nowui.chuangshi.controller.SqlController;
 import com.nowui.chuangshi.controller.StockController;
-import com.nowui.chuangshi.controller.TradeCommossionController;
 import com.nowui.chuangshi.controller.TradeController;
 import com.nowui.chuangshi.controller.UserController;
 import com.nowui.chuangshi.interceptor.GlobalActionInterceptor;
@@ -119,7 +118,6 @@ public class WebConfig extends JFinalConfig {
         routes.add("/express", ExpressController.class);
 
         routes.add("/trade", TradeController.class);
-        routes.add("/trade/commossion", TradeCommossionController.class);
         routes.add("/bill", BillController.class);
         routes.add("/qrcode", QrcodeController.class);
 
