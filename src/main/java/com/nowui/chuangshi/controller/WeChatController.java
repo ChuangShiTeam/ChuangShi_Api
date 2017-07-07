@@ -1,30 +1,25 @@
 package com.nowui.chuangshi.controller;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.service.TradeService;
 import com.nowui.chuangshi.type.PayType;
-import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.MQUtil;
 
 public class WeChatController extends Controller {
-    
+
     private final TradeService tradeService = new TradeService();
-    
+
     @ActionKey(Url.WECHAT_API_NOTIFY)
     public void notifyUrl() {
         String result = HttpKit.readData(getRequest());
@@ -85,11 +80,13 @@ public class WeChatController extends Controller {
 
             Trade trade = tradeService.findByTrade_number(trade_number);
 
-            boolean is_update = tradeService.updateSend(trade.getTrade_id(), trade.getUser_id(), trade_amount, trade_pay_type, trade_pay_number, trade_pay_account, trade_pay_time, trade_pay_result, trade_status);
+            boolean is_update = tradeService.updateSend(trade.getTrade_id(), trade.getUser_id(), trade_amount, trade_pay_type, trade_pay_number, trade_pay_account, trade_pay_time, trade_pay_result,
+                    trade_status);
 
             if (is_update) {
-                //TODO 消息队列通知计算账单和分成
-                
+                // TODO 消息队列通知计算账单和分成
+                MQUtil.sendSync("tradePay", JSON.toJSONString(trade));
+
                 renderText("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
             } else {
                 renderText("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[]]></return_msg></xml>");
@@ -99,6 +96,5 @@ public class WeChatController extends Controller {
             renderText("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[]]></return_msg></xml>");
         }
     }
-
 
 }
