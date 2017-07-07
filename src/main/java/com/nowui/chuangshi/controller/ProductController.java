@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,17 +13,22 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.FeijiuRecommendProduct;
 import com.nowui.chuangshi.model.File;
+import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
 import com.nowui.chuangshi.model.ProductSkuAttribute;
 import com.nowui.chuangshi.model.ProductSkuCommission;
 import com.nowui.chuangshi.model.ProductSkuPrice;
+import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.FileService;
+import com.nowui.chuangshi.service.MemberAddressService;
+import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.ProductService;
 import com.nowui.chuangshi.service.ProductSkuAttributeService;
 import com.nowui.chuangshi.service.ProductSkuCommissionService;
 import com.nowui.chuangshi.service.ProductSkuPriceService;
 import com.nowui.chuangshi.service.ProductSkuService;
+import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -33,7 +39,37 @@ public class ProductController extends Controller {
     private ProductSkuPriceService productSkuPriceService = new ProductSkuPriceService();
     private ProductSkuAttributeService productSkuAttributeService = new ProductSkuAttributeService();
     private ProductSkuCommissionService productSkuCommissionService = new ProductSkuCommissionService();
+    private UserService userService = new UserService();
+    private MemberService memberService = new MemberService();
+    private MemberAddressService memberAddressService = new MemberAddressService();
     private final FileService fileService = new FileService();
+
+    /**
+     * 下单前返回会员信息sku价格
+     */
+    @ActionKey(Url.PRODUCT_SKU_PRICE_FIND)
+    public void skuPriceFind() {
+        validateRequest_app_id();
+
+        validate(Product.PRODUCT_SKU_LIST);
+
+        String request_user_id = getRequest_user_id();
+        JSONObject jsonObject = getParameterJSONObject();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        Map<String, Object> ret = new HashMap<String, Object>();
+        ret.put("express_freight", BigDecimal.ZERO);
+
+        User user = userService.findByUser_id(request_user_id);
+        Member member = memberService.findByMember_id(user.getObjectId());
+
+        ret.put("member_address", memberAddressService.findByMember_id(user.getObjectId()));
+
+        ret = productSkuPriceService.listByProduct_sku_idAndMember_level_id(jsonObject.getJSONArray(Product.PRODUCT_SKU_LIST), member.getMember_level_id(), ret);
+
+        renderSuccessJson(ret);
+    }
 
     @ActionKey(Url.PRODUCT_ADMIN_LIST)
     public void adminList() {
@@ -54,7 +90,7 @@ public class ProductController extends Controller {
 
         renderSuccessJson(total, resultList);
     }
-    
+
     @ActionKey(Url.PRODUCT_ADMIN_ALL_LIST)
     public void adminAllList() {
         validateRequest_app_id();
@@ -64,15 +100,15 @@ public class ProductController extends Controller {
         authenticateRequest_app_idAndRequest_user_id();
 
         List<Product> productList = productService.listByApp_id(request_app_id);
-        
+
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
         for (Product product : productList) {
-        	Map<String, Object> resultMap = new HashMap<String, Object>();
-        	product.keep(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.SYSTEM_VERSION);
-        	List<ProductSku> productSkuList = productSkuService.listByProduct_id(product.getProduct_id());        	
-        	resultMap.put("product", product);
-        	resultMap.put("productSkuList", productSkuList);
-        	resultList.add(resultMap);
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            product.keep(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.SYSTEM_VERSION);
+            List<ProductSku> productSkuList = productSkuService.listByProduct_id(product.getProduct_id());
+            resultMap.put("product", product);
+            resultMap.put("productSkuList", productSkuList);
+            resultList.add(resultMap);
         }
 
         renderSuccessJson(resultList);
@@ -91,7 +127,8 @@ public class ProductController extends Controller {
 
         authenticateApp_id(product.getApp_id());
 
-        product.keep(Product.PRODUCT_ID, Product.PRODUCT_CATEGORY_ID, Product.PRODUCT_BRAND_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_IS_NEW, Product.PRODUCT_IS_RECOMMEND, Product.PRODUCT_IS_BARGAIN, Product.PRODUCT_IS_HOT, Product.PRODUCT_IS_SOLD_OUT, Product.PRODUCT_IS_VIRTUAL, Product.PRODUCT_CONTENT, Product.PRODUCT_STATUS, Product.SYSTEM_VERSION);
+        product.keep(Product.PRODUCT_ID, Product.PRODUCT_CATEGORY_ID, Product.PRODUCT_BRAND_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_IS_NEW, Product.PRODUCT_IS_RECOMMEND,
+                Product.PRODUCT_IS_BARGAIN, Product.PRODUCT_IS_HOT, Product.PRODUCT_IS_SOLD_OUT, Product.PRODUCT_IS_VIRTUAL, Product.PRODUCT_CONTENT, Product.PRODUCT_STATUS, Product.SYSTEM_VERSION);
 
         if (ValidateUtil.isNullOrEmpty(product.getProduct_image())) {
             product.put(Product.PRODUCT_IMAGE_FILE, "");
@@ -126,7 +163,8 @@ public class ProductController extends Controller {
     @ActionKey(Url.PRODUCT_ADMIN_SAVE)
     public void adminSave() {
         validateRequest_app_id();
-        validate(Product.PRODUCT_CATEGORY_ID, Product.PRODUCT_BRAND_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_IS_NEW, Product.PRODUCT_IS_RECOMMEND, Product.PRODUCT_IS_BARGAIN, Product.PRODUCT_IS_HOT, Product.PRODUCT_IS_SOLD_OUT, Product.PRODUCT_IS_VIRTUAL, Product.PRODUCT_CONTENT);
+        validate(Product.PRODUCT_CATEGORY_ID, Product.PRODUCT_BRAND_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_IS_NEW, Product.PRODUCT_IS_RECOMMEND, Product.PRODUCT_IS_BARGAIN,
+                Product.PRODUCT_IS_HOT, Product.PRODUCT_IS_SOLD_OUT, Product.PRODUCT_IS_VIRTUAL, Product.PRODUCT_CONTENT);
 
         Product model = getModel(Product.class);
         String product_id = Util.getRandomUUID();
@@ -136,7 +174,9 @@ public class ProductController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = productService.save(product_id, request_app_id, model.getProduct_category_id(), model.getProduct_brand_id(), model.getProduct_name(), model.getProduct_image(), model.getProduct_is_new(), model.getProduct_is_recommend(), model.getProduct_is_bargain(), model.getProduct_is_hot(), model.getProduct_is_sold_out(), model.getProduct_is_virtual(), model.getProduct_content(), request_user_id);
+        Boolean result = productService.save(product_id, request_app_id, model.getProduct_category_id(), model.getProduct_brand_id(), model.getProduct_name(), model.getProduct_image(),
+                model.getProduct_is_new(), model.getProduct_is_recommend(), model.getProduct_is_bargain(), model.getProduct_is_hot(), model.getProduct_is_sold_out(), model.getProduct_is_virtual(),
+                model.getProduct_content(), request_user_id);
 
         if (result) {
             saveProductSkuList(model.getProduct_id(), jsonObject.getJSONArray(Product.PRODUCT_SKU_LIST), new ArrayList<ProductSku>(), request_user_id);
@@ -148,7 +188,8 @@ public class ProductController extends Controller {
     @ActionKey(Url.PRODUCT_ADMIN_UPDATE)
     public void adminUpdate() {
         validateRequest_app_id();
-        validate(Product.PRODUCT_ID, Product.PRODUCT_CATEGORY_ID, Product.PRODUCT_BRAND_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_IS_NEW, Product.PRODUCT_IS_RECOMMEND, Product.PRODUCT_IS_BARGAIN, Product.PRODUCT_IS_HOT, Product.PRODUCT_IS_SOLD_OUT, Product.PRODUCT_IS_VIRTUAL, Product.PRODUCT_CONTENT, Product.PRODUCT_STATUS, Product.SYSTEM_VERSION);
+        validate(Product.PRODUCT_ID, Product.PRODUCT_CATEGORY_ID, Product.PRODUCT_BRAND_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_IS_NEW, Product.PRODUCT_IS_RECOMMEND,
+                Product.PRODUCT_IS_BARGAIN, Product.PRODUCT_IS_HOT, Product.PRODUCT_IS_SOLD_OUT, Product.PRODUCT_IS_VIRTUAL, Product.PRODUCT_CONTENT, Product.PRODUCT_STATUS, Product.SYSTEM_VERSION);
 
         Product model = getModel(Product.class);
         String request_user_id = getRequest_user_id();
@@ -160,7 +201,9 @@ public class ProductController extends Controller {
 
         authenticateApp_id(product.getApp_id());
 
-        Boolean result = productService.updateValidateSystem_version(model.getProduct_id(), model.getProduct_category_id(), model.getProduct_brand_id(), model.getProduct_name(), model.getProduct_image(), model.getProduct_is_new(), model.getProduct_is_recommend(), model.getProduct_is_bargain(), model.getProduct_is_hot(), model.getProduct_is_sold_out(), model.getProduct_is_virtual(), model.getProduct_content(), model.getProduct_status(), request_user_id, model.getSystem_version());
+        Boolean result = productService.updateValidateSystem_version(model.getProduct_id(), model.getProduct_category_id(), model.getProduct_brand_id(), model.getProduct_name(),
+                model.getProduct_image(), model.getProduct_is_new(), model.getProduct_is_recommend(), model.getProduct_is_bargain(), model.getProduct_is_hot(), model.getProduct_is_sold_out(),
+                model.getProduct_is_virtual(), model.getProduct_content(), model.getProduct_status(), request_user_id, model.getSystem_version());
 
         List<ProductSku> productSkuList = productSkuService.listByProduct_id(model.getProduct_id());
 
@@ -206,30 +249,28 @@ public class ProductController extends Controller {
 
         renderSuccessJson(total, resultList);
     }
-    
+
     @ActionKey(Url.PRODUCT_SYSTEM_ALL_LIST)
     public void systemAllList() {
-    	validateRequest_app_id();
-    	
-    	JSONObject jsonObject = getParameterJSONObject();
-    	String app_id = jsonObject.getString("app_id");
-    	
-    	List<Product> productList = productService.listByOrApp_id(app_id);
-        
+        validateRequest_app_id();
+
+        JSONObject jsonObject = getParameterJSONObject();
+        String app_id = jsonObject.getString("app_id");
+
+        List<Product> productList = productService.listByOrApp_id(app_id);
+
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
         for (Product product : productList) {
-        	Map<String, Object> resultMap = new HashMap<String, Object>();
-        	product.keep(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.SYSTEM_VERSION);
-        	List<ProductSku> productSkuList = productSkuService.listByProduct_id(product.getProduct_id());        	
-        	resultMap.put("product", product);
-        	resultMap.put("productSkuList", productSkuList);
-        	resultList.add(resultMap);
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            product.keep(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.SYSTEM_VERSION);
+            List<ProductSku> productSkuList = productSkuService.listByProduct_id(product.getProduct_id());
+            resultMap.put("product", product);
+            resultMap.put("productSkuList", productSkuList);
+            resultList.add(resultMap);
         }
 
         renderSuccessJson(resultList);
     }
-    
-    
 
     @ActionKey(Url.PRODUCT_SYSTEM_FIND)
     public void systemFind() {
@@ -240,7 +281,8 @@ public class ProductController extends Controller {
 
         Product product = productService.findByProduct_id(model.getProduct_id());
 
-        product.keep(Product.PRODUCT_ID, Product.PRODUCT_CATEGORY_ID, Product.PRODUCT_BRAND_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_IS_NEW, Product.PRODUCT_IS_RECOMMEND, Product.PRODUCT_IS_BARGAIN, Product.PRODUCT_IS_HOT, Product.PRODUCT_IS_SOLD_OUT, Product.PRODUCT_IS_VIRTUAL, Product.PRODUCT_CONTENT, Product.PRODUCT_STATUS, Product.SYSTEM_VERSION);
+        product.keep(Product.PRODUCT_ID, Product.PRODUCT_CATEGORY_ID, Product.PRODUCT_BRAND_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_IS_NEW, Product.PRODUCT_IS_RECOMMEND,
+                Product.PRODUCT_IS_BARGAIN, Product.PRODUCT_IS_HOT, Product.PRODUCT_IS_SOLD_OUT, Product.PRODUCT_IS_VIRTUAL, Product.PRODUCT_CONTENT, Product.PRODUCT_STATUS, Product.SYSTEM_VERSION);
 
         if (ValidateUtil.isNullOrEmpty(product.getProduct_image())) {
             product.put(FeijiuRecommendProduct.PRODUCT_IMAGE_FILE, "");
@@ -255,13 +297,16 @@ public class ProductController extends Controller {
     @ActionKey(Url.PRODUCT_SYSTEM_SAVE)
     public void systemSave() {
         validateRequest_app_id();
-        validate(Product.APP_ID, Product.PRODUCT_CATEGORY_ID, Product.PRODUCT_BRAND_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_IS_NEW, Product.PRODUCT_IS_RECOMMEND, Product.PRODUCT_IS_BARGAIN, Product.PRODUCT_IS_HOT, Product.PRODUCT_IS_SOLD_OUT, Product.PRODUCT_IS_VIRTUAL, Product.PRODUCT_CONTENT);
+        validate(Product.APP_ID, Product.PRODUCT_CATEGORY_ID, Product.PRODUCT_BRAND_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_IS_NEW, Product.PRODUCT_IS_RECOMMEND,
+                Product.PRODUCT_IS_BARGAIN, Product.PRODUCT_IS_HOT, Product.PRODUCT_IS_SOLD_OUT, Product.PRODUCT_IS_VIRTUAL, Product.PRODUCT_CONTENT);
 
         Product model = getModel(Product.class);
         String product_id = Util.getRandomUUID();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = productService.save(product_id, model.getApp_id(), model.getProduct_category_id(), model.getProduct_brand_id(), model.getProduct_name(), model.getProduct_image(), model.getProduct_is_new(), model.getProduct_is_recommend(), model.getProduct_is_bargain(), model.getProduct_is_hot(), model.getProduct_is_sold_out(), model.getProduct_is_virtual(), model.getProduct_content(), request_user_id);
+        Boolean result = productService.save(product_id, model.getApp_id(), model.getProduct_category_id(), model.getProduct_brand_id(), model.getProduct_name(), model.getProduct_image(),
+                model.getProduct_is_new(), model.getProduct_is_recommend(), model.getProduct_is_bargain(), model.getProduct_is_hot(), model.getProduct_is_sold_out(), model.getProduct_is_virtual(),
+                model.getProduct_content(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -269,12 +314,15 @@ public class ProductController extends Controller {
     @ActionKey(Url.PRODUCT_SYSTEM_UPDATE)
     public void systemUpdate() {
         validateRequest_app_id();
-        validate(Product.PRODUCT_ID, Product.PRODUCT_CATEGORY_ID, Product.PRODUCT_BRAND_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_IS_NEW, Product.PRODUCT_IS_RECOMMEND, Product.PRODUCT_IS_BARGAIN, Product.PRODUCT_IS_HOT, Product.PRODUCT_IS_SOLD_OUT, Product.PRODUCT_IS_VIRTUAL, Product.PRODUCT_CONTENT, Product.PRODUCT_STATUS, Product.SYSTEM_VERSION);
+        validate(Product.PRODUCT_ID, Product.PRODUCT_CATEGORY_ID, Product.PRODUCT_BRAND_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_IS_NEW, Product.PRODUCT_IS_RECOMMEND,
+                Product.PRODUCT_IS_BARGAIN, Product.PRODUCT_IS_HOT, Product.PRODUCT_IS_SOLD_OUT, Product.PRODUCT_IS_VIRTUAL, Product.PRODUCT_CONTENT, Product.PRODUCT_STATUS, Product.SYSTEM_VERSION);
 
         Product model = getModel(Product.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = productService.updateValidateSystem_version(model.getProduct_id(), model.getProduct_category_id(), model.getProduct_brand_id(), model.getProduct_name(), model.getProduct_image(), model.getProduct_is_new(), model.getProduct_is_recommend(), model.getProduct_is_bargain(), model.getProduct_is_hot(), model.getProduct_is_sold_out(), model.getProduct_is_virtual(), model.getProduct_content(), model.getProduct_status(), request_user_id, model.getSystem_version());
+        Boolean result = productService.updateValidateSystem_version(model.getProduct_id(), model.getProduct_category_id(), model.getProduct_brand_id(), model.getProduct_name(),
+                model.getProduct_image(), model.getProduct_is_new(), model.getProduct_is_recommend(), model.getProduct_is_bargain(), model.getProduct_is_hot(), model.getProduct_is_sold_out(),
+                model.getProduct_is_virtual(), model.getProduct_content(), model.getProduct_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -299,7 +347,7 @@ public class ProductController extends Controller {
         List<ProductSkuPrice> productSkuPriceSaveList = new ArrayList<ProductSkuPrice>();
         List<ProductSkuCommission> productSkuCommissionSaveList = new ArrayList<ProductSkuCommission>();
 
-        //新增SKU
+        // 新增SKU
         for (int i = 0; i < jsonArray.size(); i++) {
             Boolean isPrice = false;
             Boolean isAttribute = false;
@@ -313,13 +361,13 @@ public class ProductController extends Controller {
             JSONArray productSkuCommissionJSONArray = jsonObject.getJSONArray(ProductSku.PRODUCT_SKU_COMMISSION_LIST);
 
             for (ProductSku productSku : productSkuList) {
-                //对比SKU价格
+                // 对比SKU价格
                 isPrice = comparePrice(productSku.getProduct_sku_id(), productSkuPriceJSONArray);
 
-                //对比SKU属性
+                // 对比SKU属性
                 isAttribute = compareAttribute(productSku.getProduct_sku_id(), productSkuAttributeJSONArray);
 
-                //对比SKU佣金
+                // 对比SKU佣金
                 isCommission = compareCommission(productSku.getProduct_sku_id(), productSkuCommissionJSONArray);
             }
 
@@ -357,7 +405,7 @@ public class ProductController extends Controller {
             }
         }
 
-        //删除SKU
+        // 删除SKU
         for (ProductSku productSku : productSkuList) {
             Boolean isPrice = false;
             Boolean isAttribute = false;
@@ -370,13 +418,13 @@ public class ProductController extends Controller {
                 JSONArray productSkuAttributeJSONArray = jsonObject.getJSONArray(ProductSku.PRODUCT_SKU_ATTRIBUTE_LIST);
                 JSONArray productSkuCommissioJSONArray = jsonObject.getJSONArray(ProductSku.PRODUCT_SKU_COMMISSION_LIST);
 
-                //对比SKU价格
+                // 对比SKU价格
                 isPrice = comparePrice(productSku.getProduct_sku_id(), productSkuPriceJSONArray);
 
-                //对比SKU属性
+                // 对比SKU属性
                 isAttribute = compareAttribute(productSku.getProduct_sku_id(), productSkuAttributeJSONArray);
 
-                //对比SKU佣金
+                // 对比SKU佣金
                 isCommission = compareCommission(productSku.getProduct_sku_id(), productSkuCommissioJSONArray);
             }
 
@@ -411,7 +459,9 @@ public class ProductController extends Controller {
             for (int j = 0; j < productSkuPriceJSONArray.size(); j++) {
                 JSONObject productSkuPriceJSONObject = productSkuPriceJSONArray.getJSONObject(j);
 
-                if (productSkuPrice.getMember_level_id().equals(productSkuPriceJSONObject.getString(ProductSkuPrice.MEMBER_LEVEL_ID)) && productSkuPrice.getMember_level_name().equals(productSkuPriceJSONObject.getString(ProductSkuPrice.MEMBER_LEVEL_NAME)) && productSkuPrice.getProduct_sku_price().compareTo(productSkuPriceJSONObject.getBigDecimal(ProductSkuPrice.PRODUCT_SKU_PRICE)) == 0) {
+                if (productSkuPrice.getMember_level_id().equals(productSkuPriceJSONObject.getString(ProductSkuPrice.MEMBER_LEVEL_ID))
+                        && productSkuPrice.getMember_level_name().equals(productSkuPriceJSONObject.getString(ProductSkuPrice.MEMBER_LEVEL_NAME))
+                        && productSkuPrice.getProduct_sku_price().compareTo(productSkuPriceJSONObject.getBigDecimal(ProductSkuPrice.PRODUCT_SKU_PRICE)) == 0) {
                     isExit = true;
 
                     break;
@@ -446,7 +496,8 @@ public class ProductController extends Controller {
             for (int j = 0; j < productSkuAttributeJSONArray.size(); j++) {
                 JSONObject productSkuAttributeJSONObject = productSkuAttributeJSONArray.getJSONObject(j);
 
-                if (productSkuAttribute.getProduct_sku_attribute_name().equals(productSkuAttributeJSONObject.getString(ProductSkuAttribute.PRODUCT_SKU_ATTRIBUTE_NAME)) && productSkuAttribute.getProduct_sku_attribute_value().equals(productSkuAttributeJSONObject.getString(ProductSkuAttribute.PRODUCT_SKU_ATTRIBUTE_VALUE))) {
+                if (productSkuAttribute.getProduct_sku_attribute_name().equals(productSkuAttributeJSONObject.getString(ProductSkuAttribute.PRODUCT_SKU_ATTRIBUTE_NAME))
+                        && productSkuAttribute.getProduct_sku_attribute_value().equals(productSkuAttributeJSONObject.getString(ProductSkuAttribute.PRODUCT_SKU_ATTRIBUTE_VALUE))) {
                     isExit = true;
 
                     break;
@@ -480,7 +531,9 @@ public class ProductController extends Controller {
             for (int j = 0; j < productSkuCommissioJSONArray.size(); j++) {
                 JSONObject productSkuCommissioJSONObject = productSkuCommissioJSONArray.getJSONObject(j);
 
-                if (productSkuCommission.getMember_level_id().equals(productSkuCommissioJSONObject.getString(ProductSkuCommission.MEMBER_LEVEL_ID)) && productSkuCommission.getMember_level_name().equals(productSkuCommissioJSONObject.getString(ProductSkuCommission.MEMBER_LEVEL_NAME)) && productSkuCommission.getProduct_sku_commission().equals(productSkuCommissioJSONObject.getInteger(ProductSkuCommission.PRODUCT_SKU_COMMISSION))) {
+                if (productSkuCommission.getMember_level_id().equals(productSkuCommissioJSONObject.getString(ProductSkuCommission.MEMBER_LEVEL_ID))
+                        && productSkuCommission.getMember_level_name().equals(productSkuCommissioJSONObject.getString(ProductSkuCommission.MEMBER_LEVEL_NAME))
+                        && productSkuCommission.getProduct_sku_commission().equals(productSkuCommissioJSONObject.getInteger(ProductSkuCommission.PRODUCT_SKU_COMMISSION))) {
                     isExit = true;
 
                     break;

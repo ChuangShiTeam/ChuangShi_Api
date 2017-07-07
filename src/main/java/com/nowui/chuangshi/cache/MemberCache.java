@@ -84,17 +84,17 @@ public class MemberCache extends Cache {
         return member;
     }
 
-    public Boolean save(String member_id, String app_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_path, Boolean member_status, String system_create_user_id) {
-        return memberDao.save(member_id, app_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_path, member_status, system_create_user_id);
+    public Boolean save(String member_id, String app_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_parent_path, Boolean member_status, String system_create_user_id) {
+        return memberDao.save(member_id, app_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path, member_status, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String member_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_path, Boolean member_status, String system_update_user_id, Integer system_version) {
+    public Boolean updateValidateSystem_version(String member_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_parent_path, Boolean member_status, String system_update_user_id, Integer system_version) {
         Member member = findByMember_id(member_id);
         if (!member.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = memberDao.update(member_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_path, member_status, system_update_user_id, system_version);
+        boolean result = memberDao.update(member_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path, member_status, system_update_user_id, system_version);
 
         if (result) {
             CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);

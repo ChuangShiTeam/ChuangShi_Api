@@ -139,6 +139,7 @@ public class Url {
     public static final String PRODUCT_SYSTEM_SAVE = "/product/system/save";
     public static final String PRODUCT_SYSTEM_UPDATE = "/product/system/update";
     public static final String PRODUCT_SYSTEM_DELETE = "/product/system/delete";
+    public static final String PRODUCT_SKU_PRICE_FIND = "/product/sku/price/find";
 
     public static final String PRODUCT_BRAND_LIST = "/product/brand/list";
     public static final String PRODUCT_BRAND_FIND = "/product/brand/find";
@@ -254,6 +255,22 @@ public class Url {
     public static final String CUSTOMER_ATTRIBUTE_SYSTEM_SAVE = "/customer/attribute/system/save";
     public static final String CUSTOMER_ATTRIBUTE_SYSTEM_UPDATE = "/customer/attribute/system/update";
     public static final String CUSTOMER_ATTRIBUTE_SYSTEM_DELETE = "/customer/attribute/system/delete";
+
+    public static final String QRCODE_LIST = "/qrcode/list";
+    public static final String QRCODE_FIND = "/qrcode/find";
+    public static final String QRCODE_SAVE = "/qrcode/save";
+    public static final String QRCODE_UPDATE = "/qrcode/update";
+    public static final String QRCODE_DELETE = "/qrcode/delete";
+    public static final String QRCODE_ADMIN_LIST = "/qrcode/admin/list";
+    public static final String QRCODE_ADMIN_FIND = "/qrcode/admin/find";
+    public static final String QRCODE_ADMIN_SAVE = "/qrcode/admin/save";
+    public static final String QRCODE_ADMIN_UPDATE = "/qrcode/admin/update";
+    public static final String QRCODE_ADMIN_DELETE = "/qrcode/admin/delete";
+    public static final String QRCODE_SYSTEM_LIST = "/qrcode/system/list";
+    public static final String QRCODE_SYSTEM_FIND = "/qrcode/system/find";
+    public static final String QRCODE_SYSTEM_SAVE = "/qrcode/system/save";
+    public static final String QRCODE_SYSTEM_UPDATE = "/qrcode/system/update";
+    public static final String QRCODE_SYSTEM_DELETE = "/qrcode/system/delete";
 
     public static final String GUANGQI_CUSTOMER_LIST = "/guangqi/customer/list";
     public static final String GUANGQI_CUSTOMER_FIND = "/guangqi/customer/find";

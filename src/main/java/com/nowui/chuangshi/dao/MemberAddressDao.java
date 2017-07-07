@@ -154,4 +154,20 @@ public class MemberAddressDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
+    
+    public MemberAddress findByMember_id(String member_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(MemberAddress.MEMBER_ID, member_id);
+        SqlPara sqlPara = Db.getSqlPara("member_address.findByMember_id", sqlMap);
+
+        logSql("member_address", "findByMember_address_id", sqlPara);
+
+        List<MemberAddress> member_addressList = new MemberAddress().find(sqlPara.getSql(), sqlPara.getPara());
+        if (member_addressList.size() == 0) {
+            return null;
+        } else {
+            return member_addressList.get(0);
+        }
+    }
+
 }

@@ -55,7 +55,8 @@ public class CustomerController extends Controller {
     @ActionKey(Url.CUSTOMER_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(Customer.CUSTOMER_NAME, Customer.CUSTOMER_SEX, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_TEL, Customer.CUSTOMER_MOBILE, Customer.CUSTOMER_POSTCODE, Customer.CUSTOMER_ID_CARD, Customer.CUSTOMER_PROVINCE, Customer.CUSTOMER_CITY, Customer.CUSTOMER_AREA, Customer.CUSTOMER_ADDRESS);
+        validate(Customer.CUSTOMER_NAME, Customer.CUSTOMER_SEX, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_TEL, Customer.CUSTOMER_MOBILE, Customer.CUSTOMER_POSTCODE, Customer.CUSTOMER_ID_CARD,
+                Customer.CUSTOMER_PROVINCE, Customer.CUSTOMER_CITY, Customer.CUSTOMER_AREA, Customer.CUSTOMER_ADDRESS);
 
         Customer model = getModel(Customer.class);
         String customer_id = Util.getRandomUUID();
@@ -64,7 +65,9 @@ public class CustomerController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = customerService.save(customer_id, request_app_id, model.getCustomer_name(), model.getCustomer_sex(), model.getCustomer_birthday(), model.getCustomer_tel(), model.getCustomer_mobile(), model.getCustomer_postcode(), model.getCustomer_id_card(), model.getCustomer_province(), model.getCustomer_city(), model.getCustomer_area(), model.getCustomer_address(), request_user_id);
+        Boolean result = customerService.save(customer_id, request_app_id, model.getCustomer_name(), model.getCustomer_sex(), model.getCustomer_birthday(), model.getCustomer_tel(),
+                model.getCustomer_mobile(), model.getCustomer_postcode(), model.getCustomer_id_card(), model.getCustomer_province(), model.getCustomer_city(), model.getCustomer_area(),
+                model.getCustomer_address(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -72,7 +75,8 @@ public class CustomerController extends Controller {
     @ActionKey(Url.CUSTOMER_UPDATE)
     public void update() {
         validateRequest_app_id();
-        validate(Customer.CUSTOMER_ID, Customer.CUSTOMER_NAME, Customer.CUSTOMER_SEX, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_TEL, Customer.CUSTOMER_MOBILE, Customer.CUSTOMER_POSTCODE, Customer.CUSTOMER_ID_CARD, Customer.CUSTOMER_PROVINCE, Customer.CUSTOMER_CITY, Customer.CUSTOMER_AREA, Customer.CUSTOMER_ADDRESS, Customer.SYSTEM_VERSION);
+        validate(Customer.CUSTOMER_ID, Customer.CUSTOMER_NAME, Customer.CUSTOMER_SEX, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_TEL, Customer.CUSTOMER_MOBILE, Customer.CUSTOMER_POSTCODE,
+                Customer.CUSTOMER_ID_CARD, Customer.CUSTOMER_PROVINCE, Customer.CUSTOMER_CITY, Customer.CUSTOMER_AREA, Customer.CUSTOMER_ADDRESS, Customer.SYSTEM_VERSION);
 
         Customer model = getModel(Customer.class);
         String request_user_id = getRequest_user_id();
@@ -84,7 +88,9 @@ public class CustomerController extends Controller {
         authenticateApp_id(customer.getApp_id());
         authenticateSystem_create_user_id(customer.getSystem_create_user_id());
 
-        Boolean result = customerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_sex(), model.getCustomer_birthday(), model.getCustomer_tel(), model.getCustomer_mobile(), model.getCustomer_postcode(), model.getCustomer_id_card(), model.getCustomer_province(), model.getCustomer_city(), model.getCustomer_area(), model.getCustomer_address(), request_user_id, model.getSystem_version());
+        Boolean result = customerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_sex(), model.getCustomer_birthday(), model.getCustomer_tel(),
+                model.getCustomer_mobile(), model.getCustomer_postcode(), model.getCustomer_id_card(), model.getCustomer_province(), model.getCustomer_city(), model.getCustomer_area(),
+                model.getCustomer_address(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -123,7 +129,9 @@ public class CustomerController extends Controller {
         List<Customer> resultList = customerService.listByApp_idOrLikeCustomer_nameAndLimit(request_app_id, model.getCustomer_name(), getM(), getN());
 
         for (Customer result : resultList) {
-            result.keep(Customer.CUSTOMER_ID, Customer.SYSTEM_VERSION);
+            result.keep(Customer.CUSTOMER_ID, Customer.SYSTEM_VERSION, Customer.APP_ID, Customer.CUSTOMER_NAME, Customer.CUSTOMER_SEX, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_TEL,
+                    Customer.CUSTOMER_MOBILE, Customer.CUSTOMER_POSTCODE, Customer.CUSTOMER_ID_CARD, Customer.CUSTOMER_PROVINCE, Customer.CUSTOMER_CITY, Customer.CUSTOMER_AREA,
+                    Customer.CUSTOMER_ADDRESS);
         }
 
         renderSuccessJson(total, resultList);
@@ -142,7 +150,9 @@ public class CustomerController extends Controller {
 
         authenticateApp_id(customer.getApp_id());
 
-        customer.keep(Customer.CUSTOMER_ID, Customer.SYSTEM_VERSION);
+        customer.keep(Customer.CUSTOMER_ID, Customer.SYSTEM_VERSION, Customer.APP_ID, Customer.CUSTOMER_NAME, Customer.CUSTOMER_SEX, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_TEL,
+                Customer.CUSTOMER_MOBILE, Customer.CUSTOMER_POSTCODE, Customer.CUSTOMER_ID_CARD, Customer.CUSTOMER_PROVINCE, Customer.CUSTOMER_CITY, Customer.CUSTOMER_AREA,
+                Customer.CUSTOMER_ADDRESS);
 
         renderSuccessJson(customer);
     }
@@ -155,7 +165,8 @@ public class CustomerController extends Controller {
     @ActionKey(Url.CUSTOMER_ADMIN_UPDATE)
     public void adminUpdate() {
         validateRequest_app_id();
-        validate(Customer.CUSTOMER_ID, Customer.CUSTOMER_NAME, Customer.CUSTOMER_SEX, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_TEL, Customer.CUSTOMER_MOBILE, Customer.CUSTOMER_POSTCODE, Customer.CUSTOMER_ID_CARD, Customer.CUSTOMER_PROVINCE, Customer.CUSTOMER_CITY, Customer.CUSTOMER_AREA, Customer.CUSTOMER_ADDRESS, Customer.SYSTEM_VERSION);
+        validate(Customer.CUSTOMER_ID, Customer.CUSTOMER_NAME, Customer.CUSTOMER_SEX, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_TEL, Customer.CUSTOMER_MOBILE, Customer.CUSTOMER_POSTCODE,
+                Customer.CUSTOMER_ID_CARD, Customer.CUSTOMER_PROVINCE, Customer.CUSTOMER_CITY, Customer.CUSTOMER_AREA, Customer.CUSTOMER_ADDRESS, Customer.SYSTEM_VERSION);
 
         Customer model = getModel(Customer.class);
         String request_user_id = getRequest_user_id();
@@ -166,7 +177,9 @@ public class CustomerController extends Controller {
 
         authenticateApp_id(customer.getApp_id());
 
-        Boolean result = customerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_sex(), model.getCustomer_birthday(), model.getCustomer_tel(), model.getCustomer_mobile(), model.getCustomer_postcode(), model.getCustomer_id_card(), model.getCustomer_province(), model.getCustomer_city(), model.getCustomer_area(), model.getCustomer_address(), request_user_id, model.getSystem_version());
+        Boolean result = customerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_sex(), model.getCustomer_birthday(), model.getCustomer_tel(),
+                model.getCustomer_mobile(), model.getCustomer_postcode(), model.getCustomer_id_card(), model.getCustomer_province(), model.getCustomer_city(), model.getCustomer_area(),
+                model.getCustomer_address(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -224,13 +237,16 @@ public class CustomerController extends Controller {
     @ActionKey(Url.CUSTOMER_SYSTEM_SAVE)
     public void systemSave() {
         validateRequest_app_id();
-        validate(Customer.APP_ID, Customer.CUSTOMER_NAME, Customer.CUSTOMER_SEX, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_TEL, Customer.CUSTOMER_MOBILE, Customer.CUSTOMER_POSTCODE, Customer.CUSTOMER_ID_CARD, Customer.CUSTOMER_PROVINCE, Customer.CUSTOMER_CITY, Customer.CUSTOMER_AREA, Customer.CUSTOMER_ADDRESS);
+        validate(Customer.APP_ID, Customer.CUSTOMER_NAME, Customer.CUSTOMER_SEX, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_TEL, Customer.CUSTOMER_MOBILE, Customer.CUSTOMER_POSTCODE,
+                Customer.CUSTOMER_ID_CARD, Customer.CUSTOMER_PROVINCE, Customer.CUSTOMER_CITY, Customer.CUSTOMER_AREA, Customer.CUSTOMER_ADDRESS);
 
         Customer model = getModel(Customer.class);
         String customer_id = Util.getRandomUUID();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = customerService.save(customer_id, model.getApp_id(), model.getCustomer_name(), model.getCustomer_sex(), model.getCustomer_birthday(), model.getCustomer_tel(), model.getCustomer_mobile(), model.getCustomer_postcode(), model.getCustomer_id_card(), model.getCustomer_province(), model.getCustomer_city(), model.getCustomer_area(), model.getCustomer_address(), request_user_id);
+        Boolean result = customerService.save(customer_id, model.getApp_id(), model.getCustomer_name(), model.getCustomer_sex(), model.getCustomer_birthday(), model.getCustomer_tel(),
+                model.getCustomer_mobile(), model.getCustomer_postcode(), model.getCustomer_id_card(), model.getCustomer_province(), model.getCustomer_city(), model.getCustomer_area(),
+                model.getCustomer_address(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -238,12 +254,15 @@ public class CustomerController extends Controller {
     @ActionKey(Url.CUSTOMER_SYSTEM_UPDATE)
     public void systemUpdate() {
         validateRequest_app_id();
-        validate(Customer.CUSTOMER_ID, Customer.CUSTOMER_NAME, Customer.CUSTOMER_SEX, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_TEL, Customer.CUSTOMER_MOBILE, Customer.CUSTOMER_POSTCODE, Customer.CUSTOMER_ID_CARD, Customer.CUSTOMER_PROVINCE, Customer.CUSTOMER_CITY, Customer.CUSTOMER_AREA, Customer.CUSTOMER_ADDRESS, Customer.SYSTEM_VERSION);
+        validate(Customer.CUSTOMER_ID, Customer.CUSTOMER_NAME, Customer.CUSTOMER_SEX, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_TEL, Customer.CUSTOMER_MOBILE, Customer.CUSTOMER_POSTCODE,
+                Customer.CUSTOMER_ID_CARD, Customer.CUSTOMER_PROVINCE, Customer.CUSTOMER_CITY, Customer.CUSTOMER_AREA, Customer.CUSTOMER_ADDRESS, Customer.SYSTEM_VERSION);
 
         Customer model = getModel(Customer.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = customerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_sex(), model.getCustomer_birthday(), model.getCustomer_tel(), model.getCustomer_mobile(), model.getCustomer_postcode(), model.getCustomer_id_card(), model.getCustomer_province(), model.getCustomer_city(), model.getCustomer_area(), model.getCustomer_address(), request_user_id, model.getSystem_version());
+        Boolean result = customerService.updateValidateSystem_version(model.getCustomer_id(), model.getCustomer_name(), model.getCustomer_sex(), model.getCustomer_birthday(), model.getCustomer_tel(),
+                model.getCustomer_mobile(), model.getCustomer_postcode(), model.getCustomer_id_card(), model.getCustomer_province(), model.getCustomer_city(), model.getCustomer_area(),
+                model.getCustomer_address(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

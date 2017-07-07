@@ -92,6 +92,26 @@
     WHERE system_status = 1
     AND member_address_id = #p(member_address_id)
   #end
+  
+    #sql("findByMember_id")
+    SELECT
+    member_address_id,
+    app_id,
+    member_id,
+    user_id,
+    member_address_name,
+    member_address_tel,
+    member_address_mobile,
+    member_address_postcode,
+    member_address_province,
+    member_address_city,
+    member_address_area,
+    member_address_address,
+    member_delivery_is_default
+    FROM table_member_address
+    WHERE system_status = 1
+    AND member_id = #p(member_id)
+  #end
 
   #sql("save")
     INSERT INTO table_member_address (

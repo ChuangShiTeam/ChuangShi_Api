@@ -27,7 +27,7 @@ public class Member extends Model<Member> {
     public static final String MEMBER_LEVEL_ID = "member_level_id";
 
     @Column(type = ColumnType.VARCHAR, length = 1000, comment = "会员路径")
-    public static final String MEMBER_PATH = "member_path";
+    public static final String MEMBER_PARENT_PATH = "member_parent_path";
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "会员状态")
     public static final String MEMBER_STATUS = "member_status";
@@ -88,12 +88,12 @@ public class Member extends Model<Member> {
         set(MEMBER_LEVEL_ID, member_level_id);
     }
 
-    public String getMember_path() {
-        return getStr(MEMBER_PATH);
+    public String getMember_parent_path() {
+        return getStr(MEMBER_PARENT_PATH);
     }
 
-    public void setMember_path(String member_path) {
-        set(MEMBER_PATH, member_path);
+    public void setMember_parent_path(String member_parent_path) {
+        set(MEMBER_PARENT_PATH, member_parent_path);
     }
 
     public Boolean getMember_status() {
