@@ -119,6 +119,22 @@ public class TradeCache extends Cache {
         return result;
     }
     
+    public Boolean updateTrade_is_payAndTrade_flowAndSystem_update_user_idAndSystem_update_timeAndByTrade_idAndSystem_version(String trade_id, Boolean trade_is_pay, String trade_flow, String system_update_user_id, Integer system_version) {
+        Trade trade = findByTrade_id(trade_id);
+        if (!trade.getSystem_version().equals(system_version)) {
+            throw new RuntimeException(Constant.ERROR_VERSION);
+        }
+
+        boolean result = tradeDao.updateTrade_is_payAndTrade_flowAndSystem_update_user_idAndSystem_update_timeAndByTrade_idAndSystem_version(trade_id, trade_is_pay, trade_flow, system_update_user_id, system_version);
+
+        if (result) {
+            CacheUtil.remove(TRADE_BY_TRADE_ID_CACHE, trade_id);
+            CacheUtil.remove(TRADE_BY_TRADE_NUMBER_CACHE, trade.getTrade_number());
+        }
+
+        return result;
+    }
+    
     /**
      * 生成订单号
      * @return

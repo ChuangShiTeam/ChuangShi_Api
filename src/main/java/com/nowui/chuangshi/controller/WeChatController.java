@@ -83,7 +83,7 @@ public class WeChatController extends Controller {
             Trade trade = tradeService.findByTrade_number(trade_number);
 
             boolean is_update = tradeService.updateSend(trade.getTrade_id(), trade.getUser_id(), trade_amount, trade_pay_type, trade_pay_number, trade_pay_account, trade_pay_time, trade_pay_result,
-                    trade_status);
+                    trade_status, trade.getSystem_version());
 
             if (is_update) {
                 // TODO 消息队列通知计算账单和分成
