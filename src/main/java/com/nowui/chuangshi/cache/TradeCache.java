@@ -15,6 +15,7 @@ import com.nowui.chuangshi.util.CacheUtil;
 public class TradeCache extends Cache {
 
     public static final String TRADE_BY_TRADE_ID_CACHE = "trade_by_trade_id_cache";
+    public static final String TRADE_BY_TRADE_NUMBER_CACHE = "trade_by_trade_number_cache";
     public static final String TRADE_NUMBER_LIST_CACHE = "trade_number_list_cache";
     
 
@@ -69,6 +70,18 @@ public class TradeCache extends Cache {
 
         return trade;
     }
+    
+    public Trade findByTrade_number(String trade_number) {
+        Trade trade = CacheUtil.get(TRADE_BY_TRADE_NUMBER_CACHE, trade_number);
+
+        if (trade == null) {
+            trade = tradeDao.findByTrade_number(trade_number);
+
+            CacheUtil.put(TRADE_BY_TRADE_NUMBER_CACHE, trade_number, trade);
+        }
+
+        return trade;
+    }
 
     public Boolean save(String trade_id, String app_id, String user_id, String trade_number, String trade_receiver_name, String trade_receiver_mobile, String trade_receiver_province, String trade_receiver_city, String trade_receiver_area, String trade_receiver_address, String trade_message, Integer trade_product_quantity, BigDecimal trade_product_amount, BigDecimal trade_express_amount, BigDecimal trade_discount_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, String trade_flow, String trade_status, String trade_audit_status, String system_create_user_id) {
         return tradeDao.save(trade_id, app_id, user_id, trade_number, trade_receiver_name, trade_receiver_mobile, trade_receiver_province, trade_receiver_city, trade_receiver_area, trade_receiver_address, trade_message, trade_product_quantity, trade_product_amount, trade_express_amount, trade_discount_amount, trade_is_commission, trade_is_confirm, trade_is_pay, trade_flow, trade_status, trade_audit_status, system_create_user_id);
@@ -84,6 +97,7 @@ public class TradeCache extends Cache {
 
         if (result) {
             CacheUtil.remove(TRADE_BY_TRADE_ID_CACHE, trade_id);
+            CacheUtil.remove(TRADE_BY_TRADE_NUMBER_CACHE, trade_number);
         }
 
         return result;
@@ -99,6 +113,7 @@ public class TradeCache extends Cache {
 
         if (result) {
             CacheUtil.remove(TRADE_BY_TRADE_ID_CACHE, trade_id);
+            CacheUtil.remove(TRADE_BY_TRADE_NUMBER_CACHE, trade.getTrade_number());
         }
 
         return result;
@@ -124,5 +139,5 @@ public class TradeCache extends Cache {
         CacheUtil.put(TRADE_NUMBER_LIST_CACHE, date, trade_numberList);
         return trade_number;
     }
-    
+
 }
