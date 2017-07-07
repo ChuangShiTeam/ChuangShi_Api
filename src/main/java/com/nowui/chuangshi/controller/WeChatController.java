@@ -1,18 +1,15 @@
 package com.nowui.chuangshi.controller;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.alibaba.fastjson.JSON;
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.Sql;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.service.TradeService;
 import com.nowui.chuangshi.type.PayType;
@@ -87,16 +84,7 @@ public class WeChatController extends Controller {
 
             if (is_update) {
                 // TODO 消息队列通知计算账单和分成
-                Map<String, Object> mqMap = new HashMap<String, Object>();
-                // mqMap.put(Sql.APP_ID, "");
-                // mqMap.put(Sql.HTTP_ID, "");
-                // mqMap.put(Sql.SQL_TABLE, sql_table);
-                // mqMap.put(Sql.SQL_ACTION, sql_action);
-                // mqMap.put(Sql.SQL_CONTENT, getSql(sqlPara.getSql(),
-                // sqlPara.getPara()));
-                // mqMap.put(Sql.SYSTEM_CREATE_USER_ID, "");
-                mqMap.put(Trade.TRADE_ID, trade.getTrade_id());
-                MQUtil.sendSync("tradePay", JSON.toJSONString(mqMap));
+                MQUtil.sendSync("tradePay", trade.getTrade_id());
 
                 renderText("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
             } else {

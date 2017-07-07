@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.handler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.plugin.zbus.annotation.Handler;
 import com.jfinal.plugin.zbus.annotation.Topic;
 import com.jfinal.plugin.zbus.handler.TMsgHandler;
+import com.nowui.chuangshi.model.Bill;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.ProductSkuCommission;
 import com.nowui.chuangshi.model.Trade;
@@ -38,11 +40,8 @@ public class TradePayHandler extends TMsgHandler<String> {
     private MemberService memberService = new MemberService();
 
     @Override
-    public void handle(String json) {
+    public void handle(String trade_id) {
         try {
-            JSONObject jsonObject = JSONObject.parseObject(json);
-            String trade_id = jsonObject.getString(Trade.TRADE_ID);
-
             Trade trade = tradeService.findByTrade_id(trade_id);
 
             String user_id = trade.getUser_id();
@@ -61,23 +60,23 @@ public class TradePayHandler extends TMsgHandler<String> {
                     List<ProductSkuCommission> productSkuCommissionList = productSkuCommissionService.listByProduct_sku_id(tradeProductSku.getProduct_sku_id());
                     for (ProductSkuCommission productSkuCommission : productSkuCommissionList) {
                         if (productSkuCommission.getMember_level_id().equals(member_parent.getMember_level_id())) {
-                            tadeCommossionService.
+                            //tadeCommossionService.
                         }
                     }
                 }
             }
-
             
-            tadeCommossionService.save(trade_id, product_sku_id, member_id, member_name, member_level_id, member_level_name, product_sku_commission, product_sku_commission_amount, system_create_user_id);
+            List<Bill>  billList=  new ArrayList<Bill>();
+            //billService.save(billList);
+            //tadeCommossionService.save();
             
         } catch (Exception e) {
-            JSONObject jsonObject = JSONObject.parseObject(json);
 
             Map<String, Object> exceptionMap = new HashMap<String, Object>();
-            exceptionMap.put(com.nowui.chuangshi.model.Exception.APP_ID, jsonObject.getString(com.nowui.chuangshi.model.Exception.APP_ID));
-            exceptionMap.put(com.nowui.chuangshi.model.Exception.HTTP_ID, jsonObject.getString(com.nowui.chuangshi.model.Exception.HTTP_ID));
+            exceptionMap.put(com.nowui.chuangshi.model.Exception.APP_ID, "");
+            exceptionMap.put(com.nowui.chuangshi.model.Exception.HTTP_ID, "");
             exceptionMap.put(com.nowui.chuangshi.model.Exception.EXCEPTION_CONTENT, e.toString());
-            exceptionMap.put(com.nowui.chuangshi.model.Exception.SYSTEM_CREATE_USER_ID, jsonObject.getString(com.nowui.chuangshi.model.Exception.SYSTEM_CREATE_USER_ID));
+            exceptionMap.put(com.nowui.chuangshi.model.Exception.SYSTEM_CREATE_USER_ID, "");
             MQUtil.sendSync("exception", JSON.toJSONString(exceptionMap));
 
             e.printStackTrace();
