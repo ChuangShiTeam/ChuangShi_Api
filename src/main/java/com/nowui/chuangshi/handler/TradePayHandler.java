@@ -1,38 +1,75 @@
 package com.nowui.chuangshi.handler;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.plugin.zbus.annotation.Handler;
 import com.jfinal.plugin.zbus.annotation.Topic;
 import com.jfinal.plugin.zbus.handler.TMsgHandler;
-import com.nowui.chuangshi.model.Sql;
-import com.nowui.chuangshi.service.SqlService;
+import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.ProductSkuCommission;
+import com.nowui.chuangshi.model.Trade;
+import com.nowui.chuangshi.model.TradeProductSku;
+import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.service.BillService;
+import com.nowui.chuangshi.service.MemberService;
+import com.nowui.chuangshi.service.ProductSkuCommissionService;
+import com.nowui.chuangshi.service.TradeCommossionService;
+import com.nowui.chuangshi.service.TradePayService;
+import com.nowui.chuangshi.service.TradeProductSkuService;
+import com.nowui.chuangshi.service.TradeService;
+import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.util.MQUtil;
-import com.nowui.chuangshi.util.Util;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Topic(mq = "MQ", topic = "tradePay")
 @Handler
 public class TradePayHandler extends TMsgHandler<String> {
 
-    private final SqlService sqlService = new SqlService();
+    private final TradeService tradeService = new TradeService();
+    private final TradeProductSkuService tradeProductSkuService = new TradeProductSkuService();
+    private final TradePayService tradePayService = new TradePayService();
+    private final TradeCommossionService tadeCommossionService = new TradeCommossionService();
+    private final BillService billService = new BillService();
+    private final ProductSkuCommissionService productSkuCommissionService = new ProductSkuCommissionService();
+    private UserService userService = new UserService();
+    private MemberService memberService = new MemberService();
 
     @Override
     public void handle(String json) {
         try {
             JSONObject jsonObject = JSONObject.parseObject(json);
-            String app_id = jsonObject.getString(Sql.APP_ID);
-            String http_id = jsonObject.getString(Sql.HTTP_ID);
-            String sql_table = jsonObject.getString(Sql.SQL_TABLE);
-            String sql_action = jsonObject.getString(Sql.SQL_ACTION);
-            String sql_content = jsonObject.getString(Sql.SQL_CONTENT);
-            String system_create_user_id = jsonObject.getString(Sql.SYSTEM_CREATE_USER_ID);
+            String trade_id = jsonObject.getString(Trade.TRADE_ID);
 
-            System.out.println(sql_content);
+            Trade trade = tradeService.findByTrade_id(trade_id);
 
-            sqlService.save(Util.getRandomUUID(), app_id, http_id, sql_table, sql_action, sql_content, system_create_user_id);
+            String user_id = trade.getUser_id();
+            User user = userService.findByUser_id(user_id);
+            Member member = memberService.findByMember_id(user.getObjectId());
+
+            String member_parent_path = member.getMember_parent_path();
+            member_parent_path = member_parent_path.trim().replace("'", "");
+            String[] member_parent_id_list = member_parent_path.split(".");
+
+            List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(trade_id);
+
+            for (String member_parent_id : member_parent_id_list) {
+                Member member_parent = memberService.findByMember_id(member_parent_id);
+                for (TradeProductSku tradeProductSku : tradeProductSkuList) {
+                    List<ProductSkuCommission> productSkuCommissionList = productSkuCommissionService.listByProduct_sku_id(tradeProductSku.getProduct_sku_id());
+                    for (ProductSkuCommission productSkuCommission : productSkuCommissionList) {
+                        if (productSkuCommission.getMember_level_id().equals(member_parent.getMember_level_id())) {
+                            tadeCommossionService.
+                        }
+                    }
+                }
+            }
+
+            
+            tadeCommossionService.save(trade_id, product_sku_id, member_id, member_name, member_level_id, member_level_name, product_sku_commission, product_sku_commission_amount, system_create_user_id);
+            
         } catch (Exception e) {
             JSONObject jsonObject = JSONObject.parseObject(json);
 
