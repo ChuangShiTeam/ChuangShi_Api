@@ -172,6 +172,21 @@ public class TradeDao extends Dao {
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
+    
+    public Boolean updateTrade_is_payAndTrade_flowAndSystem_update_user_idAndSystem_update_timeAndByTrade_idAndSystem_version(String trade_id, Boolean trade_is_pay, String trade_flow, String system_update_user_id, Integer system_version) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Trade.TRADE_ID, trade_id);
+        sqlMap.put(Trade.TRADE_IS_PAY, trade_is_pay);
+        sqlMap.put(Trade.TRADE_FLOW, trade_flow);
+        sqlMap.put(Trade.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(Trade.SYSTEM_UPDATE_TIME, new Date());
+        sqlMap.put(Trade.SYSTEM_VERSION, system_version);
+        SqlPara sqlPara = Db.getSqlPara("trade.updateTrade_is_payAndTrade_flowAndSystem_update_user_idAndSystem_update_timeAndByTrade_idAndSystem_version", sqlMap);
+        
+        logSql("trade", "updateTrade_is_payAndTrade_flowAndSystem_update_user_idAndSystem_update_timeAndByTrade_idAndSystem_version", sqlPara);
+        
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
 
     public Boolean deleteByTrade_idAndSystem_version(String trade_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
