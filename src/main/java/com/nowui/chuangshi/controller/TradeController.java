@@ -8,11 +8,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
+import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.model.TradeProductSku;
+import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.ProductSkuPriceService;
 import com.nowui.chuangshi.service.TradeProductSkuService;
 import com.nowui.chuangshi.service.TradeService;
+import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.TradeFlow;
 import com.nowui.chuangshi.util.Util;
 
@@ -21,6 +25,8 @@ public class TradeController extends Controller {
     private final TradeService tradeService = new TradeService();
     private final TradeProductSkuService tradeProductSkuService = new TradeProductSkuService();
     private final ProductSkuPriceService productSkuPriceService = new ProductSkuPriceService();
+    private UserService userService = new UserService();
+    private MemberService memberService = new MemberService();
 
     @ActionKey(Url.TRADE_LIST)
     public void list() {
@@ -76,11 +82,15 @@ public class TradeController extends Controller {
         authenticateRequest_app_idAndRequest_user_id();
         int trade_product_quantity = 0;
         BigDecimal trade_product_amount = new BigDecimal(0);
+        User user = userService.findByUser_id(request_user_id);
+        Member member = memberService.findByMember_id(user.getObjectId());
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
             TradeProductSku tradeProductSku = jsonObject1.toJavaObject(TradeProductSku.class);
-            tradeProductSkuService.save(trade_id, tradeProductSku.getProduct_sku_id(), tradeProductSku.getProduct_snap_id(), tradeProductSku.getProduct_sku_quantity(), tradeProductSku.getProduct_sku_amount(), request_user_id);
+            BigDecimal  product_sku_amount = productSkuPriceService.findByProduct_sku_idAndMember_level_id(tradeProductSku.getProduct_sku_id(), member.getMember_level_id());
+            tradeProductSkuService.save(trade_id, tradeProductSku.getProduct_sku_id(), tradeProductSku.getProduct_snap_id(), tradeProductSku.getProduct_sku_quantity(), trade_product_amount, request_user_id);
             trade_product_quantity += tradeProductSku.getProduct_sku_quantity();
+            trade_product_amount = trade_product_amount.add(product_sku_amount);
         }
 
         String trade_number = tradeService.generateTrade_number();
@@ -89,7 +99,7 @@ public class TradeController extends Controller {
         boolean trade_is_confirm = false;
         boolean trade_is_commission = false;
         
-        Boolean result = tradeService.save(trade_id, request_app_id, request_user_id, trade_number, model.getTrade_receiver_name(), model.getTrade_receiver_mobile(), model.getTrade_receiver_province(), model.getTrade_receiver_city(), model.getTrade_receiver_area(), model.getTrade_receiver_address(), model.getTrade_message(), trade_product_quantity, model.getTrade_product_amount(), model.getTrade_express_amount(), model.getTrade_discount_amount(), trade_is_commission, trade_is_confirm, trade_is_pay, trade_flow, model.getTrade_status(), model.getTrade_audit_status(), request_user_id);
+        Boolean result = tradeService.save(trade_id, request_app_id, request_user_id, trade_number, model.getTrade_receiver_name(), model.getTrade_receiver_mobile(), model.getTrade_receiver_province(), model.getTrade_receiver_city(), model.getTrade_receiver_area(), model.getTrade_receiver_address(), model.getTrade_message(), trade_product_quantity, trade_product_amount, model.getTrade_express_amount(), model.getTrade_discount_amount(), trade_is_commission, trade_is_confirm, trade_is_pay, trade_flow, model.getTrade_status(), model.getTrade_audit_status(), request_user_id);
 
         renderSuccessJson(result);
     }

@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,10 @@ public class ProductSkuPriceService extends Service {
 
     public Map<String, Object> listByProduct_sku_idAndMember_level_id(JSONArray jsonArray, String member_level_id, Map<String, Object> ret) {
         return productSkuPriceCache.listByProduct_sku_idAndMember_level_id(jsonArray, member_level_id,ret);
+    }
+    
+    public BigDecimal findByProduct_sku_idAndMember_level_id(String product_sku_id, String member_level_id) {
+        return productSkuPriceCache.findByProduct_sku_idAndMember_level_id(product_sku_id, member_level_id);
     }
 
 }

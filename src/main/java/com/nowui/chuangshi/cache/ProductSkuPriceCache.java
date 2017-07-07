@@ -19,7 +19,8 @@ public class ProductSkuPriceCache extends Cache {
     private ProductSkuPriceDao productSkuPriceDao = new ProductSkuPriceDao();
 
     public List<ProductSkuPrice> listByProduct_sku_id(String product_sku_id) {
-        List<ProductSkuPrice> productSkuPriceList = CacheUtil.get(PRODUCT_SKU_PRICE_LIST_BY_PRODUCT_SKU_ID_CACHE, product_sku_id);
+        List<ProductSkuPrice> productSkuPriceList = CacheUtil.get(PRODUCT_SKU_PRICE_LIST_BY_PRODUCT_SKU_ID_CACHE,
+                product_sku_id);
 
         if (productSkuPriceList == null) {
             productSkuPriceList = productSkuPriceDao.listByProduct_sku_id(product_sku_id);
@@ -54,7 +55,8 @@ public class ProductSkuPriceCache extends Cache {
         return result;
     }
 
-    public Map<String, Object> listByProduct_sku_idAndMember_level_id(JSONArray jsonArray, String member_level_id, Map<String, Object> ret) {
+    public Map<String, Object> listByProduct_sku_idAndMember_level_id(JSONArray jsonArray, String member_level_id,
+            Map<String, Object> ret) {
         List<Map<String, Object>> product_sku_list = new ArrayList<Map<String, Object>>();
 
         BigDecimal total_price = BigDecimal.ZERO;
@@ -63,7 +65,8 @@ public class ProductSkuPriceCache extends Cache {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             String product_sku_id = jsonObject.getString(ProductSku.PRODUCT_SKU_ID);
 
-            List<ProductSkuPrice> productSkuPriceList = CacheUtil.get(PRODUCT_SKU_PRICE_LIST_BY_PRODUCT_SKU_ID_CACHE, product_sku_id);
+            List<ProductSkuPrice> productSkuPriceList = CacheUtil.get(PRODUCT_SKU_PRICE_LIST_BY_PRODUCT_SKU_ID_CACHE,
+                    product_sku_id);
 
             if (productSkuPriceList == null) {
                 productSkuPriceList = productSkuPriceDao.listByProduct_sku_id(product_sku_id);
@@ -88,6 +91,27 @@ public class ProductSkuPriceCache extends Cache {
         ret.put("product_sku_list", product_sku_list);
 
         return ret;
+    }
+
+    public BigDecimal findByProduct_sku_idAndMember_level_id(String product_sku_id, String member_level_id) {
+
+        BigDecimal product_sku_price = BigDecimal.ZERO;
+
+        List<ProductSkuPrice> productSkuPriceList = CacheUtil.get(PRODUCT_SKU_PRICE_LIST_BY_PRODUCT_SKU_ID_CACHE,
+                product_sku_id);
+
+        if (productSkuPriceList == null) {
+            productSkuPriceList = productSkuPriceDao.listByProduct_sku_id(product_sku_id);
+
+            CacheUtil.put(PRODUCT_SKU_PRICE_LIST_BY_PRODUCT_SKU_ID_CACHE, product_sku_id, productSkuPriceList);
+        }
+        for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
+            if (productSkuPrice.getMember_level_id().equals(member_level_id)) {
+                return productSkuPrice.getProduct_sku_price();
+            }
+        }
+
+        return product_sku_price;
     }
 
 }
