@@ -2,6 +2,7 @@ package com.nowui.chuangshi.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -87,7 +88,8 @@ public class TradeController extends Controller {
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
             TradeProductSku tradeProductSku = jsonObject1.toJavaObject(TradeProductSku.class);
-            BigDecimal  product_sku_amount = productSkuPriceService.findByProduct_sku_idAndMember_level_id(tradeProductSku.getProduct_sku_id(), member.getMember_level_id());
+            BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(tradeProductSku.getProduct_sku_id(), member.getMember_level_id());
+            BigDecimal product_sku_amount = product_sku_price.multiply(new BigDecimal(tradeProductSku.getProduct_sku_quantity()));
             tradeProductSkuService.save(trade_id, tradeProductSku.getProduct_sku_id(), tradeProductSku.getProduct_snap_id(), tradeProductSku.getProduct_sku_quantity(), trade_product_amount, request_user_id);
             trade_product_quantity += tradeProductSku.getProduct_sku_quantity();
             trade_product_amount = trade_product_amount.add(product_sku_amount);
@@ -140,6 +142,27 @@ public class TradeController extends Controller {
         authenticateSystem_create_user_id(trade.getSystem_create_user_id());
 
         Boolean result = tradeService.deleteByTrade_idAndSystem_update_user_idValidateSystem_version(model.getTrade_id(), request_user_id, model.getSystem_version());
+
+        renderSuccessJson(result);
+    }
+    
+    @ActionKey(Url.TRADE_PAY)
+    public void pay() {
+        validateRequest_app_id();
+        validate(Trade.TRADE_ID);
+
+        Trade model = getModel(Trade.class);
+        String request_user_id = getRequest_user_id();
+
+        model.validate(Trade.TRADE_ID);
+
+        validate("open_id", "pay_type");
+
+        JSONObject jsonObject = getAttr(Constant.REQUEST_PARAMETER);
+        String open_id = jsonObject.getString("open_id");
+        String pay_type = jsonObject.getString("pay_type");
+
+        Map<String, String> result = tradeService.pay(model.getTrade_id(), open_id, pay_type, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -295,5 +318,5 @@ public class TradeController extends Controller {
 
         renderSuccessJson(result);
     }
-
+    
 }

@@ -392,11 +392,14 @@ public class Url {
     public static final String EXPRESS_SYSTEM_UPDATE = "/express/system/update";
     public static final String EXPRESS_SYSTEM_DELETE = "/express/system/delete";
 
+    public static final String WECHAT_API_NOTIFY = "/wechat/api/notify";
+
     public static final String TRADE_LIST = "/trade/list";
     public static final String TRADE_FIND = "/trade/find";
     public static final String TRADE_SAVE = "/trade/save";
     public static final String TRADE_UPDATE = "/trade/update";
     public static final String TRADE_DELETE = "/trade/delete";
+    public static final String TRADE_PAY = "/trade/pay";
     public static final String TRADE_ADMIN_LIST = "/trade/admin/list";
     public static final String TRADE_ADMIN_FIND = "/trade/admin/find";
     public static final String TRADE_ADMIN_SAVE = "/trade/admin/save";
@@ -407,8 +410,8 @@ public class Url {
     public static final String TRADE_SYSTEM_SAVE = "/trade/system/save";
     public static final String TRADE_SYSTEM_UPDATE = "/trade/system/update";
     public static final String TRADE_SYSTEM_DELETE = "/trade/system/delete";
-    
-    //分成
+
+    // 分成
     public static final String TRADE_COMMOSSION_LIST = "/trade/commossion/list";
     public static final String TRADE_COMMOSSION_FIND = "/trade/commossion/find";
     public static final String TRADE_COMMOSSION_SAVE = "/trade/commossion/save";

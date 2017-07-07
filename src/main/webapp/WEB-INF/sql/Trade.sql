@@ -70,6 +70,14 @@
     WHERE system_status = 1
     AND trade_id = #p(trade_id)
   #end
+  
+  #sql("findByTrade_number")
+    SELECT
+    *
+    FROM table_trade
+    WHERE system_status = 1
+    AND trade_number = #p(trade_number)
+  #end
 
   #sql("save")
     INSERT INTO table_trade (

@@ -89,6 +89,21 @@ public class TradeDao extends Dao {
             return tradeList.get(0);
         }
     }
+    
+    public Trade findByTrade_number(String trade_number) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Trade.TRADE_NUMBER, trade_number);
+        SqlPara sqlPara = Db.getSqlPara("trade.findByTrade_number", sqlMap);
+
+        logSql("trade", "findByTrade_number", sqlPara);
+
+        List<Trade> tradeList = new Trade().find(sqlPara.getSql(), sqlPara.getPara());
+        if (tradeList.size() == 0) {
+            return null;
+        } else {
+            return tradeList.get(0);
+        }
+    }
 
     public Boolean save(String trade_id, String app_id, String user_id, String trade_number, String trade_receiver_name, String trade_receiver_mobile, String trade_receiver_province, String trade_receiver_city, String trade_receiver_area, String trade_receiver_address, String trade_message, Integer trade_product_quantity, BigDecimal trade_product_amount, BigDecimal trade_express_amount, BigDecimal trade_discount_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, String trade_flow, String trade_status, String trade_audit_status, String system_create_user_id) {
         Kv sqlMap = Kv.create();
