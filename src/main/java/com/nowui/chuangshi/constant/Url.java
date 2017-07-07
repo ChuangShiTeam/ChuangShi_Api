@@ -374,5 +374,21 @@ public class Url {
     public static final String EXPRESS_SYSTEM_SAVE = "/express/system/save";
     public static final String EXPRESS_SYSTEM_UPDATE = "/express/system/update";
     public static final String EXPRESS_SYSTEM_DELETE = "/express/system/delete";
+    
+    public static final String TRADE_LIST = "/trade/list";
+    public static final String TRADE_FIND = "/trade/find";
+    public static final String TRADE_SAVE = "/trade/save";
+    public static final String TRADE_UPDATE = "/trade/update";
+    public static final String TRADE_DELETE = "/trade/delete";
+    public static final String TRADE_ADMIN_LIST = "/trade/admin/list";
+    public static final String TRADE_ADMIN_FIND = "/trade/admin/find";
+    public static final String TRADE_ADMIN_SAVE = "/trade/admin/save";
+    public static final String TRADE_ADMIN_UPDATE = "/trade/admin/update";
+    public static final String TRADE_ADMIN_DELETE = "/trade/admin/delete";
+    public static final String TRADE_SYSTEM_LIST = "/trade/system/list";
+    public static final String TRADE_SYSTEM_FIND = "/trade/system/find";
+    public static final String TRADE_SYSTEM_SAVE = "/trade/system/save";
+    public static final String TRADE_SYSTEM_UPDATE = "/trade/system/update";
+    public static final String TRADE_SYSTEM_DELETE = "/trade/system/delete";
 
 }
