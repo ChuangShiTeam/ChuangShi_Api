@@ -238,7 +238,7 @@ public class Url {
     public static final String CUSTOMER_SYSTEM_SAVE = "/customer/system/save";
     public static final String CUSTOMER_SYSTEM_UPDATE = "/customer/system/update";
     public static final String CUSTOMER_SYSTEM_DELETE = "/customer/system/delete";
-    
+
     // 用户模板数据
     public static final String CUSTOMER_ATTRIBUTE_LIST = "/customer/attribute/list";
     public static final String CUSTOMER_ATTRIBUTE_FIND = "/customer/attribute/find";
@@ -359,7 +359,7 @@ public class Url {
 
     public static final String FEIJIU_FAST_EXPORT = "/feijiu/fast/export";
     public static final String FEIJIU_RECOMMEND_EXPORT = "/feijiu/recommend/export";
-    
+
     public static final String STOCK_LIST = "/stock/list";
     public static final String STOCK_FIND = "/stock/find";
     public static final String STOCK_SAVE = "/stock/save";
@@ -375,7 +375,7 @@ public class Url {
     public static final String STOCK_SYSTEM_SAVE = "/stock/system/save";
     public static final String STOCK_SYSTEM_UPDATE = "/stock/system/update";
     public static final String STOCK_SYSTEM_DELETE = "/stock/system/delete";
-    
+
     public static final String EXPRESS_LIST = "/express/list";
     public static final String EXPRESS_FIND = "/express/find";
     public static final String EXPRESS_SAVE = "/express/save";
@@ -391,7 +391,7 @@ public class Url {
     public static final String EXPRESS_SYSTEM_SAVE = "/express/system/save";
     public static final String EXPRESS_SYSTEM_UPDATE = "/express/system/update";
     public static final String EXPRESS_SYSTEM_DELETE = "/express/system/delete";
-    
+
     public static final String TRADE_LIST = "/trade/list";
     public static final String TRADE_FIND = "/trade/find";
     public static final String TRADE_SAVE = "/trade/save";
@@ -407,5 +407,39 @@ public class Url {
     public static final String TRADE_SYSTEM_SAVE = "/trade/system/save";
     public static final String TRADE_SYSTEM_UPDATE = "/trade/system/update";
     public static final String TRADE_SYSTEM_DELETE = "/trade/system/delete";
+
+    // 支付
+    public static final String TRADE_PAY_LIST = "/trade/pay/list";
+    public static final String TRADE_PAY_FIND = "/trade/pay/find";
+    public static final String TRADE_PAY_SAVE = "/trade/pay/save";
+    public static final String TRADE_PAY_UPDATE = "/trade/pay/update";
+    public static final String TRADE_PAY_DELETE = "/trade/pay/delete";
+    public static final String TRADE_PAY_ADMIN_LIST = "/trade/pay/admin/list";
+    public static final String TRADE_PAY_ADMIN_FIND = "/trade/pay/admin/find";
+    public static final String TRADE_PAY_ADMIN_SAVE = "/trade/pay/admin/save";
+    public static final String TRADE_PAY_ADMIN_UPDATE = "/trade/pay/admin/update";
+    public static final String TRADE_PAY_ADMIN_DELETE = "/trade/pay/admin/delete";
+    public static final String TRADE_PAY_SYSTEM_LIST = "/trade/pay/system/list";
+    public static final String TRADE_PAY_SYSTEM_FIND = "/trade/pay/system/find";
+    public static final String TRADE_PAY_SYSTEM_SAVE = "/trade/pay/system/save";
+    public static final String TRADE_PAY_SYSTEM_UPDATE = "/trade/pay/system/update";
+    public static final String TRADE_PAY_SYSTEM_DELETE = "/trade/pay/system/delete";
+
+    // 账单
+    public static final String BILL_LIST = "/bill/list";
+    public static final String BILL_FIND = "/bill/find";
+    public static final String BILL_SAVE = "/bill/save";
+    public static final String BILL_UPDATE = "/bill/update";
+    public static final String BILL_DELETE = "/bill/delete";
+    public static final String BILL_ADMIN_LIST = "/bill/admin/list";
+    public static final String BILL_ADMIN_FIND = "/bill/admin/find";
+    public static final String BILL_ADMIN_SAVE = "/bill/admin/save";
+    public static final String BILL_ADMIN_UPDATE = "/bill/admin/update";
+    public static final String BILL_ADMIN_DELETE = "/bill/admin/delete";
+    public static final String BILL_SYSTEM_LIST = "/bill/system/list";
+    public static final String BILL_SYSTEM_FIND = "/bill/system/find";
+    public static final String BILL_SYSTEM_SAVE = "/bill/system/save";
+    public static final String BILL_SYSTEM_UPDATE = "/bill/system/update";
+    public static final String BILL_SYSTEM_DELETE = "/bill/system/delete";
 
 }
