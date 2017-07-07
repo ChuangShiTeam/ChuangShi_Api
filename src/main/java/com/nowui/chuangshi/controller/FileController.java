@@ -58,7 +58,7 @@ public class FileController extends Controller {
     @ActionKey(Url.FILE_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(File.FILE_TYPE, File.FILE_NAME, File.FILE_SUFFIX, File.FILE_SIZE, File.FILE_PATH, File.FILE_THUMBNAIL_PATH, File.FILE_ORIGINAL_PATH, File.FILE_IMAGE);
+        validate(File.FILE_TYPE, File.FILE_NAME, File.FILE_SUFFIX, File.FILE_SIZE, File.FILE_PATH, File.FILE_THUMBNAIL_PATH, File.FILE_ORIGINAL_PATH, File.FILE_IMAGE, File.FILE_IS_EXTERNAL);
 
         File model = getModel(File.class);
         String file_id = Util.getRandomUUID();
@@ -67,7 +67,7 @@ public class FileController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = fileService.save(file_id, request_app_id, model.getFile_type(), model.getFile_name(), model.getFile_suffix(), model.getFile_size(), model.getFile_path(), model.getFile_thumbnail_path(), model.getFile_original_path(), model.getFile_image(), request_user_id);
+        Boolean result = fileService.save(file_id, request_app_id, model.getFile_type(), model.getFile_name(), model.getFile_suffix(), model.getFile_size(), model.getFile_path(), model.getFile_thumbnail_path(), model.getFile_original_path(), model.getFile_image(), model.getFile_is_external(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -294,13 +294,13 @@ public class FileController extends Controller {
     @ActionKey(Url.FILE_SYSTEM_SAVE)
     public void systemSave() {
         validateRequest_app_id();
-        validate(File.APP_ID, File.FILE_TYPE, File.FILE_NAME, File.FILE_SUFFIX, File.FILE_SIZE, File.FILE_PATH, File.FILE_THUMBNAIL_PATH, File.FILE_ORIGINAL_PATH, File.FILE_IMAGE);
+        validate(File.APP_ID, File.FILE_TYPE, File.FILE_NAME, File.FILE_SUFFIX, File.FILE_SIZE, File.FILE_PATH, File.FILE_THUMBNAIL_PATH, File.FILE_ORIGINAL_PATH, File.FILE_IMAGE, File.FILE_IS_EXTERNAL);
 
         File model = getModel(File.class);
         String file_id = Util.getRandomUUID();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = fileService.save(file_id, model.getApp_id(), model.getFile_type(), model.getFile_name(), model.getFile_suffix(), model.getFile_size(), model.getFile_path(), model.getFile_thumbnail_path(), model.getFile_original_path(), model.getFile_image(), request_user_id);
+        Boolean result = fileService.save(file_id, model.getApp_id(), model.getFile_type(), model.getFile_name(), model.getFile_suffix(), model.getFile_size(), model.getFile_path(), model.getFile_thumbnail_path(), model.getFile_original_path(), model.getFile_image(), model.getFile_is_external(), request_user_id);
 
         renderSuccessJson(result);
     }

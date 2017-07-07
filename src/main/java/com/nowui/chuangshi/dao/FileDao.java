@@ -137,7 +137,7 @@ public class FileDao extends Dao {
         }
     }
 
-    public Boolean save(String file_id, String app_id, String file_type, String file_name, String file_suffix, Integer file_size, String file_path, String file_thumbnail_path, String file_original_path, String file_image, String system_create_user_id) {
+    public Boolean save(String file_id, String app_id, String file_type, String file_name, String file_suffix, Integer file_size, String file_path, String file_thumbnail_path, String file_original_path, String file_image, Boolean file_is_external, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.FILE_ID, file_id);
         sqlMap.put(File.APP_ID, app_id);
@@ -149,6 +149,7 @@ public class FileDao extends Dao {
         sqlMap.put(File.FILE_THUMBNAIL_PATH, file_thumbnail_path);
         sqlMap.put(File.FILE_ORIGINAL_PATH, file_original_path);
         sqlMap.put(File.FILE_IMAGE, file_image);
+        sqlMap.put(File.FILE_IS_EXTERNAL, file_is_external);
         sqlMap.put(File.SYSTEM_CREATE_USER_ID, system_create_user_id);
         sqlMap.put(File.SYSTEM_CREATE_TIME, new Date());
         sqlMap.put(File.SYSTEM_UPDATE_USER_ID, system_create_user_id);
