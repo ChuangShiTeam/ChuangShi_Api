@@ -5,28 +5,28 @@ import com.nowui.chuangshi.type.ColumnType;
 
 public class Qrcode extends Model<Qrcode> {
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "二维码编号")
     public static final String QRCODE_ID = "qrcode_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号")
     public static final String APP_ID = "app_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "外键编号")
     public static final String OBJECT_ID = "object_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 10, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 10, comment = "二维码类型")
     public static final String QRCODE_TYPE = "qrcode_type";
 
-    @Column(type = ColumnType.VARCHAR, length = 250, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 200, comment = "二维码地址")
     public static final String QRCODE_URL = "qrcode_url";
 
-    @Column(type = ColumnType.INT, length = 5, comment = "")
+    @Column(type = ColumnType.INT, length = 5, comment = "关注人数")
     public static final String QRCODE_ADD = "qrcode_add";
 
-    @Column(type = ColumnType.INT, length = 5, comment = "")
+    @Column(type = ColumnType.INT, length = 5, comment = "取消人数")
     public static final String QRCODE_CANCEL = "qrcode_cancel";
 
-    @Column(type = ColumnType.TINYINT, length = 1, comment = "")
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "二维码状态")
     public static final String QRCODE_STATUS = "qrcode_status";
 
     public String getQrcode_id() {

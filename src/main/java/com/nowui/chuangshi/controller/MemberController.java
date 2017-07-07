@@ -5,15 +5,45 @@ import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.MemberLevel;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.MemberService;
+import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.util.Util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MemberController extends Controller {
 
     private final MemberService memberService = new MemberService();
+    private final UserService userService = new UserService();
+
+    private List<Map<String, Object>> getChildren(List<Member> memberList, String member_parent_id, String... keys) {
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        for (Member member : memberList) {
+            if (member.getMember_parent_id().equals(member_parent_id)) {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put(Member.MEMBER_ID, member.getMember_id());
+                map.put(User.USER_NAME, member.getStr(User.USER_NAME));
+                map.put(User.USER_AVATAR, member.getStr(User.USER_AVATAR));
+                map.put(MemberLevel.MEMBER_LEVEL_NAME, member.getStr(MemberLevel.MEMBER_LEVEL_NAME));
+
+                for (String key : keys) {
+                    map.put(key, member.get(key));
+                }
+
+                List<Map<String, Object>> childrenList = getChildren(memberList, member.getMember_id(), keys);
+                if (childrenList.size() > 0) {
+                    map.put(Constant.CHILDREN, childrenList);
+                }
+                list.add(map);
+            }
+        }
+        return list;
+    }
 
     @ActionKey(Url.MEMBER_LIST)
     public void list() {
@@ -30,6 +60,25 @@ public class MemberController extends Controller {
         for (Member result : resultList) {
             result.keep(Member.MEMBER_ID, Member.SYSTEM_VERSION);
         }
+
+        renderSuccessJson(resultList);
+    }
+
+    @ActionKey(Url.MEMBER_TEAM_LIST)
+    public void teamList() {
+        validateRequest_app_id();
+
+        String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        User user = userService.findByUser_id(request_user_id);
+
+        Member member = memberService.findByMember_id(user.getObject_id());
+
+        List<Member> memberList = memberService.listByMember_parent_pathLikeMember_parent_id(member.getMember_id());
+
+        List<Map<String, Object>> resultList = getChildren(memberList, member.getMember_id());
 
         renderSuccessJson(resultList);
     }

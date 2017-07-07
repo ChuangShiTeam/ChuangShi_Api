@@ -60,7 +60,7 @@ public class MenuService extends Service {
     }
 
     public Boolean save(String menu_id, String app_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String system_create_user_id) {
-        String menu_path = "";
+        String menu_parent_path = "";
 
         if (ValidateUtil.isNullOrEmpty(menu_parent_id)) {
             menu_parent_id = Constant.PARENT_ID;
@@ -68,34 +68,34 @@ public class MenuService extends Service {
             JSONArray jsonArray = new JSONArray();
             jsonArray.add(menu_parent_id);
 
-            menu_path = jsonArray.toJSONString();
+            menu_parent_path = jsonArray.toJSONString();
         } else {
             Menu parent = menuCache.findByMenu_id(menu_parent_id);
 
-            JSONArray jsonArray = JSONArray.parseArray(parent.getMenu_path());
+            JSONArray jsonArray = JSONArray.parseArray(parent.getMenu_parent_path());
             jsonArray.add(menu_parent_id);
 
-            menu_path = jsonArray.toJSONString();
+            menu_parent_path = jsonArray.toJSONString();
         }
         
-        return menuCache.save(menu_id, app_id, menu_parent_id, menu_name, menu_image, menu_url, menu_sort, menu_path, system_create_user_id);
+        return menuCache.save(menu_id, app_id, menu_parent_id, menu_name, menu_image, menu_url, menu_sort, menu_parent_path, system_create_user_id);
     }
 
     public Boolean updateValidateSystem_version(String menu_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String system_update_user_id, Integer system_version) {
         Menu menu = menuCache.findByMenu_id(menu_id);
 
-        String menu_path = menu.getMenu_path();
+        String menu_parent_path = menu.getMenu_parent_path();
 
         if (!menu.getMenu_parent_id().equals(menu_parent_id)) {
             Menu parent = menuCache.findByMenu_id(menu_parent_id);
 
-            JSONArray jsonArray = JSONArray.parseArray(parent.getMenu_path());
+            JSONArray jsonArray = JSONArray.parseArray(parent.getMenu_parent_path());
             jsonArray.add(menu_parent_id);
 
-            menu_path = jsonArray.toJSONString();
+            menu_parent_path = jsonArray.toJSONString();
         }
 
-        return menuCache.updateValidateSystem_version(menu_id, menu_parent_id, menu_name, menu_image, menu_url, menu_sort, menu_path, system_update_user_id, system_version);
+        return menuCache.updateValidateSystem_version(menu_id, menu_parent_id, menu_name, menu_image, menu_url, menu_sort, menu_parent_path, system_update_user_id, system_version);
     }
 
     public Boolean deleteByMenu_idAndSystem_update_user_idValidateSystem_version(String menu_id, String system_update_user_id, Integer system_version) {

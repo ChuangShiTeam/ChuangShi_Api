@@ -9,6 +9,7 @@ import com.nowui.chuangshi.model.File;
 import com.nowui.chuangshi.type.FileType;
 import com.nowui.chuangshi.util.FileUtil;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.*;
 
@@ -54,6 +55,16 @@ public class FileService extends Service {
 
     public File findByFile_id(String file_id) {
         return fileCache.findByFile_id(file_id);
+    }
+
+    public String getFile_path(String file_id) {
+        if (ValidateUtil.isNullOrEmpty(file_id)) {
+            return "";
+        }
+
+        File file = findByFile_id(file_id);
+
+        return file.getFile_path();
     }
 
     public Boolean save(String file_id, String app_id, String file_type, String file_name, String file_suffix, Integer file_size, String file_path, String file_thumbnail_path, String file_original_path, String file_image, Boolean file_is_external, String system_create_user_id) {

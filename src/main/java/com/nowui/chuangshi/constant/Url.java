@@ -170,6 +170,7 @@ public class Url {
     public static final String PRODUCT_CATEGORY_SYSTEM_DELETE = "/product/category/system/delete";
 
     public static final String MEMBER_LIST = "/member/list";
+    public static final String MEMBER_TEAM_LIST = "/member/team/list";
     public static final String MEMBER_FIND = "/member/find";
     public static final String MEMBER_SAVE = "/member/save";
     public static final String MEMBER_UPDATE = "/member/update";

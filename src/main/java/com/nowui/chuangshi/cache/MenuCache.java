@@ -43,17 +43,17 @@ public class MenuCache extends Cache {
         return menu;
     }
 
-    public Boolean save(String menu_id, String app_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String menu_path, String system_create_user_id) {
-        return menuDao.save(menu_id, app_id, menu_parent_id, menu_name, menu_image, menu_url, menu_sort, menu_path, system_create_user_id);
+    public Boolean save(String menu_id, String app_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String menu_parent_path, String system_create_user_id) {
+        return menuDao.save(menu_id, app_id, menu_parent_id, menu_name, menu_image, menu_url, menu_sort, menu_parent_path, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String menu_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String menu_path, String system_update_user_id, Integer system_version) {
+    public Boolean updateValidateSystem_version(String menu_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String menu_parent_path, String system_update_user_id, Integer system_version) {
         Menu menu = findByMenu_id(menu_id);
         if (!menu.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = menuDao.update(menu_id, menu_parent_id, menu_name, menu_image, menu_url, menu_sort, menu_path, system_update_user_id, system_version);
+        boolean result = menuDao.update(menu_id, menu_parent_id, menu_name, menu_image, menu_url, menu_sort, menu_parent_path, system_update_user_id, system_version);
 
         if (result) {
             CacheUtil.remove(MENU_BY_MENU_ID_CACHE, menu_id);
@@ -78,7 +78,7 @@ public class MenuCache extends Cache {
     }
 
     public Boolean deleteByMenu_parent_id(String menu_parent_id, String system_update_user_id) {
-        List<Menu> menuList = menuDao.listByLikeMenu_parent_id(menu_parent_id);
+        List<Menu> menuList = menuDao.listByMenu_parent_pathLikeMenu_parent_id(menu_parent_id);
 
         boolean result = menuDao.deleteByMenu_parent_id(menu_parent_id, system_update_user_id);
 

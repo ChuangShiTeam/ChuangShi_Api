@@ -3,8 +3,7 @@ package com.nowui.chuangshi.service;
 import com.nowui.chuangshi.cache.MemberCache;
 import com.nowui.chuangshi.model.Member;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class MemberService extends Service {
 
@@ -16,6 +15,10 @@ public class MemberService extends Service {
 
     public Integer countByOrApp_idOrLikeUser_name(String app_id, String user_name) {
         return memberCache.countByOrApp_idOrLikeUser_name(app_id, user_name);
+    }
+
+    public List<Member> listByMember_parent_pathLikeMember_parent_id(String member_parent_id) {
+        return memberCache.listByMember_parent_pathLikeMember_parent_id(member_parent_id);
     }
 
     public List<Member> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {

@@ -90,7 +90,7 @@ public class ProductCategoryCache extends Cache {
     }
 
     public Boolean deleteByProduct_category_parent_id(String product_category_parent_id, String system_update_user_id) {
-        List<ProductCategory> productCategoryList = productCategoryDao.listByLikeProduct_category_parent_id(product_category_parent_id);
+        List<ProductCategory> productCategoryList = productCategoryDao.listByProduct_category_pathLikeProduct_category_parent_id(product_category_parent_id);
 
         boolean result = productCategoryDao.deleteByProduct_category_parent_id(product_category_parent_id, system_update_user_id);
 

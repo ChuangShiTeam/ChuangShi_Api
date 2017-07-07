@@ -27,7 +27,7 @@ public class Menu extends Model<Menu> {
     public static final String MENU_SORT = "menu_sort";
 
     @Column(type = ColumnType.VARCHAR, length = 1000, comment = "菜单路径")
-    public static final String MENU_PATH = "menu_path";
+    public static final String MENU_PARENT_PATH = "menu_parent_path";
 
     public String getMenu_id() {
         return getStr(MENU_ID);
@@ -85,12 +85,12 @@ public class Menu extends Model<Menu> {
         set(MENU_SORT, menu_sort);
     }
 
-    public String getMenu_path() {
-        return getStr(MENU_PATH);
+    public String getMenu_parent_path() {
+        return getStr(MENU_PARENT_PATH);
     }
 
-    public void setMenu_path(String menu_path) {
-        set(MENU_PATH, menu_path);
+    public void setMenu_parent_path(String menu_parent_path) {
+        set(MENU_PARENT_PATH, menu_parent_path);
     }
 
 }

@@ -20,12 +20,12 @@ public class MenuDao extends Dao {
         return new Menu().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Menu> listByLikeMenu_parent_id(String menu_parent_id) {
+    public List<Menu> listByMenu_parent_pathLikeMenu_parent_id(String menu_parent_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Menu.MENU_PARENT_ID, menu_parent_id);
-        SqlPara sqlPara = Db.getSqlPara("menu.listByLikeMenu_parent_id", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("menu.listByMenu_parent_pathLikeMenu_parent_id", sqlMap);
 
-        logSql("menu", "listByLikeMenu_parent_id", sqlPara);
+        logSql("menu", "listByMenu_parent_pathLikeMenu_parent_id", sqlPara);
 
         return new Menu().find(sqlPara.getSql(), sqlPara.getPara());
     }
@@ -67,7 +67,7 @@ public class MenuDao extends Dao {
         }
     }
 
-    public Boolean save(String menu_id, String app_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String menu_path, String system_create_user_id) {
+    public Boolean save(String menu_id, String app_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String menu_parent_path, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Menu.MENU_ID, menu_id);
         sqlMap.put(Menu.APP_ID, app_id);
@@ -76,7 +76,7 @@ public class MenuDao extends Dao {
         sqlMap.put(Menu.MENU_IMAGE, menu_image);
         sqlMap.put(Menu.MENU_URL, menu_url);
         sqlMap.put(Menu.MENU_SORT, menu_sort);
-        sqlMap.put(Menu.MENU_PATH, menu_path);
+        sqlMap.put(Menu.MENU_PARENT_PATH, menu_parent_path);
         sqlMap.put(Menu.SYSTEM_CREATE_USER_ID, system_create_user_id);
         sqlMap.put(Menu.SYSTEM_CREATE_TIME, new Date());
         sqlMap.put(Menu.SYSTEM_UPDATE_USER_ID, system_create_user_id);
@@ -90,7 +90,7 @@ public class MenuDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String menu_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String menu_path, String system_update_user_id, Integer system_version) {
+    public Boolean update(String menu_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String menu_parent_path, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Menu.MENU_ID, menu_id);
         sqlMap.put(Menu.MENU_PARENT_ID, menu_parent_id);
@@ -98,7 +98,7 @@ public class MenuDao extends Dao {
         sqlMap.put(Menu.MENU_IMAGE, menu_image);
         sqlMap.put(Menu.MENU_URL, menu_url);
         sqlMap.put(Menu.MENU_SORT, menu_sort);
-        sqlMap.put(Menu.MENU_PATH, menu_path);
+        sqlMap.put(Menu.MENU_PARENT_PATH, menu_parent_path);
         sqlMap.put(Menu.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(Menu.SYSTEM_UPDATE_TIME, new Date());
         sqlMap.put(Menu.SYSTEM_VERSION, system_version);

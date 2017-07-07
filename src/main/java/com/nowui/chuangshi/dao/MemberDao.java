@@ -36,6 +36,16 @@ public class MemberDao extends Dao {
         return count.intValue();
     }
 
+    public List<Member> listByMember_parent_pathLikeMember_parent_id(String member_parent_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Member.MEMBER_PARENT_ID, member_parent_id);
+        SqlPara sqlPara = Db.getSqlPara("member.listByMember_parent_pathLikeMember_parent_id", sqlMap);
+
+        logSql("member", "listByMember_parent_pathLikeMember_parent_id", sqlPara);
+
+        return new Member().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+
     public List<Member> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Member.APP_ID, app_id);

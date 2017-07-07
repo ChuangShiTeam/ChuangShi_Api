@@ -9,7 +9,7 @@
     ORDER BY system_create_time DESC
   #end
 
-  #sql("listByLikeProduct_category_parent_id")
+  #sql("listByProduct_category_pathLikeProduct_category_parent_id")
     SELECT
     product_category_id
     FROM table_product_category

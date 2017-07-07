@@ -10,6 +10,7 @@ import java.util.List;
 
 public class MemberCache extends Cache {
 
+    public static final String MEMBER_LIST_BY_MEMBER_PARENT_ID_CACHE = "member_list_by_member_parent_id_cache";
     public static final String MEMBER_BY_MEMBER_ID_CACHE = "member_by_member_id_cache";
 
     private MemberDao memberDao = new MemberDao();
@@ -20,6 +21,17 @@ public class MemberCache extends Cache {
 
     public Integer countByOrApp_idOrLikeUser_name(String app_id, String user_name) {
         return memberDao.countByOrApp_idOrLikeUser_name(app_id, user_name);
+    }
+
+    public List<Member> listByMember_parent_pathLikeMember_parent_id(String member_parent_id) {
+        List<Member> memberList = CacheUtil.get(MEMBER_LIST_BY_MEMBER_PARENT_ID_CACHE, member_parent_id);
+        if (memberList == null) {
+            memberList = memberDao.listByMember_parent_pathLikeMember_parent_id(member_parent_id);
+
+            CacheUtil.put(MEMBER_LIST_BY_MEMBER_PARENT_ID_CACHE, member_parent_id, memberList);
+        }
+
+        return memberList;
     }
 
     public List<Member> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
@@ -41,24 +53,24 @@ public class MemberCache extends Cache {
 
         return memberList;
     }
-    
+
     public List<Member> listByApp_id(String app_id) {
     	List<Member> memberList = memberDao.listByApp_id(app_id);
-    	
+
     	for (Member member : memberList) {
     		member.put(findByMember_id(member.getMember_id()));
     	}
-    	
+
     	return memberList;
     }
-    
+
     public List<Member> listByOrApp_id(String app_id) {
     	List<Member> memberList = memberDao.listByOrApp_id(app_id);
-    	
+
     	for (Member member : memberList) {
     		member.put(findByMember_id(member.getMember_id()));
     	}
-    	
+
     	return memberList;
     }
 
