@@ -57,14 +57,6 @@ public class User extends Model<User> {
         set(APP_ID, app_id);
     }
 
-    public String getObject_id() {
-        return getStr(OBJECT_ID);
-    }
-
-    public void setObject_id(String object_id) {
-        set(OBJECT_ID, object_id);
-    }
-
     public String getUser_type() {
         return getStr(USER_TYPE);
     }
