@@ -57,6 +57,10 @@ public class User extends Model<User> {
         set(APP_ID, app_id);
     }
 
+    public static String getObjectId() {
+        return OBJECT_ID;
+    }
+
     public String getUser_type() {
         return getStr(USER_TYPE);
     }

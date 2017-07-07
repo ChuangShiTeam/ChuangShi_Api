@@ -139,6 +139,7 @@ public class Url {
     public static final String PRODUCT_SYSTEM_SAVE = "/product/system/save";
     public static final String PRODUCT_SYSTEM_UPDATE = "/product/system/update";
     public static final String PRODUCT_SYSTEM_DELETE = "/product/system/delete";
+    public static final String PRODUCT_SKU_PRICE_FIND = "/product/sku/price/find";
 
     public static final String PRODUCT_BRAND_LIST = "/product/brand/list";
     public static final String PRODUCT_BRAND_FIND = "/product/brand/find";
