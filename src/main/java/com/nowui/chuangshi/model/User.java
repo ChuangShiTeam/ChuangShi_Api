@@ -58,7 +58,7 @@ public class User extends Model<User> {
     }
 
     public String getObject_Id() {
-        return OBJECT_ID;
+        return getStr(OBJECT_ID);
     }
 
     public void setObject_Id(String object_Id) {
