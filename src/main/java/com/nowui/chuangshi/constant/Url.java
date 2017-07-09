@@ -433,7 +433,7 @@ public class Url {
     public static final String TRADE_SYSTEM_SAVE = "/trade/system/save";
     public static final String TRADE_SYSTEM_UPDATE = "/trade/system/update";
     public static final String TRADE_SYSTEM_DELETE = "/trade/system/delete";
-    public static final String TRADE_SKU_PRICE_FIND = "/trade/sku/price/find";
+    public static final String TRADE_CHECK = "/trade/check";
 
     // 分成
     public static final String TRADE_COMMOSSION_LIST = "/trade/commossion/list";
