@@ -1,6 +1,5 @@
 package com.nowui.chuangshi.controller;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,22 +12,17 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.FeijiuRecommendProduct;
 import com.nowui.chuangshi.model.File;
-import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
 import com.nowui.chuangshi.model.ProductSkuAttribute;
 import com.nowui.chuangshi.model.ProductSkuCommission;
 import com.nowui.chuangshi.model.ProductSkuPrice;
-import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.FileService;
-import com.nowui.chuangshi.service.MemberAddressService;
-import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.ProductService;
 import com.nowui.chuangshi.service.ProductSkuAttributeService;
 import com.nowui.chuangshi.service.ProductSkuCommissionService;
 import com.nowui.chuangshi.service.ProductSkuPriceService;
 import com.nowui.chuangshi.service.ProductSkuService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -39,37 +33,7 @@ public class ProductController extends Controller {
     private ProductSkuPriceService productSkuPriceService = new ProductSkuPriceService();
     private ProductSkuAttributeService productSkuAttributeService = new ProductSkuAttributeService();
     private ProductSkuCommissionService productSkuCommissionService = new ProductSkuCommissionService();
-    private UserService userService = new UserService();
-    private MemberService memberService = new MemberService();
-    private MemberAddressService memberAddressService = new MemberAddressService();
     private final FileService fileService = new FileService();
-
-    /**
-     * 下单前返回会员信息sku价格
-     */
-    @ActionKey(Url.PRODUCT_SKU_PRICE_FIND)
-    public void skuPriceFind() {
-        validateRequest_app_id();
-
-        validate(Product.PRODUCT_SKU_LIST);
-
-        String request_user_id = getRequest_user_id();
-        JSONObject jsonObject = getParameterJSONObject();
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        Map<String, Object> ret = new HashMap<String, Object>();
-        ret.put("express_freight", BigDecimal.ZERO);
-
-        User user = userService.findByUser_id(request_user_id);
-        Member member = memberService.findByMember_id(user.getObject_Id());
-
-        ret.put("member_address", memberAddressService.findByMember_id(user.getObject_Id()));
-
-        ret = productSkuPriceService.listByProduct_sku_idAndMember_level_id(jsonObject.getJSONArray(Product.PRODUCT_SKU_LIST), member.getMember_level_id(), ret);
-
-        renderSuccessJson(ret);
-    }
 
     @ActionKey(Url.PRODUCT_ADMIN_LIST)
     public void adminList() {
