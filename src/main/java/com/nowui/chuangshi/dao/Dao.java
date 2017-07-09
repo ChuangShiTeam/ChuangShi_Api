@@ -4,9 +4,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.model.Sql;
 import com.nowui.chuangshi.util.DateUtil;
+import com.nowui.chuangshi.util.MQUtil;
 
 public class Dao {
     protected void logSql(String sql_table, String sql_action, SqlPara sqlPara) {
@@ -17,7 +19,7 @@ public class Dao {
         mqMap.put(Sql.SQL_ACTION, sql_action);
         mqMap.put(Sql.SQL_CONTENT, getSql(sqlPara.getSql(), sqlPara.getPara()));
         mqMap.put(Sql.SYSTEM_CREATE_USER_ID, "");
-        // MQUtil.sendSync("sql", JSON.toJSONString(mqMap));
+        MQUtil.sendSync("sql", JSON.toJSONString(mqMap));
     }
 
     private String getSql(String sql, Object[] params) {

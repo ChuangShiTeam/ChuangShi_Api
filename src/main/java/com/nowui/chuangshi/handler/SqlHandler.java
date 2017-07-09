@@ -32,7 +32,7 @@ public class SqlHandler extends TMsgHandler<String> {
 
             System.out.println(sql_content);
 
-            sqlService.save(Util.getRandomUUID(), app_id, http_id, sql_table, sql_action, sql_content, system_create_user_id);
+            //sqlService.save(Util.getRandomUUID(), app_id, http_id, sql_table, sql_action, sql_content, system_create_user_id);
         } catch (Exception e) {
             JSONObject jsonObject = JSONObject.parseObject(json);
 

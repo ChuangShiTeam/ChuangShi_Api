@@ -39,8 +39,8 @@ public class Url {
     public static final String APP_SYSTEM_SAVE = "/app/system/save";
     public static final String APP_SYSTEM_UPDATE = "/app/system/update";
     public static final String APP_SYSTEM_DELETE = "/app/system/delete";
-    
-    //应用库存
+
+    // 应用库存
     public static final String APP_STOCK_LIST = "/app/stock/list";
     public static final String APP_STOCK_FIND = "/app/stock/find";
     public static final String APP_STOCK_SAVE = "/app/stock/save";
@@ -146,6 +146,7 @@ public class Url {
     public static final String FILE_SYSTEM_UPDATE = "/file/system/update";
     public static final String FILE_SYSTEM_DELETE = "/file/system/delete";
 
+    public static final String PRODUCT_FIND = "/product/find";
     public static final String PRODUCT_ADMIN_LIST = "/product/admin/list";
     public static final String PRODUCT_ADMIN_ALL_LIST = "/product/admin/all/list";
     public static final String PRODUCT_ADMIN_FIND = "/product/admin/find";
@@ -158,7 +159,6 @@ public class Url {
     public static final String PRODUCT_SYSTEM_SAVE = "/product/system/save";
     public static final String PRODUCT_SYSTEM_UPDATE = "/product/system/update";
     public static final String PRODUCT_SYSTEM_DELETE = "/product/system/delete";
-    public static final String PRODUCT_SKU_PRICE_FIND = "/product/sku/price/find";
 
     public static final String PRODUCT_BRAND_LIST = "/product/brand/list";
     public static final String PRODUCT_BRAND_FIND = "/product/brand/find";
@@ -241,8 +241,8 @@ public class Url {
     public static final String MEMBER_LEVEL_SYSTEM_SAVE = "/member/level/system/save";
     public static final String MEMBER_LEVEL_SYSTEM_UPDATE = "/member/level/system/update";
     public static final String MEMBER_LEVEL_SYSTEM_DELETE = "/member/level/system/delete";
-    
-    //会员库存
+
+    // 会员库存
     public static final String MEMBER_STOCK_LIST = "/member/stock/list";
     public static final String MEMBER_STOCK_FIND = "/member/stock/find";
     public static final String MEMBER_STOCK_SAVE = "/member/stock/save";
@@ -417,6 +417,7 @@ public class Url {
 
     public static final String WECHAT_API_NOTIFY = "/wechat/api/notify";
 
+    // 交易
     public static final String TRADE_LIST = "/trade/list";
     public static final String TRADE_FIND = "/trade/find";
     public static final String TRADE_SAVE = "/trade/save";
@@ -433,6 +434,7 @@ public class Url {
     public static final String TRADE_SYSTEM_SAVE = "/trade/system/save";
     public static final String TRADE_SYSTEM_UPDATE = "/trade/system/update";
     public static final String TRADE_SYSTEM_DELETE = "/trade/system/delete";
+    public static final String TRADE_CHECK = "/trade/check";
 
     // 分成
     public static final String TRADE_COMMOSSION_LIST = "/trade/commossion/list";
