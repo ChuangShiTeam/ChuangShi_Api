@@ -8,16 +8,19 @@ import java.util.TreeMap;
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
-import com.nowui.chuangshi.constant.Config;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
+import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Trade;
+import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.service.TradeService;
 import com.nowui.chuangshi.type.PayType;
 import com.nowui.chuangshi.util.MQUtil;
 
 public class WeChatController extends Controller {
-
+	
     private final TradeService tradeService = new TradeService();
+    private final AppService appService = new AppService();
 
     @ActionKey(Url.WECHAT_API_NOTIFY)
     public void notifyUrl() {
@@ -58,26 +61,33 @@ public class WeChatController extends Controller {
         parameter.put("total_fee", total_fee);
         parameter.put("trade_type", trade_type);
         parameter.put("transaction_id", transaction_id);
-
-        String wx_app_id = Config.wx_app_id;
-        String mch_key = Config.mch_key;
-        if (appid.equals(wx_app_id)) {
-            mch_key = Config.wx_mch_key;
+        
+        //根据订单号查询订单
+        Trade trade = tradeService.findByTrade_number(out_trade_no);
+        if (trade == null) {
+        	renderText(Constant.WX_FAIL_MSG);
         }
+        App app = appService.findByApp_id(trade.getApp_id());
+        if (app == null) {
+        	renderText(Constant.WX_FAIL_MSG);
+        }
+        String wx_app_id = app.getWechat_app_id();
+        if (!appid.equals(wx_app_id)) {
+        	renderText(Constant.WX_FAIL_MSG);
+        }
+        
+        String mch_key = app.getWechat_mch_key();
 
         String endsign = PaymentKit.createSign(parameter, mch_key);
 
         if (sign.equals(endsign)) {
             BigDecimal trade_amount = new BigDecimal(total_fee).divide(BigDecimal.valueOf(100));
-            String trade_number = out_trade_no;
             String trade_pay_type = PayType.WECHAT.getKey();
             String trade_pay_number = transaction_id;
             String trade_pay_account = openid;
             String trade_pay_time = time_end;
             String trade_pay_result = result;
             Boolean trade_status = true;
-
-            Trade trade = tradeService.findByTrade_number(trade_number);
 
             boolean is_update = tradeService.updateSend(trade.getTrade_id(), trade.getUser_id(), trade_amount, trade_pay_type, trade_pay_number, trade_pay_account, trade_pay_time, trade_pay_result,
                     trade_status, trade.getSystem_version());
@@ -86,7 +96,7 @@ public class WeChatController extends Controller {
                 // TODO 消息队列通知计算账单和分成
                 MQUtil.sendSync("tradePay", trade.getTrade_id());
 
-                renderText("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
+                renderText("");
             } else {
                 renderText("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[]]></return_msg></xml>");
             }

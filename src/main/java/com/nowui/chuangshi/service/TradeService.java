@@ -13,6 +13,7 @@ import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.cache.TradeCache;
 import com.nowui.chuangshi.constant.Config;
+import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.type.TradeFlow;
 import com.nowui.chuangshi.util.Util;
@@ -22,6 +23,8 @@ public class TradeService extends Service {
     private TradeCache tradeCache = new TradeCache();
     
     private TradePayService tradePayService = new TradePayService();
+    
+    private AppService appService = new AppService();
 
     public Integer countByApp_idOrLikeTrade_number(String app_id, String trade_number) {
         return tradeCache.countByApp_idOrLikeTrade_number(app_id, trade_number);
@@ -77,20 +80,21 @@ public class TradeService extends Service {
         if (trade.getTrade_is_pay() || !trade.getUser_id().equals(request_user_id)) {
             return new HashMap<String, String>();
         }
-
-        return unifiedTrade(trade, open_id, pay_type);
+        //微信支付
+        if (pay_type.equals("WX")) {
+        	//查询app对应微信支付所需信息 wechat_app_id, wechat_mch_id, wechat_mch_key
+        	App app = appService.findByApp_id(trade.getApp_id());
+        	if (app == null) {
+        		throw new RuntimeException("应用不存在");
+        	}
+        	return unifiedTrade(trade, open_id, app.getWechat_app_id(), app.getWechat_mch_id(), app.getWechat_mch_key());
+        }
+        //TODO 其他方式支付
+        return new HashMap<String, String>();
     }
 
-    public Map<String, String> unifiedTrade(Trade trade, String open_id, String pay_type) {
-        String app_id = Config.app_id;
-        String mch_id = Config.mch_id;
-        String mch_key = Config.mch_key;
-        if (pay_type.equals("WX")) {
-            app_id = Config.wx_app_id;
-            mch_id = Config.wx_mch_id;
-            mch_key = Config.wx_mch_key;
-        }
-
+    public Map<String, String> unifiedTrade(Trade trade, String open_id, String app_id, String mch_id, String mch_key) {
+    	
         String nonce_str = Util.getRandomStringByLength(32);
         String body = Config.body;
         String notify_url = Config.notify_url;

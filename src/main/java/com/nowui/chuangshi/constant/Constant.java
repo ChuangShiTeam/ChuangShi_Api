@@ -75,5 +75,9 @@ public class Constant {
     public static final String ERROR_VERSION = "数据已经过期，请刷新后重试";
 
     public static final String TOPIC_SQL = "sql";
+    
+    public static final String WX_SUCCESS_MSG = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+    
+    public static final String WX_FAIL_MSG = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[]]></return_msg></xml>";
 
 }
