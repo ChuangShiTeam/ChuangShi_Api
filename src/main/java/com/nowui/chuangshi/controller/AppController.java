@@ -55,8 +55,8 @@ public class AppController extends Controller {
 
     @ActionKey(Url.APP_SAVE)
     public void save() {
-        validateRequest_app_id();
-        validate(App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY);
+    	validateRequest_app_id();
+        validate(App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.APP_IS_STOCK, App.APP_IS_COMMISSION);
 
         App model = getModel(App.class);
         String app_id = Util.getRandomUUID();
@@ -64,7 +64,7 @@ public class AppController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = appService.save(app_id, model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), request_user_id);
+        Boolean result = appService.save(app_id, model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getApp_is_stock(), model.getApp_is_commission(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -84,7 +84,7 @@ public class AppController extends Controller {
         authenticateApp_id(app.getApp_id());
         authenticateSystem_create_user_id(app.getSystem_create_user_id());
 
-        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), request_user_id, model.getSystem_version());
+        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getApp_is_stock(), model.getApp_is_commission(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -159,7 +159,7 @@ public class AppController extends Controller {
 
         authenticateApp_id(app.getApp_id());
 
-        app.keep(App.APP_ID, App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.SYSTEM_VERSION);
+        app.keep(App.APP_ID, App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.APP_IS_STOCK, App.APP_IS_COMMISSION, App.SYSTEM_VERSION);
 
         renderSuccessJson(app);
     }
@@ -183,7 +183,7 @@ public class AppController extends Controller {
 
         authenticateApp_id(app.getApp_id());
 
-        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), request_user_id, model.getSystem_version());
+        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getApp_is_stock(), model.getApp_is_commission(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -250,7 +250,7 @@ public class AppController extends Controller {
 
         App app = appService.findByApp_id(model.getApp_id());
 
-        app.keep(App.APP_ID, App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.SYSTEM_VERSION);
+        app.keep(App.APP_ID, App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.APP_IS_STOCK, App.APP_IS_COMMISSION, App.SYSTEM_VERSION);
 
         renderSuccessJson(app);
     }
@@ -268,7 +268,7 @@ public class AppController extends Controller {
         App model = getModel(App.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), request_user_id, model.getSystem_version());
+        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getApp_is_stock(), model.getApp_is_commission(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

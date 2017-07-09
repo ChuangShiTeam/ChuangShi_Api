@@ -26,6 +26,12 @@ public class App extends Model<App> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "wechat_mch_key")
     public static final String WECHAT_MCH_KEY = "wechat_mch_key";
 
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否有库存")
+    public static final String APP_IS_STOCK = "app_is_stock";
+
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否分成")
+    public static final String APP_IS_COMMISSION = "app_is_commission";
+
     public String getApp_id() {
         return getStr(APP_ID);
     }
@@ -80,6 +86,22 @@ public class App extends Model<App> {
 
     public void setWechat_mch_key(String wechat_mch_key) {
         set(WECHAT_MCH_KEY, wechat_mch_key);
+    }
+
+    public Boolean getApp_is_stock() {
+        return getBoolean(APP_IS_STOCK);
+    }
+
+    public void setApp_is_stock(Boolean app_is_stock) {
+        set(APP_IS_STOCK, app_is_stock);
+    }
+
+    public Boolean getApp_is_commission() {
+        return getBoolean(APP_IS_COMMISSION);
+    }
+
+    public void setApp_is_commission(Boolean app_is_commission) {
+        set(APP_IS_COMMISSION, app_is_commission);
     }
 
 }

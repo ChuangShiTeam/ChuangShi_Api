@@ -75,7 +75,6 @@ public class WeChatController extends Controller {
         if (!appid.equals(wx_app_id)) {
         	renderText(Constant.WX_FAIL_MSG);
         }
-        
         String mch_key = app.getWechat_mch_key();
 
         String endsign = PaymentKit.createSign(parameter, mch_key);

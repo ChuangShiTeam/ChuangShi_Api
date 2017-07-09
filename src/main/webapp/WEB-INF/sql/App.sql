@@ -78,7 +78,7 @@
     WHERE system_status = 1
     AND app_id = #p(app_id)
   #end
-
+  
   #sql("save")
     INSERT INTO table_app (
       app_id,
@@ -88,6 +88,8 @@
       wechat_app_secret,
       wechat_mch_id,
       wechat_mch_key,
+      app_is_stock,
+      app_is_commission,
       system_create_user_id,
       system_create_time,
       system_update_user_id,
@@ -102,6 +104,8 @@
       #p(wechat_app_secret),
       #p(wechat_mch_id),
       #p(wechat_mch_key),
+      #p(app_is_stock),
+      #p(app_is_commission),
       #p(system_create_user_id),
       #p(system_create_time),
       #p(system_update_user_id),
@@ -119,6 +123,8 @@
     wechat_app_secret = #p(wechat_app_secret),
     wechat_mch_id = #p(wechat_mch_id),
     wechat_mch_key = #p(wechat_mch_key),
+    app_is_stock = #p(app_is_stock),
+    app_is_commission = #p(app_is_commission),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1

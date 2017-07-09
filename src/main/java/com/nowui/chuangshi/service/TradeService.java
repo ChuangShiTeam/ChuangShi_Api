@@ -87,16 +87,16 @@ public class TradeService extends Service {
         	if (app == null) {
         		throw new RuntimeException("应用不存在");
         	}
-        	return unifiedTrade(trade, open_id, app.getWechat_app_id(), app.getWechat_mch_id(), app.getWechat_mch_key());
+        	String body = app.getApp_name() + "-订单";
+        	return unifiedTrade(trade, open_id, body, app.getWechat_app_id(), app.getWechat_mch_id(), app.getWechat_mch_key());
         }
         //TODO 其他方式支付
         return new HashMap<String, String>();
     }
 
-    public Map<String, String> unifiedTrade(Trade trade, String open_id, String app_id, String mch_id, String mch_key) {
+    public Map<String, String> unifiedTrade(Trade trade, String open_id, String body, String app_id, String mch_id, String mch_key) {
     	
         String nonce_str = Util.getRandomStringByLength(32);
-        String body = Config.body;
         String notify_url = Config.notify_url;
         String openid = open_id;
         String out_trade_no = trade.getTrade_number();

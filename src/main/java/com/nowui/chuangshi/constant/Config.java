@@ -15,7 +15,6 @@ public class Config {
     public static String code_generate_url = "";
     public static String table_schema = "";
     
-    public static String body = "";
     public static String notify_url = "";
 
     static {
@@ -32,7 +31,6 @@ public class Config {
         max_activee = Integer.valueOf(PropKit.get("max_activee"));
         code_generate_url = PropKit.get("code_generate_url");
         table_schema = PropKit.get("table_schema");
-        body = PropKit.get("body");
         notify_url = PropKit.get("notify_url");
     }
 
