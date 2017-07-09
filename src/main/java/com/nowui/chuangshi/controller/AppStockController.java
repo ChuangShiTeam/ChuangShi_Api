@@ -2,13 +2,12 @@ package com.nowui.chuangshi.controller;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
+import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.Stock;
@@ -30,7 +29,7 @@ public class AppStockController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<Stock> resultList = stockService.listByApp_idAndStock_typeAndSystem_create_timeAndLimit(request_app_id, StockType.MEMBER.getValue(), jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
+        List<Stock> resultList = stockService.listByApp_idAndStock_typeAndSystem_create_timeAndLimit(request_app_id, StockType.APP.getValue(), jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
 
         for (Stock result : resultList) {
             result.keep(Stock.STOCK_ID, Stock.SYSTEM_VERSION);
@@ -61,7 +60,7 @@ public class AppStockController extends Controller {
     @ActionKey(Url.APP_STOCK_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(Member.MEMBER_ID, Stock.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION);
+        validate(App.APP_ID, Stock.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION);
 
         Stock model = getModel(Stock.class);
         
@@ -74,7 +73,7 @@ public class AppStockController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = stockService.save(stock_id, request_app_id, model.getProduct_sku_id(), object_id, StockType.MEMBER.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id);
+        Boolean result = stockService.save(stock_id, request_app_id, model.getProduct_sku_id(), object_id, StockType.APP.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -94,7 +93,7 @@ public class AppStockController extends Controller {
         authenticateApp_id(stock.getApp_id());
         authenticateSystem_create_user_id(stock.getSystem_create_user_id());
 
-        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.MEMBER.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id, model.getSystem_version());
+        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.APP.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -132,8 +131,8 @@ public class AppStockController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = stockService.countByApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_name(request_app_id, StockType.MEMBER.getValue(), user_name, model.getStock_action(), product_name);
-        List<Stock> resultList = stockService.listByApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_nameAndLimit(request_app_id, StockType.MEMBER.getValue(), user_name, model.getStock_action(), product_name, getM(), getN());
+        Integer total = stockService.countByApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_name(request_app_id, StockType.APP.getValue(), user_name, model.getStock_action(), product_name);
+        List<Stock> resultList = stockService.listByApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_nameAndLimit(request_app_id, StockType.APP.getValue(), user_name, model.getStock_action(), product_name, getM(), getN());
 
         for (Stock result : resultList) {
             result.keep(Stock.STOCK_ID, Product.PRODUCT_NAME, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.SYSTEM_VERSION);
@@ -163,7 +162,7 @@ public class AppStockController extends Controller {
     @ActionKey(Url.APP_STOCK_ADMIN_INIT)
     public void adminInit() {
         validateRequest_app_id();
-        validate(Member.MEMBER_ID);
+        validate(App.APP_ID);
 
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
@@ -174,7 +173,7 @@ public class AppStockController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = stockService.init(request_app_id, object_id, StockType.MEMBER.getValue(), jsonArray, request_user_id);
+        Boolean result = stockService.init(request_app_id, object_id, StockType.APP.getValue(), jsonArray, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -198,7 +197,7 @@ public class AppStockController extends Controller {
 
         authenticateApp_id(stock.getApp_id());
 
-        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.MEMBER.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id, model.getSystem_version());
+        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.APP.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -232,8 +231,8 @@ public class AppStockController extends Controller {
         String user_name = jsonObject.getString("user_name");
         String product_name = jsonObject.getString("product_name");
 
-        Integer total = stockService.countByOrApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_name(model.getApp_id(), StockType.MEMBER.getValue(), user_name, model.getStock_action(), product_name);
-        List<Stock> resultList = stockService.listByOrApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_nameAndLimit(model.getApp_id(), StockType.MEMBER.getValue(), user_name, model.getStock_action(), product_name, getM(), getN());
+        Integer total = stockService.countByOrApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_name(model.getApp_id(), StockType.APP.getValue(), user_name, model.getStock_action(), product_name);
+        List<Stock> resultList = stockService.listByOrApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_nameAndLimit(model.getApp_id(), StockType.APP.getValue(), user_name, model.getStock_action(), product_name, getM(), getN());
 
         for (Stock result : resultList) {
             result.keep(Stock.STOCK_ID, Stock.SYSTEM_VERSION);
@@ -281,7 +280,7 @@ public class AppStockController extends Controller {
         Stock model = getModel(Stock.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.MEMBER.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id, model.getSystem_version());
+        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.APP.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
