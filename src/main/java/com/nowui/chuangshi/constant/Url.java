@@ -371,11 +371,13 @@ public class Url {
     public static final String STOCK_ADMIN_SAVE = "/stock/admin/save";
     public static final String STOCK_ADMIN_UPDATE = "/stock/admin/update";
     public static final String STOCK_ADMIN_DELETE = "/stock/admin/delete";
+    public static final String STOCK_ADMIN_INIT = "/stock/admin/init";
     public static final String STOCK_SYSTEM_LIST = "/stock/system/list";
     public static final String STOCK_SYSTEM_FIND = "/stock/system/find";
     public static final String STOCK_SYSTEM_SAVE = "/stock/system/save";
     public static final String STOCK_SYSTEM_UPDATE = "/stock/system/update";
     public static final String STOCK_SYSTEM_DELETE = "/stock/system/delete";
+    public static final String STOCK_SYSTEM_INIT = "/stock/system/init";
 
     public static final String EXPRESS_LIST = "/express/list";
     public static final String EXPRESS_FIND = "/express/find";

@@ -98,7 +98,7 @@ public class AppDao extends Dao {
         }
     }
 
-    public Boolean save(String app_id, String app_name, String app_secret, String wechat_app_id, String wechat_app_secret, String wechat_mch_id, String wechat_mch_key, Boolean app_is_stock, Boolean app_is_commission, String system_create_user_id) {
+    public Boolean save(String app_id, String app_name, String app_secret, String wechat_app_id, String wechat_app_secret, String wechat_mch_id, String wechat_mch_key, Boolean app_is_stock, Boolean app_is_commission, Integer app_commission_level, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
         sqlMap.put(App.APP_NAME, app_name);
@@ -109,6 +109,7 @@ public class AppDao extends Dao {
         sqlMap.put(App.WECHAT_MCH_KEY, wechat_mch_key);
         sqlMap.put(App.APP_IS_STOCK, app_is_stock);
         sqlMap.put(App.APP_IS_COMMISSION, app_is_commission);
+        sqlMap.put(App.APP_COMMISSION_LEVEL, app_commission_level);
         sqlMap.put(App.SYSTEM_CREATE_USER_ID, system_create_user_id);
         sqlMap.put(App.SYSTEM_CREATE_TIME, new Date());
         sqlMap.put(App.SYSTEM_UPDATE_USER_ID, system_create_user_id);
@@ -122,7 +123,7 @@ public class AppDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String app_id, String app_name, String app_secret, String wechat_app_id, String wechat_app_secret, String wechat_mch_id, String wechat_mch_key, Boolean app_is_stock, Boolean app_is_commission, String system_update_user_id, Integer system_version) {
+    public Boolean update(String app_id, String app_name, String app_secret, String wechat_app_id, String wechat_app_secret, String wechat_mch_id, String wechat_mch_key, Boolean app_is_stock, Boolean app_is_commission, Integer app_commission_level, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
         sqlMap.put(App.APP_NAME, app_name);
@@ -133,6 +134,7 @@ public class AppDao extends Dao {
         sqlMap.put(App.WECHAT_MCH_KEY, wechat_mch_key);
         sqlMap.put(App.APP_IS_STOCK, app_is_stock);
         sqlMap.put(App.APP_IS_COMMISSION, app_is_commission);
+        sqlMap.put(App.APP_COMMISSION_LEVEL, app_commission_level);
         sqlMap.put(App.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(App.SYSTEM_UPDATE_TIME, new Date());
         sqlMap.put(App.SYSTEM_VERSION, system_version);
