@@ -37,7 +37,7 @@
     LEFT JOIN table_file ON table_user.user_avatar = table_file.file_id
     WHERE table_member.system_status = 1
     AND table_member.member_parent_path LIKE #p("%" + member_parent_id + "%")
-    ORDER BY table_member.system_create_time ASC
+    ORDER BY table_member.member_status ASC, table_member.system_create_time ASC
   #end
 
   #sql("listByApp_idAndSystem_create_timeAndLimit")
