@@ -98,4 +98,8 @@ public class BillCommissionCache extends Cache {
         return result;
     }
 
+    public Boolean batchSave(List<BillCommission> billCommissionList) {
+        return billCommissionDao.batchSave(billCommissionList);
+    }
+
 }

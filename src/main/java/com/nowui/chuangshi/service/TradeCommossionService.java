@@ -24,9 +24,8 @@ public class TradeCommossionService extends Service {
         return tradeCommossionCache.deleteByTrade_idAndSystem_update_user_idValidateSystem_version(trade_id, system_update_user_id, system_version);
     }
 
-    public void save(List<TradeCommossion> tradeCommossionList) {
-        // TODO Auto-generated method stub
-
+    public Boolean batchSave(List<TradeCommossion> tradeCommossionList) {
+        return tradeCommossionCache.batchSave(tradeCommossionList);
     }
 
 }

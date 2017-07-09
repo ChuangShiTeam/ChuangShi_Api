@@ -51,4 +51,8 @@ public class BillCommissionService extends Service {
         return billCommissionCache.deleteByBill_commission_idAndSystem_update_user_idValidateSystem_version(bill_commission_id, system_update_user_id, system_version);
     }
 
+    public Boolean batchSave(List<BillCommission> billCommissionList) {
+        return billCommissionCache.batchSave(billCommissionList);
+    }
+
 }

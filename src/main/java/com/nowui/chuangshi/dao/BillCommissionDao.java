@@ -149,4 +149,16 @@ public class BillCommissionDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
+    public Boolean batchSave(List<BillCommission> billCommissionList) {
+        int[] result = Db.batchSave(billCommissionList, Constant.BATCH_SIZE);
+
+        for (int i : result) {
+            if (i == 0) {
+                throw new RuntimeException("账单分成保存不成功");
+            }
+        }
+        return true;
+
+    }
+
 }

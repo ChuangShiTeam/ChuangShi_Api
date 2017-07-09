@@ -35,7 +35,7 @@ public class Bill extends Model<Bill> {
     @Column(type = ColumnType.DATETIME, length = 0, comment = "账单时间")
     public static final String BILL_TIME = "bill_time";
 
-    @Column(type = ColumnType.VARCHAR, length = 10, comment = "账单提现")
+    @Column(type = ColumnType.VARCHAR, length = 10, comment = "账单流程")
     public static final String BILL_FLOW = "bill_flow";
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "账单状态")
@@ -109,7 +109,7 @@ public class Bill extends Model<Bill> {
         return getDate(BILL_TIME);
     }
 
-    public void setSystem_create_time(Date bill_time) {
+    public void setBill_time(Date bill_time) {
         set(BILL_TIME, bill_time);
     }
     

@@ -1,11 +1,11 @@
 package com.nowui.chuangshi.service;
 
-import com.nowui.chuangshi.cache.BillCache;
-import com.nowui.chuangshi.model.Bill;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import com.nowui.chuangshi.cache.BillCache;
+import com.nowui.chuangshi.model.Bill;
 
 public class BillService extends Service {
 
@@ -50,8 +50,8 @@ public class BillService extends Service {
         return billCache.deleteByBill_idAndSystem_update_user_idValidateSystem_version(bill_id, system_update_user_id, system_version);
     }
 
-    public Boolean save(List<Bill> billList) {
-        return billCache.save(billList);
+    public Boolean batchSave(List<Bill> billList) {
+        return billCache.batchSave(billList);
     }
 
 }

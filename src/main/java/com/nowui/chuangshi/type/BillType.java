@@ -1,13 +1,16 @@
 package com.nowui.chuangshi.type;
 
-public enum Bill {
+public enum BillType {
 
-    MEMBER_ORGANIZATION("", "");
+    TRADE("trade", "订单"),
+    COMMISSION("commission", "分成"),
+    EXPRESS("express", "快递单");
+
 
     private String key;
     private String value;
 
-    private Bill(String key, String value) {
+    private BillType(String key, String value) {
         this.key = key;
         this.value = value;
     }
