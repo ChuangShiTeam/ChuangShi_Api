@@ -17,12 +17,6 @@ public class Stock extends Model<Stock> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "公司id或会员id")
     public static final String OBJECT_ID = "object_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 100, comment = "产品名称")
-    public static final String PRODUCT_NAME = "product_name";
-
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "产品图片")
-    public static final String PRODUCT_IMAGE = "product_image";
-
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "公司或会员")
     public static final String STOCK_TYPE = "stock_type";
 
@@ -65,22 +59,6 @@ public class Stock extends Model<Stock> {
 
     public void setObject_id(String object_id) {
         set(OBJECT_ID, object_id);
-    }
-
-    public String getProduct_name() {
-        return getStr(PRODUCT_NAME);
-    }
-
-    public void setProduct_name(String product_name) {
-        set(PRODUCT_NAME, product_name);
-    }
-
-    public String getProduct_image() {
-        return getStr(PRODUCT_IMAGE);
-    }
-
-    public void setProduct_image(String product_image) {
-        set(PRODUCT_IMAGE, product_image);
     }
 
     public String getStock_type() {

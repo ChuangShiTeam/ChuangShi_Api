@@ -1,7 +1,15 @@
 #namespace("stock")
 
-  #sql("countByApp_idOrStock_typeOrStock_actionOrLikeProduct_name")
+  #sql("countByApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_name")
     SELECT COUNT(*) FROM table_stock
+    #if(product_name)
+    LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
+    LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
+    #end
+    #if(user_name)
+    LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
+    LEFT JOIN table_user ON table_user.user_id = table_member.user_id
+    #end
     WHERE system_status = 1
     AND app_id = #p(app_id)
     #if(stock_type)
@@ -10,14 +18,26 @@
     #if(stock_action)
     AND stock_action = #p(stock_action)
     #end
+    #if(user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND table_user.user_name LIKE #p(user_name)
+    #end
     #if(product_name)
     #set(product_name = "%" + product_name + "%")
-    AND product_name LIKE #p(product_name)
+    AND table_product.product_name LIKE #p(product_name)
     #end
   #end
   
-  #sql("countByOrApp_idOrStock_typeOrStock_actionOrLikeProduct_name")
+  #sql("countByOrApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_name")
     SELECT COUNT(*) FROM table_stock
+    #if(product_name)
+    LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
+    LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
+    #end
+    #if(user_name)
+    LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
+    LEFT JOIN table_user ON table_user.user_id = table_member.user_id
+    #end
     WHERE system_status = 1
     #if(app_id)
     AND app_id = #p(app_id)
@@ -28,27 +48,40 @@
     #if(stock_action)
     AND stock_action = #p(stock_action)
     #end
+    #if(user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND table_user.user_name LIKE #p(user_name)
+    #end
     #if(product_name)
     #set(product_name = "%" + product_name + "%")
-    AND product_name LIKE #p(product_name)
+    AND table_product.product_name LIKE #p(product_name)
     #end
   #end
 
-  #sql("listByApp_idAndSystem_create_timeAndLimit")
+  #sql("listByApp_idAndStock_typeAndSystem_create_timeAndLimit")
     SELECT
     stock_id
     FROM table_stock
     WHERE system_status = 1
     AND app_id = #p(app_id)
+    AND stock_type = #p(stock_type)
     AND system_create_time < UNIX_TIMESTAMP(#p(system_create_time))
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByApp_idOrStock_typeOrStock_actionOrLikeProduct_nameAndLimit")
+  #sql("listByApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_nameAndLimit")
     SELECT
     stock_id
     FROM table_stock
+    #if(product_name)
+    LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
+    LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
+    #end
+    #if(user_name)
+    LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
+    LEFT JOIN table_user ON table_user.user_id = table_member.user_id
+    #end
     WHERE system_status = 1
     AND app_id = #p(app_id)
     #if(stock_type)
@@ -57,18 +90,30 @@
     #if(stock_action)
     AND stock_action = #p(stock_action)
     #end
+   	#if(user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND table_user.user_name LIKE #p(user_name)
+    #end
     #if(product_name)
     #set(product_name = "%" + product_name + "%")
-    AND product_name LIKE #p(product_name)
+    AND table_product.product_name LIKE #p(product_name)
     #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idOrStock_typeOrStock_actionOrLikeProduct_nameAndLimit")
+  #sql("listByOrApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_nameAndLimit")
     SELECT
     stock_id
     FROM table_stock
+    #if(product_name)
+    LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
+    LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
+    #end
+    #if(user_name)
+    LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
+    LEFT JOIN table_user ON table_user.user_id = table_member.user_id
+    #end
     WHERE system_status = 1
     #if(app_id)
     AND app_id = #p(app_id)
@@ -79,9 +124,13 @@
     #if(stock_action)
     AND stock_action = #p(stock_action)
     #end
+    #if(user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND table_user.user_name LIKE #p(user_name)
+    #end
     #if(product_name)
     #set(product_name = "%" + product_name + "%")
-    AND product_name LIKE #p(product_name)
+    AND table_product.product_name LIKE #p(product_name)
     #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
@@ -101,8 +150,6 @@
       app_id,
       product_sku_id,
       object_id,
-      product_name,
-      product_image,
       stock_type,
       stock_quantity,
       stock_action,
@@ -118,8 +165,6 @@
       #p(app_id),
       #p(product_sku_id),
       #p(object_id),
-      #p(product_name),
-      #p(product_image),
       #p(stock_type),
       #p(stock_quantity),
       #p(stock_action),
@@ -137,8 +182,6 @@
     UPDATE table_stock SET
     product_sku_id = #p(product_sku_id),
     object_id = #p(object_id),
-    product_name = #p(product_name),
-    product_image = #p(product_image),
     stock_type = #p(stock_type),
     stock_quantity = #p(stock_quantity),
     stock_action = #p(stock_action),
