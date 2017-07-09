@@ -65,12 +65,12 @@ public class BillCache extends Cache {
         return bill;
     }
 
-    public Boolean save(String bill_id, String app_id, String user_id, String bill_type, String bill_image, String bill_name, BigDecimal bill_amount, Boolean bill_is_income, String bill_time,
+    public Boolean save(String bill_id, String app_id, String user_id, String bill_type, String bill_image, String bill_name, BigDecimal bill_amount, Boolean bill_is_income, Date bill_time,
             String bill_flow, Boolean bill_status, String system_create_user_id) {
         return billDao.save(bill_id, app_id, user_id, bill_type, bill_image, bill_name, bill_amount, bill_is_income, bill_time, bill_flow, bill_status, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String bill_id, String user_id, String bill_type, String bill_image, String bill_name, BigDecimal bill_amount, Boolean bill_is_income, String bill_time,
+    public Boolean updateValidateSystem_version(String bill_id, String user_id, String bill_type, String bill_image, String bill_name, BigDecimal bill_amount, Boolean bill_is_income, Date bill_time,
             String bill_flow, Boolean bill_status, String system_update_user_id, Integer system_version) {
         Bill bill = findByBill_id(bill_id);
         if (!bill.getSystem_version().equals(system_version)) {

@@ -90,7 +90,7 @@ public class BillDao extends Dao {
         }
     }
 
-    public Boolean save(String bill_id, String app_id, String user_id, String bill_type, String bill_image, String bill_name, BigDecimal bill_amount, Boolean bill_is_income, String bill_time,
+    public Boolean save(String bill_id, String app_id, String user_id, String bill_type, String bill_image, String bill_name, BigDecimal bill_amount, Boolean bill_is_income, Date bill_time,
             String bill_flow, Boolean bill_status, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Bill.BILL_ID, bill_id);
@@ -117,7 +117,7 @@ public class BillDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String bill_id, String user_id, String bill_type, String bill_image, String bill_name, BigDecimal bill_amount, Boolean bill_is_income, String bill_time, String bill_flow,
+    public Boolean update(String bill_id, String user_id, String bill_type, String bill_image, String bill_name, BigDecimal bill_amount, Boolean bill_is_income, Date bill_time, String bill_flow,
             Boolean bill_status, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Bill.BILL_ID, bill_id);
