@@ -35,6 +35,36 @@ public class ProductController extends Controller {
     private ProductSkuCommissionService productSkuCommissionService = new ProductSkuCommissionService();
     private final FileService fileService = new FileService();
 
+    @ActionKey(Url.PRODUCT_FIND)
+    public void find() {
+        validateRequest_app_id();
+        validate(Product.PRODUCT_ID);
+
+        Product model = getModel(Product.class);
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        Product product = productService.findByProduct_id(model.getProduct_id());
+
+        authenticateApp_id(product.getApp_id());
+
+        product.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+
+        product.keep(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_CONTENT);
+
+        List<ProductSku> productSkuList = productSkuService.listByProduct_id(model.getProduct_id());
+
+        for (ProductSku productSku : productSkuList) {
+            if (productSku.getProduct_sku_is_default()) {
+                product.put(Product.PRODUCT_DEFAULT_SKU, productSku.keep(ProductSku.PRODUCT_SKU_ID));
+
+                break;
+            }
+        }
+
+        renderSuccessJson(product);
+    }
+
     @ActionKey(Url.PRODUCT_ADMIN_LIST)
     public void adminList() {
         validateRequest_app_id();

@@ -146,6 +146,7 @@ public class Url {
     public static final String FILE_SYSTEM_UPDATE = "/file/system/update";
     public static final String FILE_SYSTEM_DELETE = "/file/system/delete";
 
+    public static final String PRODUCT_FIND = "/product/find";
     public static final String PRODUCT_ADMIN_LIST = "/product/admin/list";
     public static final String PRODUCT_ADMIN_ALL_LIST = "/product/admin/all/list";
     public static final String PRODUCT_ADMIN_FIND = "/product/admin/find";

@@ -37,7 +37,7 @@ public class TradeController extends Controller {
      * 下单前返回会员信息sku价格
      */
     @ActionKey(Url.TRADE_CHECK)
-    public void skuPriceFind() {
+    public void check() {
         validateRequest_app_id();
 
         validate(Product.PRODUCT_SKU_LIST);
