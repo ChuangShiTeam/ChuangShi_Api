@@ -2,6 +2,7 @@ package com.nowui.chuangshi.controller;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
@@ -91,7 +92,7 @@ public class MemberStockController extends Controller {
         authenticateApp_id(stock.getApp_id());
         authenticateSystem_create_user_id(stock.getSystem_create_user_id());
 
-        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), model.getStock_type(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id, model.getSystem_version());
+        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.MEMBER.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -156,6 +157,25 @@ public class MemberStockController extends Controller {
 
         renderSuccessJson(stock);
     }
+    
+    @ActionKey(Url.MEMBER_STOCK_ADMIN_INIT)
+    public void adminInit() {
+        validateRequest_app_id();
+        validate(Member.MEMBER_ID);
+
+        String request_app_id = getRequest_app_id();
+        String request_user_id = getRequest_user_id();
+        
+        JSONObject jsonObject = getParameterJSONObject();
+        String object_id = jsonObject.getString("member_id");
+        JSONArray jsonArray = jsonObject.getJSONArray("product_skuList");
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        Boolean result = stockService.init(request_app_id, object_id, StockType.MEMBER.getValue(), jsonArray, request_user_id);
+
+        renderSuccessJson(result);
+    }
 
     @ActionKey(Url.MEMBER_STOCK_ADMIN_SAVE)
     public void adminSave() {
@@ -176,7 +196,7 @@ public class MemberStockController extends Controller {
 
         authenticateApp_id(stock.getApp_id());
 
-        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), model.getStock_type(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id, model.getSystem_version());
+        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.MEMBER.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -237,13 +257,16 @@ public class MemberStockController extends Controller {
     @ActionKey(Url.MEMBER_STOCK_SYSTEM_SAVE)
     public void systemSave() {
         validateRequest_app_id();
-        validate(Stock.APP_ID, Stock.PRODUCT_SKU_ID, Stock.OBJECT_ID, Stock.STOCK_TYPE, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.STOCK_STATUS);
+        validate(Stock.APP_ID, Member.MEMBER_ID, Stock.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.STOCK_STATUS);
 
         Stock model = getModel(Stock.class);
         String stock_id = Util.getRandomUUID();
         String request_user_id = getRequest_user_id();
+        
+        JSONObject jsonObject = getParameterJSONObject();
+        String object_id = jsonObject.getString("member_id");
 
-        Boolean result = stockService.save(stock_id, model.getApp_id(), model.getProduct_sku_id(), model.getObject_id(), model.getStock_type(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id);
+        Boolean result = stockService.save(stock_id, model.getApp_id(), model.getProduct_sku_id(), object_id, StockType.MEMBER.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -251,12 +274,12 @@ public class MemberStockController extends Controller {
     @ActionKey(Url.MEMBER_STOCK_SYSTEM_UPDATE)
     public void systemUpdate() {
         validateRequest_app_id();
-        validate(Stock.STOCK_ID, Stock.PRODUCT_SKU_ID, Stock.OBJECT_ID, Stock.STOCK_TYPE, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.STOCK_STATUS, Stock.SYSTEM_VERSION);
+        validate(Stock.STOCK_ID, Stock.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.STOCK_STATUS, Stock.SYSTEM_VERSION);
 
         Stock model = getModel(Stock.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), model.getStock_type(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id, model.getSystem_version());
+        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.MEMBER.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

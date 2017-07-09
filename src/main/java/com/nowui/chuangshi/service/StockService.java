@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.nowui.chuangshi.cache.StockCache;
 import com.nowui.chuangshi.model.Stock;
 
@@ -44,6 +45,11 @@ public class StockService extends Service {
 
     public Boolean deleteByStock_idAndSystem_update_user_idValidateSystem_version(String stock_id, String system_update_user_id, Integer system_version) {
         return stockCache.deleteByStock_idAndSystem_update_user_idValidateSystem_version(stock_id, system_update_user_id, system_version);
+    }
+
+    public Boolean init(String request_app_id, String object_id, String value, JSONArray jsonArray,
+            String request_user_id) {
+        return null;
     }
 
 }
