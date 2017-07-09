@@ -32,6 +32,9 @@ public class App extends Model<App> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "是否分成")
     public static final String APP_IS_COMMISSION = "app_is_commission";
 
+    @Column(type = ColumnType.INT, length = 5, comment = "参与分成的上级层数")
+    public static final String APP_COMMISSION_LEVEL = "app_commission_level";
+
     public String getApp_id() {
         return getStr(APP_ID);
     }
@@ -102,6 +105,14 @@ public class App extends Model<App> {
 
     public void setApp_is_commission(Boolean app_is_commission) {
         set(APP_IS_COMMISSION, app_is_commission);
+    }
+
+    public Integer getApp_commission_level() {
+        return getInt(APP_COMMISSION_LEVEL);
+    }
+
+    public void setApp_commission_level(Integer app_commission_level) {
+        set(APP_COMMISSION_LEVEL, app_commission_level);
     }
 
 }
