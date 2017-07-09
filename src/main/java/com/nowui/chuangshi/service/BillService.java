@@ -50,4 +50,8 @@ public class BillService extends Service {
         return billCache.deleteByBill_idAndSystem_update_user_idValidateSystem_version(bill_id, system_update_user_id, system_version);
     }
 
+    public Boolean save(List<Bill> billList) {
+        return billCache.save(billList);
+    }
+
 }

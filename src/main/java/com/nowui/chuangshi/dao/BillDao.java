@@ -151,4 +151,9 @@ public class BillDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
+    public Boolean save(List<Bill> billList) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

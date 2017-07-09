@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.nowui.chuangshi.constant.Column;
 import com.nowui.chuangshi.type.ColumnType;
@@ -34,7 +35,7 @@ public class Bill extends Model<Bill> {
     @Column(type = ColumnType.DATETIME, length = 0, comment = "账单时间")
     public static final String BILL_TIME = "bill_time";
 
-    @Column(type = ColumnType.VARCHAR, length = 10, comment = "账单状态备注")
+    @Column(type = ColumnType.VARCHAR, length = 10, comment = "账单提现")
     public static final String BILL_FLOW = "bill_flow";
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "账单状态")
@@ -104,13 +105,14 @@ public class Bill extends Model<Bill> {
         set(BILL_IS_INCOME, bill_is_income);
     }
 
-    public String getBill_time() {
-        return getStr(BILL_TIME);
+    public Date getBill_time() {
+        return getDate(BILL_TIME);
     }
 
-    public void setBill_time(String bill_time) {
+    public void setSystem_create_time(Date bill_time) {
         set(BILL_TIME, bill_time);
     }
+    
 
     public String getBill_flow() {
         return getStr(BILL_FLOW);

@@ -101,4 +101,8 @@ public class BillCache extends Cache {
         return result;
     }
 
+    public Boolean save(List<Bill> billList) {
+        return billDao.save(billList);
+    }
+
 }

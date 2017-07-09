@@ -446,4 +446,21 @@ public class Url {
     public static final String BILL_SYSTEM_UPDATE = "/bill/system/update";
     public static final String BILL_SYSTEM_DELETE = "/bill/system/delete";
 
+    // 账单分成明细
+    public static final String BILL_COMMISSION_LIST = "/bill/commission/list";
+    public static final String BILL_COMMISSION_FIND = "/bill/commission/find";
+    public static final String BILL_COMMISSION_SAVE = "/bill/commission/save";
+    public static final String BILL_COMMISSION_UPDATE = "/bill/commission/update";
+    public static final String BILL_COMMISSION_DELETE = "/bill/commission/delete";
+    public static final String BILL_COMMISSION_ADMIN_LIST = "/bill/commission/admin/list";
+    public static final String BILL_COMMISSION_ADMIN_FIND = "/bill/commission/admin/find";
+    public static final String BILL_COMMISSION_ADMIN_SAVE = "/bill/commission/admin/save";
+    public static final String BILL_COMMISSION_ADMIN_UPDATE = "/bill/commission/admin/update";
+    public static final String BILL_COMMISSION_ADMIN_DELETE = "/bill/commission/admin/delete";
+    public static final String BILL_COMMISSION_SYSTEM_LIST = "/bill/commission/system/list";
+    public static final String BILL_COMMISSION_SYSTEM_FIND = "/bill/commission/system/find";
+    public static final String BILL_COMMISSION_SYSTEM_SAVE = "/bill/commission/system/save";
+    public static final String BILL_COMMISSION_SYSTEM_UPDATE = "/bill/commission/system/update";
+    public static final String BILL_COMMISSION_SYSTEM_DELETE = "/bill/commission/system/delete";
+
 }
