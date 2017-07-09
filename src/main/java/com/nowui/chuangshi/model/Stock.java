@@ -28,6 +28,8 @@ public class Stock extends Model<Stock> {
 
     @Column(type = ColumnType.VARCHAR, length = 25, comment = "状态")
     public static final String STOCK_STATUS = "stock_status";
+    
+    public static final String PRODUCT_SKU_LIST = "product_sku_list";
 
     public String getStock_id() {
         return getStr(STOCK_ID);
