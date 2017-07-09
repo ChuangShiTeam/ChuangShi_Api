@@ -20,6 +20,7 @@ import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.controller.AdminController;
 import com.nowui.chuangshi.controller.ApiController;
 import com.nowui.chuangshi.controller.AppController;
+import com.nowui.chuangshi.controller.AppStockController;
 import com.nowui.chuangshi.controller.BillController;
 import com.nowui.chuangshi.controller.CategoryController;
 import com.nowui.chuangshi.controller.CodeController;
@@ -39,13 +40,13 @@ import com.nowui.chuangshi.controller.HttpController;
 import com.nowui.chuangshi.controller.MemberAddressController;
 import com.nowui.chuangshi.controller.MemberController;
 import com.nowui.chuangshi.controller.MemberLevelController;
+import com.nowui.chuangshi.controller.MemberStockController;
 import com.nowui.chuangshi.controller.MenuController;
 import com.nowui.chuangshi.controller.ProductBrandController;
 import com.nowui.chuangshi.controller.ProductCategoryController;
 import com.nowui.chuangshi.controller.ProductController;
 import com.nowui.chuangshi.controller.QrcodeController;
 import com.nowui.chuangshi.controller.SqlController;
-import com.nowui.chuangshi.controller.StockController;
 import com.nowui.chuangshi.controller.TradeController;
 import com.nowui.chuangshi.controller.UserController;
 import com.nowui.chuangshi.interceptor.GlobalActionInterceptor;
@@ -53,6 +54,7 @@ import com.nowui.chuangshi.model.Admin;
 import com.nowui.chuangshi.model.Api;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Bill;
+import com.nowui.chuangshi.model.BillCommission;
 import com.nowui.chuangshi.model.Category;
 import com.nowui.chuangshi.model.Customer;
 import com.nowui.chuangshi.model.CustomerAttribute;
@@ -102,6 +104,7 @@ public class WebConfig extends JFinalConfig {
         routes.add("/sql", SqlController.class);
         routes.add("/exception", ExceptionController.class);
         routes.add("/app", AppController.class);
+        routes.add("/app/stock", AppStockController.class);
         routes.add("/category", CategoryController.class);
         routes.add("/menu", MenuController.class);
         routes.add("/api", ApiController.class);
@@ -114,7 +117,7 @@ public class WebConfig extends JFinalConfig {
         routes.add("/member", MemberController.class);
         routes.add("/member/address", MemberAddressController.class);
         routes.add("/member/level", MemberLevelController.class);
-        routes.add("/stock", StockController.class);
+        routes.add("/member/stock", MemberStockController.class);
         routes.add("/express", ExpressController.class);
 
         routes.add("/trade", TradeController.class);
@@ -187,6 +190,8 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_trade_commossion", "trade_commossion_id", TradeCommossion.class);
         activeRecordPlugin.addMapping("table_trade_pay", "trade_pay_id", TradePay.class);
         activeRecordPlugin.addMapping("table_bill", "bill_id", Bill.class);
+        activeRecordPlugin.addMapping("table_bill_commission", "bill_commission_id", BillCommission.class);
+
         // activeRecordPlugin.addMapping("table_qrcode", "qrcode_id",
         // Qrcode.class);
 

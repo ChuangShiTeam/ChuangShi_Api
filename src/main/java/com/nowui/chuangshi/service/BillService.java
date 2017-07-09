@@ -1,11 +1,11 @@
 package com.nowui.chuangshi.service;
 
-import com.nowui.chuangshi.cache.BillCache;
-import com.nowui.chuangshi.model.Bill;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import com.nowui.chuangshi.cache.BillCache;
+import com.nowui.chuangshi.model.Bill;
 
 public class BillService extends Service {
 
@@ -35,12 +35,12 @@ public class BillService extends Service {
         return billCache.findByBill_id(bill_id);
     }
 
-    public Boolean save(String bill_id, String app_id, String user_id, String bill_type, String bill_image, String bill_name, BigDecimal bill_amount, Boolean bill_is_income, String bill_time,
+    public Boolean save(String bill_id, String app_id, String user_id, String bill_type, String bill_image, String bill_name, BigDecimal bill_amount, Boolean bill_is_income, Date bill_time,
             String bill_flow, Boolean bill_status, String system_create_user_id) {
         return billCache.save(bill_id, app_id, user_id, bill_type, bill_image, bill_name, bill_amount, bill_is_income, bill_time, bill_flow, bill_status, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String bill_id, String user_id, String bill_type, String bill_image, String bill_name, BigDecimal bill_amount, Boolean bill_is_income, String bill_time,
+    public Boolean updateValidateSystem_version(String bill_id, String user_id, String bill_type, String bill_image, String bill_name, BigDecimal bill_amount, Boolean bill_is_income, Date bill_time,
             String bill_flow, Boolean bill_status, String system_update_user_id, Integer system_version) {
         return billCache.updateValidateSystem_version(bill_id, user_id, bill_type, bill_image, bill_name, bill_amount, bill_is_income, bill_time, bill_flow, bill_status, system_update_user_id,
                 system_version);
@@ -48,6 +48,10 @@ public class BillService extends Service {
 
     public Boolean deleteByBill_idAndSystem_update_user_idValidateSystem_version(String bill_id, String system_update_user_id, Integer system_version) {
         return billCache.deleteByBill_idAndSystem_update_user_idValidateSystem_version(bill_id, system_update_user_id, system_version);
+    }
+
+    public Boolean batchSave(List<Bill> billList) {
+        return billCache.batchSave(billList);
     }
 
 }

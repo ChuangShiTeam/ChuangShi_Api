@@ -44,4 +44,9 @@ public class TradeCommossionCache extends Cache {
         return result;
     }
 
+
+    public boolean batchSave(List<TradeCommossion> tradeCommossionList) {
+        return tradeCommossionDao.batchSave(tradeCommossionList);
+    }
+
 }

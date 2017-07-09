@@ -1,13 +1,12 @@
 package com.nowui.chuangshi.type;
 
-public enum StockType {
-    APP("APP", "应用"),
-    MEMBER("MEMBER", "会员");
+public enum BillFlow {
+    COMPLETE("COMPLETE", "已完成");
 
     private String key;
     private String value;
 
-    private StockType(String key, String value) {
+    private BillFlow(String key, String value) {
         this.key = key;
         this.value = value;
     }
