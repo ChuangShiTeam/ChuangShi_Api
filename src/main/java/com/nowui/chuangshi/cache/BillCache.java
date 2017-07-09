@@ -101,4 +101,8 @@ public class BillCache extends Cache {
         return result;
     }
 
+    public Boolean batchSave(List<Bill> billList) {
+        return billDao.batchSave(billList);
+    }
+
 }

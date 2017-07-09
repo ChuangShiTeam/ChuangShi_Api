@@ -1,14 +1,12 @@
 package com.nowui.chuangshi.dao;
 
-import com.alibaba.fastjson.JSON;
-import com.jfinal.plugin.activerecord.SqlPara;
-import com.nowui.chuangshi.model.Sql;
-import com.nowui.chuangshi.util.DateUtil;
-import com.nowui.chuangshi.util.MQUtil;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.jfinal.plugin.activerecord.SqlPara;
+import com.nowui.chuangshi.model.Sql;
+import com.nowui.chuangshi.util.DateUtil;
 
 public class Dao {
     protected void logSql(String sql_table, String sql_action, SqlPara sqlPara) {
@@ -19,11 +17,11 @@ public class Dao {
         mqMap.put(Sql.SQL_ACTION, sql_action);
         mqMap.put(Sql.SQL_CONTENT, getSql(sqlPara.getSql(), sqlPara.getPara()));
         mqMap.put(Sql.SYSTEM_CREATE_USER_ID, "");
-        MQUtil.sendSync("sql", JSON.toJSONString(mqMap));
+        // MQUtil.sendSync("sql", JSON.toJSONString(mqMap));
     }
 
     private String getSql(String sql, Object[] params) {
-        //1 如果没有参数，说明是不是动态SQL语句
+        // 1 如果没有参数，说明是不是动态SQL语句
         int paramNum = 0;
         if (null != params) {
             paramNum = params.length;
@@ -31,7 +29,7 @@ public class Dao {
         if (1 > paramNum) {
             return sql;
         }
-        //2 如果有参数，则是动态SQL语句
+        // 2 如果有参数，则是动态SQL语句
         StringBuffer returnSQL = new StringBuffer();
         String[] subSQL = sql.split("\\?");
         for (int i = 0; i < paramNum; i++) {

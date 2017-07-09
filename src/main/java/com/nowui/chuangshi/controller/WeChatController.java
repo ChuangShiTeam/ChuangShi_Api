@@ -18,7 +18,7 @@ import com.nowui.chuangshi.type.PayType;
 import com.nowui.chuangshi.util.MQUtil;
 
 public class WeChatController extends Controller {
-	
+
     private final TradeService tradeService = new TradeService();
     private final AppService appService = new AppService();
 
@@ -61,19 +61,19 @@ public class WeChatController extends Controller {
         parameter.put("total_fee", total_fee);
         parameter.put("trade_type", trade_type);
         parameter.put("transaction_id", transaction_id);
-        
-        //根据订单号查询订单
+
+        // 根据订单号查询订单
         Trade trade = tradeService.findByTrade_number(out_trade_no);
         if (trade == null) {
-        	renderText(Constant.WX_FAIL_MSG);
+            renderText(Constant.WX_FAIL_MSG);
         }
         App app = appService.findByApp_id(trade.getApp_id());
         if (app == null) {
-        	renderText(Constant.WX_FAIL_MSG);
+            renderText(Constant.WX_FAIL_MSG);
         }
         String wx_app_id = app.getWechat_app_id();
         if (!appid.equals(wx_app_id)) {
-        	renderText(Constant.WX_FAIL_MSG);
+            renderText(Constant.WX_FAIL_MSG);
         }
         String mch_key = app.getWechat_mch_key();
 
@@ -93,8 +93,12 @@ public class WeChatController extends Controller {
 
             if (is_update) {
                 // TODO 消息队列通知计算账单和分成
+                /*
+                 * Map<String, Object> mqMap = new HashMap<String, Object>();
+                 * mqMap.put(Trade.TRADE_ID, trade.getTrade_id());
+                 * MQUtil.sendSync("tradePay", JSON.toJSONString(mqMap));
+                 */
                 MQUtil.sendSync("tradePay", trade.getTrade_id());
-
                 renderText("");
             } else {
                 renderText("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[]]></return_msg></xml>");

@@ -21,6 +21,7 @@ import com.nowui.chuangshi.controller.AdminController;
 import com.nowui.chuangshi.controller.ApiController;
 import com.nowui.chuangshi.controller.AppController;
 import com.nowui.chuangshi.controller.AppStockController;
+import com.nowui.chuangshi.controller.BillCommissionController;
 import com.nowui.chuangshi.controller.BillController;
 import com.nowui.chuangshi.controller.CategoryController;
 import com.nowui.chuangshi.controller.CodeController;
@@ -54,6 +55,7 @@ import com.nowui.chuangshi.model.Admin;
 import com.nowui.chuangshi.model.Api;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Bill;
+import com.nowui.chuangshi.model.BillCommission;
 import com.nowui.chuangshi.model.Category;
 import com.nowui.chuangshi.model.Customer;
 import com.nowui.chuangshi.model.CustomerAttribute;
@@ -121,6 +123,7 @@ public class WebConfig extends JFinalConfig {
 
         routes.add("/trade", TradeController.class);
         routes.add("/bill", BillController.class);
+        routes.add("/bill/commission", BillCommissionController.class);
         routes.add("/qrcode", QrcodeController.class);
 
         routes.add("/customer", CustomerController.class);
@@ -189,6 +192,8 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_trade_commossion", "trade_commossion_id", TradeCommossion.class);
         activeRecordPlugin.addMapping("table_trade_pay", "trade_pay_id", TradePay.class);
         activeRecordPlugin.addMapping("table_bill", "bill_id", Bill.class);
+        activeRecordPlugin.addMapping("table_bill_commission", "bill_commission_id", BillCommission.class);
+
         // activeRecordPlugin.addMapping("table_qrcode", "qrcode_id",
         // Qrcode.class);
 

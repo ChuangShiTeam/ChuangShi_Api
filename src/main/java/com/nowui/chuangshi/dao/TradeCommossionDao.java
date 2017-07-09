@@ -7,6 +7,7 @@ import java.util.List;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.TradeCommossion;
 
 public class TradeCommossionDao extends Dao {
@@ -21,7 +22,8 @@ public class TradeCommossionDao extends Dao {
         return new TradeCommossion().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public Boolean save(String trade_id, String product_sku_id, String member_id, String member_name, String member_level_id, String member_level_name, Integer product_sku_commission, BigDecimal product_sku_commission_amount, String system_create_user_id) {
+    public Boolean save(String trade_id, String product_sku_id, String member_id, String member_name, String member_level_id, String member_level_name, Integer product_sku_commission,
+            BigDecimal product_sku_commission_amount, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(TradeCommossion.TRADE_ID, trade_id);
         sqlMap.put(TradeCommossion.PRODUCT_SKU_ID, product_sku_id);
@@ -55,6 +57,17 @@ public class TradeCommossionDao extends Dao {
         logSql("trade_commossion", "deleteByTrade_idAndSystem_version", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+
+    public boolean batchSave(List<TradeCommossion> tradeCommossionList) {
+        int[] result = Db.batchSave(tradeCommossionList, Constant.BATCH_SIZE);
+
+        for (int i : result) {
+            if (i == 0) {
+                throw new RuntimeException("订单分成保存不成功");
+            }
+        }
+        return true;
     }
 
 }
