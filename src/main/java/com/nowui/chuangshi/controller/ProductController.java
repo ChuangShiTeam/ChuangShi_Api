@@ -10,13 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.FeijiuRecommendProduct;
-import com.nowui.chuangshi.model.File;
-import com.nowui.chuangshi.model.Product;
-import com.nowui.chuangshi.model.ProductSku;
-import com.nowui.chuangshi.model.ProductSkuAttribute;
-import com.nowui.chuangshi.model.ProductSkuCommission;
-import com.nowui.chuangshi.model.ProductSkuPrice;
+import com.nowui.chuangshi.model.*;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.ProductService;
 import com.nowui.chuangshi.service.ProductSkuAttributeService;
@@ -56,11 +50,15 @@ public class ProductController extends Controller {
 
         for (ProductSku productSku : productSkuList) {
             if (productSku.getProduct_sku_is_default()) {
-                product.put(Product.PRODUCT_DEFAULT_SKU, productSku.keep(ProductSku.PRODUCT_SKU_ID));
+                productSku.keep(ProductSku.PRODUCT_SKU_ID, ProductSku.PRODUCT_SKU_IS_DEFAULT);
+                productSku.put(ProductSkuPrice.PRODUCT_SKU_PRICE, 48);
 
                 break;
             }
         }
+
+        product.put(Product.PRODUCT_SKU_LIST, productSkuList);
+        product.put(TradeProductSku.PRODUCT_SKU_QUANTITY, 100);
 
         renderSuccessJson(product);
     }
