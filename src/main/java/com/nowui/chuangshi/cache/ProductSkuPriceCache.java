@@ -15,7 +15,7 @@ public class ProductSkuPriceCache extends Cache {
     public List<ProductSkuPrice> listByProduct_sku_id(String product_sku_id) {
         List<ProductSkuPrice> productSkuPriceList = CacheUtil.get(PRODUCT_SKU_PRICE_LIST_BY_PRODUCT_SKU_ID_CACHE, product_sku_id);
 
-        if (productSkuPriceList == null) {
+        if (productSkuPriceList == null || productSkuPriceList.size() == 0 ) {
             productSkuPriceList = productSkuPriceDao.listByProduct_sku_id(product_sku_id);
 
             CacheUtil.put(PRODUCT_SKU_PRICE_LIST_BY_PRODUCT_SKU_ID_CACHE, product_sku_id, productSkuPriceList);

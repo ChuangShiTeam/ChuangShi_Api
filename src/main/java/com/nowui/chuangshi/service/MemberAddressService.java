@@ -37,7 +37,7 @@ public class MemberAddressService extends Service {
     /**
      * 根据会员id获取默认地址
      * 
-     * @param member_address_id
+     * @param member_id
      * @return
      */
     public MemberAddress findByMember_id(String member_id) {
@@ -45,7 +45,7 @@ public class MemberAddressService extends Service {
 
         List<MemberAddress> memberAddressList = memberAddressCache.findByMember_id(member_id);
         for (MemberAddress address : memberAddressList) {
-            if (address.getMember_delivery_is_default()) {
+            if (address.getAddress_is_default()) {
                 memberAddress = address;
             }
         }
@@ -53,22 +53,41 @@ public class MemberAddressService extends Service {
         return memberAddress;
     }
 
+    /**
+     * 根据会员id获取所有地址
+     * 
+     * @param member_id
+     * @return
+     */
+    public List<MemberAddress> listByMember_id(String member_id) {
+        return memberAddressCache.findByMember_id(member_id);
+    }
+
     public Boolean save(String member_address_id, String app_id, String member_id, String user_id, String member_address_name, String member_address_tel, String member_address_mobile,
-            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean member_delivery_is_default,
+            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean address_is_default,
             String system_create_user_id) {
         return memberAddressCache.save(member_address_id, app_id, member_id, user_id, member_address_name, member_address_tel, member_address_mobile, member_address_postcode, member_address_province,
-                member_address_city, member_address_area, member_address_address, member_delivery_is_default, system_create_user_id);
+                member_address_city, member_address_area, member_address_address, address_is_default, system_create_user_id);
     }
 
     public Boolean updateValidateSystem_version(String member_address_id, String member_id, String user_id, String member_address_name, String member_address_tel, String member_address_mobile,
-            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean member_delivery_is_default,
+            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean address_is_default,
             String system_update_user_id, Integer system_version) {
         return memberAddressCache.updateValidateSystem_version(member_address_id, member_id, user_id, member_address_name, member_address_tel, member_address_mobile, member_address_postcode,
-                member_address_province, member_address_city, member_address_area, member_address_address, member_delivery_is_default, system_update_user_id, system_version);
+                member_address_province, member_address_city, member_address_area, member_address_address, address_is_default, system_update_user_id, system_version);
     }
 
     public Boolean deleteByMember_address_idAndSystem_update_user_idValidateSystem_version(String member_address_id, String system_update_user_id, Integer system_version) {
         return memberAddressCache.deleteByMember_address_idAndSystem_update_user_idValidateSystem_version(member_address_id, system_update_user_id, system_version);
     }
 
+    /**
+     * 批量修改地址
+     * 
+     * @param billList
+     * @return
+     */
+    public Boolean batchUpdate(List<MemberAddress> memberAddressList, String member_id) {
+        return memberAddressCache.batchUpdate(memberAddressList, member_id);
+    }
 }

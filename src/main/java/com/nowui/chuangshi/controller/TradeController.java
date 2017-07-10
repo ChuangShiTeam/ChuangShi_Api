@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -63,11 +65,14 @@ public class TradeController extends Controller {
             JSONObject productSkuObject = productSkuArray.getJSONObject(i);
 
             ProductSku productSku = productSkuService.findByProduct_sku_id(productSkuObject.getString(ProductSku.PRODUCT_SKU_ID));
+            if (productSku == null || StringUtils.isEmpty(productSku.getProduct_id())) {
+                throw new RuntimeException("找不到商品sku");
+            }
             Product product = productService.findByProduct_id(productSku.getProduct_id());
             productSkuObject.put(Product.PRODUCT_NAME, product.getProduct_name());
             productSkuObject.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
 
-            BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(ProductSku.PRODUCT_SKU_ID, member.getMember_level_id());
+            BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(productSkuObject.getString(ProductSku.PRODUCT_SKU_ID), member.getMember_level_id());
             trade_product_amount = trade_product_amount.add(product_sku_price.multiply(productSkuObject.getBigDecimal("product_sku_quantity")));
             productSkuObject.put(ProductSkuPrice.PRODUCT_SKU_PRICE, product_sku_price);
         }

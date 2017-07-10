@@ -1,33 +1,38 @@
 package com.nowui.chuangshi.controller;
 
+import java.util.Date;
 import java.util.List;
 
-import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.MemberAddress;
+import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.MemberAddressService;
+import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.util.Util;
 
 public class MemberAddressController extends Controller {
 
     private final MemberAddressService memberAddressService = new MemberAddressService();
+    private final UserService userService = new UserService();
 
     @ActionKey(Url.MEMBER_ADDRESS_LIST)
     public void list() {
         validateRequest_app_id();
-        validate(Constant.PAGE_SIZE, Constant.FIRST_CREATE_TIME, Constant.LAST_CREATE_TIME);
-
-        String request_app_id = getRequest_app_id();
-        JSONObject jsonObject = getParameterJSONObject();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<MemberAddress> resultList = memberAddressService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
+        String request_user_id = getRequest_user_id();
+
+        User user = userService.findByUser_id(request_user_id);
+
+        List<MemberAddress> resultList = memberAddressService.listByMember_id(user.getObject_Id());
 
         for (MemberAddress result : resultList) {
-            result.keep(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.SYSTEM_VERSION);
+            result.keep(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_TEL, MemberAddress.MEMBER_ADDRESS_MOBILE,
+                    MemberAddress.MEMBER_ADDRESS_POSTCODE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA,
+                    MemberAddress.MEMBER_ADDRESS_ADDRESS, MemberAddress.ADDRESS_IS_DEFAULT, MemberAddress.SYSTEM_VERSION);
         }
 
         renderSuccessJson(resultList);
@@ -55,20 +60,39 @@ public class MemberAddressController extends Controller {
     @ActionKey(Url.MEMBER_ADDRESS_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(MemberAddress.MEMBER_ID, MemberAddress.USER_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_TEL, MemberAddress.MEMBER_ADDRESS_MOBILE,
-                MemberAddress.MEMBER_ADDRESS_POSTCODE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA,
-                MemberAddress.MEMBER_ADDRESS_ADDRESS, MemberAddress.MEMBER_DELIVERY_IS_DEFAULT);
+        validate(MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA,
+                MemberAddress.MEMBER_ADDRESS_ADDRESS, MemberAddress.ADDRESS_IS_DEFAULT);
 
         MemberAddress model = getModel(MemberAddress.class);
         String member_address_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
 
+        User user = userService.findByUser_id(request_user_id);
+
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = memberAddressService.save(member_address_id, request_app_id, model.getMember_id(), model.getUser_id(), model.getMember_address_name(), model.getMember_address_tel(),
+        List<MemberAddress> memberAddressList = memberAddressService.listByMember_id(user.getObject_Id());
+        if (memberAddressList != null && memberAddressList.size() > 0) {
+            if (model.getAddress_is_default()) {
+                for (MemberAddress memberAddress : memberAddressList) {
+                    memberAddress.setAddress_is_default(false);
+                    memberAddress.setSystem_update_time(new Date());
+                    memberAddress.setSystem_update_user_id(request_user_id);
+                    memberAddress.setSystem_version(memberAddress.getSystem_version() + 1);
+                }
+                Boolean b = memberAddressService.batchUpdate(memberAddressList, user.getObject_Id());
+                if (!b) {
+                    throw new RuntimeException("修改地址不成功");
+                }
+            }
+        }else {
+            model.setAddress_is_default(true);
+        }
+
+        Boolean result = memberAddressService.save(member_address_id, request_app_id, user.getObject_Id(), request_user_id, model.getMember_address_name(), model.getMember_address_tel(),
                 model.getMember_address_mobile(), model.getMember_address_postcode(), model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(),
-                model.getMember_address_address(), model.getMember_delivery_is_default(), request_user_id);
+                model.getMember_address_address(), model.getAddress_is_default(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -78,7 +102,7 @@ public class MemberAddressController extends Controller {
         validateRequest_app_id();
         validate(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ID, MemberAddress.USER_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_TEL,
                 MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_POSTCODE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA,
-                MemberAddress.MEMBER_ADDRESS_ADDRESS, MemberAddress.MEMBER_DELIVERY_IS_DEFAULT, MemberAddress.SYSTEM_VERSION);
+                MemberAddress.MEMBER_ADDRESS_ADDRESS, MemberAddress.ADDRESS_IS_DEFAULT, MemberAddress.SYSTEM_VERSION);
 
         MemberAddress model = getModel(MemberAddress.class);
         String request_user_id = getRequest_user_id();
@@ -92,7 +116,7 @@ public class MemberAddressController extends Controller {
 
         Boolean result = memberAddressService.updateValidateSystem_version(model.getMember_address_id(), model.getMember_id(), model.getUser_id(), model.getMember_address_name(),
                 model.getMember_address_tel(), model.getMember_address_mobile(), model.getMember_address_postcode(), model.getMember_address_province(), model.getMember_address_city(),
-                model.getMember_address_area(), model.getMember_address_address(), model.getMember_delivery_is_default(), request_user_id, model.getSystem_version());
+                model.getMember_address_area(), model.getMember_address_address(), model.getAddress_is_default(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -134,7 +158,7 @@ public class MemberAddressController extends Controller {
             result.keep(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.SYSTEM_VERSION, MemberAddress.MEMBER_ID, MemberAddress.USER_ID, MemberAddress.APP_ID, MemberAddress.MEMBER_ADDRESS_NAME,
                     MemberAddress.MEMBER_ADDRESS_TEL, MemberAddress.MEMBER_ADDRESS_TEL, MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_POSTCODE,
                     MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA, MemberAddress.MEMBER_ADDRESS_ADDRESS,
-                    MemberAddress.MEMBER_DELIVERY_IS_DEFAULT);
+                    MemberAddress.ADDRESS_IS_DEFAULT);
         }
 
         renderSuccessJson(total, resultList);
@@ -155,7 +179,7 @@ public class MemberAddressController extends Controller {
 
         member_address.keep(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.SYSTEM_VERSION, MemberAddress.MEMBER_ID, MemberAddress.USER_ID, MemberAddress.APP_ID, MemberAddress.MEMBER_ADDRESS_NAME,
                 MemberAddress.MEMBER_ADDRESS_TEL, MemberAddress.MEMBER_ADDRESS_TEL, MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_POSTCODE, MemberAddress.MEMBER_ADDRESS_PROVINCE,
-                MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA, MemberAddress.MEMBER_ADDRESS_ADDRESS, MemberAddress.MEMBER_DELIVERY_IS_DEFAULT);
+                MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA, MemberAddress.MEMBER_ADDRESS_ADDRESS, MemberAddress.ADDRESS_IS_DEFAULT);
 
         renderSuccessJson(member_address);
     }
@@ -170,7 +194,7 @@ public class MemberAddressController extends Controller {
         validateRequest_app_id();
         validate(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ID, MemberAddress.USER_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_TEL,
                 MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_POSTCODE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA,
-                MemberAddress.MEMBER_ADDRESS_ADDRESS, MemberAddress.MEMBER_DELIVERY_IS_DEFAULT, MemberAddress.SYSTEM_VERSION);
+                MemberAddress.MEMBER_ADDRESS_ADDRESS, MemberAddress.ADDRESS_IS_DEFAULT, MemberAddress.SYSTEM_VERSION);
 
         MemberAddress model = getModel(MemberAddress.class);
         String request_user_id = getRequest_user_id();
@@ -183,7 +207,7 @@ public class MemberAddressController extends Controller {
 
         Boolean result = memberAddressService.updateValidateSystem_version(model.getMember_address_id(), model.getMember_id(), model.getUser_id(), model.getMember_address_name(),
                 model.getMember_address_tel(), model.getMember_address_mobile(), model.getMember_address_postcode(), model.getMember_address_province(), model.getMember_address_city(),
-                model.getMember_address_area(), model.getMember_address_address(), model.getMember_delivery_is_default(), request_user_id, model.getSystem_version());
+                model.getMember_address_area(), model.getMember_address_address(), model.getAddress_is_default(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -243,7 +267,7 @@ public class MemberAddressController extends Controller {
         validateRequest_app_id();
         validate(MemberAddress.APP_ID, MemberAddress.MEMBER_ID, MemberAddress.USER_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_TEL, MemberAddress.MEMBER_ADDRESS_MOBILE,
                 MemberAddress.MEMBER_ADDRESS_POSTCODE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA,
-                MemberAddress.MEMBER_ADDRESS_ADDRESS, MemberAddress.MEMBER_DELIVERY_IS_DEFAULT);
+                MemberAddress.MEMBER_ADDRESS_ADDRESS, MemberAddress.ADDRESS_IS_DEFAULT);
 
         MemberAddress model = getModel(MemberAddress.class);
         String member_address_id = Util.getRandomUUID();
@@ -251,7 +275,7 @@ public class MemberAddressController extends Controller {
 
         Boolean result = memberAddressService.save(member_address_id, model.getApp_id(), model.getMember_id(), model.getUser_id(), model.getMember_address_name(), model.getMember_address_tel(),
                 model.getMember_address_mobile(), model.getMember_address_postcode(), model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(),
-                model.getMember_address_address(), model.getMember_delivery_is_default(), request_user_id);
+                model.getMember_address_address(), model.getAddress_is_default(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -261,14 +285,14 @@ public class MemberAddressController extends Controller {
         validateRequest_app_id();
         validate(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ID, MemberAddress.USER_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_TEL,
                 MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_POSTCODE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA,
-                MemberAddress.MEMBER_ADDRESS_ADDRESS, MemberAddress.MEMBER_DELIVERY_IS_DEFAULT, MemberAddress.SYSTEM_VERSION);
+                MemberAddress.MEMBER_ADDRESS_ADDRESS, MemberAddress.ADDRESS_IS_DEFAULT, MemberAddress.SYSTEM_VERSION);
 
         MemberAddress model = getModel(MemberAddress.class);
         String request_user_id = getRequest_user_id();
 
         Boolean result = memberAddressService.updateValidateSystem_version(model.getMember_address_id(), model.getMember_id(), model.getUser_id(), model.getMember_address_name(),
                 model.getMember_address_tel(), model.getMember_address_mobile(), model.getMember_address_postcode(), model.getMember_address_province(), model.getMember_address_city(),
-                model.getMember_address_area(), model.getMember_address_address(), model.getMember_delivery_is_default(), request_user_id, model.getSystem_version());
+                model.getMember_address_area(), model.getMember_address_address(), model.getAddress_is_default(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

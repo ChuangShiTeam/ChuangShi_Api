@@ -79,14 +79,14 @@ public class MemberAddressCache extends Cache {
     }
 
     public Boolean save(String member_address_id, String app_id, String member_id, String user_id, String member_address_name, String member_address_tel, String member_address_mobile,
-            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean member_delivery_is_default,
+            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean address_is_default,
             String system_create_user_id) {
         return memberAddressDao.save(member_address_id, app_id, member_id, user_id, member_address_name, member_address_tel, member_address_mobile, member_address_postcode, member_address_province,
-                member_address_city, member_address_area, member_address_address, member_delivery_is_default, system_create_user_id);
+                member_address_city, member_address_area, member_address_address, address_is_default, system_create_user_id);
     }
 
     public Boolean updateValidateSystem_version(String member_address_id, String member_id, String user_id, String member_address_name, String member_address_tel, String member_address_mobile,
-            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean member_delivery_is_default,
+            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean address_is_default,
             String system_update_user_id, Integer system_version) {
         MemberAddress member_address = findByMember_address_id(member_address_id);
         if (!member_address.getSystem_version().equals(system_version)) {
@@ -94,7 +94,7 @@ public class MemberAddressCache extends Cache {
         }
 
         boolean result = memberAddressDao.update(member_address_id, member_id, user_id, member_address_name, member_address_tel, member_address_mobile, member_address_postcode,
-                member_address_province, member_address_city, member_address_area, member_address_address, member_delivery_is_default, system_update_user_id, system_version);
+                member_address_province, member_address_city, member_address_area, member_address_address, address_is_default, system_update_user_id, system_version);
 
         if (result) {
             CacheUtil.remove(MEMBER_ADDRESS_BY_MEMBER_ADDRESS_ID_CACHE, member_address_id);
@@ -113,6 +113,16 @@ public class MemberAddressCache extends Cache {
 
         if (result) {
             CacheUtil.remove(MEMBER_ADDRESS_BY_MEMBER_ADDRESS_ID_CACHE, member_address_id);
+        }
+
+        return result;
+    }
+
+    public Boolean batchUpdate(List<MemberAddress> memberAddressList,String member_id) {
+        boolean result = memberAddressDao.batchUpdate(memberAddressList);
+
+        if (result) {
+            CacheUtil.remove(MEMBER_ADDRESS_LIST_BY_MEMBER_ID_CACHE, member_id);
         }
 
         return result;

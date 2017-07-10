@@ -45,7 +45,7 @@
     member_address_city,
     member_address_area,
     member_address_address,
-    member_delivery_is_default
+    address_is_default
     FROM table_member_address
     WHERE system_status = 1
     AND app_id = #p(app_id)
@@ -87,7 +87,7 @@
     member_address_city,
     member_address_area,
     member_address_address,
-    member_delivery_is_default,
+    address_is_default,
     system_version
     FROM table_member_address
     WHERE system_status = 1
@@ -108,7 +108,8 @@
     member_address_city,
     member_address_area,
     member_address_address,
-    member_delivery_is_default
+    address_is_default,
+    system_version
     FROM table_member_address
     WHERE system_status = 1
     AND member_id = #p(member_id)
@@ -128,7 +129,7 @@
       member_address_city,
       member_address_area,
       member_address_address,
-      member_delivery_is_default,
+      address_is_default,
       system_create_user_id,
       system_create_time,
       system_update_user_id,
@@ -148,7 +149,7 @@
       #p(member_address_city),
       #p(member_address_area),
       #p(member_address_address),
-      #p(member_delivery_is_default),
+      #p(address_is_default),
       #p(system_create_user_id),
       #p(system_create_time),
       #p(system_update_user_id),
@@ -170,7 +171,7 @@
     member_address_city = #p(member_address_city),
     member_address_area = #p(member_address_area),
     member_address_address = #p(member_address_address),
-    member_delivery_is_default = #p(member_delivery_is_default),
+    address_is_default = #p(address_is_default),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1
