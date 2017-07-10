@@ -67,7 +67,7 @@ public class TradeController extends Controller {
             productSkuObject.put(Product.PRODUCT_NAME, product.getProduct_name());
             productSkuObject.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
 
-            BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(ProductSku.PRODUCT_SKU_ID, member.getMember_level_id());
+            BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(productSkuObject.getString(ProductSku.PRODUCT_SKU_ID), member.getMember_level_id());
             trade_product_amount = trade_product_amount.add(product_sku_price.multiply(productSkuObject.getBigDecimal("product_sku_quantity")));
             productSkuObject.put(ProductSkuPrice.PRODUCT_SKU_PRICE, product_sku_price);
         }
