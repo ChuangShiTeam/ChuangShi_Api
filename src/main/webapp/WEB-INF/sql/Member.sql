@@ -113,7 +113,6 @@
     FROM table_member
     WHERE system_status = 1
     AND member_id = #p(member_id)
-    AND member_delivery_is_default = true
   #end
 
   #sql("save")
