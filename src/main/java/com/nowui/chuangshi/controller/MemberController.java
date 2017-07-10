@@ -9,7 +9,6 @@ import com.nowui.chuangshi.model.MemberLevel;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.UserService;
-import com.nowui.chuangshi.util.Util;
 
 import java.util.ArrayList;
 import java.util.HashMap;

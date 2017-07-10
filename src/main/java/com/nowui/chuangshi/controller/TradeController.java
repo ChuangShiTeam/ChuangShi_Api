@@ -127,7 +127,7 @@ public class TradeController extends Controller {
     @ActionKey(Url.TRADE_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS);
+        validate(Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Product.PRODUCT_SKU_LIST);
 
         Trade model = getModel(Trade.class);
         String trade_id = Util.getRandomUUID();
@@ -135,7 +135,7 @@ public class TradeController extends Controller {
         String request_user_id = getRequest_user_id();
 
         JSONObject jsonObject = getParameterJSONObject();
-        JSONArray jsonArray = jsonObject.getJSONArray(Trade.TRADE_PRODUCT_SKU_LIST);
+        JSONArray jsonArray = jsonObject.getJSONArray(Product.PRODUCT_SKU_LIST);
 
         authenticateRequest_app_idAndRequest_user_id();
         int trade_product_quantity = 0;
