@@ -1,10 +1,8 @@
 package com.nowui.chuangshi.cache;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
-import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.dao.TradeCommossionDao;
 import com.nowui.chuangshi.model.TradeCommossion;
 import com.nowui.chuangshi.util.CacheUtil;
@@ -20,12 +18,11 @@ public class TradeCommossionCache extends Cache {
 
         if (trade_commossionList == null) {
             trade_commossionList = tradeCommossionDao.listByTrade_id(trade_id);
-            
+
             CacheUtil.put(TRADE_COMMOSSION_LIST_BY_TRADE_ID_CACHE, trade_id, trade_commossionList);
         }
         return trade_commossionList;
     }
-
 
     public Boolean save(String trade_id, String product_sku_id, String member_id, String member_name, String member_level_id, String member_level_name, Integer product_sku_commission,
             BigDecimal product_sku_commission_amount, String system_create_user_id) {
@@ -42,11 +39,6 @@ public class TradeCommossionCache extends Cache {
         }
 
         return result;
-    }
-
-
-    public boolean batchSave(List<TradeCommossion> tradeCommossionList) {
-        return tradeCommossionDao.batchSave(tradeCommossionList);
     }
 
 }
