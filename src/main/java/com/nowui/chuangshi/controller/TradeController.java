@@ -57,7 +57,7 @@ public class TradeController extends Controller {
         Member member = memberService.findByMember_id(user.getObject_Id());
         MemberAddress memberAddress = memberAddressService.findByMember_id(member.getMember_id());
 
-        BigDecimal trade_product_amount= BigDecimal.ZERO;
+        BigDecimal trade_product_amount = BigDecimal.ZERO;
         JSONArray productSkuArray = jsonObject.getJSONArray(Product.PRODUCT_SKU_LIST);
         for (int i = 0; i < productSkuArray.size(); i++) {
             JSONObject productSkuObject = productSkuArray.getJSONObject(i);
