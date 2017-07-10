@@ -1,10 +1,10 @@
 package com.nowui.chuangshi.service;
 
-import com.nowui.chuangshi.cache.MemberAddressCache;
-import com.nowui.chuangshi.model.MemberAddress;
-
 import java.util.Date;
 import java.util.List;
+
+import com.nowui.chuangshi.cache.MemberAddressCache;
+import com.nowui.chuangshi.model.MemberAddress;
 
 public class MemberAddressService extends Service {
 
@@ -41,7 +41,16 @@ public class MemberAddressService extends Service {
      * @return
      */
     public MemberAddress findByMember_id(String member_id) {
-        return memberAddressCache.findByMember_id(member_id);
+        MemberAddress memberAddress = new MemberAddress();
+
+        List<MemberAddress> memberAddressList = memberAddressCache.findByMember_id(member_id);
+        for (MemberAddress address : memberAddressList) {
+            if (address.getMember_delivery_is_default()) {
+                memberAddress = address;
+            }
+        }
+
+        return memberAddress;
     }
 
     public Boolean save(String member_address_id, String app_id, String member_id, String user_id, String member_address_name, String member_address_tel, String member_address_mobile,

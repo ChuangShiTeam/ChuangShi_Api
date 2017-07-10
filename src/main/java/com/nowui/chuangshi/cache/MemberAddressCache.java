@@ -12,7 +12,7 @@ public class MemberAddressCache extends Cache {
 
     public static final String MEMBER_ADDRESS_BY_MEMBER_ADDRESS_ID_CACHE = "member_address_by_member_address_id_cache";
 
-    public static final String MEMBER_ADDRESS_BY_MEMBER_ID_CACHE = "member_address_by_member_id_cache";
+    public static final String MEMBER_ADDRESS_LIST_BY_MEMBER_ID_CACHE = "member_address_list_by_member_id_cache";
 
     private MemberAddressDao memberAddressDao = new MemberAddressDao();
 
@@ -66,16 +66,16 @@ public class MemberAddressCache extends Cache {
         return member_address;
     }
 
-    public MemberAddress findByMember_id(String member_id) {
-        MemberAddress member_address = CacheUtil.get(MEMBER_ADDRESS_BY_MEMBER_ID_CACHE, member_id);
+    public List<MemberAddress> findByMember_id(String member_id) {
+        List<MemberAddress> member_addressList = CacheUtil.get(MEMBER_ADDRESS_LIST_BY_MEMBER_ID_CACHE, member_id);
 
-        if (member_address == null) {
-            member_address = memberAddressDao.findByMember_id(member_id);
+        if (member_addressList == null || member_addressList.size() == 0) {
+            member_addressList = memberAddressDao.findByMember_id(member_id);
 
-            CacheUtil.put(MEMBER_ADDRESS_BY_MEMBER_ID_CACHE, member_id, member_address);
+            CacheUtil.put(MEMBER_ADDRESS_LIST_BY_MEMBER_ID_CACHE, member_id, member_addressList);
         }
 
-        return member_address;
+        return member_addressList;
     }
 
     public Boolean save(String member_address_id, String app_id, String member_id, String user_id, String member_address_name, String member_address_tel, String member_address_mobile,

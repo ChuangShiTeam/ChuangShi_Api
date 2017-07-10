@@ -1,7 +1,6 @@
 package com.nowui.chuangshi.controller;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,11 +10,25 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.*;
-import com.nowui.chuangshi.service.*;
+import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.MemberAddress;
+import com.nowui.chuangshi.model.Product;
+import com.nowui.chuangshi.model.ProductSku;
+import com.nowui.chuangshi.model.ProductSkuPrice;
+import com.nowui.chuangshi.model.Trade;
+import com.nowui.chuangshi.model.TradeProductSku;
+import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.service.FileService;
+import com.nowui.chuangshi.service.MemberAddressService;
+import com.nowui.chuangshi.service.MemberService;
+import com.nowui.chuangshi.service.ProductService;
+import com.nowui.chuangshi.service.ProductSkuPriceService;
+import com.nowui.chuangshi.service.ProductSkuService;
+import com.nowui.chuangshi.service.TradeProductSkuService;
+import com.nowui.chuangshi.service.TradeService;
+import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.TradeFlow;
 import com.nowui.chuangshi.util.Util;
-import com.nowui.chuangshi.util.ValidateUtil;
 
 public class TradeController extends Controller {
 
@@ -46,12 +59,10 @@ public class TradeController extends Controller {
         User user = userService.findByUser_id(request_user_id);
         Member member = memberService.findByMember_id(user.getObject_Id());
         MemberAddress memberAddress = memberAddressService.findByMember_id(member.getMember_id());
-        if (ValidateUtil.isNullOrEmpty(memberAddress)) {
-            memberAddress = new MemberAddress();
-        }
 
+        BigDecimal trade_product_amount= BigDecimal.ZERO;
         JSONArray productSkuArray = jsonObject.getJSONArray(Product.PRODUCT_SKU_LIST);
-        for(int i = 0; i < productSkuArray.size(); i++) {
+        for (int i = 0; i < productSkuArray.size(); i++) {
             JSONObject productSkuObject = productSkuArray.getJSONObject(i);
 
             ProductSku productSku = productSkuService.findByProduct_sku_id(productSkuObject.getString(ProductSku.PRODUCT_SKU_ID));
@@ -59,20 +70,16 @@ public class TradeController extends Controller {
             productSkuObject.put(Product.PRODUCT_NAME, product.getProduct_name());
             productSkuObject.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
 
-            productSkuObject.put(ProductSkuPrice.PRODUCT_SKU_PRICE, 48);
+            BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(ProductSku.PRODUCT_SKU_ID, member.getMember_level_id());
+            trade_product_amount = trade_product_amount.add(product_sku_price);
+            productSkuObject.put(ProductSkuPrice.PRODUCT_SKU_PRICE, product_sku_price);
         }
 
         Map<String, Object> result = new HashMap<String, Object>();
         result.put(MemberAddress.MEMBER_ADDRESS, memberAddress);
         result.put(Trade.TRADE_EXPRESS_AMOUNT, BigDecimal.ZERO);
         result.put(Product.PRODUCT_SKU_LIST, productSkuArray);
-
-//        User user = userService.findByUser_id(request_user_id);
-//        Member member = memberService.findByMember_id(user.getObject_Id());
-//
-//        ret.put("member_address", memberAddressService.findByMember_id(user.getObject_Id()));
-//
-//        ret = productSkuPriceService.listByProduct_sku_idAndMember_level_id(jsonObject.getJSONArray(Product.PRODUCT_SKU_LIST), member.getMember_level_id(), ret);
+        result.put(Trade.TRADE_PRODUCT_AMOUNT, trade_product_amount);
 
         renderSuccessJson(result);
     }
