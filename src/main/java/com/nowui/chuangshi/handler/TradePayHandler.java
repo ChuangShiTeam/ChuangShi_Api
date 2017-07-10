@@ -63,9 +63,12 @@ public class TradePayHandler extends TMsgHandler<String> {
             Boolean app_is_commission = app.getApp_is_commission();
             Integer app_commission_level = app.getApp_commission_level();
 
-            String member_parent_path = member.getMember_parent_path();
-            member_parent_path = member_parent_path.trim().replace("'", "");
-            String[] member_parent_id_list = member_parent_path.split(".");
+            //["0","29b090a580244c10a78dc66faac40fc2"]
+            String member_parent_path = member.getMember_parent_path().trim();
+            member_parent_path = member_parent_path.replace("[", "");
+            member_parent_path = member_parent_path.replace("]", "");
+            member_parent_path = member_parent_path.replace("\"", "");
+            String[] member_parent_id_list = member_parent_path.split(",");
 
             int length = member_parent_id_list.length;
             String[] member_list = new String[] {};

@@ -7,23 +7,84 @@ import java.util.TreeMap;
 
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.HttpKit;
+import com.jfinal.weixin.sdk.api.ApiResult;
+import com.jfinal.weixin.sdk.api.SnsAccessToken;
+import com.jfinal.weixin.sdk.api.SnsAccessTokenApi;
+import com.jfinal.weixin.sdk.api.UserApi;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Trade;
+import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.AppService;
+import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.TradeService;
+import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.PayType;
+import com.nowui.chuangshi.type.UserType;
+import com.nowui.chuangshi.util.HttpUtil;
 import com.nowui.chuangshi.util.MQUtil;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 public class WeChatController extends Controller {
 
     private final TradeService tradeService = new TradeService();
     private final AppService appService = new AppService();
+    private final MemberService memberService = new MemberService();
+    private final UserService userService = new UserService();
 
-    @ActionKey(Url.WECHAT_API_NOTIFY)
-    public void notifyUrl() {
+    @ActionKey(Url.WECHAT_AUTH)
+    public void auth() {
+        String code = getPara("code");
+        String url = getPara("url");
+        String app_id = getPara(Constant.APP_ID);
+        String platform = getPara(Constant.PLATFORM);
+        String version = getPara(Constant.VERSION);
+        if (url.contains("?")) {
+            url = url.substring(0, url.indexOf("?"));
+        }
+
+        if (ValidateUtil.isNullOrEmpty(code)) {
+            redirect("http://h5.chuangshi.nowui.com/#/home/");
+        } else {
+            App app = appService.findByApp_id(app_id);
+
+            SnsAccessToken snsAccessToken = SnsAccessTokenApi.getSnsAccessToken(app_id, app.getApp_secret(), code);
+
+            String wechat_union_id = "";
+            if (ValidateUtil.isNullOrEmpty(snsAccessToken.getUnionid())) {
+                wechat_union_id = snsAccessToken.getUnionid();
+            }
+
+            String wechat_open_id = snsAccessToken.getOpenid();
+            String ip_address = HttpUtil.getIpAddress(getRequest());
+            String request_user_id = "";
+
+            ApiResult apiResult = UserApi.getUserInfo(wechat_open_id);
+
+
+            String user_name = apiResult.getStr("nickname");
+            String user_avatar = apiResult.getStr("headimgurl");
+            String scene_id = "";
+            Boolean member_status = false;
+
+            if (ValidateUtil.isNullOrEmpty(user_name)) {
+                user_name = "";
+            }
+
+            if (ValidateUtil.isNullOrEmpty(user_avatar)) {
+                user_avatar = "";
+            }
+
+            String token = memberService.login(app_id, wechat_open_id, wechat_union_id, user_name, user_avatar, request_user_id);
+
+            redirect("http://h5.chuangshi.nowui.com/#/" + url + "/?open_id=" + wechat_open_id + "&token=" + token);
+        }
+    }
+
+    @ActionKey(Url.WECHAT_PAY_NOTIFY)
+    public void payNotify() {
         String result = HttpKit.readData(getRequest());
 
         Map<String, String> map = PaymentKit.xmlToMap(result);

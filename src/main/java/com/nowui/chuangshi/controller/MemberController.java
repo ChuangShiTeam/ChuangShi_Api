@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
@@ -113,63 +112,8 @@ public class MemberController extends Controller {
 
         renderSuccessJson(member);
     }
+    
 
-    @ActionKey(Url.MEMBER_SAVE)
-    public void save() {
-        validateRequest_app_id();
-        validate(Member.USER_ID, Member.MEMBER_PARENT_ID, Member.FROM_QRCODE_ID, Member.QRCODE_ID, Member.MEMBER_LEVEL_ID, Member.MEMBER_PARENT_PATH, Member.MEMBER_STATUS);
-
-        Member model = getModel(Member.class);
-        String member_id = Util.getRandomUUID();
-        String request_app_id = getRequest_app_id();
-        String request_user_id = getRequest_user_id();
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        Boolean result = memberService.save(member_id, request_app_id, model.getUser_id(), model.getMember_parent_id(), model.getFrom_qrcode_id(), model.getQrcode_id(), model.getMember_level_id(), model.getMember_parent_path(), model.getMember_status(), request_user_id);
-
-        renderSuccessJson(result);
-    }
-
-    @ActionKey(Url.MEMBER_UPDATE)
-    public void update() {
-        validateRequest_app_id();
-        validate(Member.MEMBER_ID, Member.USER_ID, Member.MEMBER_PARENT_ID, Member.FROM_QRCODE_ID, Member.QRCODE_ID, Member.MEMBER_LEVEL_ID, Member.MEMBER_PARENT_PATH, Member.MEMBER_STATUS, Member.SYSTEM_VERSION);
-
-        Member model = getModel(Member.class);
-        String request_user_id = getRequest_user_id();
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        Member member = memberService.findByMember_id(model.getMember_id());
-
-        authenticateApp_id(member.getApp_id());
-        authenticateSystem_create_user_id(member.getSystem_create_user_id());
-
-        Boolean result = memberService.updateValidateSystem_version(model.getMember_id(), model.getUser_id(), model.getMember_parent_id(), model.getFrom_qrcode_id(), model.getQrcode_id(), model.getMember_level_id(), model.getMember_parent_path(), model.getMember_status(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
-    }
-
-    @ActionKey(Url.MEMBER_DELETE)
-    public void delete() {
-        validateRequest_app_id();
-        validate(Member.MEMBER_ID, Member.SYSTEM_VERSION);
-
-        Member model = getModel(Member.class);
-        String request_user_id = getRequest_user_id();
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        Member member = memberService.findByMember_id(model.getMember_id());
-
-        authenticateApp_id(member.getApp_id());
-        authenticateSystem_create_user_id(member.getSystem_create_user_id());
-
-        Boolean result = memberService.deleteByMember_idAndSystem_update_user_idValidateSystem_version(model.getMember_id(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
-    }
 
     @ActionKey(Url.MEMBER_ADMIN_LIST)
     public void adminList() {
@@ -209,49 +153,6 @@ public class MemberController extends Controller {
         renderSuccessJson(member);
     }
 
-    @ActionKey(Url.MEMBER_ADMIN_SAVE)
-    public void adminSave() {
-        save();
-    }
-
-    @ActionKey(Url.MEMBER_ADMIN_UPDATE)
-    public void adminUpdate() {
-        validateRequest_app_id();
-        validate(Member.MEMBER_ID, Member.USER_ID, Member.MEMBER_PARENT_ID, Member.FROM_QRCODE_ID, Member.QRCODE_ID, Member.MEMBER_LEVEL_ID, Member.MEMBER_PARENT_PATH, Member.MEMBER_STATUS, Member.SYSTEM_VERSION);
-
-        Member model = getModel(Member.class);
-        String request_user_id = getRequest_user_id();
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        Member member = memberService.findByMember_id(model.getMember_id());
-
-        authenticateApp_id(member.getApp_id());
-
-        Boolean result = memberService.updateValidateSystem_version(model.getMember_id(), model.getUser_id(), model.getMember_parent_id(), model.getFrom_qrcode_id(), model.getQrcode_id(), model.getMember_level_id(), model.getMember_parent_path(), model.getMember_status(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
-    }
-
-    @ActionKey(Url.MEMBER_ADMIN_DELETE)
-    public void adminDelete() {
-        validateRequest_app_id();
-        validate(Member.MEMBER_ID, Member.SYSTEM_VERSION);
-
-        Member model = getModel(Member.class);
-        String request_user_id = getRequest_user_id();
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        Member member = memberService.findByMember_id(model.getMember_id());
-
-        authenticateApp_id(member.getApp_id());
-
-        Boolean result = memberService.deleteByMember_idAndSystem_update_user_idValidateSystem_version(model.getMember_id(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
-    }
-    
     //会员发货，由公司仓库发货，减去会员库存，快递到会员指定地址
     @ActionKey(Url.MEMBER_ADMIN_SEND)
     public void adminSend() {
@@ -328,46 +229,6 @@ public class MemberController extends Controller {
         member.keep(Member.MEMBER_ID, Member.SYSTEM_VERSION);
 
         renderSuccessJson(member);
-    }
-
-    @ActionKey(Url.MEMBER_SYSTEM_SAVE)
-    public void systemSave() {
-        validateRequest_app_id();
-        validate(Member.APP_ID, Member.USER_ID, Member.MEMBER_PARENT_ID, Member.FROM_QRCODE_ID, Member.QRCODE_ID, Member.MEMBER_LEVEL_ID, Member.MEMBER_PARENT_PATH, Member.MEMBER_STATUS);
-
-        Member model = getModel(Member.class);
-        String member_id = Util.getRandomUUID();
-        String request_user_id = getRequest_user_id();
-
-        Boolean result = memberService.save(member_id, model.getApp_id(), model.getUser_id(), model.getMember_parent_id(), model.getFrom_qrcode_id(), model.getQrcode_id(), model.getMember_level_id(), model.getMember_parent_path(), model.getMember_status(), request_user_id);
-
-        renderSuccessJson(result);
-    }
-
-    @ActionKey(Url.MEMBER_SYSTEM_UPDATE)
-    public void systemUpdate() {
-        validateRequest_app_id();
-        validate(Member.MEMBER_ID, Member.USER_ID, Member.MEMBER_PARENT_ID, Member.FROM_QRCODE_ID, Member.QRCODE_ID, Member.MEMBER_LEVEL_ID, Member.MEMBER_PARENT_PATH, Member.MEMBER_STATUS, Member.SYSTEM_VERSION);
-
-        Member model = getModel(Member.class);
-        String request_user_id = getRequest_user_id();
-
-        Boolean result = memberService.updateValidateSystem_version(model.getMember_id(), model.getUser_id(), model.getMember_parent_id(), model.getFrom_qrcode_id(), model.getQrcode_id(), model.getMember_level_id(), model.getMember_parent_path(), model.getMember_status(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
-    }
-
-    @ActionKey(Url.MEMBER_SYSTEM_DELETE)
-    public void systemDelete() {
-        validateRequest_app_id();
-        validate(Member.MEMBER_ID, Member.SYSTEM_VERSION);
-
-        Member model = getModel(Member.class);
-        String request_user_id = getRequest_user_id();
-
-        Boolean result = memberService.deleteByMember_idAndSystem_update_user_idValidateSystem_version(model.getMember_id(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
     }
 
 }

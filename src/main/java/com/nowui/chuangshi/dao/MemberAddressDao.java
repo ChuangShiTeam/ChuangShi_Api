@@ -90,7 +90,7 @@ public class MemberAddressDao extends Dao {
     }
 
     public Boolean save(String member_address_id, String app_id, String member_id, String user_id, String member_address_name, String member_address_tel, String member_address_mobile,
-            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean member_delivery_is_default,
+            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean address_is_default,
             String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberAddress.MEMBER_ADDRESS_ID, member_address_id);
@@ -105,7 +105,7 @@ public class MemberAddressDao extends Dao {
         sqlMap.put(MemberAddress.MEMBER_ADDRESS_CITY, member_address_city);
         sqlMap.put(MemberAddress.MEMBER_ADDRESS_AREA, member_address_area);
         sqlMap.put(MemberAddress.MEMBER_ADDRESS_ADDRESS, member_address_address);
-        sqlMap.put(MemberAddress.MEMBER_DELIVERY_IS_DEFAULT, member_delivery_is_default);
+        sqlMap.put(MemberAddress.ADDRESS_IS_DEFAULT, address_is_default);
         sqlMap.put(MemberAddress.SYSTEM_CREATE_USER_ID, system_create_user_id);
         sqlMap.put(MemberAddress.SYSTEM_CREATE_TIME, new Date());
         sqlMap.put(MemberAddress.SYSTEM_UPDATE_USER_ID, system_create_user_id);
@@ -120,7 +120,7 @@ public class MemberAddressDao extends Dao {
     }
 
     public Boolean update(String member_address_id, String member_id, String user_id, String member_address_name, String member_address_tel, String member_address_mobile,
-            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean member_delivery_is_default,
+            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean address_is_default,
             String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberAddress.MEMBER_ADDRESS_ID, member_address_id);
@@ -134,7 +134,7 @@ public class MemberAddressDao extends Dao {
         sqlMap.put(MemberAddress.MEMBER_ADDRESS_CITY, member_address_city);
         sqlMap.put(MemberAddress.MEMBER_ADDRESS_AREA, member_address_area);
         sqlMap.put(MemberAddress.MEMBER_ADDRESS_ADDRESS, member_address_address);
-        sqlMap.put(MemberAddress.MEMBER_DELIVERY_IS_DEFAULT, member_delivery_is_default);
+        sqlMap.put(MemberAddress.ADDRESS_IS_DEFAULT, address_is_default);
         sqlMap.put(MemberAddress.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(MemberAddress.SYSTEM_UPDATE_TIME, new Date());
         sqlMap.put(MemberAddress.SYSTEM_VERSION, system_version);
@@ -158,19 +158,25 @@ public class MemberAddressDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public MemberAddress findByMember_id(String member_id) {
+    public List<MemberAddress> findByMember_id(String member_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberAddress.MEMBER_ID, member_id);
         SqlPara sqlPara = Db.getSqlPara("member_address.findByMember_id", sqlMap);
 
         logSql("member_address", "findByMember_id", sqlPara);
 
-        List<MemberAddress> member_addressList = new MemberAddress().find(sqlPara.getSql(), sqlPara.getPara());
-        if (member_addressList.size() == 0) {
-            return null;
-        } else {
-            return member_addressList.get(0);
+        return new MemberAddress().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+
+    public Boolean batchUpdate(List<MemberAddress> memberAddressList) {
+        int[] result = Db.batchUpdate(memberAddressList, Constant.BATCH_SIZE);
+
+        for (int i : result) {
+            if (i == 0) {
+                throw new RuntimeException("修改地址不成功");
+            }
         }
+        return true;
     }
 
 }

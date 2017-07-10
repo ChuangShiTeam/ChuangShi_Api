@@ -42,7 +42,7 @@ public class MemberAddress extends Model<MemberAddress> {
     public static final String MEMBER_ADDRESS_ADDRESS = "member_address_address";
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "是否默认地址")
-    public static final String MEMBER_DELIVERY_IS_DEFAULT = "member_delivery_is_default";
+    public static final String ADDRESS_IS_DEFAULT = "address_is_default";
 
     public static final String MEMBER_ADDRESS = "member_address";
 
@@ -142,12 +142,12 @@ public class MemberAddress extends Model<MemberAddress> {
         set(MEMBER_ADDRESS_ADDRESS, member_address_address);
     }
 
-    public Boolean getMember_delivery_is_default() {
-        return getBoolean(MEMBER_DELIVERY_IS_DEFAULT);
+    public Boolean getAddress_is_default() {
+        return getBoolean(ADDRESS_IS_DEFAULT);
     }
 
-    public void setMember_delivery_is_default(Boolean member_delivery_is_default) {
-        set(MEMBER_DELIVERY_IS_DEFAULT, member_delivery_is_default);
+    public void setAddress_is_default(Boolean address_is_default) {
+        set(ADDRESS_IS_DEFAULT, address_is_default);
     }
 
 }
