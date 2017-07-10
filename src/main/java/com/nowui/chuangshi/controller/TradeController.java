@@ -130,7 +130,7 @@ public class TradeController extends Controller {
     @ActionKey(Url.TRADE_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE, Product.PRODUCT_SKU_LIST);
+        validate(Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE, Product.PRODUCT_SKU_LIST, "open_id", "pay_type");
 
         Trade model = getModel(Trade.class);
         String trade_id = Util.getRandomUUID();
@@ -139,6 +139,7 @@ public class TradeController extends Controller {
 
         JSONObject jsonObject = getParameterJSONObject();
         JSONArray jsonArray = jsonObject.getJSONArray(Product.PRODUCT_SKU_LIST);
+        String open_id = jsonObject.getString("open_id");
 
         authenticateRequest_app_idAndRequest_user_id();
         int trade_product_quantity = 0;
@@ -164,11 +165,14 @@ public class TradeController extends Controller {
         boolean trade_is_commission = app.getApp_is_commission();
         boolean trade_status = true;
 
-        Boolean result = tradeService.save(trade_id, request_app_id, request_user_id, trade_number, model.getTrade_receiver_name(), model.getTrade_receiver_mobile(),
+        Boolean flag = tradeService.save(trade_id, request_app_id, request_user_id, trade_number, model.getTrade_receiver_name(), model.getTrade_receiver_mobile(),
                 model.getTrade_receiver_province(), model.getTrade_receiver_city(), model.getTrade_receiver_area(), model.getTrade_receiver_address(), model.getTrade_message(), trade_product_quantity,
                 trade_product_amount, new BigDecimal(0), new BigDecimal(0), trade_is_commission, trade_is_confirm, trade_is_pay, trade_flow, trade_status,
                 "", request_user_id);
-
+        Map<String, String> result = new HashMap<>();
+        if (flag) {
+            result = tradeService.pay(trade_id, open_id, "WX", request_user_id);
+        }
         renderSuccessJson(result);
     }
 
@@ -214,27 +218,6 @@ public class TradeController extends Controller {
         authenticateSystem_create_user_id(trade.getSystem_create_user_id());
 
         Boolean result = tradeService.deleteByTrade_idAndSystem_update_user_idValidateSystem_version(model.getTrade_id(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
-    }
-
-    @ActionKey(Url.TRADE_PAY)
-    public void pay() {
-        validateRequest_app_id();
-        validate(Trade.TRADE_ID);
-
-        Trade model = getModel(Trade.class);
-        String request_user_id = getRequest_user_id();
-
-        model.validate(Trade.TRADE_ID);
-
-        validate("open_id", "pay_type");
-
-        JSONObject jsonObject = getAttr(Constant.REQUEST_PARAMETER);
-        String open_id = jsonObject.getString("open_id");
-        String pay_type = jsonObject.getString("pay_type");
-
-        Map<String, String> result = tradeService.pay(model.getTrade_id(), open_id, pay_type, request_user_id);
 
         renderSuccessJson(result);
     }
