@@ -64,7 +64,7 @@ public class Trade extends Model<Trade> {
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "")
     public static final String TRADE_FLOW = "trade_flow";
 
-    @Column(type = ColumnType.VARCHAR, length = 10, comment = "")
+    @Column(type = ColumnType.TINYINT, length = 10, comment = "")
     public static final String TRADE_STATUS = "trade_status";
 
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "")
@@ -222,11 +222,11 @@ public class Trade extends Model<Trade> {
         set(TRADE_FLOW, trade_flow);
     }
 
-    public String getTrade_status() {
-        return getStr(TRADE_STATUS);
+    public Boolean getTrade_status() {
+        return getBoolean(TRADE_STATUS);
     }
 
-    public void setTrade_status(String trade_status) {
+    public void setTrade_status(Boolean trade_status) {
         set(TRADE_STATUS, trade_status);
     }
 

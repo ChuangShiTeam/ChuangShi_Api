@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
+import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberAddress;
 import com.nowui.chuangshi.model.Product;
@@ -20,6 +21,7 @@ import com.nowui.chuangshi.model.ProductSkuPrice;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.model.TradeProductSku;
 import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberAddressService;
 import com.nowui.chuangshi.service.MemberService;
@@ -43,6 +45,7 @@ public class TradeController extends Controller {
     private final MemberService memberService = new MemberService();
     private final MemberAddressService memberAddressService = new MemberAddressService();
     private final FileService fileService = new FileService();
+    private final AppService appService = new AppService();
 
     @ActionKey(Url.TRADE_CHECK)
     public void check() {
@@ -127,7 +130,7 @@ public class TradeController extends Controller {
     @ActionKey(Url.TRADE_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Product.PRODUCT_SKU_LIST);
+        validate(Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE, Product.PRODUCT_SKU_LIST);
 
         Trade model = getModel(Trade.class);
         String trade_id = Util.getRandomUUID();
@@ -152,17 +155,19 @@ public class TradeController extends Controller {
             trade_product_quantity += tradeProductSku.getProduct_sku_quantity();
             trade_product_amount = trade_product_amount.add(product_sku_amount);
         }
+        App app = appService.findByApp_id(member.getApp_id());
 
         String trade_number = tradeService.generateTrade_number();
-        String trade_flow = TradeFlow.PAY.getValue();
+        String trade_flow = TradeFlow.WAIT_PAY.getValue();
         boolean trade_is_pay = false;
         boolean trade_is_confirm = false;
-        boolean trade_is_commission = false;
+        boolean trade_is_commission = app.getApp_is_commission();
+        boolean trade_status = true;
 
         Boolean result = tradeService.save(trade_id, request_app_id, request_user_id, trade_number, model.getTrade_receiver_name(), model.getTrade_receiver_mobile(),
                 model.getTrade_receiver_province(), model.getTrade_receiver_city(), model.getTrade_receiver_area(), model.getTrade_receiver_address(), model.getTrade_message(), trade_product_quantity,
-                trade_product_amount, model.getTrade_express_amount(), model.getTrade_discount_amount(), trade_is_commission, trade_is_confirm, trade_is_pay, trade_flow, model.getTrade_status(),
-                model.getTrade_audit_status(), request_user_id);
+                trade_product_amount, new BigDecimal(0), new BigDecimal(0), trade_is_commission, trade_is_confirm, trade_is_pay, trade_flow, trade_status,
+                "", request_user_id);
 
         renderSuccessJson(result);
     }

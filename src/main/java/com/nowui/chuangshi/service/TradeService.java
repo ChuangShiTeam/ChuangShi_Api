@@ -54,11 +54,11 @@ public class TradeService extends Service {
         return tradeCache.findByTrade_number(trade_number);
     }
 
-    public Boolean save(String trade_id, String app_id, String user_id, String trade_number, String trade_receiver_name, String trade_receiver_mobile, String trade_receiver_province, String trade_receiver_city, String trade_receiver_area, String trade_receiver_address, String trade_message, Integer trade_product_quantity, BigDecimal trade_product_amount, BigDecimal trade_express_amount, BigDecimal trade_discount_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, String trade_flow, String trade_status, String trade_audit_status, String system_create_user_id) {
+    public Boolean save(String trade_id, String app_id, String user_id, String trade_number, String trade_receiver_name, String trade_receiver_mobile, String trade_receiver_province, String trade_receiver_city, String trade_receiver_area, String trade_receiver_address, String trade_message, Integer trade_product_quantity, BigDecimal trade_product_amount, BigDecimal trade_express_amount, BigDecimal trade_discount_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, String trade_flow, Boolean trade_status, String trade_audit_status, String system_create_user_id) {
         return tradeCache.save(trade_id, app_id, user_id, trade_number, trade_receiver_name, trade_receiver_mobile, trade_receiver_province, trade_receiver_city, trade_receiver_area, trade_receiver_address, trade_message, trade_product_quantity, trade_product_amount, trade_express_amount, trade_discount_amount, trade_is_commission, trade_is_confirm, trade_is_pay, trade_flow, trade_status, trade_audit_status, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String trade_id, String user_id, String trade_number, String trade_receiver_name, String trade_receiver_mobile, String trade_receiver_province, String trade_receiver_city, String trade_receiver_area, String trade_receiver_address, String trade_message, Integer trade_product_quantity, BigDecimal trade_product_amount, BigDecimal trade_express_amount, BigDecimal trade_discount_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, String trade_flow, String trade_status, String trade_audit_status, String system_update_user_id, Integer system_version) {
+    public Boolean updateValidateSystem_version(String trade_id, String user_id, String trade_number, String trade_receiver_name, String trade_receiver_mobile, String trade_receiver_province, String trade_receiver_city, String trade_receiver_area, String trade_receiver_address, String trade_message, Integer trade_product_quantity, BigDecimal trade_product_amount, BigDecimal trade_express_amount, BigDecimal trade_discount_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, String trade_flow, Boolean trade_status, String trade_audit_status, String system_update_user_id, Integer system_version) {
         return tradeCache.updateValidateSystem_version(trade_id, user_id, trade_number, trade_receiver_name, trade_receiver_mobile, trade_receiver_province, trade_receiver_city, trade_receiver_area, trade_receiver_address, trade_message, trade_product_quantity, trade_product_amount, trade_express_amount, trade_discount_amount, trade_is_commission, trade_is_confirm, trade_is_pay, trade_flow, trade_status, trade_audit_status, system_update_user_id, system_version);
     }
     
@@ -142,7 +142,7 @@ public class TradeService extends Service {
     public boolean updateSend(String trade_id, String user_id, BigDecimal trade_amount, String trade_pay_type,
             String trade_pay_number, String trade_pay_account, String trade_pay_time, String trade_pay_result,
             Boolean trade_status, Integer system_version) {
-        Boolean isUpdate = updateTrade_is_payAndTrade_flowAndSystem_update_user_idAndSystem_update_timeAndByTrade_idAndSystem_version(trade_id, true, TradeFlow.SEND.getValue(), user_id, system_version);
+        Boolean isUpdate = updateTrade_is_payAndTrade_flowAndSystem_update_user_idAndSystem_update_timeAndByTrade_idAndSystem_version(trade_id, true, TradeFlow.WAIT_SEND.getValue(), user_id, system_version);
         Boolean isSave = tradePayService.save(trade_id, trade_pay_type, trade_pay_number, trade_pay_account, trade_pay_time, trade_pay_result, user_id);
         return isUpdate && isSave;
     }

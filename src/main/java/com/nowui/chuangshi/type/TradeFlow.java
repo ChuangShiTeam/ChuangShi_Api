@@ -1,9 +1,9 @@
 package com.nowui.chuangshi.type;
 
 public enum TradeFlow {
-    PAY("PAY", "待支付"),
-    SEND("SEND", "待发货"),
-    RECEIVE("RECEIVE", "待收货"),
+    WAIT_PAY("WAIT_PAY", "待支付"),
+    WAIT_SEND("WAIT_SEND", "待发货"),
+    WAIT_RECEIVE("WAIT_RECEIVE", "待收货"),
     COMPLETE("COMPLETE", "已完成"),
     CANCEL("CANCEL", "已取消");
 
