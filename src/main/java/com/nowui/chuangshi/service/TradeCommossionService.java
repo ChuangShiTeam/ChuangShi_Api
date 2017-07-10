@@ -4,11 +4,14 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.nowui.chuangshi.cache.TradeCommossionCache;
+import com.nowui.chuangshi.dao.TradeCommossionDao;
 import com.nowui.chuangshi.model.TradeCommossion;
 
 public class TradeCommossionService extends Service {
 
     private TradeCommossionCache tradeCommossionCache = new TradeCommossionCache();
+
+    private TradeCommossionDao tradeCommossionDao = new TradeCommossionDao();
 
     public List<TradeCommossion> listByTrade_id(String trade_id) {
         return tradeCommossionCache.listByTrade_id(trade_id);
@@ -24,8 +27,14 @@ public class TradeCommossionService extends Service {
         return tradeCommossionCache.deleteByTrade_idAndSystem_update_user_idValidateSystem_version(trade_id, system_update_user_id, system_version);
     }
 
+    /**
+     * 批量添加订单分成
+     * 
+     * @param tradeCommossionList
+     * @return
+     */
     public Boolean batchSave(List<TradeCommossion> tradeCommossionList) {
-        return tradeCommossionCache.batchSave(tradeCommossionList);
+        return tradeCommossionDao.batchSave(tradeCommossionList);
     }
 
 }

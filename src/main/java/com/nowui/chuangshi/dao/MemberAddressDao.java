@@ -1,13 +1,13 @@
 package com.nowui.chuangshi.dao;
 
+import java.util.Date;
+import java.util.List;
+
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.MemberAddress;
-
-import java.util.Date;
-import java.util.List;
 
 public class MemberAddressDao extends Dao {
 
@@ -89,7 +89,9 @@ public class MemberAddressDao extends Dao {
         }
     }
 
-    public Boolean save(String member_address_id, String app_id, String member_id, String user_id, String member_address_name, String member_address_tel, String member_address_mobile, String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean member_delivery_is_default, String system_create_user_id) {
+    public Boolean save(String member_address_id, String app_id, String member_id, String user_id, String member_address_name, String member_address_tel, String member_address_mobile,
+            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean member_delivery_is_default,
+            String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberAddress.MEMBER_ADDRESS_ID, member_address_id);
         sqlMap.put(MemberAddress.APP_ID, app_id);
@@ -117,7 +119,9 @@ public class MemberAddressDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String member_address_id, String member_id, String user_id, String member_address_name, String member_address_tel, String member_address_mobile, String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean member_delivery_is_default, String system_update_user_id, Integer system_version) {
+    public Boolean update(String member_address_id, String member_id, String user_id, String member_address_name, String member_address_tel, String member_address_mobile,
+            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean member_delivery_is_default,
+            String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberAddress.MEMBER_ADDRESS_ID, member_address_id);
         sqlMap.put(MemberAddress.MEMBER_ID, member_id);
@@ -154,13 +158,12 @@ public class MemberAddressDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    
     public MemberAddress findByMember_id(String member_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberAddress.MEMBER_ID, member_id);
         SqlPara sqlPara = Db.getSqlPara("member_address.findByMember_id", sqlMap);
 
-        logSql("member_address", "findByMember_address_id", sqlPara);
+        logSql("member_address", "findByMember_id", sqlPara);
 
         List<MemberAddress> member_addressList = new MemberAddress().find(sqlPara.getSql(), sqlPara.getPara());
         if (member_addressList.size() == 0) {

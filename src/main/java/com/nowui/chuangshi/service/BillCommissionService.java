@@ -4,11 +4,14 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.nowui.chuangshi.cache.BillCommissionCache;
+import com.nowui.chuangshi.dao.BillCommissionDao;
 import com.nowui.chuangshi.model.BillCommission;
 
 public class BillCommissionService extends Service {
 
     private BillCommissionCache billCommissionCache = new BillCommissionCache();
+
+    private BillCommissionDao billCommissionDao = new BillCommissionDao();
 
     public List<BillCommission> listByOrBill_idOrMember_id(String bill_id, String member_id) {
         return billCommissionCache.listByOrBill_idOrMember_id(bill_id, member_id);
@@ -24,8 +27,14 @@ public class BillCommissionService extends Service {
         return billCommissionCache.deleteByBill_idAndSystem_update_user_idValidateSystem_version(bill_id, system_update_user_id, system_version);
     }
 
+    /**
+     * 批量添加账单明细
+     * 
+     * @param billCommissionList
+     * @return
+     */
     public Boolean batchSave(List<BillCommission> billCommissionList) {
-        return billCommissionCache.batchSave(billCommissionList);
+        return billCommissionDao.batchSave(billCommissionList);
     }
 
 }

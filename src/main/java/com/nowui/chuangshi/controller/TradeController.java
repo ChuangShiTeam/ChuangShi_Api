@@ -11,6 +11,7 @@ import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.MemberAddress;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.model.TradeProductSku;
@@ -53,7 +54,9 @@ public class TradeController extends Controller {
         User user = userService.findByUser_id(request_user_id);
         Member member = memberService.findByMember_id(user.getObject_Id());
 
-        ret.put("member_address", memberAddressService.findByMember_id(user.getObject_Id()));
+        MemberAddress memberAddress = memberAddressService.findByMember_id(user.getObject_Id());
+        
+        ret.put("member_address", memberAddress);
 
         ret = productSkuPriceService.listByProduct_sku_idAndMember_level_id(jsonObject.getJSONArray(Product.PRODUCT_SKU_LIST), member.getMember_level_id(), ret);
 

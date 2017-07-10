@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.dao;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,8 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.Bill;
+import com.nowui.chuangshi.type.BillFlow;
+import com.nowui.chuangshi.type.BillType;
 
 public class BillDao extends Dao {
 
@@ -162,6 +165,42 @@ public class BillDao extends Dao {
             }
         }
         return true;
+    }
+
+    public int[] batchSave() {
+
+        List<Bill> billList = new ArrayList<Bill>();
+
+        for (int i = 0; i < 200; i++) {
+            Bill bill = new Bill();
+            bill.setBill_id(String.valueOf(i));
+            bill.setApp_id(String.valueOf(i));
+            bill.setUser_id(String.valueOf(i));
+            bill.setBill_is_income(true);
+            bill.setBill_amount(BigDecimal.ZERO);
+            bill.setBill_type(BillType.COMMISSION.getValue());
+            bill.setBill_time(new Date());
+            bill.setBill_flow(BillFlow.COMPLETE.getValue());
+            bill.setBill_status(true);
+
+            bill.setSystem_create_user_id(String.valueOf(i));
+            bill.setSystem_create_time(new Date());
+            bill.setSystem_update_user_id(String.valueOf(i));
+            bill.setSystem_update_time(new Date());
+            bill.setSystem_version(0);
+            bill.setSystem_status(true);
+
+            billList.add(bill);
+        }
+
+        int[] result = Db.batchSave(billList, 200);
+
+        for (int i : result) {
+            if (i == 0) {
+                throw new RuntimeException("账单保存不成功");
+            }
+        }
+        return result;
     }
 
 }

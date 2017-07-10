@@ -14,6 +14,12 @@ public class BillController extends Controller {
 
     private final BillService billService = new BillService();
 
+    @ActionKey("/bill/test")
+    public void test() {
+        int[] ret = billService.batchSave();
+        renderSuccessJson(ret);
+    }
+
     @ActionKey(Url.BILL_LIST)
     public void list() {
         validateRequest_app_id();
@@ -64,7 +70,8 @@ public class BillController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = billService.save(bill_id, request_app_id, model.getUser_id(), model.getBill_type(), model.getBill_image(), model.getBill_name(), model.getBill_amount(), model.getBill_is_income(), model.getBill_time(), model.getBill_flow(), model.getBill_status(), request_user_id);
+        Boolean result = billService.save(bill_id, request_app_id, model.getUser_id(), model.getBill_type(), model.getBill_image(), model.getBill_name(), model.getBill_amount(),
+                model.getBill_is_income(), model.getBill_time(), model.getBill_flow(), model.getBill_status(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -72,7 +79,8 @@ public class BillController extends Controller {
     @ActionKey(Url.BILL_UPDATE)
     public void update() {
         validateRequest_app_id();
-        validate(Bill.BILL_ID, Bill.USER_ID, Bill.BILL_TYPE, Bill.BILL_IMAGE, Bill.BILL_NAME, Bill.BILL_AMOUNT, Bill.BILL_IS_INCOME, Bill.BILL_TIME, Bill.BILL_FLOW, Bill.BILL_STATUS, Bill.SYSTEM_VERSION);
+        validate(Bill.BILL_ID, Bill.USER_ID, Bill.BILL_TYPE, Bill.BILL_IMAGE, Bill.BILL_NAME, Bill.BILL_AMOUNT, Bill.BILL_IS_INCOME, Bill.BILL_TIME, Bill.BILL_FLOW, Bill.BILL_STATUS,
+                Bill.SYSTEM_VERSION);
 
         Bill model = getModel(Bill.class);
         String request_user_id = getRequest_user_id();
@@ -84,7 +92,8 @@ public class BillController extends Controller {
         authenticateApp_id(bill.getApp_id());
         authenticateSystem_create_user_id(bill.getSystem_create_user_id());
 
-        Boolean result = billService.updateValidateSystem_version(model.getBill_id(), model.getUser_id(), model.getBill_type(), model.getBill_image(), model.getBill_name(), model.getBill_amount(), model.getBill_is_income(), model.getBill_time(), model.getBill_flow(), model.getBill_status(), request_user_id, model.getSystem_version());
+        Boolean result = billService.updateValidateSystem_version(model.getBill_id(), model.getUser_id(), model.getBill_type(), model.getBill_image(), model.getBill_name(), model.getBill_amount(),
+                model.getBill_is_income(), model.getBill_time(), model.getBill_flow(), model.getBill_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -155,7 +164,8 @@ public class BillController extends Controller {
     @ActionKey(Url.BILL_ADMIN_UPDATE)
     public void adminUpdate() {
         validateRequest_app_id();
-        validate(Bill.BILL_ID, Bill.USER_ID, Bill.BILL_TYPE, Bill.BILL_IMAGE, Bill.BILL_NAME, Bill.BILL_AMOUNT, Bill.BILL_IS_INCOME, Bill.BILL_TIME, Bill.BILL_FLOW, Bill.BILL_STATUS, Bill.SYSTEM_VERSION);
+        validate(Bill.BILL_ID, Bill.USER_ID, Bill.BILL_TYPE, Bill.BILL_IMAGE, Bill.BILL_NAME, Bill.BILL_AMOUNT, Bill.BILL_IS_INCOME, Bill.BILL_TIME, Bill.BILL_FLOW, Bill.BILL_STATUS,
+                Bill.SYSTEM_VERSION);
 
         Bill model = getModel(Bill.class);
         String request_user_id = getRequest_user_id();
@@ -166,7 +176,8 @@ public class BillController extends Controller {
 
         authenticateApp_id(bill.getApp_id());
 
-        Boolean result = billService.updateValidateSystem_version(model.getBill_id(), model.getUser_id(), model.getBill_type(), model.getBill_image(), model.getBill_name(), model.getBill_amount(), model.getBill_is_income(), model.getBill_time(), model.getBill_flow(), model.getBill_status(), request_user_id, model.getSystem_version());
+        Boolean result = billService.updateValidateSystem_version(model.getBill_id(), model.getUser_id(), model.getBill_type(), model.getBill_image(), model.getBill_name(), model.getBill_amount(),
+                model.getBill_is_income(), model.getBill_time(), model.getBill_flow(), model.getBill_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -230,7 +241,8 @@ public class BillController extends Controller {
         String bill_id = Util.getRandomUUID();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = billService.save(bill_id, model.getApp_id(), model.getUser_id(), model.getBill_type(), model.getBill_image(), model.getBill_name(), model.getBill_amount(), model.getBill_is_income(), model.getBill_time(), model.getBill_flow(), model.getBill_status(), request_user_id);
+        Boolean result = billService.save(bill_id, model.getApp_id(), model.getUser_id(), model.getBill_type(), model.getBill_image(), model.getBill_name(), model.getBill_amount(),
+                model.getBill_is_income(), model.getBill_time(), model.getBill_flow(), model.getBill_status(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -238,12 +250,14 @@ public class BillController extends Controller {
     @ActionKey(Url.BILL_SYSTEM_UPDATE)
     public void systemUpdate() {
         validateRequest_app_id();
-        validate(Bill.BILL_ID, Bill.USER_ID, Bill.BILL_TYPE, Bill.BILL_IMAGE, Bill.BILL_NAME, Bill.BILL_AMOUNT, Bill.BILL_IS_INCOME, Bill.BILL_TIME, Bill.BILL_FLOW, Bill.BILL_STATUS, Bill.SYSTEM_VERSION);
+        validate(Bill.BILL_ID, Bill.USER_ID, Bill.BILL_TYPE, Bill.BILL_IMAGE, Bill.BILL_NAME, Bill.BILL_AMOUNT, Bill.BILL_IS_INCOME, Bill.BILL_TIME, Bill.BILL_FLOW, Bill.BILL_STATUS,
+                Bill.SYSTEM_VERSION);
 
         Bill model = getModel(Bill.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = billService.updateValidateSystem_version(model.getBill_id(), model.getUser_id(), model.getBill_type(), model.getBill_image(), model.getBill_name(), model.getBill_amount(), model.getBill_is_income(), model.getBill_time(), model.getBill_flow(), model.getBill_status(), request_user_id, model.getSystem_version());
+        Boolean result = billService.updateValidateSystem_version(model.getBill_id(), model.getUser_id(), model.getBill_type(), model.getBill_image(), model.getBill_name(), model.getBill_amount(),
+                model.getBill_is_income(), model.getBill_time(), model.getBill_flow(), model.getBill_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

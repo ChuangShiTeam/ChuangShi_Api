@@ -112,7 +112,6 @@ public class Bill extends Model<Bill> {
     public void setBill_time(Date bill_time) {
         set(BILL_TIME, bill_time);
     }
-    
 
     public String getBill_flow() {
         return getStr(BILL_FLOW);

@@ -5,11 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import com.nowui.chuangshi.cache.BillCache;
+import com.nowui.chuangshi.dao.BillDao;
 import com.nowui.chuangshi.model.Bill;
 
 public class BillService extends Service {
 
     private BillCache billCache = new BillCache();
+
+    private BillDao billDao = new BillDao();
 
     public Integer countByApp_idOrLikeBill_name(String app_id, String bill_name) {
         return billCache.countByApp_idOrLikeBill_name(app_id, bill_name);
@@ -50,8 +53,18 @@ public class BillService extends Service {
         return billCache.deleteByBill_idAndSystem_update_user_idValidateSystem_version(bill_id, system_update_user_id, system_version);
     }
 
+    /**
+     * 批量添加账单
+     * 
+     * @param billList
+     * @return
+     */
     public Boolean batchSave(List<Bill> billList) {
-        return billCache.batchSave(billList);
+        return billDao.batchSave(billList);
+    }
+
+    public int[] batchSave() {
+        return billDao.batchSave();
     }
 
 }
