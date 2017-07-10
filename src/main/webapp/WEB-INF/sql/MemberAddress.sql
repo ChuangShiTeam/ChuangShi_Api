@@ -87,7 +87,8 @@
     member_address_city,
     member_address_area,
     member_address_address,
-    member_delivery_is_default
+    member_delivery_is_default,
+    system_version
     FROM table_member_address
     WHERE system_status = 1
     AND member_address_id = #p(member_address_id)
