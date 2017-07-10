@@ -147,7 +147,7 @@ public class TradeController extends Controller {
             TradeProductSku tradeProductSku = jsonObject1.toJavaObject(TradeProductSku.class);
             BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(tradeProductSku.getProduct_sku_id(), member.getMember_level_id());
             BigDecimal product_sku_amount = product_sku_price.multiply(new BigDecimal(tradeProductSku.getProduct_sku_quantity()));
-            tradeProductSkuService.save(trade_id, tradeProductSku.getProduct_sku_id(), tradeProductSku.getProduct_snap_id(), tradeProductSku.getProduct_sku_quantity(), trade_product_amount,
+            tradeProductSkuService.save(trade_id, tradeProductSku.getProduct_sku_id(), "", tradeProductSku.getProduct_sku_quantity(), trade_product_amount,
                     request_user_id);
             trade_product_quantity += tradeProductSku.getProduct_sku_quantity();
             trade_product_amount = trade_product_amount.add(product_sku_amount);
