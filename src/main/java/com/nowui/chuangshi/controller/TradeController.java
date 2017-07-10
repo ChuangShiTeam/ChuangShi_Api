@@ -42,9 +42,6 @@ public class TradeController extends Controller {
     private final MemberAddressService memberAddressService = new MemberAddressService();
     private final FileService fileService = new FileService();
 
-    /**
-     * 下单前返回会员信息sku价格
-     */
     @ActionKey(Url.TRADE_CHECK)
     public void check() {
         validateRequest_app_id();
