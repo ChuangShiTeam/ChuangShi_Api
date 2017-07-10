@@ -167,8 +167,8 @@ public class MemberStockController extends Controller {
         String request_user_id = getRequest_user_id();
         
         JSONObject jsonObject = getParameterJSONObject();
-        String object_id = jsonObject.getString("member_id");
-        JSONArray jsonArray = jsonObject.getJSONArray("product_skuList");
+        String object_id = jsonObject.getString(Member.MEMBER_ID);
+        JSONArray jsonArray = jsonObject.getJSONArray(Stock.PRODUCT_SKU_LIST);
 
         authenticateRequest_app_idAndRequest_user_id();
 
