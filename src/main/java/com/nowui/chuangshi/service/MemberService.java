@@ -1,13 +1,23 @@
 package com.nowui.chuangshi.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.nowui.chuangshi.cache.MemberCache;
+import com.nowui.chuangshi.cache.UserCache;
+import com.nowui.chuangshi.constant.Config;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.type.UserType;
+import com.nowui.chuangshi.util.AesUtil;
+import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.*;
 
 public class MemberService extends Service {
 
     private MemberCache memberCache = new MemberCache();
+    private UserCache userCache = new UserCache();
 
     public Integer countByApp_idOrLikeUser_name(String app_id, String user_name) {
         return memberCache.countByApp_idOrLikeUser_name(app_id, user_name);
@@ -45,8 +55,58 @@ public class MemberService extends Service {
         return memberCache.findByMember_id(member_id);
     }
 
-    public Boolean save(String member_id, String app_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_parent_path, Boolean member_status, String system_create_user_id) {
-        return memberCache.save(member_id, app_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path, member_status, system_create_user_id);
+    public String login(String app_id, String wechat_open_id, String wechat_union_id, String user_name, String user_avatar, String system_create_user_id) {
+        if (ValidateUtil.isNullOrEmpty(wechat_open_id)) {
+            throw new RuntimeException("wechat_open_id is null");
+        }
+
+        User user = userCache.findByApp_idAndUser_typeAndWechat_open_idAndWechat_union_id(app_id, UserType.MEMBER.getKey(), wechat_open_id, wechat_union_id);
+
+        if (user == null) {
+            String member_id = Util.getRandomUUID();
+            String user_id = Util.getRandomUUID();
+            String member_parent_id = "";
+            String from_qrcode_id = "";
+            String qrcode_id = "";
+            String member_level_id = "";
+            String member_parent_path = "";
+            Boolean member_status = false;
+
+            Boolean result = memberCache.save(member_id, app_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path, member_status, system_create_user_id);
+
+            if (result) {
+                throw new RuntimeException("登录不成功");
+            }
+
+            String user_account = "";
+            String user_mobile = "";
+            String user_email = "";
+            String user_password = "";
+
+            result = userCache.save(user_id, app_id, member_id, UserType.MEMBER.getKey(), user_name, user_avatar, user_account, user_mobile, user_email, user_password, wechat_open_id, wechat_union_id, system_create_user_id);
+
+            if (result) {
+                throw new RuntimeException("登录不成功");
+            }
+        } else {
+
+        }
+
+        try {
+            Date date = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.YEAR, 1);
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(User.USER_ID, user.getUser_id());
+            jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
+
+            return AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("登录不成功");
+        }
     }
 
     public Boolean updateValidateSystem_version(String member_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_parent_path, Boolean member_status, String system_update_user_id, Integer system_version) {
