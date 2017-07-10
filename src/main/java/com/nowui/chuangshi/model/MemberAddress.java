@@ -44,6 +44,8 @@ public class MemberAddress extends Model<MemberAddress> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "是否默认地址")
     public static final String MEMBER_DELIVERY_IS_DEFAULT = "member_delivery_is_default";
 
+    public static final String MEMBER_ADDRESS = "member_address";
+
     public String getMember_address_id() {
         return getStr(MEMBER_ADDRESS_ID);
     }

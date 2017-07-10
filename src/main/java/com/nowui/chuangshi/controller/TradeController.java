@@ -63,7 +63,7 @@ public class TradeController extends Controller {
         }
 
         Map<String, Object> result = new HashMap<String, Object>();
-        result.put("member_address", memberAddress);
+        result.put(MemberAddress.MEMBER_ADDRESS, memberAddress);
         result.put(Trade.TRADE_EXPRESS_AMOUNT, BigDecimal.ZERO);
         result.put(Product.PRODUCT_SKU_LIST, productSkuArray);
 
