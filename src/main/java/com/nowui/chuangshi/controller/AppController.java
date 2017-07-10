@@ -228,11 +228,7 @@ public class AppController extends Controller {
     public void systemAllList() {
         validateRequest_app_id();
 
-        String request_app_id = getRequest_app_id();
-        String request_http_id = getRequest_http_id();
-        String request_user_id = getRequest_user_id();
-
-        List<App> resultList = appService.list(request_app_id, request_http_id, request_user_id);
+        List<App> resultList = appService.list();
 
         for (App result : resultList) {
             result.keep(App.APP_ID, App.APP_NAME);

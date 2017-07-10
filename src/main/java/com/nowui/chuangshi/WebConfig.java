@@ -21,44 +21,14 @@ import com.jfinal.template.Engine;
 import com.jfinal.weixin.sdk.api.ApiConfig;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.nowui.chuangshi.constant.Config;
-import com.nowui.chuangshi.controller.AdminController;
-import com.nowui.chuangshi.controller.ApiController;
-import com.nowui.chuangshi.controller.AppController;
-import com.nowui.chuangshi.controller.AppStockController;
-import com.nowui.chuangshi.controller.BillController;
-import com.nowui.chuangshi.controller.CategoryController;
-import com.nowui.chuangshi.controller.CodeController;
-import com.nowui.chuangshi.controller.CustomerAttributeController;
-import com.nowui.chuangshi.controller.CustomerController;
-import com.nowui.chuangshi.controller.ExceptionController;
-import com.nowui.chuangshi.controller.ExpressController;
-import com.nowui.chuangshi.controller.FeijiuController;
-import com.nowui.chuangshi.controller.FeijiuFastCustomerController;
-import com.nowui.chuangshi.controller.FeijiuRecommendCustomerController;
-import com.nowui.chuangshi.controller.FeijiuRecommendProductController;
-import com.nowui.chuangshi.controller.FileController;
-import com.nowui.chuangshi.controller.GuangqiController;
-import com.nowui.chuangshi.controller.GuangqiCustomerController;
-import com.nowui.chuangshi.controller.GuangqiPrizeController;
-import com.nowui.chuangshi.controller.HttpController;
-import com.nowui.chuangshi.controller.MemberAddressController;
-import com.nowui.chuangshi.controller.MemberController;
-import com.nowui.chuangshi.controller.MemberLevelController;
-import com.nowui.chuangshi.controller.MemberStockController;
-import com.nowui.chuangshi.controller.MenuController;
-import com.nowui.chuangshi.controller.ProductBrandController;
-import com.nowui.chuangshi.controller.ProductCategoryController;
-import com.nowui.chuangshi.controller.ProductController;
-import com.nowui.chuangshi.controller.QrcodeController;
-import com.nowui.chuangshi.controller.SqlController;
-import com.nowui.chuangshi.controller.TradeController;
-import com.nowui.chuangshi.controller.UserController;
+import com.nowui.chuangshi.controller.*;
 import com.nowui.chuangshi.interceptor.GlobalActionInterceptor;
 import com.nowui.chuangshi.model.*;
 import com.nowui.chuangshi.model.Exception;
 import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.type.FileType;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.Date;
 import java.util.List;
@@ -74,6 +44,7 @@ public class WebConfig extends JFinalConfig {
     }
 
     public void configRoute(Routes routes) {
+        routes.add("/wechat", WeChatController.class);
         routes.add("/code", CodeController.class);
         routes.add("/http", HttpController.class);
         routes.add("/sql", SqlController.class);
@@ -197,68 +168,15 @@ public class WebConfig extends JFinalConfig {
     }
 
     public void afterJFinalStart() {
-        ApiConfig apiConfig = new ApiConfig();
-        apiConfig.setAppId("wx934f793803320ecd");
-        apiConfig.setAppSecret("05dd33adcc905769a119fb84cf258617");
-        ApiConfigKit.putApiConfig(apiConfig);
-
-        // List<Record> recordList = Db.find("select * from table_http where
-        // http_url = '/guangqi/prize/draw' and system_create_time > '2017-06-22
-        // 19:30:34' order by system_create_time desc");
-        // int index = 0;
-        // for (Record record : recordList) {
-        // String customer_prize_id = Util.getRandomUUID();
-        // String app_id = "b0f1cf1b4705403ea4e2567c7d860f33";
-        // JSONObject request =
-        // JSONObject.parseObject(record.getStr("http_request"));
-        // String customer_id = request.getString("customer_id");
-        // JSONObject response =
-        // JSONObject.parseObject(record.getStr("http_response"));
-        // int code = response.getIntValue("code");
-        // if (code == 200) {
-        // String prize_id =
-        // response.getJSONObject("data").getString("prize_id");
-        // Date system_create_time = record.getDate("system_create_time");
-        // String customer_prize_date =
-        // DateUtil.getDateString(system_create_time);ou
-        // String system_create_user_id = "";
-        //
-        // Number count = Db.queryFirst("select count(*) from
-        // table_guangqi_customer_prize where customer_id = '" + customer_id +
-        // "'");
-        // if (count.intValue() == 0) {
-        //
-        // Kv sqlMap = Kv.create();
-        // sqlMap.put(GuangqiCustomerPrize.CUSTOMER_PRIZE_ID,
-        // customer_prize_id);
-        // sqlMap.put(GuangqiCustomerPrize.APP_ID, app_id);
-        // sqlMap.put(GuangqiCustomerPrize.CUSTOMER_ID, customer_id);
-        // sqlMap.put(GuangqiCustomerPrize.PRIZE_ID, prize_id);
-        // sqlMap.put(GuangqiCustomerPrize.CUSTOMER_PRIZE_DATE,
-        // customer_prize_date);
-        // sqlMap.put(GuangqiCustomerPrize.SYSTEM_CREATE_USER_ID,
-        // system_create_user_id);
-        // sqlMap.put(GuangqiCustomerPrize.SYSTEM_CREATE_TIME,
-        // system_create_time);
-        // sqlMap.put(GuangqiCustomerPrize.SYSTEM_UPDATE_USER_ID,
-        // system_create_user_id);
-        // sqlMap.put(GuangqiCustomerPrize.SYSTEM_UPDATE_TIME,
-        // system_create_time);
-        // sqlMap.put(GuangqiCustomerPrize.SYSTEM_VERSION, 0);
-        // sqlMap.put(GuangqiCustomerPrize.SYSTEM_STATUS, true);
-        // sqlMap.put(GuangqiPrize.PRIZE_QUANTITY, 0);
-        // sqlMap.put(GuangqiPrize.PRIZE_LIMIT, 0);
-        // SqlPara sqlPara = Db.getSqlPara("guangqi_customer_prize.save",
-        // sqlMap);
-        //
-        // Boolean result = Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
-        //
-        // if (!result) {
-        // System.out.println("123456");
-        // }
-        // }
-        // }
-        // }
+        List<App> appList = appService.list();
+        for (App app : appList) {
+            if (!ValidateUtil.isNullOrEmpty(app.getWechat_app_id())) {
+                ApiConfig apiConfig = new ApiConfig();
+                apiConfig.setAppId(app.getWechat_app_id());
+                apiConfig.setAppSecret(app.getWechat_app_secret());
+                ApiConfigKit.putApiConfig(apiConfig);
+            }
+        }
 
 //        initXingXiaoDadabase();
     }

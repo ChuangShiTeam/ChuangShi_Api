@@ -7,25 +7,21 @@ import java.util.TreeMap;
 
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.HttpKit;
-import com.jfinal.weixin.sdk.api.ApiResult;
-import com.jfinal.weixin.sdk.api.SnsAccessToken;
-import com.jfinal.weixin.sdk.api.SnsAccessTokenApi;
-import com.jfinal.weixin.sdk.api.UserApi;
+import com.jfinal.weixin.sdk.api.*;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Trade;
-import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.TradeService;
 import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.PayType;
-import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.HttpUtil;
 import com.nowui.chuangshi.util.MQUtil;
 import com.nowui.chuangshi.util.ValidateUtil;
+import com.nowui.chuangshi.util.WeChatUtil;
 
 public class WeChatController extends Controller {
 
@@ -33,6 +29,23 @@ public class WeChatController extends Controller {
     private final AppService appService = new AppService();
     private final MemberService memberService = new MemberService();
     private final UserService userService = new UserService();
+
+    @ActionKey(Url.WECHAT_INIT)
+    public void init() {
+        String url = getPara("url");
+        String app_id = getPara("app_id");
+
+        App app = appService.findByApp_id(app_id);
+
+        String wechat_app_id = ApiConfigKit.getAppId();
+        if (!wechat_app_id.equals(app.getWechat_app_id())) {
+            ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+        }
+
+        Map<String, Object> result = WeChatUtil.sign(url);
+
+        renderSuccessJson(result);
+    }
 
     @ActionKey(Url.WECHAT_AUTH)
     public void auth() {
@@ -46,7 +59,7 @@ public class WeChatController extends Controller {
         }
 
         if (ValidateUtil.isNullOrEmpty(code)) {
-            redirect("http://h5.chuangshi.nowui.com/#/home/");
+
         } else {
             App app = appService.findByApp_id(app_id);
 
@@ -79,7 +92,7 @@ public class WeChatController extends Controller {
 
             String token = memberService.login(app_id, wechat_open_id, wechat_union_id, user_name, user_avatar, request_user_id);
 
-            redirect("http://h5.chuangshi.nowui.com/#/" + url + "/?open_id=" + wechat_open_id + "&token=" + token);
+            redirect("http://h5.xingxiao.nowui.com/#/" + url + "/?open_id=" + wechat_open_id + "&token=" + token);
         }
     }
 

@@ -35,6 +35,15 @@ public class AppDao extends Dao {
         return count.intValue();
     }
 
+    public List<App> list() {
+        Kv sqlMap = Kv.create();
+        SqlPara sqlPara = Db.getSqlPara("app.list", sqlMap);
+
+//        logSql("app", "list", sqlPara);
+
+        return new App().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+
     public List<App> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);
@@ -70,15 +79,6 @@ public class AppDao extends Dao {
         SqlPara sqlPara = Db.getSqlPara("app.listByOrApp_idOrLikeApp_nameAndLimit", sqlMap);
 
         logSql("app", "listByOrApp_idOrLikeApp_nameAndLimit", sqlPara);
-
-        return new App().find(sqlPara.getSql(), sqlPara.getPara());
-    }
-
-    public List<App> list(String request_app_id, String request_http_id, String request_user_id) {
-        Kv sqlMap = Kv.create();
-        SqlPara sqlPara = Db.getSqlPara("app.list", sqlMap);
-
-        logSql("app", "list", sqlPara);
 
         return new App().find(sqlPara.getSql(), sqlPara.getPara());
     }

@@ -415,6 +415,7 @@ public class Url {
     public static final String EXPRESS_SYSTEM_UPDATE = "/express/system/update";
     public static final String EXPRESS_SYSTEM_DELETE = "/express/system/delete";
 
+    public static final String WECHAT_INIT = "/wechat/init";
     public static final String WECHAT_AUTH = "/wechat/auth";
     public static final String WECHAT_PAY_NOTIFY = "/wechat/pay/notify";
 

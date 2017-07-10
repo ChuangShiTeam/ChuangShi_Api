@@ -18,6 +18,10 @@ public class AppService extends Service {
         return appCache.countByOrApp_idOrLikeApp_name(app_id, app_name);
     }
 
+    public List<App> list() {
+        return appCache.list();
+    }
+
     public List<App> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         return appCache.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n);
     }
@@ -28,10 +32,6 @@ public class AppService extends Service {
 
     public List<App> listByOrApp_idOrLikeApp_nameAndLimit(String app_id, String app_name, int m, int n) {
         return appCache.listByOrApp_idOrLikeApp_nameAndLimit(app_id, app_name, m, n);
-    }
-
-    public List<App> list(String request_app_id, String request_http_id, String request_user_id) {
-        return appCache.list(request_app_id, request_http_id, request_user_id);
     }
 
     public App findByApp_id(String app_id) {

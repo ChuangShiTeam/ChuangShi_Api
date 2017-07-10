@@ -22,6 +22,16 @@ public class AppCache extends Cache {
         return appDao.countByOrApp_idOrLikeApp_name(app_id, app_name);
     }
 
+    public List<App> list() {
+        List<App> appList = appDao.list();
+
+        for (App app : appList) {
+            app.put(findByApp_id(app.getApp_id()));
+        }
+
+        return appList;
+    }
+
     public List<App> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         List<App> appList = appDao.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n);
 
@@ -44,16 +54,6 @@ public class AppCache extends Cache {
 
     public List<App> listByOrApp_idOrLikeApp_nameAndLimit(String app_id, String app_name, int m, int n) {
         List<App> appList = appDao.listByOrApp_idOrLikeApp_nameAndLimit(app_id, app_name, m, n);
-
-        for (App app : appList) {
-            app.put(findByApp_id(app.getApp_id()));
-        }
-
-        return appList;
-    }
-
-    public List<App> list(String request_app_id, String request_http_id, String request_user_id) {
-        List<App> appList = appDao.list(request_app_id, request_http_id, request_user_id);
 
         for (App app : appList) {
             app.put(findByApp_id(app.getApp_id()));

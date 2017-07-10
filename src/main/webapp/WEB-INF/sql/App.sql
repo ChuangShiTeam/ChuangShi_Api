@@ -22,6 +22,13 @@
     #end
   #end
 
+  #sql("list")
+    SELECT
+    app_id
+    FROM table_app
+    WHERE system_status = 1
+  #end
+
   #sql("listByApp_idAndSystem_create_timeAndLimit")
     SELECT
     app_id
@@ -61,14 +68,6 @@
     #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
-  #end
-
-  #sql("list")
-    SELECT
-    app_id
-    FROM table_app
-    WHERE system_status = 1
-    ORDER BY system_create_time DESC
   #end
 
   #sql("findByApp_id")

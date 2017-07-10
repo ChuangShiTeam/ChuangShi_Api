@@ -11,9 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * Created by yongqiangzhong on 21/06/2017.
- */
 public class WeChatUtil {
 
     public static Map<String, Object> sign(String url) {
