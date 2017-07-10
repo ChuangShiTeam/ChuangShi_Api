@@ -2,7 +2,8 @@ package com.nowui.chuangshi.type;
 
 public enum StockAction {
     IN("IN", "入库"),
-    OUT("OUT", "出库");
+    OUT("OUT", "出库"),
+    REPLENISH("REPLENISH", "平台补充");
 
     private String key;
     private String value;

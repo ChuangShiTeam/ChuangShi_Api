@@ -29,7 +29,15 @@ public class Stock extends Model<Stock> {
     @Column(type = ColumnType.VARCHAR, length = 25, comment = "状态")
     public static final String STOCK_STATUS = "stock_status";
     
+    public static final String APP_NAME = "app_name";
+    public static final String USER_NAME = "user_name";
+    public static final String PRODUCT_NAME = "product_name";
     public static final String PRODUCT_SKU_LIST = "product_sku_list";
+    public static final String MEMBER_ID_LIST = "member_id_list";
+    
+    private String app_name;
+    private String user_name;
+    private String product_name;
 
     public String getStock_id() {
         return getStr(STOCK_ID);
@@ -93,6 +101,30 @@ public class Stock extends Model<Stock> {
 
     public void setStock_status(String stock_status) {
         set(STOCK_STATUS, stock_status);
+    }
+
+    public String getApp_name() {
+        return app_name;
+    }
+
+    public void setApp_name(String app_name) {
+        this.app_name = app_name;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getProduct_name() {
+        return product_name;
+    }
+
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
     }
 
 }

@@ -139,9 +139,36 @@
   #sql("findByStock_id")
     SELECT
     *
-    FROM table_stock
+    FROM table_stock    
     WHERE system_status = 1
     AND stock_id = #p(stock_id)
+  #end
+  
+  #sql("findWithMemberByStock_id")
+    SELECT
+    table_stock.*,
+    table_user.user_name,
+    table_product.product_name
+    FROM table_stock
+    LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
+    LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
+    LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
+    LEFT JOIN table_user ON table_member.user_id = table_user.user_id
+    WHERE table_stock.system_status = 1
+    AND table_stock.stock_id = #p(stock_id)
+  #end
+  
+  #sql("findWithAppByStock_id")
+    SELECT
+    table_stock.*,
+    table_app.app_name,
+    table_product.product_name
+    FROM table_stock
+    LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
+    LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
+    LEFT JOIN table_app ON table_app.app_id = table_stock.object_id
+    WHERE table_stock.system_status = 1
+    AND table_stock.stock_id = #p(stock_id)
   #end
 
   #sql("save")

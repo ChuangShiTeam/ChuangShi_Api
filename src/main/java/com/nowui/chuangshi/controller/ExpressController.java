@@ -123,7 +123,7 @@ public class ExpressController extends Controller {
         List<Express> resultList = expressService.listByApp_idOrLikeExpress_noAndLimit(request_app_id, model.getExpress_no(), getM(), getN());
 
         for (Express result : resultList) {
-            result.keep(Express.EXPRESS_ID, Express.SYSTEM_VERSION);
+            result.keep(Express.EXPRESS_ID, Express.EXPRESS_NO, Express.EXPRESS_IS_PAY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_STATUS, Express.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -201,7 +201,7 @@ public class ExpressController extends Controller {
         List<Express> resultList = expressService.listByOrApp_idOrLikeExpress_noAndLimit(model.getApp_id(), model.getExpress_no(), getM(), getN());
 
         for (Express result : resultList) {
-            result.keep(Express.EXPRESS_ID, Express.SYSTEM_VERSION);
+            result.keep(Express.EXPRESS_ID, Express.EXPRESS_NO, Express.EXPRESS_IS_PAY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_STATUS, Express.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);

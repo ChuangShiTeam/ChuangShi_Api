@@ -96,6 +96,7 @@ public class MemberCache extends Cache {
 
         return member;
     }
+    
 
     public Boolean save(String member_id, String app_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_parent_path, Boolean member_status, String system_create_user_id) {
         boolean result = memberDao.save(member_id, app_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path, member_status, system_create_user_id);
@@ -135,7 +136,7 @@ public class MemberCache extends Cache {
 
         return result;
     }
-
+    
     public Boolean deleteByMember_idAndSystem_update_user_idValidateSystem_version(String member_id, String system_update_user_id, Integer system_version) {
         Member member = findByMember_id(member_id);
         if (!member.getSystem_version().equals(system_version)) {

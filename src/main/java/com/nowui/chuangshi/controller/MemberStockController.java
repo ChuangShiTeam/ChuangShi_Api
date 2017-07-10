@@ -7,8 +7,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
+import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Member;
-import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.service.StockService;
 import com.nowui.chuangshi.type.StockType;
@@ -134,7 +134,7 @@ public class MemberStockController extends Controller {
         List<Stock> resultList = stockService.listByApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_nameAndLimit(request_app_id, StockType.MEMBER.getValue(), user_name, model.getStock_action(), product_name, getM(), getN());
 
         for (Stock result : resultList) {
-            result.keep(Stock.STOCK_ID, Product.PRODUCT_NAME, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.SYSTEM_VERSION);
+            result.keep(Stock.STOCK_ID, Stock.USER_NAME, Stock.PRODUCT_NAME, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -158,8 +158,8 @@ public class MemberStockController extends Controller {
         renderSuccessJson(stock);
     }
     
-    @ActionKey(Url.MEMBER_STOCK_ADMIN_INIT)
-    public void adminInit() {
+    @ActionKey(Url.MEMBER_STOCK_ADMIN_REPLENISH)
+    public void adminReplenish() {
         validateRequest_app_id();
         validate(Member.MEMBER_ID);
 
@@ -167,16 +167,19 @@ public class MemberStockController extends Controller {
         String request_user_id = getRequest_user_id();
         
         JSONObject jsonObject = getParameterJSONObject();
-        String object_id = jsonObject.getString(Member.MEMBER_ID);
-        JSONArray jsonArray = jsonObject.getJSONArray(Stock.PRODUCT_SKU_LIST);
-
+        JSONArray productSkuList = jsonObject.getJSONArray(Stock.PRODUCT_SKU_LIST);
+        if (productSkuList == null || productSkuList.size() == 0) {
+            throw new RuntimeException("产品sku不能为空");
+        }
+        String member_id = jsonObject.getString("member_id");
+        
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = stockService.init(request_app_id, object_id, StockType.MEMBER.getValue(), jsonArray, request_user_id);
+        Boolean result = stockService.replenish(request_app_id, member_id, StockType.MEMBER.getValue(), productSkuList, request_user_id);
 
         renderSuccessJson(result);
     }
-
+    
     @ActionKey(Url.MEMBER_STOCK_ADMIN_SAVE)
     public void adminSave() {
         save();
@@ -234,11 +237,34 @@ public class MemberStockController extends Controller {
         List<Stock> resultList = stockService.listByOrApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_nameAndLimit(model.getApp_id(), StockType.MEMBER.getValue(), user_name, model.getStock_action(), product_name, getM(), getN());
 
         for (Stock result : resultList) {
-            result.keep(Stock.STOCK_ID, Stock.SYSTEM_VERSION);
+            result.keep(Stock.STOCK_ID, Stock.USER_NAME, Stock.PRODUCT_NAME, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
     }
+    
+    @ActionKey(Url.MEMBER_STOCK_SYSTEM_REPLENISH)
+    public void systemReplenish() {
+        validateRequest_app_id();
+        validate(App.APP_ID, Member.MEMBER_ID);
+
+        String request_user_id = getRequest_user_id();
+        
+        JSONObject jsonObject = getParameterJSONObject();
+        JSONArray productSkuList = jsonObject.getJSONArray(Stock.PRODUCT_SKU_LIST);
+        if (productSkuList == null || productSkuList.size() == 0) {
+            throw new RuntimeException("产品sku不能为空");
+        }
+        String member_id = jsonObject.getString("member_id");
+        String app_id = jsonObject.getString("app_id");
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        Boolean result = stockService.replenish(app_id, member_id, StockType.MEMBER.getValue(), productSkuList, request_user_id);
+
+        renderSuccessJson(result);
+    }
+
 
     @ActionKey(Url.MEMBER_STOCK_SYSTEM_FIND)
     public void systemFind() {

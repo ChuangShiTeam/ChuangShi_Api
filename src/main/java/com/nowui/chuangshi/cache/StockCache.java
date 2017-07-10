@@ -3,6 +3,7 @@ package com.nowui.chuangshi.cache;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.dao.StockDao;
 import com.nowui.chuangshi.model.Stock;
+import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.CacheUtil;
 
 import java.util.Date;
@@ -11,6 +12,8 @@ import java.util.List;
 public class StockCache extends Cache {
 
     public static final String STOCK_BY_STOCK_ID_CACHE = "stock_by_stock_id_cache";
+    public static final String MEMBER_STOCK_BY_STOCK_ID_CACHE = "member_stock_by_stock_id_cache";
+    public static final String APP_STOCK_BY_STOCK_ID_CACHE = "app_stock_by_stock_id_cache";
 
     private StockDao stockDao = new StockDao();
 
@@ -25,18 +28,38 @@ public class StockCache extends Cache {
     public List<Stock> listByApp_idAndStock_typeAndSystem_create_timeAndLimit(String app_id, String stock_type, Date system_create_time, int m, int n) {
         List<Stock> stockList = stockDao.listByApp_idAndStock_typeAndSystem_create_timeAndLimit(app_id, stock_type, system_create_time, m, n);
 
-        for (Stock stock : stockList) {
-            stock.put(findByStock_id(stock.getStock_id()));
+        if (StockType.MEMBER.getValue().equals(stock_type)) {
+            for (Stock stock : stockList) {
+                stock.put(findWithMemberByStock_id(stock.getStock_id()));
+            }
+        } else if (StockType.APP.getValue().equals(stock_type)) {
+            for (Stock stock : stockList) {
+                stock.put(findWithAppByStock_id(stock.getStock_id()));
+            }
+        } else {
+            for (Stock stock : stockList) {
+                stock.put(findByStock_id(stock.getStock_id()));
+            }
         }
-
+        
         return stockList;
     }
 
     public List<Stock> listByApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_nameAndLimit(String app_id, String stock_type, String user_name, String stock_action, String product_name, int m, int n) {
         List<Stock> stockList = stockDao.listByApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_nameAndLimit(app_id, stock_type, user_name, stock_action, product_name, m, n);
 
-        for (Stock stock : stockList) {
-            stock.put(findByStock_id(stock.getStock_id()));
+        if (StockType.MEMBER.getValue().equals(stock_type)) {
+            for (Stock stock : stockList) {
+                stock.put(findWithMemberByStock_id(stock.getStock_id()));
+            }
+        } else if (StockType.APP.getValue().equals(stock_type)) {
+            for (Stock stock : stockList) {
+                stock.put(findWithAppByStock_id(stock.getStock_id()));
+            }
+        } else {
+            for (Stock stock : stockList) {
+                stock.put(findByStock_id(stock.getStock_id()));
+            }
         }
 
         return stockList;
@@ -45,8 +68,18 @@ public class StockCache extends Cache {
     public List<Stock> listByOrApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_nameAndLimit(String app_id, String stock_type, String user_name, String stock_action, String product_name, int m, int n) {
         List<Stock> stockList = stockDao.listByOrApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_nameAndLimit(app_id, stock_type, user_name, stock_action, product_name, m, n);
 
-        for (Stock stock : stockList) {
-            stock.put(findByStock_id(stock.getStock_id()));
+        if (StockType.MEMBER.getValue().equals(stock_type)) {
+            for (Stock stock : stockList) {
+                stock.put(findWithMemberByStock_id(stock.getStock_id()));
+            }
+        } else if (StockType.APP.getValue().equals(stock_type)) {
+            for (Stock stock : stockList) {
+                stock.put(findWithAppByStock_id(stock.getStock_id()));
+            }
+        } else {
+            for (Stock stock : stockList) {
+                stock.put(findByStock_id(stock.getStock_id()));
+            }
         }
 
         return stockList;
@@ -61,6 +94,30 @@ public class StockCache extends Cache {
             CacheUtil.put(STOCK_BY_STOCK_ID_CACHE, stock_id, stock);
         }
 
+        return stock;
+    }
+    
+    public Stock findWithMemberByStock_id(String stock_id) {
+        Stock stock = CacheUtil.get(MEMBER_STOCK_BY_STOCK_ID_CACHE, stock_id);
+        
+        if (stock == null) {
+            stock = stockDao.findWithMemberByStock_id(stock_id);
+            
+            CacheUtil.put(MEMBER_STOCK_BY_STOCK_ID_CACHE, stock_id, stock);
+        }
+        
+        return stock;
+    }
+    
+    public Stock findWithAppByStock_id(String stock_id) {
+        Stock stock = CacheUtil.get(APP_STOCK_BY_STOCK_ID_CACHE, stock_id);
+        
+        if (stock == null) {
+            stock = stockDao.findWithAppByStock_id(stock_id);
+            
+            CacheUtil.put(APP_STOCK_BY_STOCK_ID_CACHE, stock_id, stock);
+        }
+        
         return stock;
     }
 
@@ -78,6 +135,8 @@ public class StockCache extends Cache {
 
         if (result) {
             CacheUtil.remove(STOCK_BY_STOCK_ID_CACHE, stock_id);
+            CacheUtil.remove(MEMBER_STOCK_BY_STOCK_ID_CACHE, stock_id);
+            CacheUtil.remove(APP_STOCK_BY_STOCK_ID_CACHE, stock_id);
         }
 
         return result;
@@ -93,6 +152,8 @@ public class StockCache extends Cache {
 
         if (result) {
             CacheUtil.remove(STOCK_BY_STOCK_ID_CACHE, stock_id);
+            CacheUtil.remove(MEMBER_STOCK_BY_STOCK_ID_CACHE, stock_id);
+            CacheUtil.remove(APP_STOCK_BY_STOCK_ID_CACHE, stock_id);
         }
 
         return result;

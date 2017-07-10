@@ -1,25 +1,37 @@
 package com.nowui.chuangshi.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.jfinal.core.ActionKey;
-import com.nowui.chuangshi.constant.Constant;
-import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.Member;
-import com.nowui.chuangshi.model.MemberLevel;
-import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.service.MemberService;
-import com.nowui.chuangshi.service.UserService;
-import com.nowui.chuangshi.util.Util;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.constant.Constant;
+import com.nowui.chuangshi.constant.Url;
+import com.nowui.chuangshi.model.Express;
+import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.MemberAddress;
+import com.nowui.chuangshi.model.MemberLevel;
+import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.service.ExpressService;
+import com.nowui.chuangshi.service.MemberAddressService;
+import com.nowui.chuangshi.service.MemberService;
+import com.nowui.chuangshi.service.StockService;
+import com.nowui.chuangshi.service.UserService;
+import com.nowui.chuangshi.type.ExpressStatus;
+import com.nowui.chuangshi.type.StockAction;
+import com.nowui.chuangshi.type.StockType;
+import com.nowui.chuangshi.util.Util;
+
 public class MemberController extends Controller {
 
     private final MemberService memberService = new MemberService();
     private final UserService userService = new UserService();
+    private final ExpressService expressService = new ExpressService();
+    private final StockService stockService = new StockService();
+    private final MemberAddressService memberAddressService = new MemberAddressService();
 
     private List<Map<String, Object>> getChildren(List<Member> memberList, String member_parent_id, String... keys) {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -173,29 +185,12 @@ public class MemberController extends Controller {
         List<Member> resultList = memberService.listByApp_idOrLikeUser_nameAndLimit(request_app_id, model.getUser_name(), getM(), getN());
 
         for (Member result : resultList) {
-            result.keep(Member.MEMBER_ID, Member.SYSTEM_VERSION);
+            result.keep(Member.MEMBER_ID, User.USER_NAME, Member.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
     }
     
-    @ActionKey(Url.MEMBER_ADMIN_ALL_LIST)
-    public void adminAllList() {
-    	validateRequest_app_id();
-    	
-    	String request_app_id = getRequest_app_id();
-    	
-    	authenticateRequest_app_idAndRequest_user_id();
-    	
-    	List<Member> resultList = memberService.listByApp_id(request_app_id);
-    	
-    	for (Member result : resultList) {
-    		result.keep(Member.MEMBER_ID, Member.SYSTEM_VERSION);
-    	}
-    	
-    	renderSuccessJson(resultList);
-    }
-
     @ActionKey(Url.MEMBER_ADMIN_FIND)
     public void adminFind() {
         validateRequest_app_id();
@@ -256,7 +251,38 @@ public class MemberController extends Controller {
 
         renderSuccessJson(result);
     }
-
+    
+    //会员发货，由公司仓库发货，减去会员库存，快递到会员指定地址
+    @ActionKey(Url.MEMBER_ADMIN_SEND)
+    public void adminSend() {
+        validateRequest_app_id();
+        validate(Member.MEMBER_ID);
+        
+        String request_app_id = getRequest_app_id();
+        String request_user_id = getRequest_user_id();
+        Express express = getModel(Express.class);
+        JSONObject jsonObject = getParameterJSONObject();
+        String member_id = jsonObject.getString("member_id");
+        String product_sku_id = jsonObject.getString("product_sku_id");
+        Integer stock_quantity = jsonObject.getInteger("stock_quantity");
+        //判断会员库存数量是否足够
+        authenticateRequest_app_idAndRequest_user_id();
+        
+        authenticateApp_id(request_app_id);
+        
+        String stock_id = Util.getRandomUUID();
+        Member member = memberService.findByMember_id(member_id);
+        //查询会员默认地址
+        MemberAddress memberAddress = memberAddressService.findByMember_id(member_id);
+        Boolean result = stockService.save(stock_id, member.getApp_id(), product_sku_id, member_id, StockType.MEMBER.getValue(), stock_quantity, StockAction.OUT.getValue(), null, request_user_id);
+        if (result) {
+            //保存快递单信息
+            expressService.save(Util.getRandomUUID(), member.getApp_id(), null, stock_id, express.getExpress_receiver_user_id(), member.getUser_id(), express.getExpress_shipper_code(), express.getExpress_no(), express.getExpress_type(), express.getExpress_receiver_company(), express.getExpress_receiver_name(), express.getExpress_receiver_tel(), express.getExpress_receiver_mobile(), express.getExpress_receiver_postcode(), express.getExpress_receiver_province(), express.getExpress_receiver_city(), express.getExpress_receiver_area(), express.getExpress_receiver_address(), express.getExpress_sender_company(), memberAddress.getMember_address_name(), memberAddress.getMember_address_tel(), memberAddress.getMember_address_mobile(), memberAddress.getMember_address_postcode(), memberAddress.getMember_address_province(), memberAddress.getMember_address_city(), memberAddress.getMember_address_area(), memberAddress.getMember_address_address(), express.getExpress_cost(), express.getExpress_is_pay(), express.getExpress_pay_way(), null, null, null, ExpressStatus.NOTRACK.getValue(), express.getExpress_remark(), request_user_id);
+        }
+        
+        renderSuccessJson(result);
+    }
+    
     @ActionKey(Url.MEMBER_SYSTEM_LIST)
     public void systemList() {
         validateRequest_app_id();
@@ -284,7 +310,7 @@ public class MemberController extends Controller {
     	List<Member> resultList = memberService.listByOrApp_id(app_id);
     	
     	for (Member result : resultList) {
-    		result.keep(Member.MEMBER_ID, Member.SYSTEM_VERSION);
+    	    result.keep(Member.MEMBER_ID, User.USER_NAME, Member.SYSTEM_VERSION);
     	}
     	
     	renderSuccessJson(resultList);

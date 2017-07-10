@@ -28,7 +28,7 @@ public class Member extends Model<Member> {
 
     @Column(type = ColumnType.VARCHAR, length = 1000, comment = "会员路径")
     public static final String MEMBER_PARENT_PATH = "member_parent_path";
-
+    
     @Column(type = ColumnType.TINYINT, length = 1, comment = "会员状态")
     public static final String MEMBER_STATUS = "member_status";
 
@@ -95,7 +95,7 @@ public class Member extends Model<Member> {
     public void setMember_parent_path(String member_parent_path) {
         set(MEMBER_PARENT_PATH, member_parent_path);
     }
-
+    
     public Boolean getMember_status() {
         return getBoolean(MEMBER_STATUS);
     }

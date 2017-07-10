@@ -51,13 +51,13 @@ public class Url {
     public static final String APP_STOCK_ADMIN_SAVE = "/app/stock/admin/save";
     public static final String APP_STOCK_ADMIN_UPDATE = "/app/stock/admin/update";
     public static final String APP_STOCK_ADMIN_DELETE = "/app/stock/admin/delete";
-    public static final String APP_STOCK_ADMIN_INIT = "/app/stock/admin/init";
+    public static final String APP_STOCK_ADMIN_REPLENISH = "/app/stock/admin/replenish";
     public static final String APP_STOCK_SYSTEM_LIST = "/app/stock/system/list";
     public static final String APP_STOCK_SYSTEM_FIND = "/app/stock/system/find";
     public static final String APP_STOCK_SYSTEM_SAVE = "/app/stock/system/save";
     public static final String APP_STOCK_SYSTEM_UPDATE = "/app/stock/system/update";
     public static final String APP_STOCK_SYSTEM_DELETE = "/app/stock/system/delete";
-    public static final String APP_STOCK_SYSTEM_INIT = "/app/stock/system/init";
+    public static final String APP_STOCK_SYSTEM_REPLENISH = "/app/stock/system/replenish";
 
     public static final String CATEGORY_LIST = "/category/list";
     public static final String CATEGORY_FIND = "/category/find";
@@ -196,11 +196,11 @@ public class Url {
     public static final String MEMBER_UPDATE = "/member/update";
     public static final String MEMBER_DELETE = "/member/delete";
     public static final String MEMBER_ADMIN_LIST = "/member/admin/list";
-    public static final String MEMBER_ADMIN_ALL_LIST = "/member/admin/all/list";
     public static final String MEMBER_ADMIN_FIND = "/member/admin/find";
     public static final String MEMBER_ADMIN_SAVE = "/member/admin/save";
     public static final String MEMBER_ADMIN_UPDATE = "/member/admin/update";
     public static final String MEMBER_ADMIN_DELETE = "/member/admin/delete";
+    public static final String MEMBER_ADMIN_SEND = "/member/admin/send"; //会员发货
     public static final String MEMBER_SYSTEM_LIST = "/member/system/list";
     public static final String MEMBER_SYSTEM_ALL_LIST = "/member/system/all/list";
     public static final String MEMBER_SYSTEM_FIND = "/member/system/find";
@@ -253,13 +253,13 @@ public class Url {
     public static final String MEMBER_STOCK_ADMIN_SAVE = "/member/stock/admin/save";
     public static final String MEMBER_STOCK_ADMIN_UPDATE = "/member/stock/admin/update";
     public static final String MEMBER_STOCK_ADMIN_DELETE = "/member/stock/admin/delete";
-    public static final String MEMBER_STOCK_ADMIN_INIT = "/member/stock/admin/init";
+    public static final String MEMBER_STOCK_ADMIN_REPLENISH = "/member/stock/admin/replenish";
     public static final String MEMBER_STOCK_SYSTEM_LIST = "/member/stock/system/list";
     public static final String MEMBER_STOCK_SYSTEM_FIND = "/member/stock/system/find";
     public static final String MEMBER_STOCK_SYSTEM_SAVE = "/member/stock/system/save";
     public static final String MEMBER_STOCK_SYSTEM_UPDATE = "/member/stock/system/update";
     public static final String MEMBER_STOCK_SYSTEM_DELETE = "/member/stock/system/delete";
-    public static final String MEMBER_STOCK_SYSTEM_INIT = "/member/stock/system/init";
+    public static final String MEMBER_STOCK_SYSTEM_REPLENISH = "/member/stock/system/replenish";
 
     // 用户管理
     public static final String CUSTOMER_LIST = "/customer/list";

@@ -163,7 +163,7 @@ public class MemberDao extends Dao {
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
-
+    
     public Boolean deleteByMember_idAndSystem_version(String member_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Member.MEMBER_ID, member_id);

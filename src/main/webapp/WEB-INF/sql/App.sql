@@ -135,7 +135,7 @@
     AND app_id = #p(app_id)
     AND system_version = #p(system_version)
   #end
-
+  
   #sql("deleteByApp_idAndSystem_version")
     UPDATE table_app SET
     system_update_user_id = #p(system_update_user_id),

@@ -1,15 +1,21 @@
 package com.nowui.chuangshi.service;
 
-import com.alibaba.fastjson.JSONArray;
-import com.nowui.chuangshi.cache.StockCache;
-import com.nowui.chuangshi.model.Stock;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.alibaba.fastjson.JSONArray;
+import com.nowui.chuangshi.cache.StockCache;
+import com.nowui.chuangshi.dao.StockDao;
+import com.nowui.chuangshi.model.Stock;
+import com.nowui.chuangshi.type.StockAction;
+import com.nowui.chuangshi.util.Util;
 
 public class StockService extends Service {
 
     private StockCache stockCache = new StockCache();
+    
+    private StockDao stockDao = new StockDao();
 
     public Integer countByApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_name(String app_id, String stock_type, String user_name, String stock_action, String product_name) {
         return stockCache.countByApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_name(app_id, stock_type, user_name, stock_action, product_name);
@@ -47,9 +53,31 @@ public class StockService extends Service {
         return stockCache.deleteByStock_idAndSystem_update_user_idValidateSystem_version(stock_id, system_update_user_id, system_version);
     }
 
-    public Boolean init(String request_app_id, String object_id, String value, JSONArray jsonArray,
-            String request_user_id) {
-        return null;
+    public Boolean replenish(String app_id, String object_id, String stock_type, JSONArray productSkuList,
+            String system_create_user_id) {
+        List<Stock> stockList = new ArrayList<Stock>();
+        for (int j = 0; j < productSkuList.size(); j++) {
+            String product_sku_id = productSkuList.getJSONObject(j).getString("product_sku_id");
+            Integer stock_quantity = productSkuList.getJSONObject(j).getInteger("stock_quantity");
+            Stock stock = new Stock();
+            stock.setStock_id(Util.getRandomUUID());
+            stock.setApp_id(app_id);
+            stock.setObject_id(object_id);
+            stock.setProduct_sku_id(product_sku_id);
+            stock.setStock_quantity(stock_quantity);
+            stock.setStock_action(StockAction.REPLENISH.getValue());
+            stock.setStock_type(stock_type);
+            
+            stock.setSystem_create_user_id(system_create_user_id);
+            stock.setSystem_create_time(new Date());
+            stock.setSystem_update_user_id(system_create_user_id);
+            stock.setSystem_update_time(new Date());
+            stock.setSystem_version(0);
+            stock.setSystem_status(true);
+            
+            stockList.add(stock);
+        }
+        return stockDao.batchSave(stockList);
     }
 
 }

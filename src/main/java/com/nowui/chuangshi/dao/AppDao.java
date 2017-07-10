@@ -144,7 +144,7 @@ public class AppDao extends Dao {
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
-
+    
     public Boolean deleteByApp_idAndSystem_version(String app_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(App.APP_ID, app_id);

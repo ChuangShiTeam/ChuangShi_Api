@@ -92,7 +92,7 @@ public class AppCache extends Cache {
 
         return result;
     }
-
+    
     public Boolean deleteByApp_idAndSystem_update_user_idValidateSystem_version(String app_id, String system_update_user_id, Integer system_version) {
         App app = findByApp_id(app_id);
         if (!app.getSystem_version().equals(system_version)) {

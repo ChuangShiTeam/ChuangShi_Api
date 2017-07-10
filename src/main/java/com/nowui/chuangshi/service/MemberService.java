@@ -1,14 +1,15 @@
 package com.nowui.chuangshi.service;
 
+import java.util.Date;
+import java.util.List;
+
 import com.nowui.chuangshi.cache.MemberCache;
 import com.nowui.chuangshi.model.Member;
-
-import java.util.*;
 
 public class MemberService extends Service {
 
     private MemberCache memberCache = new MemberCache();
-
+    
     public Integer countByApp_idOrLikeUser_name(String app_id, String user_name) {
         return memberCache.countByApp_idOrLikeUser_name(app_id, user_name);
     }
@@ -52,7 +53,7 @@ public class MemberService extends Service {
     public Boolean updateValidateSystem_version(String member_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_parent_path, Boolean member_status, String system_update_user_id, Integer system_version) {
         return memberCache.updateValidateSystem_version(member_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path, member_status, system_update_user_id, system_version);
     }
-
+    
     public Boolean deleteByMember_idAndSystem_update_user_idValidateSystem_version(String member_id, String system_update_user_id, Integer system_version) {
         return memberCache.deleteByMember_idAndSystem_update_user_idValidateSystem_version(member_id, system_update_user_id, system_version);
     }

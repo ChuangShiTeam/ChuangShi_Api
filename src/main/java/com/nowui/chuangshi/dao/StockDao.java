@@ -6,6 +6,7 @@ import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.Stock;
+import com.nowui.chuangshi.model.TradeCommossion;
 import com.nowui.chuangshi.model.User;
 
 import java.util.Date;
@@ -103,6 +104,36 @@ public class StockDao extends Dao {
             return stockList.get(0);
         }
     }
+    
+    public Stock findWithMemberByStock_id(String stock_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Stock.STOCK_ID, stock_id);
+        SqlPara sqlPara = Db.getSqlPara("stock.findWithMemberByStock_id", sqlMap);
+        
+        logSql("stock", "findWithMemberByStock_id", sqlPara);
+        
+        List<Stock> stockList = new Stock().find(sqlPara.getSql(), sqlPara.getPara());
+        if (stockList.size() == 0) {
+            return null;
+        } else {
+            return stockList.get(0);
+        }
+    }
+    
+    public Stock findWithAppByStock_id(String stock_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Stock.STOCK_ID, stock_id);
+        SqlPara sqlPara = Db.getSqlPara("stock.findWithAppByStock_id", sqlMap);
+        
+        logSql("stock", "findWithAppByStock_id", sqlPara);
+        
+        List<Stock> stockList = new Stock().find(sqlPara.getSql(), sqlPara.getPara());
+        if (stockList.size() == 0) {
+            return null;
+        } else {
+            return stockList.get(0);
+        }
+    }
 
     public Boolean save(String stock_id, String app_id, String product_sku_id, String object_id, String stock_type, Integer stock_quantity, String stock_action, String stock_status, String system_create_user_id) {
         Kv sqlMap = Kv.create();
@@ -145,7 +176,7 @@ public class StockDao extends Dao {
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
-
+    
     public Boolean deleteByStock_idAndSystem_version(String stock_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Stock.STOCK_ID, stock_id);
@@ -157,6 +188,17 @@ public class StockDao extends Dao {
         logSql("stock", "deleteByStock_idAndSystem_version", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+    
+    public boolean batchSave(List<Stock> stockList) {
+        int[] result = Db.batchSave(stockList, Constant.BATCH_SIZE);
+
+        for (int i : result) {
+            if (i == 0) {
+                throw new RuntimeException("库存记录保存不成功");
+            }
+        }
+        return true;
     }
 
 }
