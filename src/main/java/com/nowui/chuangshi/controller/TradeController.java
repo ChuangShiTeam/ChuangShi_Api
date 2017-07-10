@@ -65,7 +65,7 @@ public class TradeController extends Controller {
             JSONObject productSkuObject = productSkuArray.getJSONObject(i);
 
             ProductSku productSku = productSkuService.findByProduct_sku_id(productSkuObject.getString(ProductSku.PRODUCT_SKU_ID));
-            if (!StringUtils.isEmpty(productSku.getProduct_id())) {
+            if (productSku != null && !StringUtils.isEmpty(productSku.getProduct_id())) {
                 Product product = productService.findByProduct_id(productSku.getProduct_id());
                 productSkuObject.put(Product.PRODUCT_NAME, product.getProduct_name());
                 productSkuObject.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
