@@ -72,9 +72,9 @@ public class MemberAddressController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        if (model.getAddress_is_default()) {
-            List<MemberAddress> memberAddressList = memberAddressService.listByMember_id(user.getObject_Id());
-            if (memberAddressList != null && memberAddressList.size() > 0) {
+        List<MemberAddress> memberAddressList = memberAddressService.listByMember_id(user.getObject_Id());
+        if (memberAddressList != null && memberAddressList.size() > 0) {
+            if (model.getAddress_is_default()) {
                 for (MemberAddress memberAddress : memberAddressList) {
                     memberAddress.setAddress_is_default(false);
                     memberAddress.setSystem_update_time(new Date());
@@ -86,6 +86,8 @@ public class MemberAddressController extends Controller {
                     throw new RuntimeException("修改地址不成功");
                 }
             }
+        }else {
+            model.setAddress_is_default(true);
         }
 
         Boolean result = memberAddressService.save(member_address_id, request_app_id, user.getObject_Id(), request_user_id, model.getMember_address_name(), model.getMember_address_tel(),
