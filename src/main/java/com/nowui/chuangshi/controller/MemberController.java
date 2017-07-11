@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
@@ -182,6 +184,9 @@ public class MemberController extends Controller {
         Member member = memberService.findByMember_id(member_id);
         //查询会员默认地址
         MemberAddress memberAddress = memberAddressService.findByMember_id(member_id);
+        /*if (memberAddress == null || StringUtils.isBlank(memberAddress.getMember_address_id())) {
+        	throw new RuntimeException("会员地址信息需要完善");
+        }*/
         Boolean result = stockService.save(stock_id, member.getApp_id(), product_sku_id, member_id, StockType.MEMBER.getValue(), stock_quantity, StockAction.OUT.getValue(), null, request_user_id);
         if (result) {
             //保存快递单信息
