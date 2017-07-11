@@ -83,6 +83,36 @@ public class QrcodeCache extends Cache {
         return result;
     }
 
+    public Boolean updateQrcode_addByQrcode_id(String qrcode_id, String system_update_user_id) {
+        boolean result = qrcodeDao.updateQrcode_addByQrcode_id(qrcode_id, system_update_user_id);
+
+        if (result) {
+            CacheUtil.remove(QRCODE_BY_QRCODE_ID_CACHE, qrcode_id);
+        }
+
+        return result;
+    }
+
+    public Boolean updateQrcode_cancelByQrcode_id(String qrcode_id, String system_update_user_id) {
+        boolean result = qrcodeDao.updateQrcode_cancelByQrcode_id(qrcode_id, system_update_user_id);
+
+        if (result) {
+            CacheUtil.remove(QRCODE_BY_QRCODE_ID_CACHE, qrcode_id);
+        }
+
+        return result;
+    }
+
+    public Boolean updateQrcode_statusByQrcode_id(String qrcode_id, String system_update_user_id) {
+        boolean result = qrcodeDao.updateQrcode_statusByQrcode_id(qrcode_id, system_update_user_id);
+
+        if (result) {
+            CacheUtil.remove(QRCODE_BY_QRCODE_ID_CACHE, qrcode_id);
+        }
+
+        return result;
+    }
+
     public Boolean deleteByQrcode_idAndSystem_update_user_idValidateSystem_version(String qrcode_id, String system_update_user_id, Integer system_version) {
         Qrcode qrcode = findByQrcode_id(qrcode_id);
         if (!qrcode.getSystem_version().equals(system_version)) {

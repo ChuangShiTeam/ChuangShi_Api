@@ -136,6 +136,24 @@ public class MemberCache extends Cache {
 
         return result;
     }
+
+    public Boolean updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(String member_id, String member_parent_id, String member_parent_path, String system_update_user_id) {
+        boolean result = memberDao.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member_id, member_parent_id, member_parent_path, system_update_user_id);
+
+        if (result) {
+            CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
+
+            JSONArray jsonArray = JSONArray.parseArray(member_parent_path);
+            for (int i = 0; i < jsonArray.size(); i++) {
+                String member_parent_path_member_id = jsonArray.getString(i);
+                if (!member_parent_path_member_id.equals(Constant.PARENT_ID)) {
+                    CacheUtil.remove(MEMBER_LIST_BY_MEMBER_PARENT_ID_CACHE, member_parent_path_member_id);
+                }
+            }
+        }
+
+        return result;
+    }
     
     public Boolean deleteByMember_idAndSystem_update_user_idValidateSystem_version(String member_id, String system_update_user_id, Integer system_version) {
         Member member = findByMember_id(member_id);

@@ -55,7 +55,7 @@ public class GlobalActionInterceptor implements Interceptor {
                 request_user_id = jsonObject.getString(User.USER_ID);
             }
 
-            if (http_url.equals(Url.FILE_UPLOAD) || http_url.equals(Url.FILE_ADMIN_UPLOAD)) {
+            if (http_url.equals(Url.FILE_UPLOAD) || http_url.equals(Url.FILE_ADMIN_UPLOAD) || http_url.contains("/wechat/message")) {
 
             } else {
                 http_request = JSONObject.parseObject(HttpKit.readData(controller.getRequest()));
@@ -65,13 +65,15 @@ public class GlobalActionInterceptor implements Interceptor {
                 http_request = new JSONObject();
             }
 
-            ((com.nowui.chuangshi.controller.Controller) controller).setPlatform(http_platform);
-            ((com.nowui.chuangshi.controller.Controller) controller).setVersion(http_version);
-            ((com.nowui.chuangshi.controller.Controller) controller).setIp_address(http_ip_address);
-            ((com.nowui.chuangshi.controller.Controller) controller).setRequest_app_id(request_app_id);
-            ((com.nowui.chuangshi.controller.Controller) controller).setRequest_http_id(request_http_id);
-            ((com.nowui.chuangshi.controller.Controller) controller).setRequest_user_id(request_user_id);
-            ((com.nowui.chuangshi.controller.Controller) controller).setParameter(http_request);
+            if (controller instanceof com.nowui.chuangshi.controller.Controller) {
+                ((com.nowui.chuangshi.controller.Controller) controller).setPlatform(http_platform);
+                ((com.nowui.chuangshi.controller.Controller) controller).setVersion(http_version);
+                ((com.nowui.chuangshi.controller.Controller) controller).setIp_address(http_ip_address);
+                ((com.nowui.chuangshi.controller.Controller) controller).setRequest_app_id(request_app_id);
+                ((com.nowui.chuangshi.controller.Controller) controller).setRequest_http_id(request_http_id);
+                ((com.nowui.chuangshi.controller.Controller) controller).setRequest_user_id(request_user_id);
+                ((com.nowui.chuangshi.controller.Controller) controller).setParameter(http_request);
+            }
 
             invocation.invoke();
 
@@ -145,6 +147,13 @@ public class GlobalActionInterceptor implements Interceptor {
             if (http_url.startsWith("/http/") || http_url.contains("/export")) {
 
             } else {
+                System.out.println("----------------------------------------------------------------------------------------------------------------");
+                System.out.println("url: " + http.getHttp_url());
+                System.out.println("time: " + DateUtil.getDateTimeString(http.getSystem_create_time()));
+                System.out.println("request: " + http.getHttp_request());
+                System.out.println("response: " + http.getHttp_response());
+                System.out.println("----------------------------------------------------------------------------------------------------------------");
+
                 MQUtil.sendSync("http", JSON.toJSONString(http));
             }
         }

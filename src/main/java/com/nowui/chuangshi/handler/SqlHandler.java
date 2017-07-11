@@ -13,8 +13,8 @@ import com.nowui.chuangshi.util.Util;
 import java.util.HashMap;
 import java.util.Map;
 
-@Topic(mq = "MQ", topic = "sql")
-@Handler
+//@Topic(mq = "MQ", topic = "sql")
+//@Handler
 public class SqlHandler extends TMsgHandler<String> {
 
     private final SqlService sqlService = new SqlService();

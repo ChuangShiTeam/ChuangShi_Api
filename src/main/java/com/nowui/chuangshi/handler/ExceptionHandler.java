@@ -7,11 +7,10 @@ import com.jfinal.plugin.zbus.handler.TMsgHandler;
 import com.nowui.chuangshi.model.Exception;
 import com.nowui.chuangshi.service.ExceptionService;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
-import java.util.Map;
-
-@Topic(mq = "MQ", topic = "exception")
-@Handler
+//@Topic(mq = "MQ", topic = "exception")
+//@Handler
 public class ExceptionHandler extends TMsgHandler<String> {
 
     private final ExceptionService exceptionService = new ExceptionService();
@@ -20,10 +19,16 @@ public class ExceptionHandler extends TMsgHandler<String> {
     public void handle(String json) {
         Exception exception = JSONObject.parseObject(json, Exception.class);
 
+        String app_id = exception.getApp_id();
+
+        if (ValidateUtil.isNullOrEmpty(app_id)) {
+            app_id = "";
+        }
+
         Boolean exception_is_confirm = false;
         String exception_remark = "";
 
-        exceptionService.save(Util.getRandomUUID(), exception.getApp_id(), exception.getHttp_id(), exception.getException_content(), exception_is_confirm, exception_remark, exception.getSystem_create_user_id());
+        exceptionService.save(Util.getRandomUUID(), app_id, exception.getHttp_id(), exception.getException_content(), exception_is_confirm, exception_remark, exception.getSystem_create_user_id());
     }
 
 }

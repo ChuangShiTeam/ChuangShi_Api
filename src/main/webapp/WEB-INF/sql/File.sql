@@ -155,6 +155,18 @@
     AND system_version = #p(system_version)
   #end
 
+  #sql("updateByFile_path")
+    UPDATE table_file SET
+    file_path = #p(file_path),
+    file_thumbnail_path = #p(file_path),
+    file_original_path = #p(file_path),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND file_id = #p(file_id)
+  #end
+
   #sql("deleteByFile_idAndSystem_version")
     UPDATE table_file SET
     system_update_user_id = #p(system_update_user_id),

@@ -71,8 +71,12 @@ public class UserService extends Service {
         return userCache.save(user_id, app_id, object_id, user_type, user_name, user_avatar, user_account, user_mobile, user_email, user_password, wechat_open_id, wechat_union_id, system_create_user_id);
     }
 
-    public Boolean updateByUser_password(String user_id, String user_password, String system_update_user_id, Integer system_version) {
-        return userCache.updateByUser_password(user_id, user_password, system_update_user_id, system_version);
+    public Boolean updateByUser_password(String user_id, String user_password, String system_update_user_id) {
+        return userCache.updateByUser_password(user_id, user_password, system_update_user_id);
+    }
+
+    public Boolean updateByUser_name(String user_id, String user_name, String system_update_user_id) {
+        return userCache.updateByUser_name(user_id, user_name, system_update_user_id);
     }
 
     public Boolean deleteByUser_idAndSystem_update_user_idValidateSystem_version(String user_id, String system_update_user_id, Integer system_version) {
