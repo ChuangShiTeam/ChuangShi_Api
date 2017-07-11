@@ -3,6 +3,7 @@ package com.nowui.chuangshi.service;
 import java.util.Date;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.nowui.chuangshi.cache.FileCache;
 import com.nowui.chuangshi.cache.MemberCache;
@@ -61,7 +62,7 @@ public class MemberService extends Service {
         return memberCache.findByMember_id(member_id);
     }
 
-    public Member saveOrUpdate(String app_id, String wechat_open_id, String wechat_union_id, String member_parent_id, String from_qrcode_id, String user_name, String user_avatar, Boolean member_status, String system_create_user_id) {
+    public Member saveOrUpdate(String app_id, String wechat_open_id, String wechat_union_id, String member_parent_id, String from_qrcode_id, String member_level_id, JSONArray member_parent_path, String user_name, String user_avatar, Boolean member_status, String system_create_user_id) {
         if (ValidateUtil.isNullOrEmpty(wechat_open_id)) {
             throw new RuntimeException("wechat_open_id is null");
         }
@@ -74,12 +75,10 @@ public class MemberService extends Service {
             member_id = Util.getRandomUUID();
             String user_id = Util.getRandomUUID();
             String qrcode_id = "";
-            String member_level_id = "";
-            String member_parent_path = "";
 
             Boolean result = memberCache.save(member_id, app_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path, member_status, system_create_user_id);
 
-            if (result) {
+            if (!result) {
                 throw new RuntimeException("保存不成功");
             }
 
@@ -101,7 +100,7 @@ public class MemberService extends Service {
             String user_password = "";
             result = userCache.save(user_id, app_id, member_id, UserType.MEMBER.getKey(), user_name, file_id, user_account, user_mobile, user_email, user_password, wechat_open_id, wechat_union_id, system_create_user_id);
 
-            if (result) {
+            if (!result) {
                 throw new RuntimeException("保存不成功");
             }
         } else {
@@ -114,8 +113,8 @@ public class MemberService extends Service {
         return memberCache.findByMember_id(member_id);
     }
 
-    public String login(String app_id, String wechat_open_id, String wechat_union_id, String member_parent_id, String from_qrcode_id, String user_name, String user_avatar, Boolean member_status, String system_create_user_id) {
-        Member member = saveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, user_name, user_avatar, member_status, system_create_user_id);
+    public String login(String app_id, String wechat_open_id, String wechat_union_id, String member_parent_id, String from_qrcode_id, String member_level_id, JSONArray member_parent_path, String user_name, String user_avatar, Boolean member_status, String system_create_user_id) {
+        Member member = saveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, member_level_id, member_parent_path, user_name, user_avatar, member_status, system_create_user_id);
 
         try {
             Date date = new Date();
@@ -134,11 +133,11 @@ public class MemberService extends Service {
         }
     }
 
-    public Boolean updateValidateSystem_version(String member_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_parent_path, Boolean member_status, String system_update_user_id, Integer system_version) {
+    public Boolean updateValidateSystem_version(String member_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, JSONArray member_parent_path, Boolean member_status, String system_update_user_id, Integer system_version) {
         return memberCache.updateValidateSystem_version(member_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path, member_status, system_update_user_id, system_version);
     }
 
-    public Boolean updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(String member_id, String member_parent_id, String member_parent_path, String system_update_user_id) {
+    public Boolean updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(String member_id, String member_parent_id, JSONArray member_parent_path, String system_update_user_id) {
         return memberCache.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member_id, member_parent_id, member_parent_path, system_update_user_id);
     }
     

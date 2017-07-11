@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.jfinal.weixin.iot.msg.InEquDataMsg;
 import com.jfinal.weixin.iot.msg.InEqubindEvent;
-import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.jfinal.weixin.sdk.api.ApiResult;
 import com.jfinal.weixin.sdk.api.UserApi;
 import com.jfinal.weixin.sdk.jfinal.MsgController;
@@ -12,35 +11,23 @@ import com.jfinal.weixin.sdk.msg.in.*;
 import com.jfinal.weixin.sdk.msg.in.card.*;
 import com.jfinal.weixin.sdk.msg.in.event.*;
 import com.jfinal.weixin.sdk.msg.in.speech_recognition.InSpeechRecognitionResults;
+import com.jfinal.weixin.sdk.msg.out.OutNewsMsg;
 import com.jfinal.weixin.sdk.msg.out.OutTextMsg;
 import com.nowui.chuangshi.constant.Constant;
-import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberLevel;
 import com.nowui.chuangshi.model.Qrcode;
-import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.service.MemberLevelService;
 import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.QrcodeService;
 import com.nowui.chuangshi.type.QrcodeType;
 import com.nowui.chuangshi.util.ValidateUtil;
 
-public class XingXiaoWeChatMessageController extends MsgController {
+public class WeChatMessageController extends MsgController {
 
-    private final AppService appService = new AppService();
     private final MemberService memberService = new MemberService();
     private final MemberLevelService memberLevelService = new MemberLevelService();
     private final QrcodeService qrcodeService = new QrcodeService();
-    private final String app_id = "c1af3f1ae00e4e0da9b20f5bd41b4279";
-
-    public XingXiaoWeChatMessageController() {
-        App app = appService.findByApp_id(app_id);
-
-        String wechat_app_id = ApiConfigKit.getAppId();
-        if (!wechat_app_id.equals(app.getWechat_app_id())) {
-            ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
-        }
-    }
 
     @Override
     protected void processInTextMsg(InTextMsg inTextMsg) {
@@ -84,10 +71,13 @@ public class XingXiaoWeChatMessageController extends MsgController {
 
     @Override
     protected void processInFollowEvent(InFollowEvent inFollowEvent) {
+        String app_id = getPara(Constant.APP_ID);
         String wechat_open_id = inFollowEvent.getFromUserName();
         String wechat_union_id = "";
         String member_parent_id = "";
         String from_qrcode_id = "";
+        String member_level_id = "";
+        JSONArray member_parent_path = new JSONArray();
         String event = inFollowEvent.getEvent();
         Boolean member_status = false;
 
@@ -101,10 +91,16 @@ public class XingXiaoWeChatMessageController extends MsgController {
             wechat_union_id = "";
         }
 
-        Member member = memberService.saveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, user_name, user_avatar, member_status, system_create_user_id);
+        Member member = memberService.saveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, member_level_id, member_parent_path, user_name, user_avatar, member_status, system_create_user_id);
 
         if (event.equals("unsubscribe")) {
             qrcodeService.updateQrcode_cancelByQrcode_id(member.getFrom_qrcode_id(), system_create_user_id);
+        }
+
+        if (app_id == "df2078d6c9eb46babb0df957127273ab") {
+            OutNewsMsg outNewsMsg = new OutNewsMsg(inFollowEvent);
+            outNewsMsg.addNews("欢迎使用济颐馆健康管理平台！", "广州市济颐馆贸易有限公司", "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg", "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg");
+            render(outNewsMsg);
         }
 
         OutTextMsg outMsg = new OutTextMsg(inFollowEvent);
@@ -114,12 +110,13 @@ public class XingXiaoWeChatMessageController extends MsgController {
 
     @Override
     protected void processInQrCodeEvent(InQrCodeEvent inQrCodeEvent) {
+        String app_id = getPara(Constant.APP_ID);
         String wechat_open_id = inQrCodeEvent.getFromUserName();
         String wechat_union_id = "";
         String member_parent_id = "";
         String from_qrcode_id = inQrCodeEvent.getEventKey().replace("qrscene_", "");
-        String parent_path = "";
         String member_level_id = "";
+        JSONArray member_parent_path = new JSONArray();;
         String content = "";
         String request_user_id = "";
         Boolean member_status = false;
@@ -151,21 +148,19 @@ public class XingXiaoWeChatMessageController extends MsgController {
             member_status = true;
         }
 
-        Member member = memberService.saveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, user_name, user_avatar, member_status, system_create_user_id);
+        Member member = memberService.saveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, member_level_id, member_parent_path, user_name, user_avatar, member_status, system_create_user_id);
 
         if (ValidateUtil.isNullOrEmpty(member.getMember_parent_id())) {
             if (qrcode.getQrcode_type().equals(QrcodeType.PLATFORM.getKey())) {
                 member_parent_id = "0";
 
-                JSONArray jsonArray = new JSONArray();
-                jsonArray.add(member_parent_id);
-                parent_path = jsonArray.toJSONString();
+                member_parent_path.add(member_parent_id);
 
                 if (ValidateUtil.isNullOrEmpty(member.getMember_level_id())) {
                     MemberLevel memberLevel = memberLevelService.findByMember_level_sort(app_id, 1);
                     member_level_id = memberLevel.getMember_level_id();
 
-                    memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member.getMember_id(), member_parent_id, parent_path, member_level_id);
+                    memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member.getMember_id(), member_parent_id, member_parent_path, member_level_id);
 
                     qrcodeService.updateQrcode_addByQrcode_id(from_qrcode_id, request_user_id);
 
@@ -183,7 +178,7 @@ public class XingXiaoWeChatMessageController extends MsgController {
                 Member parentMember = memberService.findByMember_id(member_parent_id);
                 JSONArray jsonArray = JSON.parseArray(parentMember.getMember_parent_path());
                 jsonArray.add(member_parent_id);
-                parent_path = jsonArray.toJSONString();
+                member_parent_path = jsonArray;
 
                 //是否需要审核
                 if (member_status) {
@@ -192,7 +187,7 @@ public class XingXiaoWeChatMessageController extends MsgController {
                     member_level_id = memberLevel.getMember_level_id();
                 }
 
-                memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member.getMember_id(), member_parent_id, parent_path, member_level_id);
+                memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member.getMember_id(), member_parent_id, member_parent_path, member_level_id);
 
                 qrcodeService.updateQrcode_addByQrcode_id(from_qrcode_id, request_user_id);
 
@@ -202,6 +197,12 @@ public class XingXiaoWeChatMessageController extends MsgController {
             //您已经是一级会员
         } else {
 
+        }
+
+        if (app_id == "df2078d6c9eb46babb0df957127273ab") {
+            OutNewsMsg outNewsMsg = new OutNewsMsg(inQrCodeEvent);
+            outNewsMsg.addNews("欢迎使用济颐馆健康管理平台！", "广州市济颐馆贸易有限公司", "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg", "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg");
+            render(outNewsMsg);
         }
 
         OutTextMsg outMsg = new OutTextMsg(inQrCodeEvent);

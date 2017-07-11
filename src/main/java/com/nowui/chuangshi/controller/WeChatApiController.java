@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import com.alibaba.fastjson.JSONArray;
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.api.*;
@@ -16,19 +17,17 @@ import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.TradeService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.PayType;
 import com.nowui.chuangshi.util.HttpUtil;
 import com.nowui.chuangshi.util.MQUtil;
 import com.nowui.chuangshi.util.ValidateUtil;
 import com.nowui.chuangshi.util.WeChatUtil;
 
-public class WeChatController extends Controller {
+public class WeChatApiController extends Controller {
 
     private final TradeService tradeService = new TradeService();
     private final AppService appService = new AppService();
     private final MemberService memberService = new MemberService();
-    private final UserService userService = new UserService();
 
     @ActionKey(Url.WECHAT_API_INIT)
     public void init() {
@@ -71,6 +70,7 @@ public class WeChatController extends Controller {
             String wechat_union_id = snsAccessToken.getUnionid();
             String ip_address = HttpUtil.getIpAddress(getRequest());
             String member_parent_id = "";
+            JSONArray member_parent_path = new JSONArray();
             String from_qrcode_id = "";
             String request_user_id = "";
 
@@ -93,7 +93,7 @@ public class WeChatController extends Controller {
                 user_avatar = "";
             }
 
-            String token = memberService.login(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, user_name, user_avatar, member_status, request_user_id);
+            String token = memberService.login(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, member_parent_id, member_parent_path, user_name, user_avatar, member_status, request_user_id);
 
             redirect("http://h5.xingxiao.nowui.com/#/" + url + "/?open_id=" + wechat_open_id + "&token=" + token);
         }

@@ -45,10 +45,8 @@ public class WebConfig extends JFinalConfig {
     }
 
     public void configRoute(Routes routes) {
-        routes.add("/xingxiao/wechat/message", XingXiaoWeChatMessageController.class);
-        routes.add("/jiyiguang/wechat/message", JiYiGuangWeChatMessageController.class);
-
-        routes.add("/wechat/api", WeChatController.class);
+        routes.add("/wechat/message", WeChatMessageController.class);
+        routes.add("/wechat/api", WeChatApiController.class);
         routes.add("/code", CodeController.class);
         routes.add("/http", HttpController.class);
         routes.add("/sql", SqlController.class);
