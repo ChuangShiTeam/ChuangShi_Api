@@ -44,7 +44,8 @@
 
   #sql("listByApp_idOrLikeMember_level_nameAndLimit")
     SELECT
-    member_level_id
+    member_level_id,
+    member_level_value
     FROM table_member_level
     WHERE system_status = 1
     AND app_id = #p(app_id)

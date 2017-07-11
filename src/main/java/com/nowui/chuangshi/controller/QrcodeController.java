@@ -6,13 +6,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
+import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.Qrcode;
+import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.QrcodeService;
+import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.util.Util;
 
 public class QrcodeController extends Controller {
 
     private final QrcodeService qrcodeService = new QrcodeService();
+    private final UserService userService = new UserService();
+    private final MemberService memberService = new MemberService();
 
     @ActionKey(Url.QRCODE_LIST)
     public void list() {
@@ -130,6 +136,12 @@ public class QrcodeController extends Controller {
         List<Qrcode> resultList = qrcodeService.listByApp_idOrQrcode_typeAndLimit(request_app_id, model.getQrcode_type(), getM(), getN());
 
         for (Qrcode result : resultList) {
+            String member_id = result.getObject_id();
+            Member member = memberService.findByMember_id(member_id);
+            if(member!=null){
+                User user = userService.findByUser_id(member.getUser_id());
+                result.setObject_id(user.getUser_name());
+            }
             result.keep(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD, Qrcode.QRCODE_CANCEL,
                     Qrcode.QRCODE_STATUS, Qrcode.SYSTEM_VERSION);
         }
@@ -149,8 +161,16 @@ public class QrcodeController extends Controller {
         Qrcode qrcode = qrcodeService.findByQrcode_id(model.getQrcode_id());
 
         authenticateApp_id(qrcode.getApp_id());
+        
+        String member_id = qrcode.getObject_id();
+        Member member = memberService.findByMember_id(member_id);
+        if(member!=null){
+            User user = userService.findByUser_id(member.getUser_id());
+            qrcode.setObject_id(user.getUser_name());
+        }
 
-        qrcode.keep(Qrcode.QRCODE_ID, Qrcode.SYSTEM_VERSION);
+        qrcode.keep(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD, Qrcode.QRCODE_CANCEL,
+                Qrcode.QRCODE_STATUS, Qrcode.SYSTEM_VERSION);
 
         renderSuccessJson(qrcode);
     }
