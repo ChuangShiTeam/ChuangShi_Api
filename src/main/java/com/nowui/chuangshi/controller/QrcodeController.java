@@ -130,7 +130,8 @@ public class QrcodeController extends Controller {
         List<Qrcode> resultList = qrcodeService.listByApp_idOrQrcode_typeAndLimit(request_app_id, model.getQrcode_type(), getM(), getN());
 
         for (Qrcode result : resultList) {
-            result.keep(Qrcode.QRCODE_ID, Qrcode.SYSTEM_VERSION);
+            result.keep(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD, Qrcode.QRCODE_CANCEL,
+                    Qrcode.QRCODE_STATUS, Qrcode.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
