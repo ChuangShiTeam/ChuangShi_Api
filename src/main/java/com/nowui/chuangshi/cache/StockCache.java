@@ -134,7 +134,11 @@ public class StockCache extends Cache {
     }
 
     public Boolean save(String stock_id, String app_id, String product_sku_id, String object_id, String stock_type, Integer stock_quantity, String stock_action, String stock_status, String system_create_user_id) {
-        return stockDao.save(stock_id, app_id, product_sku_id, object_id, stock_type, stock_quantity, stock_action, stock_status, system_create_user_id);
+        Boolean result = stockDao.save(stock_id, app_id, product_sku_id, object_id, stock_type, stock_quantity, stock_action, stock_status, system_create_user_id);
+        if (result) {
+        	CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE, object_id + product_sku_id);
+        }
+        return result;
     }
 
     public Boolean updateValidateSystem_version(String stock_id, String product_sku_id, String object_id, String stock_type, Integer stock_quantity, String stock_action, String stock_status, String system_update_user_id, Integer system_version) {
@@ -149,6 +153,7 @@ public class StockCache extends Cache {
             CacheUtil.remove(STOCK_BY_STOCK_ID_CACHE, stock_id);
             CacheUtil.remove(MEMBER_STOCK_BY_STOCK_ID_CACHE, stock_id);
             CacheUtil.remove(APP_STOCK_BY_STOCK_ID_CACHE, stock_id);
+            CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE, stock.getObject_id() + stock.getProduct_sku_id());
         }
 
         return result;
@@ -166,6 +171,7 @@ public class StockCache extends Cache {
             CacheUtil.remove(STOCK_BY_STOCK_ID_CACHE, stock_id);
             CacheUtil.remove(MEMBER_STOCK_BY_STOCK_ID_CACHE, stock_id);
             CacheUtil.remove(APP_STOCK_BY_STOCK_ID_CACHE, stock_id);
+            CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE, stock.getObject_id() + stock.getProduct_sku_id());
         }
 
         return result;
