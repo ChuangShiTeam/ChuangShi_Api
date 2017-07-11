@@ -24,6 +24,10 @@ public class StockService extends Service {
     public Integer countByOrApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_name(String app_id, String stock_type, String user_name, String stock_action, String product_name) {
         return stockCache.countByOrApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_name(app_id, stock_type, user_name, stock_action, product_name);
     }
+    
+    public Integer sumStock_quantityByObject_idAndProduct_sku_id(String object_id, String product_sku_id) {
+    	return stockCache.sumStock_quantityByObject_idAndProduct_sku_id(object_id, product_sku_id);
+    }
 
     public List<Stock> listByApp_idAndStock_typeAndSystem_create_timeAndLimit(String app_id, String stock_type, Date system_create_time, int m, int n) {
         return stockCache.listByApp_idAndStock_typeAndSystem_create_timeAndLimit(app_id, stock_type, system_create_time, m, n);

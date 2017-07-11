@@ -43,6 +43,18 @@ public class StockDao extends Dao {
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
+    
+    public Integer sumStock_quantityByObject_idAndProduct_sku_id(String object_id, String product_sku_id) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Stock.OBJECT_ID, object_id);
+    	sqlMap.put(Stock.PRODUCT_SKU_ID, product_sku_id);
+    	SqlPara sqlPara = Db.getSqlPara("stock.sumStock_quantityByObject_idAndProduct_sku_id", sqlMap);
+    	
+    	logSql("stock", "sumStock_quantityByObject_idAndProduct_sku_id", sqlPara);
+    	
+    	Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
+    	return count.intValue();
+    }
 
     public List<Stock> listByApp_idAndStock_typeAndSystem_create_timeAndLimit(String app_id, String stock_type, Date system_create_time, int m, int n) {
         Kv sqlMap = Kv.create();

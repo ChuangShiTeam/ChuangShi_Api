@@ -14,6 +14,7 @@ public class StockCache extends Cache {
     public static final String STOCK_BY_STOCK_ID_CACHE = "stock_by_stock_id_cache";
     public static final String MEMBER_STOCK_BY_STOCK_ID_CACHE = "member_stock_by_stock_id_cache";
     public static final String APP_STOCK_BY_STOCK_ID_CACHE = "app_stock_by_stock_id_cache";
+    public static final String STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE = "stock_quantity_by_object_id_and_product_sku_id_cache";
 
     private StockDao stockDao = new StockDao();
 
@@ -23,6 +24,17 @@ public class StockCache extends Cache {
 
     public Integer countByOrApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_name(String app_id, String stock_type, String user_name, String stock_action, String product_name) {
         return stockDao.countByOrApp_idOrStock_typeOrUser_nameOrStock_actionOrLikeProduct_name(app_id, stock_type, user_name, stock_action, product_name);
+    }
+    
+    public Integer sumStock_quantityByObject_idAndProduct_sku_id(String object_id, String product_sku_id) {
+    	Integer stock_quantity = CacheUtil.get(STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE, object_id + product_sku_id);
+    	
+    	if (stock_quantity == null) {
+    		stock_quantity = stockDao.sumStock_quantityByObject_idAndProduct_sku_id(object_id, product_sku_id);
+    		
+    		CacheUtil.put(STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE, object_id + product_sku_id, stock_quantity);
+    	}
+    	return stock_quantity;
     }
 
     public List<Stock> listByApp_idAndStock_typeAndSystem_create_timeAndLimit(String app_id, String stock_type, Date system_create_time, int m, int n) {

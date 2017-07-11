@@ -170,7 +170,16 @@
     WHERE table_stock.system_status = 1
     AND table_stock.stock_id = #p(stock_id)
   #end
-
+  
+  #sql("sumStock_quantityByObject_idAndProduct_sku_id")
+    SELECT
+    IFNULL(SUM(case when stock_action = '出库' then -1*stock_quantity else stock_quantity end), 0)
+    FROM table_stock
+    WHERE system_status = 1
+    AND object_id = #p(object_id)
+    AND product_sku_id = #p(product_sku_id)
+  #end
+  
   #sql("save")
     INSERT INTO table_stock (
       stock_id,

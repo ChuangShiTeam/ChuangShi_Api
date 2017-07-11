@@ -170,6 +170,10 @@ public class MemberController extends Controller {
         String product_sku_id = jsonObject.getString("product_sku_id");
         Integer stock_quantity = jsonObject.getInteger("stock_quantity");
         //判断会员库存数量是否足够
+        Integer member_product_sku_stock_quantity = stockService.sumStock_quantityByObject_idAndProduct_sku_id(member_id, product_sku_id);
+        if (stock_quantity > member_product_sku_stock_quantity) {
+        	throw new RuntimeException("会员库存不足");
+        }
         authenticateRequest_app_idAndRequest_user_id();
         
         authenticateApp_id(request_app_id);
