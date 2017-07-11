@@ -138,8 +138,7 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_bill", "bill_id", Bill.class);
         activeRecordPlugin.addMapping("table_bill_commission", "bill_commission_id", BillCommission.class);
 
-        // activeRecordPlugin.addMapping("table_qrcode", "qrcode_id",
-        // Qrcode.class);
+        activeRecordPlugin.addMapping("table_qrcode", "qrcode_id",Qrcode.class);
 
         activeRecordPlugin.addMapping("table_customer", "customer_id", Customer.class);
         activeRecordPlugin.addMapping("table_customer_attribute", "customer_attribute_id", CustomerAttribute.class);
