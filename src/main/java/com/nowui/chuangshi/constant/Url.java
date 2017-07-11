@@ -408,12 +408,14 @@ public class Url {
     public static final String EXPRESS_ADMIN_FIND = "/express/admin/find";
     public static final String EXPRESS_ADMIN_SAVE = "/express/admin/save";
     public static final String EXPRESS_ADMIN_UPDATE = "/express/admin/update";
+    public static final String EXPRESS_ADMIN_COMPLETE = "/express/admin/complete";
     public static final String EXPRESS_ADMIN_DELETE = "/express/admin/delete";
     public static final String EXPRESS_SYSTEM_LIST = "/express/system/list";
     public static final String EXPRESS_SYSTEM_FIND = "/express/system/find";
     public static final String EXPRESS_SYSTEM_SAVE = "/express/system/save";
     public static final String EXPRESS_SYSTEM_UPDATE = "/express/system/update";
     public static final String EXPRESS_SYSTEM_DELETE = "/express/system/delete";
+    public static final String EXPRESS_SYSTEM_COMPLETE = "/express/system/complete";
 
     public static final String WECHAT_INIT = "/wechat/init";
     public static final String WECHAT_AUTH = "/wechat/auth";

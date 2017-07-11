@@ -12,25 +12,29 @@ import com.nowui.chuangshi.model.Express;
 
 public class ExpressDao extends Dao {
 
-    public Integer countByApp_idOrLikeExpress_no(String app_id, String express_no) {
+    public Integer countByApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_name(String app_id, String express_no, String express_receiver_name, String express_sender_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Express.APP_ID, app_id);
         sqlMap.put(Express.EXPRESS_NO, express_no);
-        SqlPara sqlPara = Db.getSqlPara("express.countByApp_idOrLikeExpress_no", sqlMap);
+        sqlMap.put(Express.EXPRESS_RECEIVER_NAME, express_receiver_name);
+        sqlMap.put(Express.EXPRESS_SENDER_NAME, express_sender_name);
+        SqlPara sqlPara = Db.getSqlPara("express.countByApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_name", sqlMap);
 
-        logSql("express", "countByApp_idOrLikeExpress_no", sqlPara);
+        logSql("express", "countByApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_idOrLikeExpress_no(String app_id, String express_no) {
+    public Integer countByOrApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_name(String app_id, String express_no, String express_receiver_name, String express_sender_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Express.APP_ID, app_id);
         sqlMap.put(Express.EXPRESS_NO, express_no);
-        SqlPara sqlPara = Db.getSqlPara("express.countByOrApp_idOrLikeExpress_no", sqlMap);
+        sqlMap.put(Express.EXPRESS_RECEIVER_NAME, express_receiver_name);
+        sqlMap.put(Express.EXPRESS_SENDER_NAME, express_sender_name);
+        SqlPara sqlPara = Db.getSqlPara("express.countByOrApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_name", sqlMap);
 
-        logSql("express", "countByOrApp_idOrLikeExpress_no", sqlPara);
+        logSql("express", "countByOrApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
@@ -49,28 +53,32 @@ public class ExpressDao extends Dao {
         return new Express().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Express> listByApp_idOrLikeExpress_noAndLimit(String app_id, String express_no, int m, int n) {
+    public List<Express> listByApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_nameAndLimit(String app_id, String express_no, String express_receiver_name, String express_sender_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Express.APP_ID, app_id);
         sqlMap.put(Express.EXPRESS_NO, express_no);
+        sqlMap.put(Express.EXPRESS_RECEIVER_NAME, express_receiver_name);
+        sqlMap.put(Express.EXPRESS_SENDER_NAME, express_sender_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("express.listByApp_idOrLikeExpress_noAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("express.listByApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_nameAndLimit", sqlMap);
 
-        logSql("express", "listByApp_idOrLikeExpress_noAndLimit", sqlPara);
+        logSql("express", "listByApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_nameAndLimit", sqlPara);
 
         return new Express().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Express> listByOrApp_idOrLikeExpress_noAndLimit(String app_id, String express_no, int m, int n) {
+    public List<Express> listByOrApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_nameAndLimit(String app_id, String express_no, String express_receiver_name, String express_sender_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Express.APP_ID, app_id);
         sqlMap.put(Express.EXPRESS_NO, express_no);
+        sqlMap.put(Express.EXPRESS_RECEIVER_NAME, express_receiver_name);
+        sqlMap.put(Express.EXPRESS_SENDER_NAME, express_sender_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("express.listByOrApp_idOrLikeExpress_noAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("express.listByOrApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_nameAndLimit", sqlMap);
 
-        logSql("express", "listByOrApp_idOrLikeExpress_noAndLimit", sqlPara);
+        logSql("express", "listByOrApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_nameAndLimit", sqlPara);
 
         return new Express().find(sqlPara.getSql(), sqlPara.getPara());
     }
@@ -183,6 +191,22 @@ public class ExpressDao extends Dao {
 
         logSql("express", "update", sqlPara);
 
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+    
+    public Boolean updateExpress_noAndExpress_costAndExpress_remarkByExpress_idAndSystem_version(String express_id, String express_no, BigDecimal express_cost, String express_remark, String system_update_user_id, Integer system_version) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Express.EXPRESS_ID, express_id);
+        sqlMap.put(Express.EXPRESS_NO, express_no);
+        sqlMap.put(Express.EXPRESS_COST, express_cost);
+        sqlMap.put(Express.EXPRESS_REMARK, express_remark);
+        sqlMap.put(Express.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(Express.SYSTEM_UPDATE_TIME, new Date());
+        sqlMap.put(Express.SYSTEM_VERSION, system_version);
+        SqlPara sqlPara = Db.getSqlPara("express.updateExpress_noAndExpress_costAndExpress_remarkByExpress_idAndSystem_version", sqlMap);
+        
+        logSql("express", "updateExpress_noAndExpress_costAndExpress_remarkByExpress_idAndSystem_version", sqlPara);
+        
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
