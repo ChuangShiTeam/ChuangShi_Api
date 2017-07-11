@@ -126,7 +126,6 @@ public class AdminDao extends Dao {
         sqlMap.put(Admin.ADMIN_ID, admin_id);
         sqlMap.put(Admin.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(Admin.SYSTEM_UPDATE_TIME, new Date());
-        sqlMap.put(Admin.SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("admin.deleteByAdmin_idAndSystem_version", sqlMap);
 
         logSql("admin", "deleteByAdmin_idAndSystem_version", sqlPara);

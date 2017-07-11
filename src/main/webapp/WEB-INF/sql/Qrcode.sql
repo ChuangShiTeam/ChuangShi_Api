@@ -22,7 +22,7 @@
 
   #sql("listByApp_idAndSystem_create_timeAndLimit")
     SELECT
-    qrcode_id
+    *
     FROM table_qrcode
     WHERE system_status = 1
     AND app_id = #p(app_id)
