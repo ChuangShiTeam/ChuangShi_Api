@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
@@ -170,6 +172,10 @@ public class MemberController extends Controller {
         String product_sku_id = jsonObject.getString("product_sku_id");
         Integer stock_quantity = jsonObject.getInteger("stock_quantity");
         //判断会员库存数量是否足够
+        Integer member_product_sku_stock_quantity = stockService.sumStock_quantityByObject_idAndProduct_sku_id(member_id, product_sku_id);
+        if (stock_quantity > member_product_sku_stock_quantity) {
+        	throw new RuntimeException("会员库存不足");
+        }
         authenticateRequest_app_idAndRequest_user_id();
         
         authenticateApp_id(request_app_id);
@@ -178,6 +184,9 @@ public class MemberController extends Controller {
         Member member = memberService.findByMember_id(member_id);
         //查询会员默认地址
         MemberAddress memberAddress = memberAddressService.findByMember_id(member_id);
+        /*if (memberAddress == null || StringUtils.isBlank(memberAddress.getMember_address_id())) {
+        	throw new RuntimeException("会员地址信息需要完善");
+        }*/
         Boolean result = stockService.save(stock_id, member.getApp_id(), product_sku_id, member_id, StockType.MEMBER.getValue(), stock_quantity, StockAction.OUT.getValue(), null, request_user_id);
         if (result) {
             //保存快递单信息
