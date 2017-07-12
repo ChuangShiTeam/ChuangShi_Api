@@ -117,6 +117,33 @@
     AND system_version = #p(system_version)
   #end
 
+  #sql("updateQrcode_addByQrcode_id")
+    UPDATE table_qrcode SET
+    qrcode_add = qrcode_add + 1,
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    AND qrcode_id = #p(qrcode_id)
+  #end
+
+  #sql("updateQrcode_cancelByQrcode_id")
+    UPDATE table_qrcode SET
+    qrcode_cancel = qrcode_cancel + 1,
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    AND qrcode_id = #p(qrcode_id)
+  #end
+
+  #sql("updateQrcode_statusByQrcode_id")
+    UPDATE table_qrcode SET
+    qrcode_status = 0,
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    AND qrcode_id = #p(qrcode_id)
+  #end
+
   #sql("deleteByQrcode_idAndSystem_version")
     UPDATE table_qrcode SET
     system_update_user_id = #p(system_update_user_id),

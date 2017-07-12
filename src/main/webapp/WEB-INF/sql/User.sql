@@ -151,7 +151,16 @@
     system_version = system_version + 1
     WHERE system_status = 1
     AND user_id = #p(user_id)
-    AND system_version = #p(system_version)
+  #end
+
+  #sql("updateByUser_name")
+    UPDATE table_user SET
+    user_name = #p(user_name),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND user_id = #p(user_id)
   #end
 
   #sql("deleteByUser_idAndSystem_version")

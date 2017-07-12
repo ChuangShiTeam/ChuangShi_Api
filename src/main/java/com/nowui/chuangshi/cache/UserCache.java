@@ -92,13 +92,18 @@ public class UserCache extends Cache {
         return userDao.save(user_id, app_id, object_id, user_type, user_name, user_avatar, user_account, user_mobile, user_email, user_password, wechat_open_id, wechat_union_id, system_create_user_id);
     }
 
-    public Boolean updateByUser_password(String user_id, String user_password, String system_update_user_id, Integer system_version) {
-        User user = findByUser_id(user_id);
-        if (!user.getSystem_version().equals(system_version)) {
-            throw new RuntimeException(Constant.ERROR_VERSION);
+    public Boolean updateByUser_password(String user_id, String user_password, String system_update_user_id) {
+        boolean result = userDao.updateByUser_password(user_id, user_password, system_update_user_id);
+
+        if (result) {
+            CacheUtil.remove(USER_BY_USER_ID_CACHE, user_id);
         }
 
-        boolean result = userDao.updateByUser_password(user_id, user_password, system_update_user_id, system_version);
+        return result;
+    }
+
+    public Boolean updateByUser_name(String user_id, String user_name, String system_update_user_id) {
+        boolean result = userDao.updateByUser_name(user_id, user_name, system_update_user_id);
 
         if (result) {
             CacheUtil.remove(USER_BY_USER_ID_CACHE, user_id);

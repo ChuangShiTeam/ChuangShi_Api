@@ -15,12 +15,12 @@ public class ExpressCache extends Cache {
 
     private ExpressDao expressDao = new ExpressDao();
 
-    public Integer countByApp_idOrLikeExpress_no(String app_id, String express_no) {
-        return expressDao.countByApp_idOrLikeExpress_no(app_id, express_no);
+    public Integer countByApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_name(String app_id, String express_no, String express_receiver_name, String express_sender_name) {
+        return expressDao.countByApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_name(app_id, express_no, express_receiver_name, express_sender_name);
     }
 
-    public Integer countByOrApp_idOrLikeExpress_no(String app_id, String express_no) {
-        return expressDao.countByOrApp_idOrLikeExpress_no(app_id, express_no);
+    public Integer countByOrApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_name(String app_id, String express_no, String express_receiver_name, String express_sender_name) {
+        return expressDao.countByOrApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_name(app_id, express_no, express_receiver_name, express_sender_name);
     }
 
     public List<Express> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
@@ -33,8 +33,8 @@ public class ExpressCache extends Cache {
         return expressList;
     }
 
-    public List<Express> listByApp_idOrLikeExpress_noAndLimit(String app_id, String express_no, int m, int n) {
-        List<Express> expressList = expressDao.listByApp_idOrLikeExpress_noAndLimit(app_id, express_no, m, n);
+    public List<Express> listByApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_nameAndLimit(String app_id, String express_no, String express_receiver_name, String express_sender_name, int m, int n) {
+        List<Express> expressList = expressDao.listByApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_nameAndLimit(app_id, express_no, express_receiver_name, express_sender_name, m, n);
 
         for (Express express : expressList) {
             express.put(findByExpress_id(express.getExpress_id()));
@@ -43,8 +43,8 @@ public class ExpressCache extends Cache {
         return expressList;
     }
 
-    public List<Express> listByOrApp_idOrLikeExpress_noAndLimit(String app_id, String express_no, int m, int n) {
-        List<Express> expressList = expressDao.listByOrApp_idOrLikeExpress_noAndLimit(app_id, express_no, m, n);
+    public List<Express> listByOrApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_nameAndLimit(String app_id, String express_no, String express_receiver_name, String express_sender_name, int m, int n) {
+        List<Express> expressList = expressDao.listByOrApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_nameAndLimit(app_id, express_no, express_receiver_name, express_sender_name, m, n);
 
         for (Express express : expressList) {
             express.put(findByExpress_id(express.getExpress_id()));
@@ -81,6 +81,21 @@ public class ExpressCache extends Cache {
             CacheUtil.remove(EXPRESS_BY_EXPRESS_ID_CACHE, express_id);
         }
 
+        return result;
+    }
+    
+    public Boolean updateExpress_noAndExpress_costAndExpress_remarkByExpress_idValidateSystem_version(String express_id, String express_no, BigDecimal express_cost, String express_remark, String system_update_user_id, Integer system_version) {
+        Express express = findByExpress_id(express_id);
+        if (!express.getSystem_version().equals(system_version)) {
+            throw new RuntimeException(Constant.ERROR_VERSION);
+        }
+        
+        boolean result = expressDao.updateExpress_noAndExpress_costAndExpress_remarkByExpress_idAndSystem_version(express_id, express_no, express_cost, express_remark, system_update_user_id, system_version);
+        
+        if (result) {
+            CacheUtil.remove(EXPRESS_BY_EXPRESS_ID_CACHE, express_id);
+        }
+        
         return result;
     }
 

@@ -95,9 +95,13 @@ public class TradeService extends Service {
     }
 
     public Map<String, String> unifiedTrade(Trade trade, String open_id, String body, String app_id, String mch_id, String mch_key) {
+        System.out.println(open_id);
+        System.out.println(app_id);
+        System.out.println(mch_id);
+        System.out.println(mch_key);
     	
         String nonce_str = Util.getRandomStringByLength(32);
-        String notify_url = Config.notify_url;
+        String notify_url = "http://api.xingxiao.nowui.com/wechat/api/notify";
         String openid = open_id;
         String out_trade_no = trade.getTrade_number();
         String spbill_create_ip = "0.0.0.0";
@@ -119,6 +123,8 @@ public class TradeService extends Service {
         parameter.put("sign", PaymentKit.createSign(parameter, mch_key));
 
         String result = HttpKit.post("https://api.mch.weixin.qq.com/pay/unifiedorder", PaymentKit.toXml(parameter));
+
+        System.out.println(result);
 
         Map<String, String> map = PaymentKit.xmlToMap(result);
 

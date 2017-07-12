@@ -131,6 +131,42 @@ public class QrcodeDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
+    public Boolean updateQrcode_addByQrcode_id(String qrcode_id, String system_update_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Qrcode.QRCODE_ID, qrcode_id);
+        sqlMap.put(Qrcode.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(Qrcode.SYSTEM_UPDATE_TIME, new Date());
+        SqlPara sqlPara = Db.getSqlPara("qrcode.updateQrcode_addByQrcode_id", sqlMap);
+
+        logSql("qrcode", "updateQrcode_addByQrcode_id", sqlPara);
+
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+
+    public Boolean updateQrcode_cancelByQrcode_id(String qrcode_id, String system_update_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Qrcode.QRCODE_ID, qrcode_id);
+        sqlMap.put(Qrcode.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(Qrcode.SYSTEM_UPDATE_TIME, new Date());
+        SqlPara sqlPara = Db.getSqlPara("qrcode.updateQrcode_cancelByQrcode_id", sqlMap);
+
+        logSql("qrcode", "updateQrcode_cancelByQrcode_id", sqlPara);
+
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+
+    public Boolean updateQrcode_statusByQrcode_id(String qrcode_id, String system_update_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Qrcode.QRCODE_ID, qrcode_id);
+        sqlMap.put(Qrcode.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(Qrcode.SYSTEM_UPDATE_TIME, new Date());
+        SqlPara sqlPara = Db.getSqlPara("qrcode.updateQrcode_statusByQrcode_id", sqlMap);
+
+        logSql("qrcode", "updateQrcode_statusByQrcode_id", sqlPara);
+
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+
     public Boolean deleteByQrcode_idAndSystem_version(String qrcode_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Qrcode.QRCODE_ID, qrcode_id);

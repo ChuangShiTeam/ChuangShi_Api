@@ -181,16 +181,30 @@ public class UserDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean updateByUser_password(String user_id, String user_password, String system_update_user_id, Integer system_version) {
+    public Boolean updateByUser_password(String user_id, String user_password, String system_update_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(User.USER_ID, user_id);
         sqlMap.put(User.USER_PASSWORD, user_password);
         sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(User.SYSTEM_UPDATE_TIME, new Date());
-        sqlMap.put(User.SYSTEM_VERSION, system_version);
         SqlPara sqlPara = Db.getSqlPara("user.updateByUser_password", sqlMap);
 
         logSql("user", "updateByUser_password", sqlPara);
+
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+
+    public Boolean updateByUser_name(String user_id, String user_name, String system_update_user_id) {
+        user_name = Util.getEmoji(user_name);
+
+        Kv sqlMap = Kv.create();
+        sqlMap.put(User.USER_ID, user_id);
+        sqlMap.put(User.USER_NAME, user_name);
+        sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(User.SYSTEM_UPDATE_TIME, new Date());
+        SqlPara sqlPara = Db.getSqlPara("user.updateByUser_name", sqlMap);
+
+        logSql("user", "updateByUser_name", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }

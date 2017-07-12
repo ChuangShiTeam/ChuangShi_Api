@@ -26,6 +26,12 @@ public class App extends Model<App> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "wechat_mch_key")
     public static final String WECHAT_MCH_KEY = "wechat_mch_key";
 
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "wechat_token")
+    public static final String WECHAT_TOKEN = "wechat_token";
+
+    @Column(type = ColumnType.VARCHAR, length = 43, comment = "wechat_encoding_aes_key")
+    public static final String WECHAT_ENCODING_AES_KEY = "wechat_encoding_aes_key";
+
     @Column(type = ColumnType.TINYINT, length = 1, comment = "是否有库存")
     public static final String APP_IS_STOCK = "app_is_stock";
 
@@ -89,6 +95,22 @@ public class App extends Model<App> {
 
     public void setWechat_mch_key(String wechat_mch_key) {
         set(WECHAT_MCH_KEY, wechat_mch_key);
+    }
+
+    public String getWechat_token() {
+        return getStr(WECHAT_TOKEN);
+    }
+
+    public void setWechat_token(String wechat_token) {
+        set(WECHAT_TOKEN, wechat_token);
+    }
+
+    public String getWechat_encoding_aes_key() {
+        return getStr(WECHAT_ENCODING_AES_KEY);
+    }
+
+    public void setWechat_encoding_aes_key(String wechat_encoding_aes_key) {
+        set(WECHAT_ENCODING_AES_KEY, wechat_encoding_aes_key);
     }
 
     public Boolean getApp_is_stock() {

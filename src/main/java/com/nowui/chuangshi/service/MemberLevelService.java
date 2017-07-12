@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.service;
 
 import com.nowui.chuangshi.cache.MemberLevelCache;
+import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberLevel;
 
 import java.util.Date;
@@ -36,6 +37,17 @@ public class MemberLevelService extends Service {
 
     public MemberLevel findByMember_level_id(String member_level_id) {
         return memberLevelCache.findByMember_level_id(member_level_id);
+    }
+
+    public MemberLevel findByMember_level_sort(String app_id, Integer member_level_sort) {
+        List<MemberLevel> memberLevelList = memberLevelCache.listByApp_id(app_id);
+
+        for (MemberLevel memberLevel : memberLevelList) {
+            if (memberLevel.getMember_level_sort().equals(member_level_sort)) {
+                return memberLevel;
+            }
+        }
+        return null;
     }
 
     public Boolean save(String member_level_id, String app_id, String member_level_name, Integer member_level_value, Integer member_level_sort, String system_create_user_id) {

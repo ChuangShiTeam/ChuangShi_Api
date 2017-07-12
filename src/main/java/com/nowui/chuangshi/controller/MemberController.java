@@ -1,9 +1,12 @@
 package com.nowui.chuangshi.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -13,6 +16,8 @@ import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberAddress;
 import com.nowui.chuangshi.model.MemberLevel;
+import com.nowui.chuangshi.model.ProductSku;
+import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.ExpressService;
 import com.nowui.chuangshi.service.MemberAddressService;
@@ -157,7 +162,7 @@ public class MemberController extends Controller {
     @ActionKey(Url.MEMBER_ADMIN_SEND)
     public void adminSend() {
         validateRequest_app_id();
-        validate(Member.MEMBER_ID);
+        validate(Member.MEMBER_ID, ProductSku.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_ADDRESS, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_TEL);
         
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
@@ -167,6 +172,10 @@ public class MemberController extends Controller {
         String product_sku_id = jsonObject.getString("product_sku_id");
         Integer stock_quantity = jsonObject.getInteger("stock_quantity");
         //判断会员库存数量是否足够
+        Integer member_product_sku_stock_quantity = stockService.sumStock_quantityByObject_idAndProduct_sku_id(member_id, product_sku_id);
+        if (stock_quantity > member_product_sku_stock_quantity) {
+        	throw new RuntimeException("会员库存不足");
+        }
         authenticateRequest_app_idAndRequest_user_id();
         
         authenticateApp_id(request_app_id);
@@ -175,10 +184,13 @@ public class MemberController extends Controller {
         Member member = memberService.findByMember_id(member_id);
         //查询会员默认地址
         MemberAddress memberAddress = memberAddressService.findByMember_id(member_id);
+        /*if (memberAddress == null || StringUtils.isBlank(memberAddress.getMember_address_id())) {
+        	throw new RuntimeException("会员地址信息需要完善");
+        }*/
         Boolean result = stockService.save(stock_id, member.getApp_id(), product_sku_id, member_id, StockType.MEMBER.getValue(), stock_quantity, StockAction.OUT.getValue(), null, request_user_id);
         if (result) {
             //保存快递单信息
-            expressService.save(Util.getRandomUUID(), member.getApp_id(), null, stock_id, express.getExpress_receiver_user_id(), member.getUser_id(), express.getExpress_shipper_code(), express.getExpress_no(), express.getExpress_type(), express.getExpress_receiver_company(), express.getExpress_receiver_name(), express.getExpress_receiver_tel(), express.getExpress_receiver_mobile(), express.getExpress_receiver_postcode(), express.getExpress_receiver_province(), express.getExpress_receiver_city(), express.getExpress_receiver_area(), express.getExpress_receiver_address(), express.getExpress_sender_company(), memberAddress.getMember_address_name(), memberAddress.getMember_address_tel(), memberAddress.getMember_address_mobile(), memberAddress.getMember_address_postcode(), memberAddress.getMember_address_province(), memberAddress.getMember_address_city(), memberAddress.getMember_address_area(), memberAddress.getMember_address_address(), express.getExpress_cost(), express.getExpress_is_pay(), express.getExpress_pay_way(), null, null, null, ExpressStatus.NOTRACK.getValue(), express.getExpress_remark(), request_user_id);
+            expressService.save(Util.getRandomUUID(), member.getApp_id(), "", stock_id, "", member.getUser_id(), "", "", "", express.getExpress_receiver_company(), express.getExpress_receiver_name(), express.getExpress_receiver_tel(), express.getExpress_receiver_mobile(), express.getExpress_receiver_postcode(), express.getExpress_receiver_province(), express.getExpress_receiver_city(), express.getExpress_receiver_area(), express.getExpress_receiver_address(), "", memberAddress.getMember_address_name(), memberAddress.getMember_address_tel(), memberAddress.getMember_address_mobile(), memberAddress.getMember_address_postcode(), memberAddress.getMember_address_province(), memberAddress.getMember_address_city(), memberAddress.getMember_address_area(), memberAddress.getMember_address_address(), new BigDecimal(0), false, "", null, null, "", ExpressStatus.NOTRACK.getValue(), "", request_user_id);
         }
         
         renderSuccessJson(result);

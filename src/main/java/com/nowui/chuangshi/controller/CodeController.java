@@ -1,5 +1,16 @@
 package com.nowui.chuangshi.controller;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.Kv;
@@ -10,17 +21,7 @@ import com.jfinal.template.Template;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.service.CodeService;
-import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class CodeController extends Controller {
 
@@ -185,7 +186,9 @@ public class CodeController extends Controller {
         String result = template.renderToString(templateMap);
 
         try {
-            Writer writer = new FileWriter(new File(Config.code_generate_url + fileName), false);
+            Writer writer = new BufferedWriter(
+                    new OutputStreamWriter(
+                          new FileOutputStream(new File(Config.code_generate_url + fileName)), "UTF-8"));
             writer.write(result.toCharArray());
             writer.close();
         } catch (IOException e) {

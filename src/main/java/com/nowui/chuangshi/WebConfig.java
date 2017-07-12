@@ -15,7 +15,6 @@ import com.jfinal.plugin.activerecord.SqlPara;
 import com.jfinal.plugin.cron4j.Cron4jPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
-import com.jfinal.plugin.zbus.ZbusPlugin;
 import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
 import com.jfinal.weixin.sdk.api.ApiConfig;
@@ -41,10 +40,13 @@ public class WebConfig extends JFinalConfig {
         constants.setDevMode(false);
         constants.setViewType(ViewType.JSP);
         constants.setError404View("/error.jsp");
+
+        ApiConfigKit.setDevMode(true);
     }
 
     public void configRoute(Routes routes) {
-        routes.add("/wechat", WeChatController.class);
+        routes.add("/wechat/message", WeChatMessageController.class);
+        routes.add("/wechat/api", WeChatApiController.class);
         routes.add("/code", CodeController.class);
         routes.add("/http", HttpController.class);
         routes.add("/sql", SqlController.class);
@@ -65,10 +67,10 @@ public class WebConfig extends JFinalConfig {
         routes.add("/member/level", MemberLevelController.class);
         routes.add("/member/stock", MemberStockController.class);
         routes.add("/express", ExpressController.class);
+        routes.add("/qrcode", QrcodeController.class);
 
         routes.add("/trade", TradeController.class);
         routes.add("/bill", BillController.class);
-        routes.add("/qrcode", QrcodeController.class);
 
         routes.add("/customer", CustomerController.class);
         routes.add("/customer/attribute", CustomerAttributeController.class);
@@ -92,10 +94,10 @@ public class WebConfig extends JFinalConfig {
         druidPlugin.setFilters("stat,wall");
         plugins.add(druidPlugin);
 
-        String brokerAddress = "127.0.0.1:15555";
-        String scanRootPackage = "com.nowui.chuangshi";
-        ZbusPlugin zbusPlugin = new ZbusPlugin(brokerAddress, scanRootPackage);
-        plugins.add(zbusPlugin);
+//        String brokerAddress = "127.0.0.1:15555";
+//        String scanRootPackage = "com.nowui.chuangshi";
+//        ZbusPlugin zbusPlugin = new ZbusPlugin(brokerAddress, scanRootPackage);
+//        plugins.add(zbusPlugin);
 
         ActiveRecordPlugin activeRecordPlugin = new ActiveRecordPlugin(druidPlugin);
 
@@ -131,14 +133,13 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_member_level", "member_level_id", MemberLevel.class);
         activeRecordPlugin.addMapping("table_stock", "stock_id", Stock.class);
         activeRecordPlugin.addMapping("table_express", "express_id", Express.class);
+        activeRecordPlugin.addMapping("table_qrcode", "qrcode_id", Qrcode.class);
 
         activeRecordPlugin.addMapping("table_trade", "trade_id", Trade.class);
         activeRecordPlugin.addMapping("table_trade_commossion", "trade_commossion_id", TradeCommossion.class);
         activeRecordPlugin.addMapping("table_trade_pay", "trade_pay_id", TradePay.class);
         activeRecordPlugin.addMapping("table_bill", "bill_id", Bill.class);
         activeRecordPlugin.addMapping("table_bill_commission", "bill_commission_id", BillCommission.class);
-
-        activeRecordPlugin.addMapping("table_qrcode", "qrcode_id",Qrcode.class);
 
         activeRecordPlugin.addMapping("table_customer", "customer_id", Customer.class);
         activeRecordPlugin.addMapping("table_customer_attribute", "customer_attribute_id", CustomerAttribute.class);
@@ -173,11 +174,12 @@ public class WebConfig extends JFinalConfig {
                 ApiConfig apiConfig = new ApiConfig();
                 apiConfig.setAppId(app.getWechat_app_id());
                 apiConfig.setAppSecret(app.getWechat_app_secret());
+                apiConfig.setToken(app.getWechat_token());
+                apiConfig.setEncryptMessage(false);
+                apiConfig.setEncodingAesKey(app.getWechat_encoding_aes_key());
                 ApiConfigKit.putApiConfig(apiConfig);
             }
         }
-
-//        initXingXiaoDadabase();
     }
 
     private void initXingXiaoDadabase() {

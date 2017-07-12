@@ -163,6 +163,20 @@ public class MemberDao extends Dao {
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
+
+    public Boolean updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(String member_id, String member_parent_id, String member_parent_path, String system_update_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Member.MEMBER_ID, member_id);
+        sqlMap.put(Member.MEMBER_PARENT_ID, member_parent_id);
+        sqlMap.put(Member.MEMBER_PARENT_PATH, member_parent_path);
+        sqlMap.put(Member.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(Member.SYSTEM_UPDATE_TIME, new Date());
+        SqlPara sqlPara = Db.getSqlPara("member.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id", sqlMap);
+
+        logSql("member", "updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id", sqlPara);
+
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
     
     public Boolean deleteByMember_idAndSystem_version(String member_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();

@@ -38,12 +38,12 @@ public class AppService extends Service {
         return appCache.findByApp_id(app_id);
     }
 
-    public Boolean save(String app_id, String app_name, String app_secret, String wechat_app_id, String wechat_app_secret, String wechat_mch_id, String wechat_mch_key, Boolean app_is_stock, Boolean app_is_commission, Integer app_commission_level, String system_create_user_id) {
-        return appCache.save(app_id, app_name, app_secret, wechat_app_id, wechat_app_secret, wechat_mch_id, wechat_mch_key, app_is_stock, app_is_commission, app_commission_level, system_create_user_id);
+    public Boolean save(String app_id, String app_name, String app_secret, String wechat_app_id, String wechat_app_secret, String wechat_mch_id, String wechat_mch_key, String wechat_token, String wechat_encoding_aes_key, Boolean app_is_stock, Boolean app_is_commission, Integer app_commission_level, String system_create_user_id) {
+        return appCache.save(app_id, app_name, app_secret, wechat_app_id, wechat_app_secret, wechat_mch_id, wechat_mch_key, wechat_token, wechat_encoding_aes_key, app_is_stock, app_is_commission, app_commission_level, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String app_id, String app_name, String app_secret, String wechat_app_id, String wechat_app_secret, String wechat_mch_id, String wechat_mch_key, Boolean app_is_stock, Boolean app_is_commission, Integer app_commission_level, String system_update_user_id, Integer system_version) {
-        return appCache.updateValidateSystem_version(app_id, app_name, app_secret, wechat_app_id, wechat_app_secret, wechat_mch_id, wechat_mch_key, app_is_stock, app_is_commission, app_commission_level, system_update_user_id, system_version);
+    public Boolean updateValidateSystem_version(String app_id, String app_name, String app_secret, String wechat_app_id, String wechat_app_secret, String wechat_mch_id, String wechat_mch_key, String wechat_token, String wechat_encoding_aes_key, Boolean app_is_stock, Boolean app_is_commission, Integer app_commission_level, String system_update_user_id, Integer system_version) {
+        return appCache.updateValidateSystem_version(app_id, app_name, app_secret, wechat_app_id, wechat_app_secret, wechat_mch_id, wechat_mch_key, wechat_token, wechat_encoding_aes_key, app_is_stock, app_is_commission, app_commission_level, system_update_user_id, system_version);
     }
     
     public Boolean deleteByApp_idAndSystem_update_user_idValidateSystem_version(String app_id, String system_update_user_id, Integer system_version) {

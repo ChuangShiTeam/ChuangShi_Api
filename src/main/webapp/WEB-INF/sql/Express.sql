@@ -1,6 +1,6 @@
 #namespace("express")
 
-  #sql("countByApp_idOrLikeExpress_no")
+  #sql("countByApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_name")
     SELECT COUNT(*) FROM table_express
     WHERE system_status = 1
     AND app_id = #p(app_id)
@@ -8,9 +8,17 @@
     #set(express_no = "%" + express_no + "%")
     AND express_no LIKE #p(express_no)
     #end
+    #if(express_receiver_name)
+    #set(express_receiver_name = "%" + express_receiver_name + "%")
+    AND express_receiver_name LIKE #p(express_receiver_name)
+    #end
+    #if(express_sender_name)
+    #set(express_sender_name = "%" + express_sender_name + "%")
+    AND express_sender_name LIKE #p(express_sender_name)
+    #end
   #end
 
-  #sql("countByOrApp_idOrLikeExpress_no")
+  #sql("countByOrApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_name")
     SELECT COUNT(*) FROM table_express
     WHERE system_status = 1
     #if(app_id)
@@ -19,6 +27,14 @@
     #if(express_no)
     #set(express_no = "%" + express_no + "%")
     AND express_no LIKE #p(express_no)
+    #end
+    #if(express_receiver_name)
+    #set(express_receiver_name = "%" + express_receiver_name + "%")
+    AND express_receiver_name LIKE #p(express_receiver_name)
+    #end
+    #if(express_sender_name)
+    #set(express_sender_name = "%" + express_sender_name + "%")
+    AND express_sender_name LIKE #p(express_sender_name)
     #end
   #end
 
@@ -33,7 +49,7 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByApp_idOrLikeExpress_noAndLimit")
+  #sql("listByApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_nameAndLimit")
     SELECT
     express_id
     FROM table_express
@@ -43,11 +59,19 @@
     #set(express_no = "%" + express_no + "%")
     AND express_no LIKE #p(express_no)
     #end
+    #if(express_receiver_name)
+    #set(express_receiver_name = "%" + express_receiver_name + "%")
+    AND express_receiver_name LIKE #p(express_receiver_name)
+    #end
+    #if(express_sender_name)
+    #set(express_sender_name = "%" + express_sender_name + "%")
+    AND express_sender_name LIKE #p(express_sender_name)
+    #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idOrLikeExpress_noAndLimit")
+  #sql("listByOrApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_nameAndLimit")
     SELECT
     express_id
     FROM table_express
@@ -58,6 +82,14 @@
     #if(express_no)
     #set(express_no = "%" + express_no + "%")
     AND express_no LIKE #p(express_no)
+    #end
+    #if(express_receiver_name)
+    #set(express_receiver_name = "%" + express_receiver_name + "%")
+    AND express_receiver_name LIKE #p(express_receiver_name)
+    #end
+    #if(express_sender_name)
+    #set(express_sender_name = "%" + express_sender_name + "%")
+    AND express_sender_name LIKE #p(express_sender_name)
     #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
@@ -193,6 +225,19 @@
     express_end_date = #p(express_end_date),
     express_logistics = #p(express_logistics),
     express_status = #p(express_status),
+    express_remark = #p(express_remark),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND express_id = #p(express_id)
+    AND system_version = #p(system_version)
+  #end
+  
+    #sql("updateExpress_noAndExpress_costAndExpress_remarkByExpress_idAndSystem_version")
+    UPDATE table_express SET
+    express_no = #p(express_no),
+    express_cost = #p(express_cost),
     express_remark = #p(express_remark),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),

@@ -98,13 +98,12 @@ public class MemberCache extends Cache {
     }
     
 
-    public Boolean save(String member_id, String app_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_parent_path, Boolean member_status, String system_create_user_id) {
-        boolean result = memberDao.save(member_id, app_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path, member_status, system_create_user_id);
+    public Boolean save(String member_id, String app_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, JSONArray member_parent_path, Boolean member_status, String system_create_user_id) {
+        boolean result = memberDao.save(member_id, app_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path.toJSONString(), member_status, system_create_user_id);
 
         if (result) {
-            JSONArray jsonArray = JSONArray.parseArray(member_parent_path);
-            for (int i = 0; i < jsonArray.size(); i++) {
-                String member_parent_path_member_id = jsonArray.getString(i);
+            for (int i = 0; i < member_parent_path.size(); i++) {
+                String member_parent_path_member_id = member_parent_path.getString(i);
                 if (!member_parent_path_member_id.equals(Constant.PARENT_ID)) {
                     CacheUtil.remove(MEMBER_LIST_BY_MEMBER_PARENT_ID_CACHE, member_parent_path_member_id);
                 }
@@ -114,20 +113,36 @@ public class MemberCache extends Cache {
         return result;
     }
 
-    public Boolean updateValidateSystem_version(String member_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_parent_path, Boolean member_status, String system_update_user_id, Integer system_version) {
+    public Boolean updateValidateSystem_version(String member_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, JSONArray member_parent_path, Boolean member_status, String system_update_user_id, Integer system_version) {
         Member member = findByMember_id(member_id);
         if (!member.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = memberDao.update(member_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path, member_status, system_update_user_id, system_version);
+        boolean result = memberDao.update(member_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path.toJSONString(), member_status, system_update_user_id, system_version);
 
         if (result) {
             CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
 
-            JSONArray jsonArray = JSONArray.parseArray(member_parent_path);
-            for (int i = 0; i < jsonArray.size(); i++) {
-                String member_parent_path_member_id = jsonArray.getString(i);
+            for (int i = 0; i < member_parent_path.size(); i++) {
+                String member_parent_path_member_id = member_parent_path.getString(i);
+                if (!member_parent_path_member_id.equals(Constant.PARENT_ID)) {
+                    CacheUtil.remove(MEMBER_LIST_BY_MEMBER_PARENT_ID_CACHE, member_parent_path_member_id);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public Boolean updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(String member_id, String member_parent_id, JSONArray member_parent_path, String system_update_user_id) {
+        boolean result = memberDao.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member_id, member_parent_id, member_parent_path.toJSONString(), system_update_user_id);
+
+        if (result) {
+            CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
+
+            for (int i = 0; i < member_parent_path.size(); i++) {
+                String member_parent_path_member_id = member_parent_path.getString(i);
                 if (!member_parent_path_member_id.equals(Constant.PARENT_ID)) {
                     CacheUtil.remove(MEMBER_LIST_BY_MEMBER_PARENT_ID_CACHE, member_parent_path_member_id);
                 }

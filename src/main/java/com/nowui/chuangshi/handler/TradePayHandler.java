@@ -34,8 +34,8 @@ import com.nowui.chuangshi.type.BillType;
 import com.nowui.chuangshi.util.MQUtil;
 import com.nowui.chuangshi.util.Util;
 
-@Topic(mq = "MQ", topic = "tradePay")
-@Handler
+//@Topic(mq = "MQ", topic = "tradePay")
+//@Handler
 public class TradePayHandler extends TMsgHandler<String> {
 
     private final TradeService tradeService = new TradeService();

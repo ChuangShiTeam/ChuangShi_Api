@@ -9,12 +9,13 @@ import com.nowui.chuangshi.model.Http;
 import com.nowui.chuangshi.service.HttpService;
 import com.nowui.chuangshi.util.DateUtil;
 import com.nowui.chuangshi.util.MQUtil;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Topic(mq = "MQ", topic = "http")
-@Handler
+//@Topic(mq = "MQ", topic = "http")
+//@Handler
 public class HttpHandler extends TMsgHandler<String> {
 
     private final HttpService httpService = new HttpService();
@@ -24,6 +25,12 @@ public class HttpHandler extends TMsgHandler<String> {
         try {
             Http http = JSONObject.parseObject(json, Http.class);
 
+            String app_id = http.getApp_id();
+
+            if (ValidateUtil.isNullOrEmpty(app_id)) {
+                app_id = "";
+            }
+
             System.out.println("----------------------------------------------------------------------------------------------------------------");
             System.out.println("url: " + http.getHttp_url());
             System.out.println("time: " + DateUtil.getDateTimeString(http.getSystem_create_time()));
@@ -31,7 +38,7 @@ public class HttpHandler extends TMsgHandler<String> {
             System.out.println("response: " + http.getHttp_response());
             System.out.println("----------------------------------------------------------------------------------------------------------------");
 
-            httpService.save(http.getHttp_id(), http.getApp_id(), http.getHttp_url(), http.getHttp_code(), http.getHttp_request(), http.getHttp_response(), http.getHttp_token(), http.getHttp_platform(), http.getHttp_version(), http.getHttp_ip_address(), http.getHttp_run_time(), http.getSystem_create_user_id());
+            httpService.save(http.getHttp_id(), app_id, http.getHttp_url(), http.getHttp_code(), http.getHttp_request(), http.getHttp_response(), http.getHttp_token(), http.getHttp_platform(), http.getHttp_version(), http.getHttp_ip_address(), http.getHttp_run_time(), http.getSystem_create_user_id());
         } catch (Exception e) {
             com.nowui.chuangshi.model.Exception exception = JSONObject.parseObject(json, com.nowui.chuangshi.model.Exception.class);
 

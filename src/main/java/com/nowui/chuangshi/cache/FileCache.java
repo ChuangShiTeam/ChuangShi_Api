@@ -111,6 +111,16 @@ public class FileCache extends Cache {
         return result;
     }
 
+    public Boolean updateByFile_path(String file_id, String file_path, String system_update_user_id) {
+        boolean result = fileDao.updateByFile_path(file_id, file_path, system_update_user_id);
+
+        if (result) {
+            CacheUtil.remove(FILE_BY_FILE_ID_CACHE, file_id);
+        }
+
+        return result;
+    }
+
     public Boolean deleteByFile_idAndSystem_update_user_idValidateSystem_version(String file_id, String system_update_user_id, Integer system_version) {
         File file = findByFile_id(file_id);
         if (!file.getSystem_version().equals(system_version)) {

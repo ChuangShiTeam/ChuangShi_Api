@@ -184,6 +184,19 @@ public class FileDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
+    public Boolean updateByFile_path(String file_id, String file_path, String system_update_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(File.FILE_ID, file_id);
+        sqlMap.put(File.FILE_PATH, file_path);
+        sqlMap.put(File.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(File.SYSTEM_UPDATE_TIME, new Date());
+        SqlPara sqlPara = Db.getSqlPara("file.updateByFile_path", sqlMap);
+
+        logSql("file", "updateByFile_path", sqlPara);
+
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+
     public Boolean deleteByFile_idAndSystem_version(String file_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(File.FILE_ID, file_id);

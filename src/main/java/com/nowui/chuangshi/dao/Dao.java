@@ -12,14 +12,18 @@ import com.nowui.chuangshi.util.MQUtil;
 
 public class Dao {
     protected void logSql(String sql_table, String sql_action, SqlPara sqlPara) {
-        Map<String, Object> mqMap = new HashMap<String, Object>();
-        mqMap.put(Sql.APP_ID, "");
-        mqMap.put(Sql.HTTP_ID, "");
-        mqMap.put(Sql.SQL_TABLE, sql_table);
-        mqMap.put(Sql.SQL_ACTION, sql_action);
-        mqMap.put(Sql.SQL_CONTENT, getSql(sqlPara.getSql(), sqlPara.getPara()));
-        mqMap.put(Sql.SYSTEM_CREATE_USER_ID, "");
-        MQUtil.sendSync("sql", JSON.toJSONString(mqMap));
+        String sql_content = getSql(sqlPara.getSql(), sqlPara.getPara());
+
+        System.out.println(sql_content);
+
+//        Map<String, Object> mqMap = new HashMap<String, Object>();
+//        mqMap.put(Sql.APP_ID, "");
+//        mqMap.put(Sql.HTTP_ID, "");
+//        mqMap.put(Sql.SQL_TABLE, sql_table);
+//        mqMap.put(Sql.SQL_ACTION, sql_action);
+//        mqMap.put(Sql.SQL_CONTENT, sql_content);
+//        mqMap.put(Sql.SYSTEM_CREATE_USER_ID, "");
+//        MQUtil.sendSync("sql", JSON.toJSONString(mqMap));
     }
 
     private String getSql(String sql, Object[] params) {
