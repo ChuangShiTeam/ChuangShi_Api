@@ -138,6 +138,7 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_trade", "trade_id", Trade.class);
         activeRecordPlugin.addMapping("table_trade_commossion", "trade_commossion_id", TradeCommossion.class);
         activeRecordPlugin.addMapping("table_trade_pay", "trade_pay_id", TradePay.class);
+        activeRecordPlugin.addMapping("table_trade_product_sku", "trade_product_sku_id", TradeProductSku.class);
         activeRecordPlugin.addMapping("table_bill", "bill_id", Bill.class);
         activeRecordPlugin.addMapping("table_bill_commission", "bill_commission_id", BillCommission.class);
 

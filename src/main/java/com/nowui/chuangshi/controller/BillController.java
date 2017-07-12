@@ -7,12 +7,15 @@ import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Bill;
+import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.BillService;
+import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.util.Util;
 
 public class BillController extends Controller {
 
     private final BillService billService = new BillService();
+    private final UserService userService = new UserService();
 
     @ActionKey("/bill/test")
     public void test() {
@@ -137,6 +140,10 @@ public class BillController extends Controller {
         List<Bill> resultList = billService.listByApp_idOrLikeBill_nameAndLimit(request_app_id, model.getBill_name(), getM(), getN());
 
         for (Bill result : resultList) {
+            User user = userService.findByUser_id(result.getUser_id());
+            if (user != null) {
+                result.setUser_id(user.getUser_name());
+            }
             result.keep(Bill.BILL_ID, Bill.USER_ID, Bill.BILL_TYPE, Bill.BILL_IMAGE, Bill.BILL_IMAGE, Bill.BILL_NAME, Bill.BILL_AMOUNT,
                     Bill.BILL_IS_INCOME, Bill.BILL_TIME, Bill.BILL_FLOW, Bill.BILL_STATUS, Bill.SYSTEM_VERSION);
         }
@@ -157,7 +164,8 @@ public class BillController extends Controller {
 
         authenticateApp_id(bill.getApp_id());
 
-        bill.keep(Bill.BILL_ID, Bill.SYSTEM_VERSION);
+        bill.keep(Bill.BILL_ID, Bill.USER_ID, Bill.BILL_TYPE, Bill.BILL_IMAGE, Bill.BILL_IMAGE, Bill.BILL_NAME, Bill.BILL_AMOUNT,
+                Bill.BILL_IS_INCOME, Bill.BILL_TIME, Bill.BILL_FLOW, Bill.BILL_STATUS, Bill.SYSTEM_VERSION);
 
         renderSuccessJson(bill);
     }

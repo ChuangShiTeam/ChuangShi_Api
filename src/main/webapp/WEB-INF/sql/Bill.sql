@@ -35,7 +35,17 @@
 
   #sql("listByApp_idOrLikeBill_nameAndLimit")
     SELECT
-    bill_id
+    bill_id,
+    user_id,
+    bill_type,
+    bill_image,
+    bill_name,
+    bill_amount,
+    bill_is_income,
+    bill_time,
+    bill_flow,
+    bill_status,
+    system_version
     FROM table_bill
     WHERE system_status = 1
     AND app_id = #p(app_id)
@@ -65,7 +75,17 @@
 
   #sql("findByBill_id")
     SELECT
-    *
+    bill_id,
+    user_id,
+    bill_type,
+    bill_image,
+    bill_name,
+    bill_amount,
+    bill_is_income,
+    bill_time,
+    bill_flow,
+    bill_status,
+    system_version
     FROM table_bill
     WHERE system_status = 1
     AND bill_id = #p(bill_id)

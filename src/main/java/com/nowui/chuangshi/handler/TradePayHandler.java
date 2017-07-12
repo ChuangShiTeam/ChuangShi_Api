@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
-import com.jfinal.plugin.zbus.annotation.Handler;
-import com.jfinal.plugin.zbus.annotation.Topic;
 import com.jfinal.plugin.zbus.handler.TMsgHandler;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Bill;
@@ -63,7 +61,7 @@ public class TradePayHandler extends TMsgHandler<String> {
             Boolean app_is_commission = app.getApp_is_commission();
             Integer app_commission_level = app.getApp_commission_level();
 
-            //["0","29b090a580244c10a78dc66faac40fc2"]
+            // ["0","29b090a580244c10a78dc66faac40fc2"]
             String member_parent_path = member.getMember_parent_path().trim();
             member_parent_path = member_parent_path.replace("[", "");
             member_parent_path = member_parent_path.replace("]", "");
@@ -89,7 +87,8 @@ public class TradePayHandler extends TMsgHandler<String> {
             tradeMemberBill.setApp_id(trade.getApp_id());
             tradeMemberBill.setUser_id(user_id);
             tradeMemberBill.setBill_is_income(false);
-            tradeMemberBill.setBill_amount(trade.getTrade_product_amount().add(trade.getTrade_express_amount()).subtract(trade.getTrade_discount_amount()));
+            tradeMemberBill
+                    .setBill_amount(trade.getTrade_product_amount().add(trade.getTrade_express_amount()).subtract(trade.getTrade_discount_amount()));
             tradeMemberBill.setBill_type(BillType.TRADE.getValue());
             tradeMemberBill.setBill_time(new Date());
             tradeMemberBill.setBill_flow(BillFlow.COMPLETE.getValue());
@@ -128,7 +127,8 @@ public class TradePayHandler extends TMsgHandler<String> {
                     BigDecimal bill_amount = BigDecimal.ZERO;
 
                     for (TradeProductSku tradeProductSku : tradeProductSkuList) {
-                        List<ProductSkuCommission> productSkuCommissionList = productSkuCommissionService.listByProduct_sku_id(tradeProductSku.getProduct_sku_id());
+                        List<ProductSkuCommission> productSkuCommissionList = productSkuCommissionService
+                                .listByProduct_sku_id(tradeProductSku.getProduct_sku_id());
 
                         TradeCommossion tradeCommossion = new TradeCommossion();
                         BillCommission billCommission = new BillCommission();
