@@ -194,23 +194,17 @@ public class Url {
     public static final String PRODUCT_CATEGORY_SYSTEM_DELETE = "/product/category/system/delete";
 
     public static final String MEMBER_LIST = "/member/list";
-    public static final String MEMBER_TEAM_LIST = "/member/team/list";
     public static final String MEMBER_FIND = "/member/find";
-    public static final String MEMBER_SAVE = "/member/save";
-    public static final String MEMBER_UPDATE = "/member/update";
-    public static final String MEMBER_DELETE = "/member/delete";
     public static final String MEMBER_ADMIN_LIST = "/member/admin/list";
     public static final String MEMBER_ADMIN_FIND = "/member/admin/find";
-    public static final String MEMBER_ADMIN_SAVE = "/member/admin/save";
-    public static final String MEMBER_ADMIN_UPDATE = "/member/admin/update";
-    public static final String MEMBER_ADMIN_DELETE = "/member/admin/delete";
     public static final String MEMBER_ADMIN_SEND = "/member/admin/send"; //会员发货
     public static final String MEMBER_SYSTEM_LIST = "/member/system/list";
     public static final String MEMBER_SYSTEM_ALL_LIST = "/member/system/all/list";
     public static final String MEMBER_SYSTEM_FIND = "/member/system/find";
-    public static final String MEMBER_SYSTEM_SAVE = "/member/system/save";
-    public static final String MEMBER_SYSTEM_UPDATE = "/member/system/update";
-    public static final String MEMBER_SYSTEM_DELETE = "/member/system/delete";
+    public static final String MEMBER_TEAM_LIST = "/member/team/list";
+    public static final String MEMBER_TEAM_FIND = "/member/team/find";
+    public static final String MEMBER_TEAM_MEMBER_LEVEL_LIST = "/member/team/member/level/list";
+    public static final String MEMBER_TEAM_MEMBER_LEVEL_UPDATE = "/member/team/member/level/update";
 
     // 会员地址
     public static final String MEMBER_ADDRESS_LIST = "/member/address/list";

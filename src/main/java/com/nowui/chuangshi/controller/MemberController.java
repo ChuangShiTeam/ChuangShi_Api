@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import com.nowui.chuangshi.service.*;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -19,11 +20,6 @@ import com.nowui.chuangshi.model.MemberLevel;
 import com.nowui.chuangshi.model.ProductSku;
 import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.service.ExpressService;
-import com.nowui.chuangshi.service.MemberAddressService;
-import com.nowui.chuangshi.service.MemberService;
-import com.nowui.chuangshi.service.StockService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.ExpressStatus;
 import com.nowui.chuangshi.type.StockAction;
 import com.nowui.chuangshi.type.StockType;
@@ -36,6 +32,8 @@ public class MemberController extends Controller {
     private final ExpressService expressService = new ExpressService();
     private final StockService stockService = new StockService();
     private final MemberAddressService memberAddressService = new MemberAddressService();
+    private final MemberLevelService memberLevelService = new MemberLevelService();
+    private final FileService fileService = new FileService();
 
     private List<Map<String, Object>> getChildren(List<Member> memberList, String member_parent_id, String... keys) {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -90,6 +88,8 @@ public class MemberController extends Controller {
 
         User user = userService.findByUser_id(request_user_id);
 
+        authenticateApp_id(user.getApp_id());
+
         Member member = memberService.findByMember_id(user.getObject_Id());
 
         List<Member> memberList = memberService.listByMember_parent_pathLikeMember_parent_id(member.getMember_id());
@@ -117,8 +117,92 @@ public class MemberController extends Controller {
 
         renderSuccessJson(member);
     }
-    
 
+    @ActionKey(Url.MEMBER_TEAM_MEMBER_LEVEL_LIST)
+    public void teamMemberLevel() {
+        validateRequest_app_id();
+        validate(Member.MEMBER_ID);
+
+        Member model = getModel(Member.class);
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        Member member = memberService.findByMember_id(model.getMember_id());
+
+        Member parentMember = memberService.findByMember_id(member.getMember_parent_id());
+        MemberLevel parentMemberLevel = memberLevelService.findByMember_level_id(parentMember.getMember_level_id());
+
+        List<MemberLevel> resultList = new ArrayList<MemberLevel>();
+        List<MemberLevel> memberLevelList = memberLevelService.listByApp_id(member.getApp_id());
+        for(MemberLevel memberLevel : memberLevelList) {
+            if (memberLevel.getMember_level_value() > parentMemberLevel.getMember_level_value()) {
+                if (memberLevel.getMember_level_id().equals(member.getMember_level_id())) {
+                    memberLevel.put(Constant.IS_SELECT, true);
+                } else {
+                    memberLevel.put(Constant.IS_SELECT, false);
+                }
+
+                resultList.add(memberLevel);
+            }
+        }
+
+        authenticateApp_id(member.getApp_id());
+
+        renderSuccessJson(resultList);
+    }
+
+    @ActionKey(Url.MEMBER_TEAM_FIND)
+    public void teamFind() {
+        validateRequest_app_id();
+        validate(Member.MEMBER_ID);
+
+        Member model = getModel(Member.class);
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        Member member = memberService.findByMember_id(model.getMember_id());
+
+        authenticateApp_id(member.getApp_id());
+
+        User user = userService.findByUser_id(member.getUser_id());
+        member.put(User.USER_NAME, user.getUser_name());
+        member.put(User.USER_AVATAR, fileService.getFile_path(user.getUser_avatar()));
+
+        String member_level_name = "";
+        if (!ValidateUtil.isNullOrEmpty(member.getMember_level_id())) {
+            MemberLevel memberLevel = memberLevelService.findByMember_level_id(member.getMember_level_id());
+
+            member_level_name =  memberLevel.getMember_level_name();
+        }
+        member.put(MemberLevel.MEMBER_LEVEL_NAME, member_level_name);
+
+        member.keep(Member.MEMBER_ID, User.USER_NAME, User.USER_AVATAR, MemberLevel.MEMBER_LEVEL_NAME, Member.MEMBER_STATUS);
+
+        renderSuccessJson(member);
+    }
+
+    @ActionKey(Url.MEMBER_TEAM_MEMBER_LEVEL_UPDATE)
+    public void teamMemberLevelUpdate() {
+        validateRequest_app_id();
+        validate(Member.MEMBER_ID);
+
+        Member model = getModel(Member.class);
+        String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        Member member = memberService.findByMember_id(model.getMember_id());
+        User parentUser = userService.findByUser_id(request_user_id);
+        Member parentMember = memberService.findByMember_id(parentUser.getObject_Id());
+
+        if (member.getMember_parent_id().equals(parentMember.getMember_id())) {
+            memberService.updateByMember_idAndMember_level_id(model.getMember_id(), model.getMember_level_id(), request_user_id);
+        } else {
+            throw new RuntimeException("您不是上一级");
+        }
+
+        renderSuccessJson();
+    }
 
     @ActionKey(Url.MEMBER_ADMIN_LIST)
     public void adminList() {

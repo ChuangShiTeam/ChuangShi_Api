@@ -181,6 +181,16 @@
     WHERE system_status = 1
     AND member_id = #p(member_id)
   #end
+
+  #sql("updateByMember_idAndMember_level_id")
+    UPDATE table_member SET
+    member_level_id = #p(member_level_id),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND member_id = #p(member_id)
+  #end
   
   #sql("deleteByMember_idAndSystem_version")
     UPDATE table_member SET

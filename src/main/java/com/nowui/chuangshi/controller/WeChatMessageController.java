@@ -160,7 +160,7 @@ public class WeChatMessageController extends MsgController {
                     MemberLevel memberLevel = memberLevelService.findByMember_level_sort(app_id, 1);
                     member_level_id = memberLevel.getMember_level_id();
 
-                    memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member.getMember_id(), member_parent_id, member_parent_path, member_level_id);
+                    memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member.getMember_id(), member_parent_id, member_parent_path, member_level_id, system_create_user_id);
 
                     qrcodeService.updateQrcode_addByQrcode_id(from_qrcode_id, request_user_id);
 
@@ -187,7 +187,7 @@ public class WeChatMessageController extends MsgController {
                     member_level_id = memberLevel.getMember_level_id();
                 }
 
-                memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member.getMember_id(), member_parent_id, member_parent_path, member_level_id);
+                memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member.getMember_id(), member_parent_id, member_parent_path, member_level_id, system_create_user_id);
 
                 qrcodeService.updateQrcode_addByQrcode_id(from_qrcode_id, request_user_id);
 
