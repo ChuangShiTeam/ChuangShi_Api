@@ -103,6 +103,14 @@
     AND express_id = #p(express_id)
   #end
 
+  #sql("listByTrade_id")
+    SELECT
+    *
+    FROM table_express
+    WHERE system_status = 1
+    AND trade_id = #p(trade_id)
+  #end
+
   #sql("save")
     INSERT INTO table_express (
       express_id,

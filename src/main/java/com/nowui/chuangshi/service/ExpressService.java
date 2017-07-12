@@ -51,4 +51,8 @@ public class ExpressService extends Service {
         return expressCache.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(express_id, system_update_user_id, system_version);
     }
 
+    public List<Express> listByTrade_id(String trade_id) {
+        return expressCache.listByTrade_id(trade_id);
+    }
+
 }

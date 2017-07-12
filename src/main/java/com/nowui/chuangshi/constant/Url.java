@@ -432,6 +432,7 @@ public class Url {
     public static final String TRADE_ADMIN_FIND = "/trade/admin/find";
     public static final String TRADE_ADMIN_SAVE = "/trade/admin/save";
     public static final String TRADE_ADMIN_UPDATE = "/trade/admin/update";
+    public static final String TRADE_ADMIN_DELIVERY = "/trade/admin/delivery";
     public static final String TRADE_ADMIN_DELETE = "/trade/admin/delete";
     public static final String TRADE_SYSTEM_LIST = "/trade/system/list";
     public static final String TRADE_SYSTEM_FIND = "/trade/system/find";

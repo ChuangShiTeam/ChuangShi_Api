@@ -223,4 +223,14 @@ public class ExpressDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
+    public List<Express> listByTrade_id(String trade_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Express.TRADE_ID, trade_id);
+        SqlPara sqlPara = Db.getSqlPara("express.listByTrade_id", sqlMap);
+
+        logSql("express", "listByTrade_id", sqlPara);
+        
+        return new Express().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+
 }

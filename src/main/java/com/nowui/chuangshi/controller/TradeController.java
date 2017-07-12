@@ -13,21 +13,25 @@ import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
+import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberAddress;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
 import com.nowui.chuangshi.model.ProductSkuPrice;
 import com.nowui.chuangshi.model.Trade;
+import com.nowui.chuangshi.model.TradeCommossion;
 import com.nowui.chuangshi.model.TradeProductSku;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.AppService;
+import com.nowui.chuangshi.service.ExpressService;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberAddressService;
 import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.ProductService;
 import com.nowui.chuangshi.service.ProductSkuPriceService;
 import com.nowui.chuangshi.service.ProductSkuService;
+import com.nowui.chuangshi.service.TradeCommossionService;
 import com.nowui.chuangshi.service.TradeProductSkuService;
 import com.nowui.chuangshi.service.TradeService;
 import com.nowui.chuangshi.service.UserService;
@@ -41,11 +45,13 @@ public class TradeController extends Controller {
     private final ProductSkuService productSkuService = new ProductSkuService();
     private final TradeProductSkuService tradeProductSkuService = new TradeProductSkuService();
     private final ProductSkuPriceService productSkuPriceService = new ProductSkuPriceService();
+    private final TradeCommossionService tradeCommossionService = new TradeCommossionService();
     private final UserService userService = new UserService();
     private final MemberService memberService = new MemberService();
     private final MemberAddressService memberAddressService = new MemberAddressService();
     private final FileService fileService = new FileService();
     private final AppService appService = new AppService();
+    private final ExpressService expressService = new ExpressService();
 
     @ActionKey(Url.TRADE_CHECK)
     public void check() {
@@ -75,8 +81,7 @@ public class TradeController extends Controller {
             productSkuObject.put(Product.PRODUCT_NAME, product.getProduct_name());
             productSkuObject.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
 
-            BigDecimal product_sku_price = productSkuPriceService
-                    .findByProduct_sku_idAndMember_level_id(productSkuObject.getString(ProductSku.PRODUCT_SKU_ID), member.getMember_level_id());
+            BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(productSkuObject.getString(ProductSku.PRODUCT_SKU_ID), member.getMember_level_id());
             trade_product_amount = trade_product_amount.add(product_sku_price.multiply(productSkuObject.getBigDecimal("product_sku_quantity")));
             productSkuObject.put(ProductSkuPrice.PRODUCT_SKU_PRICE, product_sku_price);
         }
@@ -100,8 +105,7 @@ public class TradeController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<Trade> resultList = tradeService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME),
-                0, getN());
+        List<Trade> resultList = tradeService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
 
         for (Trade result : resultList) {
             result.keep(Trade.TRADE_ID, Trade.SYSTEM_VERSION);
@@ -132,8 +136,8 @@ public class TradeController extends Controller {
     @ActionKey(Url.TRADE_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY,
-                Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE, Product.PRODUCT_SKU_LIST, "open_id", "pay_type");
+        validate(Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS,
+                Trade.TRADE_MESSAGE, Product.PRODUCT_SKU_LIST, "open_id", "pay_type");
 
         Trade model = getModel(Trade.class);
         String trade_id = Util.getRandomUUID();
@@ -152,11 +156,9 @@ public class TradeController extends Controller {
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
             TradeProductSku tradeProductSku = jsonObject1.toJavaObject(TradeProductSku.class);
-            BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(tradeProductSku.getProduct_sku_id(),
-                    member.getMember_level_id());
+            BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(tradeProductSku.getProduct_sku_id(), member.getMember_level_id());
             BigDecimal product_sku_amount = product_sku_price.multiply(new BigDecimal(tradeProductSku.getProduct_sku_quantity()));
-            tradeProductSkuService.save(trade_id, tradeProductSku.getProduct_sku_id(), "", tradeProductSku.getProduct_sku_quantity(),
-                    trade_product_amount, request_user_id);
+            tradeProductSkuService.save(trade_id, tradeProductSku.getProduct_sku_id(), "", tradeProductSku.getProduct_sku_quantity(), trade_product_amount, request_user_id);
             trade_product_quantity += tradeProductSku.getProduct_sku_quantity();
             trade_product_amount = trade_product_amount.add(product_sku_amount);
         }
@@ -169,10 +171,9 @@ public class TradeController extends Controller {
         boolean trade_is_commission = app.getApp_is_commission();
         boolean trade_status = true;
 
-        Boolean flag = tradeService.save(trade_id, request_app_id, request_user_id, trade_number, model.getTrade_receiver_name(),
-                model.getTrade_receiver_mobile(), model.getTrade_receiver_province(), model.getTrade_receiver_city(), model.getTrade_receiver_area(),
-                model.getTrade_receiver_address(), model.getTrade_message(), trade_product_quantity, trade_product_amount, new BigDecimal(0),
-                new BigDecimal(0), trade_is_commission, trade_is_confirm, trade_is_pay, trade_flow, trade_status, "", request_user_id);
+        Boolean flag = tradeService.save(trade_id, request_app_id, request_user_id, trade_number, model.getTrade_receiver_name(), model.getTrade_receiver_mobile(), model.getTrade_receiver_province(),
+                model.getTrade_receiver_city(), model.getTrade_receiver_area(), model.getTrade_receiver_address(), model.getTrade_message(), trade_product_quantity, trade_product_amount,
+                new BigDecimal(0), new BigDecimal(0), trade_is_commission, trade_is_confirm, trade_is_pay, trade_flow, trade_status, "", request_user_id);
         Map<String, String> result = new HashMap<>();
         if (flag) {
             result = tradeService.pay(trade_id, open_id, "WX", request_user_id);
@@ -183,11 +184,10 @@ public class TradeController extends Controller {
     @ActionKey(Url.TRADE_UPDATE)
     public void update() {
         validateRequest_app_id();
-        validate(Trade.TRADE_ID, Trade.USER_ID, Trade.TRADE_NUMBER, Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE,
-                Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS,
-                Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
-                Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW,
-                Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
+        validate(Trade.TRADE_ID, Trade.USER_ID, Trade.TRADE_NUMBER, Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY,
+                Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
+                Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS,
+                Trade.SYSTEM_VERSION);
 
         Trade model = getModel(Trade.class);
         String request_user_id = getRequest_user_id();
@@ -199,12 +199,10 @@ public class TradeController extends Controller {
         authenticateApp_id(trade.getApp_id());
         authenticateSystem_create_user_id(trade.getSystem_create_user_id());
 
-        Boolean result = tradeService.updateValidateSystem_version(model.getTrade_id(), model.getUser_id(), model.getTrade_number(),
-                model.getTrade_receiver_name(), model.getTrade_receiver_mobile(), model.getTrade_receiver_province(), model.getTrade_receiver_city(),
-                model.getTrade_receiver_area(), model.getTrade_receiver_address(), model.getTrade_message(), model.getTrade_product_quantity(),
-                model.getTrade_product_amount(), model.getTrade_express_amount(), model.getTrade_discount_amount(), model.getTrade_is_commission(),
-                model.getTrade_is_confirm(), model.getTrade_is_pay(), model.getTrade_flow(), model.getTrade_status(), model.getTrade_audit_status(),
-                request_user_id, model.getSystem_version());
+        Boolean result = tradeService.updateValidateSystem_version(model.getTrade_id(), model.getUser_id(), model.getTrade_number(), model.getTrade_receiver_name(), model.getTrade_receiver_mobile(),
+                model.getTrade_receiver_province(), model.getTrade_receiver_city(), model.getTrade_receiver_area(), model.getTrade_receiver_address(), model.getTrade_message(),
+                model.getTrade_product_quantity(), model.getTrade_product_amount(), model.getTrade_express_amount(), model.getTrade_discount_amount(), model.getTrade_is_commission(),
+                model.getTrade_is_confirm(), model.getTrade_is_pay(), model.getTrade_flow(), model.getTrade_status(), model.getTrade_audit_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -224,8 +222,7 @@ public class TradeController extends Controller {
         authenticateApp_id(trade.getApp_id());
         authenticateSystem_create_user_id(trade.getSystem_create_user_id());
 
-        Boolean result = tradeService.deleteByTrade_idAndSystem_update_user_idValidateSystem_version(model.getTrade_id(), request_user_id,
-                model.getSystem_version());
+        Boolean result = tradeService.deleteByTrade_idAndSystem_update_user_idValidateSystem_version(model.getTrade_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -248,11 +245,10 @@ public class TradeController extends Controller {
             if (user != null) {
                 result.setUser_id(user.getUser_name());
             }
-            result.keep(Trade.TRADE_ID, Trade.APP_ID, Trade.USER_ID, Trade.TRADE_NUMBER, Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE,
-                    Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS,
-                    Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
-                    Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW,
-                    Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
+            result.keep(Trade.TRADE_ID, Trade.APP_ID, Trade.USER_ID, Trade.TRADE_NUMBER, Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE,
+                    Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT,
+                    Trade.TRADE_EXPRESS_AMOUNT, Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_STATUS,
+                    Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -261,6 +257,7 @@ public class TradeController extends Controller {
     @ActionKey(Url.TRADE_ADMIN_FIND)
     public void adminFind() {
         validateRequest_app_id();
+
         validate(Trade.TRADE_ID);
 
         Trade model = getModel(Trade.class);
@@ -271,13 +268,44 @@ public class TradeController extends Controller {
 
         authenticateApp_id(trade.getApp_id());
 
-        trade.keep(Trade.TRADE_ID, Trade.APP_ID, Trade.USER_ID, Trade.TRADE_NUMBER, Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE,
-                Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS,
-                Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
-                Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW,
-                Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
+        User user = userService.findByUser_id(trade.getUser_id());
+        if (user != null) {
+            trade.setUser_id(user.getUser_name());
+        }
+        Map<String, Object> result = new HashMap<>();
 
-        renderSuccessJson(trade);
+        // 获取订单详情
+        trade.keep(Trade.TRADE_ID, Trade.APP_ID, Trade.USER_ID, Trade.TRADE_NUMBER, Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY,
+                Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
+                Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS,
+                Trade.SYSTEM_VERSION);
+        result.put("trade", trade);
+
+        // 根据订单获取商品列表
+        List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(trade.getTrade_id());
+
+        for (TradeProductSku tradeProductSku : tradeProductSkuList) {
+            tradeProductSku.put(Product.PRODUCT_NAME,"");
+        }
+        result.put("tradeProductSkuList", tradeProductSkuList);
+
+        // 根据订单获取账单列表
+        List<TradeCommossion> tradeCommossionList = tradeCommossionService.listByTrade_id(trade.getTrade_id());
+
+        for (TradeCommossion tradeCommossion : tradeCommossionList) {
+            tradeCommossion.put(Product.PRODUCT_NAME,"");
+        }
+        result.put("tradeCommossionList", tradeCommossionList);
+
+        // 根据订单获取账单列表
+        List<Express> expressList = expressService.listByTrade_id(trade.getTrade_id());
+
+        for (Express express : expressList) {
+
+        }
+        result.put("expressList", expressList);
+
+        renderSuccessJson(result);
     }
 
     @ActionKey(Url.TRADE_ADMIN_SAVE)
@@ -288,11 +316,10 @@ public class TradeController extends Controller {
     @ActionKey(Url.TRADE_ADMIN_UPDATE)
     public void adminUpdate() {
         validateRequest_app_id();
-        validate(Trade.TRADE_ID, Trade.USER_ID, Trade.TRADE_NUMBER, Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE,
-                Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS,
-                Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
-                Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW,
-                Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
+        validate(Trade.TRADE_ID, Trade.USER_ID, Trade.TRADE_NUMBER, Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY,
+                Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
+                Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS,
+                Trade.SYSTEM_VERSION);
 
         Trade model = getModel(Trade.class);
         String request_user_id = getRequest_user_id();
@@ -303,13 +330,36 @@ public class TradeController extends Controller {
 
         authenticateApp_id(trade.getApp_id());
 
-        Boolean result = tradeService.updateValidateSystem_version(model.getTrade_id(), model.getUser_id(), model.getTrade_number(),
-                model.getTrade_receiver_name(), model.getTrade_receiver_mobile(), model.getTrade_receiver_province(), model.getTrade_receiver_city(),
-                model.getTrade_receiver_area(), model.getTrade_receiver_address(), model.getTrade_message(), model.getTrade_product_quantity(),
-                model.getTrade_product_amount(), model.getTrade_express_amount(), model.getTrade_discount_amount(), model.getTrade_is_commission(),
-                model.getTrade_is_confirm(), model.getTrade_is_pay(), model.getTrade_flow(), model.getTrade_status(), model.getTrade_audit_status(),
-                request_user_id, model.getSystem_version());
+        Boolean result = tradeService.updateValidateSystem_version(model.getTrade_id(), model.getUser_id(), model.getTrade_number(), model.getTrade_receiver_name(), model.getTrade_receiver_mobile(),
+                model.getTrade_receiver_province(), model.getTrade_receiver_city(), model.getTrade_receiver_area(), model.getTrade_receiver_address(), model.getTrade_message(),
+                model.getTrade_product_quantity(), model.getTrade_product_amount(), model.getTrade_express_amount(), model.getTrade_discount_amount(), model.getTrade_is_commission(),
+                model.getTrade_is_confirm(), model.getTrade_is_pay(), model.getTrade_flow(), model.getTrade_status(), model.getTrade_audit_status(), request_user_id, model.getSystem_version());
 
+        renderSuccessJson(result);
+    }
+
+    @ActionKey(Url.TRADE_ADMIN_DELIVERY)
+    public void adminDelivery() {
+        validateRequest_app_id();
+
+        validate(Trade.TRADE_ID, Trade.SYSTEM_VERSION);
+
+        String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        JSONObject jsonObject = getParameterJSONObject();
+
+        String trade_id = jsonObject.getString("trade_id");
+
+        String system_version = jsonObject.getString("system_version");
+
+        Trade trade = tradeService.findByTrade_id(trade_id);
+
+        authenticateApp_id(trade.getApp_id());
+
+        Boolean result = tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade_id, request_user_id, system_version);
+        
         renderSuccessJson(result);
     }
 
@@ -327,8 +377,7 @@ public class TradeController extends Controller {
 
         authenticateApp_id(trade.getApp_id());
 
-        Boolean result = tradeService.deleteByTrade_idAndSystem_update_user_idValidateSystem_version(model.getTrade_id(), request_user_id,
-                model.getSystem_version());
+        Boolean result = tradeService.deleteByTrade_idAndSystem_update_user_idValidateSystem_version(model.getTrade_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -367,21 +416,18 @@ public class TradeController extends Controller {
     @ActionKey(Url.TRADE_SYSTEM_SAVE)
     public void systemSave() {
         validateRequest_app_id();
-        validate(Trade.APP_ID, Trade.USER_ID, Trade.TRADE_NUMBER, Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE,
-                Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS,
-                Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
-                Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW,
-                Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS);
+        validate(Trade.APP_ID, Trade.USER_ID, Trade.TRADE_NUMBER, Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY,
+                Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
+                Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS);
 
         Trade model = getModel(Trade.class);
         String trade_id = Util.getRandomUUID();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = tradeService.save(trade_id, model.getApp_id(), model.getUser_id(), model.getTrade_number(), model.getTrade_receiver_name(),
-                model.getTrade_receiver_mobile(), model.getTrade_receiver_province(), model.getTrade_receiver_city(), model.getTrade_receiver_area(),
-                model.getTrade_receiver_address(), model.getTrade_message(), model.getTrade_product_quantity(), model.getTrade_product_amount(),
-                model.getTrade_express_amount(), model.getTrade_discount_amount(), model.getTrade_is_commission(), model.getTrade_is_confirm(),
-                model.getTrade_is_pay(), model.getTrade_flow(), model.getTrade_status(), model.getTrade_audit_status(), request_user_id);
+        Boolean result = tradeService.save(trade_id, model.getApp_id(), model.getUser_id(), model.getTrade_number(), model.getTrade_receiver_name(), model.getTrade_receiver_mobile(),
+                model.getTrade_receiver_province(), model.getTrade_receiver_city(), model.getTrade_receiver_area(), model.getTrade_receiver_address(), model.getTrade_message(),
+                model.getTrade_product_quantity(), model.getTrade_product_amount(), model.getTrade_express_amount(), model.getTrade_discount_amount(), model.getTrade_is_commission(),
+                model.getTrade_is_confirm(), model.getTrade_is_pay(), model.getTrade_flow(), model.getTrade_status(), model.getTrade_audit_status(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -389,21 +435,18 @@ public class TradeController extends Controller {
     @ActionKey(Url.TRADE_SYSTEM_UPDATE)
     public void systemUpdate() {
         validateRequest_app_id();
-        validate(Trade.TRADE_ID, Trade.USER_ID, Trade.TRADE_NUMBER, Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE,
-                Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS,
-                Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
-                Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW,
-                Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
+        validate(Trade.TRADE_ID, Trade.USER_ID, Trade.TRADE_NUMBER, Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY,
+                Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
+                Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS,
+                Trade.SYSTEM_VERSION);
 
         Trade model = getModel(Trade.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = tradeService.updateValidateSystem_version(model.getTrade_id(), model.getUser_id(), model.getTrade_number(),
-                model.getTrade_receiver_name(), model.getTrade_receiver_mobile(), model.getTrade_receiver_province(), model.getTrade_receiver_city(),
-                model.getTrade_receiver_area(), model.getTrade_receiver_address(), model.getTrade_message(), model.getTrade_product_quantity(),
-                model.getTrade_product_amount(), model.getTrade_express_amount(), model.getTrade_discount_amount(), model.getTrade_is_commission(),
-                model.getTrade_is_confirm(), model.getTrade_is_pay(), model.getTrade_flow(), model.getTrade_status(), model.getTrade_audit_status(),
-                request_user_id, model.getSystem_version());
+        Boolean result = tradeService.updateValidateSystem_version(model.getTrade_id(), model.getUser_id(), model.getTrade_number(), model.getTrade_receiver_name(), model.getTrade_receiver_mobile(),
+                model.getTrade_receiver_province(), model.getTrade_receiver_city(), model.getTrade_receiver_area(), model.getTrade_receiver_address(), model.getTrade_message(),
+                model.getTrade_product_quantity(), model.getTrade_product_amount(), model.getTrade_express_amount(), model.getTrade_discount_amount(), model.getTrade_is_commission(),
+                model.getTrade_is_confirm(), model.getTrade_is_pay(), model.getTrade_flow(), model.getTrade_status(), model.getTrade_audit_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -416,8 +459,7 @@ public class TradeController extends Controller {
         Trade model = getModel(Trade.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = tradeService.deleteByTrade_idAndSystem_update_user_idValidateSystem_version(model.getTrade_id(), request_user_id,
-                model.getSystem_version());
+        Boolean result = tradeService.deleteByTrade_idAndSystem_update_user_idValidateSystem_version(model.getTrade_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

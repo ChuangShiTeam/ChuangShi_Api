@@ -36,6 +36,7 @@
   #sql("listByApp_idOrLikeBill_nameAndLimit")
     SELECT
     bill_id,
+    app_id,
     user_id,
     bill_type,
     bill_image,
@@ -76,6 +77,7 @@
   #sql("findByBill_id")
     SELECT
     bill_id,
+    app_id,
     user_id,
     bill_type,
     bill_image,
