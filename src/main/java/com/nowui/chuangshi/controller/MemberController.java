@@ -22,6 +22,7 @@ import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.type.ExpressStatus;
 import com.nowui.chuangshi.type.StockAction;
+import com.nowui.chuangshi.type.StockFlow;
 import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.Util;
 
@@ -246,7 +247,7 @@ public class MemberController extends Controller {
     @ActionKey(Url.MEMBER_ADMIN_SEND)
     public void adminSend() {
         validateRequest_app_id();
-        validate(Member.MEMBER_ID, ProductSku.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_ADDRESS, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_TEL);
+        validate(Member.MEMBER_ID, ProductSku.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_ADDRESS, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_MOBILE);
         
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
@@ -271,7 +272,7 @@ public class MemberController extends Controller {
         /*if (memberAddress == null || StringUtils.isBlank(memberAddress.getMember_address_id())) {
         	throw new RuntimeException("会员地址信息需要完善");
         }*/
-        Boolean result = stockService.save(stock_id, member.getApp_id(), product_sku_id, member_id, StockType.MEMBER.getValue(), stock_quantity, StockAction.OUT.getValue(), null, request_user_id);
+        Boolean result = stockService.save(stock_id, member.getApp_id(), product_sku_id, member_id, StockType.MEMBER.getValue(), stock_quantity, StockAction.OUT.getValue(), StockFlow.WAIT_SEND.getValue(), false, null, request_user_id);
         if (result) {
             //保存快递单收货人信息
             expressService.saveExpress_idAndApp_idAndStock_idAndExpress_sender_user_idAndExpress_receiver_nameAndExpress_receiver_mobileAndExpress_receiver_provinceAndExpress_receiver_cityAndExpress_receiver_areaAndExpress_receiver_addressAndSystem_create_user_id(Util.getRandomUUID(), member.getApp_id(), stock_id, member.getUser_id(), express.getExpress_receiver_name(), express.getExpress_receiver_mobile(), express.getExpress_receiver_province(), express.getExpress_receiver_city(), express.getExpress_receiver_area(), express.getExpress_receiver_address(), request_user_id);

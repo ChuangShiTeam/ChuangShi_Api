@@ -11,7 +11,7 @@ public class Stock extends Model<Stock> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用id")
     public static final String APP_ID = "app_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "商品skuid")
     public static final String PRODUCT_SKU_ID = "product_sku_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "公司id或会员id")
@@ -25,6 +25,12 @@ public class Stock extends Model<Stock> {
 
     @Column(type = ColumnType.VARCHAR, length = 25, comment = "出库或入库")
     public static final String STOCK_ACTION = "stock_action";
+    
+    @Column(type = ColumnType.VARCHAR, length = 25, comment = "发货流程")
+    public static final String STOCK_FLOW = "stock_flow";
+
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否支付")
+    public static final String STOCK_IS_PAY = "stock_is_pay";
 
     @Column(type = ColumnType.VARCHAR, length = 25, comment = "状态")
     public static final String STOCK_STATUS = "stock_status";
@@ -38,6 +44,7 @@ public class Stock extends Model<Stock> {
     private String app_name;
     private String user_name;
     private String product_name;
+    private Integer sum_stock_quantity;
 
     public String getStock_id() {
         return getStr(STOCK_ID);
@@ -94,6 +101,22 @@ public class Stock extends Model<Stock> {
     public void setStock_action(String stock_action) {
         set(STOCK_ACTION, stock_action);
     }
+    
+    public String getStock_flow() {
+        return getStr(STOCK_FLOW);
+    }
+
+    public void setStock_flow(String stock_flow) {
+        set(STOCK_FLOW, stock_flow);
+    }
+
+    public Boolean getStock_is_pay() {
+        return getBoolean(STOCK_IS_PAY);
+    }
+
+    public void setStock_is_pay(Boolean stock_is_pay) {
+        set(STOCK_IS_PAY, stock_is_pay);
+    }
 
     public String getStock_status() {
         return getStr(STOCK_STATUS);
@@ -125,6 +148,14 @@ public class Stock extends Model<Stock> {
 
     public void setProduct_name(String product_name) {
         this.product_name = product_name;
+    }
+
+    public Integer getSum_stock_quantity() {
+        return sum_stock_quantity;
+    }
+
+    public void setSum_stock_quantity(Integer sum_stock_quantity) {
+        this.sum_stock_quantity = sum_stock_quantity;
     }
 
 }
