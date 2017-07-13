@@ -89,18 +89,18 @@ public class TradeCache extends Cache {
     public Boolean save(String trade_id, String app_id, String user_id, String trade_number, String trade_receiver_name, String trade_receiver_mobile,
             String trade_receiver_province, String trade_receiver_city, String trade_receiver_area, String trade_receiver_address,
             String trade_message, Integer trade_product_quantity, BigDecimal trade_product_amount, BigDecimal trade_express_amount,
-            BigDecimal trade_discount_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, String trade_flow,
+            BigDecimal trade_discount_amount, BigDecimal trade_total_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, String trade_flow,
             Boolean trade_status, String trade_audit_status, String system_create_user_id) {
         return tradeDao.save(trade_id, app_id, user_id, trade_number, trade_receiver_name, trade_receiver_mobile, trade_receiver_province,
                 trade_receiver_city, trade_receiver_area, trade_receiver_address, trade_message, trade_product_quantity, trade_product_amount,
-                trade_express_amount, trade_discount_amount, trade_is_commission, trade_is_confirm, trade_is_pay, trade_flow, trade_status,
+                trade_express_amount, trade_discount_amount, trade_total_amount, trade_is_commission, trade_is_confirm, trade_is_pay, trade_flow, trade_status,
                 trade_audit_status, system_create_user_id);
     }
 
     public Boolean updateValidateSystem_version(String trade_id, String user_id, String trade_number, String trade_receiver_name,
             String trade_receiver_mobile, String trade_receiver_province, String trade_receiver_city, String trade_receiver_area,
             String trade_receiver_address, String trade_message, Integer trade_product_quantity, BigDecimal trade_product_amount,
-            BigDecimal trade_express_amount, BigDecimal trade_discount_amount, Boolean trade_is_commission, Boolean trade_is_confirm,
+            BigDecimal trade_express_amount, BigDecimal trade_discount_amount, BigDecimal trade_total_amount, Boolean trade_is_commission, Boolean trade_is_confirm,
             Boolean trade_is_pay, String trade_flow, Boolean trade_status, String trade_audit_status, String system_update_user_id,
             Integer system_version) {
         Trade trade = findByTrade_id(trade_id);
@@ -110,7 +110,7 @@ public class TradeCache extends Cache {
 
         boolean result = tradeDao.update(trade_id, user_id, trade_number, trade_receiver_name, trade_receiver_mobile, trade_receiver_province,
                 trade_receiver_city, trade_receiver_area, trade_receiver_address, trade_message, trade_product_quantity, trade_product_amount,
-                trade_express_amount, trade_discount_amount, trade_is_commission, trade_is_confirm, trade_is_pay, trade_flow, trade_status,
+                trade_express_amount, trade_discount_amount, trade_total_amount, trade_is_commission, trade_is_confirm, trade_is_pay, trade_flow, trade_status,
                 trade_audit_status, system_update_user_id, system_version);
 
         if (result) {

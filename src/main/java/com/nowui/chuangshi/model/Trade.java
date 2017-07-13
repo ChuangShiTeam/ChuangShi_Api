@@ -7,67 +7,70 @@ import com.nowui.chuangshi.type.ColumnType;
 
 public class Trade extends Model<Trade> {
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "订单编号")
     public static final String TRADE_ID = "trade_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号")
     public static final String APP_ID = "app_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户编号")
     public static final String USER_ID = "user_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 15, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 15, comment = "订单号")
     public static final String TRADE_NUMBER = "trade_number";
 
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "订单收货人名称")
     public static final String TRADE_RECEIVER_NAME = "trade_receiver_name";
 
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "订单收货人手机")
     public static final String TRADE_RECEIVER_MOBILE = "trade_receiver_mobile";
 
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "订单收货人省")
     public static final String TRADE_RECEIVER_PROVINCE = "trade_receiver_province";
 
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "订单收货人市")
     public static final String TRADE_RECEIVER_CITY = "trade_receiver_city";
 
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "订单收货人区")
     public static final String TRADE_RECEIVER_AREA = "trade_receiver_area";
 
-    @Column(type = ColumnType.VARCHAR, length = 100, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 100, comment = "订单收货人详细地址")
     public static final String TRADE_RECEIVER_ADDRESS = "trade_receiver_address";
 
-    @Column(type = ColumnType.VARCHAR, length = 200, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 200, comment = "订单备注")
     public static final String TRADE_MESSAGE = "trade_message";
 
-    @Column(type = ColumnType.INT, length = 5, comment = "")
+    @Column(type = ColumnType.INT, length = 5, comment = "订单商品数量")
     public static final String TRADE_PRODUCT_QUANTITY = "trade_product_quantity";
 
-    @Column(type = ColumnType.DECIMAL, length = 0, comment = "")
+    @Column(type = ColumnType.DECIMAL, length = 0, comment = "订单商品金额")
     public static final String TRADE_PRODUCT_AMOUNT = "trade_product_amount";
 
-    @Column(type = ColumnType.DECIMAL, length = 0, comment = "")
+    @Column(type = ColumnType.DECIMAL, length = 0, comment = "订单快递金额")
     public static final String TRADE_EXPRESS_AMOUNT = "trade_express_amount";
 
-    @Column(type = ColumnType.DECIMAL, length = 0, comment = "")
+    @Column(type = ColumnType.DECIMAL, length = 0, comment = "订单折扣金额")
     public static final String TRADE_DISCOUNT_AMOUNT = "trade_discount_amount";
 
-    @Column(type = ColumnType.TINYINT, length = 1, comment = "")
+    @Column(type = ColumnType.DECIMAL, length = 0, comment = "订单总金额")
+    public static final String TRADE_TOTAL_AMOUNT = "trade_total_amount";
+
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否收货")
     public static final String TRADE_IS_COMMISSION = "trade_is_commission";
 
-    @Column(type = ColumnType.TINYINT, length = 1, comment = "")
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否确认收货")
     public static final String TRADE_IS_CONFIRM = "trade_is_confirm";
 
-    @Column(type = ColumnType.TINYINT, length = 1, comment = "")
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否支付")
     public static final String TRADE_IS_PAY = "trade_is_pay";
 
-    @Column(type = ColumnType.VARCHAR, length = 10, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 10, comment = "订单流程")
     public static final String TRADE_FLOW = "trade_flow";
 
-    @Column(type = ColumnType.TINYINT, length = 10, comment = "")
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "订单状态")
     public static final String TRADE_STATUS = "trade_status";
 
-    @Column(type = ColumnType.VARCHAR, length = 10, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 10, comment = "订单审计状态")
     public static final String TRADE_AUDIT_STATUS = "trade_audit_status";
 
     public static final String TRADE_PRODUCT_SKU_LIST = "trade_product_sku_list";
@@ -190,6 +193,14 @@ public class Trade extends Model<Trade> {
 
     public void setTrade_discount_amount(BigDecimal trade_discount_amount) {
         set(TRADE_DISCOUNT_AMOUNT, trade_discount_amount);
+    }
+
+    public BigDecimal getTrade_total_amount() {
+        return getBigDecimal(TRADE_TOTAL_AMOUNT);
+    }
+
+    public void setTrade_total_amount(BigDecimal trade_total_amount) {
+        set(TRADE_TOTAL_AMOUNT, trade_total_amount);
     }
 
     public Boolean getTrade_is_commission() {

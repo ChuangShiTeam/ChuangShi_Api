@@ -29,6 +29,38 @@ public class ProductController extends Controller {
     private ProductSkuCommissionService productSkuCommissionService = new ProductSkuCommissionService();
     private final FileService fileService = new FileService();
 
+    @ActionKey(Url.PRODUCT_ALL_LIST)
+    public void allList() {
+        validateRequest_app_id();
+
+        String request_app_id = getRequest_app_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        List<Product> productList = productService.listByApp_id(request_app_id);
+
+        for (Product product : productList) {
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            product.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+
+            List<ProductSku> productSkuList = productSkuService.listByProduct_id(product.getProduct_id());
+            for(ProductSku productSku : productSkuList) {
+                if (productSku.getProduct_sku_is_default()) {
+                    List<ProductSkuPrice> productSkuPriceList = productSkuPriceService.listByProduct_sku_id(productSku.getProduct_sku_id());
+                    for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
+                        if (productSkuPrice.getMember_level_id().equals("")) {
+                            product.put(ProductSkuPrice.PRODUCT_SKU_PRICE, productSkuPrice.getProduct_sku_price());
+                        }
+                    }
+                }
+            }
+
+            product.keep(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, ProductSkuPrice.PRODUCT_SKU_PRICE);
+        }
+
+        renderSuccessJson(productList);
+    }
+
     @ActionKey(Url.PRODUCT_FIND)
     public void find() {
         validateRequest_app_id();
