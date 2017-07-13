@@ -137,8 +137,12 @@ public class MemberService extends Service {
         return memberCache.updateValidateSystem_version(member_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path, member_status, system_update_user_id, system_version);
     }
 
-    public Boolean updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(String member_id, String member_parent_id, JSONArray member_parent_path, String system_update_user_id) {
-        return memberCache.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member_id, member_parent_id, member_parent_path, system_update_user_id);
+    public Boolean updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(String member_id, String member_parent_id, JSONArray member_parent_path, String member_level_id, String system_update_user_id) {
+        return memberCache.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member_id, member_parent_id, member_parent_path, member_level_id, system_update_user_id);
+    }
+
+    public Boolean updateByMember_idAndMember_level_id(String member_id, String member_level_id, String system_update_user_id) {
+        return memberCache.updateByMember_idAndMember_level_id(member_id, member_level_id, system_update_user_id);
     }
     
     public Boolean deleteByMember_idAndSystem_update_user_idValidateSystem_version(String member_id, String system_update_user_id, Integer system_version) {

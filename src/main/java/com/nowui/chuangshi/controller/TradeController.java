@@ -158,7 +158,7 @@ public class TradeController extends Controller {
             TradeProductSku tradeProductSku = jsonObject1.toJavaObject(TradeProductSku.class);
             BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(tradeProductSku.getProduct_sku_id(), member.getMember_level_id());
             BigDecimal product_sku_amount = product_sku_price.multiply(new BigDecimal(tradeProductSku.getProduct_sku_quantity()));
-            tradeProductSkuService.save(trade_id, tradeProductSku.getProduct_sku_id(), "", tradeProductSku.getProduct_sku_quantity(), trade_product_amount, request_user_id);
+            tradeProductSkuService.save(trade_id, tradeProductSku.getProduct_sku_id(), "", tradeProductSku.getProduct_sku_quantity(), product_sku_amount, request_user_id);
             trade_product_quantity += tradeProductSku.getProduct_sku_quantity();
             trade_product_amount = trade_product_amount.add(product_sku_amount);
         }
@@ -285,7 +285,7 @@ public class TradeController extends Controller {
         List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(trade.getTrade_id());
 
         for (TradeProductSku tradeProductSku : tradeProductSkuList) {
-            tradeProductSku.put(Product.PRODUCT_NAME,"");
+            tradeProductSku.put(Product.PRODUCT_NAME, "");
         }
         result.put("tradeProductSkuList", tradeProductSkuList);
 
@@ -293,7 +293,7 @@ public class TradeController extends Controller {
         List<TradeCommossion> tradeCommossionList = tradeCommossionService.listByTrade_id(trade.getTrade_id());
 
         for (TradeCommossion tradeCommossion : tradeCommossionList) {
-            tradeCommossion.put(Product.PRODUCT_NAME,"");
+            tradeCommossion.put(Product.PRODUCT_NAME, "");
         }
         result.put("tradeCommossionList", tradeCommossionList);
 
@@ -359,7 +359,7 @@ public class TradeController extends Controller {
         authenticateApp_id(trade.getApp_id());
 
         Boolean result = tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade_id, request_user_id, system_version);
-        
+
         renderSuccessJson(result);
     }
 

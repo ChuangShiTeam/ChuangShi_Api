@@ -133,7 +133,7 @@
   #end
 
   #sql("deleteByMenu_parent_id")
-    UPDATE table_category SET
+    UPDATE table_menu SET
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1,

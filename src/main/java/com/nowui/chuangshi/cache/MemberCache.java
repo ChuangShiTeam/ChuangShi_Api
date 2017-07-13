@@ -135,8 +135,8 @@ public class MemberCache extends Cache {
         return result;
     }
 
-    public Boolean updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(String member_id, String member_parent_id, JSONArray member_parent_path, String system_update_user_id) {
-        boolean result = memberDao.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member_id, member_parent_id, member_parent_path.toJSONString(), system_update_user_id);
+    public Boolean updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(String member_id, String member_parent_id, JSONArray member_parent_path, String member_level_id, String system_update_user_id) {
+        boolean result = memberDao.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member_id, member_parent_id, member_parent_path.toJSONString(), member_level_id, system_update_user_id);
 
         if (result) {
             CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
@@ -147,6 +147,16 @@ public class MemberCache extends Cache {
                     CacheUtil.remove(MEMBER_LIST_BY_MEMBER_PARENT_ID_CACHE, member_parent_path_member_id);
                 }
             }
+        }
+
+        return result;
+    }
+
+    public Boolean updateByMember_idAndMember_level_id(String member_id, String member_level_id, String system_update_user_id) {
+        boolean result = memberDao.updateByMember_idAndMember_level_id(member_id, member_level_id, system_update_user_id);
+
+        if (result) {
+            CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
         }
 
         return result;
