@@ -58,6 +58,7 @@ public class Stock extends Model<Stock> {
     public static final String PRODUCT_NAME = "product_name";
     public static final String PRODUCT_SKU_LIST = "product_sku_list";
     public static final String MEMBER_ID_LIST = "member_id_list";
+    public static final String SUM_STOCK_QUANTITY = "sum_stock_quantity";
     
     private String app_name;
     private String user_name;

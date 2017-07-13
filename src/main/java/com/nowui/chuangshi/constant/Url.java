@@ -56,6 +56,7 @@ public class Url {
     public static final String APP_STOCK_ADMIN_UPDATE = "/app/stock/admin/update";
     public static final String APP_STOCK_ADMIN_DELETE = "/app/stock/admin/delete";
     public static final String APP_STOCK_ADMIN_REPLENISH = "/app/stock/admin/replenish";
+    public static final String APP_STOCK_ADMIN_STOCK_LIST= "/app/stock/admin/stock/list";
     public static final String APP_STOCK_SYSTEM_LIST = "/app/stock/system/list";
     public static final String APP_STOCK_SYSTEM_FIND = "/app/stock/system/find";
     public static final String APP_STOCK_SYSTEM_SAVE = "/app/stock/system/save";
@@ -197,6 +198,8 @@ public class Url {
     public static final String MEMBER_FIND = "/member/find";
     public static final String MEMBER_MY_FIND = "/member/my/find";
     public static final String MEMBER_QRCODE_FIND = "/member/qrcode/find";
+    public static final String MEMBER_SEND = "/member/send";//会员发货
+    public static final String MEMBER_SEND_DETAIL = "/member/send/detail";//会员发货明细
     public static final String MEMBER_ADMIN_LIST = "/member/admin/list";
     public static final String MEMBER_ADMIN_FIND = "/member/admin/find";
     public static final String MEMBER_ADMIN_SEND = "/member/admin/send"; //会员发货
@@ -254,12 +257,14 @@ public class Url {
     public static final String MEMBER_STOCK_ADMIN_UPDATE = "/member/stock/admin/update";
     public static final String MEMBER_STOCK_ADMIN_DELETE = "/member/stock/admin/delete";
     public static final String MEMBER_STOCK_ADMIN_REPLENISH = "/member/stock/admin/replenish";
+    public static final String MEMBER_STOCK_ADMIN_STOCK_LIST= "/member/stock/admin/stock/list";
     public static final String MEMBER_STOCK_SYSTEM_LIST = "/member/stock/system/list";
     public static final String MEMBER_STOCK_SYSTEM_FIND = "/member/stock/system/find";
     public static final String MEMBER_STOCK_SYSTEM_SAVE = "/member/stock/system/save";
     public static final String MEMBER_STOCK_SYSTEM_UPDATE = "/member/stock/system/update";
     public static final String MEMBER_STOCK_SYSTEM_DELETE = "/member/stock/system/delete";
     public static final String MEMBER_STOCK_SYSTEM_REPLENISH = "/member/stock/system/replenish";
+    public static final String MEMBER_STOCK_SYSTEM_STOCK_LIST = "/member/stock/system/stock/list";
 
     // 用户管理
     public static final String CUSTOMER_LIST = "/customer/list";
