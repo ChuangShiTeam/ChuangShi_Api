@@ -106,10 +106,14 @@ public class TradeController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-       /* List<Trade> resultList = tradeService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME),
-                0, getN());*/
-         String request_user_id = getRequest_user_id();
-         List<Trade> resultList = tradeService.listByUser_id(request_user_id);
+        /*
+         * List<Trade> resultList =
+         * tradeService.listByApp_idAndSystem_create_timeAndLimit(
+         * request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0,
+         * getN());
+         */
+        String request_user_id = getRequest_user_id();
+        List<Trade> resultList = tradeService.listByUser_id(request_user_id);
 
         for (Trade result : resultList) {
             result.keep(Trade.TRADE_ID, Trade.SYSTEM_VERSION);
@@ -358,8 +362,8 @@ public class TradeController extends Controller {
         renderSuccessJson(result);
     }
 
-    @ActionKey(Url.TRADE_ADMIN_DELIVERY)
-    public void adminDelivery() {
+    @ActionKey(Url.TRADE_DELIVERY)
+    public void delivery() {
         validateRequest_app_id();
         validate(Trade.TRADE_ID, Trade.SYSTEM_VERSION);
         authenticateRequest_app_idAndRequest_user_id();
@@ -380,6 +384,16 @@ public class TradeController extends Controller {
         Boolean result = tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade_id, request_user_id, system_version);
 
         renderSuccessJson(result);
+    }
+
+    @ActionKey(Url.TRADE_ADD_EXPRESS)
+    public void adminDelivery() {
+        // TODO
+    }
+
+    @ActionKey(Url.TRADE_DECREASE_EXPRESS)
+    public void addDelivery() {
+        // TODO
     }
 
     @ActionKey(Url.TRADE_ADMIN_DELETE)

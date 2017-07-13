@@ -70,6 +70,17 @@ public class ExpressService extends Service {
                 "", new BigDecimal(0), false, "", null, null, "", ExpressStatus.NOTRACK.getValue(), "", system_create_user_id);
     }
 
+    // 添加订单的快递地址
+    public Boolean saveExpress_idAndApp_idAndStock_idAndExpress_receiver_user_idAndExpress_receiver_nameAndExpress_receiver_mobileAndExpress_receiver_provinceAndExpress_receiver_cityAndExpress_receiver_areaAndExpress_receiver_addressAndSystem_create_user_id(
+            String express_id, String app_id, String stock_id, String express_receiver_user_id, String express_receiver_name,
+            String express_receiver_mobile, String express_receiver_province, String express_receiver_city, String express_receiver_area,
+            String express_receiver_address, String system_create_user_id) {
+        return save(express_id, app_id, "", stock_id, express_receiver_user_id, "", "", "", "", "", express_receiver_name, "",
+                express_receiver_mobile, "", express_receiver_province, express_receiver_city, express_receiver_area, express_receiver_address, "",
+                "", "", "", "", "", "", "", "", new BigDecimal(0), false, "", null, null, "", ExpressStatus.NOTRACK.getValue(), "",
+                system_create_user_id);
+    }
+
     public Boolean updateValidateSystem_version(String express_id, String trade_id, String stock_id, String express_receiver_user_id,
             String express_sender_user_id, String express_shipper_code, String express_no, String express_type, String express_receiver_company,
             String express_receiver_name, String express_receiver_tel, String express_receiver_mobile, String express_receiver_postcode,
