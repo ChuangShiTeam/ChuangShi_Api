@@ -269,7 +269,7 @@ public class WeChatController extends Controller {
                         if (productSkuCommission.getMember_level_id().equals(member_parent.getMember_level_id())) {
 
                             String member_name = userService.findByUser_id(member_parent.getUser_id()).getUser_name();
-                            Integer a = productSkuCommission.getProduct_sku_commission();
+                            double a = productSkuCommission.getProduct_sku_commission()*0.01;
                             BigDecimal b = tradeProductSku.getProduct_sku_amount();
                             BigDecimal c = new BigDecimal(a);
 

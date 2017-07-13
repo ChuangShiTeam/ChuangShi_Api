@@ -424,11 +424,13 @@ public class Url {
     public static final String TRADE_UPDATE = "/trade/update";
     public static final String TRADE_DELETE = "/trade/delete";
     public static final String TRADE_PAY = "/trade/pay";
+    public static final String TRADE_ADD_EXPRESS = "/trade/add/express";
+    public static final String TRADE_DECREASE_EXPRESS = "/trade/decrease/express";
+    public static final String TRADE_DELIVERY = "/trade/delivery";
     public static final String TRADE_ADMIN_LIST = "/trade/admin/list";
     public static final String TRADE_ADMIN_FIND = "/trade/admin/find";
     public static final String TRADE_ADMIN_SAVE = "/trade/admin/save";
     public static final String TRADE_ADMIN_UPDATE = "/trade/admin/update";
-    public static final String TRADE_ADMIN_DELIVERY = "/trade/admin/delivery";
     public static final String TRADE_ADMIN_DELETE = "/trade/admin/delete";
     public static final String TRADE_SYSTEM_LIST = "/trade/system/list";
     public static final String TRADE_SYSTEM_FIND = "/trade/system/find";
