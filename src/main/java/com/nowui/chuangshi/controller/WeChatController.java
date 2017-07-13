@@ -221,9 +221,9 @@ public class WeChatController extends Controller {
         tradeMemberBill.setBill_is_income(false);
         tradeMemberBill
                 .setBill_amount(trade.getTrade_product_amount().add(trade.getTrade_express_amount()).subtract(trade.getTrade_discount_amount()));
-        tradeMemberBill.setBill_type(BillType.TRADE.getValue());
+        tradeMemberBill.setBill_type(BillType.TRADE.getKey());
         tradeMemberBill.setBill_time(new Date());
-        tradeMemberBill.setBill_flow(BillFlow.COMPLETE.getValue());
+        tradeMemberBill.setBill_flow(BillFlow.COMPLETE.getKey());
         tradeMemberBill.setBill_status(true);
 
         tradeMemberBill.setSystem_create_user_id(request_app_id);
@@ -244,9 +244,9 @@ public class WeChatController extends Controller {
                 bill.setApp_id(trade.getApp_id());
                 bill.setUser_id(member_parent.getUser_id());
                 bill.setBill_is_income(true);
-                bill.setBill_type(BillType.COMMISSION.getValue());
+                bill.setBill_type(BillType.COMMISSION.getKey());
                 bill.setBill_time(new Date());
-                bill.setBill_flow(BillFlow.COMPLETE.getValue());
+                bill.setBill_flow(BillFlow.COMPLETE.getKey());
                 bill.setBill_status(true);
 
                 bill.setSystem_create_user_id(request_app_id);

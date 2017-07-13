@@ -147,7 +147,7 @@ public class StockDao extends Dao {
         }
     }
 
-    public Boolean save(String stock_id, String app_id, String product_sku_id, String object_id, String stock_type, Integer stock_quantity, String stock_action, String stock_flow, Boolean stock_is_pay, String stock_status, String system_create_user_id) {
+    public Boolean save(String stock_id, String app_id, String product_sku_id, String object_id, String stock_type, Integer stock_quantity, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, Boolean stock_is_pay, String stock_status, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Stock.STOCK_ID, stock_id);
         sqlMap.put(Stock.APP_ID, app_id);
@@ -155,6 +155,12 @@ public class StockDao extends Dao {
         sqlMap.put(Stock.OBJECT_ID, object_id);
         sqlMap.put(Stock.STOCK_TYPE, stock_type);
         sqlMap.put(Stock.STOCK_QUANTITY, stock_quantity);
+        sqlMap.put(Stock.STOCK_RECEIVER_NAME, stock_receiver_name);
+        sqlMap.put(Stock.STOCK_RECEIVER_MOBILE, stock_receiver_mobile);
+        sqlMap.put(Stock.STOCK_RECEIVER_PROVINCE, stock_receiver_province);
+        sqlMap.put(Stock.STOCK_RECEIVER_CITY, stock_receiver_city);
+        sqlMap.put(Stock.STOCK_RECEIVER_AREA, stock_receiver_area);
+        sqlMap.put(Stock.STOCK_RECEIVER_ADDRESS, stock_receiver_address);
         sqlMap.put(Stock.STOCK_ACTION, stock_action);
         sqlMap.put(Stock.STOCK_FLOW, stock_flow);
         sqlMap.put(Stock.STOCK_IS_PAY, stock_is_pay);
@@ -172,13 +178,19 @@ public class StockDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String stock_id, String product_sku_id, String object_id, String stock_type, Integer stock_quantity, String stock_action, String stock_flow, Boolean stock_is_pay, String stock_status, String system_update_user_id, Integer system_version) {
+    public Boolean update(String stock_id, String product_sku_id, String object_id, String stock_type, Integer stock_quantity, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, Boolean stock_is_pay, String stock_status, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Stock.STOCK_ID, stock_id);
         sqlMap.put(Stock.PRODUCT_SKU_ID, product_sku_id);
         sqlMap.put(Stock.OBJECT_ID, object_id);
         sqlMap.put(Stock.STOCK_TYPE, stock_type);
         sqlMap.put(Stock.STOCK_QUANTITY, stock_quantity);
+        sqlMap.put(Stock.STOCK_RECEIVER_NAME, stock_receiver_name);
+        sqlMap.put(Stock.STOCK_RECEIVER_MOBILE, stock_receiver_mobile);
+        sqlMap.put(Stock.STOCK_RECEIVER_PROVINCE, stock_receiver_province);
+        sqlMap.put(Stock.STOCK_RECEIVER_CITY, stock_receiver_city);
+        sqlMap.put(Stock.STOCK_RECEIVER_AREA, stock_receiver_area);
+        sqlMap.put(Stock.STOCK_RECEIVER_ADDRESS, stock_receiver_address);
         sqlMap.put(Stock.STOCK_ACTION, stock_action);
         sqlMap.put(Stock.STOCK_FLOW, stock_flow);
         sqlMap.put(Stock.STOCK_IS_PAY, stock_is_pay);
@@ -192,6 +204,7 @@ public class StockDao extends Dao {
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
+
     
     public Boolean deleteByStock_idAndSystem_version(String stock_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();

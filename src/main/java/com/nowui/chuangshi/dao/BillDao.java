@@ -178,9 +178,9 @@ public class BillDao extends Dao {
             bill.setUser_id(String.valueOf(i));
             bill.setBill_is_income(true);
             bill.setBill_amount(BigDecimal.ZERO);
-            bill.setBill_type(BillType.COMMISSION.getValue());
+            bill.setBill_type(BillType.COMMISSION.getKey());
             bill.setBill_time(new Date());
-            bill.setBill_flow(BillFlow.COMPLETE.getValue());
+            bill.setBill_flow(BillFlow.COMPLETE.getKey());
             bill.setBill_status(true);
 
             bill.setSystem_create_user_id(String.valueOf(i));

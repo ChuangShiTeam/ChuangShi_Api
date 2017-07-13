@@ -22,6 +22,24 @@ public class Stock extends Model<Stock> {
 
     @Column(type = ColumnType.INT, length = 5, comment = "数量")
     public static final String STOCK_QUANTITY = "stock_quantity";
+    
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+    public static final String STOCK_RECEIVER_NAME = "stock_receiver_name";
+
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+    public static final String STOCK_RECEIVER_MOBILE = "stock_receiver_mobile";
+
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+    public static final String STOCK_RECEIVER_PROVINCE = "stock_receiver_province";
+
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+    public static final String STOCK_RECEIVER_CITY = "stock_receiver_city";
+
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+    public static final String STOCK_RECEIVER_AREA = "stock_receiver_area";
+
+    @Column(type = ColumnType.VARCHAR, length = 100, comment = "")
+    public static final String STOCK_RECEIVER_ADDRESS = "stock_receiver_address";
 
     @Column(type = ColumnType.VARCHAR, length = 25, comment = "出库或入库")
     public static final String STOCK_ACTION = "stock_action";
@@ -92,6 +110,54 @@ public class Stock extends Model<Stock> {
 
     public void setStock_quantity(Integer stock_quantity) {
         set(STOCK_QUANTITY, stock_quantity);
+    }
+    
+    public String getStock_receiver_name() {
+        return getStr(STOCK_RECEIVER_NAME);
+    }
+
+    public void setStock_receiver_name(String stock_receiver_name) {
+        set(STOCK_RECEIVER_NAME, stock_receiver_name);
+    }
+
+    public String getStock_receiver_mobile() {
+        return getStr(STOCK_RECEIVER_MOBILE);
+    }
+
+    public void setStock_receiver_mobile(String stock_receiver_mobile) {
+        set(STOCK_RECEIVER_MOBILE, stock_receiver_mobile);
+    }
+
+    public String getStock_receiver_province() {
+        return getStr(STOCK_RECEIVER_PROVINCE);
+    }
+
+    public void setStock_receiver_province(String stock_receiver_province) {
+        set(STOCK_RECEIVER_PROVINCE, stock_receiver_province);
+    }
+
+    public String getStock_receiver_city() {
+        return getStr(STOCK_RECEIVER_CITY);
+    }
+
+    public void setStock_receiver_city(String stock_receiver_city) {
+        set(STOCK_RECEIVER_CITY, stock_receiver_city);
+    }
+
+    public String getStock_receiver_area() {
+        return getStr(STOCK_RECEIVER_AREA);
+    }
+
+    public void setStock_receiver_area(String stock_receiver_area) {
+        set(STOCK_RECEIVER_AREA, stock_receiver_area);
+    }
+
+    public String getStock_receiver_address() {
+        return getStr(STOCK_RECEIVER_ADDRESS);
+    }
+
+    public void setStock_receiver_address(String stock_receiver_address) {
+        set(STOCK_RECEIVER_ADDRESS, stock_receiver_address);
     }
 
     public String getStock_action() {

@@ -28,7 +28,7 @@ public class MemberStockController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<Stock> resultList = stockService.listByApp_idAndStock_typeAndSystem_create_timeAndLimit(request_app_id, StockType.MEMBER.getValue(), jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
+        List<Stock> resultList = stockService.listByApp_idAndStock_typeAndSystem_create_timeAndLimit(request_app_id, StockType.MEMBER.getKey(), jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
 
         for (Stock result : resultList) {
             result.keep(Stock.STOCK_ID, Stock.SYSTEM_VERSION);
@@ -72,7 +72,7 @@ public class MemberStockController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = stockService.save(stock_id, request_app_id, model.getProduct_sku_id(), object_id, StockType.MEMBER.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_flow(), model.getStock_is_pay(), model.getStock_status(), request_user_id);
+        Boolean result = stockService.save(stock_id, request_app_id, model.getProduct_sku_id(), object_id, StockType.MEMBER.getKey(), model.getStock_quantity(), model.getStock_receiver_name(), model.getStock_receiver_mobile(), model.getStock_receiver_province(), model.getStock_receiver_city(), model.getStock_receiver_area(), model.getStock_receiver_address(), model.getStock_action(), model.getStock_flow(), model.getStock_is_pay(), model.getStock_status(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -92,7 +92,7 @@ public class MemberStockController extends Controller {
         authenticateApp_id(stock.getApp_id());
         authenticateSystem_create_user_id(stock.getSystem_create_user_id());
 
-        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.MEMBER.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_flow(), model.getStock_is_pay(), model.getStock_status(), request_user_id, model.getSystem_version());
+        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.MEMBER.getKey(), model.getStock_quantity(), model.getStock_receiver_name(), model.getStock_receiver_mobile(), model.getStock_receiver_province(), model.getStock_receiver_city(), model.getStock_receiver_area(), model.getStock_receiver_address(), model.getStock_action(), model.getStock_flow(), model.getStock_is_pay(), model.getStock_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -130,8 +130,8 @@ public class MemberStockController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = stockService.countByApp_idAndStock_typeOrStock_actionOrLikeProduct_nameOrLikeUser_name(request_app_id, StockType.MEMBER.getValue(), model.getStock_action(), product_name, user_name);
-        List<Stock> resultList = stockService.listByApp_idAndStock_typeOrStock_actionOrLikeProduct_nameOrLikeUser_nameAndLimit(request_app_id, StockType.MEMBER.getValue(), model.getStock_action(), product_name, user_name, getM(), getN());
+        Integer total = stockService.countByApp_idAndStock_typeOrStock_actionOrLikeProduct_nameOrLikeUser_name(request_app_id, StockType.MEMBER.getKey(), model.getStock_action(), product_name, user_name);
+        List<Stock> resultList = stockService.listByApp_idAndStock_typeOrStock_actionOrLikeProduct_nameOrLikeUser_nameAndLimit(request_app_id, StockType.MEMBER.getKey(), model.getStock_action(), product_name, user_name, getM(), getN());
 
         for (Stock result : resultList) {
             result.keep(Stock.STOCK_ID, Stock.USER_NAME, Stock.PRODUCT_NAME, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.SYSTEM_VERSION);
@@ -175,7 +175,7 @@ public class MemberStockController extends Controller {
         
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = stockService.replenish(request_app_id, member_id, StockType.MEMBER.getValue(), productSkuList, request_user_id);
+        Boolean result = stockService.replenish(request_app_id, member_id, StockType.MEMBER.getKey(), productSkuList, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -199,7 +199,7 @@ public class MemberStockController extends Controller {
 
         authenticateApp_id(stock.getApp_id());
 
-        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.MEMBER.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_flow(), model.getStock_is_pay(), model.getStock_status(), request_user_id, model.getSystem_version());
+        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.MEMBER.getKey(), model.getStock_quantity(), model.getStock_receiver_name(), model.getStock_receiver_mobile(), model.getStock_receiver_province(), model.getStock_receiver_city(), model.getStock_receiver_area(), model.getStock_receiver_address(), model.getStock_action(), model.getStock_flow(), model.getStock_is_pay(), model.getStock_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -233,8 +233,8 @@ public class MemberStockController extends Controller {
         String user_name = jsonObject.getString("user_name");
         String product_name = jsonObject.getString("product_name");
 
-        Integer total = stockService.countByOrApp_idAndStock_typeOrStock_actionOrLikeProduct_nameOrLikeUser_name(model.getApp_id(), StockType.MEMBER.getValue(), model.getStock_action(), product_name, user_name);
-        List<Stock> resultList = stockService.listByOrApp_idAndStock_typeOrStock_actionOrLikeProduct_nameOrLikeUser_nameAndLimit(model.getApp_id(), StockType.MEMBER.getValue(), model.getStock_action(), product_name, user_name, getM(), getN());
+        Integer total = stockService.countByOrApp_idAndStock_typeOrStock_actionOrLikeProduct_nameOrLikeUser_name(model.getApp_id(), StockType.MEMBER.getKey(), model.getStock_action(), product_name, user_name);
+        List<Stock> resultList = stockService.listByOrApp_idAndStock_typeOrStock_actionOrLikeProduct_nameOrLikeUser_nameAndLimit(model.getApp_id(), StockType.MEMBER.getKey(), model.getStock_action(), product_name, user_name, getM(), getN());
 
         for (Stock result : resultList) {
             result.keep(Stock.STOCK_ID, Stock.USER_NAME, Stock.PRODUCT_NAME, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.SYSTEM_VERSION);
@@ -260,7 +260,7 @@ public class MemberStockController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = stockService.replenish(app_id, member_id, StockType.MEMBER.getValue(), productSkuList, request_user_id);
+        Boolean result = stockService.replenish(app_id, member_id, StockType.MEMBER.getKey(), productSkuList, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -292,7 +292,7 @@ public class MemberStockController extends Controller {
         JSONObject jsonObject = getParameterJSONObject();
         String object_id = jsonObject.getString("member_id");
 
-        Boolean result = stockService.save(stock_id, model.getApp_id(), model.getProduct_sku_id(), object_id, StockType.MEMBER.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_flow(), model.getStock_is_pay(), model.getStock_status(), request_user_id);
+        Boolean result = stockService.save(stock_id, model.getApp_id(), model.getProduct_sku_id(), object_id, StockType.MEMBER.getKey(), model.getStock_quantity(), model.getStock_receiver_name(), model.getStock_receiver_mobile(), model.getStock_receiver_province(), model.getStock_receiver_city(), model.getStock_receiver_area(), model.getStock_receiver_address(), model.getStock_action(), model.getStock_flow(), model.getStock_is_pay(), model.getStock_status(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -305,7 +305,7 @@ public class MemberStockController extends Controller {
         Stock model = getModel(Stock.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.MEMBER.getValue(), model.getStock_quantity(), model.getStock_action(), model.getStock_flow(), model.getStock_is_pay(), model.getStock_status(), request_user_id, model.getSystem_version());
+        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.MEMBER.getKey(), model.getStock_quantity(), model.getStock_receiver_name(), model.getStock_receiver_mobile(), model.getStock_receiver_province(), model.getStock_receiver_city(), model.getStock_receiver_area(), model.getStock_receiver_address(), model.getStock_action(), model.getStock_flow(), model.getStock_is_pay(), model.getStock_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
