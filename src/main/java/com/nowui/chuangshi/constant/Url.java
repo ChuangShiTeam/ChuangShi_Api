@@ -195,6 +195,8 @@ public class Url {
 
     public static final String MEMBER_LIST = "/member/list";
     public static final String MEMBER_FIND = "/member/find";
+    public static final String MEMBER_MY_FIND = "/member/my/find";
+    public static final String MEMBER_QRCODE_FIND = "/member/qrcode/find";
     public static final String MEMBER_ADMIN_LIST = "/member/admin/list";
     public static final String MEMBER_ADMIN_FIND = "/member/admin/find";
     public static final String MEMBER_ADMIN_SEND = "/member/admin/send"; //会员发货

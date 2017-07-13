@@ -98,17 +98,29 @@ public class TradeController extends Controller {
     @ActionKey(Url.TRADE_LIST)
     public void list() {
         validateRequest_app_id();
-        validate(Constant.PAGE_SIZE, Constant.FIRST_CREATE_TIME, Constant.LAST_CREATE_TIME);
 
-        String request_app_id = getRequest_app_id();
-        JSONObject jsonObject = getParameterJSONObject();
+        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<Trade> resultList = tradeService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
+        List<Trade> resultList = tradeService.listByUser_id(request_user_id);
 
-        for (Trade result : resultList) {
-            result.keep(Trade.TRADE_ID, Trade.SYSTEM_VERSION);
+        for (Trade trade : resultList) {
+            trade.keep(Trade.TRADE_ID, Trade.TRADE_NUMBER, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW);
+
+            List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(trade.getTrade_id());
+            for (TradeProductSku tradeProductSku : tradeProductSkuList) {
+                tradeProductSku.keep(TradeProductSku.PRODUCT_SKU_ID, TradeProductSku.PRODUCT_SKU_AMOUNT, TradeProductSku.PRODUCT_SKU_QUANTITY);
+
+                ProductSku productSku = productSkuService.findByProduct_sku_id(tradeProductSku.getProduct_sku_id());
+                Product product = productService.findByProduct_id(productSku.getProduct_id());
+
+                tradeProductSku.put(Product.PRODUCT_ID, product.getProduct_id());
+                tradeProductSku.put(Product.PRODUCT_NAME, product.getProduct_name());
+                tradeProductSku.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+            }
+
+            trade.put(Trade.TRADE_PRODUCT_SKU_LIST, tradeProductSkuList);
         }
 
         renderSuccessJson(resultList);

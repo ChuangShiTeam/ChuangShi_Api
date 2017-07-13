@@ -75,6 +75,16 @@ public class TradeDao extends Dao {
         return new Trade().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
+    public List<Trade> listByUser_id(String user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Trade.USER_ID, user_id);
+        SqlPara sqlPara = Db.getSqlPara("trade.listByUser_id", sqlMap);
+
+        logSql("trade", "listByUser_id", sqlPara);
+
+        return new Trade().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+
     public Trade findByTrade_id(String trade_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Trade.TRADE_ID, trade_id);

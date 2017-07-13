@@ -84,6 +84,15 @@
     LIMIT #p(m), #p(n)
   #end
 
+  #sql("listByUser_id")
+    SELECT
+    *
+    FROM table_trade
+    WHERE system_status = 1
+    AND user_id = #p(user_id)
+    ORDER BY system_create_time DESC
+  #end
+
   #sql("findByTrade_id")
     SELECT
     trade_id,
