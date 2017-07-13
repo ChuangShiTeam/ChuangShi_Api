@@ -44,6 +44,34 @@ public class StockDao extends Dao {
         return count.intValue();
     }
     
+    public Integer countByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_id(String app_id, String stock_type, String product_name, String user_name) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Stock.APP_ID, app_id);
+    	sqlMap.put(Stock.STOCK_TYPE, stock_type);
+    	sqlMap.put(Product.PRODUCT_NAME, product_name);
+    	sqlMap.put(User.USER_NAME, user_name);
+    	SqlPara sqlPara = Db.getSqlPara("stock.countByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_id", sqlMap);
+    	
+    	logSql("stock", "countByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_id", sqlPara);
+    	
+    	Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
+    	return count.intValue();
+    }
+    
+    public Integer countByOrApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_id(String app_id, String stock_type, String product_name, String user_name) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Stock.APP_ID, app_id);
+    	sqlMap.put(Stock.STOCK_TYPE, stock_type);
+    	sqlMap.put(Product.PRODUCT_NAME, product_name);
+    	sqlMap.put(User.USER_NAME, user_name);
+    	SqlPara sqlPara = Db.getSqlPara("stock.countByOrApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_id", sqlMap);
+    	
+    	logSql("stock", "countByOrApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_id", sqlPara);
+    	
+    	Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
+    	return count.intValue();
+    }
+    
     public Integer sumStock_quantityByObject_idAndProduct_sku_id(String object_id, String product_sku_id) {
     	Kv sqlMap = Kv.create();
     	sqlMap.put(Stock.OBJECT_ID, object_id);
@@ -100,6 +128,36 @@ public class StockDao extends Dao {
         logSql("stock", "listByOrApp_idAndStock_typeOrStock_actionOrLikeProduct_nameOrLikeUser_nameAndLimit", sqlPara);
 
         return new Stock().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+    
+    public List<Stock> listByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit(String app_id, String stock_type, String product_name, String user_name, int m, int n) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Stock.APP_ID, app_id);
+    	sqlMap.put(Stock.STOCK_TYPE, stock_type);
+    	sqlMap.put(Product.PRODUCT_NAME, product_name);
+    	sqlMap.put(User.USER_NAME, user_name);
+    	sqlMap.put(Constant.M, m);
+    	sqlMap.put(Constant.N, n);
+    	SqlPara sqlPara = Db.getSqlPara("stock.listByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit", sqlMap);
+    	
+    	logSql("stock", "listByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit", sqlPara);
+    	
+    	return new Stock().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+    
+    public List<Stock> listByOrApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit(String app_id, String stock_type, String product_name, String user_name, int m, int n) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Stock.APP_ID, app_id);
+    	sqlMap.put(Stock.STOCK_TYPE, stock_type);
+    	sqlMap.put(Product.PRODUCT_NAME, product_name);
+    	sqlMap.put(User.USER_NAME, user_name);
+    	sqlMap.put(Constant.M, m);
+    	sqlMap.put(Constant.N, n);
+    	SqlPara sqlPara = Db.getSqlPara("stock.listByOrApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit", sqlMap);
+    	
+    	logSql("stock", "listByOrApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit", sqlPara);
+    	
+    	return new Stock().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
     public Stock findByStock_id(String stock_id) {

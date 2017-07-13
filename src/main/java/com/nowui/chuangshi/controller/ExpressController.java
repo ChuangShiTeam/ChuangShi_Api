@@ -1,18 +1,26 @@
 package com.nowui.chuangshi.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Express;
+import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.service.ExpressService;
+import com.nowui.chuangshi.service.StockService;
+import com.nowui.chuangshi.type.ExpressStatus;
 import com.nowui.chuangshi.util.Util;
 
 public class ExpressController extends Controller {
 
     private final ExpressService expressService = new ExpressService();
+    
+    private final StockService stockService = new StockService();
 
     @ActionKey(Url.EXPRESS_LIST)
     public void list() {
@@ -55,17 +63,29 @@ public class ExpressController extends Controller {
     @ActionKey(Url.EXPRESS_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(Express.TRADE_ID, Express.STOCK_ID, Express.EXPRESS_RECEIVER_USER_ID, Express.EXPRESS_SENDER_USER_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, Express.EXPRESS_TYPE, Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL, Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE, Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS, Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL, Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE, Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS, Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_START_DATE, Express.EXPRESS_END_DATE, Express.EXPRESS_LOGISTICS, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK);
-
+        validate(Express.EXPRESS_NO, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_REMARK);
+        
         Express model = getModel(Express.class);
-        String express_id = Util.getRandomUUID();
-        String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
-
+        JSONObject jsonObject = getParameterJSONObject();
+        String stock_id = jsonObject.getString("stock_id");
+        String trade_id = jsonObject.getString("trade_id");
+        String express_id = Util.getRandomUUID();
+        
         authenticateRequest_app_idAndRequest_user_id();
-
-        Boolean result = expressService.save(express_id, request_app_id, model.getTrade_id(), model.getStock_id(), model.getExpress_receiver_user_id(), model.getExpress_sender_user_id(), model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_type(), model.getExpress_receiver_company(), model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(), model.getExpress_receiver_postcode(), model.getExpress_receiver_province(), model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(), model.getExpress_sender_company(), model.getExpress_sender_name(), model.getExpress_sender_tel(), model.getExpress_sender_mobile(), model.getExpress_sender_postcode(), model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(), model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(), model.getExpress_pay_way(), model.getExpress_start_date(), model.getExpress_end_date(), model.getExpress_logistics(), model.getExpress_status(), model.getExpress_remark(), request_user_id);
-
+        if (StringUtils.isBlank(stock_id)) {
+        	
+        }
+        
+        Stock stock = stockService.findByStock_id(stock_id);
+        
+        //TODO express_receiver_user_id express_sender_user_id
+        
+        Boolean result = expressService.save(express_id, stock.getApp_id(), "", stock_id, "", "", model.getExpress_shipper_code(), model.getExpress_no(), "", "", stock.getStock_receiver_name(), "", stock.getStock_receiver_mobile(), "", stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), "", "", "", "", "", "", "", "", "", null, false, "", null, null, "", ExpressStatus.NOTRACK.getKey(), model.getExpress_remark(), request_user_id);
+        
+        if (result) {
+        	
+        }
         renderSuccessJson(result);
     }
 
@@ -171,26 +191,6 @@ public class ExpressController extends Controller {
         renderSuccessJson(result);
     }
     
-    //仓库发货填写快递相关信息
-    @ActionKey(Url.EXPRESS_ADMIN_COMPLETE)
-    public void adminComplete() {
-        validateRequest_app_id();
-        validate(Express.EXPRESS_ID, Express.EXPRESS_NO, Express.EXPRESS_COST, Express.EXPRESS_REMARK, Express.SYSTEM_VERSION);
-        
-        Express model = getModel(Express.class);
-        String request_user_id = getRequest_user_id();
-        
-        authenticateRequest_app_idAndRequest_user_id();
-        
-        Express express = expressService.findByExpress_id(model.getExpress_id());
-        
-        authenticateApp_id(express.getApp_id());
-        
-        Boolean result = expressService.updateExpress_noAndExpress_costAndExpress_remarkByExpress_idValidateSystem_version(model.getExpress_id(), model.getExpress_no(), model.getExpress_cost(), model.getExpress_remark(), request_user_id, model.getSystem_version());
-        
-        renderSuccessJson(result);
-    }
-
     @ActionKey(Url.EXPRESS_ADMIN_DELETE)
     public void adminDelete() {
         validateRequest_app_id();
