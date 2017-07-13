@@ -269,15 +269,15 @@ public class TradeController extends Controller {
         for (Trade result : resultList) {
             User user = userService.findByUser_id(result.getUser_id());
             if (user != null) {
-                result.setUser_id(user.getUser_name());
+                result.put(User.USER_NAME, user.getUser_name());
             }
-            result.keep(Trade.TRADE_ID, Trade.APP_ID, Trade.USER_ID, Trade.TRADE_NUMBER, Trade.TRADE_RECEIVER_NAME,
-                    Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY,
-                    Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE,
-                    Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
-                    Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_IS_COMMISSION,
-                    Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_STATUS,
-                    Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
+            result.keep(Trade.TRADE_ID, Trade.APP_ID, Trade.USER_ID, User.USER_NAME, Trade.TRADE_NUMBER,
+                    Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE,
+                    Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS,
+                    Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT,
+                    Trade.TRADE_EXPRESS_AMOUNT, Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT,
+                    Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW,
+                    Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
