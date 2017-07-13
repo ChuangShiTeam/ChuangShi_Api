@@ -267,14 +267,14 @@ public class MemberController extends Controller {
         String stock_id = Util.getRandomUUID();
         Member member = memberService.findByMember_id(member_id);
         //查询会员默认地址
-        MemberAddress memberAddress = memberAddressService.findByMember_id(member_id);
+        //MemberAddress memberAddress = memberAddressService.findByMember_id(member_id);
         /*if (memberAddress == null || StringUtils.isBlank(memberAddress.getMember_address_id())) {
         	throw new RuntimeException("会员地址信息需要完善");
         }*/
         Boolean result = stockService.save(stock_id, member.getApp_id(), product_sku_id, member_id, StockType.MEMBER.getValue(), stock_quantity, StockAction.OUT.getValue(), null, request_user_id);
         if (result) {
-            //保存快递单信息
-            expressService.save(Util.getRandomUUID(), member.getApp_id(), "", stock_id, "", member.getUser_id(), "", "", "", express.getExpress_receiver_company(), express.getExpress_receiver_name(), express.getExpress_receiver_tel(), express.getExpress_receiver_mobile(), express.getExpress_receiver_postcode(), express.getExpress_receiver_province(), express.getExpress_receiver_city(), express.getExpress_receiver_area(), express.getExpress_receiver_address(), "", memberAddress.getMember_address_name(), memberAddress.getMember_address_tel(), memberAddress.getMember_address_mobile(), memberAddress.getMember_address_postcode(), memberAddress.getMember_address_province(), memberAddress.getMember_address_city(), memberAddress.getMember_address_area(), memberAddress.getMember_address_address(), new BigDecimal(0), false, "", null, null, "", ExpressStatus.NOTRACK.getValue(), "", request_user_id);
+            //保存快递单收货人信息
+            expressService.saveExpress_idAndApp_idAndStock_idAndExpress_sender_user_idAndExpress_receiver_nameAndExpress_receiver_mobileAndExpress_receiver_provinceAndExpress_receiver_cityAndExpress_receiver_areaAndExpress_receiver_addressAndSystem_create_user_id(Util.getRandomUUID(), member.getApp_id(), stock_id, member.getUser_id(), express.getExpress_receiver_name(), express.getExpress_receiver_mobile(), express.getExpress_receiver_province(), express.getExpress_receiver_city(), express.getExpress_receiver_area(), express.getExpress_receiver_address(), request_user_id);
         }
         
         renderSuccessJson(result);
