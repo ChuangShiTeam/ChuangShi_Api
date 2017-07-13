@@ -292,11 +292,11 @@ public class MemberController extends Controller {
     @ActionKey(Url.MEMBER_ADMIN_SEND)
     public void adminSend() {
         validateRequest_app_id();
-        validate(Member.MEMBER_ID, ProductSku.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_ADDRESS, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_MOBILE);
+        validate(Member.MEMBER_ID, ProductSku.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Stock.STOCK_RECEIVER_NAME, Stock.STOCK_RECEIVER_ADDRESS, Stock.STOCK_RECEIVER_AREA, Stock.STOCK_RECEIVER_CITY, Stock.STOCK_RECEIVER_MOBILE);
         
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
-        Express express = getModel(Express.class);
+        Stock stock = getModel(Stock.class);
         JSONObject jsonObject = getParameterJSONObject();
         String member_id = jsonObject.getString("member_id");
         String product_sku_id = jsonObject.getString("product_sku_id");
@@ -317,11 +317,7 @@ public class MemberController extends Controller {
         /*if (memberAddress == null || StringUtils.isBlank(memberAddress.getMember_address_id())) {
         	throw new RuntimeException("会员地址信息需要完善");
         }*/
-        Boolean result = stockService.save(stock_id, member.getApp_id(), product_sku_id, member_id, StockType.MEMBER.getValue(), stock_quantity, StockAction.OUT.getValue(), StockFlow.WAIT_SEND.getValue(), false, null, request_user_id);
-        if (result) {
-            //保存快递单收货人信息
-            expressService.saveExpress_idAndApp_idAndStock_idAndExpress_sender_user_idAndExpress_receiver_nameAndExpress_receiver_mobileAndExpress_receiver_provinceAndExpress_receiver_cityAndExpress_receiver_areaAndExpress_receiver_addressAndSystem_create_user_id(Util.getRandomUUID(), member.getApp_id(), stock_id, member.getUser_id(), express.getExpress_receiver_name(), express.getExpress_receiver_mobile(), express.getExpress_receiver_province(), express.getExpress_receiver_city(), express.getExpress_receiver_area(), express.getExpress_receiver_address(), request_user_id);
-        }
+        Boolean result = stockService.save(stock_id, member.getApp_id(), product_sku_id, member_id, StockType.MEMBER.getKey(), stock_quantity, stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), StockAction.OUT.getKey(), StockFlow.WAIT_SEND.getKey(), false, null, request_user_id);
         
         renderSuccessJson(result);
     }

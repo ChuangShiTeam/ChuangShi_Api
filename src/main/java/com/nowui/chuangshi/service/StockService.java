@@ -45,12 +45,12 @@ public class StockService extends Service {
         return stockCache.findByStock_id(stock_id);
     }
 
-    public Boolean save(String stock_id, String app_id, String product_sku_id, String object_id, String stock_type, Integer stock_quantity, String stock_action, String stock_flow, Boolean stock_is_pay, String stock_status, String system_create_user_id) {
-        return stockCache.save(stock_id, app_id, product_sku_id, object_id, stock_type, stock_quantity, stock_action, stock_flow, stock_is_pay, stock_status, system_create_user_id);
+    public Boolean save(String stock_id, String app_id, String product_sku_id, String object_id, String stock_type, Integer stock_quantity, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, Boolean stock_is_pay, String stock_status, String system_create_user_id) {
+        return stockCache.save(stock_id, app_id, product_sku_id, object_id, stock_type, stock_quantity, stock_receiver_name, stock_receiver_mobile, stock_receiver_province, stock_receiver_city, stock_receiver_area, stock_receiver_address, stock_action, stock_flow, stock_is_pay, stock_status, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String stock_id, String product_sku_id, String object_id, String stock_type, Integer stock_quantity, String stock_action, String stock_flow, Boolean stock_is_pay, String stock_status, String system_update_user_id, Integer system_version) {
-        return stockCache.updateValidateSystem_version(stock_id, product_sku_id, object_id, stock_type, stock_quantity, stock_action, stock_flow, stock_is_pay, stock_status, system_update_user_id, system_version);
+    public Boolean updateValidateSystem_version(String stock_id, String product_sku_id, String object_id, String stock_type, Integer stock_quantity, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, Boolean stock_is_pay, String stock_status, String system_update_user_id, Integer system_version) {
+        return stockCache.updateValidateSystem_version(stock_id, product_sku_id, object_id, stock_type, stock_quantity, stock_receiver_name, stock_receiver_mobile, stock_receiver_province, stock_receiver_city, stock_receiver_area, stock_receiver_address, stock_action, stock_flow, stock_is_pay, stock_status, system_update_user_id, system_version);
     }
 
     public Boolean deleteByStock_idAndSystem_update_user_idValidateSystem_version(String stock_id, String system_update_user_id, Integer system_version) {
@@ -69,7 +69,7 @@ public class StockService extends Service {
             stock.setObject_id(object_id);
             stock.setProduct_sku_id(product_sku_id);
             stock.setStock_quantity(stock_quantity);
-            stock.setStock_action(StockAction.REPLENISH.getValue());
+            stock.setStock_action(StockAction.REPLENISH.getKey());
             stock.setStock_type(stock_type);
             
             stock.setSystem_create_user_id(system_create_user_id);
