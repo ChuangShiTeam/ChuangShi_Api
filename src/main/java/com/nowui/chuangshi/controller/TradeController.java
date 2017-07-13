@@ -175,7 +175,7 @@ public class TradeController extends Controller {
         App app = appService.findByApp_id(member.getApp_id());
 
         String trade_number = tradeService.generateTrade_number();
-        String trade_flow = TradeFlow.WAIT_PAY.getValue();
+        String trade_flow = TradeFlow.WAIT_PAY.getKey();
         boolean trade_is_pay = false;
         boolean trade_is_confirm = false;
         boolean trade_is_commission = app.getApp_is_commission();
@@ -375,7 +375,7 @@ public class TradeController extends Controller {
 
         Trade trade = tradeService.findByTrade_id(trade_id);
         authenticateApp_id(trade.getApp_id());
-        if (!trade.getTrade_flow().equals(TradeFlow.WAIT_SEND.getValue())) {
+        if (!trade.getTrade_flow().equals(TradeFlow.WAIT_SEND.getKey())) {
             throw new RuntimeException("该订单不能发货！");
         } else if (expressService.listByTrade_id(trade_id).size() == 0) {
             throw new RuntimeException("该订单还没填写快递单！");
