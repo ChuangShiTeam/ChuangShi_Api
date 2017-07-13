@@ -9,6 +9,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.Trade;
+import com.nowui.chuangshi.type.TradeFlow;
 
 public class TradeDao extends Dao {
 
@@ -75,6 +76,16 @@ public class TradeDao extends Dao {
         return new Trade().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
+    public List<Trade> listByUser_id(String user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Trade.USER_ID, user_id);
+        SqlPara sqlPara = Db.getSqlPara("trade.listByUser_id", sqlMap);
+
+        logSql("trade", "listByUser_id", sqlPara);
+
+        return new Trade().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+
     public Trade findByTrade_id(String trade_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Trade.TRADE_ID, trade_id);
@@ -89,7 +100,7 @@ public class TradeDao extends Dao {
             return tradeList.get(0);
         }
     }
-    
+
     public Trade findByTrade_number(String trade_number) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Trade.TRADE_NUMBER, trade_number);
@@ -105,7 +116,11 @@ public class TradeDao extends Dao {
         }
     }
 
-    public Boolean save(String trade_id, String app_id, String user_id, String trade_number, String trade_receiver_name, String trade_receiver_mobile, String trade_receiver_province, String trade_receiver_city, String trade_receiver_area, String trade_receiver_address, String trade_message, Integer trade_product_quantity, BigDecimal trade_product_amount, BigDecimal trade_express_amount, BigDecimal trade_discount_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, String trade_flow, Boolean trade_status, String trade_audit_status, String system_create_user_id) {
+    public Boolean save(String trade_id, String app_id, String user_id, String trade_number, String trade_receiver_name, String trade_receiver_mobile,
+            String trade_receiver_province, String trade_receiver_city, String trade_receiver_area, String trade_receiver_address,
+            String trade_message, Integer trade_product_quantity, BigDecimal trade_product_amount, BigDecimal trade_express_amount,
+            BigDecimal trade_discount_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, String trade_flow,
+            Boolean trade_status, String trade_audit_status, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Trade.TRADE_ID, trade_id);
         sqlMap.put(Trade.APP_ID, app_id);
@@ -141,7 +156,11 @@ public class TradeDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String trade_id, String user_id, String trade_number, String trade_receiver_name, String trade_receiver_mobile, String trade_receiver_province, String trade_receiver_city, String trade_receiver_area, String trade_receiver_address, String trade_message, Integer trade_product_quantity, BigDecimal trade_product_amount, BigDecimal trade_express_amount, BigDecimal trade_discount_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, String trade_flow, Boolean trade_status, String trade_audit_status, String system_update_user_id, Integer system_version) {
+    public Boolean update(String trade_id, String user_id, String trade_number, String trade_receiver_name, String trade_receiver_mobile,
+            String trade_receiver_province, String trade_receiver_city, String trade_receiver_area, String trade_receiver_address,
+            String trade_message, Integer trade_product_quantity, BigDecimal trade_product_amount, BigDecimal trade_express_amount,
+            BigDecimal trade_discount_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, String trade_flow,
+            Boolean trade_status, String trade_audit_status, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Trade.TRADE_ID, trade_id);
         sqlMap.put(Trade.USER_ID, user_id);
@@ -172,8 +191,9 @@ public class TradeDao extends Dao {
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
-    
-    public Boolean updateTrade_is_payAndTrade_flowAndSystem_update_user_idAndSystem_update_timeAndByTrade_idAndSystem_version(String trade_id, Boolean trade_is_pay, String trade_flow, String system_update_user_id, Integer system_version) {
+
+    public Boolean updateTrade_is_payAndTrade_flowAndSystem_update_user_idAndSystem_update_timeAndByTrade_idAndSystem_version(String trade_id,
+            Boolean trade_is_pay, String trade_flow, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Trade.TRADE_ID, trade_id);
         sqlMap.put(Trade.TRADE_IS_PAY, trade_is_pay);
@@ -181,10 +201,11 @@ public class TradeDao extends Dao {
         sqlMap.put(Trade.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(Trade.SYSTEM_UPDATE_TIME, new Date());
         sqlMap.put(Trade.SYSTEM_VERSION, system_version);
-        SqlPara sqlPara = Db.getSqlPara("trade.updateTrade_is_payAndTrade_flowAndSystem_update_user_idAndSystem_update_timeAndByTrade_idAndSystem_version", sqlMap);
-        
+        SqlPara sqlPara = Db.getSqlPara(
+                "trade.updateTrade_is_payAndTrade_flowAndSystem_update_user_idAndSystem_update_timeAndByTrade_idAndSystem_version", sqlMap);
+
         logSql("trade", "updateTrade_is_payAndTrade_flowAndSystem_update_user_idAndSystem_update_timeAndByTrade_idAndSystem_version", sqlPara);
-        
+
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
@@ -197,6 +218,20 @@ public class TradeDao extends Dao {
         SqlPara sqlPara = Db.getSqlPara("trade.deleteByTrade_idAndSystem_version", sqlMap);
 
         logSql("trade", "deleteByTrade_idAndSystem_version", sqlPara);
+
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+
+    public boolean updateTrade_flowByTrade_idValidateSystem_version(String trade_id, String request_user_id, String system_version) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Trade.TRADE_ID, trade_id);
+        sqlMap.put(Trade.TRADE_FLOW, TradeFlow.WAIT_RECEIVE.getValue());
+        sqlMap.put(Trade.SYSTEM_UPDATE_USER_ID, request_user_id);
+        sqlMap.put(Trade.SYSTEM_UPDATE_TIME, new Date());
+        sqlMap.put(Trade.SYSTEM_VERSION, system_version);
+        SqlPara sqlPara = Db.getSqlPara("trade.updateTrade_flowByTrade_idValidateSystem_version", sqlMap);
+
+        logSql("trade", "updateTrade_flowByTrade_idValidateSystem_version", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }

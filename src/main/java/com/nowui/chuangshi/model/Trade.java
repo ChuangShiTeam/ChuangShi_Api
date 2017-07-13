@@ -70,6 +70,8 @@ public class Trade extends Model<Trade> {
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "")
     public static final String TRADE_AUDIT_STATUS = "trade_audit_status";
 
+    public static final String TRADE_PRODUCT_SKU_LIST = "trade_product_sku_list";
+
     public String getTrade_id() {
         return getStr(TRADE_ID);
     }

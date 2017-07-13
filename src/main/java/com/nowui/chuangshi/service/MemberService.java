@@ -62,6 +62,12 @@ public class MemberService extends Service {
         return memberCache.findByMember_id(member_id);
     }
 
+    public Member findByUser_id(String user_id) {
+        User user = userCache.findByUser_id(user_id);
+
+        return memberCache.findByMember_id(user.getObject_Id());
+    }
+
     public Member saveOrUpdate(String app_id, String wechat_open_id, String wechat_union_id, String member_parent_id, String from_qrcode_id, String member_level_id, JSONArray member_parent_path, String user_name, String user_avatar, Boolean member_status, String system_create_user_id) {
         if (ValidateUtil.isNullOrEmpty(wechat_open_id)) {
             throw new RuntimeException("wechat_open_id is null");

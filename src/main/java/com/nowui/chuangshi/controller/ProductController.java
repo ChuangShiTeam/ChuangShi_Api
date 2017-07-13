@@ -47,7 +47,6 @@ public class ProductController extends Controller {
         product.keep(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_CONTENT);
 
         List<ProductSku> productSkuList = productSkuService.listByProduct_id(model.getProduct_id());
-
         for (ProductSku productSku : productSkuList) {
             if (productSku.getProduct_sku_is_default()) {
                 productSku.keep(ProductSku.PRODUCT_SKU_ID, ProductSku.PRODUCT_SKU_IS_DEFAULT);
@@ -122,12 +121,9 @@ public class ProductController extends Controller {
         product.keep(Product.PRODUCT_ID, Product.PRODUCT_CATEGORY_ID, Product.PRODUCT_BRAND_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_IS_NEW, Product.PRODUCT_IS_RECOMMEND,
                 Product.PRODUCT_IS_BARGAIN, Product.PRODUCT_IS_HOT, Product.PRODUCT_IS_SOLD_OUT, Product.PRODUCT_IS_VIRTUAL, Product.PRODUCT_CONTENT, Product.PRODUCT_STATUS, Product.SYSTEM_VERSION);
 
-        if (ValidateUtil.isNullOrEmpty(product.getProduct_image())) {
-            product.put(Product.PRODUCT_IMAGE_FILE, "");
-        } else {
-            File file = fileService.findByFile_id(product.getProduct_image());
-            product.put(Product.PRODUCT_IMAGE_FILE, file.keep(File.FILE_ID, File.FILE_PATH));
-        }
+        product.put(Product.PRODUCT_IMAGE_FILE, fileService.getFile(product.getProduct_image()));
+
+
 
         List<ProductSku> productSkuList = productSkuService.listByProduct_id(model.getProduct_id());
         for (ProductSku productSku : productSkuList) {

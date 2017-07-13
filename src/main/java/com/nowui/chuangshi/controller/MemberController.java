@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nowui.chuangshi.model.*;
 import com.nowui.chuangshi.service.*;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -13,14 +14,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.Express;
-import com.nowui.chuangshi.model.Member;
-import com.nowui.chuangshi.model.MemberAddress;
-import com.nowui.chuangshi.model.MemberLevel;
-import com.nowui.chuangshi.model.ProductSku;
-import com.nowui.chuangshi.model.Stock;
-import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.type.ExpressStatus;
 import com.nowui.chuangshi.type.StockAction;
 import com.nowui.chuangshi.type.StockFlow;
 import com.nowui.chuangshi.type.StockType;
@@ -35,6 +28,7 @@ public class MemberController extends Controller {
     private final MemberAddressService memberAddressService = new MemberAddressService();
     private final MemberLevelService memberLevelService = new MemberLevelService();
     private final FileService fileService = new FileService();
+    private final QrcodeService qrcodeService = new QrcodeService();
 
     private List<Map<String, Object>> getChildren(List<Member> memberList, String member_parent_id, String... keys) {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -117,6 +111,57 @@ public class MemberController extends Controller {
         member.keep(Member.MEMBER_ID, Member.SYSTEM_VERSION);
 
         renderSuccessJson(member);
+    }
+
+    @ActionKey(Url.MEMBER_MY_FIND)
+    public void myFind() {
+        validateRequest_app_id();
+
+        String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        User user = userService.findByUser_id(request_user_id);
+        Member member = memberService.findByMember_id(user.getObject_Id());
+
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put(User.USER_NAME, user.getUser_name());
+        result.put(User.USER_AVATAR, fileService.getFile_path(user.getUser_avatar()));
+
+        result.put(Member.MEMBER_COMMISSION_AMOUNT, 0);
+        result.put(Member.MEMBER_ORDER_AMOUNT, 0);
+        result.put(Member.MEMBER_WAIT_PAY, 0);
+        result.put(Member.MEMBER_WAIT_SEND, 0);
+        result.put(Member.MEMBER_WAIT_RECEIVE, 0);
+        result.put(Member.MEMBER_STATUS, member.getMember_status());
+
+        if (ValidateUtil.isNullOrEmpty(member.getMember_level_id())) {
+            result.put(MemberLevel.MEMBER_LEVEL_NAME, "");
+        } else {
+            MemberLevel memberLevel = memberLevelService.findByMember_level_id(member.getMember_level_id());
+            result.put(MemberLevel.MEMBER_LEVEL_NAME, memberLevel.getMember_level_name());
+        }
+
+        authenticateApp_id(user.getApp_id());
+
+        renderSuccessJson(result);
+    }
+
+    @ActionKey(Url.MEMBER_QRCODE_FIND)
+    public void qrcodeFind() {
+        validateRequest_app_id();
+
+        String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        Member member = memberService.findByUser_id(request_user_id);
+
+        Qrcode qrcode = qrcodeService.findByQrcode_id(member.getQrcode_id());
+
+        authenticateApp_id(member.getApp_id());
+
+        renderSuccessJson(qrcode.getQrcode_url());
     }
 
     @ActionKey(Url.MEMBER_TEAM_MEMBER_LEVEL_LIST)

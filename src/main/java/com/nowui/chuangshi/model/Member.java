@@ -32,6 +32,13 @@ public class Member extends Model<Member> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "会员状态")
     public static final String MEMBER_STATUS = "member_status";
 
+    public static final String MEMBER_WITHDRAW_AMOUNT = "member_withdraw_amount";
+    public static final String MEMBER_COMMISSION_AMOUNT = "member_commission_amount";
+    public static final String MEMBER_ORDER_AMOUNT = "member_order_amount";
+    public static final String MEMBER_WAIT_PAY = "member_wait_pay";
+    public static final String MEMBER_WAIT_SEND = "member_wait_send";
+    public static final String MEMBER_WAIT_RECEIVE = "member_wait_receive";
+
     public String getMember_id() {
         return getStr(MEMBER_ID);
     }
