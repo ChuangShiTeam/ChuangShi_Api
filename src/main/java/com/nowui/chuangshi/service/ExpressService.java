@@ -66,7 +66,7 @@ public class ExpressService extends Service {
             String express_receiver_address, String system_create_user_id) {
         return save(express_id, app_id, "", stock_id, "", express_sender_user_id, "", "", "", "", express_receiver_name, "", express_receiver_mobile,
                 "", express_receiver_province, express_receiver_city, express_receiver_area, express_receiver_address, "", "", "", "", "", "", "", "",
-                "", new BigDecimal(0), false, "", null, null, "", ExpressStatus.NOTRACK.getValue(), "", system_create_user_id);
+                "", new BigDecimal(0), false, "", null, null, "", ExpressStatus.NOTRACK.getKey(), "", system_create_user_id);
     }
 
     public Boolean updateValidateSystem_version(String express_id, String trade_id, String stock_id, String express_receiver_user_id,
