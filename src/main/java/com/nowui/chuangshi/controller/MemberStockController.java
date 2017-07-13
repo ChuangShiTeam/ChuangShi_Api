@@ -139,6 +139,28 @@ public class MemberStockController extends Controller {
 
         renderSuccessJson(total, resultList);
     }
+    
+    @ActionKey(Url.MEMBER_STOCK_ADMIN_STOCK_LIST)
+    public void adminStockList() {
+    	validateRequest_app_id();
+    	validate(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+    	
+    	String request_app_id = getRequest_app_id();
+    	JSONObject jsonObject = getParameterJSONObject();
+    	String user_name = jsonObject.getString("user_name");
+    	String product_name = jsonObject.getString("product_name");
+    	
+    	authenticateRequest_app_idAndRequest_user_id();
+    	
+    	Integer total = stockService.countByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_id(request_app_id, StockType.MEMBER.getKey(), product_name, user_name);
+    	List<Stock> resultList = stockService.listByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit(request_app_id, StockType.MEMBER.getKey(), product_name, user_name, getM(), getN());
+    	
+    	for (Stock result : resultList) {
+    		result.keep(Stock.USER_NAME, Stock.PRODUCT_NAME, Stock.SUM_STOCK_QUANTITY);
+    	}
+    	
+    	renderSuccessJson(total, resultList);
+    }
 
     @ActionKey(Url.MEMBER_STOCK_ADMIN_FIND)
     public void adminFind() {

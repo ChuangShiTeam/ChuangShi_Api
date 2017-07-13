@@ -6,7 +6,7 @@
     LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
     LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
     #end
-    #if(stock_type == '会员' && user_name)
+    #if(stock_type == 'MEMBER' && user_name)
     LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
     LEFT JOIN table_user ON table_user.user_id = table_member.user_id
     #end
@@ -20,7 +20,7 @@
     #set(product_name = "%" + product_name + "%")
     AND table_product.product_name LIKE #p(product_name)
     #end
-    #if(stock_type == '会员' && user_name)
+    #if(stock_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
     #end
@@ -32,7 +32,7 @@
     LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
     LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
     #end
-    #if(stock_type == '会员' && user_name)
+    #if(stock_type == 'MEMBER' && user_name)
     LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
     LEFT JOIN table_user ON table_user.user_id = table_member.user_id
     #end
@@ -54,7 +54,7 @@
     #end
   #end
   
-  #sql("countByApp_idAndStock_typeGroupByObject_idAndProduct_sku_id")   	
+  #sql("countByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_id")   	
    	SELECT
 		COUNT(1)
 	FROM
@@ -63,19 +63,27 @@
 				table_stock.*
 			FROM
 				table_stock
+				LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
+				LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
+				#if(stock_type == 'MEMBER')
+				LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
+			    LEFT JOIN table_user ON table_member.user_id = table_user.user_id
+			    #end
+			    #if(stock_type == 'APP')
+			    LEFT JOIN table_app ON table_app.app_id = table_stock.object_id
+			    #end
 			WHERE
 				table_stock.system_status = 1
 				AND table_stock.app_id = #p(app_id)
-			    #if(stock_type)
 			    AND table_stock.stock_type = #p(stock_type)
-			    #end
+
 			GROUP BY
 				table_stock.object_id,
 				table_stock.product_sku_id
 		) AS temp
   #end
   
-  #sql("countByOrApp_idAndStock_typeGroupByObject_idAndProduct_sku_id")   	
+  #sql("countByOrApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_id")   	
    	SELECT
 		COUNT(1)
 	FROM
@@ -118,7 +126,7 @@
     LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
     LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
     #end
-    #if(stock_type == '会员' && user_name)
+    #if(stock_type == 'MEMBER' && user_name)
     LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
     LEFT JOIN table_user ON table_user.user_id = table_member.user_id
     #end
@@ -132,7 +140,7 @@
     #set(product_name = "%" + product_name + "%")
     AND table_product.product_name LIKE #p(product_name)
     #end
-    #if(stock_type == '会员' && user_name)
+    #if(stock_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
     #end
@@ -148,7 +156,7 @@
     LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
     LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
     #end
-    #if(stock_type == '会员' && user_name)
+    #if(stock_type == 'MEMBER' && user_name)
     LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
     LEFT JOIN table_user ON table_user.user_id = table_member.user_id
     #end
@@ -164,7 +172,7 @@
     #set(product_name = "%" + product_name + "%")
     AND table_product.product_name LIKE #p(product_name)
     #end
-    #if(stock_type == '会员' && user_name)
+    #if(stock_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
     #end
@@ -172,12 +180,12 @@
     LIMIT #p(m), #p(n)
   #end
   
-  #sql("listByOrApp_idAndStock_typeGroupByObject_idAndProduct_sku_id")
+  #sql("listByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit")
     SELECT
 		IFNULL(
 			SUM(
 				CASE
-				WHEN table_stock.stock_action = '出库' THEN
+				WHEN table_stock.stock_action = 'OUT' THEN
 					- 1 * table_stock.stock_quantity
 				ELSE
 					table_stock.stock_quantity
@@ -185,10 +193,10 @@
 			),
 			0
 		) as sum_stock_quantity,
-		#if(stock_type == '会员')
+		#if(stock_type == 'MEMBER')
 		table_user.user_name,
 		#end
-		#if(stock_type == '应用')
+		#if(stock_type == 'APP')
 		table_app.app_name,
 		#end
 		table_product.product_name
@@ -196,30 +204,35 @@
 		table_stock
 	LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
 	LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
-	#if(stock_type == '会员')
+	#if(stock_type == 'MEMBER')
 	LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
     LEFT JOIN table_user ON table_member.user_id = table_user.user_id
     #end
-    #if(stock_type == '应用')
+    #if(stock_type == 'APP')
     LEFT JOIN table_app ON table_app.app_id = table_stock.object_id
     #end
-	WHERE
-	 #if(app_id)
+	WHERE 
+	 table_stock.system_status = 1
 	 AND table_stock.app_id = #p(app_id)
-     #end
-     #if(stock_type)
      AND table_stock.stock_type = #p(stock_type)
+     #if(product_name)
+     #set(product_name = "%" + product_name + "%")
+     AND table_product.product_name LIKE #p(product_name)
+     #end
+     #if(stock_type == 'MEMBER' && user_name)
+     #set(user_name = "%" + user_name + "%")
+     AND table_user.user_name LIKE #p(user_name)
      #end
 	 GROUP BY table_stock.object_id, table_stock.product_sku_id
     LIMIT #p(m), #p(n)
   #end
   
-  #sql("listByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_id")
+  #sql("listByOrApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit")
     SELECT
 		IFNULL(
 			SUM(
 				CASE
-				WHEN table_stock.stock_action = '出库' THEN
+				WHEN table_stock.stock_action = 'OUT' THEN
 					- 1 * table_stock.stock_quantity
 				ELSE
 					table_stock.stock_quantity
@@ -227,10 +240,10 @@
 			),
 			0
 		) as sum_stock_quantity,
-		#if(stock_type == '会员')
+		#if(stock_type == 'MEMBER')
 		table_user.user_name,
 		#end
-		#if(stock_type == '应用')
+		#if(stock_type == 'APP')
 		table_app.app_name,
 		#end
 		table_product.product_name
@@ -238,28 +251,101 @@
 		table_stock
 	LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
 	LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
-	#if(stock_type == '会员')
+	#if(stock_type == 'MEMBER')
 	LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
     LEFT JOIN table_user ON table_member.user_id = table_user.user_id
     #end
-    #if(stock_type == '应用')
+    #if(stock_type == 'APP')
     LEFT JOIN table_app ON table_app.app_id = table_stock.object_id
     #end
-	WHERE
+	WHERE 
+	 table_stock.system_status = 1
+	 #if(app_id)
 	 AND table_stock.app_id = #p(app_id)
-     #if(stock_type)
+     #end
      AND table_stock.stock_type = #p(stock_type)
+     #if(product_name)
+     #set(product_name = "%" + product_name + "%")
+     AND table_product.product_name LIKE #p(product_name)
+     #end
+     #if(stock_type == 'MEMBER' && user_name)
+     #set(user_name = "%" + user_name + "%")
+     AND table_user.user_name LIKE #p(user_name)
      #end
 	 GROUP BY table_stock.object_id, table_stock.product_sku_id
     LIMIT #p(m), #p(n)
   #end
-
+  
   #sql("findByStock_id")
     SELECT
     *
     FROM table_stock    
     WHERE system_status = 1
     AND stock_id = #p(stock_id)
+  #end
+  
+  #sql("listByApp_idAndObject_idGroupByObject_idAndProduct_sku_id")
+    SELECT
+		IFNULL(
+			SUM(
+				CASE
+				WHEN table_stock.stock_action = 'OUT' THEN
+					- 1 * table_stock.stock_quantity
+				ELSE
+					table_stock.stock_quantity
+				END
+			),
+			0
+		) as sum_stock_quantity,
+		table_product.product_name
+	FROM
+		table_stock
+	LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
+	LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
+	WHERE 
+	 table_stock.system_status = 1
+	 AND table_stock.app_id = #p(app_id)
+     AND table_stock.object_id = #p(object_id)
+	 GROUP BY table_stock.object_id, table_stock.product_sku_id
+  #end
+  
+  #sql("listByApp_idAndObject_id")
+    SELECT
+		table_stock.*
+		table_product.product_name
+	FROM
+		table_stock
+	LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
+	LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
+	WHERE 
+	 table_stock.system_status = 1
+	 AND table_stock.app_id = #p(app_id)
+     AND table_stock.object_id = #p(object_id)
+    LIMIT #p(m), #p(n)
+  #end
+  
+  #sql("listByApp_idAndObject_id")
+    SELECT
+		table_stock.stock_id AS object_id,
+		table_stock.product_sku_id,
+		table_stock.stock_quantity AS quantity,
+		table_stock.stock_receiver_name AS receiver_name,
+		'会员发货' AS object_type
+	FROM
+		table_stock
+	WHERE
+		table_stock.stock_type = 'MEMBER'
+	AND table_stock.stock_action = 'OUT'
+	UNION
+		SELECT
+			table_trade.trade_id AS object_id,
+			table_trade_product_sku.product_sku_id,
+			table_trade.trade_product_quantity AS quantity,
+			table_trade.trade_receiver_name AS receiver_name,
+			'会员下订单' AS object_type
+		FROM
+			table_trade
+		LEFT JOIN table_trade_product_sku ON table_trade_product_sku.trade_id = table_trade.trade_id
   #end
   
   #sql("findWithMemberByStock_id")
@@ -291,7 +377,7 @@
   
   #sql("sumStock_quantityByObject_idAndProduct_sku_id")
     SELECT
-    IFNULL(SUM(case when stock_action = '出库' then -1*stock_quantity else stock_quantity end), 0)
+    IFNULL(SUM(case when stock_action = 'OUT' then -1*stock_quantity else stock_quantity end), 0)
     FROM table_stock
     WHERE system_status = 1
     AND object_id = #p(object_id)

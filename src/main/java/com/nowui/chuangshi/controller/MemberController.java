@@ -1,31 +1,37 @@
 package com.nowui.chuangshi.controller;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.nowui.chuangshi.model.*;
-import com.nowui.chuangshi.service.*;
-import com.nowui.chuangshi.util.ValidateUtil;
-
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
+import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.MemberLevel;
+import com.nowui.chuangshi.model.ProductSku;
+import com.nowui.chuangshi.model.Qrcode;
+import com.nowui.chuangshi.model.Stock;
+import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.service.FileService;
+import com.nowui.chuangshi.service.MemberLevelService;
+import com.nowui.chuangshi.service.MemberService;
+import com.nowui.chuangshi.service.QrcodeService;
+import com.nowui.chuangshi.service.StockService;
+import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.StockAction;
 import com.nowui.chuangshi.type.StockFlow;
 import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 public class MemberController extends Controller {
 
     private final MemberService memberService = new MemberService();
     private final UserService userService = new UserService();
-    private final ExpressService expressService = new ExpressService();
     private final StockService stockService = new StockService();
-    private final MemberAddressService memberAddressService = new MemberAddressService();
     private final MemberLevelService memberLevelService = new MemberLevelService();
     private final FileService fileService = new FileService();
     private final QrcodeService qrcodeService = new QrcodeService();
@@ -249,6 +255,54 @@ public class MemberController extends Controller {
 
         renderSuccessJson();
     }
+    
+    @ActionKey(Url.MEMBER_SEND)
+    public void send() {
+        validateRequest_app_id();
+        validate(Member.MEMBER_ID, ProductSku.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Stock.STOCK_RECEIVER_NAME, Stock.STOCK_RECEIVER_ADDRESS, Stock.STOCK_RECEIVER_AREA, Stock.STOCK_RECEIVER_CITY, Stock.STOCK_RECEIVER_MOBILE);
+        
+        String request_app_id = getRequest_app_id();
+        String request_user_id = getRequest_user_id();
+        Stock stock = getModel(Stock.class);
+        JSONObject jsonObject = getParameterJSONObject();
+        String member_id = jsonObject.getString("member_id");
+        String product_sku_id = jsonObject.getString("product_sku_id");
+        Integer stock_quantity = jsonObject.getInteger("stock_quantity");
+        //判断会员库存数量是否足够
+        Integer member_product_sku_stock_quantity = stockService.sumStock_quantityByObject_idAndProduct_sku_id(member_id, product_sku_id);
+        if (stock_quantity > member_product_sku_stock_quantity) {
+        	throw new RuntimeException("会员库存不足");
+        }
+        authenticateRequest_app_idAndRequest_user_id();
+        
+        authenticateApp_id(request_app_id);
+        
+        String stock_id = Util.getRandomUUID();
+        Member member = memberService.findByMember_id(member_id);
+        Boolean result = stockService.save(stock_id, member.getApp_id(), product_sku_id, member_id, StockType.MEMBER.getKey(), stock_quantity, stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), StockAction.OUT.getKey(), StockFlow.WAIT_SEND.getKey(), false, null, request_user_id);
+        
+        renderSuccessJson(result);
+    }
+    
+    @ActionKey(Url.MEMBER_SEND_DETAIL)
+    public void sendDetail() {
+        validateRequest_app_id();
+        validate(Member.MEMBER_ID);
+        
+        String request_app_id = getRequest_app_id();
+        JSONObject jsonObject = getParameterJSONObject();
+        String member_id = jsonObject.getString("member_id");
+        
+        authenticateRequest_app_idAndRequest_user_id();
+        
+        authenticateApp_id(request_app_id);
+        
+        
+        
+        Map<String, Object> result = new HashMap<String, Object>();
+        renderSuccessJson(result);
+    }
+
 
     @ActionKey(Url.MEMBER_ADMIN_LIST)
     public void adminList() {
@@ -312,11 +366,6 @@ public class MemberController extends Controller {
         
         String stock_id = Util.getRandomUUID();
         Member member = memberService.findByMember_id(member_id);
-        //查询会员默认地址
-        //MemberAddress memberAddress = memberAddressService.findByMember_id(member_id);
-        /*if (memberAddress == null || StringUtils.isBlank(memberAddress.getMember_address_id())) {
-        	throw new RuntimeException("会员地址信息需要完善");
-        }*/
         Boolean result = stockService.save(stock_id, member.getApp_id(), product_sku_id, member_id, StockType.MEMBER.getKey(), stock_quantity, stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), StockAction.OUT.getKey(), StockFlow.WAIT_SEND.getKey(), false, null, request_user_id);
         
         renderSuccessJson(result);

@@ -137,6 +137,27 @@ public class AppStockController extends Controller {
 
         renderSuccessJson(total, resultList);
     }
+    
+    @ActionKey(Url.APP_STOCK_ADMIN_STOCK_LIST)
+    public void adminStockList() {
+    	validateRequest_app_id();
+    	validate(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+    	
+    	String request_app_id = getRequest_app_id();
+    	JSONObject jsonObject = getParameterJSONObject();
+    	String product_name = jsonObject.getString("product_name");
+    	
+    	authenticateRequest_app_idAndRequest_user_id();
+    	
+    	Integer total = stockService.countByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_id(request_app_id, StockType.APP.getKey(), product_name, null);
+    	List<Stock> resultList = stockService.listByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit(request_app_id, StockType.APP.getKey(), product_name, null, getM(), getN());
+    	
+    	for (Stock result : resultList) {
+    		result.keep(Stock.PRODUCT_NAME, Stock.SUM_STOCK_QUANTITY);
+    	}
+    	
+    	renderSuccessJson(total, resultList);
+    }
 
     @ActionKey(Url.APP_STOCK_ADMIN_FIND)
     public void adminFind() {
@@ -169,11 +190,10 @@ public class AppStockController extends Controller {
         if (productSkuList == null || productSkuList.size() == 0) {
             throw new RuntimeException("初始化库存失败, 产品sku不能为空");
         }
-        String app_id = jsonObject.getString("app_id");
         
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = stockService.replenish(request_app_id, app_id, StockType.APP.getKey(), productSkuList, request_user_id);
+        Boolean result = stockService.replenish(request_app_id, request_app_id, StockType.APP.getKey(), productSkuList, request_user_id);
 
         renderSuccessJson(result);
     }
