@@ -46,7 +46,7 @@ public class WebConfig extends JFinalConfig {
 
     public void configRoute(Routes routes) {
         routes.add("/wechat/message", WeChatMessageController.class);
-        routes.add("/wechat/api", WeChatApiController.class);
+        routes.add("/wechat", WeChatController.class);
         routes.add("/code", CodeController.class);
         routes.add("/http", HttpController.class);
         routes.add("/sql", SqlController.class);
@@ -175,16 +175,16 @@ public class WebConfig extends JFinalConfig {
                 ApiConfig apiConfig = new ApiConfig();
                 apiConfig.setAppId(app.getWechat_app_id());
                 apiConfig.setAppSecret(app.getWechat_app_secret());
-                apiConfig.setToken(app.getWechat_token());
+                apiConfig.setToken("0c2b0aad29634f76816d0a70b932f0cf");
                 apiConfig.setEncryptMessage(false);
-                apiConfig.setEncodingAesKey(app.getWechat_encoding_aes_key());
+                apiConfig.setEncodingAesKey("yl0e2HePzbHmrdo7m0HXASQA0w2RRNRzcl8bwNwN5iv");
                 ApiConfigKit.putApiConfig(apiConfig);
             }
         }
     }
 
     private void initXingXiaoDadabase() {
-         List<Record> userRecordList = Db.find("select * from XingXiao.table_user");
+        List<Record> userRecordList = Db.find("select * from XingXiao.table_user");
         for (Record record : userRecordList) {
             String user_id = record.getStr("user_id");
             String app_id = "c1af3f1ae00e4e0da9b20f5bd41b4279";
@@ -198,11 +198,9 @@ public class WebConfig extends JFinalConfig {
             String user_avatar = Util.getRandomUUID();
             String wechat_open_id = record.getStr("wechat_open_id");
             String wechat_union_id = record.getStr("wechat_union_id");
-            String system_create_user_id =
-                    record.getStr("system_create_user_id");
+            String system_create_user_id = record.getStr("system_create_user_id");
             Date system_create_time = record.getDate("system_create_time");
-            String system_update_user_id =
-                    record.getStr("system_update_user_id");
+            String system_update_user_id = record.getStr("system_update_user_id");
             Date system_update_time = record.getDate("system_update_time");
             Integer system_version = 0;
             Boolean system_status = record.getBoolean("system_status");
@@ -273,11 +271,9 @@ public class WebConfig extends JFinalConfig {
             String member_level_id = record.getStr("member_level_id");
             String member_parent_path = record.getStr("parent_path");
             Boolean member_status = record.getBoolean("member_status");
-            String system_create_user_id =
-                    record.getStr("system_create_user_id");
+            String system_create_user_id = record.getStr("system_create_user_id");
             Date system_create_time = record.getDate("system_create_time");
-            String system_update_user_id =
-                    record.getStr("system_update_user_id");
+            String system_update_user_id = record.getStr("system_update_user_id");
             Date system_update_time = record.getDate("system_update_time");
             Integer system_version = 0;
             Boolean system_status = record.getBoolean("system_status");
@@ -309,11 +305,9 @@ public class WebConfig extends JFinalConfig {
             String member_level_name = record.getStr("member_level_name");
             Integer member_level_value = record.getInt("member_level_value");
             Integer member_level_sort = record.getInt("member_level_sort");
-            String system_create_user_id =
-                    record.getStr("system_create_user_id");
+            String system_create_user_id = record.getStr("system_create_user_id");
             Date system_create_time = record.getDate("system_create_time");
-            String system_update_user_id =
-                    record.getStr("system_update_user_id");
+            String system_update_user_id = record.getStr("system_update_user_id");
             Date system_update_time = record.getDate("system_update_time");
             Integer system_version = 0;
             Boolean system_status = record.getBoolean("system_status");
@@ -344,11 +338,9 @@ public class WebConfig extends JFinalConfig {
             Integer qrcode_add = record.getInt("scene_add");
             Integer qrcode_cancel = record.getInt("scene_add");
             Boolean qrcode_status = !record.getBoolean("scene_is_expire");
-            String system_create_user_id =
-                    record.getStr("system_create_user_id");
+            String system_create_user_id = record.getStr("system_create_user_id");
             Date system_create_time = record.getDate("system_create_time");
-            String system_update_user_id =
-                    record.getStr("system_update_user_id");
+            String system_update_user_id = record.getStr("system_update_user_id");
             Date system_update_time = record.getDate("system_update_time");
             Integer system_version = 0;
             Boolean system_status = record.getBoolean("system_status");

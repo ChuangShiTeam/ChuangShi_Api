@@ -48,7 +48,7 @@ import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 import com.nowui.chuangshi.util.WeChatUtil;
 
-public class WeChatApiController extends Controller {
+public class WeChatController extends Controller {
 
     private final TradeService tradeService = new TradeService();
     private final AppService appService = new AppService();
@@ -61,8 +61,8 @@ public class WeChatApiController extends Controller {
     private UserService userService = new UserService();
     private BillCommissionService billCommissionService = new BillCommissionService();
 
-    @ActionKey(Url.WECHAT_API_INIT)
-    public void init() {
+    @ActionKey(Url.WECHAT_CONFIG)
+    public void config() {
         String url = getPara("url");
         String app_id = getPara("app_id");
 
@@ -78,7 +78,7 @@ public class WeChatApiController extends Controller {
         renderSuccessJson(result);
     }
 
-    @ActionKey(Url.WECHAT_API_AUTH)
+    @ActionKey(Url.WECHAT_AUTH)
     public void auth() {
         String code = getPara("code");
         String url = getPara("url");
@@ -325,7 +325,7 @@ public class WeChatApiController extends Controller {
         billService.batchSave(billList);
     }
 
-    @ActionKey(Url.WECHAT_API_NOTIFY)
+    @ActionKey(Url.WECHAT_NOTIFY)
     public void payNotify() {
         String result = HttpKit.readData(getRequest());
 

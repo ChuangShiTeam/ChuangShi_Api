@@ -2,9 +2,9 @@ package com.nowui.chuangshi.constant;
 
 public class Url {
 
-    public static final String WECHAT_API_INIT = "/wechat/api/init";
-    public static final String WECHAT_API_AUTH = "/wechat/api/auth";
-    public static final String WECHAT_API_NOTIFY = "/wechat/api/notify";
+    public static final String WECHAT_CONFIG = "/wechat/config";
+    public static final String WECHAT_AUTH = "/wechat/auth";
+    public static final String WECHAT_NOTIFY = "/wechat/notify";
 
     public static final String CODE_ADMIN_LIST = "/code/admin/list";
     public static final String CODE_ADMIN_SAVE = "/code/admin/save";
