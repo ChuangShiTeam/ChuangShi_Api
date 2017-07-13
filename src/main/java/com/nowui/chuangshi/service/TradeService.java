@@ -46,6 +46,10 @@ public class TradeService extends Service {
         return tradeCache.listByOrApp_idOrLikeTrade_numberAndLimit(app_id, trade_number, m, n);
     }
 
+    public List<Trade> listByUser_id(String user_id) {
+        return tradeCache.listByUser_id(user_id);
+    }
+
     public Trade findByTrade_id(String trade_id) {
         return tradeCache.findByTrade_id(trade_id);
     }

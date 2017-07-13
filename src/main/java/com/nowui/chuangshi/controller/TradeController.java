@@ -106,8 +106,10 @@ public class TradeController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<Trade> resultList = tradeService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME),
-                0, getN());
+       /* List<Trade> resultList = tradeService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME),
+                0, getN());*/
+         String request_user_id = getRequest_user_id();
+         List<Trade> resultList = tradeService.listByUser_id(request_user_id);
 
         for (Trade result : resultList) {
             result.keep(Trade.TRADE_ID, Trade.SYSTEM_VERSION);

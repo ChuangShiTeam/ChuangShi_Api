@@ -58,6 +58,10 @@ public class TradeCache extends Cache {
         return tradeList;
     }
 
+    public List<Trade> listByUser_id(String user_id) {
+        return tradeDao.listByUser_id(user_id);
+    }
+
     public Trade findByTrade_id(String trade_id) {
         Trade trade = CacheUtil.get(TRADE_BY_TRADE_ID_CACHE, trade_id);
 

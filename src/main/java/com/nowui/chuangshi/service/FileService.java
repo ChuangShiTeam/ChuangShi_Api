@@ -67,6 +67,16 @@ public class FileService extends Service {
         return file.getFile_path();
     }
 
+    public File getFile(String file_id) {
+        if (ValidateUtil.isNullOrEmpty(file_id)) {
+            return null;
+        }
+
+        File file = findByFile_id(file_id);
+
+        return file.keep(File.FILE_ID, File.FILE_PATH);
+    }
+
     public Boolean save(String file_id, String app_id, String file_type, String file_name, String file_suffix, Integer file_size, String file_path, String file_thumbnail_path, String file_original_path, String file_image, Boolean file_is_external, String system_create_user_id) {
         return fileCache.save(file_id, app_id, file_type, file_name, file_suffix, file_size, file_path, file_thumbnail_path, file_original_path, file_image, file_is_external, system_create_user_id);
     }
