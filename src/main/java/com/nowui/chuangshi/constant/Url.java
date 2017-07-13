@@ -4,6 +4,7 @@ public class Url {
 
     public static final String WECHAT_CONFIG = "/wechat/config";
     public static final String WECHAT_AUTH = "/wechat/auth";
+    public static final String WECHAT_MENU = "/wechat/menu";
     public static final String WECHAT_NOTIFY = "/wechat/notify";
 
     public static final String CODE_ADMIN_LIST = "/code/admin/list";

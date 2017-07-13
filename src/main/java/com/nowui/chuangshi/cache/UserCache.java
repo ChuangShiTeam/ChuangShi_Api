@@ -4,6 +4,7 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.dao.UserDao;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.util.CacheUtil;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.Date;
 import java.util.List;
@@ -103,6 +104,10 @@ public class UserCache extends Cache {
     }
 
     public Boolean updateByUser_name(String user_id, String user_name, String system_update_user_id) {
+        if (ValidateUtil.isNullOrEmpty(user_name)) {
+            return false;
+        }
+
         boolean result = userDao.updateByUser_name(user_id, user_name, system_update_user_id);
 
         if (result) {

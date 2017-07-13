@@ -13,11 +13,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.HttpKit;
-import com.jfinal.weixin.sdk.api.ApiConfigKit;
-import com.jfinal.weixin.sdk.api.ApiResult;
-import com.jfinal.weixin.sdk.api.SnsAccessToken;
-import com.jfinal.weixin.sdk.api.SnsAccessTokenApi;
-import com.jfinal.weixin.sdk.api.UserApi;
+import com.jfinal.weixin.sdk.api.*;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
@@ -94,6 +90,13 @@ public class WeChatController extends Controller {
         } else {
             App app = appService.findByApp_id(app_id);
 
+            String wechat_app_id = ApiConfigKit.getAppId();
+            if (!wechat_app_id.equals(app.getWechat_app_id())) {
+                ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+            }
+
+            System.out.println(app_id);
+
             SnsAccessToken snsAccessToken = SnsAccessTokenApi.getSnsAccessToken(app.getWechat_app_id(), app.getWechat_app_secret(), code);
 
             System.out.println(snsAccessToken.getJson());
@@ -107,6 +110,8 @@ public class WeChatController extends Controller {
             String request_user_id = "";
 
             ApiResult apiResult = UserApi.getUserInfo(wechat_open_id);
+
+            System.out.println(apiResult.getJson());
 
             if (ValidateUtil.isNullOrEmpty(wechat_union_id)) {
                 wechat_union_id = "";
@@ -128,8 +133,22 @@ public class WeChatController extends Controller {
             String token = memberService.login(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, member_parent_id,
                     member_parent_path, user_name, user_avatar, member_status, request_user_id);
 
-            redirect("http://h5.xingxiao.nowui.com/#/" + url + "/?open_id=" + wechat_open_id + "&token=" + token);
+            redirect("http://h5.xingxiao.nowui.com/#/" + url + "?open_id=" + wechat_open_id + "&token=" + token);
         }
+    }
+
+    @ActionKey(Url.WECHAT_MENU)
+    public void menu() {
+        App app = appService.findByApp_id("c1af3f1ae00e4e0da9b20f5bd41b4279");
+
+        String wechat_app_id = ApiConfigKit.getAppId();
+        if (!wechat_app_id.equals(app.getWechat_app_id())) {
+            ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+        }
+
+        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"爆水丸\",\"url\":\"http://h5." + "xingxiao.nowui.com" + "/\"}]}");
+
+        renderText(apiResult.getJson());
     }
 
     @ActionKey("/wechat/pay/success")

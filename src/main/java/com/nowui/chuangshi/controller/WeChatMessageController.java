@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.jfinal.weixin.iot.msg.InEquDataMsg;
 import com.jfinal.weixin.iot.msg.InEqubindEvent;
+import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.jfinal.weixin.sdk.api.ApiResult;
 import com.jfinal.weixin.sdk.api.UserApi;
 import com.jfinal.weixin.sdk.jfinal.MsgController;
@@ -14,13 +15,10 @@ import com.jfinal.weixin.sdk.msg.in.speech_recognition.InSpeechRecognitionResult
 import com.jfinal.weixin.sdk.msg.out.OutNewsMsg;
 import com.jfinal.weixin.sdk.msg.out.OutTextMsg;
 import com.nowui.chuangshi.constant.Constant;
-import com.nowui.chuangshi.model.Member;
-import com.nowui.chuangshi.model.MemberLevel;
-import com.nowui.chuangshi.model.Qrcode;
-import com.nowui.chuangshi.service.MemberLevelService;
-import com.nowui.chuangshi.service.MemberService;
-import com.nowui.chuangshi.service.QrcodeService;
+import com.nowui.chuangshi.model.*;
+import com.nowui.chuangshi.service.*;
 import com.nowui.chuangshi.type.QrcodeType;
+import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 public class WeChatMessageController extends MsgController {
@@ -28,6 +26,9 @@ public class WeChatMessageController extends MsgController {
     private final MemberService memberService = new MemberService();
     private final MemberLevelService memberLevelService = new MemberLevelService();
     private final QrcodeService qrcodeService = new QrcodeService();
+    private final AppService appService = new AppService();
+    private final UserService userService = new UserService();
+    private final FileService fileService = new FileService();
 
     @Override
     protected void processInTextMsg(InTextMsg inTextMsg) {
@@ -81,6 +82,13 @@ public class WeChatMessageController extends MsgController {
         String event = inFollowEvent.getEvent();
         Boolean member_status = false;
 
+        App app = appService.findByApp_id(app_id);
+
+        String wechat_app_id = ApiConfigKit.getAppId();
+        if (!wechat_app_id.equals(app.getWechat_app_id())) {
+            ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+        }
+
         ApiResult apiResult = UserApi.getUserInfo(wechat_open_id);
         wechat_union_id = apiResult.getStr("unionid");
         String user_name = apiResult.getStr("nickname");
@@ -122,6 +130,13 @@ public class WeChatMessageController extends MsgController {
         Boolean member_status = false;
         String system_create_user_id = "";
 
+        App app = appService.findByApp_id(app_id);
+
+        String wechat_app_id = ApiConfigKit.getAppId();
+        if (!wechat_app_id.equals(app.getWechat_app_id())) {
+            ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+        }
+
         Qrcode qrcode = qrcodeService.findByQrcode_id(from_qrcode_id);
 
         if (!qrcode.getQrcode_status()) {
@@ -138,6 +153,8 @@ public class WeChatMessageController extends MsgController {
         wechat_union_id = apiResult.getStr("unionid");
         String user_name = apiResult.getStr("nickname");
         String user_avatar = apiResult.getStr("headimgurl");
+
+        System.out.println(apiResult.getJson());
 
         if (ValidateUtil.isNullOrEmpty(wechat_union_id)) {
             wechat_union_id = "";
@@ -222,7 +239,39 @@ public class WeChatMessageController extends MsgController {
 
     @Override
     protected void processInMenuEvent(InMenuEvent inMenuEvent) {
+        String app_id = getPara(Constant.APP_ID);
 
+        App app = appService.findByApp_id(app_id);
+
+        String wechat_app_id = ApiConfigKit.getAppId();
+        if (!wechat_app_id.equals(app.getWechat_app_id())) {
+            ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+        }
+
+        String wechat_open_id = inMenuEvent.getFromUserName();
+
+        ApiResult apiResult = UserApi.getUserInfo(wechat_open_id);
+        String wechat_union_id = apiResult.getStr("unionid");
+        String user_name = apiResult.getStr("nickname");
+        String user_avatar = apiResult.getStr("headimgurl");
+        String system_create_user_id = "";
+
+        User user = userService.findByApp_idAndUser_typeAndWechat_open_idAndWechat_union_id(app_id, UserType.MEMBER.getKey(), wechat_open_id, wechat_union_id);
+        if (user != null) {
+            if (!user.getUser_name().equals(user_name)) {
+                userService.updateByUser_name(user.getUser_id(), user_name, system_create_user_id);
+
+                memberService.deleteMemberParentCache(user.getObject_Id());
+            }
+
+            File file = fileService.findByFile_id(user.getUser_avatar());
+
+            if (!user_avatar.equals(file.getFile_path())) {
+                fileService.updateByFile_path(user.getUser_avatar(), user_avatar, system_create_user_id);
+
+                memberService.deleteMemberParentCache(user.getObject_Id());
+            }
+        }
     }
 
     @Override

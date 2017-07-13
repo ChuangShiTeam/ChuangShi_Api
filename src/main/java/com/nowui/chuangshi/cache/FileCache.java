@@ -4,6 +4,7 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.dao.FileDao;
 import com.nowui.chuangshi.model.File;
 import com.nowui.chuangshi.util.CacheUtil;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.Date;
 import java.util.List;
@@ -112,6 +113,10 @@ public class FileCache extends Cache {
     }
 
     public Boolean updateByFile_path(String file_id, String file_path, String system_update_user_id) {
+        if (ValidateUtil.isNullOrEmpty(file_path)) {
+            return false;
+        }
+
         boolean result = fileDao.updateByFile_path(file_id, file_path, system_update_user_id);
 
         if (result) {

@@ -10,6 +10,7 @@ import com.nowui.chuangshi.cache.MemberCache;
 import com.nowui.chuangshi.cache.UserCache;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
+import com.nowui.chuangshi.model.File;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.type.FileType;
@@ -22,10 +23,11 @@ import java.util.*;
 
 public class MemberService extends Service {
 
-    private MemberCache memberCache = new MemberCache();
-    private UserCache userCache = new UserCache();
-    private FileCache fileCache = new FileCache();
-    
+    private final MemberCache memberCache = new MemberCache();
+    private final UserCache userCache = new UserCache();
+    private final FileCache fileCache = new FileCache();
+    private final FileService fileService = new FileService();
+
     public Integer countByApp_idOrLikeUser_name(String app_id, String user_name) {
         return memberCache.countByApp_idOrLikeUser_name(app_id, user_name);
     }
@@ -45,13 +47,13 @@ public class MemberService extends Service {
     public List<Member> listByApp_idOrLikeUser_nameAndLimit(String app_id, String user_name, int m, int n) {
         return memberCache.listByApp_idOrLikeUser_nameAndLimit(app_id, user_name, m, n);
     }
-    
+
     public List<Member> listByApp_id(String app_id) {
-    	return memberCache.listByApp_id(app_id);
+        return memberCache.listByApp_id(app_id);
     }
-    
+
     public List<Member> listByOrApp_id(String app_id) {
-    	return memberCache.listByOrApp_id(app_id);
+        return memberCache.listByOrApp_id(app_id);
     }
 
     public List<Member> listByOrApp_idOrLikeUser_nameAndLimit(String app_id, String user_name, int m, int n) {
@@ -110,8 +112,19 @@ public class MemberService extends Service {
                 throw new RuntimeException("保存不成功");
             }
         } else {
-            userCache.updateByUser_name(user.getUser_id(), user_name, system_create_user_id);
-            fileCache.updateByFile_path(user.getUser_avatar(), user_avatar, system_create_user_id);
+            if (!user.getUser_name().equals(user_name)) {
+                userCache.updateByUser_name(user.getUser_id(), user_name, system_create_user_id);
+
+                memberCache.deleteMemberParentCache(user.getObject_Id());
+            }
+
+            File file = fileService.findByFile_id(user.getUser_avatar());
+
+            if (!user_avatar.equals(file.getFile_path())) {
+                fileCache.updateByFile_path(user.getUser_avatar(), user_avatar, system_create_user_id);
+
+                memberCache.deleteMemberParentCache(user.getObject_Id());
+            }
 
             member_id = user.getObject_Id();
         }
@@ -150,9 +163,13 @@ public class MemberService extends Service {
     public Boolean updateByMember_idAndMember_level_id(String member_id, String member_level_id, String system_update_user_id) {
         return memberCache.updateByMember_idAndMember_level_id(member_id, member_level_id, system_update_user_id);
     }
-    
+
     public Boolean deleteByMember_idAndSystem_update_user_idValidateSystem_version(String member_id, String system_update_user_id, Integer system_version) {
         return memberCache.deleteByMember_idAndSystem_update_user_idValidateSystem_version(member_id, system_update_user_id, system_version);
+    }
+
+    public void deleteMemberParentCache(String member_id) {
+        memberCache.deleteMemberParentCache(member_id);
     }
 
 }
