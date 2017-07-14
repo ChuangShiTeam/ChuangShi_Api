@@ -324,30 +324,6 @@
     LIMIT #p(m), #p(n)
   #end
   
-  #sql("listByApp_idAndObject_id")
-    SELECT
-		table_stock.stock_id AS object_id,
-		table_stock.product_sku_id,
-		table_stock.stock_quantity AS quantity,
-		table_stock.stock_receiver_name AS receiver_name,
-		'会员发货' AS object_type
-	FROM
-		table_stock
-	WHERE
-		table_stock.stock_type = 'MEMBER'
-	AND table_stock.stock_action = 'OUT'
-	UNION
-		SELECT
-			table_trade.trade_id AS object_id,
-			table_trade_product_sku.product_sku_id,
-			table_trade.trade_product_quantity AS quantity,
-			table_trade.trade_receiver_name AS receiver_name,
-			'会员下订单' AS object_type
-		FROM
-			table_trade
-		LEFT JOIN table_trade_product_sku ON table_trade_product_sku.trade_id = table_trade.trade_id
-  #end
-  
   #sql("findWithMemberByStock_id")
     SELECT
     table_stock.*,
