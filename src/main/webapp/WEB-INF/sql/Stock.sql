@@ -1,11 +1,7 @@
 #namespace("stock")
 
-  #sql("countByApp_idAndStock_typeOrStock_actionOrLikeProduct_nameOrLikeUser_name")
+  #sql("countByApp_idAndStock_typeOrStock_actionOrLikeUser_name")
     SELECT COUNT(*) FROM table_stock
-    #if(product_name)
-    LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
-    LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
-    #end
     #if(stock_type == 'MEMBER' && user_name)
     LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
     LEFT JOIN table_user ON table_user.user_id = table_member.user_id
@@ -16,22 +12,14 @@
     #if(stock_action)
     AND table_stock.stock_action = #p(stock_action)
     #end
-    #if(product_name)
-    #set(product_name = "%" + product_name + "%")
-    AND table_product.product_name LIKE #p(product_name)
-    #end
     #if(stock_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
     #end
   #end
   
-  #sql("countByOrApp_idAndStock_typeOrStock_actionOrLikeProduct_nameOrLikeUser_name")
+  #sql("countByOrApp_idAndStock_typeOrStock_actionOrLikeUser_name")
     SELECT COUNT(*) FROM table_stock
-    #if(product_name)
-    LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
-    LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
-    #end
     #if(stock_type == 'MEMBER' && user_name)
     LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
     LEFT JOIN table_user ON table_user.user_id = table_member.user_id
@@ -44,13 +32,53 @@
     #if(stock_action)
     AND stock_action = #p(stock_action)
     #end
-    #if(product_name)
-    #set(product_name = "%" + product_name + "%")
-    AND table_product.product_name LIKE #p(product_name)
-    #end
     #if(user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
+    #end
+  #end
+  
+  #sql("countOutByApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no")
+    SELECT COUNT(*) FROM table_stock
+    LEFT JOIN table_express ON table_stock.stock_id = table_express.stock_id
+    WHERE table_stock.system_status = 1
+    AND table_stock.app_id = #p(app_id)
+    AND table_stock.stock_type = #p(stock_type)
+    AND table_stock.stock_action = 'OUT'
+    #if(express_sender_name)
+    #set(express_sender_name = "%" + express_sender_name + "%")
+    AND table_express.express_sender_name LIKE #p(express_sender_name)
+    #end
+    #if(stock_receiver_name)
+    #set(stock_receiver_name = "%" + stock_receiver_name + "%")
+    AND table_stock.stock_receiver_name LIKE #p(stock_receiver_name)
+    #end
+    #if(express_no)
+    #set(express_no = "%" + express_no + "%")
+    AND table_express.express_no LIKE #p(express_no)
+    #end
+  #end
+  
+  #sql("countOutByOrApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no")
+    SELECT COUNT(*) FROM table_stock
+    LEFT JOIN table_express ON table_stock.stock_id = table_express.stock_id
+    WHERE table_stock.system_status = 1
+    #if(app_id)
+    AND table_stock.app_id = #p(app_id)
+    #end
+    AND table_stock.stock_type = #p(stock_type)
+    AND table_stock.stock_action = 'OUT'
+    #if(express_sender_name)
+    #set(express_sender_name = "%" + express_sender_name + "%")
+    AND table_express.express_sender_name LIKE #p(express_sender_name)
+    #end
+    #if(stock_receiver_name)
+    #set(stock_receiver_name = "%" + stock_receiver_name + "%")
+    AND table_stock.stock_receiver_name LIKE #p(stock_receiver_name)
+    #end
+    #if(express_no)
+    #set(express_no = "%" + express_no + "%")
+    AND table_express.express_no LIKE #p(express_no)
     #end
   #end
   
@@ -118,14 +146,10 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByApp_idAndStock_typeOrStock_actionOrLikeProduct_nameOrLikeUser_nameAndLimit")
+  #sql("listByApp_idAndStock_typeOrStock_actionOrLikeUser_nameAndLimit")
     SELECT
     table_stock.stock_id
     FROM table_stock
-    #if(product_name)
-    LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
-    LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
-    #end
     #if(stock_type == 'MEMBER' && user_name)
     LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
     LEFT JOIN table_user ON table_user.user_id = table_member.user_id
@@ -136,10 +160,6 @@
     #if(stock_action)
     AND table_stock.stock_action = #p(stock_action)
     #end
-    #if(product_name)
-    #set(product_name = "%" + product_name + "%")
-    AND table_product.product_name LIKE #p(product_name)
-    #end
     #if(stock_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
@@ -148,14 +168,10 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idAndStock_typeOrStock_actionOrLikeProduct_nameOrLikeUser_nameAndLimit")
+  #sql("listByOrApp_idAndStock_typeOrStock_actionOrLikeUser_nameAndLimit")
     SELECT
     table_stock.stock_id
     FROM table_stock
-    #if(product_name)
-    LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
-    LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
-    #end
     #if(stock_type == 'MEMBER' && user_name)
     LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
     LEFT JOIN table_user ON table_user.user_id = table_member.user_id
@@ -167,10 +183,6 @@
     AND table_stock.stock_type = #p(stock_type)
     #if(stock_action)
     AND table_stock.stock_action = #p(stock_action)
-    #end
-    #if(product_name)
-    #set(product_name = "%" + product_name + "%")
-    AND table_product.product_name LIKE #p(product_name)
     #end
     #if(stock_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
@@ -276,37 +288,58 @@
     LIMIT #p(m), #p(n)
   #end
   
-  #sql("findByStock_id")
-    SELECT
-    *
-    FROM table_stock    
-    WHERE system_status = 1
-    AND stock_id = #p(stock_id)
+  #sql("listOutByApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no")
+    SELECT 
+    	table_stock.*,
+    	table_express.express_sender_name,
+    	table_express.express_no
+    FROM table_stock
+    LEFT JOIN table_express ON table_stock.stock_id = table_express.stock_id
+    WHERE table_stock.system_status = 1
+    AND table_stock.app_id = #p(app_id)
+    AND table_stock.stock_type = #p(stock_type)
+    AND table_stock.stock_action = 'OUT'
+    #if(express_sender_name)
+    #set(express_sender_name = "%" + express_sender_name + "%")
+    AND table_express.express_sender_name LIKE #p(express_sender_name)
+    #end
+    #if(stock_receiver_name)
+    #set(stock_receiver_name = "%" + stock_receiver_name + "%")
+    AND table_stock.stock_receiver_name LIKE #p(stock_receiver_name)
+    #end
+    #if(express_no)
+    #set(express_no = "%" + express_no + "%")
+    AND table_express.express_no LIKE #p(express_no)
+    #end
+    LIMIT #p(m), #p(n)
   #end
   
-  #sql("listByApp_idAndObject_idGroupByObject_idAndProduct_sku_id")
-    SELECT
-		IFNULL(
-			SUM(
-				CASE
-				WHEN table_stock.stock_action = 'OUT' THEN
-					- 1 * table_stock.stock_quantity
-				ELSE
-					table_stock.stock_quantity
-				END
-			),
-			0
-		) as sum_stock_quantity,
-		table_product.product_name
-	FROM
-		table_stock
-	LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
-	LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
-	WHERE 
-	 table_stock.system_status = 1
-	 AND table_stock.app_id = #p(app_id)
-     AND table_stock.object_id = #p(object_id)
-	 GROUP BY table_stock.object_id, table_stock.product_sku_id
+  #sql("listOutByOrApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no")
+    SELECT 
+    	table_stock.*,
+    	table_express.express_sender_name,
+    	table_express.express_no
+    FROM table_stock
+    LEFT JOIN table_express ON table_stock.stock_id = table_express.stock_id
+    WHERE table_stock.system_status = 1
+    #if(app_id)
+    AND table_stock.app_id = #p(app_id)
+    #end
+    AND table_stock.stock_type = #p(stock_type)
+    AND table_stock.stock_action = 'OUT'
+    #if(express_sender_name)
+    #set(express_sender_name = "%" + express_sender_name + "%")
+    AND table_express.express_sender_name LIKE #p(express_sender_name)
+    #end
+    #if(stock_receiver_name)
+    #set(stock_receiver_name = "%" + stock_receiver_name + "%")
+    AND table_stock.stock_receiver_name LIKE #p(stock_receiver_name)
+    #end
+    #if(express_no)
+    #set(express_no = "%" + express_no + "%")
+    AND table_express.express_no LIKE #p(express_no)
+    #end
+    LIMIT #p(m), #p(n)
   #end
   
   #sql("listByApp_idAndObject_id")
@@ -324,14 +357,19 @@
     LIMIT #p(m), #p(n)
   #end
   
+  #sql("findByStock_id")
+    SELECT
+    *
+    FROM table_stock    
+    WHERE system_status = 1
+    AND stock_id = #p(stock_id)
+  #end
+  
   #sql("findWithMemberByStock_id")
     SELECT
     table_stock.*,
-    table_user.user_name,
-    table_product.product_name
+    table_user.user_name
     FROM table_stock
-    LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
-    LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
     LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
     LEFT JOIN table_user ON table_member.user_id = table_user.user_id
     WHERE table_stock.system_status = 1
@@ -341,11 +379,8 @@
   #sql("findWithAppByStock_id")
     SELECT
     table_stock.*,
-    table_app.app_name,
-    table_product.product_name
+    table_app.app_name
     FROM table_stock
-    LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
-    LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
     LEFT JOIN table_app ON table_app.app_id = table_stock.object_id
     WHERE table_stock.system_status = 1
     AND table_stock.stock_id = #p(stock_id)
@@ -364,7 +399,6 @@
     INSERT INTO table_stock (
       stock_id,
       app_id,
-      product_sku_id,
       object_id,
       stock_type,
       stock_quantity,
@@ -376,6 +410,8 @@
       stock_receiver_address,
       stock_action,
       stock_flow,
+      stock_express_pay_way,
+      stock_express_shipper_code,
       stock_is_pay,
       stock_status,
       system_create_user_id,
@@ -387,7 +423,6 @@
     ) VALUES (
       #p(stock_id),
       #p(app_id),
-      #p(product_sku_id),
       #p(object_id),
       #p(stock_type),
       #p(stock_quantity),
@@ -399,6 +434,8 @@
       #p(stock_receiver_address),
       #p(stock_action),
       #p(stock_flow),
+      #p(stock_express_pay_way),
+      #p(stock_express_shipper_code),
       #p(stock_is_pay),
       #p(stock_status),
       #p(system_create_user_id),
@@ -412,7 +449,6 @@
 
   #sql("update")
     UPDATE table_stock SET
-    product_sku_id = #p(product_sku_id),
     object_id = #p(object_id),
     stock_type = #p(stock_type),
     stock_quantity = #p(stock_quantity),
@@ -424,6 +460,8 @@
     stock_receiver_address = #p(stock_receiver_address),
     stock_action = #p(stock_action),
     stock_flow = #p(stock_flow),
+    stock_express_pay_way = #p(stock_express_pay_way),
+    stock_express_shipper_code = #p(stock_express_shipper_code),
     stock_is_pay = #p(stock_is_pay),
     stock_status = #p(stock_status),
     system_update_user_id = #p(system_update_user_id),

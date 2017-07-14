@@ -11,9 +11,6 @@ public class Stock extends Model<Stock> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用id")
     public static final String APP_ID = "app_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "商品skuid")
-    public static final String PRODUCT_SKU_ID = "product_sku_id";
-
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "公司id或会员id")
     public static final String OBJECT_ID = "object_id";
 
@@ -46,7 +43,13 @@ public class Stock extends Model<Stock> {
     
     @Column(type = ColumnType.VARCHAR, length = 25, comment = "发货流程")
     public static final String STOCK_FLOW = "stock_flow";
+    
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "快递支付类型")
+    public static final String STOCK_EXPRESS_PAY_WAY = "stock_express_pay_way";
 
+    @Column(type = ColumnType.VARCHAR, length = 10, comment = "快递公司编码")
+    public static final String STOCK_EXPRESS_SHIPPER_CODE = "stock_express_shipper_code";
+    
     @Column(type = ColumnType.TINYINT, length = 1, comment = "是否支付")
     public static final String STOCK_IS_PAY = "stock_is_pay";
 
@@ -55,14 +58,12 @@ public class Stock extends Model<Stock> {
     
     public static final String APP_NAME = "app_name";
     public static final String USER_NAME = "user_name";
-    public static final String PRODUCT_NAME = "product_name";
-    public static final String PRODUCT_SKU_LIST = "product_sku_list";
+    public static final String STOCK_PRODUCT_SKU_LIST = "stock_product_sku_list";
     public static final String MEMBER_ID_LIST = "member_id_list";
     public static final String SUM_STOCK_QUANTITY = "sum_stock_quantity";
     
     private String app_name;
     private String user_name;
-    private String product_name;
     private Integer sum_stock_quantity;
 
     public String getStock_id() {
@@ -79,14 +80,6 @@ public class Stock extends Model<Stock> {
 
     public void setApp_id(String app_id) {
         set(APP_ID, app_id);
-    }
-
-    public String getProduct_sku_id() {
-        return getStr(PRODUCT_SKU_ID);
-    }
-
-    public void setProduct_sku_id(String product_sku_id) {
-        set(PRODUCT_SKU_ID, product_sku_id);
     }
 
     public String getObject_id() {
@@ -176,6 +169,22 @@ public class Stock extends Model<Stock> {
     public void setStock_flow(String stock_flow) {
         set(STOCK_FLOW, stock_flow);
     }
+    
+    public String getStock_express_pay_way() {
+        return getStr(STOCK_EXPRESS_PAY_WAY);
+    }
+
+    public void setStock_express_pay_way(String stock_express_pay_way) {
+        set(STOCK_EXPRESS_PAY_WAY, stock_express_pay_way);
+    }
+
+    public String getStock_express_shipper_code() {
+        return getStr(STOCK_EXPRESS_SHIPPER_CODE);
+    }
+
+    public void setStock_express_shipper_code(String stock_express_shipper_code) {
+        set(STOCK_EXPRESS_SHIPPER_CODE, stock_express_shipper_code);
+    }
 
     public Boolean getStock_is_pay() {
         return getBoolean(STOCK_IS_PAY);
@@ -207,14 +216,6 @@ public class Stock extends Model<Stock> {
 
     public void setUser_name(String user_name) {
         this.user_name = user_name;
-    }
-
-    public String getProduct_name() {
-        return product_name;
-    }
-
-    public void setProduct_name(String product_name) {
-        this.product_name = product_name;
     }
 
     public Integer getSum_stock_quantity() {

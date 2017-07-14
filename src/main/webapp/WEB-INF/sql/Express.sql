@@ -105,17 +105,18 @@
 
   #sql("listByTrade_id")
     SELECT
-    *
-    FROM table_express
-    WHERE system_status = 1
-    AND trade_id = #p(trade_id)
+    table_express.*
+    FROM table_express, table_stock
+    WHERE table_express.system_status = 1
+    AND table_stock.system_status = 1
+    AND table_express.stock_id = table_stock.stock_id
+    AND table_stock.object_id = #p(trade_id)
   #end
 
   #sql("save")
     INSERT INTO table_express (
       express_id,
       app_id,
-      trade_id,
       stock_id,
       express_receiver_user_id,
       express_sender_user_id,
@@ -157,7 +158,6 @@
     ) VALUES (
       #p(express_id),
       #p(app_id),
-      #p(trade_id),
       #p(stock_id),
       #p(express_receiver_user_id),
       #p(express_sender_user_id),
@@ -201,7 +201,6 @@
 
   #sql("update")
     UPDATE table_express SET
-    trade_id = #p(trade_id),
     stock_id = #p(stock_id),
     express_receiver_user_id = #p(express_receiver_user_id),
     express_sender_user_id = #p(express_sender_user_id),

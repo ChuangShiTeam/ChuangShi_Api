@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
@@ -259,27 +260,24 @@ public class MemberController extends Controller {
     @ActionKey(Url.MEMBER_SEND)
     public void send() {
         validateRequest_app_id();
-        validate(Member.MEMBER_ID, ProductSku.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Stock.STOCK_RECEIVER_NAME, Stock.STOCK_RECEIVER_ADDRESS, Stock.STOCK_RECEIVER_AREA, Stock.STOCK_RECEIVER_CITY, Stock.STOCK_RECEIVER_MOBILE);
+        validate(Stock.STOCK_RECEIVER_NAME, Stock.STOCK_RECEIVER_ADDRESS, Stock.STOCK_RECEIVER_AREA, Stock.STOCK_RECEIVER_CITY, Stock.STOCK_RECEIVER_MOBILE, Stock.STOCK_PRODUCT_SKU_LIST);
         
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
         Stock stock = getModel(Stock.class);
         JSONObject jsonObject = getParameterJSONObject();
-        String member_id = jsonObject.getString("member_id");
-        String product_sku_id = jsonObject.getString("product_sku_id");
-        Integer stock_quantity = jsonObject.getInteger("stock_quantity");
-        //判断会员库存数量是否足够
-        Integer member_product_sku_stock_quantity = stockService.sumStock_quantityByObject_idAndProduct_sku_id(member_id, product_sku_id);
-        if (stock_quantity > member_product_sku_stock_quantity) {
-        	throw new RuntimeException("会员库存不足");
+        JSONArray productSkuList = jsonObject.getJSONArray(Stock.STOCK_PRODUCT_SKU_LIST);
+        if (productSkuList == null || productSkuList.size() == 0) {
+            throw new RuntimeException("产品sku不能为空");
         }
         authenticateRequest_app_idAndRequest_user_id();
         
         authenticateApp_id(request_app_id);
         
-        String stock_id = Util.getRandomUUID();
-        Member member = memberService.findByMember_id(member_id);
-        Boolean result = stockService.save(stock_id, member.getApp_id(), product_sku_id, member_id, StockType.MEMBER.getKey(), stock_quantity, stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), StockAction.OUT.getKey(), StockFlow.WAIT_SEND.getKey(), false, null, request_user_id);
+        User user = userService.findByUser_id(request_user_id);
+        Member member = memberService.findByMember_id(user.getObject_Id());
+        Boolean result = stockService.out(member.getApp_id(), member.getMember_id(), StockType.MEMBER.getKey(), stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), stock.getStock_express_pay_way(), stock.getStock_express_shipper_code(),
+                productSkuList, request_user_id);
         
         renderSuccessJson(result);
     }
@@ -346,27 +344,24 @@ public class MemberController extends Controller {
     @ActionKey(Url.MEMBER_ADMIN_SEND)
     public void adminSend() {
         validateRequest_app_id();
-        validate(Member.MEMBER_ID, ProductSku.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Stock.STOCK_RECEIVER_NAME, Stock.STOCK_RECEIVER_ADDRESS, Stock.STOCK_RECEIVER_AREA, Stock.STOCK_RECEIVER_CITY, Stock.STOCK_RECEIVER_MOBILE);
+        validate(Member.MEMBER_ID, Stock.STOCK_RECEIVER_NAME, Stock.STOCK_RECEIVER_ADDRESS, Stock.STOCK_RECEIVER_AREA, Stock.STOCK_RECEIVER_CITY, Stock.STOCK_RECEIVER_MOBILE, Stock.STOCK_PRODUCT_SKU_LIST);
         
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
         Stock stock = getModel(Stock.class);
         JSONObject jsonObject = getParameterJSONObject();
         String member_id = jsonObject.getString("member_id");
-        String product_sku_id = jsonObject.getString("product_sku_id");
-        Integer stock_quantity = jsonObject.getInteger("stock_quantity");
-        //判断会员库存数量是否足够
-        Integer member_product_sku_stock_quantity = stockService.sumStock_quantityByObject_idAndProduct_sku_id(member_id, product_sku_id);
-        if (stock_quantity > member_product_sku_stock_quantity) {
-        	throw new RuntimeException("会员库存不足");
+        JSONArray productSkuList = jsonObject.getJSONArray(Stock.STOCK_PRODUCT_SKU_LIST);
+        if (productSkuList == null || productSkuList.size() == 0) {
+            throw new RuntimeException("产品sku不能为空");
         }
         authenticateRequest_app_idAndRequest_user_id();
         
         authenticateApp_id(request_app_id);
         
-        String stock_id = Util.getRandomUUID();
         Member member = memberService.findByMember_id(member_id);
-        Boolean result = stockService.save(stock_id, member.getApp_id(), product_sku_id, member_id, StockType.MEMBER.getKey(), stock_quantity, stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), StockAction.OUT.getKey(), StockFlow.WAIT_SEND.getKey(), false, null, request_user_id);
+        Boolean result = stockService.out(member.getApp_id(), member_id, StockType.MEMBER.getKey(), stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), stock.getStock_express_pay_way(), stock.getStock_express_shipper_code(),
+                productSkuList, request_user_id);
         
         renderSuccessJson(result);
     }

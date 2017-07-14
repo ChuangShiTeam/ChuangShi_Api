@@ -71,20 +71,20 @@ public class ExpressCache extends Cache {
         return express;
     }
 
-    public Boolean save(String express_id, String app_id, String trade_id, String stock_id, String express_receiver_user_id, String express_sender_user_id, String express_shipper_code,
+    public Boolean save(String express_id, String app_id, String stock_id, String express_receiver_user_id, String express_sender_user_id, String express_shipper_code,
             String express_no, String express_type, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile,
             String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address,
             String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province,
             String express_sender_city, String express_sender_area, String express_sender_address, BigDecimal express_cost, Boolean express_is_pay, String express_pay_way, String express_start_date,
             String express_end_date, String express_logistics, String express_status, String express_remark, String system_create_user_id) {
-        return expressDao.save(express_id, app_id, trade_id, stock_id, express_receiver_user_id, express_sender_user_id, express_shipper_code, express_no, express_type, express_receiver_company,
+        return expressDao.save(express_id, app_id, stock_id, express_receiver_user_id, express_sender_user_id, express_shipper_code, express_no, express_type, express_receiver_company,
                 express_receiver_name, express_receiver_tel, express_receiver_mobile, express_receiver_postcode, express_receiver_province, express_receiver_city, express_receiver_area,
                 express_receiver_address, express_sender_company, express_sender_name, express_sender_tel, express_sender_mobile, express_sender_postcode, express_sender_province, express_sender_city,
                 express_sender_area, express_sender_address, express_cost, express_is_pay, express_pay_way, express_start_date, express_end_date, express_logistics, express_status, express_remark,
                 system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String express_id, String trade_id, String stock_id, String express_receiver_user_id, String express_sender_user_id, String express_shipper_code,
+    public Boolean updateValidateSystem_version(String express_id, String stock_id, String express_receiver_user_id, String express_sender_user_id, String express_shipper_code,
             String express_no, String express_type, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile,
             String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address,
             String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province,
@@ -95,7 +95,7 @@ public class ExpressCache extends Cache {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = expressDao.update(express_id, trade_id, stock_id, express_receiver_user_id, express_sender_user_id, express_shipper_code, express_no, express_type, express_receiver_company,
+        boolean result = expressDao.update(express_id, stock_id, express_receiver_user_id, express_sender_user_id, express_shipper_code, express_no, express_type, express_receiver_company,
                 express_receiver_name, express_receiver_tel, express_receiver_mobile, express_receiver_postcode, express_receiver_province, express_receiver_city, express_receiver_area,
                 express_receiver_address, express_sender_company, express_sender_name, express_sender_tel, express_sender_mobile, express_sender_postcode, express_sender_province, express_sender_city,
                 express_sender_area, express_sender_address, express_cost, express_is_pay, express_pay_way, express_start_date, express_end_date, express_logistics, express_status, express_remark,
