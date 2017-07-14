@@ -11,12 +11,7 @@ import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.*;
-import com.nowui.chuangshi.service.FileService;
-import com.nowui.chuangshi.service.ProductService;
-import com.nowui.chuangshi.service.ProductSkuAttributeService;
-import com.nowui.chuangshi.service.ProductSkuCommissionService;
-import com.nowui.chuangshi.service.ProductSkuPriceService;
-import com.nowui.chuangshi.service.ProductSkuService;
+import com.nowui.chuangshi.service.*;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -28,6 +23,8 @@ public class ProductController extends Controller {
     private ProductSkuAttributeService productSkuAttributeService = new ProductSkuAttributeService();
     private ProductSkuCommissionService productSkuCommissionService = new ProductSkuCommissionService();
     private final FileService fileService = new FileService();
+    private final MemberService memberService = new MemberService();
+    private final MemberLevelService memberLevelService = new MemberLevelService();
 
     @ActionKey(Url.PRODUCT_ALL_LIST)
     public void allList() {
@@ -67,10 +64,14 @@ public class ProductController extends Controller {
         validate(Product.PRODUCT_ID);
 
         Product model = getModel(Product.class);
+        String request_app_id = getRequest_app_id();
+        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
         Product product = productService.findByProduct_id(model.getProduct_id());
+
+        Member member = memberService.findByUser_id(request_user_id);
 
         authenticateApp_id(product.getApp_id());
 
@@ -81,15 +82,57 @@ public class ProductController extends Controller {
         List<ProductSku> productSkuList = productSkuService.listByProduct_id(model.getProduct_id());
         for (ProductSku productSku : productSkuList) {
             if (productSku.getProduct_sku_is_default()) {
-                productSku.keep(ProductSku.PRODUCT_SKU_ID, ProductSku.PRODUCT_SKU_IS_DEFAULT);
-                productSku.put(ProductSkuPrice.PRODUCT_SKU_PRICE, 48.00);
+//                productSku.keep(ProductSku.PRODUCT_SKU_ID, ProductSku.PRODUCT_SKU_IS_DEFAULT);
+                List<ProductSkuPrice> productSkuPriceList = productSkuPriceService.listByProduct_sku_id(productSku.getProduct_sku_id());
+                //默认没有属性的价格
+                for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
+                    if (productSkuPrice.getMember_level_id().equals("")) {
+                        product.put(ProductSkuPrice.PRODUCT_SKU_PRICE, productSkuPrice.getProduct_sku_price());
+                    }
+                }
+                for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
+                    if (productSkuPrice.getMember_level_id().equals(member.getMember_level_id())) {
+                        product.put(ProductSkuPrice.PRODUCT_SKU_PRICE, productSkuPrice.getProduct_sku_price());
+                    }
+                }
+                product.put(ProductSkuPrice.PRODUCT_SKU_ID, productSku.getProduct_sku_id());
 
                 break;
             }
         }
 
-        product.put(Product.PRODUCT_SKU_LIST, productSkuList);
-        product.put(TradeProductSku.PRODUCT_SKU_QUANTITY, 1);
+//        product.put(Product.PRODUCT_SKU_LIST, productSkuList);
+
+
+        Integer member_level_value = 0;
+        String member_level_id = member.getMember_level_id();
+        if (!ValidateUtil.isNullOrEmpty(member_level_id)) {
+            MemberLevel memberLevel = memberLevelService.findByMember_level_id(member_level_id);
+            member_level_value = memberLevel.getMember_level_value();
+        }
+
+        Integer product_quantity_min = 1;
+
+        if (request_app_id.equals("c1af3f1ae00e4e0da9b20f5bd41b4279")) {
+            product_quantity_min = 10;
+            if (member_level_value == 1) {
+                product_quantity_min = 12500;
+            } else if (member_level_value == 2) {
+                product_quantity_min = 5000;
+            } else if (member_level_value == 3) {
+                product_quantity_min = 5000;
+            } else if (member_level_value == 4) {
+                product_quantity_min = 1250;
+            } else if (member_level_value == 5) {
+                product_quantity_min = 300;
+            } else if (member_level_value == 6) {
+                product_quantity_min = 50;
+            } else if (member_level_value == 7) {
+                product_quantity_min = 10;
+            }
+        }
+
+        product.put(TradeProductSku.PRODUCT_SKU_QUANTITY, product_quantity_min);
 
         renderSuccessJson(product);
     }
