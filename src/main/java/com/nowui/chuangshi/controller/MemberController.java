@@ -8,20 +8,14 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.jfinal.weixin.sdk.api.ApiConfigKit;
+import com.jfinal.weixin.sdk.api.ApiResult;
+import com.jfinal.weixin.sdk.api.QrcodeApi;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.Member;
-import com.nowui.chuangshi.model.MemberLevel;
-import com.nowui.chuangshi.model.ProductSku;
-import com.nowui.chuangshi.model.Qrcode;
-import com.nowui.chuangshi.model.Stock;
-import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.service.FileService;
-import com.nowui.chuangshi.service.MemberLevelService;
-import com.nowui.chuangshi.service.MemberService;
-import com.nowui.chuangshi.service.QrcodeService;
-import com.nowui.chuangshi.service.StockService;
-import com.nowui.chuangshi.service.UserService;
+import com.nowui.chuangshi.model.*;
+import com.nowui.chuangshi.service.*;
+import com.nowui.chuangshi.type.QrcodeType;
 import com.nowui.chuangshi.type.StockAction;
 import com.nowui.chuangshi.type.StockFlow;
 import com.nowui.chuangshi.type.StockType;
@@ -36,6 +30,7 @@ public class MemberController extends Controller {
     private final MemberLevelService memberLevelService = new MemberLevelService();
     private final FileService fileService = new FileService();
     private final QrcodeService qrcodeService = new QrcodeService();
+    private final AppService appService = new AppService();
 
     private List<Map<String, Object>> getChildren(List<Member> memberList, String member_parent_id, String... keys) {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -164,7 +159,36 @@ public class MemberController extends Controller {
 
         Member member = memberService.findByUser_id(request_user_id);
 
-        Qrcode qrcode = qrcodeService.findByQrcode_id(member.getQrcode_id());
+        String qrcode_id = "";
+
+        if (!member.getMember_status()) {
+            throw new RuntimeException("您还没有通过审核");
+        }
+
+        if (ValidateUtil.isNullOrEmpty(member.getQrcode_id())) {
+            qrcode_id = Util.getRandomUUID();
+            String member_id = member.getMember_id();
+
+
+            App app = appService.findByApp_id(member.getApp_id());
+
+            String wechat_app_id = ApiConfigKit.getAppId();
+            if (!wechat_app_id.equals(app.getWechat_app_id())) {
+                ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+            }
+
+            ApiResult apiResult = QrcodeApi.createPermanent(qrcode_id);
+            Boolean qrcode_status = true;
+            String qrcode_url = QrcodeApi.getShowQrcodeUrl(apiResult.getStr("ticket"));
+
+            qrcodeService.save(qrcode_id, member.getApp_id(), member_id, QrcodeType.MEMBER.getKey(), qrcode_url, 0, 0, qrcode_status, request_user_id);
+
+            memberService.updateByMember_idAndQrcode_id(member_id, qrcode_id, request_user_id);
+        } else {
+            qrcode_id = member.getQrcode_id();
+        }
+
+        Qrcode qrcode = qrcodeService.findByQrcode_id(qrcode_id);
 
         authenticateApp_id(member.getApp_id());
 

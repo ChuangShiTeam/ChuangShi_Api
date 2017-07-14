@@ -39,7 +39,6 @@ import com.nowui.chuangshi.type.BillFlow;
 import com.nowui.chuangshi.type.BillType;
 import com.nowui.chuangshi.type.PayType;
 import com.nowui.chuangshi.util.HttpUtil;
-import com.nowui.chuangshi.util.MQUtil;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 import com.nowui.chuangshi.util.WeChatUtil;
@@ -97,7 +96,8 @@ public class WeChatController extends Controller {
 
             System.out.println(app_id);
 
-            SnsAccessToken snsAccessToken = SnsAccessTokenApi.getSnsAccessToken(app.getWechat_app_id(), app.getWechat_app_secret(), code);
+            SnsAccessToken snsAccessToken = SnsAccessTokenApi.getSnsAccessToken(app.getWechat_app_id(),
+                    app.getWechat_app_secret(), code);
 
             System.out.println(snsAccessToken.getJson());
 
@@ -130,8 +130,9 @@ public class WeChatController extends Controller {
                 user_avatar = "";
             }
 
-            String token = memberService.login(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, member_parent_id,
-                    member_parent_path, user_name, user_avatar, member_status, request_user_id);
+            String token = memberService.login(app_id, wechat_open_id, wechat_union_id, member_parent_id,
+                    from_qrcode_id, member_parent_id, member_parent_path, user_name, user_avatar, member_status,
+                    request_user_id);
 
             redirect("http://h5.xingxiao.nowui.com/#/" + url + "?open_id=" + wechat_open_id + "&token=" + token);
         }
@@ -146,7 +147,8 @@ public class WeChatController extends Controller {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
         }
 
-        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"爆水丸\",\"url\":\"http://h5." + "xingxiao.nowui.com" + "/\"}]}");
+        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"爆水丸\",\"url\":\"http://h5."
+                + "xingxiao.nowui.com" + "/\"}]}");
 
         renderText(apiResult.getJson());
     }
@@ -165,11 +167,12 @@ public class WeChatController extends Controller {
             throw new RuntimeException("找不到订单");
         }
 
-        if (!trade.getTrade_flow().equals("待支付")) {
+        if (!trade.getTrade_flow().equals("WAIT_PAY")) {
             throw new RuntimeException("订单不能支付");
         }
 
-        BigDecimal trade_amount = trade.getTrade_product_amount().add(trade.getTrade_express_amount()).subtract(trade.getTrade_discount_amount());
+        BigDecimal trade_amount = trade.getTrade_product_amount().add(trade.getTrade_express_amount())
+                .subtract(trade.getTrade_discount_amount());
         String trade_pay_type = PayType.WECHAT.getKey();
         String trade_pay_number = trade.getTrade_number();
         String trade_pay_account = trade.getTrade_number();
@@ -182,8 +185,9 @@ public class WeChatController extends Controller {
         String trade_pay_result = "success";
         Boolean trade_status = true;
 
-        boolean is_update = tradeService.updateSend(trade.getTrade_id(), trade.getUser_id(), trade_amount, trade_pay_type, trade_pay_number,
-                trade_pay_account, trade_pay_time, trade_pay_result, trade_status, trade.getSystem_version());
+        boolean is_update = tradeService.updateSend(trade.getTrade_id(), trade.getUser_id(), trade_amount,
+                trade_pay_type, trade_pay_number, trade_pay_account, trade_pay_time, trade_pay_result, trade_status,
+                trade.getSystem_version());
 
         if (is_update) {
             // TODO 消息队列通知计算账单和分成
@@ -238,8 +242,8 @@ public class WeChatController extends Controller {
         tradeMemberBill.setApp_id(trade.getApp_id());
         tradeMemberBill.setUser_id(user_id);
         tradeMemberBill.setBill_is_income(false);
-        tradeMemberBill
-                .setBill_amount(trade.getTrade_product_amount().add(trade.getTrade_express_amount()).subtract(trade.getTrade_discount_amount()));
+        tradeMemberBill.setBill_amount(trade.getTrade_product_amount().add(trade.getTrade_express_amount())
+                .subtract(trade.getTrade_discount_amount()));
         tradeMemberBill.setBill_type(BillType.TRADE.getKey());
         tradeMemberBill.setBill_time(new Date());
         tradeMemberBill.setBill_flow(BillFlow.COMPLETE.getKey());
@@ -288,7 +292,7 @@ public class WeChatController extends Controller {
                         if (productSkuCommission.getMember_level_id().equals(member_parent.getMember_level_id())) {
 
                             String member_name = userService.findByUser_id(member_parent.getUser_id()).getUser_name();
-                            double a = productSkuCommission.getProduct_sku_commission()*0.01;
+                            double a = productSkuCommission.getProduct_sku_commission() * 0.01;
                             BigDecimal b = tradeProductSku.getProduct_sku_amount();
                             BigDecimal c = new BigDecimal(a);
 
@@ -410,8 +414,9 @@ public class WeChatController extends Controller {
             String trade_pay_result = result;
             Boolean trade_status = true;
 
-            boolean is_update = tradeService.updateSend(trade.getTrade_id(), trade.getUser_id(), trade_amount, trade_pay_type, trade_pay_number,
-                    trade_pay_account, trade_pay_time, trade_pay_result, trade_status, trade.getSystem_version());
+            boolean is_update = tradeService.updateSend(trade.getTrade_id(), trade.getUser_id(), trade_amount,
+                    trade_pay_type, trade_pay_number, trade_pay_account, trade_pay_time, trade_pay_result, trade_status,
+                    trade.getSystem_version());
 
             if (is_update) {
                 // TODO 消息队列通知计算账单和分成
@@ -419,11 +424,14 @@ public class WeChatController extends Controller {
                  * Map<String, Object> mqMap = new HashMap<String, Object>();
                  * mqMap.put(Trade.TRADE_ID, trade.getTrade_id());
                  * MQUtil.sendSync("tradePay", JSON.toJSONString(mqMap));
+                 * 
+                 * MQUtil.sendSync("tradePay", trade.getTrade_id());
                  */
-                MQUtil.sendSync("tradePay", trade.getTrade_id());
+                this.payChange(trade.getTrade_id(), getRequest_app_id());
                 renderText("");
             } else {
-                renderText("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[]]></return_msg></xml>");
+                renderText(
+                        "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[]]></return_msg></xml>");
             }
 
         } else {

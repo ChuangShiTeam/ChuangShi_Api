@@ -164,6 +164,10 @@ public class MemberService extends Service {
         return memberCache.updateByMember_idAndMember_level_id(member_id, member_level_id, system_update_user_id);
     }
 
+    public Boolean updateByMember_idAndQrcode_id(String member_id, String qrcode_id, String system_update_user_id) {
+        return memberCache.updateByMember_idAndQrcode_id(member_id, qrcode_id, system_update_user_id);
+    }
+
     public Boolean deleteByMember_idAndSystem_update_user_idValidateSystem_version(String member_id, String system_update_user_id, Integer system_version) {
         return memberCache.deleteByMember_idAndSystem_update_user_idValidateSystem_version(member_id, system_update_user_id, system_version);
     }

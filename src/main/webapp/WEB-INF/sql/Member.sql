@@ -191,6 +191,16 @@
     WHERE system_status = 1
     AND member_id = #p(member_id)
   #end
+
+  #sql("updateByMember_idAndQrcode_id")
+    UPDATE table_member SET
+    qrcode_id = #p(qrcode_id),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND member_id = #p(member_id)
+  #end
   
   #sql("deleteByMember_idAndSystem_version")
     UPDATE table_member SET
