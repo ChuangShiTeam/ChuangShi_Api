@@ -39,7 +39,6 @@ import com.nowui.chuangshi.type.BillFlow;
 import com.nowui.chuangshi.type.BillType;
 import com.nowui.chuangshi.type.PayType;
 import com.nowui.chuangshi.util.HttpUtil;
-import com.nowui.chuangshi.util.MQUtil;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 import com.nowui.chuangshi.util.WeChatUtil;

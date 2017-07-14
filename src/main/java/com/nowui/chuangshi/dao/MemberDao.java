@@ -191,6 +191,19 @@ public class MemberDao extends Dao {
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
+
+    public Boolean updateByMember_idAndQrcode_id(String member_id, String qrcode_id, String system_update_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Member.MEMBER_ID, member_id);
+        sqlMap.put(Member.QRCODE_ID, qrcode_id);
+        sqlMap.put(Member.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(Member.SYSTEM_UPDATE_TIME, new Date());
+        SqlPara sqlPara = Db.getSqlPara("member.updateByMember_idAndQrcode_id", sqlMap);
+
+        logSql("member", "updateByMember_idAndQrcode_id", sqlPara);
+
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
     
     public Boolean deleteByMember_idAndSystem_version(String member_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();

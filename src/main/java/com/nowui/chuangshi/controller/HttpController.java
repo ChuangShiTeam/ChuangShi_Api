@@ -25,7 +25,7 @@ public class HttpController extends Controller {
         List<Http> resultList = httpService.listByApp_idAndLimit(request_app_id, getM(), getN());
 
         for (Http result : resultList) {
-            result.keep(Http.HTTP_ID, Http.HTTP_URL, Http.SYSTEM_VERSION);
+            result.keep(Http.HTTP_ID, Http.HTTP_URL, Http.HTTP_CODE, Http.HTTP_PLATFORM, Http.HTTP_VERSION, Http.HTTP_IP_ADDRESS, Http.HTTP_RUN_TIME, Http.SYSTEM_CREATE_TIME, Http.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -60,7 +60,7 @@ public class HttpController extends Controller {
         List<Http> resultList = httpService.listByOrApp_idAndLimit(model.getApp_id(), getM(), getN());
 
         for (Http result : resultList) {
-            result.keep(Http.HTTP_ID, Http.HTTP_URL, Http.HTTP_CODE, Http.HTTP_PLATFORM, Http.HTTP_VERSION, Http.HTTP_RUN_TIME, Http.SYSTEM_CREATE_TIME, Http.SYSTEM_VERSION);
+            result.keep(Http.HTTP_ID, Http.HTTP_URL, Http.HTTP_CODE, Http.HTTP_PLATFORM, Http.HTTP_VERSION, Http.HTTP_IP_ADDRESS, Http.HTTP_RUN_TIME, Http.SYSTEM_CREATE_TIME, Http.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);

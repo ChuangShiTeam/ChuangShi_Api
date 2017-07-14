@@ -82,7 +82,7 @@ public class ProductController extends Controller {
         for (ProductSku productSku : productSkuList) {
             if (productSku.getProduct_sku_is_default()) {
                 productSku.keep(ProductSku.PRODUCT_SKU_ID, ProductSku.PRODUCT_SKU_IS_DEFAULT);
-                productSku.put(ProductSkuPrice.PRODUCT_SKU_PRICE, 0.01);
+                productSku.put(ProductSkuPrice.PRODUCT_SKU_PRICE, 48.00);
 
                 break;
             }
