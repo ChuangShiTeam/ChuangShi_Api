@@ -101,6 +101,7 @@ public class TradeController extends Controller {
     @ActionKey(Url.TRADE_LIST)
     public void list() {
         validateRequest_app_id();
+
         // validate(Constant.PAGE_SIZE, Constant.FIRST_CREATE_TIME,
         // Constant.LAST_CREATE_TIME);
         // String request_app_id = getRequest_app_id();
