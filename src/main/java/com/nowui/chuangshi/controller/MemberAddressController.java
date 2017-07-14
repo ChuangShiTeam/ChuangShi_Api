@@ -96,8 +96,8 @@ public class MemberAddressController extends Controller {
         }
 
         Boolean result = memberAddressService.save(member_address_id, request_app_id, user.getObject_Id(),
-                request_user_id, model.getMember_address_name(), model.getMember_address_tel(),
-                model.getMember_address_mobile(), model.getMember_address_postcode(),
+                request_user_id, model.getMember_address_name(), "",
+                model.getMember_address_mobile(), "",
                 model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(),
                 model.getMember_address_address(), model.getAddress_is_default(), request_user_id);
 

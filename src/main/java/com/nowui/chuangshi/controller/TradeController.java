@@ -101,18 +101,41 @@ public class TradeController extends Controller {
     @ActionKey(Url.TRADE_LIST)
     public void list() {
         validateRequest_app_id();
-        validate(Constant.PAGE_SIZE, Constant.FIRST_CREATE_TIME, Constant.LAST_CREATE_TIME);
-
-        String request_app_id = getRequest_app_id();
-        JSONObject jsonObject = getParameterJSONObject();
-
+        // validate(Constant.PAGE_SIZE, Constant.FIRST_CREATE_TIME,
+        // Constant.LAST_CREATE_TIME);
+        // String request_app_id = getRequest_app_id();
+        // JSONObject jsonObject = getParameterJSONObject();
+        validateRequest_app_id();
         authenticateRequest_app_idAndRequest_user_id();
 
         String request_user_id = getRequest_user_id();
         List<Trade> resultList = tradeService.listByUser_id(request_user_id);
 
         for (Trade result : resultList) {
-            result.keep(Trade.TRADE_ID, Trade.SYSTEM_VERSION);
+            User user = userService.findByUser_id(result.getUser_id());
+            if (user != null) {
+                result.put(User.USER_NAME, user.getUser_name());
+            }
+
+            // 根据订单获取商品列表
+            List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(result.getTrade_id());
+            for (TradeProductSku tradeProductSku : tradeProductSkuList) {
+                ProductSku productSku = productSkuService.findByProduct_sku_id(tradeProductSku.getProduct_sku_id());
+                Product product = productService.findByProduct_id(productSku.getProduct_id());
+                tradeProductSku.put(Product.PRODUCT_NAME, product.getProduct_name());
+                tradeProductSku.put(Product.PRODUCT_IMAGE, product.getProduct_image());
+                tradeProductSku.keep(TradeProductSku.PRODUCT_SKU_ID, TradeProductSku.PRODUCT_SKU_AMOUNT,
+                        TradeProductSku.PRODUCT_SKU_QUANTITY, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE);
+            }
+            result.put(Trade.TRADE_PRODUCT_SKU_LIST, tradeProductSkuList);
+
+            result.keep(Trade.TRADE_ID, Trade.APP_ID, Trade.USER_ID, User.USER_NAME, Trade.TRADE_NUMBER,
+                    Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE,
+                    Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS,
+                    Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT,
+                    Trade.TRADE_EXPRESS_AMOUNT, Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT,
+                    Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW,
+                    Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION, Trade.TRADE_PRODUCT_SKU_LIST);
         }
 
         renderSuccessJson(resultList);

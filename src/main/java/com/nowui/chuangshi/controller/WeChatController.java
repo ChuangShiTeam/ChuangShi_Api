@@ -165,7 +165,7 @@ public class WeChatController extends Controller {
             throw new RuntimeException("找不到订单");
         }
 
-        if (!trade.getTrade_flow().equals("待支付")) {
+        if (!trade.getTrade_flow().equals("WAIT_PAY")) {
             throw new RuntimeException("订单不能支付");
         }
 
