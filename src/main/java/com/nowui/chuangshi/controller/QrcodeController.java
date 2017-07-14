@@ -1,24 +1,33 @@
 package com.nowui.chuangshi.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.jfinal.weixin.sdk.api.ApiConfigKit;
+import com.jfinal.weixin.sdk.api.ApiResult;
+import com.jfinal.weixin.sdk.api.QrcodeApi;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
+import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.Qrcode;
 import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.QrcodeService;
 import com.nowui.chuangshi.service.UserService;
+import com.nowui.chuangshi.type.SceneType;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.WeChatUtil;
 
 public class QrcodeController extends Controller {
 
     private final QrcodeService qrcodeService = new QrcodeService();
     private final UserService userService = new UserService();
     private final MemberService memberService = new MemberService();
+    private final AppService appService = new AppService();
 
     @ActionKey(Url.QRCODE_LIST)
     public void list() {
@@ -34,8 +43,8 @@ public class QrcodeController extends Controller {
                 jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
 
         for (Qrcode result : resultList) {
-            result.keep(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD, Qrcode.QRCODE_CANCEL,
-                    Qrcode.QRCODE_STATUS, Qrcode.SYSTEM_VERSION);
+            result.keep(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD,
+                    Qrcode.QRCODE_CANCEL, Qrcode.QRCODE_STATUS, Qrcode.SYSTEM_VERSION);
         }
 
         renderSuccessJson(resultList);
@@ -63,7 +72,8 @@ public class QrcodeController extends Controller {
     @ActionKey(Url.QRCODE_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD, Qrcode.QRCODE_CANCEL, Qrcode.QRCODE_STATUS);
+        validate(Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD, Qrcode.QRCODE_CANCEL,
+                Qrcode.QRCODE_STATUS);
 
         Qrcode model = getModel(Qrcode.class);
         String qrcode_id = Util.getRandomUUID();
@@ -72,8 +82,9 @@ public class QrcodeController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = qrcodeService.save(qrcode_id, request_app_id, model.getObject_id(), model.getQrcode_type(), model.getQrcode_url(),
-                model.getQrcode_add(), model.getQrcode_cancel(), model.getQrcode_status(), request_user_id);
+        Boolean result = qrcodeService.save(qrcode_id, request_app_id, model.getObject_id(), model.getQrcode_type(),
+                model.getQrcode_url(), model.getQrcode_add(), model.getQrcode_cancel(), model.getQrcode_status(),
+                request_user_id);
 
         renderSuccessJson(result);
     }
@@ -81,8 +92,8 @@ public class QrcodeController extends Controller {
     @ActionKey(Url.QRCODE_UPDATE)
     public void update() {
         validateRequest_app_id();
-        validate(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD, Qrcode.QRCODE_CANCEL,
-                Qrcode.QRCODE_STATUS, Qrcode.SYSTEM_VERSION);
+        validate(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD,
+                Qrcode.QRCODE_CANCEL, Qrcode.QRCODE_STATUS, Qrcode.SYSTEM_VERSION);
 
         Qrcode model = getModel(Qrcode.class);
         String request_user_id = getRequest_user_id();
@@ -94,9 +105,9 @@ public class QrcodeController extends Controller {
         authenticateApp_id(qrcode.getApp_id());
         authenticateSystem_create_user_id(qrcode.getSystem_create_user_id());
 
-        Boolean result = qrcodeService.updateValidateSystem_version(model.getQrcode_id(), model.getObject_id(), model.getQrcode_type(),
-                model.getQrcode_url(), model.getQrcode_add(), model.getQrcode_cancel(), model.getQrcode_status(), request_user_id,
-                model.getSystem_version());
+        Boolean result = qrcodeService.updateValidateSystem_version(model.getQrcode_id(), model.getObject_id(),
+                model.getQrcode_type(), model.getQrcode_url(), model.getQrcode_add(), model.getQrcode_cancel(),
+                model.getQrcode_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -116,8 +127,8 @@ public class QrcodeController extends Controller {
         authenticateApp_id(qrcode.getApp_id());
         authenticateSystem_create_user_id(qrcode.getSystem_create_user_id());
 
-        Boolean result = qrcodeService.deleteByQrcode_idAndSystem_update_user_idValidateSystem_version(model.getQrcode_id(), request_user_id,
-                model.getSystem_version());
+        Boolean result = qrcodeService.deleteByQrcode_idAndSystem_update_user_idValidateSystem_version(
+                model.getQrcode_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -133,17 +144,18 @@ public class QrcodeController extends Controller {
         authenticateRequest_app_idAndRequest_user_id();
 
         Integer total = qrcodeService.countByApp_idOrQrcode_type(request_app_id, model.getQrcode_type());
-        List<Qrcode> resultList = qrcodeService.listByApp_idOrQrcode_typeAndLimit(request_app_id, model.getQrcode_type(), getM(), getN());
+        List<Qrcode> resultList = qrcodeService.listByApp_idOrQrcode_typeAndLimit(request_app_id,
+                model.getQrcode_type(), getM(), getN());
 
         for (Qrcode result : resultList) {
             String member_id = result.getObject_id();
             Member member = memberService.findByMember_id(member_id);
-            if(member!=null){
+            if (member != null) {
                 User user = userService.findByUser_id(member.getUser_id());
                 result.setObject_id(user.getUser_name());
             }
-            result.keep(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD, Qrcode.QRCODE_CANCEL,
-                    Qrcode.QRCODE_STATUS, Qrcode.SYSTEM_VERSION);
+            result.keep(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD,
+                    Qrcode.QRCODE_CANCEL, Qrcode.QRCODE_STATUS, Qrcode.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -161,30 +173,52 @@ public class QrcodeController extends Controller {
         Qrcode qrcode = qrcodeService.findByQrcode_id(model.getQrcode_id());
 
         authenticateApp_id(qrcode.getApp_id());
-        
+
         String member_id = qrcode.getObject_id();
         Member member = memberService.findByMember_id(member_id);
-        if(member!=null){
+        if (member != null) {
             User user = userService.findByUser_id(member.getUser_id());
             qrcode.setObject_id(user.getUser_name());
         }
 
-        qrcode.keep(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD, Qrcode.QRCODE_CANCEL,
-                Qrcode.QRCODE_STATUS, Qrcode.SYSTEM_VERSION);
+        qrcode.keep(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD,
+                Qrcode.QRCODE_CANCEL, Qrcode.QRCODE_STATUS, Qrcode.SYSTEM_VERSION);
 
         renderSuccessJson(qrcode);
     }
 
+    // 新增平台二维码
     @ActionKey(Url.QRCODE_ADMIN_SAVE)
     public void adminSave() {
-        save();
+        String app_id = getRequest_app_id();
+        String request_user_id = getRequest_user_id();
+
+        App app = appService.findByApp_id(app_id);
+
+        String wechat_app_id = ApiConfigKit.getAppId();
+        if (!wechat_app_id.equals(app.getWechat_app_id())) {
+            ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+        }
+
+        String qrcode_id = Util.getRandomUUID();
+        String object_id = "";
+        String qrcode_type = SceneType.PLATFORM.getKey();
+        Boolean qrcode_status = true;
+
+        ApiResult apiResult = QrcodeApi.createPermanent(qrcode_id);
+        String qrcode_url = QrcodeApi.getShowQrcodeUrl(apiResult.getStr("ticket"));
+
+        Boolean result = qrcodeService.save(qrcode_id, app_id, object_id, qrcode_type, qrcode_url, 0, 0, qrcode_status,
+                request_user_id);
+
+        renderSuccessJson(result);
     }
 
     @ActionKey(Url.QRCODE_ADMIN_UPDATE)
     public void adminUpdate() {
         validateRequest_app_id();
-        validate(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD, Qrcode.QRCODE_CANCEL,
-                Qrcode.QRCODE_STATUS, Qrcode.SYSTEM_VERSION);
+        validate(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD,
+                Qrcode.QRCODE_CANCEL, Qrcode.QRCODE_STATUS, Qrcode.SYSTEM_VERSION);
 
         Qrcode model = getModel(Qrcode.class);
         String request_user_id = getRequest_user_id();
@@ -195,9 +229,9 @@ public class QrcodeController extends Controller {
 
         authenticateApp_id(qrcode.getApp_id());
 
-        Boolean result = qrcodeService.updateValidateSystem_version(model.getQrcode_id(), model.getObject_id(), model.getQrcode_type(),
-                model.getQrcode_url(), model.getQrcode_add(), model.getQrcode_cancel(), model.getQrcode_status(), request_user_id,
-                model.getSystem_version());
+        Boolean result = qrcodeService.updateValidateSystem_version(model.getQrcode_id(), model.getObject_id(),
+                model.getQrcode_type(), model.getQrcode_url(), model.getQrcode_add(), model.getQrcode_cancel(),
+                model.getQrcode_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -216,8 +250,8 @@ public class QrcodeController extends Controller {
 
         authenticateApp_id(qrcode.getApp_id());
 
-        Boolean result = qrcodeService.deleteByQrcode_idAndSystem_update_user_idValidateSystem_version(model.getQrcode_id(), request_user_id,
-                model.getSystem_version());
+        Boolean result = qrcodeService.deleteByQrcode_idAndSystem_update_user_idValidateSystem_version(
+                model.getQrcode_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -230,7 +264,8 @@ public class QrcodeController extends Controller {
         Qrcode model = getModel(Qrcode.class);
 
         Integer total = qrcodeService.countByOrApp_idOrQrcode_type(model.getApp_id(), model.getQrcode_type());
-        List<Qrcode> resultList = qrcodeService.listByOrApp_idOrQrcode_typeAndLimit(model.getApp_id(), model.getQrcode_type(), getM(), getN());
+        List<Qrcode> resultList = qrcodeService.listByOrApp_idOrQrcode_typeAndLimit(model.getApp_id(),
+                model.getQrcode_type(), getM(), getN());
 
         for (Qrcode result : resultList) {
             result.keep(Qrcode.QRCODE_ID, Qrcode.SYSTEM_VERSION);
@@ -256,15 +291,16 @@ public class QrcodeController extends Controller {
     @ActionKey(Url.QRCODE_SYSTEM_SAVE)
     public void systemSave() {
         validateRequest_app_id();
-        validate(Qrcode.APP_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD, Qrcode.QRCODE_CANCEL,
-                Qrcode.QRCODE_STATUS);
+        validate(Qrcode.APP_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD,
+                Qrcode.QRCODE_CANCEL, Qrcode.QRCODE_STATUS);
 
         Qrcode model = getModel(Qrcode.class);
         String qrcode_id = Util.getRandomUUID();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = qrcodeService.save(qrcode_id, model.getApp_id(), model.getObject_id(), model.getQrcode_type(), model.getQrcode_url(),
-                model.getQrcode_add(), model.getQrcode_cancel(), model.getQrcode_status(), request_user_id);
+        Boolean result = qrcodeService.save(qrcode_id, model.getApp_id(), model.getObject_id(), model.getQrcode_type(),
+                model.getQrcode_url(), model.getQrcode_add(), model.getQrcode_cancel(), model.getQrcode_status(),
+                request_user_id);
 
         renderSuccessJson(result);
     }
@@ -272,15 +308,15 @@ public class QrcodeController extends Controller {
     @ActionKey(Url.QRCODE_SYSTEM_UPDATE)
     public void systemUpdate() {
         validateRequest_app_id();
-        validate(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD, Qrcode.QRCODE_CANCEL,
-                Qrcode.QRCODE_STATUS, Qrcode.SYSTEM_VERSION);
+        validate(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD,
+                Qrcode.QRCODE_CANCEL, Qrcode.QRCODE_STATUS, Qrcode.SYSTEM_VERSION);
 
         Qrcode model = getModel(Qrcode.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = qrcodeService.updateValidateSystem_version(model.getQrcode_id(), model.getObject_id(), model.getQrcode_type(),
-                model.getQrcode_url(), model.getQrcode_add(), model.getQrcode_cancel(), model.getQrcode_status(), request_user_id,
-                model.getSystem_version());
+        Boolean result = qrcodeService.updateValidateSystem_version(model.getQrcode_id(), model.getObject_id(),
+                model.getQrcode_type(), model.getQrcode_url(), model.getQrcode_add(), model.getQrcode_cancel(),
+                model.getQrcode_status(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -293,8 +329,8 @@ public class QrcodeController extends Controller {
         Qrcode model = getModel(Qrcode.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = qrcodeService.deleteByQrcode_idAndSystem_update_user_idValidateSystem_version(model.getQrcode_id(), request_user_id,
-                model.getSystem_version());
+        Boolean result = qrcodeService.deleteByQrcode_idAndSystem_update_user_idValidateSystem_version(
+                model.getQrcode_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
