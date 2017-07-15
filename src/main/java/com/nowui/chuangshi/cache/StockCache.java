@@ -1,13 +1,14 @@
 package com.nowui.chuangshi.cache;
 
+import java.util.Date;
+import java.util.List;
+
+import com.jfinal.plugin.activerecord.Record;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.dao.StockDao;
 import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.CacheUtil;
-
-import java.util.Date;
-import java.util.List;
 
 public class StockCache extends Cache {
 
@@ -121,11 +122,11 @@ public class StockCache extends Cache {
         return stockDao.listByOrApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit(app_id, stock_type, product_name, user_name, m, n);
     }
     
-    public List<Stock> listOutByApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(String app_id, String express_sender_name, String stock_receiver_name, String express_no, int m, int n) {
+    public List<Record> listOutByApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(String app_id, String express_sender_name, String stock_receiver_name, String express_no, int m, int n) {
         return stockDao.listOutByApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(app_id, express_sender_name, stock_receiver_name, express_no, m, n);
     }
     
-    public List<Stock> listOutByOrApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(String app_id, String express_sender_name, String stock_receiver_name, String express_no, int m, int n) {
+    public List<Record> listOutByOrApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(String app_id, String express_sender_name, String stock_receiver_name, String express_no, int m, int n) {
         return stockDao.listOutByOrApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(app_id, express_sender_name, stock_receiver_name, express_no, m, n);
     }
     

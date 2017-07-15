@@ -297,7 +297,6 @@
     LEFT JOIN table_express ON table_stock.stock_id = table_express.stock_id
     WHERE table_stock.system_status = 1
     AND table_stock.app_id = #p(app_id)
-    AND table_stock.stock_type = #p(stock_type)
     AND table_stock.stock_action = 'OUT'
     #if(express_sender_name)
     #set(express_sender_name = "%" + express_sender_name + "%")
@@ -311,6 +310,7 @@
     #set(express_no = "%" + express_no + "%")
     AND table_express.express_no LIKE #p(express_no)
     #end
+    ORDER BY table_stock.system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
   
@@ -325,7 +325,6 @@
     #if(app_id)
     AND table_stock.app_id = #p(app_id)
     #end
-    AND table_stock.stock_type = #p(stock_type)
     AND table_stock.stock_action = 'OUT'
     #if(express_sender_name)
     #set(express_sender_name = "%" + express_sender_name + "%")
@@ -339,6 +338,7 @@
     #set(express_no = "%" + express_no + "%")
     AND table_express.express_no LIKE #p(express_no)
     #end
+    ORDER BY table_stock.system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
   

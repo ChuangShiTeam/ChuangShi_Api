@@ -44,7 +44,7 @@ public class Stock extends Model<Stock> {
     @Column(type = ColumnType.VARCHAR, length = 25, comment = "发货流程")
     public static final String STOCK_FLOW = "stock_flow";
     
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "快递支付类型")
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "快递支付方式")
     public static final String STOCK_EXPRESS_PAY_WAY = "stock_express_pay_way";
 
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "快递公司编码")

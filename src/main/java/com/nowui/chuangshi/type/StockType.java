@@ -2,7 +2,8 @@ package com.nowui.chuangshi.type;
 
 public enum StockType {
     APP("APP", "应用"),
-    MEMBER("MEMBER", "会员");
+    MEMBER("MEMBER", "会员"),
+	TRADE("TRADE", "订单");
 
     private String key;
     private String value;

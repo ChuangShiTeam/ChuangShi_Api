@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,9 +8,11 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.jfinal.plugin.activerecord.Record;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
+import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.StockProductSku;
@@ -43,6 +46,40 @@ public class MemberStockController extends Controller {
         }
 
         renderSuccessJson(total, resultList);
+    }
+    
+    @ActionKey(Url.MEMBER_STOCK_ADMIN_OUT_LIST)
+    public void adminOutList() {
+    	validateRequest_app_id();
+    	validate(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+    	
+    	String request_app_id = getRequest_app_id();
+    	JSONObject jsonObject = getParameterJSONObject();
+    	String express_sender_name = jsonObject.getString("express_sender_name");
+    	String stock_receiver_name = jsonObject.getString("stock_receiver_name");
+    	String express_no = jsonObject.getString("express_no");
+    	
+    	authenticateRequest_app_idAndRequest_user_id();
+    	
+    	Integer total = stockService.countOutByApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(request_app_id, express_sender_name, stock_receiver_name, express_no);
+    	List<Record> recordList = stockService.listOutByApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(request_app_id, express_sender_name, stock_receiver_name, express_no, getM(), getN());
+    	
+    	List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+    	
+    	for (Record record : recordList) {
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put(Stock.STOCK_ID, record.get(Stock.STOCK_ID));
+    		map.put(Stock.OBJECT_ID, record.get(Stock.OBJECT_ID));
+    		map.put(Stock.STOCK_TYPE, record.get(Stock.STOCK_TYPE));
+    		map.put(Stock.STOCK_QUANTITY, record.get(Stock.STOCK_QUANTITY));
+    		map.put(Stock.STOCK_RECEIVER_NAME, record.get(Stock.STOCK_RECEIVER_NAME));
+    		map.put(Stock.STOCK_FLOW, record.get(Stock.STOCK_FLOW));
+    		map.put(Express.EXPRESS_SENDER_NAME, record.get(Express.EXPRESS_SENDER_NAME));
+    		map.put(Express.EXPRESS_NO, record.get(Express.EXPRESS_NO));
+    		resultList.add(map);
+    	}
+    	
+    	renderSuccessJson(total, resultList);
     }
     
     @ActionKey(Url.MEMBER_STOCK_ADMIN_STOCK_LIST)
@@ -147,6 +184,37 @@ public class MemberStockController extends Controller {
         }
 
         renderSuccessJson(total, resultList);
+    }
+    
+    @ActionKey(Url.MEMBER_STOCK_SYSTEM_OUT_LIST)
+    public void systemOutList() {
+    	validateRequest_app_id();
+    	validate(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+    	
+    	String request_app_id = getRequest_app_id();
+    	JSONObject jsonObject = getParameterJSONObject();
+    	String express_sender_name = jsonObject.getString("express_sender_name");
+    	String stock_receiver_name = jsonObject.getString("stock_receiver_name");
+    	String express_no = jsonObject.getString("express_no");
+    	
+    	Integer total = stockService.countOutByApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(request_app_id, express_sender_name, stock_receiver_name, express_no);
+    	List<Record> recordList = stockService.listOutByApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(request_app_id, express_sender_name, stock_receiver_name, express_no, getM(), getN());
+    	
+    	List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+    	
+    	for (Record record : recordList) {
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put(Stock.STOCK_ID, record.get(Stock.STOCK_ID));
+    		map.put(Stock.OBJECT_ID, record.get(Stock.OBJECT_ID));
+    		map.put(Stock.STOCK_QUANTITY, record.get(Stock.STOCK_QUANTITY));
+    		map.put(Stock.STOCK_RECEIVER_NAME, record.get(Stock.STOCK_RECEIVER_NAME));
+    		map.put(Stock.STOCK_FLOW, record.get(Stock.STOCK_FLOW));
+    		map.put(Express.EXPRESS_SENDER_NAME, record.get(Express.EXPRESS_SENDER_NAME));
+    		map.put(Express.EXPRESS_NO, record.get(Express.EXPRESS_NO));
+    		resultList.add(map);
+    	}
+    	
+    	renderSuccessJson(total, resultList);
     }
     
     @ActionKey(Url.MEMBER_STOCK_SYSTEM_REPLENISH)
