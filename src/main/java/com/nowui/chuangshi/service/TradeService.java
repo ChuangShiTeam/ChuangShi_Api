@@ -138,7 +138,7 @@ public class TradeService extends Service {
         String out_trade_no = "TRADE_" + trade.getTrade_id();
         String spbill_create_ip = "0.0.0.0";
         DecimalFormat format = new DecimalFormat("0");
-        String total_fee = format.format(trade.getTrade_total_amount());
+        String total_fee = format.format(trade.getTrade_total_amount().multiply(BigDecimal.valueOf(100)));
         String trade_type = "JSAPI";
 
         SortedMap<String, String> parameter = new TreeMap<String, String>();
@@ -154,9 +154,11 @@ public class TradeService extends Service {
         parameter.put("trade_type", trade_type);
         parameter.put("sign", PaymentKit.createSign(parameter, mch_key));
 
+        System.out.println("parameter" + parameter);
+
         String result = HttpKit.post("https://api.mch.weixin.qq.com/pay/unifiedorder", PaymentKit.toXml(parameter));
 
-        System.out.println(result);
+        System.out.println("result" + result);
 
         Map<String, String> map = PaymentKit.xmlToMap(result);
 
@@ -190,9 +192,10 @@ public class TradeService extends Service {
         return isUpdate && isSave;
     }
 
-    public Boolean updateTrade_flowByTrade_idValidateSystem_version(String trade_id, String trade_flow, String request_user_id,
-    		Integer system_version) {
-        return tradeCache.updateTrade_flowByTrade_idValidateSystem_version(trade_id, trade_flow, request_user_id, system_version);
+    public Boolean updateTrade_flowByTrade_idValidateSystem_version(String trade_id, String trade_flow,
+            String request_user_id, Integer system_version) {
+        return tradeCache.updateTrade_flowByTrade_idValidateSystem_version(trade_id, trade_flow, request_user_id,
+                system_version);
     }
 
 }
