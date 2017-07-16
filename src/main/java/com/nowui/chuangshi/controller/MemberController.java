@@ -8,16 +8,27 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.jfinal.weixin.sdk.api.ApiResult;
 import com.jfinal.weixin.sdk.api.QrcodeApi;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.*;
-import com.nowui.chuangshi.service.*;
+import com.nowui.chuangshi.model.App;
+import com.nowui.chuangshi.model.Express;
+import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.MemberLevel;
+import com.nowui.chuangshi.model.Qrcode;
+import com.nowui.chuangshi.model.Stock;
+import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.service.AppService;
+import com.nowui.chuangshi.service.FileService;
+import com.nowui.chuangshi.service.MemberLevelService;
+import com.nowui.chuangshi.service.MemberService;
+import com.nowui.chuangshi.service.QrcodeService;
+import com.nowui.chuangshi.service.StockService;
+import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.QrcodeType;
-import com.nowui.chuangshi.type.StockAction;
-import com.nowui.chuangshi.type.StockFlow;
 import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
@@ -281,6 +292,7 @@ public class MemberController extends Controller {
         renderSuccessJson();
     }
     
+    //会员发货
     @ActionKey(Url.MEMBER_SEND)
     public void send() {
         validateRequest_app_id();
@@ -306,23 +318,44 @@ public class MemberController extends Controller {
         renderSuccessJson(result);
     }
     
+    //会员发货明细
     @ActionKey(Url.MEMBER_SEND_DETAIL)
     public void sendDetail() {
-        validateRequest_app_id();
-        validate(Member.MEMBER_ID);
-        
-        String request_app_id = getRequest_app_id();
-        JSONObject jsonObject = getParameterJSONObject();
-        String member_id = jsonObject.getString("member_id");
-        
-        authenticateRequest_app_idAndRequest_user_id();
-        
-        authenticateApp_id(request_app_id);
-        
-        
-        
-        Map<String, Object> result = new HashMap<String, Object>();
-        renderSuccessJson(result);
+    	validateRequest_app_id();
+    	validate(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+    	
+    	String request_app_id = getRequest_app_id();
+    	String request_user_id = getRequest_user_id();
+    	User user = userService.findByUser_id(request_user_id);
+        Member member = memberService.findByMember_id(user.getObject_Id());
+    	
+    	authenticateRequest_app_idAndRequest_user_id();
+    	
+    	authenticateApp_id(request_app_id);
+    	
+    	//查询会员库存
+    	Integer stock_quantity = stockService.sumStock_quantityByObject_id(member.getMember_id());
+    	//查询会员发货单列表
+    	List<Record> recordList = stockService.listWithExpressByObject_id(member.getMember_id(), getM(), getN());
+    	List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+    	for (Record record : recordList) {
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put(Stock.STOCK_ID, record.get(Stock.STOCK_ID));
+    		map.put(Stock.STOCK_RECEIVER_NAME, record.get(Stock.STOCK_RECEIVER_NAME));
+    		map.put(Stock.STOCK_RECEIVER_MOBILE, record.get(Stock.STOCK_RECEIVER_MOBILE));
+    		map.put(Stock.STOCK_RECEIVER_PROVINCE, record.get(Stock.STOCK_RECEIVER_PROVINCE));
+    		map.put(Stock.STOCK_RECEIVER_CITY, record.get(Stock.STOCK_RECEIVER_CITY));
+    		map.put(Stock.STOCK_RECEIVER_AREA, record.get(Stock.STOCK_RECEIVER_AREA));
+    		map.put(Stock.STOCK_RECEIVER_ADDRESS, record.get(Stock.STOCK_RECEIVER_ADDRESS));
+    		map.put(Stock.STOCK_FLOW, record.get(Stock.STOCK_FLOW));
+    		map.put(Express.EXPRESS_NO, record.get(Express.EXPRESS_NO));
+    		map.put(Express.EXPRESS_SHIPPER_CODE, record.get(Express.EXPRESS_SHIPPER_CODE));
+    		resultList.add(map);
+    	}
+    	Map<String, Object> result = new HashMap<String, Object>();
+    	result.put("stock_quantity", stock_quantity);
+    	result.put("stock_list", resultList);
+    	renderSuccessJson(result);
     }
 
 

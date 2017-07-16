@@ -422,17 +422,16 @@
     LIMIT #p(m), #p(n)
   #end
   
-  #sql("listByApp_idAndObject_id")
+  #sql("listWithExpressByObject_id")
     SELECT
 		table_stock.*
-		table_product.product_name
+		table_express.express_no,
+		table_express.express_shipper_code
 	FROM
 		table_stock
-	LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
-	LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
+	LEFT JOIN table_express ON table_express.stock_id = table_stock.stock_id
 	WHERE 
 	 table_stock.system_status = 1
-	 AND table_stock.app_id = #p(app_id)
      AND table_stock.object_id = #p(object_id)
     LIMIT #p(m), #p(n)
   #end
@@ -486,6 +485,14 @@
     AND table_stock_product_sku.system_status = 1
     AND table_stock.object_id = #p(object_id)
     AND table_stock_product_sku.product_sku_id = #p(product_sku_id)
+  #end
+  
+  #sql("sumStock_quantityByObject_id")
+    SELECT
+    IFNULL(SUM(case when table_stock.stock_action = 'OUT' then -1*table_stock.stock_quantity else table_stock.stock_quantity end), 0)
+    FROM table_stock
+    WHERE table_stock.system_status = 1
+    AND table_stock.object_id = #p(object_id)
   #end
   
   #sql("save")

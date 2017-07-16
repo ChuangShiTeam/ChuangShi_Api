@@ -46,6 +46,10 @@ public class StockService extends Service {
     public Integer sumStock_quantityByObject_idAndProduct_sku_id(String object_id, String product_sku_id) {
     	return stockCache.sumStock_quantityByObject_idAndProduct_sku_id(object_id, product_sku_id);
     }
+    
+    public Integer sumStock_quantityByObject_id(String object_id) {
+    	return stockCache.sumStock_quantityByObject_id(object_id);
+    }
 
     public List<Stock> listByApp_idAndStock_typeAndSystem_create_timeAndLimit(String app_id, String stock_type, Date system_create_time, int m, int n) {
         return stockCache.listByApp_idAndStock_typeAndSystem_create_timeAndLimit(app_id, stock_type, system_create_time, m, n);
@@ -73,6 +77,10 @@ public class StockService extends Service {
     
     public List<Record> listOutByOrApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(String app_id, String express_sender_name, String stock_receiver_name, String express_no, int m, int n) {
     	return stockCache.listOutByOrApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(app_id, express_sender_name, stock_receiver_name, express_no, m, n);
+    }
+    
+    public List<Record> listWithExpressByObject_id(String object_id, int m, int n) {
+    	return stockCache.listWithExpressByObject_id(object_id, m, n);
     }
     
     public Stock findByStock_id(String stock_id) {

@@ -16,7 +16,7 @@ public class StockCache extends Cache {
     public static final String MEMBER_STOCK_BY_STOCK_ID_CACHE = "member_stock_by_stock_id_cache";
     public static final String TRADE_STOCK_BY_STOCK_ID_CACHE = "trade_stock_by_stock_id_cache";
     public static final String APP_STOCK_BY_STOCK_ID_CACHE = "app_stock_by_stock_id_cache";
-    public static final String STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE = "stock_quantity_by_object_id_and_product_sku_id_cache";
+    public static final String STOCK_QUANTITY_BY_OBJECT_ID_CACHE = "stock_quantity_by_object_id_cache";
 
     private StockDao stockDao = new StockDao();
 
@@ -45,12 +45,16 @@ public class StockCache extends Cache {
     }
     
     public Integer sumStock_quantityByObject_idAndProduct_sku_id(String object_id, String product_sku_id) {
-    	Integer stock_quantity = CacheUtil.get(STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE, object_id + product_sku_id);
+    	return stockDao.sumStock_quantityByObject_idAndProduct_sku_id(object_id, product_sku_id);
+    }
+    
+    public Integer sumStock_quantityByObject_id(String object_id) {
+    	Integer stock_quantity = CacheUtil.get(STOCK_QUANTITY_BY_OBJECT_ID_CACHE, object_id);
     	
     	if (stock_quantity == null) {
-    		stock_quantity = stockDao.sumStock_quantityByObject_idAndProduct_sku_id(object_id, product_sku_id);
+    		stock_quantity = stockDao.sumStock_quantityByObject_id(object_id);
     		
-    		CacheUtil.put(STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE, object_id + product_sku_id, stock_quantity);
+    		CacheUtil.put(STOCK_QUANTITY_BY_OBJECT_ID_CACHE, object_id, stock_quantity);
     	}
     	return stock_quantity;
     }
@@ -131,6 +135,10 @@ public class StockCache extends Cache {
         return stockDao.listOutByOrApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(app_id, express_sender_name, stock_receiver_name, express_no, m, n);
     }
     
+    public List<Record> listWithExpressByObject_id(String object_id, int m, int n) {
+    	return stockDao.listWithExpressByObject_id(object_id, m, n);
+    }
+    
     public Stock findByStock_id(String stock_id) {
         Stock stock = CacheUtil.get(STOCK_BY_STOCK_ID_CACHE, stock_id);
 
@@ -182,7 +190,7 @@ public class StockCache extends Cache {
     public Boolean save(String stock_id, String app_id, String object_id, String stock_type, Integer stock_quantity, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, String stock_express_pay_way, String stock_express_shipper_code, Boolean stock_is_pay, String stock_status, String system_create_user_id) {
         boolean result = stockDao.save(stock_id, app_id, object_id, stock_type, stock_quantity, stock_receiver_name, stock_receiver_mobile, stock_receiver_province, stock_receiver_city, stock_receiver_area, stock_receiver_address, stock_action, stock_flow, stock_express_pay_way, stock_express_shipper_code, stock_is_pay, stock_status, system_create_user_id);
         if (result) {
-        	CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE, object_id);
+        	CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_CACHE, object_id);
         }
         return result;
     }
@@ -200,7 +208,7 @@ public class StockCache extends Cache {
             CacheUtil.remove(MEMBER_STOCK_BY_STOCK_ID_CACHE, stock_id);
             CacheUtil.remove(TRADE_STOCK_BY_STOCK_ID_CACHE, stock_id);
             CacheUtil.remove(APP_STOCK_BY_STOCK_ID_CACHE, stock_id);
-            CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE, stock.getObject_id());
+            CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_CACHE, stock.getObject_id());
         }
 
         return result;
@@ -219,7 +227,7 @@ public class StockCache extends Cache {
     		CacheUtil.remove(MEMBER_STOCK_BY_STOCK_ID_CACHE, stock_id);
     		CacheUtil.remove(TRADE_STOCK_BY_STOCK_ID_CACHE, stock_id);
     		CacheUtil.remove(APP_STOCK_BY_STOCK_ID_CACHE, stock_id);
-    		CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE, stock.getObject_id());
+    		CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_CACHE, stock.getObject_id());
     	}
     	
     	return result;
@@ -237,7 +245,7 @@ public class StockCache extends Cache {
             CacheUtil.remove(STOCK_BY_STOCK_ID_CACHE, stock_id);
             CacheUtil.remove(MEMBER_STOCK_BY_STOCK_ID_CACHE, stock_id);
             CacheUtil.remove(APP_STOCK_BY_STOCK_ID_CACHE, stock_id);
-            CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE, stock.getObject_id());
+            CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_CACHE, stock.getObject_id());
         }
 
         return result;

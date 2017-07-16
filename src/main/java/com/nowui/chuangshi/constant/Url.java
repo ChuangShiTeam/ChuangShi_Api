@@ -202,6 +202,7 @@ public class Url {
     public static final String MEMBER_MY_FIND = "/member/my/find";
     public static final String MEMBER_QRCODE_FIND = "/member/qrcode/find";
     public static final String MEMBER_SEND = "/member/send";// 会员发货
+    public static final String MEMBER_SEND_LIST_AND_STOCK = "/member/sendListAndStock";// 会员发货列表和库存
     public static final String MEMBER_SEND_DETAIL = "/member/send/detail";// 会员发货明细
     public static final String MEMBER_ADMIN_LIST = "/member/admin/list";
     public static final String MEMBER_ADMIN_FIND = "/member/admin/find";

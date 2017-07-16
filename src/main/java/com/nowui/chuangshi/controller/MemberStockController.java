@@ -19,6 +19,7 @@ import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.StockProductSku;
+import com.nowui.chuangshi.service.ExpressService;
 import com.nowui.chuangshi.service.StockProductSkuService;
 import com.nowui.chuangshi.service.StockService;
 import com.nowui.chuangshi.type.StockType;
@@ -27,6 +28,38 @@ public class MemberStockController extends Controller {
 
     private final StockService stockService = new StockService();
     private final StockProductSkuService stockProductSkuService = new StockProductSkuService();
+    private final ExpressService expressService = new ExpressService();
+    
+    @ActionKey(Url.MEMBER_STOCK_FIND)
+    public void find() {
+        validateRequest_app_id();
+        validate(Stock.STOCK_ID);
+
+        Stock model = getModel(Stock.class);
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        Stock stock = stockService.findByStock_id(model.getStock_id());
+
+        authenticateApp_id(stock.getApp_id());
+        
+        Express express = expressService.findByStock_id(model.getStock_id()); 
+        String express_status = stock.getStock_flow();
+        
+        if (express != null) {
+        	express_status = express.getExpress_status();
+        }
+        
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put(Stock.STOCK_QUANTITY, stock.getStock_quantity());
+        result.put(Stock.STOCK_EXPRESS_PAY_WAY, stock.getStock_express_pay_way());
+        result.put(Stock.STOCK_RECEIVER_NAME, stock.getStock_receiver_name());
+        result.put(Stock.STOCK_RECEIVER_MOBILE, stock.getStock_receiver_mobile());
+        result.put(Stock.STOCK_RECEIVER_ADDRESS, stock.getStock_receiver_address());
+        result.put(Stock.STOCK_FLOW, stock.getStock_flow());
+        result.put(Express.EXPRESS_STATUS, express_status);
+        renderSuccessJson(result);
+    }
 
 
     @ActionKey(Url.MEMBER_STOCK_ADMIN_LIST)
