@@ -479,11 +479,13 @@
   
   #sql("sumStock_quantityByObject_idAndProduct_sku_id")
     SELECT
-    IFNULL(SUM(case when stock_action = 'OUT' then -1*stock_quantity else stock_quantity end), 0)
-    FROM table_stock
-    WHERE system_status = 1
-    AND object_id = #p(object_id)
-    AND product_sku_id = #p(product_sku_id)
+    IFNULL(SUM(case when table_stock.stock_action = 'OUT' then -1*table_stock_product_sku.product_sku_quantity else table_stock_product_sku.product_sku_quantity end), 0)
+    FROM table_stock_product_sku
+    LEFT JOIN table_stock ON table_stock_product_sku.stock_id = table_stock.stock_id
+    WHERE table_stock.system_status = 1
+    AND table_stock_product_sku.system_status = 1
+    AND table_stock.object_id = #p(object_id)
+    AND table_stock_product_sku.product_sku_id = #p(product_sku_id)
   #end
   
   #sql("save")

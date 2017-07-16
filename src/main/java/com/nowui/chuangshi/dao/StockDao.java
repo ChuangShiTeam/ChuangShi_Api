@@ -11,6 +11,7 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.Stock;
+import com.nowui.chuangshi.model.StockProductSku;
 import com.nowui.chuangshi.model.User;
 
 public class StockDao extends Dao {
@@ -102,6 +103,7 @@ public class StockDao extends Dao {
     public Integer sumStock_quantityByObject_idAndProduct_sku_id(String object_id, String product_sku_id) {
     	Kv sqlMap = Kv.create();
     	sqlMap.put(Stock.OBJECT_ID, object_id);
+    	sqlMap.put(StockProductSku.PRODUCT_SKU_ID, product_sku_id);
     	SqlPara sqlPara = Db.getSqlPara("stock.sumStock_quantityByObject_idAndProduct_sku_id", sqlMap);
     	
     	logSql("stock", "sumStock_quantityByObject_idAndProduct_sku_id", sqlPara);

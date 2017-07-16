@@ -144,10 +144,10 @@ public class StockService extends Service {
         for (int j = 0; j < productSkuList.size(); j++) {
             StockProductSku stockProductSku = productSkuList.getJSONObject(j).toJavaObject(StockProductSku.class);
             //判断库存数量是否足够
-            /*Integer product_sku_stock_quantity = stockService.sumStock_quantityByObject_idAndProduct_sku_id(member_id, product_sku_id);
-            if (stock_quantity > product_sku_stock_quantity) {
+            Integer product_sku_stock_quantity = sumStock_quantityByObject_idAndProduct_sku_id(object_id, stockProductSku.getProduct_sku_id());
+            if (stockProductSku.getProduct_sku_quantity() > product_sku_stock_quantity) {
                 throw new RuntimeException("库存不足");
-            }*/
+            }
             stockProductSku.setStock_id(stock_id);
             stockProductSku.setSystem_create_user_id(system_create_user_id);
             stockProductSku.setSystem_create_time(new Date());
