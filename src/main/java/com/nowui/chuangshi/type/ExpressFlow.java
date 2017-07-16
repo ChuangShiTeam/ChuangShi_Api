@@ -1,6 +1,6 @@
 package com.nowui.chuangshi.type;
 
-public enum ExpressStatus {
+public enum ExpressFlow {
     
     NOTRACK("NOTRACK", "无轨迹"),
     SENT("SENT", "已揽收"),
@@ -12,7 +12,7 @@ public enum ExpressStatus {
     private String key;
     private String value;
 
-    private ExpressStatus(String key, String value) {
+    private ExpressFlow(String key, String value) {
         this.key = key;
         this.value = value;
     }

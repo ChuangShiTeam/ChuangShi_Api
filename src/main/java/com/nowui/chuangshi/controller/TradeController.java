@@ -401,7 +401,7 @@ public class TradeController extends Controller {
 
         JSONObject jsonObject = getParameterJSONObject();
         String trade_id = jsonObject.getString("trade_id");
-        String system_version = jsonObject.getString("system_version");
+        Integer system_version = jsonObject.getInteger("system_version");
         String request_user_id = getRequest_user_id();
 
         Trade trade = tradeService.findByTrade_id(trade_id);
@@ -412,7 +412,7 @@ public class TradeController extends Controller {
             throw new RuntimeException("该订单还没填写快递单！");
         }
 
-        Boolean result = tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade_id, request_user_id,
+        Boolean result = tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade_id, TradeFlow.WAIT_RECEIVE.getKey(), request_user_id,
                 system_version);
 
         renderSuccessJson(result);

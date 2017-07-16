@@ -178,13 +178,13 @@ public class TradeCache extends Cache {
         return trade_number;
     }
 
-    public Boolean updateTrade_flowByTrade_idValidateSystem_version(String trade_id, String request_user_id, String system_version) {
+    public Boolean updateTrade_flowByTrade_idValidateSystem_version(String trade_id, String trade_flow, String request_user_id, Integer system_version) {
         Trade trade = findByTrade_id(trade_id);
         if (!trade.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = tradeDao.updateTrade_flowByTrade_idValidateSystem_version(trade_id, request_user_id, system_version);
+        boolean result = tradeDao.updateTrade_flowByTrade_idValidateSystem_version(trade_id, trade_flow, request_user_id, system_version);
 
         if (result) {
             CacheUtil.remove(TRADE_BY_TRADE_ID_CACHE, trade_id);

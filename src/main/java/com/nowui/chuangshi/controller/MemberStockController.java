@@ -44,10 +44,10 @@ public class MemberStockController extends Controller {
         authenticateApp_id(stock.getApp_id());
         
         Express express = expressService.findByStock_id(model.getStock_id()); 
-        String express_status = stock.getStock_flow();
+        String express_flow = stock.getStock_flow();
         
         if (express != null) {
-        	express_status = express.getExpress_status();
+        	express_flow = express.getExpress_flow();
         }
         
         Map<String, Object> result = new HashMap<String, Object>();
@@ -57,7 +57,7 @@ public class MemberStockController extends Controller {
         result.put(Stock.STOCK_RECEIVER_MOBILE, stock.getStock_receiver_mobile());
         result.put(Stock.STOCK_RECEIVER_ADDRESS, stock.getStock_receiver_address());
         result.put(Stock.STOCK_FLOW, stock.getStock_flow());
-        result.put(Express.EXPRESS_STATUS, express_status);
+        result.put(Express.EXPRESS_FLOW, express_flow);
         renderSuccessJson(result);
     }
 

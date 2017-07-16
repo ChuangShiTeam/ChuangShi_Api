@@ -9,9 +9,11 @@ import com.jfinal.plugin.activerecord.Record;
 import com.nowui.chuangshi.cache.StockCache;
 import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.StockProductSku;
+import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.type.StockAction;
 import com.nowui.chuangshi.type.StockFlow;
 import com.nowui.chuangshi.type.StockType;
+import com.nowui.chuangshi.type.TradeFlow;
 import com.nowui.chuangshi.util.Util;
 
 public class StockService extends Service {
@@ -19,6 +21,8 @@ public class StockService extends Service {
     private StockCache stockCache = new StockCache();
     
     private StockProductSkuService stockProductSkuService = new StockProductSkuService();
+    
+    private TradeService tradeService = new TradeService();
 
     public Integer countByApp_idAndStock_typeOrStock_actionOrLikeUser_name(String app_id, String stock_type, String stock_action, String user_name) {
         return stockCache.countByApp_idAndStock_typeOrStock_actionOrLikeUser_name(app_id, stock_type, stock_action, user_name);
@@ -173,6 +177,19 @@ public class StockService extends Service {
         }
         return result;
     }
+
+	public void updateFinish(String stock_id) {
+		Stock stock = findByStock_id(stock_id);
+		
+		if (StockType.TRADE.getKey().equals(stock.getStock_type())) {
+			//更新订单状态
+			Trade trade = tradeService.findByTrade_id(stock.getObject_id());
+			tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade.getTrade_id(), TradeFlow.COMPLETE.getKey(), trade.getSystem_create_user_id(), trade.getSystem_version());
+		}
+		
+		this.updateStock_flowByStock_idValidateSystem_version(stock_id, StockFlow.COMPLETE.getKey(), stock.getSystem_create_user_id(), stock.getSystem_version());
+		
+	}
 
 
 }

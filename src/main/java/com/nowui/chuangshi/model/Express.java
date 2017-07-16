@@ -103,7 +103,10 @@ public class Express extends Model<Express> {
     @Column(type = ColumnType.LONGTEXT, length = 429496729, comment = "物流信息")
     public static final String EXPRESS_LOGISTICS = "express_logistics";
 
-    @Column(type = ColumnType.VARCHAR, length = 25, comment = "状态")
+    @Column(type = ColumnType.VARCHAR, length = 25, comment = "物流流程")
+    public static final String EXPRESS_FLOW = "express_flow";
+    
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "")
     public static final String EXPRESS_STATUS = "express_status";
 
     @Column(type = ColumnType.VARCHAR, length = 200, comment = "备注")
@@ -365,12 +368,20 @@ public class Express extends Model<Express> {
         set(EXPRESS_LOGISTICS, express_logistics);
     }
 
-    public String getExpress_status() {
-        return getStr(EXPRESS_STATUS);
+    public String getExpress_flow() {
+        return getStr(EXPRESS_FLOW);
     }
 
-    public void setExpress_status(String express_status) {
-        set(EXPRESS_STATUS, express_status);
+    public void setExpress_flow(String express_flow) {
+        set(EXPRESS_FLOW, express_flow);
+    }
+    
+    public Boolean getExpress_status() {
+    	return getBoolean(EXPRESS_STATUS);
+    }
+    
+    public void setExpress_status(Boolean express_status) {
+    	set(EXPRESS_STATUS, express_status);
     }
 
     public String getExpress_remark() {

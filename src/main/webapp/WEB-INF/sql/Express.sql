@@ -155,6 +155,7 @@
       express_start_date,
       express_end_date,
       express_logistics,
+      express_flow,
       express_status,
       express_remark,
       system_create_user_id,
@@ -196,6 +197,7 @@
       #p(express_start_date),
       #p(express_end_date),
       #p(express_logistics),
+      #p(express_flow),
       #p(express_status),
       #p(express_remark),
       #p(system_create_user_id),
@@ -239,6 +241,7 @@
     express_start_date = #p(express_start_date),
     express_end_date = #p(express_end_date),
     express_logistics = #p(express_logistics),
+    express_flow = #p(express_flow),
     express_status = #p(express_status),
     express_remark = #p(express_remark),
     system_update_user_id = #p(system_update_user_id),
@@ -249,11 +252,11 @@
     AND system_version = #p(system_version)
   #end
   
-    #sql("updateExpress_noAndExpress_costAndExpress_remarkByExpress_idAndSystem_version")
+  #sql("updateExpress_flowAndExpress_statusAndExpress_logisticsByExpress_idAndSystem_version")
     UPDATE table_express SET
-    express_no = #p(express_no),
-    express_cost = #p(express_cost),
-    express_remark = #p(express_remark),
+    express_flow = #p(express_flow),
+    express_status = #p(express_status),
+    express_logistics = #p(express_logistics),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1

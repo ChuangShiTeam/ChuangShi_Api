@@ -221,10 +221,10 @@ public class TradeDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public boolean updateTrade_flowByTrade_idValidateSystem_version(String trade_id, String request_user_id, String system_version) {
+    public boolean updateTrade_flowByTrade_idValidateSystem_version(String trade_id, String trade_flow, String request_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Trade.TRADE_ID, trade_id);
-        sqlMap.put(Trade.TRADE_FLOW, TradeFlow.WAIT_RECEIVE.getKey());
+        sqlMap.put(Trade.TRADE_FLOW, trade_flow);
         sqlMap.put(Trade.SYSTEM_UPDATE_USER_ID, request_user_id);
         sqlMap.put(Trade.SYSTEM_UPDATE_TIME, new Date());
         sqlMap.put(Trade.SYSTEM_VERSION, system_version);

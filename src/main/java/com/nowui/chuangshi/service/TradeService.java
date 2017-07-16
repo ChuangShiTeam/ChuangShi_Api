@@ -190,17 +190,9 @@ public class TradeService extends Service {
         return isUpdate && isSave;
     }
 
-    /**
-     * 发货更新订单状态
-     * 
-     * @param trade_id
-     * @param request_user_id
-     * @param system_version
-     * @return
-     */
-    public Boolean updateTrade_flowByTrade_idValidateSystem_version(String trade_id, String request_user_id,
-            String system_version) {
-        return tradeCache.updateTrade_flowByTrade_idValidateSystem_version(trade_id, request_user_id, system_version);
+    public Boolean updateTrade_flowByTrade_idValidateSystem_version(String trade_id, String trade_flow, String request_user_id,
+    		Integer system_version) {
+        return tradeCache.updateTrade_flowByTrade_idValidateSystem_version(trade_id, trade_flow, request_user_id, system_version);
     }
 
 }
