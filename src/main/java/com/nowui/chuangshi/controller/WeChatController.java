@@ -420,13 +420,6 @@ public class WeChatController extends Controller {
 
             if (is_update) {
                 // TODO 消息队列通知计算账单和分成
-                /*
-                 * Map<String, Object> mqMap = new HashMap<String, Object>();
-                 * mqMap.put(Trade.TRADE_ID, trade.getTrade_id());
-                 * MQUtil.sendSync("tradePay", JSON.toJSONString(mqMap));
-                 * 
-                 * MQUtil.sendSync("tradePay", trade.getTrade_id());
-                 */
                 this.payChange(trade.getTrade_id(), getRequest_app_id());
                 renderText("");
             } else {
