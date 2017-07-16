@@ -376,6 +376,17 @@
     AND table_stock.stock_id = #p(stock_id)
   #end
   
+  #sql("findWithTradeByStock_id")
+    SELECT
+    table_stock.*,
+    table_user.user_name
+    FROM table_stock
+    LEFT JOIN table_trade ON table_trade.trade_id = table_stock.object_id
+    LEFT JOIN table_user ON table_trade.user_id = table_user.user_id
+    WHERE table_stock.system_status = 1
+    AND table_stock.stock_id = #p(stock_id)
+  #end
+  
   #sql("findWithAppByStock_id")
     SELECT
     table_stock.*,
@@ -471,6 +482,18 @@
     AND stock_id = #p(stock_id)
     AND system_version = #p(system_version)
   #end
+  
+  #sql("updateStock_flowByStock_idAndSystem_version")
+    UPDATE table_stock SET
+    stock_flow = #p(stock_flow),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND stock_id = #p(stock_id)
+    AND system_version = #p(system_version)
+  #end
+
 
   #sql("deleteByStock_idAndSystem_version")
     UPDATE table_stock SET

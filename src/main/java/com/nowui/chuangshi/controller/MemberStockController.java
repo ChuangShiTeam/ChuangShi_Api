@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -113,13 +115,23 @@ public class MemberStockController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Stock stock = stockService.findWithMemberByStock_id(model.getStock_id());
+        Stock stock = new Stock();
+        
+        if (StringUtils.isBlank(model.getStock_type())) {
+        	stock = stockService.findWithMemberByStock_id(model.getStock_id());
+        } else {
+        	if (StockType.MEMBER.getKey().equals(model.getStock_type())) {
+        		stock = stockService.findWithMemberByStock_id(model.getStock_id());
+        	} else if (StockType.TRADE.getKey().equals(model.getStock_type())) {
+        		stock = stockService.findWithTradeByStock_id(model.getStock_id());
+        	}
+        }
 
         authenticateApp_id(stock.getApp_id());
         
         List<StockProductSku> stockProductSkuList = stockProductSkuService.listAndProduct_nameByStock_id(model.getStock_id());
         
-        stock.keep(Stock.STOCK_ID, Stock.USER_NAME, Stock.STOCK_ACTION, Stock.STOCK_QUANTITY, Stock.SYSTEM_VERSION);
+        stock.keep(Stock.STOCK_ID, Stock.USER_NAME, Stock.STOCK_ACTION, Stock.STOCK_QUANTITY, Stock.STOCK_EXPRESS_PAY_WAY, Stock.STOCK_EXPRESS_SHIPPER_CODE, Stock.STOCK_RECEIVER_ADDRESS, Stock.STOCK_RECEIVER_AREA, Stock.STOCK_RECEIVER_CITY, Stock.STOCK_RECEIVER_MOBILE, Stock.STOCK_RECEIVER_NAME, Stock.STOCK_RECEIVER_PROVINCE, Stock.SYSTEM_VERSION);
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("stock", stock);
         result.put(Stock.STOCK_PRODUCT_SKU_LIST, stockProductSkuList);

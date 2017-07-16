@@ -102,6 +102,14 @@
     WHERE system_status = 1
     AND express_id = #p(express_id)
   #end
+  
+  #sql("listByStock_id")
+    SELECT
+    table_express.*
+    FROM table_express
+    WHERE table_express.system_status = 1
+    AND table_express.stock_id = #p(stock_id)
+  #end
 
   #sql("listByTrade_id")
     SELECT

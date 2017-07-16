@@ -151,5 +151,9 @@ public class ExpressCache extends Cache {
 
         return expressList;
     }
+    
+    public Express findByStock_id(String stock_id) {
+    	return expressDao.findByStock_id(stock_id);
+    }
 
 }

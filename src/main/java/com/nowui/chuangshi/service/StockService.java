@@ -83,6 +83,10 @@ public class StockService extends Service {
         return stockCache.findWithMemberByStock_id(stock_id);
     }
     
+    public Stock findWithTradeByStock_id(String stock_id) {
+    	return stockCache.findWithTradeByStock_id(stock_id);
+    }
+    
     public Stock findWithAppByStock_id(String stock_id) {
         return stockCache.findWithAppByStock_id(stock_id);
     }
@@ -93,6 +97,10 @@ public class StockService extends Service {
 
     public Boolean updateValidateSystem_version(String stock_id, String object_id, String stock_type, Integer stock_quantity, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, String stock_express_pay_way, String stock_express_shipper_code, Boolean stock_is_pay, String stock_status, String system_update_user_id, Integer system_version) {
         return stockCache.updateValidateSystem_version(stock_id, object_id, stock_type, stock_quantity, stock_receiver_name, stock_receiver_mobile, stock_receiver_province, stock_receiver_city, stock_receiver_area, stock_receiver_address, stock_action, stock_flow, stock_express_pay_way, stock_express_shipper_code, stock_is_pay, stock_status, system_update_user_id, system_version);
+    }
+    
+    public Boolean updateStock_flowByStock_idValidateSystem_version(String stock_id, String stock_flow, String system_update_user_id, Integer system_version) {
+    	return stockCache.updateStock_flowByStock_idValidateSystem_version(stock_id, stock_flow, system_update_user_id, system_version);
     }
 
     public Boolean deleteByStock_idAndSystem_update_user_idValidateSystem_version(String stock_id, String system_update_user_id, Integer system_version) {

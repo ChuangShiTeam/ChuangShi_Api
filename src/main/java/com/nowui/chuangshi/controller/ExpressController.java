@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -15,10 +13,16 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Kdniao;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Express;
+import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.Stock;
+import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.service.ExpressService;
+import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.StockService;
+import com.nowui.chuangshi.service.TradeService;
 import com.nowui.chuangshi.type.ExpressStatus;
+import com.nowui.chuangshi.type.StockFlow;
+import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.DateUtil;
 import com.nowui.chuangshi.util.Util;
 
@@ -27,6 +31,10 @@ public class ExpressController extends Controller {
     private final ExpressService expressService = new ExpressService();
 
     private final StockService stockService = new StockService();
+    
+    private final TradeService tradeService = new TradeService();
+    
+    private final MemberService memberService = new MemberService();
 
     /**
      * 接收物流信息
@@ -175,33 +183,40 @@ public class ExpressController extends Controller {
     @ActionKey(Url.EXPRESS_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(Express.EXPRESS_NO, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_REMARK);
+        validate(Express.STOCK_ID, Express.EXPRESS_NO, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_REMARK);
 
         Express model = getModel(Express.class);
         String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
         String stock_id = jsonObject.getString("stock_id");
-        String trade_id = jsonObject.getString("trade_id");
         String express_id = Util.getRandomUUID();
 
         authenticateRequest_app_idAndRequest_user_id();
-        if (StringUtils.isBlank(stock_id)) {
-
-        }
 
         Stock stock = stockService.findByStock_id(stock_id);
+        String express_receiver_user_id = "";
+        String express_sender_user_id = "";
+        
+        if (StockType.TRADE.getKey().equals(stock.getStock_type())) {
+        	Trade trade = tradeService.findByTrade_id(stock.getObject_id());
+        	
+        	express_sender_user_id = trade.getUser_id();
+        } else if (StockType.MEMBER.getKey().equals(stock.getStock_type())) {
+        	Member member = memberService.findByMember_id(stock.getObject_id());
+        	
+        	express_receiver_user_id = member.getUser_id();
+        }
 
-        // TODO express_receiver_user_id express_sender_user_id
-
-        Boolean result = expressService.save(express_id, stock.getApp_id(), stock_id, "", "",
+        Boolean result = expressService.save(express_id, stock.getApp_id(), stock_id, express_receiver_user_id, express_sender_user_id,
                 model.getExpress_shipper_code(), model.getExpress_no(), "", "", stock.getStock_receiver_name(), "",
                 stock.getStock_receiver_mobile(), "", stock.getStock_receiver_province(),
                 stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), "",
-                "", "", "", "", "", "", "", "", null, false, "", null, null, "", ExpressStatus.NOTRACK.getKey(),
+                "", "", "", "", "", "", "", "", null, false, stock.getStock_express_pay_way(), null, null, "", ExpressStatus.NOTRACK.getKey(),
                 model.getExpress_remark(), request_user_id);
 
         if (result) {
-
+        	//更新发货单流程为待收货
+        	stockService.updateStock_flowByStock_idValidateSystem_version(stock_id, StockFlow.WAIT_RECEIVE.getKey(), request_user_id, stock.getSystem_version());
         }
         renderSuccessJson(result);
     }
@@ -322,6 +337,34 @@ public class ExpressController extends Controller {
                 Express.SYSTEM_VERSION);
 
         renderSuccessJson(express);
+    }
+    
+    @ActionKey(Url.EXPRESS_ADMIN_FIND_BY_STOCK_ID)
+    public void adminFindByStock_id() {
+    	validateRequest_app_id();
+    	validate(Express.STOCK_ID);
+    	
+    	Express model = getModel(Express.class);
+    	
+    	authenticateRequest_app_idAndRequest_user_id();
+    	
+    	Express express = expressService.findByStock_id(model.getStock_id());
+    	
+    	authenticateApp_id(express.getApp_id());
+    	
+    	express.keep(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_RECEIVER_USER_ID,
+    			Express.EXPRESS_SENDER_USER_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, Express.EXPRESS_TYPE,
+    			Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
+    			Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
+    			Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,
+    			Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL,
+    			Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE,
+    			Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS,
+    			Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_START_DATE,
+    			Express.EXPRESS_END_DATE, Express.EXPRESS_LOGISTICS, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK,
+    			Express.SYSTEM_VERSION);
+    	
+    	renderSuccessJson(express);
     }
 
     @ActionKey(Url.EXPRESS_ADMIN_SAVE)

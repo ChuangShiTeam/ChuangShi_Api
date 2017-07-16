@@ -14,6 +14,7 @@ public class StockCache extends Cache {
 
     public static final String STOCK_BY_STOCK_ID_CACHE = "stock_by_stock_id_cache";
     public static final String MEMBER_STOCK_BY_STOCK_ID_CACHE = "member_stock_by_stock_id_cache";
+    public static final String TRADE_STOCK_BY_STOCK_ID_CACHE = "trade_stock_by_stock_id_cache";
     public static final String APP_STOCK_BY_STOCK_ID_CACHE = "app_stock_by_stock_id_cache";
     public static final String STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE = "stock_quantity_by_object_id_and_product_sku_id_cache";
 
@@ -154,6 +155,18 @@ public class StockCache extends Cache {
         return stock;
     }
     
+    public Stock findWithTradeByStock_id(String stock_id) {
+    	Stock stock = CacheUtil.get(TRADE_STOCK_BY_STOCK_ID_CACHE, stock_id);
+    	
+    	if (stock == null) {
+    		stock = stockDao.findWithTradeByStock_id(stock_id);
+    		
+    		CacheUtil.put(TRADE_STOCK_BY_STOCK_ID_CACHE, stock_id, stock);
+    	}
+    	
+    	return stock;
+    }
+    
     public Stock findWithAppByStock_id(String stock_id) {
         Stock stock = CacheUtil.get(APP_STOCK_BY_STOCK_ID_CACHE, stock_id);
         
@@ -185,11 +198,31 @@ public class StockCache extends Cache {
         if (result) {
             CacheUtil.remove(STOCK_BY_STOCK_ID_CACHE, stock_id);
             CacheUtil.remove(MEMBER_STOCK_BY_STOCK_ID_CACHE, stock_id);
+            CacheUtil.remove(TRADE_STOCK_BY_STOCK_ID_CACHE, stock_id);
             CacheUtil.remove(APP_STOCK_BY_STOCK_ID_CACHE, stock_id);
             CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE, stock.getObject_id());
         }
 
         return result;
+    }
+    
+    public Boolean updateStock_flowByStock_idValidateSystem_version(String stock_id, String stock_flow, String system_update_user_id, Integer system_version) {
+    	Stock stock = findByStock_id(stock_id);
+    	if (!stock.getSystem_version().equals(system_version)) {
+    		throw new RuntimeException(Constant.ERROR_VERSION);
+    	}
+    	
+    	boolean result = stockDao.updateStock_flowByStock_idAndSystem_version(stock_id, stock_flow, system_update_user_id, system_version);
+    	
+    	if (result) {
+    		CacheUtil.remove(STOCK_BY_STOCK_ID_CACHE, stock_id);
+    		CacheUtil.remove(MEMBER_STOCK_BY_STOCK_ID_CACHE, stock_id);
+    		CacheUtil.remove(TRADE_STOCK_BY_STOCK_ID_CACHE, stock_id);
+    		CacheUtil.remove(APP_STOCK_BY_STOCK_ID_CACHE, stock_id);
+    		CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_AND_PRODUCT_SKU_ID_CACHE, stock.getObject_id());
+    	}
+    	
+    	return result;
     }
 
     public Boolean deleteByStock_idAndSystem_update_user_idValidateSystem_version(String stock_id, String system_update_user_id, Integer system_version) {

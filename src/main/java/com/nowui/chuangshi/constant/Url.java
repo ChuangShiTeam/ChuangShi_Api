@@ -416,6 +416,7 @@ public class Url {
     public static final String EXPRESS_DELETE = "/express/delete";
     public static final String EXPRESS_ADMIN_LIST = "/express/admin/list";
     public static final String EXPRESS_ADMIN_FIND = "/express/admin/find";
+    public static final String EXPRESS_ADMIN_FIND_BY_STOCK_ID = "/express/admin/findByStockId";
     public static final String EXPRESS_ADMIN_SAVE = "/express/admin/save";
     public static final String EXPRESS_ADMIN_UPDATE = "/express/admin/update";
     public static final String EXPRESS_ADMIN_COMPLETE = "/express/admin/complete";

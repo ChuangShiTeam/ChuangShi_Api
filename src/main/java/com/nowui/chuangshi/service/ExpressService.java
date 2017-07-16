@@ -152,5 +152,9 @@ public class ExpressService extends Service {
     public List<Express> listByTrade_id(String trade_id) {
         return expressCache.listByTrade_id(trade_id);
     }
+    
+    public Express findByStock_id(String stock_id) {
+    	return expressCache.findByStock_id(stock_id);
+    }
 
 }

@@ -231,5 +231,20 @@ public class ExpressDao extends Dao {
         
         return new Express().find(sqlPara.getSql(), sqlPara.getPara());
     }
+    
+    public Express findByStock_id(String stock_id) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Express.STOCK_ID, stock_id);
+    	SqlPara sqlPara = Db.getSqlPara("express.listByStock_id", sqlMap);
+    	
+    	logSql("express", "listByStock_id", sqlPara);
+    	
+    	List<Express> expressList = new Express().find(sqlPara.getSql(), sqlPara.getPara());
+    	if (expressList != null && expressList.size() > 0) {
+    		return expressList.get(0);
+    	}
+    	
+    	return new Express();
+    }
 
 }

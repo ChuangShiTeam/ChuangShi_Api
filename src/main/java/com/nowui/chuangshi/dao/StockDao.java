@@ -247,6 +247,21 @@ public class StockDao extends Dao {
         }
     }
     
+    public Stock findWithTradeByStock_id(String stock_id) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Stock.STOCK_ID, stock_id);
+    	SqlPara sqlPara = Db.getSqlPara("stock.findWithTradeByStock_id", sqlMap);
+    	
+    	logSql("stock", "findWithTradeByStock_id", sqlPara);
+    	
+    	List<Stock> stockList = new Stock().find(sqlPara.getSql(), sqlPara.getPara());
+    	if (stockList.size() == 0) {
+    		return null;
+    	} else {
+    		return stockList.get(0);
+    	}
+    }
+    
     public Stock findWithAppByStock_id(String stock_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Stock.STOCK_ID, stock_id);
@@ -320,6 +335,20 @@ public class StockDao extends Dao {
         logSql("stock", "update", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+    
+    public Boolean updateStock_flowByStock_idAndSystem_version(String stock_id, String stock_flow, String system_update_user_id, Integer system_version) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Stock.STOCK_ID, stock_id);
+    	sqlMap.put(Stock.STOCK_FLOW, stock_flow);
+    	sqlMap.put(Stock.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+    	sqlMap.put(Stock.SYSTEM_UPDATE_TIME, new Date());
+    	sqlMap.put(Stock.SYSTEM_VERSION, system_version);
+    	SqlPara sqlPara = Db.getSqlPara("stock.updateStock_flowByStock_idAndSystem_version", sqlMap);
+    	
+    	logSql("stock", "updateStock_flowByStock_idAndSystem_version", sqlPara);
+    	
+    	return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
     
     public Boolean deleteByStock_idAndSystem_version(String stock_id, String system_update_user_id, Integer system_version) {
