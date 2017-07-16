@@ -427,6 +427,27 @@ public class TradeController extends Controller {
     public void addDelivery() {
         // TODO
     }
+    
+    @ActionKey(Url.TRADE_PAY)
+    public void pay() {
+        validateRequest_app_id();
+        validate(Trade.TRADE_ID);
+
+        Trade model = getModel(Trade.class);
+        String request_user_id = getRequest_user_id();
+
+        model.validate(Trade.TRADE_ID);
+
+        validate("open_id", "pay_type");
+
+        JSONObject jsonObject = getAttr(Constant.REQUEST_PARAMETER);
+        String open_id = jsonObject.getString("open_id");
+        String pay_type = jsonObject.getString("pay_type");
+
+        Map<String, String> result = tradeService.pay(model.getTrade_id(), open_id, pay_type, request_user_id);
+
+        renderSuccessJson(result);
+    }
 
     @ActionKey(Url.TRADE_ADMIN_DELETE)
     public void adminDelete() {

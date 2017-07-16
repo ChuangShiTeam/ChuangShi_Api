@@ -138,7 +138,7 @@ public class TradeService extends Service {
         String out_trade_no = "TRADE_" + trade.getTrade_id();
         String spbill_create_ip = "0.0.0.0";
         DecimalFormat format = new DecimalFormat("0");
-        String total_fee = format.format(trade.getTrade_product_amount().multiply(BigDecimal.valueOf(100))); // TODO
+        String total_fee = format.format((trade.getTrade_product_amount().add(trade.getTrade_express_amount()).subtract(trade.getTrade_discount_amount())).multiply(BigDecimal.valueOf(100)));
         String trade_type = "JSAPI";
 
         SortedMap<String, String> parameter = new TreeMap<String, String>();
