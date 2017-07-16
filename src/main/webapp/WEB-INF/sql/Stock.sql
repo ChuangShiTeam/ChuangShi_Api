@@ -424,7 +424,7 @@
   
   #sql("listWithExpressByObject_id")
     SELECT
-		table_stock.*
+		table_stock.*,
 		table_express.express_no,
 		table_express.express_shipper_code,
 		table_express.express_flow
