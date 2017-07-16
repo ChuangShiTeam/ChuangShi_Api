@@ -53,6 +53,7 @@ import com.nowui.chuangshi.controller.ProductCategoryController;
 import com.nowui.chuangshi.controller.ProductController;
 import com.nowui.chuangshi.controller.QrcodeController;
 import com.nowui.chuangshi.controller.SqlController;
+import com.nowui.chuangshi.controller.SupplierController;
 import com.nowui.chuangshi.controller.TradeController;
 import com.nowui.chuangshi.controller.UserController;
 import com.nowui.chuangshi.controller.WeChatController;
@@ -92,6 +93,7 @@ import com.nowui.chuangshi.model.Qrcode;
 import com.nowui.chuangshi.model.Sql;
 import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.StockProductSku;
+import com.nowui.chuangshi.model.Supplier;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.model.TradeCommossion;
 import com.nowui.chuangshi.model.TradePay;
@@ -152,6 +154,8 @@ public class WebConfig extends JFinalConfig {
         routes.add("/feijiu/recommend/customer", FeijiuRecommendCustomerController.class);
         routes.add("/feijiu/recommend/product", FeijiuRecommendProductController.class);
         routes.add("/feijiu", FeijiuController.class);
+
+        routes.add("/supplier", SupplierController.class);
     }
 
     public void configEngine(Engine engine) {
@@ -164,10 +168,11 @@ public class WebConfig extends JFinalConfig {
         druidPlugin.setFilters("stat,wall");
         plugins.add(druidPlugin);
 
-//        String brokerAddress = "127.0.0.1:15555";
-//        String scanRootPackage = "com.nowui.chuangshi";
-//        ZbusPlugin zbusPlugin = new ZbusPlugin(brokerAddress, scanRootPackage);
-//        plugins.add(zbusPlugin);
+        // String brokerAddress = "127.0.0.1:15555";
+        // String scanRootPackage = "com.nowui.chuangshi";
+        // ZbusPlugin zbusPlugin = new ZbusPlugin(brokerAddress,
+        // scanRootPackage);
+        // plugins.add(zbusPlugin);
 
         ActiveRecordPlugin activeRecordPlugin = new ActiveRecordPlugin(druidPlugin);
 
@@ -195,9 +200,11 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_product_brand", "product_brand_id", ProductBrand.class);
         activeRecordPlugin.addMapping("table_product_category", "product_category_id", ProductCategory.class);
         activeRecordPlugin.addMapping("table_product_sku", "product_sku_id", ProductSku.class);
-        activeRecordPlugin.addMapping("table_product_sku_attribute", "product_sku_attribute_id", ProductSkuAttribute.class);
+        activeRecordPlugin.addMapping("table_product_sku_attribute", "product_sku_attribute_id",
+                ProductSkuAttribute.class);
         activeRecordPlugin.addMapping("table_product_sku_price", "product_sku_price_id", ProductSkuPrice.class);
-        activeRecordPlugin.addMapping("table_product_sku_commission", "product_sku_commission_id", ProductSkuCommission.class);
+        activeRecordPlugin.addMapping("table_product_sku_commission", "product_sku_commission_id",
+                ProductSkuCommission.class);
         activeRecordPlugin.addMapping("table_member", "member_id", Member.class);
         activeRecordPlugin.addMapping("table_member_address", "member_address_id", MemberAddress.class);
         activeRecordPlugin.addMapping("table_member_level", "member_level_id", MemberLevel.class);
@@ -219,9 +226,16 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_guangqi_customer", "guangqi_customer_id", GuangqiCustomer.class);
         activeRecordPlugin.addMapping("table_guangqi_prize", "guangqi_prize_id", GuangqiPrize.class);
         activeRecordPlugin.addMapping("table_guangqi_customer_prize", "customer_prize_id", GuangqiCustomerPrize.class);
-        activeRecordPlugin.addMapping("table_feijiu_fast_customer", "feijiu_fast_customer_id", FeijiuFastCustomer.class);
-        activeRecordPlugin.addMapping("table_feijiu_recommend_customer", "feijiu_recommend_customer_id", FeijiuRecommendCustomer.class);
-        activeRecordPlugin.addMapping("table_feijiu_recommend_product", "feijiu_recommend_product_id", FeijiuRecommendProduct.class);
+        activeRecordPlugin.addMapping("table_feijiu_fast_customer", "feijiu_fast_customer_id",
+                FeijiuFastCustomer.class);
+        activeRecordPlugin.addMapping("table_feijiu_recommend_customer", "feijiu_recommend_customer_id",
+                FeijiuRecommendCustomer.class);
+        activeRecordPlugin.addMapping("table_feijiu_recommend_product", "feijiu_recommend_product_id",
+                FeijiuRecommendProduct.class);
+
+        activeRecordPlugin.addMapping("table_supplier", "supplier_id", Supplier.class);
+//        activeRecordPlugin.addMapping("table_supplier_product", "supplier_product_id", SupplierProduct.class);
+
         plugins.add(activeRecordPlugin);
 
         EhCachePlugin ehCachePlugin = new EhCachePlugin();

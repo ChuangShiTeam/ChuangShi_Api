@@ -80,9 +80,6 @@ public class WeChatController extends Controller {
         String app_id = getPara(Constant.APP_ID);
         String platform = getPara(Constant.PLATFORM);
         String version = getPara(Constant.VERSION);
-        if (url.contains("?")) {
-            url = url.substring(0, url.indexOf("?"));
-        }
 
         if (ValidateUtil.isNullOrEmpty(code)) {
 
@@ -133,8 +130,11 @@ public class WeChatController extends Controller {
             String token = memberService.login(app_id, wechat_open_id, wechat_union_id, member_parent_id,
                     from_qrcode_id, member_parent_id, member_parent_path, user_name, user_avatar, member_status,
                     request_user_id);
+            url = url.contains("?") ? url + "&" : url + "?";
 
-            redirect("http://h5.xingxiao.nowui.com/#/" + url + "?open_id=" + wechat_open_id + "&token=" + token);
+            System.out.println("url : " + url);
+
+            redirect(url + "open_id=" + wechat_open_id + "&token=" + token);
         }
     }
 
@@ -191,14 +191,14 @@ public class WeChatController extends Controller {
 
         if (is_update) {
             // TODO 消息队列通知计算账单和分成
-            this.payChange(trade.getTrade_id(), getRequest_app_id());
+            this.payChange(trade.getTrade_id());
             renderSuccessJson("订单支付成功");
         } else {
             throw new RuntimeException("订单支付失败");
         }
     }
 
-    private void payChange(String trade_id, String request_app_id) {
+    private void payChange(String trade_id) {
         Trade trade = tradeService.findByTrade_id(trade_id);
 
         String user_id = trade.getUser_id();
@@ -249,9 +249,9 @@ public class WeChatController extends Controller {
         tradeMemberBill.setBill_flow(BillFlow.COMPLETE.getKey());
         tradeMemberBill.setBill_status(true);
 
-        tradeMemberBill.setSystem_create_user_id(request_app_id);
+        tradeMemberBill.setSystem_create_user_id("");
         tradeMemberBill.setSystem_create_time(new Date());
-        tradeMemberBill.setSystem_update_user_id(request_app_id);
+        tradeMemberBill.setSystem_update_user_id("");
         tradeMemberBill.setSystem_update_time(new Date());
         tradeMemberBill.setSystem_version(0);
         tradeMemberBill.setSystem_status(true);
@@ -272,9 +272,9 @@ public class WeChatController extends Controller {
                 bill.setBill_flow(BillFlow.COMPLETE.getKey());
                 bill.setBill_status(true);
 
-                bill.setSystem_create_user_id(request_app_id);
+                bill.setSystem_create_user_id("");
                 bill.setSystem_create_time(new Date());
-                bill.setSystem_update_user_id(request_app_id);
+                bill.setSystem_update_user_id("");
                 bill.setSystem_update_time(new Date());
                 bill.setSystem_version(0);
                 bill.setSystem_status(true);
@@ -306,9 +306,9 @@ public class WeChatController extends Controller {
                             // TODO
                             tradeCommossion.setProduct_sku_commission_amount(b.multiply(c));
 
-                            tradeCommossion.setSystem_create_user_id(request_app_id);
+                            tradeCommossion.setSystem_create_user_id("");
                             tradeCommossion.setSystem_create_time(new Date());
-                            tradeCommossion.setSystem_update_user_id(request_app_id);
+                            tradeCommossion.setSystem_update_user_id("");
                             tradeCommossion.setSystem_update_time(new Date());
                             tradeCommossion.setSystem_version(0);
                             tradeCommossion.setSystem_status(true);
@@ -325,9 +325,9 @@ public class WeChatController extends Controller {
                             // TODO
                             billCommission.setProduct_sku_commission_amount(b.multiply(c));
 
-                            billCommission.setSystem_create_user_id(request_app_id);
+                            billCommission.setSystem_create_user_id("");
                             billCommission.setSystem_create_time(new Date());
-                            billCommission.setSystem_update_user_id(request_app_id);
+                            billCommission.setSystem_update_user_id("");
                             billCommission.setSystem_update_time(new Date());
                             billCommission.setSystem_version(0);
                             billCommission.setSystem_status(true);
@@ -388,8 +388,10 @@ public class WeChatController extends Controller {
         parameter.put("trade_type", trade_type);
         parameter.put("transaction_id", transaction_id);
 
+        String[] out_trade_no_array = out_trade_no.split("_");
+
         // 根据订单号查询订单
-        Trade trade = tradeService.findByTrade_number(out_trade_no);
+        Trade trade = tradeService.findByTrade_id(out_trade_no_array[1]);
         if (trade == null) {
             renderText(Constant.WX_FAIL_MSG);
         }
@@ -420,7 +422,7 @@ public class WeChatController extends Controller {
 
             if (is_update) {
                 // TODO 消息队列通知计算账单和分成
-                this.payChange(trade.getTrade_id(), getRequest_app_id());
+                this.payChange(trade.getTrade_id());
                 renderText("");
             } else {
                 renderText(

@@ -503,4 +503,21 @@ public class Url {
     public static final String BILL_COMMISSION_SYSTEM_UPDATE = "/bill/commission/system/update";
     public static final String BILL_COMMISSION_SYSTEM_DELETE = "/bill/commission/system/delete";
 
+    // 供应商
+    public static final String SUPPLIER_LIST = "/supplier/list";
+    public static final String SUPPLIER_FIND = "/supplier/find";
+    public static final String SUPPLIER_SAVE = "/supplier/save";
+    public static final String SUPPLIER_UPDATE = "/supplier/update";
+    public static final String SUPPLIER_DELETE = "/supplier/delete";
+    public static final String SUPPLIER_ADMIN_LIST = "/supplier/admin/list";
+    public static final String SUPPLIER_ADMIN_FIND = "/supplier/admin/find";
+    public static final String SUPPLIER_ADMIN_SAVE = "/supplier/admin/save";
+    public static final String SUPPLIER_ADMIN_UPDATE = "/supplier/admin/update";
+    public static final String SUPPLIER_ADMIN_DELETE = "/supplier/admin/delete";
+    public static final String SUPPLIER_SYSTEM_LIST = "/supplier/system/list";
+    public static final String SUPPLIER_SYSTEM_FIND = "/supplier/system/find";
+    public static final String SUPPLIER_SYSTEM_SAVE = "/supplier/system/save";
+    public static final String SUPPLIER_SYSTEM_UPDATE = "/supplier/system/update";
+    public static final String SUPPLIER_SYSTEM_DELETE = "/supplier/system/delete";
+
 }

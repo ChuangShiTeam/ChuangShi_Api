@@ -55,7 +55,7 @@ public class GlobalActionInterceptor implements Interceptor {
                 request_user_id = jsonObject.getString(User.USER_ID);
             }
 
-            if (http_url.equals(Url.FILE_UPLOAD) || http_url.equals(Url.FILE_ADMIN_UPLOAD) || http_url.contains("/wechat/message")) {
+            if (http_url.equals(Url.FILE_UPLOAD) || http_url.equals(Url.FILE_ADMIN_UPLOAD) || http_url.contains("/wechat/")) {
 
             } else {
                 http_request = JSONObject.parseObject(HttpKit.readData(controller.getRequest()));
