@@ -20,6 +20,7 @@ import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberLevel;
 import com.nowui.chuangshi.model.Qrcode;
 import com.nowui.chuangshi.model.Stock;
+import com.nowui.chuangshi.model.StockProductSku;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.service.FileService;
@@ -312,8 +313,13 @@ public class MemberController extends Controller {
         
         User user = userService.findByUser_id(request_user_id);
         Member member = memberService.findByMember_id(user.getObject_Id());
+        List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
+        for (int j = 0; j < productSkuList.size(); j++) {
+            StockProductSku stockProductSku = productSkuList.getJSONObject(j).toJavaObject(StockProductSku.class);
+            stockProductSkuList.add(stockProductSku);
+        }
         Boolean result = stockService.out(member.getApp_id(), member.getMember_id(), StockType.MEMBER.getKey(), stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), stock.getStock_express_pay_way(), stock.getStock_express_shipper_code(),
-                productSkuList, request_user_id);
+        		stockProductSkuList, request_user_id);
         
         renderSuccessJson(result);
     }
@@ -417,8 +423,13 @@ public class MemberController extends Controller {
         authenticateApp_id(request_app_id);
         
         Member member = memberService.findByMember_id(member_id);
+        List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
+        for (int j = 0; j < productSkuList.size(); j++) {
+            StockProductSku stockProductSku = productSkuList.getJSONObject(j).toJavaObject(StockProductSku.class);
+            stockProductSkuList.add(stockProductSku);
+        }
         Boolean result = stockService.out(member.getApp_id(), member_id, StockType.MEMBER.getKey(), stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), stock.getStock_express_pay_way(), stock.getStock_express_shipper_code(),
-                productSkuList, request_user_id);
+        		stockProductSkuList, request_user_id);
         
         renderSuccessJson(result);
     }

@@ -11,6 +11,7 @@ import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.StockProductSku;
 import com.nowui.chuangshi.type.StockAction;
 import com.nowui.chuangshi.type.StockFlow;
+import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.Util;
 
 public class StockService extends Service {
@@ -143,19 +144,18 @@ public class StockService extends Service {
     }
     
     public Boolean out(String app_id, String object_id, String stock_type, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_express_pay_way, String stock_express_shipper_code,
-            JSONArray productSkuList, String system_create_user_id) {
+            List<StockProductSku> stockProductSkuList, String system_create_user_id) {
         
         Integer stock_quantity = 0;
         String stock_id = Util.getRandomUUID();
-        List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
-        
-        for (int j = 0; j < productSkuList.size(); j++) {
-            StockProductSku stockProductSku = productSkuList.getJSONObject(j).toJavaObject(StockProductSku.class);
-            //判断库存数量是否足够
-            Integer product_sku_stock_quantity = sumStock_quantityByObject_idAndProduct_sku_id(object_id, stockProductSku.getProduct_sku_id());
-            if (stockProductSku.getProduct_sku_quantity() > product_sku_stock_quantity) {
-                throw new RuntimeException("库存不足");
-            }
+        for (StockProductSku stockProductSku : stockProductSkuList) {
+            //判断会员库存数量是否足够
+        	if (StockType.MEMBER.getKey().equals(stock_type)) {
+        		Integer product_sku_stock_quantity = sumStock_quantityByObject_idAndProduct_sku_id(object_id, stockProductSku.getProduct_sku_id());
+                if (stockProductSku.getProduct_sku_quantity() > product_sku_stock_quantity) {
+                    throw new RuntimeException("库存不足");
+                }
+        	}
             stockProductSku.setStock_id(stock_id);
             stockProductSku.setSystem_create_user_id(system_create_user_id);
             stockProductSku.setSystem_create_time(new Date());

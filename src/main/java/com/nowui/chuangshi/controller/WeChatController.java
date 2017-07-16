@@ -13,7 +13,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.HttpKit;
-import com.jfinal.weixin.sdk.api.*;
+import com.jfinal.weixin.sdk.api.ApiConfigKit;
+import com.jfinal.weixin.sdk.api.ApiResult;
+import com.jfinal.weixin.sdk.api.MenuApi;
+import com.jfinal.weixin.sdk.api.SnsAccessToken;
+import com.jfinal.weixin.sdk.api.SnsAccessTokenApi;
+import com.jfinal.weixin.sdk.api.UserApi;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
@@ -22,6 +27,7 @@ import com.nowui.chuangshi.model.Bill;
 import com.nowui.chuangshi.model.BillCommission;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.ProductSkuCommission;
+import com.nowui.chuangshi.model.StockProductSku;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.model.TradeCommossion;
 import com.nowui.chuangshi.model.TradeProductSku;
@@ -31,6 +37,7 @@ import com.nowui.chuangshi.service.BillCommissionService;
 import com.nowui.chuangshi.service.BillService;
 import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.ProductSkuCommissionService;
+import com.nowui.chuangshi.service.StockService;
 import com.nowui.chuangshi.service.TradeCommossionService;
 import com.nowui.chuangshi.service.TradeProductSkuService;
 import com.nowui.chuangshi.service.TradeService;
@@ -38,6 +45,7 @@ import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.BillFlow;
 import com.nowui.chuangshi.type.BillType;
 import com.nowui.chuangshi.type.PayType;
+import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.HttpUtil;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
@@ -53,8 +61,9 @@ public class WeChatController extends Controller {
     private final TradeCommossionService tradeCommossionService = new TradeCommossionService();
     private final BillService billService = new BillService();
     private final ProductSkuCommissionService productSkuCommissionService = new ProductSkuCommissionService();
-    private UserService userService = new UserService();
-    private BillCommissionService billCommissionService = new BillCommissionService();
+    private final UserService userService = new UserService();
+    private final BillCommissionService billCommissionService = new BillCommissionService();
+    private final StockService stockService = new StockService();
 
     @ActionKey(Url.WECHAT_CONFIG)
     public void config() {
@@ -428,6 +437,8 @@ public class WeChatController extends Controller {
                  * MQUtil.sendSync("tradePay", trade.getTrade_id());
                  */
                 this.payChange(trade.getTrade_id(), getRequest_app_id());
+                
+                this.createStockOut(trade.getTrade_id());
                 renderText("");
             } else {
                 renderText(
@@ -437,6 +448,25 @@ public class WeChatController extends Controller {
         } else {
             renderText("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[]]></return_msg></xml>");
         }
+    }
+    
+    //生成发货单
+    private void createStockOut(String trade_id) {
+    	Trade trade = tradeService.findByTrade_id(trade_id);
+    	
+    	List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(trade_id);
+    	List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
+    	
+    	for (TradeProductSku tradeProductSku : tradeProductSkuList) {
+    		StockProductSku stockProductSku = new StockProductSku();
+    		stockProductSku.setProduct_sku_id(tradeProductSku.getProduct_sku_id());
+    		stockProductSku.setProduct_sku_quantity(tradeProductSku.getProduct_sku_quantity());
+    		stockProductSkuList.add(stockProductSku);
+    	}
+
+    	
+    	//TODO 快递支付方式、快递公司编码
+    	stockService.out(trade.getApp_id(), trade_id, StockType.TRADE.getKey(), trade.getTrade_receiver_name(), trade.getTrade_receiver_mobile(), trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(), trade.getTrade_receiver_address(), "", "", stockProductSkuList, trade.getSystem_create_user_id());
     }
 
 }
