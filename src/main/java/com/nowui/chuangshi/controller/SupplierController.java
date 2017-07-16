@@ -216,7 +216,7 @@ public class SupplierController extends Controller {
         JSONArray product_list = jsonObject.getJSONArray("product_list");
         for (int j = 0; j < product_list.size(); j++) {
             StockProductSku stockProductSku = product_list.getJSONObject(j).toJavaObject(StockProductSku.class);
-            stockProductSkuList.add(stockProductSku);
+            //stockProductSkuList.add(stockProductSku);
         }
 
         renderSuccessJson(result);

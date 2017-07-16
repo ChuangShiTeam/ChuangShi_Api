@@ -13,8 +13,6 @@ public class SupplierProductDao extends Dao {
 
     public Integer countByApp_idOrLikeSupplier_product_name(String app_id, String supplier_product_name) {
         Kv sqlMap = Kv.create();
-        sqlMap.put(SupplierProduct.APP_ID, app_id);
-        sqlMap.put(SupplierProduct.SUPPLIER_PRODUCT_NAME, supplier_product_name);
         SqlPara sqlPara = Db.getSqlPara("supplier_product.countByApp_idOrLikeSupplier_product_name", sqlMap);
 
         logSql("supplier_product", "countByApp_idOrLikeSupplier_product_name", sqlPara);
@@ -25,8 +23,6 @@ public class SupplierProductDao extends Dao {
 
     public Integer countByOrApp_idOrLikeSupplier_product_name(String app_id, String supplier_product_name) {
         Kv sqlMap = Kv.create();
-        sqlMap.put(SupplierProduct.APP_ID, app_id);
-        sqlMap.put(SupplierProduct.SUPPLIER_PRODUCT_NAME, supplier_product_name);
         SqlPara sqlPara = Db.getSqlPara("supplier_product.countByOrApp_idOrLikeSupplier_product_name", sqlMap);
 
         logSql("supplier_product", "countByOrApp_idOrLikeSupplier_product_name", sqlPara);
@@ -37,7 +33,6 @@ public class SupplierProductDao extends Dao {
 
     public List<SupplierProduct> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         Kv sqlMap = Kv.create();
-        sqlMap.put(SupplierProduct.APP_ID, app_id);
         sqlMap.put(SupplierProduct.SYSTEM_CREATE_TIME, system_create_time);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
@@ -50,8 +45,6 @@ public class SupplierProductDao extends Dao {
 
     public List<SupplierProduct> listByApp_idOrLikeSupplier_product_nameAndLimit(String app_id, String supplier_product_name, int m, int n) {
         Kv sqlMap = Kv.create();
-        sqlMap.put(SupplierProduct.APP_ID, app_id);
-        sqlMap.put(SupplierProduct.SUPPLIER_PRODUCT_NAME, supplier_product_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("supplier_product.listByApp_idOrLikeSupplier_product_nameAndLimit", sqlMap);
@@ -63,8 +56,6 @@ public class SupplierProductDao extends Dao {
 
     public List<SupplierProduct> listByOrApp_idOrLikeSupplier_product_nameAndLimit(String app_id, String supplier_product_name, int m, int n) {
         Kv sqlMap = Kv.create();
-        sqlMap.put(SupplierProduct.APP_ID, app_id);
-        sqlMap.put(SupplierProduct.SUPPLIER_PRODUCT_NAME, supplier_product_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
         SqlPara sqlPara = Db.getSqlPara("supplier_product.listByOrApp_idOrLikeSupplier_product_nameAndLimit", sqlMap);
@@ -76,7 +67,6 @@ public class SupplierProductDao extends Dao {
 
     public SupplierProduct findBySupplier_product_id(String supplier_product_id) {
         Kv sqlMap = Kv.create();
-        sqlMap.put(SupplierProduct.SUPPLIER_PRODUCT_ID, supplier_product_id);
         SqlPara sqlPara = Db.getSqlPara("supplier_product.findBySupplier_product_id", sqlMap);
 
         logSql("supplier_product", "findBySupplier_product_id", sqlPara);
@@ -108,7 +98,6 @@ public class SupplierProductDao extends Dao {
 
     public Boolean update(String supplier_product_id, String supplier_id, String product_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
-        sqlMap.put(SupplierProduct.SUPPLIER_PRODUCT_ID, supplier_product_id);
         sqlMap.put(SupplierProduct.SUPPLIER_ID, supplier_id);
         sqlMap.put(SupplierProduct.PRODUCT_ID, product_id);
         sqlMap.put(SupplierProduct.SYSTEM_UPDATE_USER_ID, system_update_user_id);
@@ -123,7 +112,6 @@ public class SupplierProductDao extends Dao {
 
     public Boolean deleteBySupplier_product_idAndSystem_version(String supplier_product_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
-        sqlMap.put(SupplierProduct.SUPPLIER_PRODUCT_ID, supplier_product_id);
         sqlMap.put(SupplierProduct.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(SupplierProduct.SYSTEM_UPDATE_TIME, new Date());
         sqlMap.put(SupplierProduct.SYSTEM_VERSION, system_version);

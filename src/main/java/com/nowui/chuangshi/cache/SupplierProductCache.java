@@ -26,7 +26,7 @@ public class SupplierProductCache extends Cache {
         List<SupplierProduct> supplier_productList = supplierProductDao.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n);
 
         for (SupplierProduct supplier_product : supplier_productList) {
-            supplier_product.put(findBySupplier_product_id(supplier_product.getSupplier_product_id()));
+            supplier_product.put(findBySupplier_product_id(""));
         }
 
         return supplier_productList;
@@ -36,7 +36,7 @@ public class SupplierProductCache extends Cache {
         List<SupplierProduct> supplier_productList = supplierProductDao.listByApp_idOrLikeSupplier_product_nameAndLimit(app_id, supplier_product_name, m, n);
 
         for (SupplierProduct supplier_product : supplier_productList) {
-            supplier_product.put(findBySupplier_product_id(supplier_product.getSupplier_product_id()));
+            supplier_product.put(findBySupplier_product_id(""));
         }
 
         return supplier_productList;
@@ -46,7 +46,7 @@ public class SupplierProductCache extends Cache {
         List<SupplierProduct> supplier_productList = supplierProductDao.listByOrApp_idOrLikeSupplier_product_nameAndLimit(app_id, supplier_product_name, m, n);
 
         for (SupplierProduct supplier_product : supplier_productList) {
-            supplier_product.put(findBySupplier_product_id(supplier_product.getSupplier_product_id()));
+            supplier_product.put(findBySupplier_product_id(""));
         }
 
         return supplier_productList;
