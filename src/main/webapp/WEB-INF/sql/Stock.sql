@@ -433,6 +433,7 @@
 	LEFT JOIN table_express ON table_express.stock_id = table_stock.stock_id
 	WHERE 
 	 table_stock.system_status = 1
+	 AND table_stock.stock_action = 'OUT'
      AND table_stock.object_id = #p(object_id)
     LIMIT #p(m), #p(n)
   #end

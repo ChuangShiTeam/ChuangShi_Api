@@ -3,7 +3,7 @@
   #sql("countByApp_idOrLikeUser_name")
     SELECT COUNT(*) FROM table_member
     #if(user_name)
-    LEFT JOIN table_user ON table_user.user_id = table_admin.user_id
+    LEFT JOIN table_user ON table_user.user_id = table_member.user_id
     #end
     WHERE table_member.system_status = 1
     AND table_member.app_id = #p(app_id)
@@ -16,7 +16,7 @@
   #sql("countByOrApp_idOrLikeUser_name")
     SELECT COUNT(*) FROM table_member
     #if(user_name)
-    LEFT JOIN table_user ON table_user.user_id = table_admin.user_id
+    LEFT JOIN table_user ON table_user.user_id = table_member.user_id
     #end
     WHERE table_member.system_status = 1
     #if(app_id)
@@ -56,7 +56,7 @@
     member_id
     FROM table_member
     #if(user_name)
-    LEFT JOIN table_user ON table_user.user_id = table_admin.user_id
+    LEFT JOIN table_user ON table_user.user_id = table_member.user_id
     #end
     WHERE table_member.system_status = 1
     AND table_member.app_id = #p(app_id)
@@ -93,7 +93,7 @@
     member_id
     FROM table_member
     #if(user_name)
-    LEFT JOIN table_user ON table_user.user_id = table_admin.user_id
+    LEFT JOIN table_user ON table_user.user_id = table_member.user_id
     #end
     WHERE table_member.system_status = 1
     #if(app_id)

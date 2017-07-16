@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.alibaba.fastjson.JSONArray;
 import com.jfinal.plugin.activerecord.Record;
 import com.nowui.chuangshi.cache.StockCache;
@@ -152,7 +154,11 @@ public class StockService extends Service {
         
         Integer stock_quantity = 0;
         String stock_id = Util.getRandomUUID();
+        List<StockProductSku> list = new ArrayList<StockProductSku>();
         for (StockProductSku stockProductSku : stockProductSkuList) {
+        	if (StringUtils.isBlank(stockProductSku.getProduct_sku_id()) || stockProductSku.getProduct_sku_quantity() == null) {
+        		throw new RuntimeException("商品sku或数量不能为空");
+        	}
             //判断会员库存数量是否足够
         	if (StockType.MEMBER.getKey().equals(stock_type)) {
         		Integer product_sku_stock_quantity = sumStock_quantityByObject_idAndProduct_sku_id(object_id, stockProductSku.getProduct_sku_id());
@@ -169,11 +175,11 @@ public class StockService extends Service {
             stockProductSku.setSystem_status(true);
             
             stock_quantity += stockProductSku.getProduct_sku_quantity();
-            stockProductSkuList.add(stockProductSku);
+            list.add(stockProductSku);
         }
         Boolean result = stockCache.save(stock_id, app_id, object_id, stock_type, stock_quantity, stock_receiver_name, stock_receiver_mobile, stock_receiver_province, stock_receiver_city, stock_receiver_area, stock_receiver_address, StockAction.OUT.getKey(), StockFlow.WAIT_SEND.getKey(), stock_express_pay_way, stock_express_shipper_code, false, "", system_create_user_id);
         if (result) {
-            stockProductSkuService.batchSave(stockProductSkuList);
+            stockProductSkuService.batchSave(list);
         }
         return result;
     }
