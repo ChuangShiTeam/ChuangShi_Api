@@ -297,7 +297,7 @@ public class MemberController extends Controller {
     @ActionKey(Url.MEMBER_SEND)
     public void send() {
         validateRequest_app_id();
-        validate(Stock.STOCK_RECEIVER_NAME, Stock.STOCK_RECEIVER_ADDRESS, Stock.STOCK_RECEIVER_AREA, Stock.STOCK_RECEIVER_CITY, Stock.STOCK_RECEIVER_MOBILE, Stock.STOCK_PRODUCT_SKU_LIST);
+        validate(Stock.STOCK_RECEIVER_NAME, Stock.STOCK_RECEIVER_PROVINCE, Stock.STOCK_RECEIVER_ADDRESS, Stock.STOCK_RECEIVER_AREA, Stock.STOCK_RECEIVER_CITY, Stock.STOCK_RECEIVER_MOBILE, Stock.STOCK_PRODUCT_SKU_LIST);
         
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
@@ -353,7 +353,7 @@ public class MemberController extends Controller {
     		map.put(Stock.STOCK_RECEIVER_CITY, record.get(Stock.STOCK_RECEIVER_CITY));
     		map.put(Stock.STOCK_RECEIVER_AREA, record.get(Stock.STOCK_RECEIVER_AREA));
     		map.put(Stock.STOCK_RECEIVER_ADDRESS, record.get(Stock.STOCK_RECEIVER_ADDRESS));
-    		map.put(Stock.STOCK_FLOW, record.get(Stock.STOCK_FLOW));
+    		map.put(Express.EXPRESS_FLOW, record.get(Express.EXPRESS_FLOW));
     		map.put(Express.EXPRESS_NO, record.get(Express.EXPRESS_NO));
     		map.put(Express.EXPRESS_SHIPPER_CODE, record.get(Express.EXPRESS_SHIPPER_CODE));
     		resultList.add(map);
@@ -363,8 +363,7 @@ public class MemberController extends Controller {
     	result.put("stock_list", resultList);
     	renderSuccessJson(result);
     }
-
-
+    
     @ActionKey(Url.MEMBER_ADMIN_LIST)
     public void adminList() {
         validateRequest_app_id();

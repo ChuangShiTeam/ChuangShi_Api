@@ -55,13 +55,15 @@ public class MemberStockController extends Controller {
         result.put(Stock.STOCK_EXPRESS_PAY_WAY, stock.getStock_express_pay_way());
         result.put(Stock.STOCK_RECEIVER_NAME, stock.getStock_receiver_name());
         result.put(Stock.STOCK_RECEIVER_MOBILE, stock.getStock_receiver_mobile());
+        result.put(Stock.STOCK_RECEIVER_PROVINCE, stock.getStock_receiver_province());
+        result.put(Stock.STOCK_RECEIVER_CITY, stock.getStock_receiver_city());
+        result.put(Stock.STOCK_RECEIVER_AREA, stock.getStock_receiver_area());
         result.put(Stock.STOCK_RECEIVER_ADDRESS, stock.getStock_receiver_address());
         result.put(Express.EXPRESS_FLOW, express_flow);
         result.put(Express.EXPRESS_LOGISTICS, express.getExpress_logistics());
         renderSuccessJson(result);
     }
-
-
+    
     @ActionKey(Url.MEMBER_STOCK_ADMIN_LIST)
     public void adminList() {
         validateRequest_app_id();

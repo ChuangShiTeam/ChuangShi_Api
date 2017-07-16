@@ -426,7 +426,8 @@
     SELECT
 		table_stock.*
 		table_express.express_no,
-		table_express.express_shipper_code
+		table_express.express_shipper_code,
+		table_express.express_flow
 	FROM
 		table_stock
 	LEFT JOIN table_express ON table_express.stock_id = table_stock.stock_id
