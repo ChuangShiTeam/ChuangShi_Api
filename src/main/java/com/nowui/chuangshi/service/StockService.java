@@ -11,6 +11,7 @@ import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.StockProductSku;
 import com.nowui.chuangshi.type.StockAction;
 import com.nowui.chuangshi.type.StockFlow;
+import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.Util;
 
 public class StockService extends Service {
@@ -46,6 +47,10 @@ public class StockService extends Service {
     public Integer sumStock_quantityByObject_idAndProduct_sku_id(String object_id, String product_sku_id) {
     	return stockCache.sumStock_quantityByObject_idAndProduct_sku_id(object_id, product_sku_id);
     }
+    
+    public Integer sumStock_quantityByObject_id(String object_id) {
+    	return stockCache.sumStock_quantityByObject_id(object_id);
+    }
 
     public List<Stock> listByApp_idAndStock_typeAndSystem_create_timeAndLimit(String app_id, String stock_type, Date system_create_time, int m, int n) {
         return stockCache.listByApp_idAndStock_typeAndSystem_create_timeAndLimit(app_id, stock_type, system_create_time, m, n);
@@ -73,6 +78,10 @@ public class StockService extends Service {
     
     public List<Record> listOutByOrApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(String app_id, String express_sender_name, String stock_receiver_name, String express_no, int m, int n) {
     	return stockCache.listOutByOrApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(app_id, express_sender_name, stock_receiver_name, express_no, m, n);
+    }
+    
+    public List<Record> listWithExpressByObject_id(String object_id, int m, int n) {
+    	return stockCache.listWithExpressByObject_id(object_id, m, n);
     }
     
     public Stock findByStock_id(String stock_id) {
@@ -135,19 +144,18 @@ public class StockService extends Service {
     }
     
     public Boolean out(String app_id, String object_id, String stock_type, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_express_pay_way, String stock_express_shipper_code,
-            JSONArray productSkuList, String system_create_user_id) {
+            List<StockProductSku> stockProductSkuList, String system_create_user_id) {
         
         Integer stock_quantity = 0;
         String stock_id = Util.getRandomUUID();
-        List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
-        
-        for (int j = 0; j < productSkuList.size(); j++) {
-            StockProductSku stockProductSku = productSkuList.getJSONObject(j).toJavaObject(StockProductSku.class);
-            //判断库存数量是否足够
-            Integer product_sku_stock_quantity = sumStock_quantityByObject_idAndProduct_sku_id(object_id, stockProductSku.getProduct_sku_id());
-            if (stockProductSku.getProduct_sku_quantity() > product_sku_stock_quantity) {
-                throw new RuntimeException("库存不足");
-            }
+        for (StockProductSku stockProductSku : stockProductSkuList) {
+            //判断会员库存数量是否足够
+        	if (StockType.MEMBER.getKey().equals(stock_type)) {
+        		Integer product_sku_stock_quantity = sumStock_quantityByObject_idAndProduct_sku_id(object_id, stockProductSku.getProduct_sku_id());
+                if (stockProductSku.getProduct_sku_quantity() > product_sku_stock_quantity) {
+                    throw new RuntimeException("库存不足");
+                }
+        	}
             stockProductSku.setStock_id(stock_id);
             stockProductSku.setSystem_create_user_id(system_create_user_id);
             stockProductSku.setSystem_create_time(new Date());

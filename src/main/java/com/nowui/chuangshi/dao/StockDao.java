@@ -111,6 +111,17 @@ public class StockDao extends Dao {
     	Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
     	return count.intValue();
     }
+    
+    public Integer sumStock_quantityByObject_id(String object_id) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Stock.OBJECT_ID, object_id);
+    	SqlPara sqlPara = Db.getSqlPara("stock.sumStock_quantityByObject_id", sqlMap);
+    	
+    	logSql("stock", "sumStock_quantityByObject_id", sqlPara);
+    	
+    	Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
+    	return count.intValue();
+    }
 
     public List<Stock> listByApp_idAndStock_typeAndSystem_create_timeAndLimit(String app_id, String stock_type, Date system_create_time, int m, int n) {
         Kv sqlMap = Kv.create();
@@ -189,7 +200,6 @@ public class StockDao extends Dao {
     public List<Record> listOutByApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(String app_id, String express_sender_name, String stock_receiver_name, String express_no, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Stock.APP_ID, app_id);
-        sqlMap.put(Stock.APP_ID, app_id);
         sqlMap.put(Express.EXPRESS_SENDER_NAME, express_sender_name);
         sqlMap.put(Stock.STOCK_RECEIVER_NAME, stock_receiver_name);
         sqlMap.put(Express.EXPRESS_NO, express_no);
@@ -205,7 +215,6 @@ public class StockDao extends Dao {
     public List<Record> listOutByOrApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(String app_id, String express_sender_name, String stock_receiver_name, String express_no, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Stock.APP_ID, app_id);
-        sqlMap.put(Stock.APP_ID, app_id);
         sqlMap.put(Express.EXPRESS_SENDER_NAME, express_sender_name);
         sqlMap.put(Stock.STOCK_RECEIVER_NAME, stock_receiver_name);
         sqlMap.put(Express.EXPRESS_NO, express_no);
@@ -214,6 +223,19 @@ public class StockDao extends Dao {
         SqlPara sqlPara = Db.getSqlPara("stock.listOutByOrApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no", sqlMap);
         
         logSql("stock", "listOutByOrApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no", sqlPara);
+        
+        return Db.find(sqlPara.getSql(), sqlPara.getPara());
+    }
+    
+    public List<Record> listWithExpressByObject_id(String object_id, int m, int n) {
+    	Kv sqlMap = Kv.create();
+        sqlMap.put(Stock.OBJECT_ID, object_id);
+        sqlMap.put(Constant.M, m);
+        sqlMap.put(Constant.N, n);
+        
+        SqlPara sqlPara = Db.getSqlPara("stock.listWithExpressByObject_id", sqlMap);
+        
+        logSql("stock", "listWithExpressByObject_id", sqlPara);
         
         return Db.find(sqlPara.getSql(), sqlPara.getPara());
     }
