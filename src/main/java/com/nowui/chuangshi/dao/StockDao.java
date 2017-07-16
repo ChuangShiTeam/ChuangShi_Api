@@ -154,7 +154,7 @@ public class StockDao extends Dao {
         return new Stock().find(sqlPara.getSql(), sqlPara.getPara());
     }
     
-    public List<Stock> listByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit(String app_id, String stock_type, String product_name, String user_name, int m, int n) {
+    public List<Record> listByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit(String app_id, String stock_type, String product_name, String user_name, int m, int n) {
     	Kv sqlMap = Kv.create();
     	sqlMap.put(Stock.APP_ID, app_id);
     	sqlMap.put(Stock.STOCK_TYPE, stock_type);
@@ -166,10 +166,10 @@ public class StockDao extends Dao {
     	
     	logSql("stock", "listByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit", sqlPara);
     	
-    	return new Stock().find(sqlPara.getSql(), sqlPara.getPara());
+    	return Db.find(sqlPara.getSql(), sqlPara.getPara());
     }
     
-    public List<Stock> listByOrApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit(String app_id, String stock_type, String product_name, String user_name, int m, int n) {
+    public List<Record> listByOrApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit(String app_id, String stock_type, String product_name, String user_name, int m, int n) {
     	Kv sqlMap = Kv.create();
     	sqlMap.put(Stock.APP_ID, app_id);
     	sqlMap.put(Stock.STOCK_TYPE, stock_type);
@@ -181,7 +181,7 @@ public class StockDao extends Dao {
     	
     	logSql("stock", "listByOrApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit", sqlPara);
     	
-    	return new Stock().find(sqlPara.getSql(), sqlPara.getPara());
+    	return Db.find(sqlPara.getSql(), sqlPara.getPara());
     }
     
     public List<Record> listOutByApp_idOrLikeExpress_sender_nameOrLikeStock_receiver_nameOrLikeExpress_no(String app_id, String express_sender_name, String stock_receiver_name, String express_no, int m, int n) {

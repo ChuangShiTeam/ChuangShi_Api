@@ -88,26 +88,55 @@
 	FROM
 		(
 			SELECT
-				table_stock.*
-			FROM
-				table_stock
-				LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
-				LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
+				IFNULL(
+					SUM(
+						CASE
+						WHEN table_stock.stock_action = 'OUT' THEN
+							- 1 * table_stock_product_sku.product_sku_quantity
+						ELSE
+							table_stock_product_sku.product_sku_quantity
+						END
+					),
+					0
+				) as sum_stock_quantity,	
 				#if(stock_type == 'MEMBER')
-				LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
-			    LEFT JOIN table_user ON table_member.user_id = table_user.user_id
-			    #end
-			    #if(stock_type == 'APP')
-			    LEFT JOIN table_app ON table_app.app_id = table_stock.object_id
-			    #end
-			WHERE
-				table_stock.system_status = 1
-				AND table_stock.app_id = #p(app_id)
-			    AND table_stock.stock_type = #p(stock_type)
-
-			GROUP BY
-				table_stock.object_id,
-				table_stock.product_sku_id
+				table_user.user_name,
+				#end
+				#if(stock_type == 'APP')
+				table_app.app_name,
+				#end
+				table_product.product_name
+			FROM
+				table_stock_product_sku 
+			LEFT JOIN table_stock on table_stock_product_sku.stock_id = table_stock.stock_id
+			LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock_product_sku.product_sku_id
+			LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
+			#if(stock_type == 'MEMBER')
+			LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
+		    LEFT JOIN table_user ON table_member.user_id = table_user.user_id
+		    #end
+		    #if(stock_type == 'APP')
+		    LEFT JOIN table_app ON table_app.app_id = table_stock.app_id
+		    #end
+			WHERE 
+			 table_stock_product_sku.system_status = 1
+		    AND table_stock.system_status = 1
+		    AND table_stock.app_id = #p(app_id)
+		    #if(stock_type == 'APP')
+		    AND (table_stock.stock_type = 'APP' OR table_stock.stock_type = 'TRADE')
+		    #end
+		    #if(stock_type == 'MEMBER')
+		    AND table_stock.stock_type = 'MEMBER'
+		    #end
+		    #if(product_name)
+		    #set(product_name = "%" + product_name + "%")
+		    AND table_product.product_name LIKE #p(product_name)
+		    #end
+		    #if(stock_type == 'MEMBER' && user_name)
+		    #set(user_name = "%" + user_name + "%")
+		    AND table_user.user_name LIKE #p(user_name)
+		    #end
+			GROUP BY table_stock.object_id, table_stock_product_sku.product_sku_id
 		) AS temp
   #end
   
@@ -117,20 +146,57 @@
 	FROM
 		(
 			SELECT
-				table_stock.*
+				IFNULL(
+					SUM(
+						CASE
+						WHEN table_stock.stock_action = 'OUT' THEN
+							- 1 * table_stock_product_sku.product_sku_quantity
+						ELSE
+							table_stock_product_sku.product_sku_quantity
+						END
+					),
+					0
+				) as sum_stock_quantity,	
+				#if(stock_type == 'MEMBER')
+				table_user.user_name,
+				#end
+				#if(stock_type == 'APP')
+				table_app.app_name,
+				#end
+				table_product.product_name
 			FROM
-				table_stock
-			WHERE
-				table_stock.system_status = 1
-				#if(app_id)
-			    AND table_stock.app_id = #p(app_id)
-			    #end
-			    #if(stock_type)
-			    AND table_stock.stock_type = #p(stock_type)
-			    #end
-			GROUP BY
-				table_stock.object_id,
-				table_stock.product_sku_id
+				table_stock_product_sku 
+			LEFT JOIN table_stock on table_stock_product_sku.stock_id = table_stock.stock_id
+			LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock_product_sku.product_sku_id
+			LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
+			#if(stock_type == 'MEMBER')
+			LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
+		    LEFT JOIN table_user ON table_member.user_id = table_user.user_id
+		    #end
+		    #if(stock_type == 'APP')
+		    LEFT JOIN table_app ON table_app.app_id = table_stock.app_id
+		    #end
+		    #if(stock_type == 'MEMBER')
+		    AND table_stock.stock_type = 'MEMBER'
+		    #end
+			WHERE 
+			 table_stock_product_sku.system_status = 1
+		    AND table_stock.system_status = 1
+		    #if(app_id)
+		    AND table_stock.app_id = #p(app_id)
+		    #end
+		    #if(stock_type == 'APP')
+		    AND (table_stock.stock_type = 'APP' OR table_stock.stock_type = 'TRADE')
+		    #end
+		    #if(product_name)
+		    #set(product_name = "%" + product_name + "%")
+		    AND table_product.product_name LIKE #p(product_name)
+		    #end
+		    #if(stock_type == 'MEMBER' && user_name)
+		    #set(user_name = "%" + user_name + "%")
+		    AND table_user.user_name LIKE #p(user_name)
+		    #end
+			GROUP BY table_stock.object_id, table_stock_product_sku.product_sku_id
 		) AS temp
   #end
 
@@ -198,13 +264,13 @@
 			SUM(
 				CASE
 				WHEN table_stock.stock_action = 'OUT' THEN
-					- 1 * table_stock.stock_quantity
+					- 1 * table_stock_product_sku.product_sku_quantity
 				ELSE
-					table_stock.stock_quantity
+					table_stock_product_sku.product_sku_quantity
 				END
 			),
 			0
-		) as sum_stock_quantity,
+		) as sum_stock_quantity,	
 		#if(stock_type == 'MEMBER')
 		table_user.user_name,
 		#end
@@ -213,29 +279,36 @@
 		#end
 		table_product.product_name
 	FROM
-		table_stock
-	LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
+		table_stock_product_sku 
+	LEFT JOIN table_stock on table_stock_product_sku.stock_id = table_stock.stock_id
+	LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock_product_sku.product_sku_id
 	LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
 	#if(stock_type == 'MEMBER')
 	LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
     LEFT JOIN table_user ON table_member.user_id = table_user.user_id
     #end
     #if(stock_type == 'APP')
-    LEFT JOIN table_app ON table_app.app_id = table_stock.object_id
+    LEFT JOIN table_app ON table_app.app_id = table_stock.app_id
     #end
 	WHERE 
-	 table_stock.system_status = 1
-	 AND table_stock.app_id = #p(app_id)
-     AND table_stock.stock_type = #p(stock_type)
-     #if(product_name)
-     #set(product_name = "%" + product_name + "%")
-     AND table_product.product_name LIKE #p(product_name)
-     #end
-     #if(stock_type == 'MEMBER' && user_name)
-     #set(user_name = "%" + user_name + "%")
-     AND table_user.user_name LIKE #p(user_name)
-     #end
-	 GROUP BY table_stock.object_id, table_stock.product_sku_id
+	 table_stock_product_sku.system_status = 1
+    AND table_stock.system_status = 1
+    AND table_stock.app_id = #p(app_id)
+    #if(stock_type == 'APP')
+    AND (table_stock.stock_type = 'APP' OR table_stock.stock_type = 'TRADE')
+    #end
+    #if(stock_type == 'MEMBER')
+    AND table_stock.stock_type = 'MEMBER'
+    #end
+    #if(product_name)
+    #set(product_name = "%" + product_name + "%")
+    AND table_product.product_name LIKE #p(product_name)
+    #end
+    #if(stock_type == 'MEMBER' && user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND table_user.user_name LIKE #p(user_name)
+    #end
+	GROUP BY table_stock.object_id, table_stock_product_sku.product_sku_id
     LIMIT #p(m), #p(n)
   #end
   
@@ -245,13 +318,13 @@
 			SUM(
 				CASE
 				WHEN table_stock.stock_action = 'OUT' THEN
-					- 1 * table_stock.stock_quantity
+					- 1 * table_stock_product_sku.product_sku_quantity
 				ELSE
-					table_stock.stock_quantity
+					table_stock_product_sku.product_sku_quantity
 				END
 			),
 			0
-		) as sum_stock_quantity,
+		) as sum_stock_quantity,	
 		#if(stock_type == 'MEMBER')
 		table_user.user_name,
 		#end
@@ -260,31 +333,38 @@
 		#end
 		table_product.product_name
 	FROM
-		table_stock
-	LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock.product_sku_id
+		table_stock_product_sku 
+	LEFT JOIN table_stock on table_stock_product_sku.stock_id = table_stock.stock_id
+	LEFT JOIN table_product_sku ON table_product_sku.product_sku_id = table_stock_product_sku.product_sku_id
 	LEFT JOIN table_product ON table_product.product_id = table_product_sku.product_id
 	#if(stock_type == 'MEMBER')
 	LEFT JOIN table_member ON table_member.member_id = table_stock.object_id
     LEFT JOIN table_user ON table_member.user_id = table_user.user_id
     #end
     #if(stock_type == 'APP')
-    LEFT JOIN table_app ON table_app.app_id = table_stock.object_id
+    LEFT JOIN table_app ON table_app.app_id = table_stock.app_id
     #end
 	WHERE 
-	 table_stock.system_status = 1
-	 #if(app_id)
-	 AND table_stock.app_id = #p(app_id)
-     #end
-     AND table_stock.stock_type = #p(stock_type)
-     #if(product_name)
-     #set(product_name = "%" + product_name + "%")
-     AND table_product.product_name LIKE #p(product_name)
-     #end
-     #if(stock_type == 'MEMBER' && user_name)
-     #set(user_name = "%" + user_name + "%")
-     AND table_user.user_name LIKE #p(user_name)
-     #end
-	 GROUP BY table_stock.object_id, table_stock.product_sku_id
+	 table_stock_product_sku.system_status = 1
+    AND table_stock.system_status = 1
+    #if(app_id)
+    AND table_stock.app_id = #p(app_id)
+    #end
+    #if(stock_type == 'APP')
+    AND (table_stock.stock_type = 'APP' OR table_stock.stock_type = 'TRADE')
+    #end
+    #if(stock_type == 'MEMBER')
+    AND table_stock.stock_type = 'MEMBER'
+    #end
+    #if(product_name)
+    #set(product_name = "%" + product_name + "%")
+    AND table_product.product_name LIKE #p(product_name)
+    #end
+    #if(stock_type == 'MEMBER' && user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND table_user.user_name LIKE #p(user_name)
+    #end
+	GROUP BY table_stock.object_id, table_stock_product_sku.product_sku_id
     LIMIT #p(m), #p(n)
   #end
   

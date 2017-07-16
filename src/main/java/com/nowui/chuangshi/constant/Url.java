@@ -63,6 +63,7 @@ public class Url {
     public static final String APP_STOCK_SYSTEM_SAVE = "/app/stock/system/save";
     public static final String APP_STOCK_SYSTEM_UPDATE = "/app/stock/system/update";
     public static final String APP_STOCK_SYSTEM_DELETE = "/app/stock/system/delete";
+    public static final String APP_STOCK_SYSTEM_STOCK_LIST = "/app/stock/system/stock/list";
     public static final String APP_STOCK_SYSTEM_REPLENISH = "/app/stock/system/replenish";
 
     public static final String CATEGORY_LIST = "/category/list";

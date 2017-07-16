@@ -16,6 +16,7 @@ import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.StockProductSku;
 import com.nowui.chuangshi.service.StockProductSkuService;
@@ -97,10 +98,15 @@ public class MemberStockController extends Controller {
     	authenticateRequest_app_idAndRequest_user_id();
     	
     	Integer total = stockService.countByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_id(request_app_id, StockType.MEMBER.getKey(), product_name, user_name);
-    	List<Stock> resultList = stockService.listByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit(request_app_id, StockType.MEMBER.getKey(), product_name, user_name, getM(), getN());
+    	List<Record> recordList = stockService.listByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit(request_app_id, StockType.MEMBER.getKey(), product_name, user_name, getM(), getN());
     	
-    	for (Stock result : resultList) {
-    		//result.keep(Stock.USER_NAME, Stock.PRODUCT_NAME, Stock.SUM_STOCK_QUANTITY);
+    	List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+    	for (Record record : recordList) {
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put(Stock.SUM_STOCK_QUANTITY, record.get(Stock.SUM_STOCK_QUANTITY));
+    		map.put(Stock.USER_NAME, record.get(Stock.USER_NAME));
+    		map.put(Product.PRODUCT_NAME, record.get(Product.PRODUCT_NAME));
+    		resultList.add(map);
     	}
     	
     	renderSuccessJson(total, resultList);
@@ -223,6 +229,33 @@ public class MemberStockController extends Controller {
     		map.put(Stock.STOCK_FLOW, record.get(Stock.STOCK_FLOW));
     		map.put(Express.EXPRESS_SENDER_NAME, record.get(Express.EXPRESS_SENDER_NAME));
     		map.put(Express.EXPRESS_NO, record.get(Express.EXPRESS_NO));
+    		resultList.add(map);
+    	}
+    	
+    	renderSuccessJson(total, resultList);
+    }
+    
+    @ActionKey(Url.MEMBER_STOCK_SYSTEM_STOCK_LIST)
+    public void systemStockList() {
+    	validateRequest_app_id();
+    	validate(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+    	
+    	JSONObject jsonObject = getParameterJSONObject();
+    	String app_id = jsonObject.getString("app_id");
+    	String user_name = jsonObject.getString("user_name");
+    	String product_name = jsonObject.getString("product_name");
+    	
+    	authenticateRequest_app_idAndRequest_user_id();
+    	
+    	Integer total = stockService.countByOrApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_id(app_id, StockType.MEMBER.getKey(), product_name, user_name);
+    	List<Record> recordList = stockService.listByOrApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit(app_id, StockType.MEMBER.getKey(), product_name, user_name, getM(), getN());
+    	
+    	List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+    	for (Record record : recordList) {
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put(Stock.SUM_STOCK_QUANTITY, record.get(Stock.SUM_STOCK_QUANTITY));
+    		map.put(Stock.USER_NAME, record.get(Stock.USER_NAME));
+    		map.put(Product.PRODUCT_NAME, record.get(Product.PRODUCT_NAME));
     		resultList.add(map);
     	}
     	

@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,15 +8,16 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.jfinal.plugin.activerecord.Record;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
+import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.StockProductSku;
 import com.nowui.chuangshi.service.StockProductSkuService;
 import com.nowui.chuangshi.service.StockService;
 import com.nowui.chuangshi.type.StockType;
-import com.nowui.chuangshi.util.Util;
 
 public class AppStockController extends Controller {
     
@@ -54,10 +56,15 @@ public class AppStockController extends Controller {
     	authenticateRequest_app_idAndRequest_user_id();
     	
     	Integer total = stockService.countByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_id(request_app_id, StockType.APP.getKey(), product_name, null);
-    	List<Stock> resultList = stockService.listByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit(request_app_id, StockType.APP.getKey(), product_name, null, getM(), getN());
+    	List<Record> recordList = stockService.listByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit(request_app_id, StockType.APP.getKey(), product_name, null, getM(), getN());
     	
-    	for (Stock result : resultList) {
-    		result.keep(Stock.SUM_STOCK_QUANTITY);
+    	List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+    	for (Record record : recordList) {
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put(Stock.SUM_STOCK_QUANTITY, record.get(Stock.SUM_STOCK_QUANTITY));
+    		map.put(Stock.APP_NAME, record.get(Stock.APP_NAME));
+    		map.put(Product.PRODUCT_NAME, record.get(Product.PRODUCT_NAME));
+    		resultList.add(map);
     	}
     	
     	renderSuccessJson(total, resultList);
@@ -142,6 +149,32 @@ public class AppStockController extends Controller {
         renderSuccessJson(total, resultList);
     }
     
+    @ActionKey(Url.APP_STOCK_SYSTEM_STOCK_LIST)
+    public void systemStockList() {
+    	validateRequest_app_id();
+    	validate(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+    	
+    	JSONObject jsonObject = getParameterJSONObject();
+    	String app_id = jsonObject.getString("app_id");
+    	String product_name = jsonObject.getString("product_name");
+    	
+    	authenticateRequest_app_idAndRequest_user_id();
+    	
+    	Integer total = stockService.countByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_id(app_id, StockType.APP.getKey(), product_name, null);
+    	List<Record> recordList = stockService.listByApp_idAndStock_typeOrLikeProduct_nameOrLikeUser_nameGroupByObject_idAndProduct_sku_idAndLimit(app_id, StockType.APP.getKey(), product_name, null, getM(), getN());
+    	
+    	List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+    	for (Record record : recordList) {
+    		Map<String, Object> map = new HashMap<String, Object>();
+    		map.put(Stock.SUM_STOCK_QUANTITY, record.get(Stock.SUM_STOCK_QUANTITY));
+    		map.put(Stock.APP_NAME, record.get(Stock.APP_NAME));
+    		map.put(Product.PRODUCT_NAME, record.get(Product.PRODUCT_NAME));
+    		resultList.add(map);
+    	}
+    	
+    	renderSuccessJson(total, resultList);
+    }
+    
     @ActionKey(Url.APP_STOCK_SYSTEM_REPLENISH)
     public void systemReplenish() {
         validateRequest_app_id();
@@ -178,36 +211,6 @@ public class AppStockController extends Controller {
         renderSuccessJson(stock);
     }
 
-    /*@ActionKey(Url.APP_STOCK_SYSTEM_SAVE)
-    public void systemSave() {
-        validateRequest_app_id();
-        validate(Stock.APP_ID, Stock.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.STOCK_STATUS);
-
-        Stock model = getModel(Stock.class);
-        String stock_id = Util.getRandomUUID();
-        String request_user_id = getRequest_user_id();
-        
-        JSONObject jsonObject = getParameterJSONObject();
-        String object_id = jsonObject.getString("app_id");
-
-        Boolean result = stockService.save(stock_id, model.getApp_id(), model.getProduct_sku_id(), object_id, StockType.APP.getKey(), model.getStock_quantity(), model.getStock_receiver_name(), model.getStock_receiver_mobile(), model.getStock_receiver_province(), model.getStock_receiver_city(), model.getStock_receiver_area(), model.getStock_receiver_address(), model.getStock_action(), model.getStock_flow(), model.getStock_is_pay(), model.getStock_status(), request_user_id);
-
-        renderSuccessJson(result);
-    }
-
-    @ActionKey(Url.APP_STOCK_SYSTEM_UPDATE)
-    public void systemUpdate() {
-        validateRequest_app_id();
-        validate(Stock.STOCK_ID, Stock.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Stock.STOCK_ACTION, Stock.STOCK_STATUS, Stock.SYSTEM_VERSION);
-
-        Stock model = getModel(Stock.class);
-        String request_user_id = getRequest_user_id();
-
-        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getProduct_sku_id(), model.getObject_id(), StockType.APP.getKey(), model.getStock_quantity(), model.getStock_receiver_name(), model.getStock_receiver_mobile(), model.getStock_receiver_province(), model.getStock_receiver_city(), model.getStock_receiver_area(), model.getStock_receiver_address(), model.getStock_action(), model.getStock_flow(), model.getStock_is_pay(), model.getStock_status(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
-    }
-*/
     @ActionKey(Url.APP_STOCK_SYSTEM_DELETE)
     public void systemDelete() {
         validateRequest_app_id();
