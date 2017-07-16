@@ -21,7 +21,6 @@ import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.StockService;
 import com.nowui.chuangshi.service.TradeService;
 import com.nowui.chuangshi.type.ExpressFlow;
-import com.nowui.chuangshi.type.StockFlow;
 import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.DateUtil;
 import com.nowui.chuangshi.util.Util;
@@ -186,8 +185,9 @@ public class ExpressController extends Controller {
 
 		if (result) {
 			// 更新发货单流程为待收货
-			stockService.updateStock_flowByStock_idValidateSystem_version(stock_id, StockFlow.WAIT_RECEIVE.getKey(),
-					request_user_id, stock.getSystem_version());
+			stockService.updateSend(stock_id, request_user_id);
+			//快递订阅
+			expressService.subscription(express_id, model.getExpress_shipper_code(), model.getExpress_no());
 		}
 		renderSuccessJson(result);
 	}

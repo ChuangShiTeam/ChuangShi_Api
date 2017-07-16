@@ -56,8 +56,8 @@ public class MemberStockController extends Controller {
         result.put(Stock.STOCK_RECEIVER_NAME, stock.getStock_receiver_name());
         result.put(Stock.STOCK_RECEIVER_MOBILE, stock.getStock_receiver_mobile());
         result.put(Stock.STOCK_RECEIVER_ADDRESS, stock.getStock_receiver_address());
-        result.put(Stock.STOCK_FLOW, stock.getStock_flow());
         result.put(Express.EXPRESS_FLOW, express_flow);
+        result.put(Express.EXPRESS_LOGISTICS, express.getExpress_logistics());
         renderSuccessJson(result);
     }
 

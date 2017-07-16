@@ -27,7 +27,7 @@ public class ExpressService extends Service {
      * @param expCode
      * @param expNo
      */
-    private void subscription(String express_id, String expCode, String expNo) {
+    public void subscription(String express_id, String expCode, String expNo) {
         String eBusinessID = Kdniao.EBusinessID;
         String appKey = Kdniao.AppKey;
         String reqURL = Kdniao.ReqURL;
@@ -166,7 +166,7 @@ public class ExpressService extends Service {
 			
 			Boolean isStatus = express.getExpress_status();
 
-			if (isStatus) {
+			if (!bean.getExpress_status() && isStatus) {
 				
 				stockService.updateFinish(bean.getStock_id());
 

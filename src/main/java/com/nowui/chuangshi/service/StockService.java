@@ -191,5 +191,18 @@ public class StockService extends Service {
 		
 	}
 
+	public void updateSend(String stock_id, String request_user_id) {
+		Stock stock = findByStock_id(stock_id);
+		Boolean flag = this.updateStock_flowByStock_idValidateSystem_version(stock_id, StockFlow.WAIT_RECEIVE.getKey(),
+				request_user_id, stock.getSystem_version());
+		if (flag) {
+			//更新订单为待收货
+			if (StockType.TRADE.getKey().equals(stock.getStock_type())) {
+				Trade trade = tradeService.findByTrade_id(stock.getObject_id());
+				tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade.getTrade_id(), TradeFlow.WAIT_RECEIVE.getKey(), request_user_id, trade.getSystem_version());
+			}
+		}
+	}
+
 
 }
