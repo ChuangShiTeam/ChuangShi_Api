@@ -190,7 +190,7 @@ public class StockService extends Service {
 		if (StockType.TRADE.getKey().equals(stock.getStock_type())) {
 			//更新订单状态
 			Trade trade = tradeService.findByTrade_id(stock.getObject_id());
-			tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade.getTrade_id(), TradeFlow.COMPLETE.getKey(), trade.getSystem_create_user_id(), trade.getSystem_version());
+			tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade.getTrade_id(), TradeFlow.COMPLETE.getKey(), "", trade.getSystem_version());
 		}
 		
 		this.updateStock_flowByStock_idValidateSystem_version(stock_id, StockFlow.COMPLETE.getKey(), stock.getSystem_create_user_id(), stock.getSystem_version());
