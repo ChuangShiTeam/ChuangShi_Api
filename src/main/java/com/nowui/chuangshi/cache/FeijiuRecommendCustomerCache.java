@@ -33,13 +33,7 @@ public class FeijiuRecommendCustomerCache extends Cache {
     }
 
     public List<FeijiuRecommendCustomer> listByApp_id(String app_id) {
-        List<FeijiuRecommendCustomer> feijiu_recommend_customerList = feijiuRecommendCustomerDao.listByApp_id(app_id);
-
-        for (FeijiuRecommendCustomer feijiu_recommend_customer : feijiu_recommend_customerList) {
-            feijiu_recommend_customer.put(findByCustomer_id(feijiu_recommend_customer.getCustomer_id()));
-        }
-
-        return feijiu_recommend_customerList;
+        return feijiuRecommendCustomerDao.listByApp_id(app_id);
     }
 
     public List<FeijiuRecommendCustomer> listByApp_idAndCustomer_nameAndLimit(String app_id, String customer_name, int m, int n) {

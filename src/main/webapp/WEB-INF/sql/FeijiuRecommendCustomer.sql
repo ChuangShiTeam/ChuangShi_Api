@@ -31,7 +31,7 @@
 
   #sql("listByApp_id")
     SELECT
-    customer_id
+    *
     FROM table_feijiu_recommend_customer
     WHERE system_status = 1
     AND app_id = #p(app_id)
