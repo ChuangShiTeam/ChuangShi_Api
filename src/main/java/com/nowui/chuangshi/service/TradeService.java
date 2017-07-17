@@ -135,7 +135,7 @@ public class TradeService extends Service {
         String nonce_str = Util.getRandomStringByLength(32);
         String notify_url = "http://api.chuangshi.nowui.com" + Url.WECHAT_NOTIFY;
         String openid = open_id;
-        String out_trade_no = "TRADE_" + trade.getTrade_id();
+        String out_trade_no = trade.getTrade_id();
         String spbill_create_ip = "0.0.0.0";
         DecimalFormat format = new DecimalFormat("0");
         String total_fee = format.format(trade.getTrade_total_amount().multiply(BigDecimal.valueOf(100)));
@@ -143,6 +143,7 @@ public class TradeService extends Service {
 
         SortedMap<String, String> parameter = new TreeMap<String, String>();
         parameter.put("appid", app_id);
+        // parameter.put("attach", "TRADE");
         parameter.put("body", body);
         parameter.put("mch_id", mch_id);
         parameter.put("nonce_str", nonce_str);

@@ -209,6 +209,26 @@ public class TradeController extends Controller {
         }
         renderSuccessJson(result);
     }
+    
+    @ActionKey(Url.TRADE_CONFIRM)
+    public void confirm() {
+        validateRequest_app_id();
+        validate(Trade.TRADE_ID);
+
+        Trade model = getModel(Trade.class);
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        Trade trade = tradeService.findByTrade_id(model.getTrade_id());
+
+        authenticateApp_id(trade.getApp_id());
+        //authenticateSystem_create_user_id(trade.getSystem_create_user_id());
+
+        trade.keep(Trade.TRADE_IS_PAY,Trade.TRADE_TOTAL_AMOUNT);
+
+        renderSuccessJson(trade);
+    }
+    
 
     @ActionKey(Url.TRADE_UPDATE)
     public void update() {

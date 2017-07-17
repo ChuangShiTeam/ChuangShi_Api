@@ -452,6 +452,7 @@ public class Url {
     public static final String TRADE_SYSTEM_UPDATE = "/trade/system/update";
     public static final String TRADE_SYSTEM_DELETE = "/trade/system/delete";
     public static final String TRADE_CHECK = "/trade/check";
+    public static final String TRADE_CONFIRM = "/trade/confirm";
 
     // 分成
     public static final String TRADE_COMMOSSION_LIST = "/trade/commossion/list";

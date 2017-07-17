@@ -364,6 +364,7 @@ public class WeChatController extends Controller {
         Map<String, String> map = PaymentKit.xmlToMap(result);
 
         String appid = (String) map.get("appid");
+        // String attach = (String) map.get("attach");
         String bank_type = (String) map.get("bank_type");
         String cash_fee = (String) map.get("cash_fee");
         String fee_type = (String) map.get("fee_type");
@@ -397,10 +398,8 @@ public class WeChatController extends Controller {
         parameter.put("trade_type", trade_type);
         parameter.put("transaction_id", transaction_id);
 
-        String[] out_trade_no_array = out_trade_no.split("_");
-
         // 根据订单号查询订单
-        Trade trade = tradeService.findByTrade_id(out_trade_no_array[1]);
+        Trade trade = tradeService.findByTrade_id(out_trade_no);
         if (trade == null) {
             renderText(Constant.WX_FAIL_MSG);
         }
