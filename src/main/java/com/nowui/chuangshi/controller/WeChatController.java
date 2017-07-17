@@ -461,7 +461,7 @@ public class WeChatController extends Controller {
 
     	
     	//TODO 快递支付方式、快递公司编码
-    	stockService.out(trade.getApp_id(), trade_id, StockType.TRADE.getKey(), trade.getTrade_receiver_name(), trade.getTrade_receiver_mobile(), trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(), trade.getTrade_receiver_address(), "", "", stockProductSkuList, trade.getSystem_create_user_id());
+    	stockService.out(trade.getApp_id(), trade_id, StockType.TRADE.getKey(), trade.getTrade_receiver_name(), trade.getTrade_receiver_mobile(), trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(), trade.getTrade_receiver_address(), "", "", stockProductSkuList, "");
     }
 
 }
