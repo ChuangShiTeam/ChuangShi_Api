@@ -332,7 +332,7 @@ public class ExpressController extends Controller {
 	                Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE,
 	                Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS,
 	                Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_START_DATE,
-	                Express.EXPRESS_END_DATE, Express.EXPRESS_LOGISTICS, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK,
+	                Express.EXPRESS_END_DATE, Express.EXPRESS_LOGISTICS, Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK,
 	                Express.SYSTEM_VERSION);
 		}
 
