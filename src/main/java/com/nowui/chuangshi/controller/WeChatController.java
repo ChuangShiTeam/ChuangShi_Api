@@ -434,14 +434,13 @@ public class WeChatController extends Controller {
                 this.payChange(trade.getTrade_id());
                 
                 this.createStockOut(trade.getTrade_id());
-                renderText("");
+                renderText(Constant.WX_SUCCESS_MSG);
             } else {
-                renderText(
-                        "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[]]></return_msg></xml>");
+                renderText(Constant.WX_FAIL_MSG);
             }
 
         } else {
-            renderText("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[]]></return_msg></xml>");
+            renderText(Constant.WX_FAIL_MSG);        
         }
     }
     
