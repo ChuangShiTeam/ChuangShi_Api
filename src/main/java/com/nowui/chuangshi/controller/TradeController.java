@@ -130,7 +130,8 @@ public class TradeController extends Controller {
             }
             result.put(Trade.TRADE_PRODUCT_SKU_LIST, tradeProductSkuList);
 
-            result.keep(Trade.TRADE_ID, Trade.TRADE_NUMBER, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_PRODUCT_SKU_LIST);
+            result.keep(Trade.TRADE_ID, Trade.TRADE_FLOW, Trade.TRADE_NUMBER, Trade.TRADE_PRODUCT_QUANTITY,
+                    Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_PRODUCT_SKU_LIST);
         }
 
         renderSuccessJson(resultList);
@@ -209,7 +210,7 @@ public class TradeController extends Controller {
         }
         renderSuccessJson(result);
     }
-    
+
     @ActionKey(Url.TRADE_CONFIRM)
     public void confirm() {
         validateRequest_app_id();
@@ -222,13 +223,12 @@ public class TradeController extends Controller {
         Trade trade = tradeService.findByTrade_id(model.getTrade_id());
 
         authenticateApp_id(trade.getApp_id());
-        //authenticateSystem_create_user_id(trade.getSystem_create_user_id());
+        // authenticateSystem_create_user_id(trade.getSystem_create_user_id());
 
-        trade.keep(Trade.TRADE_IS_PAY,Trade.TRADE_TOTAL_AMOUNT);
+        trade.keep(Trade.TRADE_IS_PAY, Trade.TRADE_TOTAL_AMOUNT);
 
         renderSuccessJson(trade);
     }
-    
 
     @ActionKey(Url.TRADE_UPDATE)
     public void update() {
@@ -432,8 +432,8 @@ public class TradeController extends Controller {
             throw new RuntimeException("该订单还没填写快递单！");
         }
 
-        Boolean result = tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade_id, TradeFlow.WAIT_RECEIVE.getKey(), request_user_id,
-                system_version);
+        Boolean result = tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade_id,
+                TradeFlow.WAIT_RECEIVE.getKey(), request_user_id, system_version);
 
         renderSuccessJson(result);
     }
@@ -447,7 +447,7 @@ public class TradeController extends Controller {
     public void addDelivery() {
         // TODO
     }
-    
+
     @ActionKey(Url.TRADE_PAY)
     public void pay() {
         validateRequest_app_id();
