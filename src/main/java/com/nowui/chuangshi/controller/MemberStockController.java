@@ -45,9 +45,11 @@ public class MemberStockController extends Controller {
         
         Express express = expressService.findByStock_id(model.getStock_id()); 
         String express_flow = stock.getStock_flow();
+        String express_logistics = null;
         
         if (express != null) {
         	express_flow = express.getExpress_flow();
+        	express_logistics = express.getExpress_logistics();
         }
         
         Map<String, Object> result = new HashMap<String, Object>();
@@ -60,7 +62,7 @@ public class MemberStockController extends Controller {
         result.put(Stock.STOCK_RECEIVER_AREA, stock.getStock_receiver_area());
         result.put(Stock.STOCK_RECEIVER_ADDRESS, stock.getStock_receiver_address());
         result.put(Express.EXPRESS_FLOW, express_flow);
-        result.put(Express.EXPRESS_LOGISTICS, express.getExpress_logistics());
+        result.put(Express.EXPRESS_LOGISTICS, express_logistics);
         renderSuccessJson(result);
     }
     
