@@ -432,6 +432,8 @@ public class WeChatController extends Controller {
             if (is_update) {
                 // TODO 消息队列通知计算账单和分成
                 this.payChange(trade.getTrade_id());
+                
+                this.createStockOut(trade.getTrade_id());
                 renderText("");
             } else {
                 renderText(
