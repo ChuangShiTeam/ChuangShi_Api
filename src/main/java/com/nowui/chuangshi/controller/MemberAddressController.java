@@ -43,7 +43,7 @@ public class MemberAddressController extends Controller {
 
     @ActionKey(Url.MEMBER_ADDRESS_FIND)
     public void find() {
-        validateRequest_app_id();
+        //validateRequest_app_id();
         validate(MemberAddress.MEMBER_ADDRESS_ID);
 
         MemberAddress model = getModel(MemberAddress.class);
@@ -53,9 +53,9 @@ public class MemberAddressController extends Controller {
         MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id());
 
         authenticateApp_id(member_address.getApp_id());
-        authenticateSystem_create_user_id(member_address.getSystem_create_user_id());
+        //authenticateSystem_create_user_id(member_address.getSystem_create_user_id());
 
-        member_address.keep(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.SYSTEM_VERSION);
+        //member_address.keep(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.SYSTEM_VERSION);
 
         renderSuccessJson(member_address);
     }
