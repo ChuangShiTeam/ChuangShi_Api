@@ -143,7 +143,7 @@ public class TradeService extends Service {
 
         SortedMap<String, String> parameter = new TreeMap<String, String>();
         parameter.put("appid", app_id);
-        // parameter.put("attach", "TRADE");
+        parameter.put("attach", "TRADE");
         parameter.put("body", body);
         parameter.put("mch_id", mch_id);
         parameter.put("nonce_str", nonce_str);

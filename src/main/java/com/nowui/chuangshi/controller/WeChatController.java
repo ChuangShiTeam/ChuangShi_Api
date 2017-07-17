@@ -364,7 +364,7 @@ public class WeChatController extends Controller {
         Map<String, String> map = PaymentKit.xmlToMap(result);
 
         String appid = (String) map.get("appid");
-        // String attach = (String) map.get("attach");
+        String attach = (String) map.get("attach");
         String bank_type = (String) map.get("bank_type");
         String cash_fee = (String) map.get("cash_fee");
         String fee_type = (String) map.get("fee_type");
@@ -383,6 +383,7 @@ public class WeChatController extends Controller {
 
         SortedMap<String, String> parameter = new TreeMap<String, String>();
         parameter.put("appid", appid);
+        parameter.put("attach", attach);
         parameter.put("bank_type", bank_type);
         parameter.put("cash_fee", cash_fee);
         parameter.put("fee_type", fee_type);
