@@ -113,6 +113,7 @@
     FROM table_member_address
     WHERE system_status = 1
     AND member_id = #p(member_id)
+    ORDER BY address_is_default DESC ,system_update_time DESC
   #end
 
   #sql("save")
