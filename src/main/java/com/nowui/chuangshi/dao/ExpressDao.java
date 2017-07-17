@@ -246,7 +246,7 @@ public class ExpressDao extends Dao {
     		return expressList.get(0);
     	}
     	
-    	return new Express();
+    	return null;
     }
 
 }
