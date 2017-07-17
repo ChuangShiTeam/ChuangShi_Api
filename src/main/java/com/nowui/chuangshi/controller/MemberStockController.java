@@ -44,12 +44,14 @@ public class MemberStockController extends Controller {
         authenticateApp_id(stock.getApp_id());
         
         Express express = expressService.findByStock_id(model.getStock_id()); 
-        String express_flow = stock.getStock_flow();
-        String express_logistics = null;
+        String express_flow = null;
+        JSONArray express_logistics = null;
         
         if (express != null) {
         	express_flow = express.getExpress_flow();
-        	express_logistics = express.getExpress_logistics();
+        	if (StringUtils.isNotBlank(express.getExpress_logistics())) {
+        	    express_logistics = JSONObject.parseArray(express.getExpress_logistics());
+        	}
         }
         
         Map<String, Object> result = new HashMap<String, Object>();
