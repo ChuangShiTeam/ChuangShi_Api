@@ -66,6 +66,8 @@ public class Constant {
 
     public static final String IS_SELECT = "is_select";
 
+    public static final String IS_CHILDREN = "is_children";
+
     public static final String ZERO = "0";
 
     public static final String ERROR_USER = "user is denied";
