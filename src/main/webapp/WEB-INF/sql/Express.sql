@@ -237,7 +237,7 @@
     AND system_version = #p(system_version)
   #end
   
-  #sql("updateExpress_flowAndExpress_statusAndexpress_tracesByExpress_idAndSystem_version")
+  #sql("updateExpress_flowAndExpress_statusAndExpress_tracesByExpress_idAndSystem_version")
     UPDATE table_express SET
     express_flow = #p(express_flow),
     express_status = #p(express_status),

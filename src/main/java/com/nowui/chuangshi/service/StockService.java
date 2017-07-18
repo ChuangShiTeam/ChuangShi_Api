@@ -253,7 +253,7 @@ public class StockService extends Service {
 		if (flag) {
 			//更新订单为待收货
 			if (StringUtils.isNotBlank(stock.getTrade_id())) {
-				Trade trade = tradeService.findByTrade_id(stock.getObject_id());
+				Trade trade = tradeService.findByTrade_id(stock.getTrade_id());
 				tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade.getTrade_id(), TradeFlow.WAIT_RECEIVE.getKey(), request_user_id, trade.getSystem_version());
 			}
 		}
