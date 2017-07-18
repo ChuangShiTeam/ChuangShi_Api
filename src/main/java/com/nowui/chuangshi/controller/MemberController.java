@@ -246,10 +246,12 @@ public class MemberController extends Controller {
         validate(Member.MEMBER_ID);
 
         Member model = getModel(Member.class);
+        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
         Member member = memberService.findByMember_id(model.getMember_id());
+        Member parentMember = memberService.findByUser_id(request_user_id);
 
         authenticateApp_id(member.getApp_id());
 
@@ -265,7 +267,9 @@ public class MemberController extends Controller {
         }
         member.put(MemberLevel.MEMBER_LEVEL_NAME, member_level_name);
 
-        member.keep(Member.MEMBER_ID, User.USER_NAME, User.USER_AVATAR, MemberLevel.MEMBER_LEVEL_NAME, Member.MEMBER_STATUS);
+        member.keep(Member.MEMBER_ID, Member.MEMBER_PARENT_ID, User.USER_NAME, User.USER_AVATAR, MemberLevel.MEMBER_LEVEL_NAME, Member.MEMBER_STATUS);
+
+        member.put(Constant.IS_CHILDREN, member.getMember_parent_id().equals(parentMember.getMember_id()));
 
         renderSuccessJson(member);
     }

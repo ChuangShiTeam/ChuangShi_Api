@@ -157,6 +157,15 @@ public class MemberCache extends Cache {
 
         if (result) {
             CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
+
+            Member member = findByMember_id(member_id);
+            JSONArray jsonArray = JSONArray.parseArray(member.getMember_parent_path());
+            for (int i = 0; i < jsonArray.size(); i++) {
+                String member_parent_path_member_id = jsonArray.getString(i);
+                if (!member_parent_path_member_id.equals(Constant.PARENT_ID)) {
+                    CacheUtil.remove(MEMBER_LIST_BY_MEMBER_PARENT_ID_CACHE, member_parent_path_member_id);
+                }
+            }
         }
 
         return result;
