@@ -11,6 +11,9 @@ public class Stock extends Model<Stock> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用id")
     public static final String APP_ID = "app_id";
 
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "订单id")
+    public static final String TRADE_ID = "trade_id";
+
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "公司id或会员id")
     public static final String OBJECT_ID = "object_id";
 
@@ -19,37 +22,43 @@ public class Stock extends Model<Stock> {
 
     @Column(type = ColumnType.INT, length = 5, comment = "数量")
     public static final String STOCK_QUANTITY = "stock_quantity";
-    
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "发货人id")
+    public static final String STOCK_SENDER_USER_ID = "stock_sender_user_id";
+
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "收货人id")
+    public static final String STOCK_RECIEVER_USER_ID = "stock_reciever_user_id";
+
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "收货人")
     public static final String STOCK_RECEIVER_NAME = "stock_receiver_name";
 
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "收货人手机号码")
     public static final String STOCK_RECEIVER_MOBILE = "stock_receiver_mobile";
 
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "收货人省")
     public static final String STOCK_RECEIVER_PROVINCE = "stock_receiver_province";
 
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "收货人市")
     public static final String STOCK_RECEIVER_CITY = "stock_receiver_city";
 
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "收货人地区")
     public static final String STOCK_RECEIVER_AREA = "stock_receiver_area";
 
-    @Column(type = ColumnType.VARCHAR, length = 100, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 100, comment = "收货人地址")
     public static final String STOCK_RECEIVER_ADDRESS = "stock_receiver_address";
 
     @Column(type = ColumnType.VARCHAR, length = 25, comment = "出库或入库")
     public static final String STOCK_ACTION = "stock_action";
-    
+
     @Column(type = ColumnType.VARCHAR, length = 25, comment = "发货流程")
     public static final String STOCK_FLOW = "stock_flow";
-    
+
     @Column(type = ColumnType.VARCHAR, length = 20, comment = "快递支付方式")
     public static final String STOCK_EXPRESS_PAY_WAY = "stock_express_pay_way";
 
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "快递公司编码")
     public static final String STOCK_EXPRESS_SHIPPER_CODE = "stock_express_shipper_code";
-    
+
     @Column(type = ColumnType.TINYINT, length = 1, comment = "是否支付")
     public static final String STOCK_IS_PAY = "stock_is_pay";
 
@@ -57,13 +66,17 @@ public class Stock extends Model<Stock> {
     public static final String STOCK_STATUS = "stock_status";
     
     public static final String APP_NAME = "app_name";
+    
     public static final String USER_NAME = "user_name";
+    
     public static final String STOCK_PRODUCT_SKU_LIST = "stock_product_sku_list";
-    public static final String MEMBER_ID_LIST = "member_id_list";
+    
     public static final String SUM_STOCK_QUANTITY = "sum_stock_quantity";
     
     private String app_name;
+    
     private String user_name;
+    
     private Integer sum_stock_quantity;
 
     public String getStock_id() {
@@ -80,6 +93,14 @@ public class Stock extends Model<Stock> {
 
     public void setApp_id(String app_id) {
         set(APP_ID, app_id);
+    }
+
+    public String getTrade_id() {
+        return getStr(TRADE_ID);
+    }
+
+    public void setTrade_id(String trade_id) {
+        set(TRADE_ID, trade_id);
     }
 
     public String getObject_id() {
@@ -105,7 +126,23 @@ public class Stock extends Model<Stock> {
     public void setStock_quantity(Integer stock_quantity) {
         set(STOCK_QUANTITY, stock_quantity);
     }
-    
+
+    public String getStock_sender_user_id() {
+        return getStr(STOCK_SENDER_USER_ID);
+    }
+
+    public void setStock_sender_user_id(String stock_sender_user_id) {
+        set(STOCK_SENDER_USER_ID, stock_sender_user_id);
+    }
+
+    public String getStock_reciever_user_id() {
+        return getStr(STOCK_RECIEVER_USER_ID);
+    }
+
+    public void setStock_reciever_user_id(String stock_reciever_user_id) {
+        set(STOCK_RECIEVER_USER_ID, stock_reciever_user_id);
+    }
+
     public String getStock_receiver_name() {
         return getStr(STOCK_RECEIVER_NAME);
     }
@@ -161,7 +198,7 @@ public class Stock extends Model<Stock> {
     public void setStock_action(String stock_action) {
         set(STOCK_ACTION, stock_action);
     }
-    
+
     public String getStock_flow() {
         return getStr(STOCK_FLOW);
     }
@@ -169,7 +206,7 @@ public class Stock extends Model<Stock> {
     public void setStock_flow(String stock_flow) {
         set(STOCK_FLOW, stock_flow);
     }
-    
+
     public String getStock_express_pay_way() {
         return getStr(STOCK_EXPRESS_PAY_WAY);
     }

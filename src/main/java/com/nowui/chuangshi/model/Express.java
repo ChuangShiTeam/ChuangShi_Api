@@ -13,23 +13,14 @@ public class Express extends Model<Express> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用id")
     public static final String APP_ID = "app_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "库存出库id")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
     public static final String STOCK_ID = "stock_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "收货用户id")
-    public static final String EXPRESS_RECEIVER_USER_ID = "express_receiver_user_id";
-
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "发货用户id")
-    public static final String EXPRESS_SENDER_USER_ID = "express_sender_user_id";
-
-    @Column(type = ColumnType.VARCHAR, length = 50, comment = "快递公司编码")
+    @Column(type = ColumnType.VARCHAR, length = 10, comment = "快递公司编码")
     public static final String EXPRESS_SHIPPER_CODE = "express_shipper_code";
 
-    @Column(type = ColumnType.VARCHAR, length = 100, comment = "快递单号")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "快递单号")
     public static final String EXPRESS_NO = "express_no";
-
-    @Column(type = ColumnType.VARCHAR, length = 25, comment = "快递类型")
-    public static final String EXPRESS_TYPE = "express_type";
 
     @Column(type = ColumnType.VARCHAR, length = 100, comment = "收货公司")
     public static final String EXPRESS_RECEIVER_COMPANY = "express_receiver_company";
@@ -91,21 +82,15 @@ public class Express extends Model<Express> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "运费是否支付")
     public static final String EXPRESS_IS_PAY = "express_is_pay";
 
-    @Column(type = ColumnType.VARCHAR, length = 50, comment = "运费支付方式")
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "运费支付方式")
     public static final String EXPRESS_PAY_WAY = "express_pay_way";
 
-    @Column(type = ColumnType.DATETIME, length = 0, comment = "快递发货时间")
-    public static final String EXPRESS_START_DATE = "express_start_date";
-
-    @Column(type = ColumnType.DATETIME, length = 0, comment = "快递取货时间")
-    public static final String EXPRESS_END_DATE = "express_end_date";
-
     @Column(type = ColumnType.LONGTEXT, length = 429496729, comment = "物流信息")
-    public static final String EXPRESS_LOGISTICS = "express_logistics";
+    public static final String EXPRESS_TRACES = "express_traces";
 
-    @Column(type = ColumnType.VARCHAR, length = 25, comment = "物流流程")
+    @Column(type = ColumnType.VARCHAR, length = 25, comment = "状态")
     public static final String EXPRESS_FLOW = "express_flow";
-    
+
     @Column(type = ColumnType.TINYINT, length = 1, comment = "")
     public static final String EXPRESS_STATUS = "express_status";
 
@@ -136,22 +121,6 @@ public class Express extends Model<Express> {
         set(STOCK_ID, stock_id);
     }
 
-    public String getExpress_receiver_user_id() {
-        return getStr(EXPRESS_RECEIVER_USER_ID);
-    }
-
-    public void setExpress_receiver_user_id(String express_receiver_user_id) {
-        set(EXPRESS_RECEIVER_USER_ID, express_receiver_user_id);
-    }
-
-    public String getExpress_sender_user_id() {
-        return getStr(EXPRESS_SENDER_USER_ID);
-    }
-
-    public void setExpress_sender_user_id(String express_sender_user_id) {
-        set(EXPRESS_SENDER_USER_ID, express_sender_user_id);
-    }
-
     public String getExpress_shipper_code() {
         return getStr(EXPRESS_SHIPPER_CODE);
     }
@@ -166,14 +135,6 @@ public class Express extends Model<Express> {
 
     public void setExpress_no(String express_no) {
         set(EXPRESS_NO, express_no);
-    }
-
-    public String getExpress_type() {
-        return getStr(EXPRESS_TYPE);
-    }
-
-    public void setExpress_type(String express_type) {
-        set(EXPRESS_TYPE, express_type);
     }
 
     public String getExpress_receiver_company() {
@@ -344,28 +305,12 @@ public class Express extends Model<Express> {
         set(EXPRESS_PAY_WAY, express_pay_way);
     }
 
-    public String getExpress_start_date() {
-        return getStr(EXPRESS_START_DATE);
+    public String getExpress_traces() {
+        return getStr(EXPRESS_TRACES);
     }
 
-    public void setExpress_start_date(String express_start_date) {
-        set(EXPRESS_START_DATE, express_start_date);
-    }
-
-    public String getExpress_end_date() {
-        return getStr(EXPRESS_END_DATE);
-    }
-
-    public void setExpress_end_date(String express_end_date) {
-        set(EXPRESS_END_DATE, express_end_date);
-    }
-
-    public String getExpress_logistics() {
-        return getStr(EXPRESS_LOGISTICS);
-    }
-
-    public void setExpress_logistics(String express_logistics) {
-        set(EXPRESS_LOGISTICS, express_logistics);
+    public void setExpress_traces(String express_traces) {
+        set(EXPRESS_TRACES, express_traces);
     }
 
     public String getExpress_flow() {
@@ -375,13 +320,13 @@ public class Express extends Model<Express> {
     public void setExpress_flow(String express_flow) {
         set(EXPRESS_FLOW, express_flow);
     }
-    
+
     public Boolean getExpress_status() {
-    	return getBoolean(EXPRESS_STATUS);
+        return getBoolean(EXPRESS_STATUS);
     }
-    
+
     public void setExpress_status(Boolean express_status) {
-    	set(EXPRESS_STATUS, express_status);
+        set(EXPRESS_STATUS, express_status);
     }
 
     public String getExpress_remark() {

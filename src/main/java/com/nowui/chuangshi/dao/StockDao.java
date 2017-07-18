@@ -271,21 +271,6 @@ public class StockDao extends Dao {
         }
     }
     
-    public Stock findWithTradeByStock_id(String stock_id) {
-    	Kv sqlMap = Kv.create();
-    	sqlMap.put(Stock.STOCK_ID, stock_id);
-    	SqlPara sqlPara = Db.getSqlPara("stock.findWithTradeByStock_id", sqlMap);
-    	
-    	logSql("stock", "findWithTradeByStock_id", sqlPara);
-    	
-    	List<Stock> stockList = new Stock().find(sqlPara.getSql(), sqlPara.getPara());
-    	if (stockList.size() == 0) {
-    		return null;
-    	} else {
-    		return stockList.get(0);
-    	}
-    }
-    
     public Stock findWithAppByStock_id(String stock_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Stock.STOCK_ID, stock_id);
@@ -301,13 +286,16 @@ public class StockDao extends Dao {
         }
     }
 
-    public Boolean save(String stock_id, String app_id, String object_id, String stock_type, Integer stock_quantity, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, String stock_express_pay_way, String stock_express_shipper_code, Boolean stock_is_pay, String stock_status, String system_create_user_id) {
+    public Boolean save(String stock_id, String app_id, String trade_id, String object_id, String stock_type, Integer stock_quantity, String stock_sender_user_id, String stock_reciever_user_id, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, String stock_express_pay_way, String stock_express_shipper_code, Boolean stock_is_pay, String stock_status, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Stock.STOCK_ID, stock_id);
         sqlMap.put(Stock.APP_ID, app_id);
+        sqlMap.put(Stock.TRADE_ID, trade_id);
         sqlMap.put(Stock.OBJECT_ID, object_id);
         sqlMap.put(Stock.STOCK_TYPE, stock_type);
         sqlMap.put(Stock.STOCK_QUANTITY, stock_quantity);
+        sqlMap.put(Stock.STOCK_SENDER_USER_ID, stock_sender_user_id);
+        sqlMap.put(Stock.STOCK_RECIEVER_USER_ID, stock_reciever_user_id);
         sqlMap.put(Stock.STOCK_RECEIVER_NAME, stock_receiver_name);
         sqlMap.put(Stock.STOCK_RECEIVER_MOBILE, stock_receiver_mobile);
         sqlMap.put(Stock.STOCK_RECEIVER_PROVINCE, stock_receiver_province);
@@ -333,12 +321,15 @@ public class StockDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String stock_id, String object_id, String stock_type, Integer stock_quantity, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, String stock_express_pay_way, String stock_express_shipper_code, Boolean stock_is_pay, String stock_status, String system_update_user_id, Integer system_version) {
+    public Boolean update(String stock_id, String trade_id, String object_id, String stock_type, Integer stock_quantity, String stock_sender_user_id, String stock_reciever_user_id, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, String stock_express_pay_way, String stock_express_shipper_code, Boolean stock_is_pay, String stock_status, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Stock.STOCK_ID, stock_id);
+        sqlMap.put(Stock.TRADE_ID, trade_id);
         sqlMap.put(Stock.OBJECT_ID, object_id);
         sqlMap.put(Stock.STOCK_TYPE, stock_type);
         sqlMap.put(Stock.STOCK_QUANTITY, stock_quantity);
+        sqlMap.put(Stock.STOCK_SENDER_USER_ID, stock_sender_user_id);
+        sqlMap.put(Stock.STOCK_RECIEVER_USER_ID, stock_reciever_user_id);
         sqlMap.put(Stock.STOCK_RECEIVER_NAME, stock_receiver_name);
         sqlMap.put(Stock.STOCK_RECEIVER_MOBILE, stock_receiver_mobile);
         sqlMap.put(Stock.STOCK_RECEIVER_PROVINCE, stock_receiver_province);

@@ -122,12 +122,7 @@
 			 table_stock_product_sku.system_status = 1
 		    AND table_stock.system_status = 1
 		    AND table_stock.app_id = #p(app_id)
-		    #if(stock_type == 'APP')
-		    AND (table_stock.stock_type = 'APP' OR table_stock.stock_type = 'TRADE')
-		    #end
-		    #if(stock_type == 'MEMBER')
-		    AND table_stock.stock_type = 'MEMBER'
-		    #end
+		    AND table_stock.stock_type = #p(stock_type)
 		    #if(product_name)
 		    #set(product_name = "%" + product_name + "%")
 		    AND table_product.product_name LIKE #p(product_name)
@@ -176,18 +171,13 @@
 		    #if(stock_type == 'APP')
 		    LEFT JOIN table_app ON table_app.app_id = table_stock.app_id
 		    #end
-		    #if(stock_type == 'MEMBER')
-		    AND table_stock.stock_type = 'MEMBER'
-		    #end
 			WHERE 
 			 table_stock_product_sku.system_status = 1
 		    AND table_stock.system_status = 1
 		    #if(app_id)
 		    AND table_stock.app_id = #p(app_id)
 		    #end
-		    #if(stock_type == 'APP')
-		    AND (table_stock.stock_type = 'APP' OR table_stock.stock_type = 'TRADE')
-		    #end
+		    AND table_stock.stock_type = #p(stock_type)
 		    #if(product_name)
 		    #set(product_name = "%" + product_name + "%")
 		    AND table_product.product_name LIKE #p(product_name)
@@ -294,12 +284,7 @@
 	 table_stock_product_sku.system_status = 1
     AND table_stock.system_status = 1
     AND table_stock.app_id = #p(app_id)
-    #if(stock_type == 'APP')
-    AND (table_stock.stock_type = 'APP' OR table_stock.stock_type = 'TRADE')
-    #end
-    #if(stock_type == 'MEMBER')
-    AND table_stock.stock_type = 'MEMBER'
-    #end
+    AND table_stock.stock_type = #p(stock_type)
     #if(product_name)
     #set(product_name = "%" + product_name + "%")
     AND table_product.product_name LIKE #p(product_name)
@@ -350,12 +335,7 @@
     #if(app_id)
     AND table_stock.app_id = #p(app_id)
     #end
-    #if(stock_type == 'APP')
-    AND (table_stock.stock_type = 'APP' OR table_stock.stock_type = 'TRADE')
-    #end
-    #if(stock_type == 'MEMBER')
-    AND table_stock.stock_type = 'MEMBER'
-    #end
+    AND table_stock.stock_type = #p(stock_type)
     #if(product_name)
     #set(product_name = "%" + product_name + "%")
     AND table_product.product_name LIKE #p(product_name)
@@ -457,17 +437,6 @@
     AND table_stock.stock_id = #p(stock_id)
   #end
   
-  #sql("findWithTradeByStock_id")
-    SELECT
-    table_stock.*,
-    table_user.user_name
-    FROM table_stock
-    LEFT JOIN table_trade ON table_trade.trade_id = table_stock.object_id
-    LEFT JOIN table_user ON table_trade.user_id = table_user.user_id
-    WHERE table_stock.system_status = 1
-    AND table_stock.stock_id = #p(stock_id)
-  #end
-  
   #sql("findWithAppByStock_id")
     SELECT
     table_stock.*,
@@ -501,9 +470,12 @@
     INSERT INTO table_stock (
       stock_id,
       app_id,
+      trade_id,
       object_id,
       stock_type,
       stock_quantity,
+      stock_sender_user_id,
+      stock_reciever_user_id,
       stock_receiver_name,
       stock_receiver_mobile,
       stock_receiver_province,
@@ -525,9 +497,12 @@
     ) VALUES (
       #p(stock_id),
       #p(app_id),
+      #p(trade_id),
       #p(object_id),
       #p(stock_type),
       #p(stock_quantity),
+      #p(stock_sender_user_id),
+      #p(stock_reciever_user_id),
       #p(stock_receiver_name),
       #p(stock_receiver_mobile),
       #p(stock_receiver_province),
@@ -551,9 +526,12 @@
 
   #sql("update")
     UPDATE table_stock SET
+    trade_id = #p(trade_id),
     object_id = #p(object_id),
     stock_type = #p(stock_type),
     stock_quantity = #p(stock_quantity),
+    stock_sender_user_id = #p(stock_sender_user_id),
+    stock_reciever_user_id = #p(stock_reciever_user_id),
     stock_receiver_name = #p(stock_receiver_name),
     stock_receiver_mobile = #p(stock_receiver_mobile),
     stock_receiver_province = #p(stock_receiver_province),
@@ -573,7 +551,7 @@
     AND stock_id = #p(stock_id)
     AND system_version = #p(system_version)
   #end
-  
+
   #sql("updateStock_flowByStock_idAndSystem_version")
     UPDATE table_stock SET
     stock_flow = #p(stock_flow),
@@ -584,7 +562,6 @@
     AND stock_id = #p(stock_id)
     AND system_version = #p(system_version)
   #end
-
 
   #sql("deleteByStock_idAndSystem_version")
     UPDATE table_stock SET

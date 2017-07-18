@@ -118,7 +118,7 @@
     WHERE table_express.system_status = 1
     AND table_stock.system_status = 1
     AND table_express.stock_id = table_stock.stock_id
-    AND table_stock.object_id = #p(trade_id)
+    AND table_stock.trade_id = #p(trade_id)
   #end
 
   #sql("save")
@@ -126,11 +126,8 @@
       express_id,
       app_id,
       stock_id,
-      express_receiver_user_id,
-      express_sender_user_id,
       express_shipper_code,
       express_no,
-      express_type,
       express_receiver_company,
       express_receiver_name,
       express_receiver_tel,
@@ -152,9 +149,7 @@
       express_cost,
       express_is_pay,
       express_pay_way,
-      express_start_date,
-      express_end_date,
-      express_logistics,
+      express_traces,
       express_flow,
       express_status,
       express_remark,
@@ -168,11 +163,8 @@
       #p(express_id),
       #p(app_id),
       #p(stock_id),
-      #p(express_receiver_user_id),
-      #p(express_sender_user_id),
       #p(express_shipper_code),
       #p(express_no),
-      #p(express_type),
       #p(express_receiver_company),
       #p(express_receiver_name),
       #p(express_receiver_tel),
@@ -194,9 +186,7 @@
       #p(express_cost),
       #p(express_is_pay),
       #p(express_pay_way),
-      #p(express_start_date),
-      #p(express_end_date),
-      #p(express_logistics),
+      #p(express_traces),
       #p(express_flow),
       #p(express_status),
       #p(express_remark),
@@ -212,11 +202,8 @@
   #sql("update")
     UPDATE table_express SET
     stock_id = #p(stock_id),
-    express_receiver_user_id = #p(express_receiver_user_id),
-    express_sender_user_id = #p(express_sender_user_id),
     express_shipper_code = #p(express_shipper_code),
     express_no = #p(express_no),
-    express_type = #p(express_type),
     express_receiver_company = #p(express_receiver_company),
     express_receiver_name = #p(express_receiver_name),
     express_receiver_tel = #p(express_receiver_tel),
@@ -238,9 +225,7 @@
     express_cost = #p(express_cost),
     express_is_pay = #p(express_is_pay),
     express_pay_way = #p(express_pay_way),
-    express_start_date = #p(express_start_date),
-    express_end_date = #p(express_end_date),
-    express_logistics = #p(express_logistics),
+    express_traces = #p(express_traces),
     express_flow = #p(express_flow),
     express_status = #p(express_status),
     express_remark = #p(express_remark),
@@ -252,11 +237,11 @@
     AND system_version = #p(system_version)
   #end
   
-  #sql("updateExpress_flowAndExpress_statusAndExpress_logisticsByExpress_idAndSystem_version")
+  #sql("updateExpress_flowAndExpress_statusAndexpress_tracesByExpress_idAndSystem_version")
     UPDATE table_express SET
     express_flow = #p(express_flow),
     express_status = #p(express_status),
-    express_logistics = #p(express_logistics),
+    express_traces = #p(express_traces),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1
