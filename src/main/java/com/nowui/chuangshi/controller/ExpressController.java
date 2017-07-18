@@ -13,15 +13,10 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Kdniao;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Express;
-import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.Stock;
-import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.service.ExpressService;
-import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.StockService;
-import com.nowui.chuangshi.service.TradeService;
 import com.nowui.chuangshi.type.ExpressFlow;
-import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.DateUtil;
 import com.nowui.chuangshi.util.Util;
 
@@ -30,10 +25,6 @@ public class ExpressController extends Controller {
 	private final ExpressService expressService = new ExpressService();
 
 	private final StockService stockService = new StockService();
-
-	private final TradeService tradeService = new TradeService();
-
-	private final MemberService memberService = new MemberService();
 
 	/**
 	 * 接收物流信息
@@ -74,7 +65,7 @@ public class ExpressController extends Controller {
 
 			String express_flow = "无轨迹";
 			Boolean express_status = false;
-			String express_trace = jsonObject.getString("Traces");
+			String express_traces = jsonObject.getString("Traces");
 			if (success) {
 				String state = jsonObject.getString("State");
 				if (state.equals("1")) {
@@ -91,14 +82,14 @@ public class ExpressController extends Controller {
 					express_flow = "问题件";
 				}
 
-				express_trace = jsonObject.getString("Traces");
+				express_traces = jsonObject.getString("Traces");
 			}
 
 			Express express = new Express();
 
 			express.setExpress_flow(express_flow);
             express.setExpress_status(express_status);
-            express.setExpress_logistics(express_trace);
+            express.setExpress_traces(express_traces);
             express.setExpress_id(express_id);
 
             expressList.add(express);
@@ -151,7 +142,7 @@ public class ExpressController extends Controller {
 	@ActionKey(Url.EXPRESS_SAVE)
 	public void save() {
 		validateRequest_app_id();
-		validate(Express.STOCK_ID, Express.EXPRESS_NO, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_REMARK);
+		validate(Express.STOCK_ID, Express.EXPRESS_NO, Express.EXPRESS_COST, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_REMARK);
 
 		Express model = getModel(Express.class);
 		String request_user_id = getRequest_user_id();
@@ -162,25 +153,12 @@ public class ExpressController extends Controller {
 		authenticateRequest_app_idAndRequest_user_id();
 
 		Stock stock = stockService.findByStock_id(stock_id);
-		String express_receiver_user_id = "";
-		String express_sender_user_id = "";
 
-		if (StockType.TRADE.getKey().equals(stock.getStock_type())) {
-			Trade trade = tradeService.findByTrade_id(stock.getObject_id());
-
-			express_sender_user_id = trade.getUser_id();
-		} else if (StockType.MEMBER.getKey().equals(stock.getStock_type())) {
-			Member member = memberService.findByMember_id(stock.getObject_id());
-
-			express_receiver_user_id = member.getUser_id();
-		}
-
-		Boolean result = expressService.save(express_id, stock.getApp_id(), stock_id, express_receiver_user_id,
-				express_sender_user_id, model.getExpress_shipper_code(), model.getExpress_no(), "", "",
-				stock.getStock_receiver_name(), "", stock.getStock_receiver_mobile(), "",
+		Boolean result = expressService.save(express_id, stock.getApp_id(), stock_id, model.getExpress_shipper_code(), model.getExpress_no(),
+				"", stock.getStock_receiver_name(), "", stock.getStock_receiver_mobile(), "",
 				stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(),
-				stock.getStock_receiver_address(), "", "", "", "", "", "", "", "", "", null, false,
-				stock.getStock_express_pay_way(), null, null, "", ExpressFlow.NOTRACK.getValue(), false,
+				stock.getStock_receiver_address(), "", "", "", "", "", "", "", "", "", model.getExpress_cost(), stock.getStock_is_pay(),
+				stock.getStock_express_pay_way(), "", ExpressFlow.NOTRACK.getValue(), false,
 				model.getExpress_remark(), request_user_id);
 
 		if (result) {
@@ -195,16 +173,15 @@ public class ExpressController extends Controller {
 	@ActionKey(Url.EXPRESS_UPDATE)
 	public void update() {
 		validateRequest_app_id();
-		validate(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_RECEIVER_USER_ID, Express.EXPRESS_SENDER_USER_ID,
-				Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, Express.EXPRESS_TYPE,
+		validate(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
 				Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
 				Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
 				Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,
 				Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL,
 				Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE,
 				Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS,
-				Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_START_DATE,
-				Express.EXPRESS_END_DATE, Express.EXPRESS_LOGISTICS, Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK,
+				Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY,
+				Express.EXPRESS_TRACES, Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK,
 				Express.SYSTEM_VERSION);
 
 		Express model = getModel(Express.class);
@@ -218,8 +195,7 @@ public class ExpressController extends Controller {
 		authenticateSystem_create_user_id(express.getSystem_create_user_id());
 
 		Boolean result = expressService.updateValidateSystem_version(model.getExpress_id(), model.getStock_id(),
-				model.getExpress_receiver_user_id(), model.getExpress_sender_user_id(), model.getExpress_shipper_code(),
-				model.getExpress_no(), model.getExpress_type(), model.getExpress_receiver_company(),
+				model.getExpress_shipper_code(),model.getExpress_no(), model.getExpress_receiver_company(),
 				model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(),
 				model.getExpress_receiver_postcode(), model.getExpress_receiver_province(),
 				model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(),
@@ -227,9 +203,8 @@ public class ExpressController extends Controller {
 				model.getExpress_sender_mobile(), model.getExpress_sender_postcode(),
 				model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(),
 				model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(),
-				model.getExpress_pay_way(), model.getExpress_start_date(), model.getExpress_end_date(),
-				model.getExpress_logistics(), model.getExpress_flow(), model.getExpress_status(), model.getExpress_remark(), request_user_id,
-				model.getSystem_version());
+				model.getExpress_pay_way(), model.getExpress_traces(), model.getExpress_flow(), model.getExpress_status(), 
+				model.getExpress_remark(), request_user_id, model.getSystem_version());
 
 		renderSuccessJson(result);
 	}
@@ -275,7 +250,7 @@ public class ExpressController extends Controller {
 
 		for (Express result : resultList) {
 			result.keep(Express.EXPRESS_ID, Express.EXPRESS_NO, Express.EXPRESS_IS_PAY, Express.EXPRESS_RECEIVER_NAME,
-					Express.EXPRESS_SENDER_NAME, Express.EXPRESS_STATUS, Express.SYSTEM_VERSION);
+					Express.EXPRESS_SENDER_NAME, Express.EXPRESS_FLOW, Express.SYSTEM_VERSION);
 		}
 
 		renderSuccessJson(total, resultList);
@@ -294,16 +269,15 @@ public class ExpressController extends Controller {
 
 		authenticateApp_id(express.getApp_id());
 
-		express.keep(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_RECEIVER_USER_ID,
-				Express.EXPRESS_SENDER_USER_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, Express.EXPRESS_TYPE,
+		express.keep(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
 				Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
 				Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
 				Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,
 				Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL,
 				Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE,
 				Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS,
-				Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_START_DATE,
-				Express.EXPRESS_END_DATE, Express.EXPRESS_LOGISTICS, Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK,
+				Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, 
+				Express.EXPRESS_TRACES, Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK,
 				Express.SYSTEM_VERSION);
 
 		renderSuccessJson(express);
@@ -323,16 +297,14 @@ public class ExpressController extends Controller {
 		if (express != null) {
 		    authenticateApp_id(express.getApp_id());
 
-	        express.keep(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_RECEIVER_USER_ID,
-	                Express.EXPRESS_SENDER_USER_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, Express.EXPRESS_TYPE,
+	        express.keep(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
 	                Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
 	                Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
 	                Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,
 	                Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL,
 	                Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE,
 	                Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS,
-	                Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_START_DATE,
-	                Express.EXPRESS_END_DATE, Express.EXPRESS_LOGISTICS, Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK,
+	                Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_TRACES, Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK,
 	                Express.SYSTEM_VERSION);
 		}
 
@@ -347,16 +319,15 @@ public class ExpressController extends Controller {
 	@ActionKey(Url.EXPRESS_ADMIN_UPDATE)
 	public void adminUpdate() {
 		validateRequest_app_id();
-		validate(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_RECEIVER_USER_ID, Express.EXPRESS_SENDER_USER_ID,
-				Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, Express.EXPRESS_TYPE,
+		validate(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
 				Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
 				Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
 				Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,
 				Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL,
 				Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE,
 				Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS,
-				Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_START_DATE,
-				Express.EXPRESS_END_DATE, Express.EXPRESS_LOGISTICS, Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK,
+				Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, 
+				Express.EXPRESS_TRACES, Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK,
 				Express.SYSTEM_VERSION);
 
 		Express model = getModel(Express.class);
@@ -369,8 +340,7 @@ public class ExpressController extends Controller {
 		authenticateApp_id(express.getApp_id());
 
 		Boolean result = expressService.updateValidateSystem_version(model.getExpress_id(), model.getStock_id(),
-				model.getExpress_receiver_user_id(), model.getExpress_sender_user_id(), model.getExpress_shipper_code(),
-				model.getExpress_no(), model.getExpress_type(), model.getExpress_receiver_company(),
+				model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_receiver_company(),
 				model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(),
 				model.getExpress_receiver_postcode(), model.getExpress_receiver_province(),
 				model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(),
@@ -378,8 +348,7 @@ public class ExpressController extends Controller {
 				model.getExpress_sender_mobile(), model.getExpress_sender_postcode(),
 				model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(),
 				model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(),
-				model.getExpress_pay_way(), model.getExpress_start_date(), model.getExpress_end_date(),
-				model.getExpress_logistics(), model.getExpress_flow(), model.getExpress_status(), model.getExpress_remark(), request_user_id,
+				model.getExpress_pay_way(), model.getExpress_traces(), model.getExpress_flow(), model.getExpress_status(), model.getExpress_remark(), request_user_id,
 				model.getSystem_version());
 
 		renderSuccessJson(result);
@@ -422,7 +391,7 @@ public class ExpressController extends Controller {
 
 		for (Express result : resultList) {
 			result.keep(Express.EXPRESS_ID, Express.EXPRESS_NO, Express.EXPRESS_IS_PAY, Express.EXPRESS_RECEIVER_NAME,
-					Express.EXPRESS_SENDER_NAME, Express.EXPRESS_STATUS, Express.SYSTEM_VERSION);
+					Express.EXPRESS_SENDER_NAME, Express.EXPRESS_FLOW, Express.SYSTEM_VERSION);
 		}
 
 		renderSuccessJson(total, resultList);
@@ -437,16 +406,15 @@ public class ExpressController extends Controller {
 
 		Express express = expressService.findByExpress_id(model.getExpress_id());
 
-		express.keep(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_RECEIVER_USER_ID,
-				Express.EXPRESS_SENDER_USER_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, Express.EXPRESS_TYPE,
+		express.keep(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, 
 				Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
 				Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
 				Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,
 				Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL,
 				Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE,
 				Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS,
-				Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_START_DATE,
-				Express.EXPRESS_END_DATE, Express.EXPRESS_LOGISTICS, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK,
+				Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, 
+				Express.EXPRESS_TRACES, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK,
 				Express.SYSTEM_VERSION);
 
 		renderSuccessJson(express);
@@ -455,24 +423,22 @@ public class ExpressController extends Controller {
 	@ActionKey(Url.EXPRESS_SYSTEM_SAVE)
 	public void systemSave() {
 		validateRequest_app_id();
-		validate(Express.APP_ID, Express.STOCK_ID, Express.EXPRESS_RECEIVER_USER_ID, Express.EXPRESS_SENDER_USER_ID,
-				Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, Express.EXPRESS_TYPE,
+		validate(Express.APP_ID, Express.STOCK_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, 
 				Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
 				Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
 				Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,
 				Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL,
 				Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE,
 				Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS,
-				Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_START_DATE,
-				Express.EXPRESS_END_DATE, Express.EXPRESS_LOGISTICS, Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK);
+				Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, 
+				Express.EXPRESS_TRACES, Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK);
 
 		Express model = getModel(Express.class);
 		String express_id = Util.getRandomUUID();
 		String request_user_id = getRequest_user_id();
 
 		Boolean result = expressService.save(express_id, model.getApp_id(), model.getStock_id(),
-				model.getExpress_receiver_user_id(), model.getExpress_sender_user_id(), model.getExpress_shipper_code(),
-				model.getExpress_no(), model.getExpress_type(), model.getExpress_receiver_company(),
+				model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_receiver_company(),
 				model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(),
 				model.getExpress_receiver_postcode(), model.getExpress_receiver_province(),
 				model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(),
@@ -480,8 +446,8 @@ public class ExpressController extends Controller {
 				model.getExpress_sender_mobile(), model.getExpress_sender_postcode(),
 				model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(),
 				model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(),
-				model.getExpress_pay_way(), model.getExpress_start_date(), model.getExpress_end_date(),
-				model.getExpress_logistics(), model.getExpress_flow(), model.getExpress_status(), model.getExpress_remark(), request_user_id);
+				model.getExpress_pay_way(), model.getExpress_traces(), model.getExpress_flow(), 
+				model.getExpress_status(), model.getExpress_remark(), request_user_id);
 
 		renderSuccessJson(result);
 	}
@@ -489,24 +455,22 @@ public class ExpressController extends Controller {
 	@ActionKey(Url.EXPRESS_SYSTEM_UPDATE)
 	public void systemUpdate() {
 		validateRequest_app_id();
-		validate(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_RECEIVER_USER_ID, Express.EXPRESS_SENDER_USER_ID,
-				Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, Express.EXPRESS_TYPE,
+		validate(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, 
 				Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
 				Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
 				Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,
 				Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL,
 				Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE,
 				Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS,
-				Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_START_DATE,
-				Express.EXPRESS_END_DATE, Express.EXPRESS_LOGISTICS, Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK,
+				Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, 
+				Express.EXPRESS_TRACES, Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK,
 				Express.SYSTEM_VERSION);
 
 		Express model = getModel(Express.class);
 		String request_user_id = getRequest_user_id();
 
-		Boolean result = expressService.updateValidateSystem_version(model.getExpress_id(), model.getStock_id(),
-				model.getExpress_receiver_user_id(), model.getExpress_sender_user_id(), model.getExpress_shipper_code(),
-				model.getExpress_no(), model.getExpress_type(), model.getExpress_receiver_company(),
+		Boolean result = expressService.updateValidateSystem_version(model.getExpress_id(), model.getStock_id(), 
+		        model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_receiver_company(),
 				model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(),
 				model.getExpress_receiver_postcode(), model.getExpress_receiver_province(),
 				model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(),
@@ -514,8 +478,8 @@ public class ExpressController extends Controller {
 				model.getExpress_sender_mobile(), model.getExpress_sender_postcode(),
 				model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(),
 				model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(),
-				model.getExpress_pay_way(), model.getExpress_start_date(), model.getExpress_end_date(),
-				model.getExpress_logistics(), model.getExpress_flow(), model.getExpress_status(), model.getExpress_remark(), request_user_id,
+				model.getExpress_pay_way(), model.getExpress_traces(), model.getExpress_flow(), 
+				model.getExpress_status(), model.getExpress_remark(), request_user_id,
 				model.getSystem_version());
 
 		renderSuccessJson(result);

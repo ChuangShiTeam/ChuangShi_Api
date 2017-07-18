@@ -98,20 +98,16 @@ public class StockService extends Service {
         return stockCache.findWithMemberByStock_id(stock_id);
     }
     
-    public Stock findWithTradeByStock_id(String stock_id) {
-    	return stockCache.findWithTradeByStock_id(stock_id);
-    }
-    
     public Stock findWithAppByStock_id(String stock_id) {
         return stockCache.findWithAppByStock_id(stock_id);
     }
 
-    public Boolean save(String stock_id, String app_id, String object_id, String stock_type, Integer stock_quantity, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, String stock_express_pay_way, String stock_express_shipper_code, Boolean stock_is_pay, String stock_status, String system_create_user_id) {
-        return stockCache.save(stock_id, app_id, object_id, stock_type, stock_quantity, stock_receiver_name, stock_receiver_mobile, stock_receiver_province, stock_receiver_city, stock_receiver_area, stock_receiver_address, stock_action, stock_flow, stock_express_pay_way, stock_express_shipper_code, stock_is_pay, stock_status, system_create_user_id);
+    public Boolean save(String stock_id, String app_id, String trade_id, String object_id, String stock_type, Integer stock_quantity, String stock_sender_user_id, String stock_reciever_user_id, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, String stock_express_pay_way, String stock_express_shipper_code, Boolean stock_is_pay, String stock_status, String system_create_user_id) {
+        return stockCache.save(stock_id, app_id, trade_id, object_id, stock_type, stock_quantity, stock_sender_user_id, stock_reciever_user_id, stock_receiver_name, stock_receiver_mobile, stock_receiver_province, stock_receiver_city, stock_receiver_area, stock_receiver_address, stock_action, stock_flow, stock_express_pay_way, stock_express_shipper_code, stock_is_pay, stock_status, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String stock_id, String object_id, String stock_type, Integer stock_quantity, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, String stock_express_pay_way, String stock_express_shipper_code, Boolean stock_is_pay, String stock_status, String system_update_user_id, Integer system_version) {
-        return stockCache.updateValidateSystem_version(stock_id, object_id, stock_type, stock_quantity, stock_receiver_name, stock_receiver_mobile, stock_receiver_province, stock_receiver_city, stock_receiver_area, stock_receiver_address, stock_action, stock_flow, stock_express_pay_way, stock_express_shipper_code, stock_is_pay, stock_status, system_update_user_id, system_version);
+    public Boolean updateValidateSystem_version(String stock_id, String trade_id, String object_id, String stock_type, Integer stock_quantity, String stock_sender_user_id, String stock_reciever_user_id, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, String stock_express_pay_way, String stock_express_shipper_code, Boolean stock_is_pay, String stock_status, String system_update_user_id, Integer system_version) {
+        return stockCache.updateValidateSystem_version(stock_id, trade_id, object_id, stock_type, stock_quantity, stock_sender_user_id, stock_reciever_user_id, stock_receiver_name, stock_receiver_mobile, stock_receiver_province, stock_receiver_city, stock_receiver_area, stock_receiver_address, stock_action, stock_flow, stock_express_pay_way, stock_express_shipper_code, stock_is_pay, stock_status, system_update_user_id, system_version);
     }
     
     public Boolean updateStock_flowByStock_idValidateSystem_version(String stock_id, String stock_flow, String system_update_user_id, Integer system_version) {
@@ -122,6 +118,7 @@ public class StockService extends Service {
         return stockCache.deleteByStock_idAndSystem_update_user_idValidateSystem_version(stock_id, system_update_user_id, system_version);
     }
 
+    //平台补充
     public Boolean replenish(String app_id, String object_id, String stock_type, JSONArray productSkuList,
             String system_create_user_id) {
         
@@ -131,6 +128,12 @@ public class StockService extends Service {
         
         for (int j = 0; j < productSkuList.size(); j++) {
             StockProductSku stockProductSku = productSkuList.getJSONObject(j).toJavaObject(StockProductSku.class);
+            if (StringUtils.isBlank(stockProductSku.getProduct_sku_id())) {
+                throw new RuntimeException("商品skuid不能为空");
+            }
+            if (stockProductSku.getProduct_sku_quantity() == null) {
+                throw new RuntimeException("商品数量不能为空");
+            }
             stockProductSku.setStock_id(stock_id);
             stockProductSku.setSystem_create_user_id(system_create_user_id);
             stockProductSku.setSystem_create_time(new Date());
@@ -142,30 +145,30 @@ public class StockService extends Service {
             stock_quantity += stockProductSku.getProduct_sku_quantity();
             stockProductSkuList.add(stockProductSku);
         }
-        Boolean result = stockCache.save(stock_id, app_id, object_id, stock_type, stock_quantity, "", "", "", "", "", "", StockAction.REPLENISH.getKey(), "", "", "", false, "", system_create_user_id);
+        Boolean result = stockCache.save(stock_id, app_id, "", object_id, stock_type, stock_quantity, "", "", "", "", "", "", "", "", StockAction.REPLENISH.getKey(), "", "", "", false, "", system_create_user_id);
         if (result) {
             stockProductSkuService.batchSave(stockProductSkuList);
         }
         return result;
     }
     
-    public Boolean out(String app_id, String object_id, String stock_type, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_express_pay_way, String stock_express_shipper_code,
-            List<StockProductSku> stockProductSkuList, String system_create_user_id) {
+    //入库
+    public Boolean in(String app_id, String tarde_id, String object_id, String stock_type, List<StockProductSku> stockProductSkuList,
+            String system_create_user_id) {
         
         Integer stock_quantity = 0;
         String stock_id = Util.getRandomUUID();
         List<StockProductSku> list = new ArrayList<StockProductSku>();
         for (StockProductSku stockProductSku : stockProductSkuList) {
-        	if (StringUtils.isBlank(stockProductSku.getProduct_sku_id()) || stockProductSku.getProduct_sku_quantity() == null) {
-        		throw new RuntimeException("商品sku或数量不能为空");
-        	}
-            //判断会员库存数量是否足够
-        	if (StockType.MEMBER.getKey().equals(stock_type)) {
-        		Integer product_sku_stock_quantity = sumStock_quantityByObject_idAndProduct_sku_id(object_id, stockProductSku.getProduct_sku_id());
-                if (stockProductSku.getProduct_sku_quantity() > product_sku_stock_quantity) {
-                    throw new RuntimeException("库存不足");
-                }
-        	}
+            if (StringUtils.isBlank(stockProductSku.getProduct_sku_id())) {
+                throw new RuntimeException("商品skuid不能为空");
+            }
+            if (stockProductSku.getProduct_sku_quantity() == null) {
+                throw new RuntimeException("商品数量不能为空");
+            }
+            if (stockProductSku.getProduct_sku_quantity() <= 0) {
+                throw new RuntimeException("商品数量必须大于0");
+            }
             stockProductSku.setStock_id(stock_id);
             stockProductSku.setSystem_create_user_id(system_create_user_id);
             stockProductSku.setSystem_create_time(new Date());
@@ -177,7 +180,51 @@ public class StockService extends Service {
             stock_quantity += stockProductSku.getProduct_sku_quantity();
             list.add(stockProductSku);
         }
-        Boolean result = stockCache.save(stock_id, app_id, object_id, stock_type, stock_quantity, stock_receiver_name, stock_receiver_mobile, stock_receiver_province, stock_receiver_city, stock_receiver_area, stock_receiver_address, StockAction.OUT.getKey(), StockFlow.WAIT_SEND.getKey(), stock_express_pay_way, stock_express_shipper_code, false, "", system_create_user_id);
+        Boolean result = stockCache.save(stock_id, app_id, tarde_id, object_id, stock_type, stock_quantity, "", "", "", "", "", "", "", "", StockAction.IN.getKey(), "", "", "", false, "", system_create_user_id);
+        if (result) {
+            stockProductSkuService.batchSave(list);
+        }
+        return result;
+    }
+    
+    //出库
+    public Boolean out(String app_id, String trade_id, String object_id, String stock_type, String stock_sender_user_id, String stock_receiver_user_id, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_express_pay_way, String stock_express_shipper_code,
+            Boolean stock_is_pay, List<StockProductSku> stockProductSkuList, String system_create_user_id) {
+        
+        Integer stock_quantity = 0;
+        String stock_id = Util.getRandomUUID();
+        List<StockProductSku> list = new ArrayList<StockProductSku>();
+        for (StockProductSku stockProductSku : stockProductSkuList) {
+            if (StringUtils.isBlank(stockProductSku.getProduct_sku_id())) {
+                throw new RuntimeException("商品skuid不能为空");
+            }
+            if (stockProductSku.getProduct_sku_quantity() == null) {
+                throw new RuntimeException("商品数量不能为空");
+            }
+            if (stockProductSku.getProduct_sku_quantity() <= 0) {
+                throw new RuntimeException("商品数量必须大于0");
+            }
+            if (StringUtils.isBlank(trade_id)) {
+            	//判断会员库存数量是否足够
+            	if (StockType.MEMBER.getKey().equals(stock_type)) {
+            		Integer product_sku_stock_quantity = sumStock_quantityByObject_idAndProduct_sku_id(object_id, stockProductSku.getProduct_sku_id());
+                    if (stockProductSku.getProduct_sku_quantity() > product_sku_stock_quantity) {
+                        throw new RuntimeException("库存不足");
+                    }
+            	}
+            }
+            stockProductSku.setStock_id(stock_id);
+            stockProductSku.setSystem_create_user_id(system_create_user_id);
+            stockProductSku.setSystem_create_time(new Date());
+            stockProductSku.setSystem_update_user_id(system_create_user_id);
+            stockProductSku.setSystem_update_time(new Date());
+            stockProductSku.setSystem_version(0);
+            stockProductSku.setSystem_status(true);
+            
+            stock_quantity += stockProductSku.getProduct_sku_quantity();
+            list.add(stockProductSku);
+        }
+        Boolean result = stockCache.save(stock_id, app_id, trade_id, object_id, stock_type, stock_quantity, stock_sender_user_id, stock_receiver_user_id, stock_receiver_name, stock_receiver_mobile, stock_receiver_province, stock_receiver_city, stock_receiver_area, stock_receiver_address, StockAction.OUT.getKey(), StockFlow.WAIT_SEND.getKey(), stock_express_pay_way, stock_express_shipper_code, stock_is_pay, "", system_create_user_id);
         if (result) {
             stockProductSkuService.batchSave(list);
         }
@@ -187,14 +234,18 @@ public class StockService extends Service {
 	public void updateFinish(String stock_id) {
 		Stock stock = findByStock_id(stock_id);
 		
-		if (StockType.TRADE.getKey().equals(stock.getStock_type())) {
-			//更新订单状态
-			Trade trade = tradeService.findByTrade_id(stock.getObject_id());
-			tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade.getTrade_id(), TradeFlow.COMPLETE.getKey(), "", trade.getSystem_version());
+		if (StockFlow.COMPLETE.getKey().equals(stock.getStock_flow())) {
+		    return;
 		}
+		Boolean flag = this.updateStock_flowByStock_idValidateSystem_version(stock_id, StockFlow.COMPLETE.getKey(), stock.getSystem_create_user_id(), stock.getSystem_version());
 		
-		this.updateStock_flowByStock_idValidateSystem_version(stock_id, StockFlow.COMPLETE.getKey(), stock.getSystem_create_user_id(), stock.getSystem_version());
-		
+		if (flag) {
+		    if (StringUtils.isNotBlank(stock.getTrade_id())) {
+	            //更新订单未完成
+	            Trade trade = tradeService.findByTrade_id(stock.getTrade_id());
+	            tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade.getTrade_id(), TradeFlow.COMPLETE.getKey(), "", trade.getSystem_version());
+	        }
+		}
 	}
 
 	public void updateSend(String stock_id, String request_user_id) {
@@ -203,8 +254,8 @@ public class StockService extends Service {
 				request_user_id, stock.getSystem_version());
 		if (flag) {
 			//更新订单为待收货
-			if (StockType.TRADE.getKey().equals(stock.getStock_type())) {
-				Trade trade = tradeService.findByTrade_id(stock.getObject_id());
+			if (StringUtils.isNotBlank(stock.getTrade_id())) {
+				Trade trade = tradeService.findByTrade_id(stock.getTrade_id());
 				tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade.getTrade_id(), TradeFlow.WAIT_RECEIVE.getKey(), request_user_id, trade.getSystem_version());
 			}
 		}

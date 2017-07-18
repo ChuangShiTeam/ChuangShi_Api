@@ -14,7 +14,6 @@ public class StockCache extends Cache {
 
     public static final String STOCK_BY_STOCK_ID_CACHE = "stock_by_stock_id_cache";
     public static final String MEMBER_STOCK_BY_STOCK_ID_CACHE = "member_stock_by_stock_id_cache";
-    public static final String TRADE_STOCK_BY_STOCK_ID_CACHE = "trade_stock_by_stock_id_cache";
     public static final String APP_STOCK_BY_STOCK_ID_CACHE = "app_stock_by_stock_id_cache";
     public static final String STOCK_QUANTITY_BY_OBJECT_ID_CACHE = "stock_quantity_by_object_id_cache";
 
@@ -163,18 +162,6 @@ public class StockCache extends Cache {
         return stock;
     }
     
-    public Stock findWithTradeByStock_id(String stock_id) {
-    	Stock stock = CacheUtil.get(TRADE_STOCK_BY_STOCK_ID_CACHE, stock_id);
-    	
-    	if (stock == null) {
-    		stock = stockDao.findWithTradeByStock_id(stock_id);
-    		
-    		CacheUtil.put(TRADE_STOCK_BY_STOCK_ID_CACHE, stock_id, stock);
-    	}
-    	
-    	return stock;
-    }
-    
     public Stock findWithAppByStock_id(String stock_id) {
         Stock stock = CacheUtil.get(APP_STOCK_BY_STOCK_ID_CACHE, stock_id);
         
@@ -187,26 +174,26 @@ public class StockCache extends Cache {
         return stock;
     }
 
-    public Boolean save(String stock_id, String app_id, String object_id, String stock_type, Integer stock_quantity, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, String stock_express_pay_way, String stock_express_shipper_code, Boolean stock_is_pay, String stock_status, String system_create_user_id) {
-        boolean result = stockDao.save(stock_id, app_id, object_id, stock_type, stock_quantity, stock_receiver_name, stock_receiver_mobile, stock_receiver_province, stock_receiver_city, stock_receiver_area, stock_receiver_address, stock_action, stock_flow, stock_express_pay_way, stock_express_shipper_code, stock_is_pay, stock_status, system_create_user_id);
+    public Boolean save(String stock_id, String app_id, String trade_id, String object_id, String stock_type, Integer stock_quantity, String stock_sender_user_id, String stock_reciever_user_id, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, String stock_express_pay_way, String stock_express_shipper_code, Boolean stock_is_pay, String stock_status, String system_create_user_id) {
+        boolean result = stockDao.save(stock_id, app_id, trade_id, object_id, stock_type, stock_quantity, stock_sender_user_id, stock_reciever_user_id, stock_receiver_name, stock_receiver_mobile, stock_receiver_province, stock_receiver_city, stock_receiver_area, stock_receiver_address, stock_action, stock_flow, stock_express_pay_way, stock_express_shipper_code, stock_is_pay, stock_status, system_create_user_id);
+                
         if (result) {
         	CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_CACHE, object_id);
         }
         return result;
     }
 
-    public Boolean updateValidateSystem_version(String stock_id, String object_id, String stock_type, Integer stock_quantity, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, String stock_express_pay_way, String stock_express_shipper_code, Boolean stock_is_pay, String stock_status, String system_update_user_id, Integer system_version) {
+    public Boolean updateValidateSystem_version(String stock_id, String trade_id, String object_id, String stock_type, Integer stock_quantity, String stock_sender_user_id, String stock_reciever_user_id, String stock_receiver_name, String stock_receiver_mobile, String stock_receiver_province, String stock_receiver_city, String stock_receiver_area, String stock_receiver_address, String stock_action, String stock_flow, String stock_express_pay_way, String stock_express_shipper_code, Boolean stock_is_pay, String stock_status, String system_update_user_id, Integer system_version) {
         Stock stock = findByStock_id(stock_id);
         if (!stock.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = stockDao.update(stock_id, object_id, stock_type, stock_quantity, stock_receiver_name, stock_receiver_mobile, stock_receiver_province, stock_receiver_city, stock_receiver_area, stock_receiver_address, stock_action, stock_flow, stock_express_pay_way, stock_express_shipper_code, stock_is_pay, stock_status, system_update_user_id, system_version);
-
+        boolean result = stockDao.update(stock_id, trade_id, object_id, stock_type, stock_quantity, stock_sender_user_id, stock_reciever_user_id, stock_receiver_name, stock_receiver_mobile, stock_receiver_province, stock_receiver_city, stock_receiver_area, stock_receiver_address, stock_action, stock_flow, stock_express_pay_way, stock_express_shipper_code, stock_is_pay, stock_status, system_update_user_id, system_version);
+        
         if (result) {
             CacheUtil.remove(STOCK_BY_STOCK_ID_CACHE, stock_id);
             CacheUtil.remove(MEMBER_STOCK_BY_STOCK_ID_CACHE, stock_id);
-            CacheUtil.remove(TRADE_STOCK_BY_STOCK_ID_CACHE, stock_id);
             CacheUtil.remove(APP_STOCK_BY_STOCK_ID_CACHE, stock_id);
             CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_CACHE, stock.getObject_id());
         }
@@ -225,7 +212,6 @@ public class StockCache extends Cache {
     	if (result) {
     		CacheUtil.remove(STOCK_BY_STOCK_ID_CACHE, stock_id);
     		CacheUtil.remove(MEMBER_STOCK_BY_STOCK_ID_CACHE, stock_id);
-    		CacheUtil.remove(TRADE_STOCK_BY_STOCK_ID_CACHE, stock_id);
     		CacheUtil.remove(APP_STOCK_BY_STOCK_ID_CACHE, stock_id);
     		CacheUtil.remove(STOCK_QUANTITY_BY_OBJECT_ID_CACHE, stock.getObject_id());
     	}

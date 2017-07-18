@@ -44,6 +44,7 @@ import com.nowui.chuangshi.service.TradeService;
 import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.BillFlow;
 import com.nowui.chuangshi.type.BillType;
+import com.nowui.chuangshi.type.ExpressPayWay;
 import com.nowui.chuangshi.type.PayType;
 import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.HttpUtil;
@@ -448,6 +449,10 @@ public class WeChatController extends Controller {
     private void createStockOut(String trade_id) {
     	Trade trade = tradeService.findByTrade_id(trade_id);
     	
+    	String user_id = trade.getUser_id();
+        User user = userService.findByUser_id(user_id);
+        Member member = memberService.findByMember_id(user.getObject_Id());
+    	
     	List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(trade_id);
     	List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
     	
@@ -457,10 +462,16 @@ public class WeChatController extends Controller {
     		stockProductSku.setProduct_sku_quantity(tradeProductSku.getProduct_sku_quantity());
     		stockProductSkuList.add(stockProductSku);
     	}
-
     	
-    	//TODO 快递支付方式、快递公司编码
-    	stockService.out(trade.getApp_id(), trade_id, StockType.TRADE.getKey(), trade.getTrade_receiver_name(), trade.getTrade_receiver_mobile(), trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(), trade.getTrade_receiver_address(), "", "", stockProductSkuList, "");
+    	//会员进货
+    	stockService.in(trade.getApp_id(), trade_id, member.getMember_id(), StockType.MEMBER.getKey(), stockProductSkuList, "");
+    	//会员发货
+    	//快递支付方式、快递公司编码、是否支付
+    	String stock_express_pay_way = ExpressPayWay.THIRD_PARTY_PAY.getValue(); //订单产生会员发货设置快递支付方式为第三方支付
+    	String stock_express_shipper_code = ""; //快递公司由仓库发货时指定
+    	Boolean stock_is_pay = true;  //快递费已支付
+    	
+    	stockService.out(trade.getApp_id(), trade_id, member.getMember_id(), StockType.MEMBER.getKey(), "", trade.getUser_id(), trade.getTrade_receiver_name(), trade.getTrade_receiver_mobile(), trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(), trade.getTrade_receiver_address(), stock_express_pay_way, stock_express_shipper_code, stock_is_pay, stockProductSkuList, "");
     }
 
 }

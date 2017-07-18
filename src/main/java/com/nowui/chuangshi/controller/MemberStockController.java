@@ -45,12 +45,12 @@ public class MemberStockController extends Controller {
         
         Express express = expressService.findByStock_id(model.getStock_id()); 
         String express_flow = null;
-        JSONArray express_logistics = null;
+        JSONArray express_traces = null;
         
         if (express != null) {
         	express_flow = express.getExpress_flow();
-        	if (StringUtils.isNotBlank(express.getExpress_logistics())) {
-        	    express_logistics = JSONObject.parseArray(express.getExpress_logistics());
+        	if (StringUtils.isNotBlank(express.getExpress_traces())) {
+        	    express_traces = JSONObject.parseArray(express.getExpress_traces());
         	}
         }
         
@@ -64,7 +64,7 @@ public class MemberStockController extends Controller {
         result.put(Stock.STOCK_RECEIVER_AREA, stock.getStock_receiver_area());
         result.put(Stock.STOCK_RECEIVER_ADDRESS, stock.getStock_receiver_address());
         result.put(Express.EXPRESS_FLOW, express_flow);
-        result.put(Express.EXPRESS_LOGISTICS, express_logistics);
+        result.put(Express.EXPRESS_TRACES, express_traces);
         renderSuccessJson(result);
     }
     
@@ -118,6 +118,7 @@ public class MemberStockController extends Controller {
     		map.put(Stock.STOCK_FLOW, record.get(Stock.STOCK_FLOW));
     		map.put(Express.EXPRESS_SENDER_NAME, record.get(Express.EXPRESS_SENDER_NAME));
     		map.put(Express.EXPRESS_NO, record.get(Express.EXPRESS_NO));
+    		map.put(Stock.SYSTEM_CREATE_TIME, record.get(Stock.SYSTEM_CREATE_TIME));
     		resultList.add(map);
     	}
     	
@@ -160,18 +161,8 @@ public class MemberStockController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Stock stock = new Stock();
+        Stock stock = stockService.findWithMemberByStock_id(model.getStock_id());
         
-        if (StringUtils.isBlank(model.getStock_type())) {
-        	stock = stockService.findWithMemberByStock_id(model.getStock_id());
-        } else {
-        	if (StockType.MEMBER.getKey().equals(model.getStock_type())) {
-        		stock = stockService.findWithMemberByStock_id(model.getStock_id());
-        	} else if (StockType.TRADE.getKey().equals(model.getStock_type())) {
-        		stock = stockService.findWithTradeByStock_id(model.getStock_id());
-        	}
-        }
-
         authenticateApp_id(stock.getApp_id());
         
         List<StockProductSku> stockProductSkuList = stockProductSkuService.listAndProduct_nameByStock_id(model.getStock_id());

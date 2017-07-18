@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class MemberAddressController extends Controller {
 
     @ActionKey(Url.MEMBER_ADDRESS_FIND)
     public void find() {
-        //validateRequest_app_id();
+        validateRequest_app_id();
         validate(MemberAddress.MEMBER_ADDRESS_ID);
 
         MemberAddress model = getModel(MemberAddress.class);
@@ -53,9 +54,12 @@ public class MemberAddressController extends Controller {
         MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id());
 
         authenticateApp_id(member_address.getApp_id());
-        //authenticateSystem_create_user_id(member_address.getSystem_create_user_id());
+        authenticateSystem_create_user_id(member_address.getSystem_create_user_id());
 
-        //member_address.keep(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.SYSTEM_VERSION);
+        member_address.keep(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.APP_ID, MemberAddress.MEMBER_ADDRESS_NAME,
+                MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_PROVINCE,
+                MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA,
+                MemberAddress.MEMBER_ADDRESS_ADDRESS, MemberAddress.ADDRESS_IS_DEFAULT, MemberAddress.SYSTEM_VERSION);
 
         renderSuccessJson(member_address);
     }
@@ -86,18 +90,14 @@ public class MemberAddressController extends Controller {
                     memberAddress.setSystem_update_user_id(request_user_id);
                     memberAddress.setSystem_version(memberAddress.getSystem_version() + 1);
                 }
-                Boolean b = memberAddressService.batchUpdate(memberAddressList, user.getObject_Id());
-                if (!b) {
-                    throw new RuntimeException("修改地址不成功");
-                }
+                memberAddressService.batchUpdate(memberAddressList, user.getObject_Id());
             }
         } else {
             model.setAddress_is_default(true);
         }
 
         Boolean result = memberAddressService.save(member_address_id, request_app_id, user.getObject_Id(),
-                request_user_id, model.getMember_address_name(), "",
-                model.getMember_address_mobile(), "",
+                request_user_id, model.getMember_address_name(), "", model.getMember_address_mobile(), "",
                 model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(),
                 model.getMember_address_address(), model.getAddress_is_default(), request_user_id);
 
@@ -107,12 +107,10 @@ public class MemberAddressController extends Controller {
     @ActionKey(Url.MEMBER_ADDRESS_UPDATE)
     public void update() {
         validateRequest_app_id();
-        validate(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ID, MemberAddress.USER_ID,
-                MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_TEL,
-                MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_POSTCODE,
-                MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY,
-                MemberAddress.MEMBER_ADDRESS_AREA, MemberAddress.MEMBER_ADDRESS_ADDRESS,
-                MemberAddress.ADDRESS_IS_DEFAULT, MemberAddress.SYSTEM_VERSION);
+        validate(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ADDRESS_NAME,
+                MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_PROVINCE,
+                MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA,
+                MemberAddress.MEMBER_ADDRESS_ADDRESS, MemberAddress.ADDRESS_IS_DEFAULT, MemberAddress.SYSTEM_VERSION);
 
         MemberAddress model = getModel(MemberAddress.class);
         String request_user_id = getRequest_user_id();
@@ -124,12 +122,31 @@ public class MemberAddressController extends Controller {
         authenticateApp_id(member_address.getApp_id());
         authenticateSystem_create_user_id(member_address.getSystem_create_user_id());
 
+        if (model.getAddress_is_default()) {
+            List<MemberAddress> memberAddressList = memberAddressService.listByMember_id(member_address.getMember_id());
+            List<MemberAddress> updateMemberAddressList = new ArrayList<>();
+
+            for (MemberAddress memberAddress : memberAddressList) {
+                if (memberAddress.getAddress_is_default() == true
+                        && !memberAddress.getMember_address_id().equals(model.getMember_address_id())) {
+                    memberAddress.setAddress_is_default(false);
+                    memberAddress.setSystem_update_time(new Date());
+                    memberAddress.setSystem_update_user_id(request_user_id);
+                    memberAddress.setSystem_version(memberAddress.getSystem_version() + 1);
+
+                    updateMemberAddressList.add(memberAddress);
+                }
+            }
+
+            memberAddressService.batchUpdate(updateMemberAddressList, member_address.getMember_id());
+        }
+
         Boolean result = memberAddressService.updateValidateSystem_version(model.getMember_address_id(),
-                model.getMember_id(), model.getUser_id(), model.getMember_address_name(), model.getMember_address_tel(),
-                model.getMember_address_mobile(), model.getMember_address_postcode(),
-                model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(),
-                model.getMember_address_address(), model.getAddress_is_default(), request_user_id,
-                model.getSystem_version());
+                member_address.getMember_id(), member_address.getUser_id(), model.getMember_address_name(),
+                member_address.getMember_address_tel(), model.getMember_address_mobile(),
+                member_address.getMember_address_postcode(), model.getMember_address_province(),
+                model.getMember_address_city(), model.getMember_address_area(), model.getMember_address_address(),
+                model.getAddress_is_default(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

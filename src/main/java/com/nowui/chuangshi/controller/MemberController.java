@@ -322,8 +322,8 @@ public class MemberController extends Controller {
             StockProductSku stockProductSku = productSkuList.getJSONObject(j).toJavaObject(StockProductSku.class);
             stockProductSkuList.add(stockProductSku);
         }
-        Boolean result = stockService.out(member.getApp_id(), member.getMember_id(), StockType.MEMBER.getKey(), stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), stock.getStock_express_pay_way(), stock.getStock_express_shipper_code(),
-        		stockProductSkuList, request_user_id);
+        Boolean result = stockService.out(member.getApp_id(), "", member.getMember_id(), StockType.MEMBER.getKey(), member.getUser_id(), "",stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), stock.getStock_express_pay_way(), stock.getStock_express_shipper_code(),
+        		false, stockProductSkuList, request_user_id);
         
         renderSuccessJson(result);
     }
@@ -431,8 +431,8 @@ public class MemberController extends Controller {
             StockProductSku stockProductSku = productSkuList.getJSONObject(j).toJavaObject(StockProductSku.class);
             stockProductSkuList.add(stockProductSku);
         }
-        Boolean result = stockService.out(member.getApp_id(), member_id, StockType.MEMBER.getKey(), stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), stock.getStock_express_pay_way(), stock.getStock_express_shipper_code(),
-        		stockProductSkuList, request_user_id);
+        Boolean result = stockService.out(member.getApp_id(), "", member_id, StockType.MEMBER.getKey(), member.getUser_id(), "", stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), stock.getStock_express_pay_way(), stock.getStock_express_shipper_code(),
+        		false, stockProductSkuList, request_user_id);
         
         renderSuccessJson(result);
     }
