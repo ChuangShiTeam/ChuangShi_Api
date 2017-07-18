@@ -35,7 +35,8 @@ public class MemberAddressDao extends Dao {
         return count.intValue();
     }
 
-    public List<MemberAddress> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
+    public List<MemberAddress> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m,
+            int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberAddress.APP_ID, app_id);
         sqlMap.put(MemberAddress.SYSTEM_CREATE_TIME, system_create_time);
@@ -48,7 +49,8 @@ public class MemberAddressDao extends Dao {
         return new MemberAddress().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<MemberAddress> listByApp_idOrLikeMember_address_nameAndLimit(String app_id, String member_address_name, int m, int n) {
+    public List<MemberAddress> listByApp_idOrLikeMember_address_nameAndLimit(String app_id, String member_address_name,
+            int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberAddress.APP_ID, app_id);
         sqlMap.put(MemberAddress.MEMBER_ADDRESS_NAME, member_address_name);
@@ -61,7 +63,8 @@ public class MemberAddressDao extends Dao {
         return new MemberAddress().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<MemberAddress> listByOrApp_idOrLikeMember_address_nameAndLimit(String app_id, String member_address_name, int m, int n) {
+    public List<MemberAddress> listByOrApp_idOrLikeMember_address_nameAndLimit(String app_id,
+            String member_address_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberAddress.APP_ID, app_id);
         sqlMap.put(MemberAddress.MEMBER_ADDRESS_NAME, member_address_name);
@@ -89,8 +92,10 @@ public class MemberAddressDao extends Dao {
         }
     }
 
-    public Boolean save(String member_address_id, String app_id, String member_id, String user_id, String member_address_name, String member_address_tel, String member_address_mobile,
-            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean address_is_default,
+    public Boolean save(String member_address_id, String app_id, String member_id, String user_id,
+            String member_address_name, String member_address_tel, String member_address_mobile,
+            String member_address_postcode, String member_address_province, String member_address_city,
+            String member_address_area, String member_address_address, Boolean address_is_default,
             String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberAddress.MEMBER_ADDRESS_ID, member_address_id);
@@ -119,9 +124,11 @@ public class MemberAddressDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String member_address_id, String member_id, String user_id, String member_address_name, String member_address_tel, String member_address_mobile,
-            String member_address_postcode, String member_address_province, String member_address_city, String member_address_area, String member_address_address, Boolean address_is_default,
-            String system_update_user_id, Integer system_version) {
+    public Boolean update(String member_address_id, String member_id, String user_id, String member_address_name,
+            String member_address_tel, String member_address_mobile, String member_address_postcode,
+            String member_address_province, String member_address_city, String member_address_area,
+            String member_address_address, Boolean address_is_default, String system_update_user_id,
+            Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberAddress.MEMBER_ADDRESS_ID, member_address_id);
         sqlMap.put(MemberAddress.MEMBER_ID, member_id);
@@ -145,7 +152,8 @@ public class MemberAddressDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean deleteByMember_address_idAndSystem_version(String member_address_id, String system_update_user_id, Integer system_version) {
+    public Boolean deleteByMember_address_idAndSystem_version(String member_address_id, String system_update_user_id,
+            Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberAddress.MEMBER_ADDRESS_ID, member_address_id);
         sqlMap.put(MemberAddress.SYSTEM_UPDATE_USER_ID, system_update_user_id);
