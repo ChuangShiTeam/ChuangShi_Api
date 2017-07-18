@@ -204,13 +204,15 @@ public class StockService extends Service {
             if (stockProductSku.getProduct_sku_quantity() <= 0) {
                 throw new RuntimeException("商品数量必须大于0");
             }
-            //判断会员库存数量是否足够
-        	if (StockType.MEMBER.getKey().equals(stock_type)) {
-        		Integer product_sku_stock_quantity = sumStock_quantityByObject_idAndProduct_sku_id(object_id, stockProductSku.getProduct_sku_id());
-                if (stockProductSku.getProduct_sku_quantity() > product_sku_stock_quantity) {
-                    throw new RuntimeException("库存不足");
-                }
-        	}
+            if (StringUtils.isBlank(trade_id)) {
+            	//判断会员库存数量是否足够
+            	if (StockType.MEMBER.getKey().equals(stock_type)) {
+            		Integer product_sku_stock_quantity = sumStock_quantityByObject_idAndProduct_sku_id(object_id, stockProductSku.getProduct_sku_id());
+                    if (stockProductSku.getProduct_sku_quantity() > product_sku_stock_quantity) {
+                        throw new RuntimeException("库存不足");
+                    }
+            	}
+            }
             stockProductSku.setStock_id(stock_id);
             stockProductSku.setSystem_create_user_id(system_create_user_id);
             stockProductSku.setSystem_create_time(new Date());
