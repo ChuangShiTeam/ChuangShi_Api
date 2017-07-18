@@ -302,9 +302,9 @@ public class WeChatController extends Controller {
                         if (productSkuCommission.getMember_level_id().equals(member_parent.getMember_level_id())) {
 
                             String member_name = userService.findByUser_id(member_parent.getUser_id()).getUser_name();
-                            double a = productSkuCommission.getProduct_sku_commission() * 0.01;
                             BigDecimal b = tradeProductSku.getProduct_sku_amount();
-                            BigDecimal c = new BigDecimal(a);
+                            BigDecimal c = new BigDecimal(productSkuCommission.getProduct_sku_commission())
+                                    .multiply(BigDecimal.valueOf(100));
 
                             tradeCommossion.setTrade_id(trade_id);
                             tradeCommossion.setProduct_sku_id(tradeProductSku.getProduct_sku_id());
@@ -433,7 +433,7 @@ public class WeChatController extends Controller {
             if (is_update) {
                 // TODO 消息队列通知计算账单和分成
                 this.payChange(trade.getTrade_id());
-                
+
                 this.createStockOut(trade.getTrade_id());
                 renderText(Constant.WX_SUCCESS_MSG);
             } else {
@@ -441,37 +441,42 @@ public class WeChatController extends Controller {
             }
 
         } else {
-            renderText(Constant.WX_FAIL_MSG);        
+            renderText(Constant.WX_FAIL_MSG);
         }
     }
-    
-    //生成发货单
+
+    // 生成发货单
     private void createStockOut(String trade_id) {
-    	Trade trade = tradeService.findByTrade_id(trade_id);
-    	
-    	String user_id = trade.getUser_id();
+        Trade trade = tradeService.findByTrade_id(trade_id);
+
+        String user_id = trade.getUser_id();
         User user = userService.findByUser_id(user_id);
         Member member = memberService.findByMember_id(user.getObject_Id());
-    	
-    	List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(trade_id);
-    	List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
-    	
-    	for (TradeProductSku tradeProductSku : tradeProductSkuList) {
-    		StockProductSku stockProductSku = new StockProductSku();
-    		stockProductSku.setProduct_sku_id(tradeProductSku.getProduct_sku_id());
-    		stockProductSku.setProduct_sku_quantity(tradeProductSku.getProduct_sku_quantity());
-    		stockProductSkuList.add(stockProductSku);
-    	}
-    	
-    	//会员进货
-    	stockService.in(trade.getApp_id(), trade_id, member.getMember_id(), StockType.MEMBER.getKey(), stockProductSkuList, "");
-    	//会员发货
-    	//快递支付方式、快递公司编码、是否支付
-    	String stock_express_pay_way = ExpressPayWay.THIRD_PARTY_PAY.getValue(); //订单产生会员发货设置快递支付方式为第三方支付
-    	String stock_express_shipper_code = ""; //快递公司由仓库发货时指定
-    	Boolean stock_is_pay = true;  //快递费已支付
-    	
-    	stockService.out(trade.getApp_id(), trade_id, member.getMember_id(), StockType.MEMBER.getKey(), "", trade.getUser_id(), trade.getTrade_receiver_name(), trade.getTrade_receiver_mobile(), trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(), trade.getTrade_receiver_address(), stock_express_pay_way, stock_express_shipper_code, stock_is_pay, stockProductSkuList, "");
+
+        List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(trade_id);
+        List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
+
+        for (TradeProductSku tradeProductSku : tradeProductSkuList) {
+            StockProductSku stockProductSku = new StockProductSku();
+            stockProductSku.setProduct_sku_id(tradeProductSku.getProduct_sku_id());
+            stockProductSku.setProduct_sku_quantity(tradeProductSku.getProduct_sku_quantity());
+            stockProductSkuList.add(stockProductSku);
+        }
+
+        // 会员进货
+        stockService.in(trade.getApp_id(), trade_id, member.getMember_id(), StockType.MEMBER.getKey(),
+                stockProductSkuList, "");
+        // 会员发货
+        // 快递支付方式、快递公司编码、是否支付
+        String stock_express_pay_way = ExpressPayWay.THIRD_PARTY_PAY.getValue(); // 订单产生会员发货设置快递支付方式为第三方支付
+        String stock_express_shipper_code = ""; // 快递公司由仓库发货时指定
+        Boolean stock_is_pay = true; // 快递费已支付
+
+        stockService.out(trade.getApp_id(), trade_id, member.getMember_id(), StockType.MEMBER.getKey(), "",
+                trade.getUser_id(), trade.getTrade_receiver_name(), trade.getTrade_receiver_mobile(),
+                trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(),
+                trade.getTrade_receiver_address(), stock_express_pay_way, stock_express_shipper_code, stock_is_pay,
+                stockProductSkuList, "");
     }
 
 }
