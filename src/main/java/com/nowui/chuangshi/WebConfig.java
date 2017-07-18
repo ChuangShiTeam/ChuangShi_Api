@@ -1,23 +1,15 @@
 package com.nowui.chuangshi;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
 import com.jfinal.config.JFinalConfig;
 import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
-import com.jfinal.kit.Kv;
 import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
-import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Record;
-import com.jfinal.plugin.activerecord.SqlPara;
 import com.jfinal.plugin.cron4j.Cron4jPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
@@ -26,13 +18,11 @@ import com.jfinal.template.Engine;
 import com.jfinal.weixin.sdk.api.ApiConfig;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.nowui.chuangshi.constant.Config;
-import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.controller.AdminController;
 import com.nowui.chuangshi.controller.ApiController;
 import com.nowui.chuangshi.controller.AppController;
 import com.nowui.chuangshi.controller.AppStockController;
 import com.nowui.chuangshi.controller.BillController;
-import com.nowui.chuangshi.controller.CategoryController;
 import com.nowui.chuangshi.controller.CodeController;
 import com.nowui.chuangshi.controller.CustomerAttributeController;
 import com.nowui.chuangshi.controller.CustomerController;
@@ -66,8 +56,6 @@ import com.nowui.chuangshi.interceptor.GlobalActionInterceptor;
 import com.nowui.chuangshi.model.*;
 import com.nowui.chuangshi.model.Exception;
 import com.nowui.chuangshi.service.AppService;
-import com.nowui.chuangshi.type.FileType;
-import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 public class WebConfig extends JFinalConfig {
@@ -91,7 +79,6 @@ public class WebConfig extends JFinalConfig {
         routes.add("/exception", ExceptionController.class);
         routes.add("/app", AppController.class);
         routes.add("/app/stock", AppStockController.class);
-        routes.add("/category", CategoryController.class);
         routes.add("/menu", MenuController.class);
         routes.add("/api", ApiController.class);
         routes.add("/user", UserController.class);
@@ -155,7 +142,6 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_sql", "sql_id", Sql.class);
         activeRecordPlugin.addMapping("table_exception", "exception_id", Exception.class);
         activeRecordPlugin.addMapping("table_app", "app_id", App.class);
-        activeRecordPlugin.addMapping("table_category", "category_id", Category.class);
         activeRecordPlugin.addMapping("table_menu", "menu_id", Menu.class);
         activeRecordPlugin.addMapping("table_api", "api_id", Api.class);
         activeRecordPlugin.addMapping("table_menu_api", "menu_api_id", MenuApi.class);
