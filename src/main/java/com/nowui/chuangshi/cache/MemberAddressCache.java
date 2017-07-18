@@ -116,6 +116,7 @@ public class MemberAddressCache extends Cache {
 
         if (result) {
             CacheUtil.remove(MEMBER_ADDRESS_BY_MEMBER_ADDRESS_ID_CACHE, member_address_id);
+            CacheUtil.remove(MEMBER_ADDRESS_LIST_BY_MEMBER_ID_CACHE, member_id);
         }
 
         return result;
@@ -143,6 +144,10 @@ public class MemberAddressCache extends Cache {
 
         if (result) {
             CacheUtil.remove(MEMBER_ADDRESS_LIST_BY_MEMBER_ID_CACHE, member_id);
+
+            for (MemberAddress memberAddress : memberAddressList) {
+                CacheUtil.remove(MEMBER_ADDRESS_BY_MEMBER_ADDRESS_ID_CACHE, memberAddress.getMember_address_id());
+            }
         }
 
         return result;
