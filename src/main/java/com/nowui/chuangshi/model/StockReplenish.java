@@ -22,6 +22,14 @@ public class StockReplenish extends Model<StockReplenish> {
 
     @Column(type = ColumnType.VARCHAR, length = 25, comment = "状态")
     public static final String STOCK_REPLENISH_STATUS = "stock_replenish_status";
+    
+    public static final String APP_NAME = "app_name";
+    
+    public static final String USER_NAME = "user_name";
+    
+    private String app_name;
+    
+    private String user_name;
 
     public String getStock_replenish_id() {
         return getStr(STOCK_REPLENISH_ID);
@@ -69,6 +77,22 @@ public class StockReplenish extends Model<StockReplenish> {
 
     public void setStock_replenish_status(String stock_replenish_status) {
         set(STOCK_REPLENISH_STATUS, stock_replenish_status);
+    }
+    
+    public String getApp_name() {
+        return app_name;
+    }
+
+    public void setApp_name(String app_name) {
+        this.app_name = app_name;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
 }

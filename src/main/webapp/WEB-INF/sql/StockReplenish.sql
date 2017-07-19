@@ -79,6 +79,14 @@
     ORDER BY table_stock_replenish.system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
+  
+  #sql("findByStock_replenish_id")
+    SELECT
+    *
+    FROM table_stock_replenish
+    WHERE system_status = 1
+    AND stock_replenish_id = #p(stock_replenish_id)
+  #end
 
   #sql("findByStock_replenish_idAndStock_replenish_type")
     SELECT
