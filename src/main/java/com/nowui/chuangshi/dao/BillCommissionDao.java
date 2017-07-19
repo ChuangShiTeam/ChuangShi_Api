@@ -23,7 +23,7 @@ public class BillCommissionDao extends Dao {
         return new BillCommission().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public Boolean save(String bill_id, String product_sku_id, String member_id, String member_name, String member_level_id, String member_level_name, Integer product_sku_commission,
+    public Boolean save(String bill_id, String product_sku_id, String member_id, String member_name, String member_level_id, String member_level_name, BigDecimal product_sku_commission,
             BigDecimal product_sku_commission_amount, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(BillCommission.BILL_ID, bill_id);

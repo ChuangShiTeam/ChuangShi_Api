@@ -25,10 +25,10 @@ public class BillCommission extends Model<BillCommission> {
     @Column(type = ColumnType.VARCHAR, length = 20, comment = "等级名称")
     public static final String MEMBER_LEVEL_NAME = "member_level_name";
 
-    @Column(type = ColumnType.INT, length = 3, comment = "SKU佣金")
+    @Column(type = ColumnType.DECIMAL, length = 10, comment = "SKU佣金")
     public static final String PRODUCT_SKU_COMMISSION = "product_sku_commission";
 
-    @Column(type = ColumnType.DECIMAL, length = 0, comment = "分成金额")
+    @Column(type = ColumnType.DECIMAL, length = 10, comment = "分成金额")
     public static final String PRODUCT_SKU_COMMISSION_AMOUNT = "product_sku_commission_amount";
 
     public String getBill_id() {
@@ -79,11 +79,11 @@ public class BillCommission extends Model<BillCommission> {
         set(MEMBER_LEVEL_NAME, member_level_name);
     }
 
-    public Integer getProduct_sku_commission() {
-        return getInt(PRODUCT_SKU_COMMISSION);
+    public BigDecimal getProduct_sku_commission() {
+        return getBigDecimal(PRODUCT_SKU_COMMISSION);
     }
 
-    public void setProduct_sku_commission(Integer product_sku_commission) {
+    public void setProduct_sku_commission(BigDecimal product_sku_commission) {
         set(PRODUCT_SKU_COMMISSION, product_sku_commission);
     }
 

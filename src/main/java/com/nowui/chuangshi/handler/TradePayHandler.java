@@ -49,15 +49,15 @@ public class TradePayHandler extends TMsgHandler<String> {
     @Override
     public void handle(String trade_id) {
         try {
+
             Trade trade = tradeService.findByTrade_id(trade_id);
-            String system_create_user_id = trade.getSystem_create_user_id();
 
             String user_id = trade.getUser_id();
             User user = userService.findByUser_id(user_id);
             Member member = memberService.findByMember_id(user.getObject_Id());
 
             // 根据应用信息 获取是否分成 和分成级数
-            App app = appService.findByApp_id(trade.getTrade_id());
+            App app = appService.findByApp_id(trade.getApp_id());
             Boolean app_is_commission = app.getApp_is_commission();
             Integer app_commission_level = app.getApp_commission_level();
 
@@ -67,12 +67,18 @@ public class TradePayHandler extends TMsgHandler<String> {
             member_parent_path = member_parent_path.replace("]", "");
             member_parent_path = member_parent_path.replace("\"", "");
             String[] member_parent_id_list = member_parent_path.split(",");
+            int length = member_parent_id_list.length - 1;
 
-            int length = member_parent_id_list.length;
-            String[] member_list = new String[] {};
+            ArrayList<String> member_list = new ArrayList<String>();
+
+            if (app_commission_level - 1 > length) {
+                app_commission_level = length;
+            }
 
             for (int i = 0; i < app_commission_level; i++) {
-                member_list[i] = member_parent_id_list[length - i];
+                if (!member_parent_id_list[length - i].equals("0")) {
+                    member_list.add(member_parent_id_list[length - i]);
+                }
             }
 
             List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(trade_id);
@@ -87,23 +93,23 @@ public class TradePayHandler extends TMsgHandler<String> {
             tradeMemberBill.setApp_id(trade.getApp_id());
             tradeMemberBill.setUser_id(user_id);
             tradeMemberBill.setBill_is_income(false);
-            tradeMemberBill
-                    .setBill_amount(trade.getTrade_product_amount().add(trade.getTrade_express_amount()).subtract(trade.getTrade_discount_amount()));
+            tradeMemberBill.setBill_amount(trade.getTrade_product_amount().add(trade.getTrade_express_amount())
+                    .subtract(trade.getTrade_discount_amount()));
             tradeMemberBill.setBill_type(BillType.TRADE.getKey());
             tradeMemberBill.setBill_time(new Date());
             tradeMemberBill.setBill_flow(BillFlow.COMPLETE.getKey());
             tradeMemberBill.setBill_status(true);
 
-            tradeMemberBill.setSystem_create_user_id(system_create_user_id);
+            tradeMemberBill.setSystem_create_user_id("");
             tradeMemberBill.setSystem_create_time(new Date());
-            tradeMemberBill.setSystem_update_user_id(system_create_user_id);
+            tradeMemberBill.setSystem_update_user_id("");
             tradeMemberBill.setSystem_update_time(new Date());
             tradeMemberBill.setSystem_version(0);
             tradeMemberBill.setSystem_status(true);
 
             billList.add(tradeMemberBill);
 
-            if (app_is_commission && member_list.length > 0) {
+            if (app_is_commission && member_list.size() > 0) {
                 for (String member_parent_id : member_list) {
                     Member member_parent = memberService.findByMember_id(member_parent_id);
 
@@ -117,9 +123,9 @@ public class TradePayHandler extends TMsgHandler<String> {
                     bill.setBill_flow(BillFlow.COMPLETE.getKey());
                     bill.setBill_status(true);
 
-                    bill.setSystem_create_user_id(system_create_user_id);
+                    bill.setSystem_create_user_id("");
                     bill.setSystem_create_time(new Date());
-                    bill.setSystem_update_user_id(system_create_user_id);
+                    bill.setSystem_update_user_id("");
                     bill.setSystem_update_time(new Date());
                     bill.setSystem_version(0);
                     bill.setSystem_status(true);
@@ -136,10 +142,11 @@ public class TradePayHandler extends TMsgHandler<String> {
                         for (ProductSkuCommission productSkuCommission : productSkuCommissionList) {
                             if (productSkuCommission.getMember_level_id().equals(member_parent.getMember_level_id())) {
 
-                                String member_name = userService.findByUser_id(member_parent.getUser_id()).getUser_name();
-                                Integer a = productSkuCommission.getProduct_sku_commission();
+                                String member_name = userService.findByUser_id(member_parent.getUser_id())
+                                        .getUser_name();
+                                BigDecimal a = productSkuCommission.getProduct_sku_commission();
                                 BigDecimal b = tradeProductSku.getProduct_sku_amount();
-                                BigDecimal c = new BigDecimal(a);
+                                BigDecimal c = a.divide(BigDecimal.valueOf(100));
 
                                 tradeCommossion.setTrade_id(trade_id);
                                 tradeCommossion.setProduct_sku_id(tradeProductSku.getProduct_sku_id());
@@ -147,12 +154,13 @@ public class TradePayHandler extends TMsgHandler<String> {
                                 tradeCommossion.setMember_name(member_name);
                                 tradeCommossion.setMember_level_id(productSkuCommission.getMember_level_id());
                                 tradeCommossion.setMember_level_name(productSkuCommission.getMember_level_name());
-                                tradeCommossion.setProduct_sku_commission(productSkuCommission.getProduct_sku_commission());
+                                tradeCommossion.setProduct_sku_commission(a);
+                                // TODO
                                 tradeCommossion.setProduct_sku_commission_amount(b.multiply(c));
 
-                                tradeCommossion.setSystem_create_user_id(system_create_user_id);
+                                tradeCommossion.setSystem_create_user_id("");
                                 tradeCommossion.setSystem_create_time(new Date());
-                                tradeCommossion.setSystem_update_user_id(system_create_user_id);
+                                tradeCommossion.setSystem_update_user_id("");
                                 tradeCommossion.setSystem_update_time(new Date());
                                 tradeCommossion.setSystem_version(0);
                                 tradeCommossion.setSystem_status(true);
@@ -165,32 +173,30 @@ public class TradePayHandler extends TMsgHandler<String> {
                                 billCommission.setMember_name(member_name);
                                 billCommission.setMember_level_id(productSkuCommission.getMember_level_id());
                                 billCommission.setMember_level_name(productSkuCommission.getMember_level_name());
-                                billCommission.setProduct_sku_commission(productSkuCommission.getProduct_sku_commission());
+                                billCommission.setProduct_sku_commission(a);
+                                // TODO
                                 billCommission.setProduct_sku_commission_amount(b.multiply(c));
 
-                                billCommission.setSystem_create_user_id(system_create_user_id);
+                                billCommission.setSystem_create_user_id("");
                                 billCommission.setSystem_create_time(new Date());
-                                billCommission.setSystem_update_user_id(system_create_user_id);
+                                billCommission.setSystem_update_user_id("");
                                 billCommission.setSystem_update_time(new Date());
                                 billCommission.setSystem_version(0);
                                 billCommission.setSystem_status(true);
 
                                 billCommissionList.add(billCommission);
-
+                                // TODO
                                 bill_amount.add(b.multiply(c));
                                 break;
                             }
                         }
                     }
-
                     bill.setBill_amount(bill_amount);
                     billList.add(bill);
                 }
-
                 billCommissionService.batchSave(billCommissionList);
                 tradeCommossionService.batchSave(tradeCommossionList);
             }
-
             billService.batchSave(billList);
 
         } catch (Exception e) {
