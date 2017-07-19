@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.apache.poi.util.SystemOutLogger;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -167,12 +169,12 @@ public class WeChatController extends Controller {
     public void paySuccess() {
         validateRequest_app_id();
 
-        validate(Trade.TRADE_NUMBER);
+        // validate(Trade.TRADE_NUMBER);
         JSONObject jsonObject = getParameterJSONObject();
         String trade_number = jsonObject.getString("trade_number");
 
         // 根据订单号查询订单
-        Trade trade = tradeService.findByTrade_number(trade_number);
+        Trade trade = tradeService.findByTrade_number("20170711734043");
         if (trade == null) {
             throw new RuntimeException("找不到订单");
         }
@@ -302,9 +304,9 @@ public class WeChatController extends Controller {
                         if (productSkuCommission.getMember_level_id().equals(member_parent.getMember_level_id())) {
 
                             String member_name = userService.findByUser_id(member_parent.getUser_id()).getUser_name();
+                            BigDecimal a = productSkuCommission.getProduct_sku_commission();
                             BigDecimal b = tradeProductSku.getProduct_sku_amount();
-                            BigDecimal c = new BigDecimal(productSkuCommission.getProduct_sku_commission())
-                                    .multiply(BigDecimal.valueOf(100));
+                            BigDecimal c = a.divide(BigDecimal.valueOf(100));
 
                             tradeCommossion.setTrade_id(trade_id);
                             tradeCommossion.setProduct_sku_id(tradeProductSku.getProduct_sku_id());
@@ -312,7 +314,7 @@ public class WeChatController extends Controller {
                             tradeCommossion.setMember_name(member_name);
                             tradeCommossion.setMember_level_id(productSkuCommission.getMember_level_id());
                             tradeCommossion.setMember_level_name(productSkuCommission.getMember_level_name());
-                            tradeCommossion.setProduct_sku_commission(productSkuCommission.getProduct_sku_commission());
+                            tradeCommossion.setProduct_sku_commission(a);
                             // TODO
                             tradeCommossion.setProduct_sku_commission_amount(b.multiply(c));
 
@@ -331,7 +333,7 @@ public class WeChatController extends Controller {
                             billCommission.setMember_name(member_name);
                             billCommission.setMember_level_id(productSkuCommission.getMember_level_id());
                             billCommission.setMember_level_name(productSkuCommission.getMember_level_name());
-                            billCommission.setProduct_sku_commission(productSkuCommission.getProduct_sku_commission());
+                            billCommission.setProduct_sku_commission(a);
                             // TODO
                             billCommission.setProduct_sku_commission_amount(b.multiply(c));
 
@@ -344,7 +346,7 @@ public class WeChatController extends Controller {
 
                             billCommissionList.add(billCommission);
                             // TODO
-                            bill_amount.add(b.multiply(c));
+                            bill_amount = bill_amount.add(b.multiply(c));
                             break;
                         }
                     }
