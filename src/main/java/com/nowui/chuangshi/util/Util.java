@@ -1,20 +1,25 @@
 package com.nowui.chuangshi.util;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.jfinal.kit.PathKit;
-import com.nowui.chuangshi.constant.Constant;
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.spec.SecretKeySpec;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.jfinal.kit.PathKit;
+import com.nowui.chuangshi.constant.Constant;
 
 public class Util {
 
@@ -34,9 +39,9 @@ public class Util {
     }
 
     public static String getEmoji(String source) {
-        if(!ValidateUtil.isNull(source)){
+        if (!ValidateUtil.isNull(source)) {
             return source.replaceAll("[\\ud800\\udc00-\\udbff\\udfff\\ud800-\\udfff]", "*");
-        }else{
+        } else {
             return source;
         }
     }
@@ -71,8 +76,7 @@ public class Util {
             String encoding = "UTF-8";
             File file = new File(PathKit.getWebRootPath() + "/WEB-INF/classes/china.txt");
             if (file.isFile() && file.exists()) {
-                InputStreamReader read = new InputStreamReader(
-                        new FileInputStream(file), encoding);
+                InputStreamReader read = new InputStreamReader(new FileInputStream(file), encoding);
                 BufferedReader bufferedReader = new BufferedReader(read);
                 String lineTxt = null;
                 while ((lineTxt = bufferedReader.readLine()) != null) {
@@ -146,11 +150,13 @@ public class Util {
     }
 
     public static String getThumbnail_path(String path) {
-        return path.substring(0, path.lastIndexOf("/")) + "/" + Constant.THUMBNAIL + "/" + path.substring(path.lastIndexOf("/") + 1, path.length());
+        return path.substring(0, path.lastIndexOf("/")) + "/" + Constant.THUMBNAIL + "/"
+                + path.substring(path.lastIndexOf("/") + 1, path.length());
     }
 
     public static String getOriginal_path(String path) {
-        return path.substring(0, path.lastIndexOf("/")) + "/" + Constant.ORIGINAL + "/" + path.substring(path.lastIndexOf("/") + 1, path.length());
+        return path.substring(0, path.lastIndexOf("/")) + "/" + Constant.ORIGINAL + "/"
+                + path.substring(path.lastIndexOf("/") + 1, path.length());
     }
 
     public static byte[] aesEncryptToBytes(String content, String encryptKey) throws Exception {
@@ -162,4 +168,15 @@ public class Util {
         return cipher.doFinal(content.getBytes("utf-8"));
     }
 
+    public static Map<String, Object> Obj2Map(Object obj) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        Field[] fields = obj.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            map.put(field.getName(), field.get(obj));
+        }
+
+        return map;
+    }
 }

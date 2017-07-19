@@ -35,29 +35,7 @@
 
   #sql("listByApp_idOrLikeTrade_numberAndLimit")
     SELECT
-    trade_id,
-    app_id,
-    user_id,
-    trade_number,
-    trade_receiver_name,
-    trade_receiver_mobile,
-    trade_receiver_province,
-    trade_receiver_city,
-    trade_receiver_area,
-    trade_receiver_address,
-    trade_message,
-    trade_product_quantity,
-    trade_product_amount,
-    trade_express_amount,
-    trade_discount_amount,
-    trade_total_amount,
-    trade_is_commission,
-    trade_is_confirm,
-    trade_is_pay,
-    trade_flow,
-    trade_status,
-    trade_audit_status,
-    system_version
+    *
     FROM table_trade
     WHERE system_status = 1
     AND app_id = #p(app_id)
@@ -96,29 +74,7 @@
 
   #sql("findByTrade_id")
     SELECT
-    trade_id,
-    app_id,
-    user_id,
-    trade_number,
-    trade_receiver_name,
-    trade_receiver_mobile,
-    trade_receiver_province,
-    trade_receiver_city,
-    trade_receiver_area,
-    trade_receiver_address,
-    trade_message,
-    trade_product_quantity,
-    trade_product_amount,
-    trade_express_amount,
-    trade_discount_amount,
-    trade_total_amount,
-    trade_is_commission,
-    trade_is_confirm,
-    trade_is_pay,
-    trade_flow,
-    trade_status,
-    trade_audit_status,
-    system_version
+    *
     FROM table_trade
     WHERE system_status = 1
     AND trade_id = #p(trade_id)

@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,7 +139,7 @@ public class TradeController extends Controller {
     }
 
     @ActionKey(Url.TRADE_FIND)
-    public void find() {
+    public void find() throws Exception {
         validateRequest_app_id();
         validate(Trade.TRADE_ID);
 
@@ -146,12 +147,50 @@ public class TradeController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
+        // 获取订单信息
         Trade trade = tradeService.findByTrade_id(model.getTrade_id());
 
         authenticateApp_id(trade.getApp_id());
         authenticateSystem_create_user_id(trade.getSystem_create_user_id());
 
-        trade.keep(Trade.TRADE_ID, Trade.SYSTEM_VERSION);
+        // 根据订单获取商品列表
+        List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(trade.getTrade_id());
+        for (TradeProductSku tradeProductSku : tradeProductSkuList) {
+            ProductSku productSku = productSkuService.findByProduct_sku_id(tradeProductSku.getProduct_sku_id());
+            Product product = productService.findByProduct_id(productSku.getProduct_id());
+            tradeProductSku.put(Product.PRODUCT_NAME, product.getProduct_name());
+            tradeProductSku.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+            tradeProductSku.keep(TradeProductSku.PRODUCT_SKU_ID, TradeProductSku.PRODUCT_SKU_AMOUNT,
+                    TradeProductSku.PRODUCT_SKU_QUANTITY, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE);
+        }
+        trade.put(Trade.TRADE_PRODUCT_SKU_LIST, tradeProductSkuList);
+
+        // 获取物流信息
+        List<Express> expressList = new ArrayList<>();
+        if (trade.getTrade_flow().equals(TradeFlow.WAIT_RECEIVE) || trade.getTrade_flow().equals(TradeFlow.COMPLETE)) {
+            expressList = expressService.listByTrade_id(model.getTrade_id());
+            for (Express express : expressList) {
+                Map<String, Object> traces = new HashMap<>();
+
+                if (express != null) {
+                    if (StringUtils.isNotBlank(express.getExpress_traces())) {
+                        JSONArray express_traces = JSONObject.parseArray(express.getExpress_traces());
+                        traces = Util.Obj2Map(express_traces.get(express_traces.size() - 1));
+                    }
+                }
+
+                express.put(Express.EXPRESS_TRACES, traces);
+                express.keep(Express.EXPRESS_ID, Express.EXPRESS_FLOW, Express.EXPRESS_TRACES);
+            }
+        }
+        trade.put(Express.EXPRESS_TRADE_ID_LIST, expressList);
+
+        trade.keep(Trade.TRADE_ID, Trade.TRADE_NUMBER, Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE,
+                Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA,
+                Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY,
+                Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT, Trade.TRADE_DISCOUNT_AMOUNT,
+                Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_FLOW, Trade.SYSTEM_VERSION, Trade.SYSTEM_CREATE_TIME,
+                Trade.TRADE_PRODUCT_SKU_LIST, Express.EXPRESS_TRADE_ID_LIST);
 
         renderSuccessJson(trade);
     }

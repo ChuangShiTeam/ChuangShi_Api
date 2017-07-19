@@ -97,6 +97,8 @@ public class Express extends Model<Express> {
     @Column(type = ColumnType.VARCHAR, length = 200, comment = "备注")
     public static final String EXPRESS_REMARK = "express_remark";
 
+    public static final String EXPRESS_TRADE_ID_LIST = "express_trade_id_list";
+
     public String getExpress_id() {
         return getStr(EXPRESS_ID);
     }
