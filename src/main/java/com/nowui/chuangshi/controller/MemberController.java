@@ -103,7 +103,7 @@ public class MemberController extends Controller {
 
         List<Member> memberList = memberService.listByMember_parent_pathLikeMember_parent_id(member.getMember_id());
 
-        List<Map<String, Object>> resultList = getChildren(memberList, member.getMember_id());
+        List<Map<String, Object>> resultList = getChildren(memberList, member.getMember_id(), Member.MEMBER_STATUS);
 
         renderSuccessJson(resultList);
     }

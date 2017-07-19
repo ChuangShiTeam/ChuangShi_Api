@@ -30,7 +30,7 @@
 
   #sql("listByMember_parent_pathLikeMember_parent_id")
     SELECT
-    table_member.member_id, table_member.member_parent_id, table_user.user_name, IFNULL(table_member_level.member_level_name, '') AS member_level_name, table_file.file_path AS user_avatar
+    table_member.member_id, table_member.member_parent_id, table_user.user_name, IFNULL(table_member_level.member_level_name, '') AS member_level_name, table_member.member_status, table_file.file_path AS user_avatar
     FROM table_member
     LEFT JOIN table_user ON table_member.user_id = table_user.user_id
     LEFT JOIN table_member_level ON table_member.member_level_id = table_member_level.member_level_id
