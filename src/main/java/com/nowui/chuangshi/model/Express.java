@@ -98,6 +98,8 @@ public class Express extends Model<Express> {
     public static final String EXPRESS_REMARK = "express_remark";
 
     public static final String EXPRESS_TRADE_ID_LIST = "express_trade_id_list";
+    
+    public static final String EXPRESS_TRACES_LIST = "express_traces_list";
 
     public String getExpress_id() {
         return getStr(EXPRESS_ID);

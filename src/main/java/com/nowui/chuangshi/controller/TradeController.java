@@ -167,7 +167,7 @@ public class TradeController extends Controller {
 
         // 获取物流信息
         List<Express> expressList = new ArrayList<>();
-        if (trade.getTrade_flow().equals(TradeFlow.WAIT_RECEIVE) || trade.getTrade_flow().equals(TradeFlow.COMPLETE)) {
+        if (trade.getTrade_flow().equals(TradeFlow.WAIT_RECEIVE.getKey()) || trade.getTrade_flow().equals(TradeFlow.COMPLETE.getKey())) {
             expressList = expressService.listByTrade_id(model.getTrade_id());
             for (Express express : expressList) {
                 Map<String, Object> traces = new HashMap<>();
@@ -179,7 +179,7 @@ public class TradeController extends Controller {
                     }
                 }
 
-                express.put(Express.EXPRESS_TRACES, traces);
+                express.put(Express.EXPRESS_TRACES, traces.get("map"));
                 express.keep(Express.EXPRESS_ID, Express.EXPRESS_FLOW, Express.EXPRESS_TRACES);
             }
         }
