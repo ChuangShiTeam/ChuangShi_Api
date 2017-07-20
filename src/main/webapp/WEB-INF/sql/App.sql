@@ -89,9 +89,7 @@
       wechat_mch_key,
       wechat_token,
       wechat_encoding_aes_key,
-      app_is_create_warehouse,
-      app_is_delivery,
-      app_is_audit_member,
+      app_is_stock,
       app_is_commission,
       app_commission_level,
       system_create_user_id,
@@ -110,9 +108,7 @@
       #p(wechat_mch_key),
       #p(wechat_token),
       #p(wechat_encoding_aes_key),
-      #p(app_is_create_warehouse),
-      #p(app_is_delivery),
-      #p(app_is_audit_member),
+      #p(app_is_stock),
       #p(app_is_commission),
       #p(app_commission_level),
       #p(system_create_user_id),
@@ -134,9 +130,7 @@
     wechat_mch_key = #p(wechat_mch_key),
     wechat_token = #p(wechat_token),
     wechat_encoding_aes_key = #p(wechat_encoding_aes_key),
-    app_is_create_warehouse = #p(app_is_create_warehouse),
-    app_is_delivery = #p(app_is_delivery),
-    app_is_audit_member = #p(app_is_audit_member),
+    app_is_stock = #p(app_is_stock),
     app_is_commission = #p(app_is_commission),
     app_commission_level = #p(app_commission_level),
     system_update_user_id = #p(system_update_user_id),
@@ -146,7 +140,6 @@
     AND app_id = #p(app_id)
     AND system_version = #p(system_version)
   #end
-
   
   #sql("deleteByApp_idAndSystem_version")
     UPDATE table_app SET

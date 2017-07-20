@@ -9,6 +9,7 @@ import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Product;
+import com.nowui.chuangshi.model.StockProductSku;
 import com.nowui.chuangshi.model.Supplier;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.ProductService;
@@ -214,7 +215,7 @@ public class SupplierController extends Controller {
         JSONObject jsonObject = getParameterJSONObject();
         JSONArray product_list = jsonObject.getJSONArray("product_list");
         for (int j = 0; j < product_list.size(); j++) {
-            //StockProductSku stockProductSku = product_list.getJSONObject(j).toJavaObject(StockProductSku.class);
+            StockProductSku stockProductSku = product_list.getJSONObject(j).toJavaObject(StockProductSku.class);
             //stockProductSkuList.add(stockProductSku);
         }
 

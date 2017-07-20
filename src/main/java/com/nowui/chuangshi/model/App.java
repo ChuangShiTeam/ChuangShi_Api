@@ -32,14 +32,8 @@ public class App extends Model<App> {
     @Column(type = ColumnType.VARCHAR, length = 43, comment = "wechat_encoding_aes_key")
     public static final String WECHAT_ENCODING_AES_KEY = "wechat_encoding_aes_key";
 
-    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否建仓库")
-    public static final String APP_IS_CREATE_WAREHOUSE = "app_is_create_warehouse";
-
-    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否发货")
-    public static final String APP_IS_DELIVERY = "app_is_delivery";
-
-    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否审核会员")
-    public static final String APP_IS_AUDIT_MEMBER = "app_is_audit_member";
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否有库存")
+    public static final String APP_IS_STOCK = "app_is_stock";
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "是否分成")
     public static final String APP_IS_COMMISSION = "app_is_commission";
@@ -119,28 +113,12 @@ public class App extends Model<App> {
         set(WECHAT_ENCODING_AES_KEY, wechat_encoding_aes_key);
     }
 
-    public Boolean getApp_is_create_warehouse() {
-        return getBoolean(APP_IS_CREATE_WAREHOUSE);
+    public Boolean getApp_is_stock() {
+        return getBoolean(APP_IS_STOCK);
     }
 
-    public void setApp_is_create_warehouse(Boolean app_is_create_warehouse) {
-        set(APP_IS_CREATE_WAREHOUSE, app_is_create_warehouse);
-    }
-
-    public Boolean getApp_is_delivery() {
-        return getBoolean(APP_IS_DELIVERY);
-    }
-
-    public void setApp_is_delivery(Boolean app_is_delivery) {
-        set(APP_IS_DELIVERY, app_is_delivery);
-    }
-
-    public Boolean getApp_is_audit_member() {
-        return getBoolean(APP_IS_AUDIT_MEMBER);
-    }
-
-    public void setApp_is_audit_member(Boolean app_is_audit_member) {
-        set(APP_IS_AUDIT_MEMBER, app_is_audit_member);
+    public void setApp_is_stock(Boolean app_is_stock) {
+        set(APP_IS_STOCK, app_is_stock);
     }
 
     public Boolean getApp_is_commission() {

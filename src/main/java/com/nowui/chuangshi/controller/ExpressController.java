@@ -194,7 +194,7 @@ public class ExpressController extends Controller {
 
         if (result) {
             // 更新发货单流程为待收货
-            //stockService.updateSend(stock_id, request_user_id);
+            stockService.updateSend(stock_id, request_user_id);
             // 快递订阅
             expressService.subscription(express_id, model.getExpress_shipper_code(), model.getExpress_no());
         }
