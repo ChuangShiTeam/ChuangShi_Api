@@ -521,5 +521,22 @@ public class Url {
     public static final String SUPPLIER_SYSTEM_SAVE = "/supplier/system/save";
     public static final String SUPPLIER_SYSTEM_UPDATE = "/supplier/system/update";
     public static final String SUPPLIER_SYSTEM_DELETE = "/supplier/system/delete";
+    
+    //仓库
+    public static final String WAREHOUSE_LIST = "/warehouse/list";
+    public static final String WAREHOUSE_FIND = "/warehouse/find";
+    public static final String WAREHOUSE_SAVE = "/warehouse/save";
+    public static final String WAREHOUSE_UPDATE = "/warehouse/update";
+    public static final String WAREHOUSE_DELETE = "/warehouse/delete";
+    public static final String WAREHOUSE_ADMIN_LIST = "/warehouse/admin/list";
+    public static final String WAREHOUSE_ADMIN_FIND = "/warehouse/admin/find";
+    public static final String WAREHOUSE_ADMIN_SAVE = "/warehouse/admin/save";
+    public static final String WAREHOUSE_ADMIN_UPDATE = "/warehouse/admin/update";
+    public static final String WAREHOUSE_ADMIN_DELETE = "/warehouse/admin/delete";
+    public static final String WAREHOUSE_SYSTEM_LIST = "/warehouse/system/list";
+    public static final String WAREHOUSE_SYSTEM_FIND = "/warehouse/system/find";
+    public static final String WAREHOUSE_SYSTEM_SAVE = "/warehouse/system/save";
+    public static final String WAREHOUSE_SYSTEM_UPDATE = "/warehouse/system/update";
+    public static final String WAREHOUSE_SYSTEM_DELETE = "/warehouse/system/delete";
 
 }

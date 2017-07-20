@@ -20,7 +20,6 @@ import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberLevel;
 import com.nowui.chuangshi.model.Qrcode;
 import com.nowui.chuangshi.model.Stock;
-import com.nowui.chuangshi.model.StockProductSku;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.service.FileService;
@@ -30,7 +29,6 @@ import com.nowui.chuangshi.service.QrcodeService;
 import com.nowui.chuangshi.service.StockService;
 import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.QrcodeType;
-import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -317,15 +315,15 @@ public class MemberController extends Controller {
         
         User user = userService.findByUser_id(request_user_id);
         Member member = memberService.findByMember_id(user.getObject_Id());
-        List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
+        /*List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
         for (int j = 0; j < productSkuList.size(); j++) {
             StockProductSku stockProductSku = productSkuList.getJSONObject(j).toJavaObject(StockProductSku.class);
             stockProductSkuList.add(stockProductSku);
-        }
-        Boolean result = stockService.out(member.getApp_id(), "", member.getMember_id(), StockType.MEMBER.getKey(), member.getUser_id(), "",stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), stock.getStock_express_pay_way(), stock.getStock_express_shipper_code(),
+        }*/
+        /*Boolean result = stockService.out(member.getApp_id(), "", member.getMember_id(), StockType.MEMBER.getKey(), member.getUser_id(), "",stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), stock.getStock_express_pay_way(), stock.getStock_express_shipper_code(),
         		false, stockProductSkuList, request_user_id);
-        
-        renderSuccessJson(result);
+        */
+        renderSuccessJson(false);
     }
     
     //会员发货明细
@@ -344,10 +342,10 @@ public class MemberController extends Controller {
     	authenticateApp_id(request_app_id);
     	
     	//查询会员库存
-    	Integer stock_quantity = stockService.sumStock_quantityByObject_id(member.getMember_id());
+    	//Integer stock_quantity = stockService.sumStock_quantityByObject_id(member.getMember_id());
     	//查询会员发货单列表
-    	List<Record> recordList = stockService.listWithExpressByObject_id(member.getMember_id(), getM(), getN());
-    	List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+    	//List<Record> recordList = stockService.listWithExpressByObject_id(member.getMember_id(), getM(), getN());
+    	/*List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
     	for (Record record : recordList) {
     		Map<String, Object> map = new HashMap<String, Object>();
     		map.put(Stock.STOCK_ID, record.get(Stock.STOCK_ID));
@@ -361,10 +359,10 @@ public class MemberController extends Controller {
     		map.put(Express.EXPRESS_NO, record.get(Express.EXPRESS_NO));
     		map.put(Express.EXPRESS_SHIPPER_CODE, record.get(Express.EXPRESS_SHIPPER_CODE));
     		resultList.add(map);
-    	}
+    	}*/
     	Map<String, Object> result = new HashMap<String, Object>();
-    	result.put("stock_quantity", stock_quantity);
-    	result.put("stock_list", resultList);
+    	//result.put("stock_quantity", stock_quantity);
+    	//result.put("stock_list", resultList);
     	renderSuccessJson(result);
     }
     
@@ -426,15 +424,15 @@ public class MemberController extends Controller {
         authenticateApp_id(request_app_id);
         
         Member member = memberService.findByMember_id(member_id);
-        List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
+        /*List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
         for (int j = 0; j < productSkuList.size(); j++) {
             StockProductSku stockProductSku = productSkuList.getJSONObject(j).toJavaObject(StockProductSku.class);
             stockProductSkuList.add(stockProductSku);
         }
         Boolean result = stockService.out(member.getApp_id(), "", member_id, StockType.MEMBER.getKey(), member.getUser_id(), "", stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), stock.getStock_express_pay_way(), stock.getStock_express_shipper_code(),
         		false, stockProductSkuList, request_user_id);
-        
-        renderSuccessJson(result);
+        */
+        renderSuccessJson(false);
     }
     
     @ActionKey(Url.MEMBER_SYSTEM_LIST)

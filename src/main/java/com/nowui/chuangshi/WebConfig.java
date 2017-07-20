@@ -21,7 +21,6 @@ import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.controller.AdminController;
 import com.nowui.chuangshi.controller.ApiController;
 import com.nowui.chuangshi.controller.AppController;
-import com.nowui.chuangshi.controller.AppStockController;
 import com.nowui.chuangshi.controller.BillController;
 import com.nowui.chuangshi.controller.CodeController;
 import com.nowui.chuangshi.controller.CustomerAttributeController;
@@ -40,7 +39,6 @@ import com.nowui.chuangshi.controller.HttpController;
 import com.nowui.chuangshi.controller.MemberAddressController;
 import com.nowui.chuangshi.controller.MemberController;
 import com.nowui.chuangshi.controller.MemberLevelController;
-import com.nowui.chuangshi.controller.MemberStockController;
 import com.nowui.chuangshi.controller.MenuController;
 import com.nowui.chuangshi.controller.ProductBrandController;
 import com.nowui.chuangshi.controller.ProductCategoryController;
@@ -50,6 +48,7 @@ import com.nowui.chuangshi.controller.SqlController;
 import com.nowui.chuangshi.controller.SupplierController;
 import com.nowui.chuangshi.controller.TradeController;
 import com.nowui.chuangshi.controller.UserController;
+import com.nowui.chuangshi.controller.WarehouseController;
 import com.nowui.chuangshi.controller.WeChatController;
 import com.nowui.chuangshi.controller.WeChatMessageController;
 import com.nowui.chuangshi.interceptor.GlobalActionInterceptor;
@@ -78,7 +77,6 @@ public class WebConfig extends JFinalConfig {
         routes.add("/sql", SqlController.class);
         routes.add("/exception", ExceptionController.class);
         routes.add("/app", AppController.class);
-        routes.add("/app/stock", AppStockController.class);
         routes.add("/menu", MenuController.class);
         routes.add("/api", ApiController.class);
         routes.add("/user", UserController.class);
@@ -90,7 +88,6 @@ public class WebConfig extends JFinalConfig {
         routes.add("/member", MemberController.class);
         routes.add("/member/address", MemberAddressController.class);
         routes.add("/member/level", MemberLevelController.class);
-        routes.add("/member/stock", MemberStockController.class);
         routes.add("/express", ExpressController.class);
         routes.add("/qrcode", QrcodeController.class);
 
@@ -109,6 +106,8 @@ public class WebConfig extends JFinalConfig {
         routes.add("/feijiu", FeijiuController.class);
 
         routes.add("/supplier", SupplierController.class);
+        
+        routes.add("/warehouse", WarehouseController.class);
     }
 
     public void configEngine(Engine engine) {
@@ -160,7 +159,6 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_member_address", "member_address_id", MemberAddress.class);
         activeRecordPlugin.addMapping("table_member_level", "member_level_id", MemberLevel.class);
         activeRecordPlugin.addMapping("table_stock", "stock_id", Stock.class);
-        activeRecordPlugin.addMapping("table_stock_product_sku", "stock_product_sku_id", StockProductSku.class);
         activeRecordPlugin.addMapping("table_express", "express_id", Express.class);
         activeRecordPlugin.addMapping("table_qrcode", "qrcode_id", Qrcode.class);
 
@@ -184,6 +182,8 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_supplier", "supplier_id", Supplier.class);
 //        activeRecordPlugin.addMapping("table_supplier_product", "supplier_product_id", SupplierProduct.class);
 
+        activeRecordPlugin.addMapping("table_warehouse", "warehouse_id", Warehouse.class);
+        
         plugins.add(activeRecordPlugin);
 
         EhCachePlugin ehCachePlugin = new EhCachePlugin();

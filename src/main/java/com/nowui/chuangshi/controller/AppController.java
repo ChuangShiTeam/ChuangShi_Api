@@ -56,7 +56,7 @@ public class AppController extends Controller {
     @ActionKey(Url.APP_SAVE)
     public void save() {
     	validateRequest_app_id();
-        validate(App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.WECHAT_TOKEN, App.WECHAT_ENCODING_AES_KEY, App.APP_IS_STOCK, App.APP_IS_COMMISSION, App.APP_COMMISSION_LEVEL);
+    	validate(App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.WECHAT_TOKEN, App.WECHAT_ENCODING_AES_KEY, App.APP_IS_CREATE_WAREHOUSE, App.APP_IS_DELIVERY, App.APP_IS_AUDIT_MEMBER, App.APP_IS_COMMISSION, App.APP_COMMISSION_LEVEL);
 
         App model = getModel(App.class);
         String app_id = Util.getRandomUUID();
@@ -64,15 +64,15 @@ public class AppController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = appService.save(app_id, model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getWechat_token(), model.getWechat_encoding_aes_key(), model.getApp_is_stock(), model.getApp_is_commission(), model.getApp_commission_level(), request_user_id);
-
+        Boolean result = appService.save(app_id, model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getWechat_token(), model.getWechat_encoding_aes_key(), model.getApp_is_create_warehouse(), model.getApp_is_delivery(), model.getApp_is_audit_member(), model.getApp_is_commission(), model.getApp_commission_level(), request_user_id);
+        
         renderSuccessJson(result);
     }
 
     @ActionKey(Url.APP_UPDATE)
     public void update() {
         validateRequest_app_id();
-        validate(App.APP_ID, App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.WECHAT_TOKEN, App.WECHAT_ENCODING_AES_KEY, App.APP_IS_STOCK, App.APP_IS_COMMISSION, App.APP_COMMISSION_LEVEL, App.SYSTEM_VERSION);
+        validate(App.APP_ID, App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.WECHAT_TOKEN, App.WECHAT_ENCODING_AES_KEY, App.APP_IS_CREATE_WAREHOUSE, App.APP_IS_DELIVERY, App.APP_IS_AUDIT_MEMBER, App.APP_IS_COMMISSION, App.APP_COMMISSION_LEVEL, App.SYSTEM_VERSION);
 
         App model = getModel(App.class);
         String request_user_id = getRequest_user_id();
@@ -84,7 +84,7 @@ public class AppController extends Controller {
         authenticateApp_id(app.getApp_id());
         authenticateSystem_create_user_id(app.getSystem_create_user_id());
 
-        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getWechat_token(), model.getWechat_encoding_aes_key(), model.getApp_is_stock(), model.getApp_is_commission(), model.getApp_commission_level(), request_user_id, model.getSystem_version());
+        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getWechat_token(), model.getWechat_encoding_aes_key(), model.getApp_is_create_warehouse(), model.getApp_is_delivery(), model.getApp_is_audit_member(), model.getApp_is_commission(), model.getApp_commission_level(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -159,7 +159,7 @@ public class AppController extends Controller {
 
         authenticateApp_id(app.getApp_id());
 
-        app.keep(App.APP_ID, App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.WECHAT_TOKEN, App.WECHAT_ENCODING_AES_KEY, App.APP_IS_STOCK, App.APP_IS_COMMISSION, App.APP_COMMISSION_LEVEL, App.SYSTEM_VERSION);
+        app.keep(App.APP_ID, App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.WECHAT_TOKEN, App.WECHAT_ENCODING_AES_KEY, App.APP_IS_CREATE_WAREHOUSE, App.APP_IS_DELIVERY, App.APP_IS_AUDIT_MEMBER, App.APP_IS_COMMISSION, App.APP_COMMISSION_LEVEL, App.SYSTEM_VERSION);
 
         renderSuccessJson(app);
     }
@@ -172,7 +172,7 @@ public class AppController extends Controller {
     @ActionKey(Url.APP_ADMIN_UPDATE)
     public void adminUpdate() {
         validateRequest_app_id();
-        validate(App.APP_ID, App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.WECHAT_TOKEN, App.WECHAT_ENCODING_AES_KEY, App.APP_IS_STOCK, App.APP_IS_COMMISSION, App.APP_COMMISSION_LEVEL, App.SYSTEM_VERSION);
+        validate(App.APP_ID, App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.WECHAT_TOKEN, App.WECHAT_ENCODING_AES_KEY, App.APP_IS_CREATE_WAREHOUSE, App.APP_IS_DELIVERY, App.APP_IS_AUDIT_MEMBER, App.APP_IS_COMMISSION, App.APP_COMMISSION_LEVEL, App.SYSTEM_VERSION);
 
         App model = getModel(App.class);
         String request_user_id = getRequest_user_id();
@@ -183,7 +183,7 @@ public class AppController extends Controller {
 
         authenticateApp_id(app.getApp_id());
 
-        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getWechat_token(), model.getWechat_encoding_aes_key(), model.getApp_is_stock(), model.getApp_is_commission(), model.getApp_commission_level(), request_user_id, model.getSystem_version());
+        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getWechat_token(), model.getWechat_encoding_aes_key(), model.getApp_is_create_warehouse(), model.getApp_is_delivery(), model.getApp_is_audit_member(), model.getApp_is_commission(), model.getApp_commission_level(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -246,7 +246,7 @@ public class AppController extends Controller {
 
         App app = appService.findByApp_id(model.getApp_id());
 
-        app.keep(App.APP_ID, App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.APP_IS_STOCK, App.APP_IS_COMMISSION, App.APP_COMMISSION_LEVEL, App.SYSTEM_VERSION);
+        app.keep(App.APP_ID, App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.APP_IS_CREATE_WAREHOUSE, App.APP_IS_DELIVERY, App.APP_IS_AUDIT_MEMBER, App.APP_IS_COMMISSION, App.APP_COMMISSION_LEVEL, App.SYSTEM_VERSION);
 
         renderSuccessJson(app);
     }
@@ -264,7 +264,7 @@ public class AppController extends Controller {
         App model = getModel(App.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getWechat_token(), model.getWechat_encoding_aes_key(), model.getApp_is_stock(), model.getApp_is_commission(), model.getApp_commission_level(), request_user_id, model.getSystem_version());
+        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getWechat_token(), model.getWechat_encoding_aes_key(), model.getApp_is_create_warehouse(), model.getApp_is_delivery(), model.getApp_is_audit_member(), model.getApp_is_commission(), model.getApp_commission_level(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
