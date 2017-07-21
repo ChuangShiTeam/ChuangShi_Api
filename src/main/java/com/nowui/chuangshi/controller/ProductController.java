@@ -53,14 +53,12 @@ public class ProductController extends Controller {
         List<Product> productList = productService.listByApp_id(request_app_id);
 
         for (Product product : productList) {
-            Map<String, Object> resultMap = new HashMap<String, Object>();
             product.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
 
             List<ProductSku> productSkuList = productSkuService.listByProduct_id(product.getProduct_id());
             for (ProductSku productSku : productSkuList) {
                 if (productSku.getProduct_sku_is_default()) {
-                    List<ProductSkuPrice> productSkuPriceList = productSkuPriceService
-                            .listByProduct_sku_id(productSku.getProduct_sku_id());
+                    List<ProductSkuPrice> productSkuPriceList = productSkuPriceService.listByProduct_sku_id(productSku.getProduct_sku_id());
                     for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
                         if (productSkuPrice.getMember_level_id().equals("")) {
                             product.put(ProductSkuPrice.PRODUCT_SKU_PRICE, productSkuPrice.getProduct_sku_price());
@@ -69,8 +67,7 @@ public class ProductController extends Controller {
                 }
             }
 
-            product.keep(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE,
-                    ProductSkuPrice.PRODUCT_SKU_PRICE);
+            product.keep(Product.PRODUCT_ID, Product.PRODUCT_CATEGORY_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, ProductSkuPrice.PRODUCT_SKU_PRICE);
         }
 
         renderSuccessJson(productList);
@@ -452,7 +449,7 @@ public class ProductController extends Controller {
     }
 
     private void saveProductSkuList(String product_id, JSONArray jsonArray, List<ProductSku> productSkuList,
-            String request_user_id) {
+                                    String request_user_id) {
         List<ProductSku> productSkuSaveList = new ArrayList<ProductSku>();
         List<String> productSkuIdDeleteList = new ArrayList<String>();
 
@@ -581,9 +578,9 @@ public class ProductController extends Controller {
                 if (productSkuPrice.getMember_level_id()
                         .equals(productSkuPriceJSONObject.getString(ProductSkuPrice.MEMBER_LEVEL_ID))
                         && productSkuPrice.getMember_level_name()
-                                .equals(productSkuPriceJSONObject.getString(ProductSkuPrice.MEMBER_LEVEL_NAME))
+                        .equals(productSkuPriceJSONObject.getString(ProductSkuPrice.MEMBER_LEVEL_NAME))
                         && productSkuPrice.getProduct_sku_price().compareTo(
-                                productSkuPriceJSONObject.getBigDecimal(ProductSkuPrice.PRODUCT_SKU_PRICE)) == 0) {
+                        productSkuPriceJSONObject.getBigDecimal(ProductSkuPrice.PRODUCT_SKU_PRICE)) == 0) {
                     isExit = true;
 
                     break;
@@ -622,7 +619,7 @@ public class ProductController extends Controller {
                 if (productSkuAttribute.getProduct_sku_attribute_name()
                         .equals(productSkuAttributeJSONObject.getString(ProductSkuAttribute.PRODUCT_SKU_ATTRIBUTE_NAME))
                         && productSkuAttribute.getProduct_sku_attribute_value().equals(productSkuAttributeJSONObject
-                                .getString(ProductSkuAttribute.PRODUCT_SKU_ATTRIBUTE_VALUE))) {
+                        .getString(ProductSkuAttribute.PRODUCT_SKU_ATTRIBUTE_VALUE))) {
                     isExit = true;
 
                     break;
@@ -660,9 +657,9 @@ public class ProductController extends Controller {
                 if (productSkuCommission.getMember_level_id()
                         .equals(productSkuCommissioJSONObject.getString(ProductSkuCommission.MEMBER_LEVEL_ID))
                         && productSkuCommission.getMember_level_name()
-                                .equals(productSkuCommissioJSONObject.getString(ProductSkuCommission.MEMBER_LEVEL_NAME))
+                        .equals(productSkuCommissioJSONObject.getString(ProductSkuCommission.MEMBER_LEVEL_NAME))
                         && productSkuCommission.getProduct_sku_commission().equals(productSkuCommissioJSONObject
-                                .getInteger(ProductSkuCommission.PRODUCT_SKU_COMMISSION))) {
+                        .getInteger(ProductSkuCommission.PRODUCT_SKU_COMMISSION))) {
                     isExit = true;
 
                     break;

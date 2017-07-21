@@ -152,15 +152,15 @@ public class WeChatController extends Controller {
 
     @ActionKey(Url.WECHAT_MENU)
     public void menu() {
-        App app = appService.findByApp_id("c1af3f1ae00e4e0da9b20f5bd41b4279");
+        App app = appService.findByApp_id("df2078d6c9eb46babb0df957127273ab");
 
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
         }
 
-        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"爆水丸\",\"url\":\"http://h5."
-                + "xingxiao.nowui.com" + "/\"}]}");
+        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"健康推荐\",\"url\":\"http://h5."
+                + "jiyiguan.nowui.com" + "/\"}]}");
 
         renderText(apiResult.getJson());
     }
