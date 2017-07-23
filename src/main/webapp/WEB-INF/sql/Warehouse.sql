@@ -62,6 +62,15 @@
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
+  
+  #sql("listByApp_id")
+    SELECT
+    warehouse_id
+    FROM table_warehouse
+    WHERE system_status = 1
+    AND app_id = #p(app_id)
+    ORDER BY system_create_time DESC
+  #end
 
   #sql("findByWarehouse_id")
     SELECT

@@ -31,6 +31,10 @@ public class WarehouseService extends Service {
     public List<Warehouse> listByOrApp_idOrLikeWarehouse_nameAndLimit(String app_id, String warehouse_name, int m, int n) {
         return warehouseCache.listByOrApp_idOrLikeWarehouse_nameAndLimit(app_id, warehouse_name, m, n);
     }
+    
+    public List<Warehouse> listByApp_id(String app_id) {
+        return warehouseCache.listByApp_id(app_id);
+    }
 
     public Warehouse findByWarehouse_id(String warehouse_id) {
         return warehouseCache.findByWarehouse_id(warehouse_id);

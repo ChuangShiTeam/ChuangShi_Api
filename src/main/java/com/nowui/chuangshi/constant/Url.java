@@ -529,11 +529,13 @@ public class Url {
     public static final String WAREHOUSE_UPDATE = "/warehouse/update";
     public static final String WAREHOUSE_DELETE = "/warehouse/delete";
     public static final String WAREHOUSE_ADMIN_LIST = "/warehouse/admin/list";
+    public static final String WAREHOUSE_ADMIN_ALL_LIST = "/warehouse/admin/all/list";
     public static final String WAREHOUSE_ADMIN_FIND = "/warehouse/admin/find";
     public static final String WAREHOUSE_ADMIN_SAVE = "/warehouse/admin/save";
     public static final String WAREHOUSE_ADMIN_UPDATE = "/warehouse/admin/update";
     public static final String WAREHOUSE_ADMIN_DELETE = "/warehouse/admin/delete";
     public static final String WAREHOUSE_SYSTEM_LIST = "/warehouse/system/list";
+    public static final String WAREHOUSE_SYSTEM_ALL_LIST = "/warehouse/system/all/list";
     public static final String WAREHOUSE_SYSTEM_FIND = "/warehouse/system/find";
     public static final String WAREHOUSE_SYSTEM_SAVE = "/warehouse/system/save";
     public static final String WAREHOUSE_SYSTEM_UPDATE = "/warehouse/system/update";

@@ -51,6 +51,16 @@ public class WarehouseCache extends Cache {
 
         return warehouseList;
     }
+    
+    public List<Warehouse> listByApp_id(String app_id) {
+        List<Warehouse> warehouseList = warehouseDao.listByApp_id(app_id);
+
+        for (Warehouse warehouse : warehouseList) {
+            warehouse.put(findByWarehouse_id(warehouse.getWarehouse_id()));
+        }
+
+        return warehouseList;
+    }
 
     public Warehouse findByWarehouse_id(String warehouse_id) {
         Warehouse warehouse = CacheUtil.get(WAREHOUSE_BY_WAREHOUSE_ID_CACHE, warehouse_id);

@@ -128,6 +128,23 @@ public class WarehouseController extends Controller {
 
         renderSuccessJson(total, resultList);
     }
+    
+    @ActionKey(Url.WAREHOUSE_ADMIN_ALL_LIST)
+    public void adminAllList() {
+        validateRequest_app_id();
+        
+        String request_app_id = getRequest_app_id();
+        
+        authenticateRequest_app_idAndRequest_user_id();
+        
+        List<Warehouse> resultList = warehouseService.listByApp_id(request_app_id);
+        
+        for (Warehouse result : resultList) {
+            result.keep(Warehouse.WAREHOUSE_ID, Warehouse.WAREHOUSE_NAME);
+        }
+        
+        renderSuccessJson(resultList);
+    }
 
     @ActionKey(Url.WAREHOUSE_ADMIN_FIND)
     public void adminFind() {

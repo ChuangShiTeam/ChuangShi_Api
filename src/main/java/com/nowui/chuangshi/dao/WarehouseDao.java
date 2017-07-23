@@ -73,6 +73,16 @@ public class WarehouseDao extends Dao {
 
         return new Warehouse().find(sqlPara.getSql(), sqlPara.getPara());
     }
+    
+    public List<Warehouse> listByApp_id(String app_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Warehouse.APP_ID, app_id);
+        SqlPara sqlPara = Db.getSqlPara("warehouse.listByApp_id", sqlMap);
+        
+        logSql("warehouse", "listByApp_id", sqlPara);
+        
+        return new Warehouse().find(sqlPara.getSql(), sqlPara.getPara());
+    }
 
     public Warehouse findByWarehouse_id(String warehouse_id) {
         Kv sqlMap = Kv.create();
