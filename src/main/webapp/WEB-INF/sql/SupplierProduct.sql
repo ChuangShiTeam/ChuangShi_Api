@@ -1,5 +1,14 @@
 #namespace("supplier_product")
 
+ #sql("findBySupplier_id")
+    SELECT 
+    * 
+    FROM table_supplier_product
+    WHERE system_status = 1
+    AND supplier_id = #p(supplier_id)
+    ORDER BY system_create_time DESC
+  #end
+  
   #sql("countByApp_idOrLikeSupplier_product_name")
     SELECT COUNT(*) FROM table_supplier_product
     WHERE system_status = 1
@@ -114,6 +123,16 @@
     WHERE system_status = 1
     AND supplier_product_id = #p(supplier_product_id)
     AND system_version = #p(system_version)
+  #end
+  
+  #sql("deleteBySupplier_id")
+    UPDATE table_supplier_product SET
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1,
+    system_status = 0
+    WHERE system_status = 1
+    AND supplier_id = #p(supplier_id)
   #end
 
 #end

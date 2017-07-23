@@ -163,6 +163,18 @@
     AND user_id = #p(user_id)
   #end
 
+  #sql("updateByUser_nameAndUser_accountAndUser_password")
+    UPDATE table_user SET
+    user_name = #p(user_name),
+    user_account = #p(user_account),
+    user_password = #p(user_password),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND user_id = #p(user_id)
+  #end
+
   #sql("deleteByUser_idAndSystem_version")
     UPDATE table_user SET
     system_update_user_id = #p(system_update_user_id),

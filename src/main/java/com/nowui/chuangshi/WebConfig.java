@@ -182,7 +182,7 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_feijiu_recommend_product", "feijiu_recommend_product_id", FeijiuRecommendProduct.class);
 
         activeRecordPlugin.addMapping("table_supplier", "supplier_id", Supplier.class);
-//        activeRecordPlugin.addMapping("table_supplier_product", "supplier_product_id", SupplierProduct.class);
+        activeRecordPlugin.addMapping("table_supplier_product", "supplier_id", SupplierProduct.class);
 
         plugins.add(activeRecordPlugin);
 

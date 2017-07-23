@@ -1,15 +1,26 @@
 package com.nowui.chuangshi.dao;
 
+import java.util.Date;
+import java.util.List;
+
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.SupplierProduct;
 
-import java.util.Date;
-import java.util.List;
-
 public class SupplierProductDao extends Dao {
+
+    public List<SupplierProduct> findBySupplier_id(String supplier_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(SupplierProduct.SUPPLIER_ID, supplier_id);
+        SqlPara sqlPara = Db.getSqlPara("supplier_product.findBySupplier_id", sqlMap);
+
+        logSql("supplier_product", "findBySupplier_id", sqlPara);
+
+        return new SupplierProduct().find(sqlPara.getSql(), sqlPara.getPara());
+
+    }
 
     public Integer countByApp_idOrLikeSupplier_product_name(String app_id, String supplier_product_name) {
         Kv sqlMap = Kv.create();
@@ -31,7 +42,8 @@ public class SupplierProductDao extends Dao {
         return count.intValue();
     }
 
-    public List<SupplierProduct> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
+    public List<SupplierProduct> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time,
+            int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(SupplierProduct.SYSTEM_CREATE_TIME, system_create_time);
         sqlMap.put(Constant.M, m);
@@ -43,7 +55,8 @@ public class SupplierProductDao extends Dao {
         return new SupplierProduct().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<SupplierProduct> listByApp_idOrLikeSupplier_product_nameAndLimit(String app_id, String supplier_product_name, int m, int n) {
+    public List<SupplierProduct> listByApp_idOrLikeSupplier_product_nameAndLimit(String app_id,
+            String supplier_product_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
@@ -54,7 +67,8 @@ public class SupplierProductDao extends Dao {
         return new SupplierProduct().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<SupplierProduct> listByOrApp_idOrLikeSupplier_product_nameAndLimit(String app_id, String supplier_product_name, int m, int n) {
+    public List<SupplierProduct> listByOrApp_idOrLikeSupplier_product_nameAndLimit(String app_id,
+            String supplier_product_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
@@ -96,7 +110,20 @@ public class SupplierProductDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String supplier_product_id, String supplier_id, String product_id, String system_update_user_id, Integer system_version) {
+    public Boolean batchSave(List<SupplierProduct> supplierProductList) {
+        int[] result = Db.batchSave(supplierProductList, Constant.BATCH_SIZE);
+
+        for (int i : result) {
+            if (i == 0) {
+                throw new RuntimeException("供应商选择商品不成功");
+            }
+        }
+
+        return true;
+    }
+
+    public Boolean update(String supplier_product_id, String supplier_id, String product_id,
+            String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(SupplierProduct.SUPPLIER_ID, supplier_id);
         sqlMap.put(SupplierProduct.PRODUCT_ID, product_id);
@@ -110,7 +137,8 @@ public class SupplierProductDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean deleteBySupplier_product_idAndSystem_version(String supplier_product_id, String system_update_user_id, Integer system_version) {
+    public Boolean deleteBySupplier_product_idAndSystem_version(String supplier_product_id,
+            String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(SupplierProduct.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(SupplierProduct.SYSTEM_UPDATE_TIME, new Date());
@@ -118,6 +146,18 @@ public class SupplierProductDao extends Dao {
         SqlPara sqlPara = Db.getSqlPara("supplier_product.deleteBySupplier_product_idAndSystem_version", sqlMap);
 
         logSql("supplier_product", "deleteBySupplier_product_idAndSystem_version", sqlPara);
+
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+
+    public boolean deleteBySupplier_id(String supplier_id, String system_update_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(SupplierProduct.SUPPLIER_ID, supplier_id);
+        sqlMap.put(SupplierProduct.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(SupplierProduct.SYSTEM_UPDATE_TIME, new Date());
+        SqlPara sqlPara = Db.getSqlPara("supplier_product.deleteBySupplier_id", sqlMap);
+
+        logSql("supplier_product", "deleteBySupplier_id", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
