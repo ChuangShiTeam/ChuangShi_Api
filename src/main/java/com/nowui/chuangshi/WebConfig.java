@@ -46,6 +46,7 @@ import com.nowui.chuangshi.controller.ProductController;
 import com.nowui.chuangshi.controller.QrcodeController;
 import com.nowui.chuangshi.controller.SqlController;
 import com.nowui.chuangshi.controller.StockController;
+import com.nowui.chuangshi.controller.StockInController;
 import com.nowui.chuangshi.controller.SupplierController;
 import com.nowui.chuangshi.controller.TradeController;
 import com.nowui.chuangshi.controller.UserController;
@@ -53,8 +54,47 @@ import com.nowui.chuangshi.controller.WarehouseController;
 import com.nowui.chuangshi.controller.WeChatController;
 import com.nowui.chuangshi.controller.WeChatMessageController;
 import com.nowui.chuangshi.interceptor.GlobalActionInterceptor;
-import com.nowui.chuangshi.model.*;
+import com.nowui.chuangshi.model.Admin;
+import com.nowui.chuangshi.model.Api;
+import com.nowui.chuangshi.model.App;
+import com.nowui.chuangshi.model.Bill;
+import com.nowui.chuangshi.model.BillCommission;
+import com.nowui.chuangshi.model.Customer;
+import com.nowui.chuangshi.model.CustomerAttribute;
 import com.nowui.chuangshi.model.Exception;
+import com.nowui.chuangshi.model.Express;
+import com.nowui.chuangshi.model.FeijiuFastCustomer;
+import com.nowui.chuangshi.model.FeijiuRecommendCustomer;
+import com.nowui.chuangshi.model.FeijiuRecommendProduct;
+import com.nowui.chuangshi.model.File;
+import com.nowui.chuangshi.model.GuangqiCustomer;
+import com.nowui.chuangshi.model.GuangqiCustomerPrize;
+import com.nowui.chuangshi.model.GuangqiPrize;
+import com.nowui.chuangshi.model.Http;
+import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.MemberAddress;
+import com.nowui.chuangshi.model.MemberLevel;
+import com.nowui.chuangshi.model.Menu;
+import com.nowui.chuangshi.model.MenuApi;
+import com.nowui.chuangshi.model.Product;
+import com.nowui.chuangshi.model.ProductBrand;
+import com.nowui.chuangshi.model.ProductCategory;
+import com.nowui.chuangshi.model.ProductImage;
+import com.nowui.chuangshi.model.ProductSku;
+import com.nowui.chuangshi.model.ProductSkuAttribute;
+import com.nowui.chuangshi.model.ProductSkuCommission;
+import com.nowui.chuangshi.model.ProductSkuPrice;
+import com.nowui.chuangshi.model.Qrcode;
+import com.nowui.chuangshi.model.Sql;
+import com.nowui.chuangshi.model.Stock;
+import com.nowui.chuangshi.model.StockIn;
+import com.nowui.chuangshi.model.Supplier;
+import com.nowui.chuangshi.model.Trade;
+import com.nowui.chuangshi.model.TradeCommossion;
+import com.nowui.chuangshi.model.TradePay;
+import com.nowui.chuangshi.model.TradeProductSku;
+import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.model.Warehouse;
 import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -110,6 +150,8 @@ public class WebConfig extends JFinalConfig {
         
         routes.add("/warehouse", WarehouseController.class);
         routes.add("/stock", StockController.class);
+        routes.add("/stock/in", StockInController.class);
+
     }
 
     public void configEngine(Engine engine) {
@@ -186,6 +228,7 @@ public class WebConfig extends JFinalConfig {
 
         activeRecordPlugin.addMapping("table_warehouse", "warehouse_id", Warehouse.class);
         activeRecordPlugin.addMapping("table_stock", "stock_id", Stock.class);
+        activeRecordPlugin.addMapping("table_stock_in", "stock_in_id", StockIn.class);
         
         plugins.add(activeRecordPlugin);
 

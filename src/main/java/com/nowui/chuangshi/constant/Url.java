@@ -552,5 +552,22 @@ public class Url {
     public static final String STOCK_SYSTEM_SAVE = "/stock/system/save";
     public static final String STOCK_SYSTEM_UPDATE = "/stock/system/update";
     public static final String STOCK_SYSTEM_DELETE = "/stock/system/delete";
+    
+    //入库
+    public static final String STOCK_IN_LIST = "/stock/in/list";
+    public static final String STOCK_IN_FIND = "/stock/in/find";
+    public static final String STOCK_IN_SAVE = "/stock/in/save";
+    public static final String STOCK_IN_UPDATE = "/stock/in/update";
+    public static final String STOCK_IN_DELETE = "/stock/in/delete";
+    public static final String STOCK_IN_ADMIN_LIST = "/stock/in/admin/list";
+    public static final String STOCK_IN_ADMIN_FIND = "/stock/in/admin/find";
+    public static final String STOCK_IN_ADMIN_SAVE = "/stock/in/admin/save";
+    public static final String STOCK_IN_ADMIN_UPDATE = "/stock/in/admin/update";
+    public static final String STOCK_IN_ADMIN_DELETE = "/stock/in/admin/delete";
+    public static final String STOCK_IN_SYSTEM_LIST = "/stock/in/system/list";
+    public static final String STOCK_IN_SYSTEM_FIND = "/stock/in/system/find";
+    public static final String STOCK_IN_SYSTEM_SAVE = "/stock/in/system/save";
+    public static final String STOCK_IN_SYSTEM_UPDATE = "/stock/in/system/update";
+    public static final String STOCK_IN_SYSTEM_DELETE = "/stock/in/system/delete";
 
 }

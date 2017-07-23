@@ -1,65 +1,94 @@
 #namespace("stock_in")
 
-  #sql("countByApp_idOrLikeStock_in_name")
+  #sql("countByApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_name")
     SELECT COUNT(*) FROM table_stock_in
-    WHERE system_status = 1
-    AND app_id = #p(app_id)
-    #if(stock_in_name)
-    #set(stock_in_name = "%" + stock_in_name + "%")
-    AND stock_in_name LIKE #p(stock_in_name)
+    #if(stock_in_type == 'MEMBER' && user_name)
+    LEFT JOIN table_user ON table_user.user_id = table_stock_in.object_id
+    #end
+    WHERE table_stock_in.system_status = 1
+    AND table_stock_in.app_id = #p(app_id)
+    #if(warehouse_id)
+    AND table_stock_in.warehouse_id = #p(warehouse_id)
+    #end
+    AND table_stock_in.stock_in_type = #p(stock_in_type)
+    #if(stock_in_type == 'MEMBER' && user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND table_user.user_name LIKE #p(user_name)
     #end
   #end
 
-  #sql("countByOrApp_idOrLikeStock_in_name")
+  #sql("countByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_name")
     SELECT COUNT(*) FROM table_stock_in
-    WHERE system_status = 1
+    #if(stock_in_type == 'MEMBER' && user_name)
+    LEFT JOIN table_user ON table_user.user_id = table_stock_in.object_id
+    #end
+    WHERE table_stock_in.system_status = 1
     #if(app_id)
-    AND app_id = #p(app_id)
+    AND table_stock_in.app_id = #p(app_id)
     #end
-    #if(stock_in_name)
-    #set(stock_in_name = "%" + stock_in_name + "%")
-    AND stock_in_name LIKE #p(stock_in_name)
+    #if(warehouse_id)
+    AND table_stock_in.warehouse_id = #p(warehouse_id)
+    #end
+    AND table_stock_in.stock_in_type = #p(stock_in_type)
+    #if(stock_in_type == 'MEMBER' && user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND table_user.user_name LIKE #p(user_name)
     #end
   #end
 
-  #sql("listByApp_idAndSystem_create_timeAndLimit")
+  #sql("listByApp_idAndStock_in_typeAndSystem_create_timeAndLimit")
     SELECT
     stock_in_id
     FROM table_stock_in
     WHERE system_status = 1
     AND app_id = #p(app_id)
+    AND stock_in_type = #p(stock_in_type)
     AND system_create_time < UNIX_TIMESTAMP(#p(system_create_time))
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByApp_idOrLikeStock_in_nameAndLimit")
+  #sql("listByApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_nameAndLimit")
     SELECT
-    stock_in_id
+    table_stock_in.stock_in_id
     FROM table_stock_in
-    WHERE system_status = 1
-    AND app_id = #p(app_id)
-    #if(stock_in_name)
-    #set(stock_in_name = "%" + stock_in_name + "%")
-    AND stock_in_name LIKE #p(stock_in_name)
+    #if(stock_in_type == 'MEMBER' && user_name)
+    LEFT JOIN table_user ON table_user.user_id = table_stock_in.object_id
     #end
-    ORDER BY system_create_time DESC
+    WHERE table_stock_in.system_status = 1
+    AND table_stock_in.app_id = #p(app_id)
+    #if(warehouse_id)
+    AND table_stock_in.warehouse_id = #p(warehouse_id)
+    #end
+    AND table_stock_in.stock_in_type = #p(stock_in_type)
+    #if(stock_in_type == 'MEMBER' && user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND table_user.user_name LIKE #p(user_name)
+    #end
+    ORDER BY table_stock_in.system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idOrLikeStock_in_nameAndLimit")
+  #sql("listByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_nameAndLimit")
     SELECT
-    stock_in_id
+    table_stock_in.stock_in_id
     FROM table_stock_in
-    WHERE system_status = 1
+    #if(stock_in_type == 'MEMBER' && user_name)
+    LEFT JOIN table_user ON table_user.user_id = table_stock_in.object_id
+    #end
+    WHERE table_stock_in.system_status = 1
     #if(app_id)
-    AND app_id = #p(app_id)
+    AND table_stock_in.app_id = #p(app_id)
     #end
-    #if(stock_in_name)
-    #set(stock_in_name = "%" + stock_in_name + "%")
-    AND stock_in_name LIKE #p(stock_in_name)
+    #if(warehouse_id)
+    AND table_stock_in.warehouse_id = #p(warehouse_id)
     #end
-    ORDER BY system_create_time DESC
+    AND table_stock_in.stock_in_type = #p(stock_in_type)
+    #if(stock_in_type == 'MEMBER' && user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND table_user.user_name LIKE #p(user_name)
+    #end
+    ORDER BY table_stock_in.system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
@@ -69,6 +98,26 @@
     FROM table_stock_in
     WHERE system_status = 1
     AND stock_in_id = #p(stock_in_id)
+  #end
+  
+  #sql("findByStock_in_idAndStock_in_type")
+    SELECT
+    table_stock_in.*
+    #if(stock_in_type == 'MEMBER')
+    ,table_user.user_name
+    #end
+    #if(stock_in_type == 'APP')
+    ,table_app.app_name
+    #end
+    FROM table_stock_in
+    #if(stock_in_type == 'MEMBER')
+    LEFT JOIN table_user ON table_user.user_id = table_stock_in.object_id
+    #end
+    #if(stock_in_type == 'APP')
+    LEFT JOIN table_app ON table_app.app_id = table_stock_in.object_id
+    #end
+    WHERE table_stock_in.system_status = 1
+    AND table_stock_in.stock_in_id = #p(stock_in_id)
   #end
 
   #sql("save")
