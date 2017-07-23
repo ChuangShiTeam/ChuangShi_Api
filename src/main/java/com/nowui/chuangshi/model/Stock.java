@@ -41,6 +41,8 @@ public class Stock extends Model<Stock> {
     private String app_name;
     
     private String user_name;
+    
+    private String product_name;
 
     public String getStock_id() {
         return getStr(STOCK_ID);
@@ -112,6 +114,30 @@ public class Stock extends Model<Stock> {
 
     public void setStock_quantity(Integer stock_quantity) {
         set(STOCK_QUANTITY, stock_quantity);
+    }
+
+    public String getApp_name() {
+        return app_name;
+    }
+
+    public void setApp_name(String app_name) {
+        this.app_name = app_name;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getProduct_name() {
+        return product_name;
+    }
+
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
     }
 
 }

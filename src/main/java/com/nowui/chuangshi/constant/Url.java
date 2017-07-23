@@ -538,5 +538,17 @@ public class Url {
     public static final String WAREHOUSE_SYSTEM_SAVE = "/warehouse/system/save";
     public static final String WAREHOUSE_SYSTEM_UPDATE = "/warehouse/system/update";
     public static final String WAREHOUSE_SYSTEM_DELETE = "/warehouse/system/delete";
+    
+    //库存
+    public static final String STOCK_ADMIN_LIST = "/stock/admin/list";
+    public static final String STOCK_ADMIN_FIND = "/stock/admin/find";
+    public static final String STOCK_ADMIN_SAVE = "/stock/admin/save";
+    public static final String STOCK_ADMIN_UPDATE = "/stock/admin/update";
+    public static final String STOCK_ADMIN_DELETE = "/stock/admin/delete";
+    public static final String STOCK_SYSTEM_LIST = "/stock/system/list";
+    public static final String STOCK_SYSTEM_FIND = "/stock/system/find";
+    public static final String STOCK_SYSTEM_SAVE = "/stock/system/save";
+    public static final String STOCK_SYSTEM_UPDATE = "/stock/system/update";
+    public static final String STOCK_SYSTEM_DELETE = "/stock/system/delete";
 
 }

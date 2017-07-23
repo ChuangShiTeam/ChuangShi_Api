@@ -123,7 +123,7 @@ public class WarehouseController extends Controller {
         List<Warehouse> resultList = warehouseService.listByApp_idOrLikeWarehouse_nameAndLimit(request_app_id, model.getWarehouse_name(), getM(), getN());
 
         for (Warehouse result : resultList) {
-            result.keep(Warehouse.WAREHOUSE_ID, Warehouse.SYSTEM_VERSION);
+            result.keep(Warehouse.WAREHOUSE_ID, Warehouse.WAREHOUSE_NAME, Warehouse.WAREHOUSE_CODE, Warehouse.WAREHOUSE_STATUS, Warehouse.WAREHOUSE_REMARK, Warehouse.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -142,7 +142,7 @@ public class WarehouseController extends Controller {
 
         authenticateApp_id(warehouse.getApp_id());
 
-        warehouse.keep(Warehouse.WAREHOUSE_ID, Warehouse.SYSTEM_VERSION);
+        warehouse.keep(Warehouse.WAREHOUSE_ID, Warehouse.WAREHOUSE_NAME, Warehouse.WAREHOUSE_CODE, Warehouse.WAREHOUSE_STATUS, Warehouse.WAREHOUSE_REMARK, Warehouse.SYSTEM_VERSION);
 
         renderSuccessJson(warehouse);
     }
@@ -201,7 +201,7 @@ public class WarehouseController extends Controller {
         List<Warehouse> resultList = warehouseService.listByOrApp_idOrLikeWarehouse_nameAndLimit(model.getApp_id(), model.getWarehouse_name(), getM(), getN());
 
         for (Warehouse result : resultList) {
-            result.keep(Warehouse.WAREHOUSE_ID, Warehouse.SYSTEM_VERSION);
+            result.keep(Warehouse.WAREHOUSE_ID, Warehouse.WAREHOUSE_NAME, Warehouse.WAREHOUSE_CODE, Warehouse.WAREHOUSE_STATUS, Warehouse.WAREHOUSE_REMARK, Warehouse.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -216,7 +216,7 @@ public class WarehouseController extends Controller {
 
         Warehouse warehouse = warehouseService.findByWarehouse_id(model.getWarehouse_id());
 
-        warehouse.keep(Warehouse.WAREHOUSE_ID, Warehouse.SYSTEM_VERSION);
+        warehouse.keep(Warehouse.WAREHOUSE_ID, Warehouse.WAREHOUSE_NAME, Warehouse.WAREHOUSE_CODE, Warehouse.WAREHOUSE_STATUS, Warehouse.WAREHOUSE_REMARK, Warehouse.SYSTEM_VERSION);
 
         renderSuccessJson(warehouse);
     }

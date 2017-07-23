@@ -16,8 +16,8 @@ public class StockDao extends Dao {
         sqlMap.put(Stock.APP_ID, app_id);
         sqlMap.put(Stock.WARSEHOUSE_ID, warsehouse_id);
         sqlMap.put(Stock.STOCK_TYPE, stock_type);
-        sqlMap.put(Stock.STOCK_TYPE, stock_type);
-        sqlMap.put(Stock.STOCK_TYPE, stock_type);
+        sqlMap.put(Stock.PRODUCT_NAME, product_name);
+        sqlMap.put(Stock.USER_NAME, user_name);
         SqlPara sqlPara = Db.getSqlPara("stock.countByApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name", sqlMap);
 
         logSql("stock", "countByApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name", sqlPara);
@@ -26,13 +26,16 @@ public class StockDao extends Dao {
         return count.intValue();
     }
 
-    public Integer countByOrApp_idOrLikeStock_name(String app_id, String stock_name) {
+    public Integer countByOrApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(String app_id, String warsehouse_id, String stock_type, String product_name, String user_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Stock.APP_ID, app_id);
-        sqlMap.put(Stock.STOCK_TYPE, stock_name);
-        SqlPara sqlPara = Db.getSqlPara("stock.countByOrApp_idOrLikeStock_name", sqlMap);
+        sqlMap.put(Stock.WARSEHOUSE_ID, warsehouse_id);
+        sqlMap.put(Stock.STOCK_TYPE, stock_type);
+        sqlMap.put(Stock.PRODUCT_NAME, product_name);
+        sqlMap.put(Stock.USER_NAME, user_name);
+        SqlPara sqlPara = Db.getSqlPara("stock.countByOrApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name", sqlMap);
 
-        logSql("stock", "countByOrApp_idOrLikeStock_name", sqlPara);
+        logSql("stock", "countByOrApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
@@ -51,28 +54,34 @@ public class StockDao extends Dao {
         return new Stock().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Stock> listByApp_idOrLikeStock_nameAndLimit(String app_id, String stock_type, int m, int n) {
+    public List<Stock> listByApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit(String app_id, String warsehouse_id, String stock_type, String product_name, String user_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Stock.APP_ID, app_id);
+        sqlMap.put(Stock.WARSEHOUSE_ID, warsehouse_id);
         sqlMap.put(Stock.STOCK_TYPE, stock_type);
+        sqlMap.put(Stock.PRODUCT_NAME, product_name);
+        sqlMap.put(Stock.USER_NAME, user_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("stock.listByApp_idOrLikeStock_nameAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("stock.listByApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit", sqlMap);
 
-        logSql("stock", "listByApp_idOrLikeStock_nameAndLimit", sqlPara);
+        logSql("stock", "listByApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit", sqlPara);
 
         return new Stock().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Stock> listByOrApp_idOrLikeStock_nameAndLimit(String app_id, String stock_name, int m, int n) {
+    public List<Stock> listByOrApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit(String app_id, String warsehouse_id, String stock_type, String product_name, String user_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Stock.APP_ID, app_id);
-        sqlMap.put(Stock.STOCK_TYPE, stock_name);
+        sqlMap.put(Stock.WARSEHOUSE_ID, warsehouse_id);
+        sqlMap.put(Stock.STOCK_TYPE, stock_type);
+        sqlMap.put(Stock.PRODUCT_NAME, product_name);
+        sqlMap.put(Stock.USER_NAME, user_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("stock.listByOrApp_idOrLikeStock_nameAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("stock.listByOrApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit", sqlMap);
 
-        logSql("stock", "listByOrApp_idOrLikeStock_nameAndLimit", sqlPara);
+        logSql("stock", "listByOrApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit", sqlPara);
 
         return new Stock().find(sqlPara.getSql(), sqlPara.getPara());
     }
@@ -84,6 +93,22 @@ public class StockDao extends Dao {
 
         logSql("stock", "findByStock_id", sqlPara);
 
+        List<Stock> stockList = new Stock().find(sqlPara.getSql(), sqlPara.getPara());
+        if (stockList.size() == 0) {
+            return null;
+        } else {
+            return stockList.get(0);
+        }
+    }
+    
+    public Stock findByStock_idAndStock_type(String stock_id, String stock_type) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Stock.STOCK_ID, stock_id);
+        sqlMap.put(Stock.STOCK_TYPE, stock_type);
+        SqlPara sqlPara = Db.getSqlPara("stock.findByStock_idAndStock_type", sqlMap);
+        
+        logSql("stock", "findByStock_idAndStock_type", sqlPara);
+        
         List<Stock> stockList = new Stock().find(sqlPara.getSql(), sqlPara.getPara());
         if (stockList.size() == 0) {
             return null;

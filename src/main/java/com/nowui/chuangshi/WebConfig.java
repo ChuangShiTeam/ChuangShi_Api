@@ -45,6 +45,7 @@ import com.nowui.chuangshi.controller.ProductCategoryController;
 import com.nowui.chuangshi.controller.ProductController;
 import com.nowui.chuangshi.controller.QrcodeController;
 import com.nowui.chuangshi.controller.SqlController;
+import com.nowui.chuangshi.controller.StockController;
 import com.nowui.chuangshi.controller.SupplierController;
 import com.nowui.chuangshi.controller.TradeController;
 import com.nowui.chuangshi.controller.UserController;
@@ -108,6 +109,7 @@ public class WebConfig extends JFinalConfig {
         routes.add("/supplier", SupplierController.class);
         
         routes.add("/warehouse", WarehouseController.class);
+        routes.add("/stock", StockController.class);
     }
 
     public void configEngine(Engine engine) {
@@ -183,6 +185,7 @@ public class WebConfig extends JFinalConfig {
 //        activeRecordPlugin.addMapping("table_supplier_product", "supplier_product_id", SupplierProduct.class);
 
         activeRecordPlugin.addMapping("table_warehouse", "warehouse_id", Warehouse.class);
+        activeRecordPlugin.addMapping("table_stock", "stock_id", Stock.class);
         
         plugins.add(activeRecordPlugin);
 
