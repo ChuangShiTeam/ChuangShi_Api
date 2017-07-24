@@ -109,10 +109,12 @@
 
   #sql("findByDelivery_order_id")
     SELECT
-    *
+    table_delivery_order.*,
+    table_user.user_name
     FROM table_delivery_order
-    WHERE system_status = 1
-    AND delivery_order_id = #p(delivery_order_id)
+    LEFT JOIN table_user ON table_user.user_id = table_delivery_order.delivery_order_user_id
+    WHERE table_delivery_order.system_status = 1
+    AND table_delivery_order.delivery_order_id = #p(delivery_order_id)
   #end
 
   #sql("save")

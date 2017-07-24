@@ -11,14 +11,17 @@ import com.jfinal.plugin.activerecord.Record;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.DeliveryOrder;
+import com.nowui.chuangshi.model.DeliveryOrderProductSku;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.service.DeliveryOrderProductSkuService;
 import com.nowui.chuangshi.service.DeliveryOrderService;
 
 public class DeliveryOrderController extends Controller {
 
     private final DeliveryOrderService deliveryOrderService = new DeliveryOrderService();
-
+    private final DeliveryOrderProductSkuService deliveryOrderProductSkuService = new DeliveryOrderProductSkuService();
+    
     @ActionKey(Url.DELIVERY_ORDER_LIST)
     public void list() {
         validateRequest_app_id();
@@ -100,6 +103,7 @@ public class DeliveryOrderController extends Controller {
             result.put(DeliveryOrder.SYSTEM_VERSION, record.get(DeliveryOrder.SYSTEM_VERSION));
             result.put(DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY, record.get(DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY));
             result.put(DeliveryOrder.DELIVERY_ORDER_FLOW, record.get(DeliveryOrder.DELIVERY_ORDER_FLOW));
+            result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME));
             result.put(User.USER_NAME, record.get(User.USER_NAME));
             result.put(Express.EXPRESS_NO, record.get(Express.EXPRESS_NO));
             resultList.add(result);
@@ -116,14 +120,18 @@ public class DeliveryOrderController extends Controller {
         DeliveryOrder model = getModel(DeliveryOrder.class);
 
         authenticateRequest_app_idAndRequest_user_id();
-
+        
         DeliveryOrder delivery_order = deliveryOrderService.findByDelivery_order_id(model.getDelivery_order_id());
 
         authenticateApp_id(delivery_order.getApp_id());
 
-        delivery_order.keep(DeliveryOrder.DELIVERY_ORDER_ID, DeliveryOrder.SYSTEM_VERSION);
+        List<Record> deliveryOrderProductSkuList = deliveryOrderProductSkuService.listByDelivery_order_id(model.getDelivery_order_id());
+        delivery_order.keep(DeliveryOrder.DELIVERY_ORDER_ID, DeliveryOrder.USER_NAME, DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY, DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE, DeliveryOrder.DELIVERY_ORDER_RECEIVER_PROVINCE, DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY, DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA, DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS, DeliveryOrder.DELIVERY_ORDER_EXPRESS_PAY_WAY, DeliveryOrder.DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, DeliveryOrder.DELIVERY_ORDER_IS_PAY, DeliveryOrder.DELIVERY_ORDER_FLOW, DeliveryOrder.SYSTEM_VERSION);
 
-        renderSuccessJson(delivery_order);
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("delivery_order", delivery_order);
+        result.put("delivery_order_product_sku_list", deliveryOrderProductSkuList);
+        renderSuccessJson(result);
     }
 
 
@@ -186,6 +194,7 @@ public class DeliveryOrderController extends Controller {
             result.put(DeliveryOrder.SYSTEM_VERSION, record.get(DeliveryOrder.SYSTEM_VERSION));
             result.put(DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY, record.get(DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY));
             result.put(DeliveryOrder.DELIVERY_ORDER_FLOW, record.get(DeliveryOrder.DELIVERY_ORDER_FLOW));
+            result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME));
             result.put(User.USER_NAME, record.get(User.USER_NAME));
             result.put(Express.EXPRESS_NO, record.get(Express.EXPRESS_NO));
             resultList.add(result);

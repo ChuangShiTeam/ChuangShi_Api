@@ -123,7 +123,7 @@
     INSERT INTO table_express (
       express_id,
       app_id,
-      tarde_id,
+      trade_id,
       delivery_order_id,
       express_shipper_code,
       express_no,
@@ -161,7 +161,7 @@
     ) VALUES (
       #p(express_id),
       #p(app_id),
-      #p(tarde_id),
+      #p(trade_id),
       #p(delivery_order_id),
       #p(express_shipper_code),
       #p(express_no),
@@ -201,7 +201,7 @@
 
   #sql("update")
     UPDATE table_express SET
-    tarde_id = #p(tarde_id),
+    trade_id = #p(trade_id),
     delivery_order_id = #p(delivery_order_id),
     express_shipper_code = #p(express_shipper_code),
     express_no = #p(express_no),

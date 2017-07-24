@@ -14,7 +14,7 @@ public class Express extends Model<Express> {
     public static final String APP_ID = "app_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
-    public static final String TARDE_ID = "tarde_id";
+    public static final String TRADE_ID = "trade_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
     public static final String DELIVERY_ORDER_ID = "delivery_order_id";
@@ -120,12 +120,12 @@ public class Express extends Model<Express> {
         set(APP_ID, app_id);
     }
 
-    public String getTarde_id() {
-        return getStr(TARDE_ID);
+    public String getTrade_id() {
+        return getStr(TRADE_ID);
     }
 
-    public void setTarde_id(String tarde_id) {
-        set(TARDE_ID, tarde_id);
+    public void setTrade_id(String trade_id) {
+        set(TRADE_ID, trade_id);
     }
 
     public String getDelivery_order_id() {

@@ -301,13 +301,13 @@ public class MemberController extends Controller {
     @ActionKey(Url.MEMBER_SEND)
     public void send() {
         validateRequest_app_id();
-        validate(Stock.STOCK_RECEIVER_NAME, Stock.STOCK_RECEIVER_PROVINCE, Stock.STOCK_RECEIVER_ADDRESS, Stock.STOCK_RECEIVER_AREA, Stock.STOCK_RECEIVER_CITY, Stock.STOCK_RECEIVER_MOBILE, Stock.STOCK_PRODUCT_SKU_LIST);
+        validate(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS, DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA, DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY, DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE, DeliveryOrder.DELIVERY_ORDER_PRODUCT_SKU_LIST);
         
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
-        Stock stock = getModel(Stock.class);
+        DeliveryOrder deliveryOrder = getModel(DeliveryOrder.class);
         JSONObject jsonObject = getParameterJSONObject();
-        JSONArray productSkuList = jsonObject.getJSONArray(Stock.STOCK_PRODUCT_SKU_LIST);
+        JSONArray productSkuList = jsonObject.getJSONArray(DeliveryOrder.DELIVERY_ORDER_PRODUCT_SKU_LIST);
         if (productSkuList == null || productSkuList.size() == 0) {
             throw new RuntimeException("产品sku不能为空");
         }
@@ -315,17 +315,14 @@ public class MemberController extends Controller {
         
         authenticateApp_id(request_app_id);
         
-        User user = userService.findByUser_id(request_user_id);
-        Member member = memberService.findByMember_id(user.getObject_Id());
-        /*List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
+        List<DeliveryOrderProductSku> deliveryOrderProductSkuList = new ArrayList<DeliveryOrderProductSku>();
         for (int j = 0; j < productSkuList.size(); j++) {
-            StockProductSku stockProductSku = productSkuList.getJSONObject(j).toJavaObject(StockProductSku.class);
-            stockProductSkuList.add(stockProductSku);
-        }*/
-        /*Boolean result = stockService.out(member.getApp_id(), "", member.getMember_id(), StockType.MEMBER.getKey(), member.getUser_id(), "",stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), stock.getStock_express_pay_way(), stock.getStock_express_shipper_code(),
-        		false, stockProductSkuList, request_user_id);
-        */
-        renderSuccessJson(false);
+            DeliveryOrderProductSku deliveryOrderProductSku = productSkuList.getJSONObject(j).toJavaObject(DeliveryOrderProductSku.class);
+            deliveryOrderProductSkuList.add(deliveryOrderProductSku);
+        }
+        Boolean result = deliveryOrderService.save(request_app_id, "", request_user_id, request_user_id, "", deliveryOrder.getDelivery_order_receiver_name(), deliveryOrder.getDelivery_order_receiver_mobile(), deliveryOrder.getDelivery_order_receiver_province(), deliveryOrder.getDelivery_order_receiver_city(), deliveryOrder.getDelivery_order_receiver_area(), deliveryOrder.getDelivery_order_receiver_address(), deliveryOrder.getDelivery_order_express_pay_way(), deliveryOrder.getDelivery_order_express_shipper_code(), false, deliveryOrderProductSkuList, request_user_id);
+
+        renderSuccessJson(result);
     }
     
     //会员发货明细
@@ -431,9 +428,9 @@ public class MemberController extends Controller {
             DeliveryOrderProductSku deliveryOrderProductSku = productSkuList.getJSONObject(j).toJavaObject(DeliveryOrderProductSku.class);
             deliveryOrderProductSkuList.add(deliveryOrderProductSku);
         }
-        Boolean result = 
+        Boolean result = deliveryOrderService.save(request_app_id, "", member.getUser_id(), member.getUser_id(), "", deliveryOrder.getDelivery_order_receiver_name(), deliveryOrder.getDelivery_order_receiver_mobile(), deliveryOrder.getDelivery_order_receiver_province(), deliveryOrder.getDelivery_order_receiver_city(), deliveryOrder.getDelivery_order_receiver_area(), deliveryOrder.getDelivery_order_receiver_address(), deliveryOrder.getDelivery_order_express_pay_way(), deliveryOrder.getDelivery_order_express_shipper_code(), false, deliveryOrderProductSkuList, request_user_id);
         
-        renderSuccessJson(false);
+        renderSuccessJson(result);
     }
     
     @ActionKey(Url.MEMBER_SYSTEM_LIST)

@@ -17,23 +17,18 @@ import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
-import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.TradeProductSku;
 import com.nowui.chuangshi.service.ExpressService;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.ProductService;
 import com.nowui.chuangshi.service.ProductSkuService;
-import com.nowui.chuangshi.service.StockService;
 import com.nowui.chuangshi.service.TradeProductSkuService;
-import com.nowui.chuangshi.type.ExpressFlow;
 import com.nowui.chuangshi.util.DateUtil;
-import com.nowui.chuangshi.util.Util;
 
 public class ExpressController extends Controller {
 
     private final ExpressService expressService = new ExpressService();
 
-    private final StockService stockService = new StockService();
     private final TradeProductSkuService tradeProductSkuService = new TradeProductSkuService();
     private final ProductService productService = new ProductService();
     private final ProductSkuService productSkuService = new ProductSkuService();
@@ -154,8 +149,7 @@ public class ExpressController extends Controller {
             }
         }
 
-        Stock stock = stockService.findByStock_id(express.getStock_id());
-        List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(stock.getTrade_id());
+        List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(express.getTrade_id());
 
         ProductSku productSku = productSkuService.findByProduct_sku_id(tradeProductSkuList.get(0).getProduct_sku_id());
         Product product = productService.findByProduct_id(productSku.getProduct_id());
@@ -167,97 +161,6 @@ public class ExpressController extends Controller {
                 Express.EXPRESS_TRACES_LIST, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Express.SYSTEM_VERSION);
 
         renderSuccessJson(express);
-    }
-
-    @ActionKey(Url.EXPRESS_SAVE)
-    public void save() {
-        validateRequest_app_id();
-        validate(Express.STOCK_ID, Express.EXPRESS_NO, Express.EXPRESS_COST, Express.EXPRESS_SHIPPER_CODE,
-                Express.EXPRESS_REMARK);
-
-        Express model = getModel(Express.class);
-        String request_user_id = getRequest_user_id();
-        JSONObject jsonObject = getParameterJSONObject();
-        String stock_id = jsonObject.getString("stock_id");
-        String express_id = Util.getRandomUUID();
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        Stock stock = stockService.findByStock_id(stock_id);
-
-        Boolean result = expressService.save(express_id, stock.getApp_id(), stock_id, model.getExpress_shipper_code(),
-                model.getExpress_no(), "", stock.getStock_receiver_name(), "", stock.getStock_receiver_mobile(), "",
-                stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(),
-                stock.getStock_receiver_address(), "", "", "", "", "", "", "", "", "", model.getExpress_cost(),
-                stock.getStock_is_pay(), stock.getStock_express_pay_way(), "", ExpressFlow.NOTRACK.getValue(), false,
-                model.getExpress_remark(), request_user_id);
-
-        if (result) {
-            // 更新发货单流程为待收货
-            //stockService.updateSend(stock_id, request_user_id);
-            // 快递订阅
-            expressService.subscription(express_id, model.getExpress_shipper_code(), model.getExpress_no());
-        }
-        renderSuccessJson(result);
-    }
-
-    @ActionKey(Url.EXPRESS_UPDATE)
-    public void update() {
-        validateRequest_app_id();
-        validate(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
-                Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
-                Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
-                Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,
-                Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL,
-                Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE,
-                Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS,
-                Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_TRACES,
-                Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK, Express.SYSTEM_VERSION);
-
-        Express model = getModel(Express.class);
-        String request_user_id = getRequest_user_id();
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        Express express = expressService.findByExpress_id(model.getExpress_id());
-
-        authenticateApp_id(express.getApp_id());
-        authenticateSystem_create_user_id(express.getSystem_create_user_id());
-
-        Boolean result = expressService.updateValidateSystem_version(model.getExpress_id(), model.getStock_id(),
-                model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_receiver_company(),
-                model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(),
-                model.getExpress_receiver_postcode(), model.getExpress_receiver_province(),
-                model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(),
-                model.getExpress_sender_company(), model.getExpress_sender_name(), model.getExpress_sender_tel(),
-                model.getExpress_sender_mobile(), model.getExpress_sender_postcode(),
-                model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(),
-                model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(),
-                model.getExpress_pay_way(), model.getExpress_traces(), model.getExpress_flow(),
-                model.getExpress_status(), model.getExpress_remark(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
-    }
-
-    @ActionKey(Url.EXPRESS_DELETE)
-    public void delete() {
-        validateRequest_app_id();
-        validate(Express.EXPRESS_ID, Express.SYSTEM_VERSION);
-
-        Express model = getModel(Express.class);
-        String request_user_id = getRequest_user_id();
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        Express express = expressService.findByExpress_id(model.getExpress_id());
-
-        authenticateApp_id(express.getApp_id());
-        authenticateSystem_create_user_id(express.getSystem_create_user_id());
-
-        Boolean result = expressService.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(
-                model.getExpress_id(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
     }
 
     @ActionKey(Url.EXPRESS_ADMIN_LIST)
@@ -299,7 +202,7 @@ public class ExpressController extends Controller {
 
         authenticateApp_id(express.getApp_id());
 
-        express.keep(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
+        express.keep(Express.EXPRESS_ID, Express.DELIVERY_ORDER_ID, Express.TRADE_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
                 Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
                 Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
                 Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,
@@ -307,26 +210,26 @@ public class ExpressController extends Controller {
                 Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE,
                 Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS,
                 Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_TRACES,
-                Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK, Express.SYSTEM_VERSION);
+                Express.EXPRESS_FLOW, Express.EXPRESS_IS_COMPLETE, Express.EXPRESS_REMARK, Express.SYSTEM_VERSION);
 
         renderSuccessJson(express);
     }
 
-    @ActionKey(Url.EXPRESS_ADMIN_FIND_BY_STOCK_ID)
+    @ActionKey(Url.EXPRESS_ADMIN_FIND_BY_DELIVERY_ORDER_ID)
     public void adminFindByStock_id() {
         validateRequest_app_id();
-        validate(Express.STOCK_ID);
+        validate(Express.DELIVERY_ORDER_ID);
 
         Express model = getModel(Express.class);
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Express express = expressService.findByStock_id(model.getStock_id());
+        Express express = expressService.findByDelivery_order_id(model.getDelivery_order_id());
 
         if (express != null) {
             authenticateApp_id(express.getApp_id());
 
-            express.keep(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
+            express.keep(Express.EXPRESS_ID, Express.DELIVERY_ORDER_ID, Express.TRADE_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
                     Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
                     Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE,
                     Express.EXPRESS_RECEIVER_PROVINCE, Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA,
@@ -334,53 +237,11 @@ public class ExpressController extends Controller {
                     Express.EXPRESS_SENDER_TEL, Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE,
                     Express.EXPRESS_SENDER_PROVINCE, Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA,
                     Express.EXPRESS_SENDER_ADDRESS, Express.EXPRESS_COST, Express.EXPRESS_IS_PAY,
-                    Express.EXPRESS_PAY_WAY, Express.EXPRESS_TRACES, Express.EXPRESS_FLOW, Express.EXPRESS_STATUS,
+                    Express.EXPRESS_PAY_WAY, Express.EXPRESS_TRACES, Express.EXPRESS_FLOW, Express.EXPRESS_IS_COMPLETE,
                     Express.EXPRESS_REMARK, Express.SYSTEM_VERSION);
         }
 
         renderSuccessJson(express);
-    }
-
-    @ActionKey(Url.EXPRESS_ADMIN_SAVE)
-    public void adminSave() {
-        save();
-    }
-
-    @ActionKey(Url.EXPRESS_ADMIN_UPDATE)
-    public void adminUpdate() {
-        validateRequest_app_id();
-        validate(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
-                Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
-                Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
-                Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,
-                Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL,
-                Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE,
-                Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS,
-                Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_TRACES,
-                Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK, Express.SYSTEM_VERSION);
-
-        Express model = getModel(Express.class);
-        String request_user_id = getRequest_user_id();
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        Express express = expressService.findByExpress_id(model.getExpress_id());
-
-        authenticateApp_id(express.getApp_id());
-
-        Boolean result = expressService.updateValidateSystem_version(model.getExpress_id(), model.getStock_id(),
-                model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_receiver_company(),
-                model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(),
-                model.getExpress_receiver_postcode(), model.getExpress_receiver_province(),
-                model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(),
-                model.getExpress_sender_company(), model.getExpress_sender_name(), model.getExpress_sender_tel(),
-                model.getExpress_sender_mobile(), model.getExpress_sender_postcode(),
-                model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(),
-                model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(),
-                model.getExpress_pay_way(), model.getExpress_traces(), model.getExpress_flow(),
-                model.getExpress_status(), model.getExpress_remark(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
     }
 
     @ActionKey(Url.EXPRESS_ADMIN_DELETE)
@@ -435,7 +296,7 @@ public class ExpressController extends Controller {
 
         Express express = expressService.findByExpress_id(model.getExpress_id());
 
-        express.keep(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
+        express.keep(Express.EXPRESS_ID, Express.DELIVERY_ORDER_ID, Express.TRADE_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
                 Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
                 Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
                 Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,
@@ -443,72 +304,9 @@ public class ExpressController extends Controller {
                 Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE,
                 Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS,
                 Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_TRACES,
-                Express.EXPRESS_STATUS, Express.EXPRESS_REMARK, Express.SYSTEM_VERSION);
+                Express.EXPRESS_IS_COMPLETE, Express.EXPRESS_REMARK, Express.SYSTEM_VERSION);
 
         renderSuccessJson(express);
-    }
-
-    @ActionKey(Url.EXPRESS_SYSTEM_SAVE)
-    public void systemSave() {
-        validateRequest_app_id();
-        validate(Express.APP_ID, Express.STOCK_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
-                Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
-                Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
-                Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,
-                Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL,
-                Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE,
-                Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS,
-                Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_TRACES,
-                Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK);
-
-        Express model = getModel(Express.class);
-        String express_id = Util.getRandomUUID();
-        String request_user_id = getRequest_user_id();
-
-        Boolean result = expressService.save(express_id, model.getApp_id(), model.getStock_id(),
-                model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_receiver_company(),
-                model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(),
-                model.getExpress_receiver_postcode(), model.getExpress_receiver_province(),
-                model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(),
-                model.getExpress_sender_company(), model.getExpress_sender_name(), model.getExpress_sender_tel(),
-                model.getExpress_sender_mobile(), model.getExpress_sender_postcode(),
-                model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(),
-                model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(),
-                model.getExpress_pay_way(), model.getExpress_traces(), model.getExpress_flow(),
-                model.getExpress_status(), model.getExpress_remark(), request_user_id);
-
-        renderSuccessJson(result);
-    }
-
-    @ActionKey(Url.EXPRESS_SYSTEM_UPDATE)
-    public void systemUpdate() {
-        validateRequest_app_id();
-        validate(Express.EXPRESS_ID, Express.STOCK_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
-                Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
-                Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
-                Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,
-                Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME, Express.EXPRESS_SENDER_TEL,
-                Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE, Express.EXPRESS_SENDER_PROVINCE,
-                Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA, Express.EXPRESS_SENDER_ADDRESS,
-                Express.EXPRESS_COST, Express.EXPRESS_IS_PAY, Express.EXPRESS_PAY_WAY, Express.EXPRESS_TRACES,
-                Express.EXPRESS_FLOW, Express.EXPRESS_STATUS, Express.EXPRESS_REMARK, Express.SYSTEM_VERSION);
-
-        Express model = getModel(Express.class);
-        String request_user_id = getRequest_user_id();
-
-        Boolean result = expressService.updateValidateSystem_version(model.getExpress_id(), model.getStock_id(),
-                model.getExpress_shipper_code(), model.getExpress_no(), model.getExpress_receiver_company(),
-                model.getExpress_receiver_name(), model.getExpress_receiver_tel(), model.getExpress_receiver_mobile(),
-                model.getExpress_receiver_postcode(), model.getExpress_receiver_province(),
-                model.getExpress_receiver_city(), model.getExpress_receiver_area(), model.getExpress_receiver_address(),
-                model.getExpress_sender_company(), model.getExpress_sender_name(), model.getExpress_sender_tel(),
-                model.getExpress_sender_mobile(), model.getExpress_sender_postcode(),
-                model.getExpress_sender_province(), model.getExpress_sender_city(), model.getExpress_sender_area(),
-                model.getExpress_sender_address(), model.getExpress_cost(), model.getExpress_is_pay(),
-                model.getExpress_pay_way(), model.getExpress_traces(), model.getExpress_flow(),
-                model.getExpress_status(), model.getExpress_remark(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
     }
 
     @ActionKey(Url.EXPRESS_SYSTEM_DELETE)

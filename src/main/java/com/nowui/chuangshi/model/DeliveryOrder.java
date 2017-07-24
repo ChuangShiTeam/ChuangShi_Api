@@ -60,6 +60,10 @@ public class DeliveryOrder extends Model<DeliveryOrder> {
     public static final String DELIVERY_IS_COMPLETE = "delivery_is_complete";
     
     public static final String DELIVERY_ORDER_PRODUCT_SKU_LIST = "delivery_order_product_sku_list";
+    
+    public static final String USER_NAME = "user_name";
+    
+    private String user_name;
 
     public String getDelivery_order_id() {
         return getStr(DELIVERY_ORDER_ID);
@@ -203,6 +207,14 @@ public class DeliveryOrder extends Model<DeliveryOrder> {
 
     public void setDelivery_is_complete(Boolean delivery_is_complete) {
         set(DELIVERY_IS_COMPLETE, delivery_is_complete);
+    }
+    
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
 }
