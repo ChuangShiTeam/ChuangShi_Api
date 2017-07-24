@@ -321,28 +321,13 @@ public class MemberController extends Controller {
         
         authenticateApp_id(request_app_id);
         
-<<<<<<< HEAD
-        User user = userService.findByUser_id(request_user_id);
-        Member member = memberService.findByMember_id(user.getObject_Id());
-        List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
-=======
         List<DeliveryOrderProductSku> deliveryOrderProductSkuList = new ArrayList<DeliveryOrderProductSku>();
->>>>>>> refs/remotes/origin/stock_test
         for (int j = 0; j < productSkuList.size(); j++) {
-<<<<<<< HEAD
-            StockProductSku stockProductSku = productSkuList.getJSONObject(j).toJavaObject(StockProductSku.class);
-            stockProductSkuList.add(stockProductSku);
-        }
-        Boolean result = stockService.out(member.getApp_id(), "", member.getMember_id(), StockType.MEMBER.getKey(), member.getUser_id(), "",stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), stock.getStock_express_pay_way(), stock.getStock_express_shipper_code(),
-        		false, stockProductSkuList, request_user_id);
-        
-=======
             DeliveryOrderProductSku deliveryOrderProductSku = productSkuList.getJSONObject(j).toJavaObject(DeliveryOrderProductSku.class);
             deliveryOrderProductSkuList.add(deliveryOrderProductSku);
         }
         Boolean result = deliveryOrderService.save(request_app_id, "", request_user_id, request_user_id, "", deliveryOrder.getDelivery_order_receiver_name(), deliveryOrder.getDelivery_order_receiver_mobile(), deliveryOrder.getDelivery_order_receiver_province(), deliveryOrder.getDelivery_order_receiver_city(), deliveryOrder.getDelivery_order_receiver_area(), deliveryOrder.getDelivery_order_receiver_address(), deliveryOrder.getDelivery_order_express_pay_way(), deliveryOrder.getDelivery_order_express_shipper_code(), false, deliveryOrderProductSkuList, request_user_id);
 
->>>>>>> refs/remotes/origin/stock_test
         renderSuccessJson(result);
     }
     
@@ -360,17 +345,9 @@ public class MemberController extends Controller {
     	authenticateApp_id(request_app_id);
     	
     	//查询会员库存
-<<<<<<< HEAD
-    	Integer stock_quantity = stockService.sumStock_quantityByObject_id(member.getMember_id());
-=======
     	Integer stock_quantity = stockService.sumQuantityByObject_id(request_user_id);
->>>>>>> refs/remotes/origin/stock_test
     	//查询会员发货单列表
-<<<<<<< HEAD
-    	List<Record> recordList = stockService.listWithExpressByObject_id(member.getMember_id(), getM(), getN());
-=======
     	List<Record> recordList = deliverOrderService.listWithExpressByDelivery_order_sender_user_idAndLimit(request_user_id, getM(), getN());
->>>>>>> refs/remotes/origin/stock_test
     	List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
     	for (Record record : recordList) {
     		Map<String, Object> map = new HashMap<String, Object>();
@@ -388,11 +365,7 @@ public class MemberController extends Controller {
     	}
     	Map<String, Object> result = new HashMap<String, Object>();
     	result.put("stock_quantity", stock_quantity);
-<<<<<<< HEAD
-    	result.put("stock_list", resultList);
-=======
     	result.put("delivery_order_list", resultList);
->>>>>>> refs/remotes/origin/stock_test
     	renderSuccessJson(result);
     }
     
@@ -454,21 +427,12 @@ public class MemberController extends Controller {
         authenticateApp_id(request_app_id);
         
         Member member = memberService.findByMember_id(member_id);
-<<<<<<< HEAD
-        List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
-=======
         List<DeliveryOrderProductSku> deliveryOrderProductSkuList = new ArrayList<DeliveryOrderProductSku>();
->>>>>>> refs/remotes/origin/stock_test
         for (int j = 0; j < productSkuList.size(); j++) {
             DeliveryOrderProductSku deliveryOrderProductSku = productSkuList.getJSONObject(j).toJavaObject(DeliveryOrderProductSku.class);
             deliveryOrderProductSkuList.add(deliveryOrderProductSku);
         }
-<<<<<<< HEAD
-        Boolean result = stockService.out(member.getApp_id(), "", member_id, StockType.MEMBER.getKey(), member.getUser_id(), "", stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), stock.getStock_express_pay_way(), stock.getStock_express_shipper_code(),
-        		false, stockProductSkuList, request_user_id);
-=======
         Boolean result = deliveryOrderService.save(request_app_id, "", member.getUser_id(), member.getUser_id(), "", deliveryOrder.getDelivery_order_receiver_name(), deliveryOrder.getDelivery_order_receiver_mobile(), deliveryOrder.getDelivery_order_receiver_province(), deliveryOrder.getDelivery_order_receiver_city(), deliveryOrder.getDelivery_order_receiver_area(), deliveryOrder.getDelivery_order_receiver_address(), deliveryOrder.getDelivery_order_express_pay_way(), deliveryOrder.getDelivery_order_express_shipper_code(), false, deliveryOrderProductSkuList, request_user_id);
->>>>>>> refs/remotes/origin/stock_test
         
         renderSuccessJson(result);
     }
