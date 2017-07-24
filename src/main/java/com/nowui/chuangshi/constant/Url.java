@@ -45,27 +45,6 @@ public class Url {
     public static final String APP_SYSTEM_UPDATE = "/app/system/update";
     public static final String APP_SYSTEM_DELETE = "/app/system/delete";
 
-    // 应用库存
-    public static final String APP_STOCK_LIST = "/app/stock/list";
-    public static final String APP_STOCK_FIND = "/app/stock/find";
-    public static final String APP_STOCK_SAVE = "/app/stock/save";
-    public static final String APP_STOCK_UPDATE = "/app/stock/update";
-    public static final String APP_STOCK_DELETE = "/app/stock/delete";
-    public static final String APP_STOCK_ADMIN_LIST = "/app/stock/admin/list";
-    public static final String APP_STOCK_ADMIN_FIND = "/app/stock/admin/find";
-    public static final String APP_STOCK_ADMIN_SAVE = "/app/stock/admin/save";
-    public static final String APP_STOCK_ADMIN_UPDATE = "/app/stock/admin/update";
-    public static final String APP_STOCK_ADMIN_DELETE = "/app/stock/admin/delete";
-    public static final String APP_STOCK_ADMIN_REPLENISH = "/app/stock/admin/replenish";
-    public static final String APP_STOCK_ADMIN_STOCK_LIST = "/app/stock/admin/stock/list";
-    public static final String APP_STOCK_SYSTEM_LIST = "/app/stock/system/list";
-    public static final String APP_STOCK_SYSTEM_FIND = "/app/stock/system/find";
-    public static final String APP_STOCK_SYSTEM_SAVE = "/app/stock/system/save";
-    public static final String APP_STOCK_SYSTEM_UPDATE = "/app/stock/system/update";
-    public static final String APP_STOCK_SYSTEM_DELETE = "/app/stock/system/delete";
-    public static final String APP_STOCK_SYSTEM_STOCK_LIST = "/app/stock/system/stock/list";
-    public static final String APP_STOCK_SYSTEM_REPLENISH = "/app/stock/system/replenish";
-
     public static final String CATEGORY_LIST = "/category/list";
     public static final String CATEGORY_FIND = "/category/find";
     public static final String CATEGORY_SAVE = "/category/save";
@@ -249,29 +228,6 @@ public class Url {
     public static final String MEMBER_LEVEL_SYSTEM_UPDATE = "/member/level/system/update";
     public static final String MEMBER_LEVEL_SYSTEM_DELETE = "/member/level/system/delete";
 
-    // 会员库存
-    public static final String MEMBER_STOCK_LIST = "/member/stock/list";
-    public static final String MEMBER_STOCK_FIND = "/member/stock/find";
-    public static final String MEMBER_STOCK_SAVE = "/member/stock/save";
-    public static final String MEMBER_STOCK_UPDATE = "/member/stock/update";
-    public static final String MEMBER_STOCK_DELETE = "/member/stock/delete";
-    public static final String MEMBER_STOCK_ADMIN_LIST = "/member/stock/admin/list";
-    public static final String MEMBER_STOCK_ADMIN_FIND = "/member/stock/admin/find";
-    public static final String MEMBER_STOCK_ADMIN_SAVE = "/member/stock/admin/save";
-    public static final String MEMBER_STOCK_ADMIN_UPDATE = "/member/stock/admin/update";
-    public static final String MEMBER_STOCK_ADMIN_DELETE = "/member/stock/admin/delete";
-    public static final String MEMBER_STOCK_ADMIN_REPLENISH = "/member/stock/admin/replenish";
-    public static final String MEMBER_STOCK_ADMIN_STOCK_LIST = "/member/stock/admin/stock/list";
-    public static final String MEMBER_STOCK_ADMIN_OUT_LIST = "/member/stock/admin/out/list";
-    public static final String MEMBER_STOCK_SYSTEM_LIST = "/member/stock/system/list";
-    public static final String MEMBER_STOCK_SYSTEM_FIND = "/member/stock/system/find";
-    public static final String MEMBER_STOCK_SYSTEM_SAVE = "/member/stock/system/save";
-    public static final String MEMBER_STOCK_SYSTEM_UPDATE = "/member/stock/system/update";
-    public static final String MEMBER_STOCK_SYSTEM_DELETE = "/member/stock/system/delete";
-    public static final String MEMBER_STOCK_SYSTEM_REPLENISH = "/member/stock/system/replenish";
-    public static final String MEMBER_STOCK_SYSTEM_STOCK_LIST = "/member/stock/system/stock/list";
-    public static final String MEMBER_STOCK_SYSTEM_OUT_LIST = "/member/stock/system/out/list";
-
     // 用户管理
     public static final String CUSTOMER_LIST = "/customer/list";
     public static final String CUSTOMER_FIND = "/customer/find";
@@ -418,7 +374,7 @@ public class Url {
     public static final String EXPRESS_DELETE = "/express/delete";
     public static final String EXPRESS_ADMIN_LIST = "/express/admin/list";
     public static final String EXPRESS_ADMIN_FIND = "/express/admin/find";
-    public static final String EXPRESS_ADMIN_FIND_BY_STOCK_ID = "/express/admin/findByStockId";
+    public static final String EXPRESS_ADMIN_FIND_BY_DELIVERY_ORDER_ID = "/express/admin/findByDeliveryOrderId";
     public static final String EXPRESS_ADMIN_SAVE = "/express/admin/save";
     public static final String EXPRESS_ADMIN_UPDATE = "/express/admin/update";
     public static final String EXPRESS_ADMIN_COMPLETE = "/express/admin/complete";
@@ -524,6 +480,106 @@ public class Url {
     public static final String SUPPLIER_SYSTEM_SAVE = "/supplier/system/save";
     public static final String SUPPLIER_SYSTEM_UPDATE = "/supplier/system/update";
     public static final String SUPPLIER_SYSTEM_DELETE = "/supplier/system/delete";
+    
+    //仓库
+    public static final String WAREHOUSE_LIST = "/warehouse/list";
+    public static final String WAREHOUSE_FIND = "/warehouse/find";
+    public static final String WAREHOUSE_SAVE = "/warehouse/save";
+    public static final String WAREHOUSE_UPDATE = "/warehouse/update";
+    public static final String WAREHOUSE_DELETE = "/warehouse/delete";
+    public static final String WAREHOUSE_ADMIN_LIST = "/warehouse/admin/list";
+    public static final String WAREHOUSE_ADMIN_ALL_LIST = "/warehouse/admin/all/list";
+    public static final String WAREHOUSE_ADMIN_FIND = "/warehouse/admin/find";
+    public static final String WAREHOUSE_ADMIN_SAVE = "/warehouse/admin/save";
+    public static final String WAREHOUSE_ADMIN_UPDATE = "/warehouse/admin/update";
+    public static final String WAREHOUSE_ADMIN_DELETE = "/warehouse/admin/delete";
+    public static final String WAREHOUSE_SYSTEM_LIST = "/warehouse/system/list";
+    public static final String WAREHOUSE_SYSTEM_ALL_LIST = "/warehouse/system/all/list";
+    public static final String WAREHOUSE_SYSTEM_FIND = "/warehouse/system/find";
+    public static final String WAREHOUSE_SYSTEM_SAVE = "/warehouse/system/save";
+    public static final String WAREHOUSE_SYSTEM_UPDATE = "/warehouse/system/update";
+    public static final String WAREHOUSE_SYSTEM_DELETE = "/warehouse/system/delete";
+    
+    //库存
+    public static final String STOCK_ADMIN_LIST = "/stock/admin/list";
+    public static final String STOCK_ADMIN_FIND = "/stock/admin/find";
+    public static final String STOCK_ADMIN_SAVE = "/stock/admin/save";
+    public static final String STOCK_ADMIN_UPDATE = "/stock/admin/update";
+    public static final String STOCK_ADMIN_DELETE = "/stock/admin/delete";
+    public static final String STOCK_SYSTEM_LIST = "/stock/system/list";
+    public static final String STOCK_SYSTEM_FIND = "/stock/system/find";
+    public static final String STOCK_SYSTEM_SAVE = "/stock/system/save";
+    public static final String STOCK_SYSTEM_UPDATE = "/stock/system/update";
+    public static final String STOCK_SYSTEM_DELETE = "/stock/system/delete";
+    
+    //入库
+    public static final String STOCK_IN_LIST = "/stock/in/list";
+    public static final String STOCK_IN_FIND = "/stock/in/find";
+    public static final String STOCK_IN_SAVE = "/stock/in/save";
+    public static final String STOCK_IN_UPDATE = "/stock/in/update";
+    public static final String STOCK_IN_DELETE = "/stock/in/delete";
+    public static final String STOCK_IN_ADMIN_LIST = "/stock/in/admin/list";
+    public static final String STOCK_IN_ADMIN_FIND = "/stock/in/admin/find";
+    public static final String STOCK_IN_ADMIN_SAVE = "/stock/in/admin/save";
+    public static final String STOCK_IN_ADMIN_UPDATE = "/stock/in/admin/update";
+    public static final String STOCK_IN_ADMIN_DELETE = "/stock/in/admin/delete";
+    public static final String STOCK_IN_SYSTEM_LIST = "/stock/in/system/list";
+    public static final String STOCK_IN_SYSTEM_FIND = "/stock/in/system/find";
+    public static final String STOCK_IN_SYSTEM_SAVE = "/stock/in/system/save";
+    public static final String STOCK_IN_SYSTEM_UPDATE = "/stock/in/system/update";
+    public static final String STOCK_IN_SYSTEM_DELETE = "/stock/in/system/delete";
+    
+    //出库
+    public static final String STOCK_OUT_LIST = "/stock/out/list";
+    public static final String STOCK_OUT_FIND = "/stock/out/find";
+    public static final String STOCK_OUT_SAVE = "/stock/out/save";
+    public static final String STOCK_OUT_UPDATE = "/stock/out/update";
+    public static final String STOCK_OUT_DELETE = "/stock/out/delete";
+    public static final String STOCK_OUT_ADMIN_LIST = "/stock/out/admin/list";
+    public static final String STOCK_OUT_ADMIN_FIND = "/stock/out/admin/find";
+    public static final String STOCK_OUT_ADMIN_SAVE = "/stock/out/admin/save";
+    public static final String STOCK_OUT_ADMIN_UPDATE = "/stock/out/admin/update";
+    public static final String STOCK_OUT_ADMIN_DELETE = "/stock/out/admin/delete";
+    public static final String STOCK_OUT_SYSTEM_LIST = "/stock/out/system/list";
+    public static final String STOCK_OUT_SYSTEM_FIND = "/stock/out/system/find";
+    public static final String STOCK_OUT_SYSTEM_SAVE = "/stock/out/system/save";
+    public static final String STOCK_OUT_SYSTEM_UPDATE = "/stock/out/system/update";
+    public static final String STOCK_OUT_SYSTEM_DELETE = "/stock/out/system/delete";
+    
+    //发货单
+    public static final String DELIVERY_ORDER_LIST = "/delivery/order/list";
+    public static final String DELIVERY_ORDER_FIND = "/delivery/order/find";
+    public static final String DELIVERY_ORDER_SAVE = "/delivery/order/save";
+    public static final String DELIVERY_ORDER_UPDATE = "/delivery/order/update";
+    public static final String DELIVERY_ORDER_DELETE = "/delivery/order/delete";
+    public static final String DELIVERY_ORDER_ADMIN_LIST = "/delivery/order/admin/list";
+    public static final String DELIVERY_ORDER_ADMIN_FIND = "/delivery/order/admin/find";
+    public static final String DELIVERY_ORDER_ADMIN_EXPRESS = "/delivery/order/admin/express";
+    public static final String DELIVERY_ORDER_ADMIN_SAVE = "/delivery/order/admin/save";
+    public static final String DELIVERY_ORDER_ADMIN_UPDATE = "/delivery/order/admin/update";
+    public static final String DELIVERY_ORDER_ADMIN_DELETE = "/delivery/order/admin/delete";
+    public static final String DELIVERY_ORDER_SYSTEM_LIST = "/delivery/order/system/list";
+    public static final String DELIVERY_ORDER_SYSTEM_FIND = "/delivery/order/system/find";
+    public static final String DELIVERY_ORDER_SYSTEM_SAVE = "/delivery/order/system/save";
+    public static final String DELIVERY_ORDER_SYSTEM_UPDATE = "/delivery/order/system/update";
+    public static final String DELIVERY_ORDER_SYSTEM_DELETE = "/delivery/order/system/delete";
+    
+    //报损报溢单
+    public static final String STOCK_REPLENISH_LIST = "/stock/replenish/list";
+    public static final String STOCK_REPLENISH_FIND = "/stock/replenish/find";
+    public static final String STOCK_REPLENISH_SAVE = "/stock/replenish/save";
+    public static final String STOCK_REPLENISH_UPDATE = "/stock/replenish/update";
+    public static final String STOCK_REPLENISH_DELETE = "/stock/replenish/delete";
+    public static final String STOCK_REPLENISH_ADMIN_LIST = "/stock/replenish/admin/list";
+    public static final String STOCK_REPLENISH_ADMIN_FIND = "/stock/replenish/admin/find";
+    public static final String STOCK_REPLENISH_ADMIN_SAVE = "/stock/replenish/admin/save";
+    public static final String STOCK_REPLENISH_ADMIN_UPDATE = "/stock/replenish/admin/update";
+    public static final String STOCK_REPLENISH_ADMIN_DELETE = "/stock/replenish/admin/delete";
+    public static final String STOCK_REPLENISH_SYSTEM_LIST = "/stock/replenish/system/list";
+    public static final String STOCK_REPLENISH_SYSTEM_FIND = "/stock/replenish/system/find";
+    public static final String STOCK_REPLENISH_SYSTEM_SAVE = "/stock/replenish/system/save";
+    public static final String STOCK_REPLENISH_SYSTEM_UPDATE = "/stock/replenish/system/update";
+    public static final String STOCK_REPLENISH_SYSTEM_DELETE = "/stock/replenish/system/delete";
 
     // 缓存
     public static final String REMOVE_ALL_CACHE = "/remove/all/cache";

@@ -77,17 +77,17 @@ public class StockReplenishCache extends Cache {
         return stock_replenish;
     }
 
-    public Boolean save(String stock_replenish_id, String app_id, String object_id, String stock_replenish_type, Integer stock_replenish_quantity, String stock_replenish_status, String system_create_user_id) {
-        return stockReplenishDao.save(stock_replenish_id, app_id, object_id, stock_replenish_type, stock_replenish_quantity, stock_replenish_status, system_create_user_id);
+    public Boolean save(String stock_replenish_id, String app_id, String warehouse_id, String object_id, String stock_replenish_type, Integer stock_replenish_quantity, String stock_replenish_action, String stock_replenish_status, String system_create_user_id) {
+        return stockReplenishDao.save(stock_replenish_id, app_id, warehouse_id, object_id, stock_replenish_type, stock_replenish_quantity, stock_replenish_action, stock_replenish_status, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String stock_replenish_id, String object_id, String stock_replenish_type, Integer stock_replenish_quantity, String stock_replenish_status, String system_update_user_id, Integer system_version) {
+    public Boolean updateValidateSystem_version(String stock_replenish_id, String warehouse_id, String object_id, String stock_replenish_type, Integer stock_replenish_quantity, String stock_replenish_action, String stock_replenish_status, String system_update_user_id, Integer system_version) {
         StockReplenish stock_replenish = findByStock_replenish_id(stock_replenish_id);
         if (!stock_replenish.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = stockReplenishDao.update(stock_replenish_id, object_id, stock_replenish_type, stock_replenish_quantity, stock_replenish_status, system_update_user_id, system_version);
+        boolean result = stockReplenishDao.update(stock_replenish_id, warehouse_id, object_id, stock_replenish_type, stock_replenish_quantity, stock_replenish_action, stock_replenish_status, system_update_user_id, system_version);
 
         if (result) {
             CacheUtil.remove(STOCK_REPLENISH_BY_STOCK_REPLENISH_ID_CACHE, stock_replenish_id);

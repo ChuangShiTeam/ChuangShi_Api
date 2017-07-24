@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.type;
 
-public enum StockFlow {
+public enum DeliveryOrderFlow {
+    
     WAIT_SEND("WAIT_SEND", "待发货"),
     WAIT_RECEIVE("WAIT_RECEIVE", "待收货"),
     COMPLETE("COMPLETE", "已完成"),
@@ -9,7 +10,7 @@ public enum StockFlow {
     private String key;
     private String value;
 
-    private StockFlow(String key, String value) {
+    private DeliveryOrderFlow(String key, String value) {
         this.key = key;
         this.value = value;
     }
@@ -21,6 +22,5 @@ public enum StockFlow {
     public String getValue() {
         return value;
     }
-
 
 }

@@ -112,9 +112,11 @@
     INSERT INTO table_stock_replenish (
       stock_replenish_id,
       app_id,
+      warehouse_id,
       object_id,
       stock_replenish_type,
       stock_replenish_quantity,
+      stock_replenish_action,
       stock_replenish_status,
       system_create_user_id,
       system_create_time,
@@ -125,9 +127,11 @@
     ) VALUES (
       #p(stock_replenish_id),
       #p(app_id),
+      #p(warehouse_id),
       #p(object_id),
       #p(stock_replenish_type),
       #p(stock_replenish_quantity),
+      #p(stock_replenish_action),
       #p(stock_replenish_status),
       #p(system_create_user_id),
       #p(system_create_time),
@@ -140,9 +144,11 @@
 
   #sql("update")
     UPDATE table_stock_replenish SET
+    warehouse_id = #p(warehouse_id),
     object_id = #p(object_id),
     stock_replenish_type = #p(stock_replenish_type),
     stock_replenish_quantity = #p(stock_replenish_quantity),
+    stock_replenish_action = #p(stock_replenish_action),
     stock_replenish_status = #p(stock_replenish_status),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),

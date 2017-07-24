@@ -6,6 +6,7 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.service.AppService;
+import com.nowui.chuangshi.service.WarehouseService;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.ArrayList;
@@ -14,6 +15,8 @@ import java.util.List;
 public class AppController extends Controller {
 
     private final AppService appService = new AppService();
+    
+    private final WarehouseService warehouseService = new WarehouseService();
 
     @ActionKey(Url.APP_LIST)
     public void list() {
@@ -64,8 +67,12 @@ public class AppController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = appService.save(app_id, model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getWechat_token(), model.getWechat_encoding_aes_key(), model.getApp_is_stock(), model.getApp_is_commission(), model.getApp_commission_level(), request_user_id);
-
+        Boolean result = appService.save(app_id, model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getWechat_token(), model.getWechat_encoding_aes_key(), model.getApp_is_create_warehouse(), model.getApp_is_delivery(), model.getApp_is_audit_member(), model.getApp_is_commission(), model.getApp_commission_level(), request_user_id);
+        if (result) {
+            if (model.getApp_is_create_warehouse()) {
+                warehouseService.createDefault(app_id, request_user_id);
+            }
+        }
         renderSuccessJson(result);
     }
 
@@ -84,8 +91,12 @@ public class AppController extends Controller {
         authenticateApp_id(app.getApp_id());
         authenticateSystem_create_user_id(app.getSystem_create_user_id());
 
-        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getWechat_token(), model.getWechat_encoding_aes_key(), model.getApp_is_stock(), model.getApp_is_commission(), model.getApp_commission_level(), request_user_id, model.getSystem_version());
-
+        Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getWechat_token(), model.getWechat_encoding_aes_key(), model.getApp_is_create_warehouse(), model.getApp_is_delivery(), model.getApp_is_audit_member(), model.getApp_is_commission(), model.getApp_commission_level(), request_user_id, model.getSystem_version());
+        if (result) {
+            if ((!app.getApp_is_create_warehouse()) && model.getApp_is_create_warehouse()) {
+                warehouseService.createDefault(app.getApp_id(), request_user_id);
+            }
+        }
         renderSuccessJson(result);
     }
 
@@ -185,6 +196,12 @@ public class AppController extends Controller {
 
         Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getWechat_token(), model.getWechat_encoding_aes_key(), model.getApp_is_stock(), model.getApp_is_commission(), model.getApp_commission_level(), request_user_id, model.getSystem_version());
 
+        if (result) {
+            if ((!app.getApp_is_create_warehouse()) && model.getApp_is_create_warehouse()) {
+                warehouseService.createDefault(app.getApp_id(), request_user_id);
+            }
+        }
+        
         renderSuccessJson(result);
     }
 
@@ -266,6 +283,12 @@ public class AppController extends Controller {
 
         Boolean result = appService.updateValidateSystem_version(model.getApp_id(), model.getApp_name(), model.getApp_secret(), model.getWechat_app_id(), model.getWechat_app_secret(), model.getWechat_mch_id(), model.getWechat_mch_key(), model.getWechat_token(), model.getWechat_encoding_aes_key(), model.getApp_is_stock(), model.getApp_is_commission(), model.getApp_commission_level(), request_user_id, model.getSystem_version());
 
+        if (result) {
+            if (model.getApp_is_create_warehouse()) {
+                warehouseService.createDefault(model.getApp_id(), request_user_id);
+            }
+        }
+        
         renderSuccessJson(result);
     }
 

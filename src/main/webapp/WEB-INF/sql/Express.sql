@@ -103,29 +103,28 @@
     AND express_id = #p(express_id)
   #end
   
-  #sql("listByStock_id")
+  #sql("listByDelivery_order_id")
     SELECT
-    table_express.*
+    *
     FROM table_express
-    WHERE table_express.system_status = 1
-    AND table_express.stock_id = #p(stock_id)
+    WHERE system_status = 1
+    AND delivery_order_id = #p(delivery_order_id)
   #end
 
   #sql("listByTrade_id")
     SELECT
-    table_express.*
-    FROM table_express, table_stock
-    WHERE table_express.system_status = 1
-    AND table_stock.system_status = 1
-    AND table_express.stock_id = table_stock.stock_id
-    AND table_stock.trade_id = #p(trade_id)
+    *
+    FROM table_express
+    WHERE system_status = 1
+    AND table_express.trade_id = #p(trade_id)
   #end
 
   #sql("save")
     INSERT INTO table_express (
       express_id,
       app_id,
-      stock_id,
+      trade_id,
+      delivery_order_id,
       express_shipper_code,
       express_no,
       express_receiver_company,
@@ -151,7 +150,7 @@
       express_pay_way,
       express_traces,
       express_flow,
-      express_status,
+      express_is_complete,
       express_remark,
       system_create_user_id,
       system_create_time,
@@ -162,7 +161,8 @@
     ) VALUES (
       #p(express_id),
       #p(app_id),
-      #p(stock_id),
+      #p(trade_id),
+      #p(delivery_order_id),
       #p(express_shipper_code),
       #p(express_no),
       #p(express_receiver_company),
@@ -188,7 +188,7 @@
       #p(express_pay_way),
       #p(express_traces),
       #p(express_flow),
-      #p(express_status),
+      #p(express_is_complete),
       #p(express_remark),
       #p(system_create_user_id),
       #p(system_create_time),
@@ -201,7 +201,8 @@
 
   #sql("update")
     UPDATE table_express SET
-    stock_id = #p(stock_id),
+    trade_id = #p(trade_id),
+    delivery_order_id = #p(delivery_order_id),
     express_shipper_code = #p(express_shipper_code),
     express_no = #p(express_no),
     express_receiver_company = #p(express_receiver_company),
@@ -227,7 +228,7 @@
     express_pay_way = #p(express_pay_way),
     express_traces = #p(express_traces),
     express_flow = #p(express_flow),
-    express_status = #p(express_status),
+    express_is_complete = #p(express_is_complete),
     express_remark = #p(express_remark),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),

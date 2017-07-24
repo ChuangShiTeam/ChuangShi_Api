@@ -187,7 +187,7 @@ public class ProductController extends Controller {
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
         for (Product product : productList) {
             Map<String, Object> resultMap = new HashMap<String, Object>();
-            product.keep(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.SYSTEM_VERSION);
+            product.keep(Product.PRODUCT_ID, Product.PRODUCT_CATEGORY_ID, Product.PRODUCT_NAME, Product.SYSTEM_VERSION);
             List<ProductSku> productSkuList = productSkuService.listByProduct_id(product.getProduct_id());
             resultMap.put("product", product);
             resultMap.put("productSkuList", productSkuList);

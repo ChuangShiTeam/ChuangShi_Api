@@ -21,12 +21,12 @@ import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.controller.AdminController;
 import com.nowui.chuangshi.controller.ApiController;
 import com.nowui.chuangshi.controller.AppController;
-import com.nowui.chuangshi.controller.AppStockController;
 import com.nowui.chuangshi.controller.BillController;
 import com.nowui.chuangshi.controller.CacheController;
 import com.nowui.chuangshi.controller.CodeController;
 import com.nowui.chuangshi.controller.CustomerAttributeController;
 import com.nowui.chuangshi.controller.CustomerController;
+import com.nowui.chuangshi.controller.DeliveryOrderController;
 import com.nowui.chuangshi.controller.ExceptionController;
 import com.nowui.chuangshi.controller.ExpressController;
 import com.nowui.chuangshi.controller.FeijiuController;
@@ -41,21 +41,72 @@ import com.nowui.chuangshi.controller.HttpController;
 import com.nowui.chuangshi.controller.MemberAddressController;
 import com.nowui.chuangshi.controller.MemberController;
 import com.nowui.chuangshi.controller.MemberLevelController;
-import com.nowui.chuangshi.controller.MemberStockController;
 import com.nowui.chuangshi.controller.MenuController;
 import com.nowui.chuangshi.controller.ProductBrandController;
 import com.nowui.chuangshi.controller.ProductCategoryController;
 import com.nowui.chuangshi.controller.ProductController;
 import com.nowui.chuangshi.controller.QrcodeController;
 import com.nowui.chuangshi.controller.SqlController;
+import com.nowui.chuangshi.controller.StockController;
+import com.nowui.chuangshi.controller.StockInController;
+import com.nowui.chuangshi.controller.StockOutController;
+import com.nowui.chuangshi.controller.StockReplenishController;
 import com.nowui.chuangshi.controller.SupplierController;
 import com.nowui.chuangshi.controller.TradeController;
 import com.nowui.chuangshi.controller.UserController;
 import com.nowui.chuangshi.controller.WeChatController;
 import com.nowui.chuangshi.controller.WeChatMessageController;
 import com.nowui.chuangshi.interceptor.GlobalActionInterceptor;
-import com.nowui.chuangshi.model.*;
+import com.nowui.chuangshi.model.Admin;
+import com.nowui.chuangshi.model.Api;
+import com.nowui.chuangshi.model.App;
+import com.nowui.chuangshi.model.Bill;
+import com.nowui.chuangshi.model.BillCommission;
+import com.nowui.chuangshi.model.Customer;
+import com.nowui.chuangshi.model.CustomerAttribute;
+import com.nowui.chuangshi.model.DeliveryOrder;
+import com.nowui.chuangshi.model.DeliveryOrderProductSku;
 import com.nowui.chuangshi.model.Exception;
+import com.nowui.chuangshi.model.Express;
+import com.nowui.chuangshi.model.FeijiuFastCustomer;
+import com.nowui.chuangshi.model.FeijiuRecommendCustomer;
+import com.nowui.chuangshi.model.FeijiuRecommendProduct;
+import com.nowui.chuangshi.model.File;
+import com.nowui.chuangshi.model.GuangqiCustomer;
+import com.nowui.chuangshi.model.GuangqiCustomerPrize;
+import com.nowui.chuangshi.model.GuangqiPrize;
+import com.nowui.chuangshi.model.Http;
+import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.MemberAddress;
+import com.nowui.chuangshi.model.MemberLevel;
+import com.nowui.chuangshi.model.Menu;
+import com.nowui.chuangshi.model.MenuApi;
+import com.nowui.chuangshi.model.Product;
+import com.nowui.chuangshi.model.ProductBrand;
+import com.nowui.chuangshi.model.ProductCategory;
+import com.nowui.chuangshi.model.ProductImage;
+import com.nowui.chuangshi.model.ProductSku;
+import com.nowui.chuangshi.model.ProductSkuAttribute;
+import com.nowui.chuangshi.model.ProductSkuCommission;
+import com.nowui.chuangshi.model.ProductSkuPrice;
+import com.nowui.chuangshi.model.Qrcode;
+import com.nowui.chuangshi.model.Sql;
+import com.nowui.chuangshi.model.Stock;
+import com.nowui.chuangshi.model.StockIn;
+import com.nowui.chuangshi.model.StockInProductSku;
+import com.nowui.chuangshi.model.StockOut;
+import com.nowui.chuangshi.model.StockOutProductSku;
+import com.nowui.chuangshi.model.StockProductSku;
+import com.nowui.chuangshi.model.StockReplenish;
+import com.nowui.chuangshi.model.StockReplenishProductSku;
+import com.nowui.chuangshi.model.Supplier;
+import com.nowui.chuangshi.model.SupplierProduct;
+import com.nowui.chuangshi.model.Trade;
+import com.nowui.chuangshi.model.TradeCommossion;
+import com.nowui.chuangshi.model.TradePay;
+import com.nowui.chuangshi.model.TradeProductSku;
+import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.model.Warehouse;
 import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -79,7 +130,6 @@ public class WebConfig extends JFinalConfig {
         routes.add("/sql", SqlController.class);
         routes.add("/exception", ExceptionController.class);
         routes.add("/app", AppController.class);
-        routes.add("/app/stock", AppStockController.class);
         routes.add("/menu", MenuController.class);
         routes.add("/api", ApiController.class);
         routes.add("/user", UserController.class);
@@ -91,7 +141,6 @@ public class WebConfig extends JFinalConfig {
         routes.add("/member", MemberController.class);
         routes.add("/member/address", MemberAddressController.class);
         routes.add("/member/level", MemberLevelController.class);
-        routes.add("/member/stock", MemberStockController.class);
         routes.add("/express", ExpressController.class);
         routes.add("/qrcode", QrcodeController.class);
 
@@ -110,7 +159,17 @@ public class WebConfig extends JFinalConfig {
         routes.add("/feijiu", FeijiuController.class);
 
         routes.add("/supplier", SupplierController.class);
+
         routes.add("/cache", CacheController.class);
+
+        
+        routes.add("/warehouse", WarehouseController.class);
+        routes.add("/stock", StockController.class);
+        routes.add("/stock/in", StockInController.class);
+        routes.add("/stock/out", StockOutController.class);
+        routes.add("/stock/replenish", StockReplenishController.class);
+        
+        routes.add("/delivery/order", DeliveryOrderController.class);
     }
 
     public void configEngine(Engine engine) {
@@ -186,6 +245,18 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_supplier", "supplier_id", Supplier.class);
         activeRecordPlugin.addMapping("table_supplier_product", "supplier_id", SupplierProduct.class);
 
+        activeRecordPlugin.addMapping("table_warehouse", "warehouse_id", Warehouse.class);
+        activeRecordPlugin.addMapping("table_stock", "stock_id", Stock.class);
+        activeRecordPlugin.addMapping("table_stock_in", "stock_in_id", StockIn.class);
+        activeRecordPlugin.addMapping("table_stock_in_product_sku", "stock_produc_sku_in_id", StockInProductSku.class);
+        activeRecordPlugin.addMapping("table_stock_out", "stock_out_id", StockOut.class);
+        activeRecordPlugin.addMapping("table_stock_out_product_sku", "stock_produc_sku_out_id", StockOutProductSku.class);
+        activeRecordPlugin.addMapping("table_stock_replenish", "stock_replenish_id", StockReplenish.class);
+        activeRecordPlugin.addMapping("table_stock_replenish_product_sku", "stock_produc_sku_replenish_id", StockReplenishProductSku.class);
+        
+        activeRecordPlugin.addMapping("table_delivery_order", "delivery_order_id", DeliveryOrder.class);
+        activeRecordPlugin.addMapping("table_delivery_order_product_sku", "delivery_order_product_sku_id", DeliveryOrderProductSku.class);
+        
         plugins.add(activeRecordPlugin);
 
         EhCachePlugin ehCachePlugin = new EhCachePlugin();

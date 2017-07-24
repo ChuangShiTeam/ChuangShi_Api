@@ -34,12 +34,12 @@ public class StockReplenishService extends Service {
         return stockReplenishCache.findByStock_replenish_id(stock_replenish_id);
     }
 
-    public Boolean save(String stock_replenish_id, String app_id, String object_id, String stock_replenish_type, Integer stock_replenish_quantity, String stock_replenish_status, String system_create_user_id) {
-        return stockReplenishCache.save(stock_replenish_id, app_id, object_id, stock_replenish_type, stock_replenish_quantity, stock_replenish_status, system_create_user_id);
+    public Boolean save(String stock_replenish_id, String app_id, String warehouse_id, String object_id, String stock_replenish_type, Integer stock_replenish_quantity, String stock_replenish_action, String stock_replenish_status, String system_create_user_id) {
+        return stockReplenishCache.save(stock_replenish_id, app_id, warehouse_id, object_id, stock_replenish_type, stock_replenish_quantity, stock_replenish_action, stock_replenish_status, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String stock_replenish_id, String object_id, String stock_replenish_type, Integer stock_replenish_quantity, String stock_replenish_status, String system_update_user_id, Integer system_version) {
-        return stockReplenishCache.updateValidateSystem_version(stock_replenish_id, object_id, stock_replenish_type, stock_replenish_quantity, stock_replenish_status, system_update_user_id, system_version);
+    public Boolean updateValidateSystem_version(String stock_replenish_id, String warehouse_id, String object_id, String stock_replenish_type, Integer stock_replenish_quantity, String stock_replenish_action, String stock_replenish_status, String system_update_user_id, Integer system_version) {
+        return stockReplenishCache.updateValidateSystem_version(stock_replenish_id, warehouse_id, object_id, stock_replenish_type, stock_replenish_quantity, stock_replenish_action, stock_replenish_status, system_update_user_id, system_version);
     }
 
     public Boolean deleteByStock_replenish_idAndSystem_update_user_idValidateSystem_version(String stock_replenish_id, String system_update_user_id, Integer system_version) {
