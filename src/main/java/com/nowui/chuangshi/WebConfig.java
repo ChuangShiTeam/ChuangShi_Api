@@ -54,6 +54,7 @@ import com.nowui.chuangshi.controller.StockReplenishController;
 import com.nowui.chuangshi.controller.SupplierController;
 import com.nowui.chuangshi.controller.TradeController;
 import com.nowui.chuangshi.controller.UserController;
+import com.nowui.chuangshi.controller.WarehouseController;
 import com.nowui.chuangshi.controller.WeChatController;
 import com.nowui.chuangshi.controller.WeChatMessageController;
 import com.nowui.chuangshi.interceptor.GlobalActionInterceptor;
