@@ -66,7 +66,6 @@ public class WeChatController extends Controller {
     private final ProductSkuCommissionService productSkuCommissionService = new ProductSkuCommissionService();
     private final UserService userService = new UserService();
     private final BillCommissionService billCommissionService = new BillCommissionService();
-    private final StockService stockService = new StockService();
 
     @ActionKey(Url.WECHAT_CONFIG)
     public void config() {
@@ -476,7 +475,7 @@ public class WeChatController extends Controller {
             stockProductSkuList.add(stockProductSku);
         }
 
-        // 会员进货
+        /*// 会员进货
         stockService.in(trade.getApp_id(), trade_id, member.getMember_id(), StockType.MEMBER.getKey(),
                 stockProductSkuList, "");
         // 会员发货
@@ -489,7 +488,7 @@ public class WeChatController extends Controller {
                 trade.getUser_id(), trade.getTrade_receiver_name(), trade.getTrade_receiver_mobile(),
                 trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(),
                 trade.getTrade_receiver_address(), stock_express_pay_way, stock_express_shipper_code, stock_is_pay,
-                stockProductSkuList, "");
+                stockProductSkuList, "");*/
     }
 
 }
