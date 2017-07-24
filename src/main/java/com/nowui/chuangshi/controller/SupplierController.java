@@ -15,7 +15,6 @@ import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.File;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.Supplier;
 import com.nowui.chuangshi.model.SupplierProduct;
@@ -206,6 +205,7 @@ public class SupplierController extends Controller {
         String user_name = "";
         String user_account = "";
         List<Product> productList = new ArrayList<>();
+        List<Integer> selectedRowKeys = new ArrayList<>();
 
         if (!StringUtils.isEmpty(model.getSupplier_id())) {
             supplier = supplierService.findBySupplier_id(model.getSupplier_id());
@@ -216,15 +216,18 @@ public class SupplierController extends Controller {
             user_name = user.getUser_name();
             user_account = user.getUser_account();
             productList = productService.listByApp_id(supplier.getApp_id());
-            for (Product product : productList) {
+
+            for (int i = 0; i < productList.size(); i++) {
                 List<SupplierProduct> list = supplierProductService.listBySupplier_id(model.getSupplier_id());
                 for (SupplierProduct supplierProduct : list) {
-                    product.put("product_isCheck", false);
-                    if (supplierProduct.getProduct_id().equals(product.getProduct_id())) {
-                        product.put("product_isCheck", true);
+                    if (supplierProduct.getProduct_id().equals(productList.get(i).getProduct_id())) {
+                        selectedRowKeys.add(i);
+                        break;
                     }
                 }
-                //TODO
+            }
+
+            for (Product product : productList) {
                 String file_path = fileService.getFile_path(product.getProduct_image());
                 product.put(Product.PRODUCT_IMAGE, file_path);
                 product.keep(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, "product_isCheck");
@@ -241,9 +244,10 @@ public class SupplierController extends Controller {
         supplier.put(User.USER_NAME, user_name);
         supplier.put(User.USER_ACCOUNT, user_account);
         supplier.put(Product.PRODUCT_LIST, productList);
+        supplier.put("selectedRowKeys", selectedRowKeys);
 
         supplier.keep(Supplier.SUPPLIER_ID, Supplier.SUPPLIER_STATUS, User.USER_NAME, User.USER_ACCOUNT,
-                Supplier.SYSTEM_VERSION, Product.PRODUCT_LIST);
+                Supplier.SYSTEM_VERSION, Product.PRODUCT_LIST, "selectedRowKeys");
 
         renderSuccessJson(supplier);
     }
