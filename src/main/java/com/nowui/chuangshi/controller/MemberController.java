@@ -290,6 +290,7 @@ public class MemberController extends Controller {
 
         if (member.getMember_parent_id().equals(parentMember.getMember_id())) {
             memberService.updateByMember_idAndMember_level_id(model.getMember_id(), model.getMember_level_id(), request_user_id);
+            //TODO
         } else {
             throw new RuntimeException("您不是上一级");
         }
