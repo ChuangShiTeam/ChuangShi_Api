@@ -11,7 +11,6 @@ import com.jfinal.plugin.activerecord.Record;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.DeliveryOrder;
-import com.nowui.chuangshi.model.DeliveryOrderProductSku;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.DeliveryOrderProductSkuService;
@@ -135,9 +134,38 @@ public class DeliveryOrderController extends Controller {
     }
 
 
-    @ActionKey(Url.DELIVERY_ORDER_ADMIN_UPDATE)
-    public void adminUpdate() {
+    /**
+     * 仓库发货快递
+     */
+    @ActionKey(Url.DELIVERY_ORDER_ADMIN_EXPRESS)
+    public void adminExpress() {
         validateRequest_app_id();
+        validate(DeliveryOrder.DELIVERY_ORDER_ID, Express.EXPRESS_NO, Express.EXPRESS_COST, Express.EXPRESS_SHIPPER_CODE,
+                Express.EXPRESS_REMARK);
+
+        Express model = getModel(Express.class);
+        String request_user_id = getRequest_user_id();
+        JSONObject jsonObject = getParameterJSONObject();
+        String delivery_order_id = jsonObject.getString("delivery_order_id");
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        Stock stock = stockService.findByStock_id(stock_id);
+
+        Boolean result = expressService.save(express_id, stock.getApp_id(), stock_id, model.getExpress_shipper_code(),
+                model.getExpress_no(), "", stock.getStock_receiver_name(), "", stock.getStock_receiver_mobile(), "",
+                stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(),
+                stock.getStock_receiver_address(), "", "", "", "", "", "", "", "", "", model.getExpress_cost(),
+                stock.getStock_is_pay(), stock.getStock_express_pay_way(), "", ExpressFlow.NOTRACK.getValue(), false,
+                model.getExpress_remark(), request_user_id);
+
+        if (result) {
+            // 更新发货单流程为待收货
+            //stockService.updateSend(stock_id, request_user_id);
+            // 快递订阅
+            expressService.subscription(express_id, model.getExpress_shipper_code(), model.getExpress_no());
+        }
+        
         validate(DeliveryOrder.DELIVERY_ORDER_ID, DeliveryOrder.TRADE_ID, DeliveryOrder.DELIVERY_ORDER_USER_ID, DeliveryOrder.DELIVERY_ORDER_SENDER_USER_ID, DeliveryOrder.DELIVERY_ORDER_RECIEVER_USER_ID, DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE, DeliveryOrder.DELIVERY_ORDER_RECEIVER_PROVINCE, DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY, DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA, DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS, DeliveryOrder.DELIVERY_ORDER_EXPRESS_PAY_WAY, DeliveryOrder.DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, DeliveryOrder.DELIVERY_ORDER_IS_PAY, DeliveryOrder.DELIVERY_ORDER_FLOW, DeliveryOrder.DELIVERY_IS_COMPLETE, DeliveryOrder.SYSTEM_VERSION);
 
         DeliveryOrder model = getModel(DeliveryOrder.class);
