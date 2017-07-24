@@ -506,6 +506,8 @@ public class Url {
     public static final String BILL_COMMISSION_SYSTEM_DELETE = "/bill/commission/system/delete";
 
     // 供应商
+    public static final String TRADE_SUPPLIER_LIST = "/trade/supplier/list";
+    public static final String TRADE_SUPPLIER_FIND = "/trade/supplier/find";
     public static final String SUPPLIER_LOGIN = "/supplier/login";
     public static final String SUPPLIER_LIST = "/supplier/list";
     public static final String SUPPLIER_FIND = "/supplier/find";

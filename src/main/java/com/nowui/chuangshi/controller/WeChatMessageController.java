@@ -99,7 +99,9 @@ public class WeChatMessageController extends MsgController {
             wechat_union_id = "";
         }
 
-        Member member = memberService.saveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, member_level_id, member_parent_path, user_name, user_avatar, member_status, system_create_user_id);
+        Member member = memberService.saveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id,
+                from_qrcode_id, member_level_id, member_parent_path, user_name, user_avatar, member_status,
+                system_create_user_id);
 
         if (event.equals("unsubscribe")) {
             qrcodeService.updateQrcode_cancelByQrcode_id(member.getFrom_qrcode_id(), system_create_user_id);
@@ -107,7 +109,9 @@ public class WeChatMessageController extends MsgController {
 
         if (app_id == "df2078d6c9eb46babb0df957127273ab") {
             OutNewsMsg outNewsMsg = new OutNewsMsg(inFollowEvent);
-            outNewsMsg.addNews("欢迎使用济颐馆健康管理平台！", "广州市济颐馆贸易有限公司", "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg", "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg");
+            outNewsMsg.addNews("欢迎使用济颐馆健康管理平台！", "广州市济颐馆贸易有限公司",
+                    "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg",
+                    "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg");
             render(outNewsMsg);
         }
 
@@ -124,7 +128,8 @@ public class WeChatMessageController extends MsgController {
         String member_parent_id = "";
         String from_qrcode_id = inQrCodeEvent.getEventKey().replace("qrscene_", "");
         String member_level_id = "";
-        JSONArray member_parent_path = new JSONArray();;
+        JSONArray member_parent_path = new JSONArray();
+        ;
         String content = "";
         String request_user_id = "";
         Boolean member_status = false;
@@ -161,11 +166,18 @@ public class WeChatMessageController extends MsgController {
         }
 
         if (qrcode.getQrcode_type().equals(QrcodeType.PLATFORM.getKey())) {
-            //合伙人不用审核
+            // 合伙人不用审核
             member_status = true;
         }
 
-        Member member = memberService.saveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, member_level_id, member_parent_path, user_name, user_avatar, member_status, system_create_user_id);
+        /*
+         * else if (app.getApp_is_commission()) { // 该应用指定需要审核 member_status =
+         * true; } else { // 该应用指定不需要审核 member_status = false; }
+         */
+        
+        Member member = memberService.saveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id,
+                from_qrcode_id, member_level_id, member_parent_path, user_name, user_avatar, member_status,
+                system_create_user_id);
 
         if (ValidateUtil.isNullOrEmpty(member.getMember_parent_id())) {
             if (qrcode.getQrcode_type().equals(QrcodeType.PLATFORM.getKey())) {
@@ -177,15 +189,19 @@ public class WeChatMessageController extends MsgController {
                     MemberLevel memberLevel = memberLevelService.findByMember_level_sort(app_id, 1);
                     member_level_id = memberLevel.getMember_level_id();
 
-                    memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member.getMember_id(), member_parent_id, member_parent_path, member_level_id, system_create_user_id);
+                    memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(
+                            member.getMember_id(), member_parent_id, member_parent_path, member_level_id,
+                            system_create_user_id);
 
                     qrcodeService.updateQrcode_addByQrcode_id(from_qrcode_id, request_user_id);
 
-                    //content = "恭喜您，成为我们的会员！您的等级是" + memberLevel.getMember_level_name() + "。";
+                    // content = "恭喜您，成为我们的会员！您的等级是" +
+                    // memberLevel.getMember_level_name() + "。";
                 } else {
                     MemberLevel memberLevel = memberLevelService.findByMember_level_id(member.getMember_level_id());
 
-                    //content = "不能绑定，您的等级已经是" + memberLevel.getMember_level_name() + "。";
+                    // content = "不能绑定，您的等级已经是" +
+                    // memberLevel.getMember_level_name() + "。";
                 }
 
                 qrcodeService.updateQrcode_statusByQrcode_id(from_qrcode_id, request_user_id);
@@ -197,28 +213,35 @@ public class WeChatMessageController extends MsgController {
                 jsonArray.add(member_parent_id);
                 member_parent_path = jsonArray;
 
-                //是否需要审核
+                // 是否需要审核
                 if (member_status) {
-                    MemberLevel parentMemberLevel = memberLevelService.findByMember_level_id(parentMember.getMember_level_id());
-                    MemberLevel memberLevel = memberLevelService.findByMember_level_sort(app_id, parentMemberLevel.getMember_level_sort() + 1);
+                    MemberLevel parentMemberLevel = memberLevelService
+                            .findByMember_level_id(parentMember.getMember_level_id());
+                    MemberLevel memberLevel = memberLevelService.findByMember_level_sort(app_id,
+                            parentMemberLevel.getMember_level_sort() + 1);
                     member_level_id = memberLevel.getMember_level_id();
                 }
 
-                memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member.getMember_id(), member_parent_id, member_parent_path, member_level_id, system_create_user_id);
+                memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(
+                        member.getMember_id(), member_parent_id, member_parent_path, member_level_id,
+                        system_create_user_id);
 
                 qrcodeService.updateQrcode_addByQrcode_id(from_qrcode_id, request_user_id);
 
-                //content = "恭喜您，成为我们的会员！您的推荐人是" + parentMember.getMember_name() + "。";
+                // content = "恭喜您，成为我们的会员！您的推荐人是" +
+                // parentMember.getMember_name() + "。";
             }
         } else if (member.getMember_parent_id().equals(Constant.PARENT_ID)) {
-            //您已经是一级会员
+            // 您已经是一级会员
         } else {
 
         }
 
         if (app_id == "df2078d6c9eb46babb0df957127273ab") {
             OutNewsMsg outNewsMsg = new OutNewsMsg(inQrCodeEvent);
-            outNewsMsg.addNews("欢迎使用济颐馆健康管理平台！", "广州市济颐馆贸易有限公司", "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg", "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg");
+            outNewsMsg.addNews("欢迎使用济颐馆健康管理平台！", "广州市济颐馆贸易有限公司",
+                    "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg",
+                    "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg");
             render(outNewsMsg);
         }
 
@@ -256,7 +279,8 @@ public class WeChatMessageController extends MsgController {
         String user_avatar = apiResult.getStr("headimgurl");
         String system_create_user_id = "";
 
-        User user = userService.findByApp_idAndUser_typeAndWechat_open_idAndWechat_union_id(app_id, UserType.MEMBER.getKey(), wechat_open_id, wechat_union_id);
+        User user = userService.findByApp_idAndUser_typeAndWechat_open_idAndWechat_union_id(app_id,
+                UserType.MEMBER.getKey(), wechat_open_id, wechat_union_id);
         if (user != null) {
             if (!user.getUser_name().equals(user_name)) {
                 userService.updateByUser_name(user.getUser_id(), user_name, system_create_user_id);
