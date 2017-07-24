@@ -134,29 +134,6 @@ public class DeliveryOrderController extends Controller {
         renderSuccessJson(result);
     }
 
-
-    /**
-     * 仓库发货快递
-     */
-    @ActionKey(Url.DELIVERY_ORDER_ADMIN_EXPRESS)
-    public void adminExpress() {
-        validateRequest_app_id();
-        validate(DeliveryOrder.DELIVERY_ORDER_ID, Warehouse.WAREHOUSE_ID, Express.EXPRESS_NO, Express.EXPRESS_COST, Express.EXPRESS_SHIPPER_CODE,
-                Express.EXPRESS_REMARK);
-
-        Express model = getModel(Express.class);
-        String request_user_id = getRequest_user_id();
-        JSONObject jsonObject = getParameterJSONObject();
-        String delivery_order_id = jsonObject.getString("delivery_order_id");
-        String warehouse_id = jsonObject.getString("warehouse_id");
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        Boolean result = deliveryOrderService.express(delivery_order_id, warehouse_id, model.getExpress_no(), model.getExpress_cost(), model.getExpress_shipper_code(), model.getExpress_remark(), request_user_id);
-        
-        renderSuccessJson(result);
-    }
-
     @ActionKey(Url.DELIVERY_ORDER_ADMIN_DELETE)
     public void adminDelete() {
         validateRequest_app_id();

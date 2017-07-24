@@ -198,5 +198,11 @@ public class TradeService extends Service {
         return tradeCache.updateTrade_flowByTrade_idValidateSystem_version(trade_id, trade_flow, request_user_id,
                 system_version);
     }
+    
+    public Boolean updateFinish(String trade_id) {
+    	Trade trade = findByTrade_id(trade_id);
+    	
+    	return updateTrade_flowByTrade_idValidateSystem_version(trade_id, TradeFlow.COMPLETE.getKey(), trade.getSystem_update_user_id(), trade.getSystem_version());
+    }
 
 }

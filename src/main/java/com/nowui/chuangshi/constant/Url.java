@@ -375,7 +375,7 @@ public class Url {
     public static final String EXPRESS_ADMIN_LIST = "/express/admin/list";
     public static final String EXPRESS_ADMIN_FIND = "/express/admin/find";
     public static final String EXPRESS_ADMIN_FIND_BY_DELIVERY_ORDER_ID = "/express/admin/findByDeliveryOrderId";
-    public static final String EXPRESS_ADMIN_SAVE = "/express/admin/save";
+    public static final String EXPRESS_ADMIN_MEMBER_EXPRESS = "/express/admin/member/express";
     public static final String EXPRESS_ADMIN_UPDATE = "/express/admin/update";
     public static final String EXPRESS_ADMIN_COMPLETE = "/express/admin/complete";
     public static final String EXPRESS_ADMIN_DELETE = "/express/admin/delete";
@@ -554,7 +554,6 @@ public class Url {
     public static final String DELIVERY_ORDER_DELETE = "/delivery/order/delete";
     public static final String DELIVERY_ORDER_ADMIN_LIST = "/delivery/order/admin/list";
     public static final String DELIVERY_ORDER_ADMIN_FIND = "/delivery/order/admin/find";
-    public static final String DELIVERY_ORDER_ADMIN_EXPRESS = "/delivery/order/admin/express";
     public static final String DELIVERY_ORDER_ADMIN_SAVE = "/delivery/order/admin/save";
     public static final String DELIVERY_ORDER_ADMIN_UPDATE = "/delivery/order/admin/update";
     public static final String DELIVERY_ORDER_ADMIN_DELETE = "/delivery/order/admin/delete";
