@@ -2,7 +2,10 @@ package com.nowui.chuangshi.service;
 
 import java.util.List;
 
+import com.jfinal.plugin.activerecord.Db;
 import com.nowui.chuangshi.cache.StockReplenishProductSkuCache;
+import com.nowui.chuangshi.constant.Constant;
+import com.nowui.chuangshi.model.StockOutProductSku;
 import com.nowui.chuangshi.model.StockReplenishProductSku;
 
 public class StockReplenishProductSkuService extends Service {
@@ -19,6 +22,17 @@ public class StockReplenishProductSkuService extends Service {
 
     public Boolean deleteByStock_replenish_idAndSystem_update_user_id(String stock_replenish_id, String system_update_user_id) {
         return stockReplenishProductSkuCache.deleteByStock_replenish_idAndSystem_update_user_id(stock_replenish_id, system_update_user_id);
+    }
+    
+    public Boolean batchSave(List<StockReplenishProductSku> list) {
+        int[] result = Db.batchSave(list, Constant.BATCH_SIZE);
+
+        for (int i : result) {
+            if (i == 0) {
+                throw new RuntimeException("报损报溢明细记录保存不成功");
+            }
+        }
+        return true;
     }
 
 }

@@ -29,7 +29,7 @@ public class DeliveryOrderProductSkuService extends Service {
 
         for (int i : result) {
             if (i == 0) {
-                throw new RuntimeException("库存明细记录保存不成功");
+                throw new RuntimeException("发货明细记录保存不成功");
             }
         }
         return true;

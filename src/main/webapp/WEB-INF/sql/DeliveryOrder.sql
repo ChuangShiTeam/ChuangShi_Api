@@ -41,6 +41,12 @@
     AND table_express.express_no LIKE #p(express_no)
     #end
   #end
+  
+  #sql("countByDelivery_order_sender_user_id")
+    SELECT COUNT(*) FROM table_delivery_order
+    WHERE table_delivery_order.system_status = 1
+    AND table_delivery_order.delivery_order_sender_user_id = #p(delivery_order_sender_user_id)
+  #end
 
   #sql("listByApp_idAndSystem_create_timeAndLimit")
     SELECT
@@ -104,6 +110,19 @@
     AND table_express.express_no LIKE #p(express_no)
     #end
     ORDER BY table_delivery_order.system_create_time DESC
+    LIMIT #p(m), #p(n)
+  #end
+  
+  #sql("listWithExpressByDelivery_order_sender_user_idAndLimit")
+    SELECT
+    table_delivery_order.*,
+    table_express.express_no,
+    table_express.express_flow,
+    table_express.express_shipper_code
+    FROM table_delivery_order
+    LEFT JOIN table_express ON table_express.delivery_order_id = table_delivery_order.delivery_order_id
+    WHERE table_delivery_order.system_status = 1
+    AND table_delivery_order.delivery_order_sender_user_id = #p(delivery_order_sender_user_id)
     LIMIT #p(m), #p(n)
   #end
 
@@ -187,6 +206,18 @@
     delivery_order_express_pay_way = #p(delivery_order_express_pay_way),
     delivery_order_express_shipper_code = #p(delivery_order_express_shipper_code),
     delivery_order_is_pay = #p(delivery_order_is_pay),
+    delivery_order_flow = #p(delivery_order_flow),
+    delivery_is_complete = #p(delivery_is_complete),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND delivery_order_id = #p(delivery_order_id)
+    AND system_version = #p(system_version)
+  #end
+  
+  #sql("updateDelivery_order_flowAndDelivery_is_completeByDelivery_order_idAndSystem_version")
+    UPDATE table_delivery_order SET
     delivery_order_flow = #p(delivery_order_flow),
     delivery_is_complete = #p(delivery_is_complete),
     system_update_user_id = #p(system_update_user_id),

@@ -41,6 +41,17 @@ public class DeliveryOrderDao extends Dao {
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
+    
+    public Integer countByDelivery_order_sender_user_id(String delivery_order_sender_user_id) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(DeliveryOrder.DELIVERY_ORDER_SENDER_USER_ID, delivery_order_sender_user_id);
+    	SqlPara sqlPara = Db.getSqlPara("delivery_order.countByDelivery_order_sender_user_id", sqlMap);
+    	
+    	logSql("delivery_order", "countByDelivery_order_sender_user_id", sqlPara);
+    	
+    	Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
+    	return count.intValue();
+    }
 
     public List<DeliveryOrder> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         Kv sqlMap = Kv.create();
@@ -83,6 +94,18 @@ public class DeliveryOrderDao extends Dao {
         logSql("delivery_order", "listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit", sqlPara);
 
         return Db.find(sqlPara.getSql(), sqlPara.getPara());
+    }
+    
+    public List<Record> listWithExpressByDelivery_order_sender_user_idAndLimit(String delivery_order_sender_user_id, int m, int n) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(DeliveryOrder.DELIVERY_ORDER_SENDER_USER_ID, delivery_order_sender_user_id);
+    	sqlMap.put(Constant.M, m);
+    	sqlMap.put(Constant.N, n);
+    	SqlPara sqlPara = Db.getSqlPara("delivery_order.listWithExpressByDelivery_order_sender_user_idAndLimit", sqlMap);
+    	
+    	logSql("delivery_order", "listWithExpressByDelivery_order_sender_user_idAndLimit", sqlPara);
+    	
+    	return Db.find(sqlPara.getSql(), sqlPara.getPara());
     }
 
     public DeliveryOrder findByDelivery_order_id(String delivery_order_id) {
@@ -160,6 +183,21 @@ public class DeliveryOrderDao extends Dao {
         logSql("delivery_order", "update", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+    
+    public Boolean updateDelivery_order_flowAndDelivery_is_completeByDelivery_order_idAndSystem_version(String delivery_order_id, String delivery_order_flow, Boolean delivery_is_complete, String system_update_user_id, Integer system_version) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(DeliveryOrder.DELIVERY_ORDER_ID, delivery_order_id);
+    	sqlMap.put(DeliveryOrder.DELIVERY_ORDER_FLOW, delivery_order_flow);
+    	sqlMap.put(DeliveryOrder.DELIVERY_IS_COMPLETE, delivery_is_complete);
+    	sqlMap.put(DeliveryOrder.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+    	sqlMap.put(DeliveryOrder.SYSTEM_UPDATE_TIME, new Date());
+    	sqlMap.put(DeliveryOrder.SYSTEM_VERSION, system_version);
+    	SqlPara sqlPara = Db.getSqlPara("delivery_order.updateDelivery_order_flowAndDelivery_is_completeByDelivery_order_idAndSystem_version", sqlMap);
+    	
+    	logSql("delivery_order", "updateDelivery_order_flowAndDelivery_is_completeByDelivery_order_idAndSystem_version", sqlPara);
+    	
+    	return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
     public Boolean deleteByDelivery_order_idAndSystem_version(String delivery_order_id, String system_update_user_id, Integer system_version) {

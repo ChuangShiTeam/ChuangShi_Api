@@ -23,6 +23,14 @@ public class StockCache extends Cache {
     public Integer countByOrApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(String app_id, String warehouse_id, String stock_type, String product_name, String user_name) {
         return stockDao.countByOrApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(app_id, warehouse_id, stock_type, product_name, user_name);
     }
+    
+    public Integer sumQuantityByApp_idOrWarehouse_idAndObject_idAndProduct_sku_id(String app_id, String warehouse_id, String object_id, String product_sku_id) {
+    	return stockDao.sumQuantityByApp_idOrWarehouse_idAndObject_idAndProduct_sku_id(app_id, warehouse_id, object_id, product_sku_id);
+    }
+    
+    public Integer sumQuantityByObject_id(String object_id) {
+    	return stockDao.sumQuantityByObject_id(object_id);
+    }	
 
     public List<Stock> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         List<Stock> stockList = stockDao.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n);
@@ -64,6 +72,10 @@ public class StockCache extends Cache {
         }
 
         return stock;
+    }
+    
+    public Stock findByWarehouse_idAndProduct_sku_idAndStock_type(String warehouse_id, String product_sku_id, String stock_type) {
+        return stockDao.findByWarehouse_idAndProduct_sku_idAndStock_type(warehouse_id, product_sku_id, stock_type);
     }
     
     public Stock findByStock_idAndStock_type(String stock_id, String stock_type) {
@@ -112,6 +124,14 @@ public class StockCache extends Cache {
         }
 
         return result;
+    }
+    
+    public Boolean batchUpdate(List<Stock> stockList) {
+    	return stockDao.batchUpdate(stockList);
+    }
+    
+    public Boolean batchSave(List<Stock> stockList) {
+    	return stockDao.batchSave(stockList);
     }
 
 }

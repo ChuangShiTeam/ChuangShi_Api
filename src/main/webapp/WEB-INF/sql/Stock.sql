@@ -25,7 +25,7 @@
     AND table_user.user_name LIKE #p(user_name)
     #end
   #end
-
+  
   #sql("countByOrApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name")
     SELECT COUNT(*) FROM table_stock
     #if(product_name)
@@ -52,6 +52,23 @@
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
     #end
+  #end
+  
+  #sql("sumQuantityByApp_idOrWarehouse_idAndObject_idAndProduct_sku_id")
+    SELECT IFNULL(sum(stock_quantity), 0) FROM table_stock
+    WHERE system_status = 1
+    AND table_stock.app_id = #p(app_id)
+    #if(warehouse_id)
+    AND warehouse_id = #p(warehouse_id)
+    #end
+    AND object_id = #p(object_id)
+    AND product_sku_id = #p(product_sku_id)
+  #end
+  
+  #sql("sumQuantityByObject_id")
+    SELECT IFNULL(sum(stock_quantity), 0) FROM table_stock
+    WHERE system_status = 1
+    AND object_id = #p(object_id)
   #end
 
   #sql("listByApp_idAndSystem_create_timeAndLimit")
@@ -133,6 +150,16 @@
     FROM table_stock
     WHERE system_status = 1
     AND stock_id = #p(stock_id)
+  #end
+  
+  #sql("findByWarehouse_idAndProduct_sku_idAndStock_type")
+    SELECT
+    *
+    FROM table_stock
+    WHERE system_status = 1
+    AND warehouse_id = #p(warehouse_id)
+    AND product_sku_id = #p(product_sku_id)
+    AND stock_type = #p(stock_type)
   #end
   
   #sql("findByStock_idAndStock_type")

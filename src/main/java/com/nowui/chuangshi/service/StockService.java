@@ -17,6 +17,14 @@ public class StockService extends Service {
     public Integer countByOrApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(String app_id, String warehouse_id, String stock_type, String product_name, String user_name) {
         return stockCache.countByOrApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(app_id, warehouse_id, stock_type, product_name, user_name);
     }
+    
+    public Integer sumQuantityByApp_idOrWarehouse_idAndObject_idAndProduct_sku_id(String app_id, String warehouse_id, String object_id, String product_sku_id) {
+    	return stockCache.sumQuantityByApp_idOrWarehouse_idAndObject_idAndProduct_sku_id(app_id, warehouse_id, object_id, product_sku_id);
+    }
+    
+    public Integer sumQuantityByObject_id(String object_id) {
+    	return stockCache.sumQuantityByObject_id(object_id);
+    }
 
     public List<Stock> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         return stockCache.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n);
@@ -33,6 +41,10 @@ public class StockService extends Service {
     public Stock findByStock_id(String stock_id) {
         return stockCache.findByStock_id(stock_id);
     }
+    
+    public Stock findByWarehouse_idAndProduct_sku_idAndStock_type(String warehouse_id, String product_sku_id, String stock_type) {
+    	return stockCache.findByWarehouse_idAndProduct_sku_idAndStock_type(warehouse_id, product_sku_id, stock_type);
+    }
 
     public Boolean save(String stock_id, String app_id, String warehouse_id, String object_id, String stock_type, String product_category_id, String product_id, String product_sku_id, Integer stock_quantity, String system_create_user_id) {
         return stockCache.save(stock_id, app_id, warehouse_id, object_id, stock_type, product_category_id, product_id, product_sku_id, stock_quantity, system_create_user_id);
@@ -44,6 +56,14 @@ public class StockService extends Service {
 
     public Boolean deleteByStock_idAndSystem_update_user_idValidateSystem_version(String stock_id, String system_update_user_id, Integer system_version) {
         return stockCache.deleteByStock_idAndSystem_update_user_idValidateSystem_version(stock_id, system_update_user_id, system_version);
+    }
+    
+    public Boolean batchUpdate(List<Stock> stockList) {
+    	return stockCache.batchUpdate(stockList);
+    }
+    
+    public Boolean batchSave(List<Stock> stockList) {
+    	return stockCache.batchSave(stockList);
     }
 
 }

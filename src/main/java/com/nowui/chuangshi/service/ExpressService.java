@@ -17,8 +17,6 @@ public class ExpressService extends Service {
 
     private ExpressCache expressCache = new ExpressCache();
     
-    private DeliveryOrderService deliveryOrderService = new DeliveryOrderService();
-
     /**
      * 订阅快递
      * 

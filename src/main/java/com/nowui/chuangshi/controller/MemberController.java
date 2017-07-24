@@ -8,6 +8,7 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.jfinal.weixin.sdk.api.ApiResult;
 import com.jfinal.weixin.sdk.api.QrcodeApi;
@@ -16,6 +17,7 @@ import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.DeliveryOrderProductSku;
+import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberLevel;
 import com.nowui.chuangshi.model.Qrcode;
@@ -43,6 +45,8 @@ public class MemberController extends Controller {
     private final FileService fileService = new FileService();
     private final QrcodeService qrcodeService = new QrcodeService();
     private final AppService appService = new AppService();
+    private final StockService stockService = new StockService();
+    private final DeliveryOrderService deliverOrderService = new DeliveryOrderService();
 
     private List<Map<String, Object>> getChildren(List<Member> memberList, String member_parent_id, String... keys) {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -333,35 +337,33 @@ public class MemberController extends Controller {
     	
     	String request_app_id = getRequest_app_id();
     	String request_user_id = getRequest_user_id();
-    	User user = userService.findByUser_id(request_user_id);
-        Member member = memberService.findByMember_id(user.getObject_Id());
     	
     	authenticateRequest_app_idAndRequest_user_id();
     	
     	authenticateApp_id(request_app_id);
     	
     	//查询会员库存
-    	//Integer stock_quantity = stockService.sumStock_quantityByObject_id(member.getMember_id());
+    	Integer stock_quantity = stockService.sumQuantityByObject_id(request_user_id);
     	//查询会员发货单列表
-    	//List<Record> recordList = stockService.listWithExpressByObject_id(member.getMember_id(), getM(), getN());
-    	/*List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+    	List<Record> recordList = deliverOrderService.listWithExpressByDelivery_order_sender_user_idAndLimit(request_user_id, getM(), getN());
+    	List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
     	for (Record record : recordList) {
     		Map<String, Object> map = new HashMap<String, Object>();
-    		map.put(Stock.STOCK_ID, record.get(Stock.STOCK_ID));
-    		map.put(Stock.STOCK_RECEIVER_NAME, record.get(Stock.STOCK_RECEIVER_NAME));
-    		map.put(Stock.STOCK_RECEIVER_MOBILE, record.get(Stock.STOCK_RECEIVER_MOBILE));
-    		map.put(Stock.STOCK_RECEIVER_PROVINCE, record.get(Stock.STOCK_RECEIVER_PROVINCE));
-    		map.put(Stock.STOCK_RECEIVER_CITY, record.get(Stock.STOCK_RECEIVER_CITY));
-    		map.put(Stock.STOCK_RECEIVER_AREA, record.get(Stock.STOCK_RECEIVER_AREA));
-    		map.put(Stock.STOCK_RECEIVER_ADDRESS, record.get(Stock.STOCK_RECEIVER_ADDRESS));
+    		map.put(DeliveryOrder.DELIVERY_ORDER_ID, record.get(DeliveryOrder.DELIVERY_ORDER_ID));
+    		map.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME));
+    		map.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE, record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE));
+    		map.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_PROVINCE, record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_PROVINCE));
+    		map.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY, record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY));
+    		map.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA, record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA));
+    		map.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS, record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS));
     		map.put(Express.EXPRESS_FLOW, record.get(Express.EXPRESS_FLOW));
     		map.put(Express.EXPRESS_NO, record.get(Express.EXPRESS_NO));
     		map.put(Express.EXPRESS_SHIPPER_CODE, record.get(Express.EXPRESS_SHIPPER_CODE));
     		resultList.add(map);
-    	}*/
+    	}
     	Map<String, Object> result = new HashMap<String, Object>();
-    	//result.put("stock_quantity", stock_quantity);
-    	//result.put("stock_list", resultList);
+    	result.put("stock_quantity", stock_quantity);
+    	result.put("delivery_order_list", resultList);
     	renderSuccessJson(result);
     }
     

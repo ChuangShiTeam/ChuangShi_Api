@@ -40,6 +40,10 @@ public class DeliveryOrderCache extends Cache {
     public List<Record> listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit(String app_id, String user_name, String delivery_order_receiver_name, String express_no, int m, int n) {
         return deliveryOrderDao.listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit(app_id, user_name, delivery_order_receiver_name, express_no, m, n);
     }
+    
+    public List<Record> listWithExpressByDelivery_order_sender_user_idAndLimit(String delivery_order_sender_user_id, int m, int n) {
+    	return deliveryOrderDao.listWithExpressByDelivery_order_sender_user_idAndLimit(delivery_order_sender_user_id, m, n);
+    }
 
     public DeliveryOrder findByDelivery_order_id(String delivery_order_id) {
         DeliveryOrder delivery_order = CacheUtil.get(DELIVERY_ORDER_BY_DELIVERY_ORDER_ID_CACHE, delivery_order_id);
@@ -64,6 +68,21 @@ public class DeliveryOrderCache extends Cache {
         }
 
         boolean result = deliveryOrderDao.update(delivery_order_id, trade_id, delivery_order_user_id, delivery_order_sender_user_id, delivery_order_reciever_user_id, delivery_order_total_quantity, delivery_order_receiver_name, delivery_order_receiver_mobile, delivery_order_receiver_province, delivery_order_receiver_city, delivery_order_receiver_area, delivery_order_receiver_address, delivery_order_express_pay_way, delivery_order_express_shipper_code, delivery_order_is_pay, delivery_order_flow, delivery_is_complete, system_update_user_id, system_version);
+
+        if (result) {
+            CacheUtil.remove(DELIVERY_ORDER_BY_DELIVERY_ORDER_ID_CACHE, delivery_order_id);
+        }
+
+        return result;
+    }
+    
+    public Boolean updateDelivery_order_flowAndDelivery_is_completeByDelivery_order_idValidateSystem_version(String delivery_order_id, String delivery_order_flow, Boolean delivery_is_complete, String system_update_user_id, Integer system_version) {
+    	DeliveryOrder delivery_order = findByDelivery_order_id(delivery_order_id);
+        if (!delivery_order.getSystem_version().equals(system_version)) {
+            throw new RuntimeException(Constant.ERROR_VERSION);
+        }
+
+        boolean result = deliveryOrderDao.updateDelivery_order_flowAndDelivery_is_completeByDelivery_order_idAndSystem_version(delivery_order_id, delivery_order_flow, delivery_is_complete, system_update_user_id, system_version);
 
         if (result) {
             CacheUtil.remove(DELIVERY_ORDER_BY_DELIVERY_ORDER_ID_CACHE, delivery_order_id);

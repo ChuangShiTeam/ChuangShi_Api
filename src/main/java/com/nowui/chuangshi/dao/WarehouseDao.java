@@ -36,16 +36,16 @@ public class WarehouseDao extends Dao {
     }
 
     public List<Warehouse> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
-        Kv sqlMap = Kv.create();
-        sqlMap.put(Warehouse.APP_ID, app_id);
-        sqlMap.put(Warehouse.SYSTEM_CREATE_TIME, system_create_time);
-        sqlMap.put(Constant.M, m);
-        sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("warehouse.listByApp_idAndSystem_create_timeAndLimit", sqlMap);
-
-        logSql("warehouse", "listByApp_idAndSystem_create_timeAndLimit", sqlPara);
-
-        return new Warehouse().find(sqlPara.getSql(), sqlPara.getPara());
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Warehouse.APP_ID, app_id);
+    	sqlMap.put(Warehouse.SYSTEM_CREATE_TIME, system_create_time);
+    	sqlMap.put(Constant.M, m);
+    	sqlMap.put(Constant.N, n);
+    	SqlPara sqlPara = Db.getSqlPara("warehouse.listByApp_idAndSystem_create_timeAndLimit", sqlMap);
+    	
+    	logSql("warehouse", "listByApp_idAndSystem_create_timeAndLimit", sqlPara);
+    	
+    	return new Warehouse().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
     public List<Warehouse> listByApp_idOrLikeWarehouse_nameAndLimit(String app_id, String warehouse_name, int m, int n) {

@@ -5,6 +5,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.Stock;
+import com.nowui.chuangshi.model.StockOutProductSku;
 
 import java.util.Date;
 import java.util.List;
@@ -39,6 +40,31 @@ public class StockDao extends Dao {
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
+    }
+    
+    public Integer sumQuantityByApp_idOrWarehouse_idAndObject_idAndProduct_sku_id(String app_id, String warehouse_id, String object_id, String product_sku_id) {
+    	Kv sqlMap = Kv.create();
+        sqlMap.put(Stock.APP_ID, app_id);
+        sqlMap.put(Stock.WAREHOUSE_ID, warehouse_id);
+        sqlMap.put(Stock.OBJECT_ID, object_id);
+        sqlMap.put(Stock.PRODUCT_SKU_ID, product_sku_id);
+        SqlPara sqlPara = Db.getSqlPara("stock.sumQuantityByApp_idOrWarehouse_idAndObject_idAndProduct_sku_id", sqlMap);
+
+        logSql("stock", "sumQuantityByApp_idOrWarehouse_idAndObject_idAndProduct_sku_id", sqlPara);
+
+        Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
+        return count.intValue();
+    }
+    
+    public Integer sumQuantityByObject_id(String object_id) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Stock.OBJECT_ID, object_id);
+    	SqlPara sqlPara = Db.getSqlPara("stock.sumQuantityByObject_id", sqlMap);
+    	
+    	logSql("stock", "sumQuantityByObject_id", sqlPara);
+    	
+    	Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
+    	return count.intValue();
     }
 
     public List<Stock> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
@@ -99,6 +125,23 @@ public class StockDao extends Dao {
         } else {
             return stockList.get(0);
         }
+    }
+    
+    public Stock findByWarehouse_idAndProduct_sku_idAndStock_type(String warehouse_id, String product_sku_id, String stock_type) {
+    	Kv sqlMap = Kv.create();
+    	sqlMap.put(Stock.WAREHOUSE_ID, warehouse_id);
+    	sqlMap.put(Stock.PRODUCT_SKU_ID, product_sku_id);
+    	sqlMap.put(Stock.STOCK_TYPE, stock_type);
+    	SqlPara sqlPara = Db.getSqlPara("stock.findByWarehouse_idAndProduct_sku_idAndStock_type", sqlMap);
+    	
+    	logSql("stock", "findByWarehouse_idAndProduct_sku_idAndStock_type", sqlPara);
+    	
+    	List<Stock> stockList = new Stock().find(sqlPara.getSql(), sqlPara.getPara());
+    	if (stockList.size() == 0) {
+    		return null;
+    	} else {
+    		return stockList.get(0);
+    	}
     }
     
     public Stock findByStock_idAndStock_type(String stock_id, String stock_type) {
@@ -172,6 +215,28 @@ public class StockDao extends Dao {
         logSql("stock", "deleteByStock_idAndSystem_version", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+    
+    public Boolean batchUpdate(List<Stock> stockList) {
+        int[] result = Db.batchUpdate(stockList, Constant.BATCH_SIZE);
+
+        for (int i : result) {
+            if (i == 0) {
+                throw new RuntimeException("库存记录更新不成功");
+            }
+        }
+        return true;
+    }
+    
+    public Boolean batchSave(List<Stock> stockList) {
+        int[] result = Db.batchSave(stockList, Constant.BATCH_SIZE);
+
+        for (int i : result) {
+            if (i == 0) {
+                throw new RuntimeException("库存记录保存不成功");
+            }
+        }
+        return true;
     }
 
 }
