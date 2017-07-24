@@ -150,35 +150,8 @@ public class DeliveryOrderController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Stock stock = stockService.findByStock_id(stock_id);
-
-        Boolean result = expressService.save(express_id, stock.getApp_id(), stock_id, model.getExpress_shipper_code(),
-                model.getExpress_no(), "", stock.getStock_receiver_name(), "", stock.getStock_receiver_mobile(), "",
-                stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(),
-                stock.getStock_receiver_address(), "", "", "", "", "", "", "", "", "", model.getExpress_cost(),
-                stock.getStock_is_pay(), stock.getStock_express_pay_way(), "", ExpressFlow.NOTRACK.getValue(), false,
-                model.getExpress_remark(), request_user_id);
-
-        if (result) {
-            // 更新发货单流程为待收货
-            //stockService.updateSend(stock_id, request_user_id);
-            // 快递订阅
-            expressService.subscription(express_id, model.getExpress_shipper_code(), model.getExpress_no());
-        }
+        Boolean result = deliveryOrderService.express(delivery_order_id, model.getExpress_no(), model.getExpress_cost(), model.getExpress_shipper_code(), model.getExpress_remark(), request_user_id);
         
-        validate(DeliveryOrder.DELIVERY_ORDER_ID, DeliveryOrder.TRADE_ID, DeliveryOrder.DELIVERY_ORDER_USER_ID, DeliveryOrder.DELIVERY_ORDER_SENDER_USER_ID, DeliveryOrder.DELIVERY_ORDER_RECIEVER_USER_ID, DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE, DeliveryOrder.DELIVERY_ORDER_RECEIVER_PROVINCE, DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY, DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA, DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS, DeliveryOrder.DELIVERY_ORDER_EXPRESS_PAY_WAY, DeliveryOrder.DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, DeliveryOrder.DELIVERY_ORDER_IS_PAY, DeliveryOrder.DELIVERY_ORDER_FLOW, DeliveryOrder.DELIVERY_IS_COMPLETE, DeliveryOrder.SYSTEM_VERSION);
-
-        DeliveryOrder model = getModel(DeliveryOrder.class);
-        String request_user_id = getRequest_user_id();
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        DeliveryOrder delivery_order = deliveryOrderService.findByDelivery_order_id(model.getDelivery_order_id());
-
-        authenticateApp_id(delivery_order.getApp_id());
-
-        Boolean result = deliveryOrderService.updateValidateSystem_version(model.getDelivery_order_id(), model.getTrade_id(), model.getDelivery_order_user_id(), model.getDelivery_order_sender_user_id(), model.getDelivery_order_reciever_user_id(), model.getDelivery_order_total_quantity(), model.getDelivery_order_receiver_name(), model.getDelivery_order_receiver_mobile(), model.getDelivery_order_receiver_province(), model.getDelivery_order_receiver_city(), model.getDelivery_order_receiver_area(), model.getDelivery_order_receiver_address(), model.getDelivery_order_express_pay_way(), model.getDelivery_order_express_shipper_code(), model.getDelivery_order_is_pay(), model.getDelivery_order_flow(), model.getDelivery_is_complete(), request_user_id, model.getSystem_version());
-
         renderSuccessJson(result);
     }
 

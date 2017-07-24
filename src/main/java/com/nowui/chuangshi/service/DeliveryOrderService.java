@@ -5,8 +5,10 @@ import com.nowui.chuangshi.cache.DeliveryOrderCache;
 import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.DeliveryOrderProductSku;
 import com.nowui.chuangshi.type.DeliveryOrderFlow;
+import com.nowui.chuangshi.type.ExpressFlow;
 import com.nowui.chuangshi.util.Util;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +20,10 @@ public class DeliveryOrderService extends Service {
     private DeliveryOrderCache deliveryOrderCache = new DeliveryOrderCache();
     
     private DeliveryOrderProductSkuService deliveryOrderProductSkuService = new DeliveryOrderProductSkuService();
+    
+    private ExpressService expressService = new ExpressService();
+    
+    private StockOutService stockOutService = new StockOutService();
 
     public Integer countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no(String app_id, String user_name, String delivery_order_receiver_name, String express_no) {
         return deliveryOrderCache.countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no(app_id, user_name, delivery_order_receiver_name, express_no);
@@ -86,6 +92,30 @@ public class DeliveryOrderService extends Service {
             deliveryOrderProductSkuService.batchSave(list);
         }
         return result;
+    }
+    
+    public Boolean express(String delivery_order_id, String express_no, BigDecimal express_cost, String express_shipper_code, String express_remark, String request_user_id) {
+        DeliveryOrder deliveryOrder = deliveryOrderCache.findByDelivery_order_id(delivery_order_id);
+        if (deliveryOrder == null) {
+            throw new RuntimeException("找不到对应发货单");
+        }
+        List<Record> deliveryOrderProductSkuList = deliveryOrderProductSkuService.listByDelivery_order_id(delivery_order_id);
+        
+        //出库
+        String express_id = Util.getRandomUUID();
+        Boolean result = expressService.save(express_id, deliveryOrder.getApp_id(), delivery_order_id, deliveryOrder.getTrade_id(), express_shipper_code,
+                express_no, "", deliveryOrder.getDelivery_order_receiver_name(), "", deliveryOrder.getDelivery_order_receiver_mobile(), "",
+                deliveryOrder.getDelivery_order_receiver_province(), deliveryOrder.getDelivery_order_receiver_city(), deliveryOrder.getDelivery_order_receiver_area(),
+                deliveryOrder.getDelivery_order_receiver_address(), "", "", "", "", "", "", "", "", "", express_cost,
+                deliveryOrder.getDelivery_order_is_pay(), deliveryOrder.getDelivery_order_express_pay_way(), "", ExpressFlow.NOTRACK.getValue(), false,
+                express_remark, request_user_id);
+        
+        if (result) {
+            // 更新发货单流程为待收货
+            //stockService.updateSend(stock_id, request_user_id);
+            // 快递订阅
+            expressService.subscription(express_id, model.getExpress_shipper_code(), model.getExpress_no());
+        }
     }
 
 }
