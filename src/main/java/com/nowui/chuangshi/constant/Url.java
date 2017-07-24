@@ -525,4 +525,6 @@ public class Url {
     public static final String SUPPLIER_SYSTEM_UPDATE = "/supplier/system/update";
     public static final String SUPPLIER_SYSTEM_DELETE = "/supplier/system/delete";
 
+    // 缓存
+    public static final String REMOVE_ALL_CACHE = "/remove/all/cache";
 }

@@ -23,6 +23,7 @@ import com.nowui.chuangshi.controller.ApiController;
 import com.nowui.chuangshi.controller.AppController;
 import com.nowui.chuangshi.controller.AppStockController;
 import com.nowui.chuangshi.controller.BillController;
+import com.nowui.chuangshi.controller.CacheController;
 import com.nowui.chuangshi.controller.CodeController;
 import com.nowui.chuangshi.controller.CustomerAttributeController;
 import com.nowui.chuangshi.controller.CustomerController;
@@ -109,6 +110,7 @@ public class WebConfig extends JFinalConfig {
         routes.add("/feijiu", FeijiuController.class);
 
         routes.add("/supplier", SupplierController.class);
+        routes.add("/cache", CacheController.class);
     }
 
     public void configEngine(Engine engine) {
