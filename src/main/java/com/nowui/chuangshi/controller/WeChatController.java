@@ -142,25 +142,36 @@ public class WeChatController extends Controller {
             String token = memberService.login(app_id, wechat_open_id, wechat_union_id, member_parent_id,
                     from_qrcode_id, member_parent_id, member_parent_path, user_name, user_avatar, member_status,
                     request_user_id);
-            url = url.contains("?") ? url + "&" : url + "?";
+            //url = url.contains("?") ? url + "&" : url + "?";
 
-            System.out.println("url : " + url);
+            //System.out.println("url : " + url);
 
-            redirect(url + "open_id=" + wechat_open_id + "&token=" + token);
+            redirect(url + "?&open_id=" + wechat_open_id + "&token=" + token);
         }
     }
 
     @ActionKey(Url.WECHAT_MENU)
     public void menu() {
-        App app = appService.findByApp_id("df2078d6c9eb46babb0df957127273ab");
+        App app = appService.findByApp_id("c1af3f1ae00e4e0da9b20f5bd41b4279");
 
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
         }
 
-        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"健康推荐\",\"url\":\"http://h5."
-                + "jiyiguan.nowui.com" + "/\"}]}");
+        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"爆水丸\",\"url\":\"http://h5."
+                + "xingxiao.nowui.com" + "/?#/team\"}]}");
+
+
+//        App app = appService.findByApp_id("df2078d6c9eb46babb0df957127273ab");
+//
+//        String wechat_app_id = ApiConfigKit.getAppId();
+//        if (!wechat_app_id.equals(app.getWechat_app_id())) {
+//            ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+//        }
+//
+//        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"健康推荐\",\"url\":\"http://h5."
+//                + "jiyiguan.nowui.com" + "/?#/index\"}]}");
 
         renderText(apiResult.getJson());
     }
