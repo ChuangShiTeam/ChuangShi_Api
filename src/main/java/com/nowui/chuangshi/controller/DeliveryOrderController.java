@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.jfinal.plugin.activerecord.Record;
@@ -12,16 +15,17 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.Express;
+import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.model.Warehouse;
 import com.nowui.chuangshi.service.DeliveryOrderProductSkuService;
 import com.nowui.chuangshi.service.DeliveryOrderService;
+import com.nowui.chuangshi.service.ExpressService;
 
 public class DeliveryOrderController extends Controller {
 
     private final DeliveryOrderService deliveryOrderService = new DeliveryOrderService();
     private final DeliveryOrderProductSkuService deliveryOrderProductSkuService = new DeliveryOrderProductSkuService();
-    
+    private final ExpressService expressService = new ExpressService();
     @ActionKey(Url.DELIVERY_ORDER_LIST)
     public void list() {
         validateRequest_app_id();
@@ -43,7 +47,7 @@ public class DeliveryOrderController extends Controller {
 
     @ActionKey(Url.DELIVERY_ORDER_FIND)
     public void find() {
-        validateRequest_app_id();
+    	validateRequest_app_id();
         validate(DeliveryOrder.DELIVERY_ORDER_ID);
 
         DeliveryOrder model = getModel(DeliveryOrder.class);
@@ -55,9 +59,31 @@ public class DeliveryOrderController extends Controller {
         authenticateApp_id(delivery_order.getApp_id());
         authenticateSystem_create_user_id(delivery_order.getSystem_create_user_id());
 
-        delivery_order.keep(DeliveryOrder.DELIVERY_ORDER_ID, DeliveryOrder.SYSTEM_VERSION);
-
-        renderSuccessJson(delivery_order);
+        
+        Express express = expressService.findByDelivery_order_id(model.getDelivery_order_id());
+        String express_flow = null;
+        JSONArray express_traces = null;
+        
+        if (express != null) {
+        	express_flow = express.getExpress_flow();
+        	if (StringUtils.isNotBlank(express.getExpress_traces())) {
+        	    express_traces = JSONObject.parseArray(express.getExpress_traces());
+        	}
+        }
+        
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put(DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY, delivery_order.getDelivery_order_total_quantity());
+        result.put(DeliveryOrder.DELIVERY_ORDER_EXPRESS_PAY_WAY, delivery_order.getDelivery_order_express_pay_way());
+        result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, delivery_order.getDelivery_order_receiver_name());
+        result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE, delivery_order.getDelivery_order_receiver_mobile());
+        result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_PROVINCE, delivery_order.getDelivery_order_receiver_province());
+        result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY, delivery_order.getDelivery_order_receiver_city());
+        result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA, delivery_order.getDelivery_order_receiver_area());
+        result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS, delivery_order.getDelivery_order_receiver_address());
+        result.put(Express.EXPRESS_FLOW, express_flow);
+        result.put(Express.EXPRESS_TRACES, express_traces);
+        renderSuccessJson(result);
+        
     }
 
     @ActionKey(Url.DELIVERY_ORDER_DELETE)
