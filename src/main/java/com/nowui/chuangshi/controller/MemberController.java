@@ -8,20 +8,21 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
-import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.jfinal.weixin.sdk.api.ApiResult;
 import com.jfinal.weixin.sdk.api.QrcodeApi;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
-import com.nowui.chuangshi.model.Express;
+import com.nowui.chuangshi.model.DeliveryOrder;
+import com.nowui.chuangshi.model.DeliveryOrderProductSku;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberLevel;
 import com.nowui.chuangshi.model.Qrcode;
 import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.AppService;
+import com.nowui.chuangshi.service.DeliveryOrderService;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberLevelService;
 import com.nowui.chuangshi.service.MemberService;
@@ -29,6 +30,7 @@ import com.nowui.chuangshi.service.QrcodeService;
 import com.nowui.chuangshi.service.StockService;
 import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.QrcodeType;
+import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -36,7 +38,7 @@ public class MemberController extends Controller {
 
     private final MemberService memberService = new MemberService();
     private final UserService userService = new UserService();
-    private final StockService stockService = new StockService();
+    private final DeliveryOrderService deliveryOrderService = new DeliveryOrderService();
     private final MemberLevelService memberLevelService = new MemberLevelService();
     private final FileService fileService = new FileService();
     private final QrcodeService qrcodeService = new QrcodeService();
@@ -380,7 +382,7 @@ public class MemberController extends Controller {
         List<Member> resultList = memberService.listByApp_idOrLikeUser_nameAndLimit(request_app_id, model.getUser_name(), getM(), getN());
 
         for (Member result : resultList) {
-            result.keep(Member.MEMBER_ID, User.USER_NAME, Member.SYSTEM_VERSION);
+            result.keep(Member.MEMBER_ID, Member.USER_ID, User.USER_NAME, Member.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -408,14 +410,14 @@ public class MemberController extends Controller {
     @ActionKey(Url.MEMBER_ADMIN_SEND)
     public void adminSend() {
         validateRequest_app_id();
-        validate(Member.MEMBER_ID, Stock.STOCK_RECEIVER_NAME, Stock.STOCK_RECEIVER_ADDRESS, Stock.STOCK_RECEIVER_AREA, Stock.STOCK_RECEIVER_CITY, Stock.STOCK_RECEIVER_MOBILE, Stock.STOCK_PRODUCT_SKU_LIST);
+        validate(Member.MEMBER_ID, DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS, DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA, DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY, DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE, DeliveryOrder.DELIVERY_ORDER_PRODUCT_SKU_LIST);
         
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
-        Stock stock = getModel(Stock.class);
+        DeliveryOrder deliveryOrder = getModel(DeliveryOrder.class);
         JSONObject jsonObject = getParameterJSONObject();
         String member_id = jsonObject.getString("member_id");
-        JSONArray productSkuList = jsonObject.getJSONArray(Stock.STOCK_PRODUCT_SKU_LIST);
+        JSONArray productSkuList = jsonObject.getJSONArray(DeliveryOrder.DELIVERY_ORDER_PRODUCT_SKU_LIST);
         if (productSkuList == null || productSkuList.size() == 0) {
             throw new RuntimeException("产品sku不能为空");
         }
@@ -424,14 +426,13 @@ public class MemberController extends Controller {
         authenticateApp_id(request_app_id);
         
         Member member = memberService.findByMember_id(member_id);
-        /*List<StockProductSku> stockProductSkuList = new ArrayList<StockProductSku>();
+        List<DeliveryOrderProductSku> deliveryOrderProductSkuList = new ArrayList<DeliveryOrderProductSku>();
         for (int j = 0; j < productSkuList.size(); j++) {
-            StockProductSku stockProductSku = productSkuList.getJSONObject(j).toJavaObject(StockProductSku.class);
-            stockProductSkuList.add(stockProductSku);
+            DeliveryOrderProductSku deliveryOrderProductSku = productSkuList.getJSONObject(j).toJavaObject(DeliveryOrderProductSku.class);
+            deliveryOrderProductSkuList.add(deliveryOrderProductSku);
         }
-        Boolean result = stockService.out(member.getApp_id(), "", member_id, StockType.MEMBER.getKey(), member.getUser_id(), "", stock.getStock_receiver_name(), stock.getStock_receiver_mobile(), stock.getStock_receiver_province(), stock.getStock_receiver_city(), stock.getStock_receiver_area(), stock.getStock_receiver_address(), stock.getStock_express_pay_way(), stock.getStock_express_shipper_code(),
-        		false, stockProductSkuList, request_user_id);
-        */
+        Boolean result = 
+        
         renderSuccessJson(false);
     }
     

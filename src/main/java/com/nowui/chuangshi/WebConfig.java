@@ -25,6 +25,7 @@ import com.nowui.chuangshi.controller.BillController;
 import com.nowui.chuangshi.controller.CodeController;
 import com.nowui.chuangshi.controller.CustomerAttributeController;
 import com.nowui.chuangshi.controller.CustomerController;
+import com.nowui.chuangshi.controller.DeliveryOrderController;
 import com.nowui.chuangshi.controller.ExceptionController;
 import com.nowui.chuangshi.controller.ExpressController;
 import com.nowui.chuangshi.controller.FeijiuController;
@@ -47,6 +48,8 @@ import com.nowui.chuangshi.controller.QrcodeController;
 import com.nowui.chuangshi.controller.SqlController;
 import com.nowui.chuangshi.controller.StockController;
 import com.nowui.chuangshi.controller.StockInController;
+import com.nowui.chuangshi.controller.StockOutController;
+import com.nowui.chuangshi.controller.StockReplenishController;
 import com.nowui.chuangshi.controller.SupplierController;
 import com.nowui.chuangshi.controller.TradeController;
 import com.nowui.chuangshi.controller.UserController;
@@ -61,6 +64,7 @@ import com.nowui.chuangshi.model.Bill;
 import com.nowui.chuangshi.model.BillCommission;
 import com.nowui.chuangshi.model.Customer;
 import com.nowui.chuangshi.model.CustomerAttribute;
+import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.Exception;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.FeijiuFastCustomer;
@@ -88,6 +92,8 @@ import com.nowui.chuangshi.model.Qrcode;
 import com.nowui.chuangshi.model.Sql;
 import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.StockIn;
+import com.nowui.chuangshi.model.StockOut;
+import com.nowui.chuangshi.model.StockReplenish;
 import com.nowui.chuangshi.model.Supplier;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.model.TradeCommossion;
@@ -151,7 +157,10 @@ public class WebConfig extends JFinalConfig {
         routes.add("/warehouse", WarehouseController.class);
         routes.add("/stock", StockController.class);
         routes.add("/stock/in", StockInController.class);
-
+        routes.add("/stock/out", StockOutController.class);
+        routes.add("/stock/replenish", StockReplenishController.class);
+        
+        routes.add("/delivery/order", DeliveryOrderController.class);
     }
 
     public void configEngine(Engine engine) {
@@ -229,6 +238,10 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_warehouse", "warehouse_id", Warehouse.class);
         activeRecordPlugin.addMapping("table_stock", "stock_id", Stock.class);
         activeRecordPlugin.addMapping("table_stock_in", "stock_in_id", StockIn.class);
+        activeRecordPlugin.addMapping("table_stock_out", "stock_out_id", StockOut.class);
+        activeRecordPlugin.addMapping("table_stock_replenish", "stock_replenish_id", StockReplenish.class);
+        
+        activeRecordPlugin.addMapping("table_delivery_order", "delivery_order_id", DeliveryOrder.class);
         
         plugins.add(activeRecordPlugin);
 

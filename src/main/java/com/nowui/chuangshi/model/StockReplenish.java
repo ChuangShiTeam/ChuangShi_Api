@@ -11,6 +11,9 @@ public class StockReplenish extends Model<StockReplenish> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用id")
     public static final String APP_ID = "app_id";
 
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    public static final String WAREHOUSE_ID = "warehouse_id";
+
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用id或用户id")
     public static final String OBJECT_ID = "object_id";
 
@@ -19,6 +22,9 @@ public class StockReplenish extends Model<StockReplenish> {
 
     @Column(type = ColumnType.INT, length = 5, comment = "数量")
     public static final String STOCK_REPLENISH_QUANTITY = "stock_replenish_quantity";
+
+    @Column(type = ColumnType.VARCHAR, length = 25, comment = "报损或报溢")
+    public static final String STOCK_REPLENISH_ACTION = "stock_replenish_action";
 
     @Column(type = ColumnType.VARCHAR, length = 25, comment = "状态")
     public static final String STOCK_REPLENISH_STATUS = "stock_replenish_status";
@@ -47,6 +53,14 @@ public class StockReplenish extends Model<StockReplenish> {
         set(APP_ID, app_id);
     }
 
+    public String getWarehouse_id() {
+        return getStr(WAREHOUSE_ID);
+    }
+
+    public void setWarehouse_id(String warehouse_id) {
+        set(WAREHOUSE_ID, warehouse_id);
+    }
+
     public String getObject_id() {
         return getStr(OBJECT_ID);
     }
@@ -69,6 +83,14 @@ public class StockReplenish extends Model<StockReplenish> {
 
     public void setStock_replenish_quantity(Integer stock_replenish_quantity) {
         set(STOCK_REPLENISH_QUANTITY, stock_replenish_quantity);
+    }
+
+    public String getStock_replenish_action() {
+        return getStr(STOCK_REPLENISH_ACTION);
+    }
+
+    public void setStock_replenish_action(String stock_replenish_action) {
+        set(STOCK_REPLENISH_ACTION, stock_replenish_action);
     }
 
     public String getStock_replenish_status() {

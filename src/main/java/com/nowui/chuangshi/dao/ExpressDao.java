@@ -99,11 +99,12 @@ public class ExpressDao extends Dao {
         }
     }
 
-    public Boolean save(String express_id, String app_id, String stock_id, String express_shipper_code, String express_no, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile, String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address, String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province, String express_sender_city, String express_sender_area, String express_sender_address, BigDecimal express_cost, Boolean express_is_pay, String express_pay_way, String express_traces, String express_flow, Boolean express_status, String express_remark, String system_create_user_id) {
+    public Boolean save(String express_id, String app_id, String tarde_id, String delivery_order_id, String express_shipper_code, String express_no, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile, String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address, String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province, String express_sender_city, String express_sender_area, String express_sender_address, BigDecimal express_cost, Boolean express_is_pay, String express_pay_way, String express_traces, String express_flow, Boolean express_is_complete, String express_remark, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Express.EXPRESS_ID, express_id);
         sqlMap.put(Express.APP_ID, app_id);
-        sqlMap.put(Express.STOCK_ID, stock_id);
+        sqlMap.put(Express.TARDE_ID, tarde_id);
+        sqlMap.put(Express.DELIVERY_ORDER_ID, delivery_order_id);
         sqlMap.put(Express.EXPRESS_SHIPPER_CODE, express_shipper_code);
         sqlMap.put(Express.EXPRESS_NO, express_no);
         sqlMap.put(Express.EXPRESS_RECEIVER_COMPANY, express_receiver_company);
@@ -129,7 +130,7 @@ public class ExpressDao extends Dao {
         sqlMap.put(Express.EXPRESS_PAY_WAY, express_pay_way);
         sqlMap.put(Express.EXPRESS_TRACES, express_traces);
         sqlMap.put(Express.EXPRESS_FLOW, express_flow);
-        sqlMap.put(Express.EXPRESS_STATUS, express_status);
+        sqlMap.put(Express.EXPRESS_IS_COMPLETE, express_is_complete);
         sqlMap.put(Express.EXPRESS_REMARK, express_remark);
         sqlMap.put(Express.SYSTEM_CREATE_USER_ID, system_create_user_id);
         sqlMap.put(Express.SYSTEM_CREATE_TIME, new Date());
@@ -144,10 +145,11 @@ public class ExpressDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String express_id, String stock_id, String express_shipper_code, String express_no, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile, String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address, String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province, String express_sender_city, String express_sender_area, String express_sender_address, BigDecimal express_cost, Boolean express_is_pay, String express_pay_way, String express_traces, String express_flow, Boolean express_status, String express_remark, String system_update_user_id, Integer system_version) {
+    public Boolean update(String express_id, String tarde_id, String delivery_order_id, String express_shipper_code, String express_no, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile, String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address, String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province, String express_sender_city, String express_sender_area, String express_sender_address, BigDecimal express_cost, Boolean express_is_pay, String express_pay_way, String express_traces, String express_flow, Boolean express_is_complete, String express_remark, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Express.EXPRESS_ID, express_id);
-        sqlMap.put(Express.STOCK_ID, stock_id);
+        sqlMap.put(Express.TARDE_ID, tarde_id);
+        sqlMap.put(Express.DELIVERY_ORDER_ID, delivery_order_id);
         sqlMap.put(Express.EXPRESS_SHIPPER_CODE, express_shipper_code);
         sqlMap.put(Express.EXPRESS_NO, express_no);
         sqlMap.put(Express.EXPRESS_RECEIVER_COMPANY, express_receiver_company);
@@ -173,7 +175,7 @@ public class ExpressDao extends Dao {
         sqlMap.put(Express.EXPRESS_PAY_WAY, express_pay_way);
         sqlMap.put(Express.EXPRESS_TRACES, express_traces);
         sqlMap.put(Express.EXPRESS_FLOW, express_flow);
-        sqlMap.put(Express.EXPRESS_STATUS, express_status);
+        sqlMap.put(Express.EXPRESS_IS_COMPLETE, express_is_complete);
         sqlMap.put(Express.EXPRESS_REMARK, express_remark);
         sqlMap.put(Express.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(Express.SYSTEM_UPDATE_TIME, new Date());
@@ -185,18 +187,18 @@ public class ExpressDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
     
-    public Boolean updateExpress_flowAndExpress_statusAndExpress_tracesByExpress_idAndSystem_version(String express_id, String express_flow, Boolean express_status, String express_traces, String system_update_user_id, Integer system_version) {
+    public Boolean updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idAndSystem_version(String express_id, String express_flow, Boolean express_is_complete, String express_traces, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Express.EXPRESS_ID, express_id);
         sqlMap.put(Express.EXPRESS_FLOW, express_flow);
-        sqlMap.put(Express.EXPRESS_STATUS, express_status);
+        sqlMap.put(Express.EXPRESS_IS_COMPLETE, express_is_complete);
         sqlMap.put(Express.EXPRESS_TRACES, express_traces);
         sqlMap.put(Express.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(Express.SYSTEM_UPDATE_TIME, new Date());
         sqlMap.put(Express.SYSTEM_VERSION, system_version);
-        SqlPara sqlPara = Db.getSqlPara("express.updateExpress_flowAndExpress_statusAndExpress_tracesByExpress_idAndSystem_version", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("express.updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idAndSystem_version", sqlMap);
         
-        logSql("express", "updateExpress_flowAndExpress_statusAndExpress_tracesByExpress_idAndSystem_version", sqlPara);
+        logSql("express", "updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idAndSystem_version", sqlPara);
         
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
@@ -224,12 +226,12 @@ public class ExpressDao extends Dao {
         return new Express().find(sqlPara.getSql(), sqlPara.getPara());
     }
     
-    public Express findByStock_id(String stock_id) {
+    public Express findByDelivery_order_id(String delivery_order_id) {
     	Kv sqlMap = Kv.create();
-    	sqlMap.put(Express.STOCK_ID, stock_id);
-    	SqlPara sqlPara = Db.getSqlPara("express.listByStock_id", sqlMap);
+    	sqlMap.put(Express.DELIVERY_ORDER_ID, delivery_order_id);
+    	SqlPara sqlPara = Db.getSqlPara("express.listByDelivery_order_id", sqlMap);
     	
-    	logSql("express", "listByStock_id", sqlPara);
+    	logSql("express", "listByDelivery_order_id", sqlPara);
     	
     	List<Express> expressList = new Express().find(sqlPara.getSql(), sqlPara.getPara());
     	if (expressList != null && expressList.size() > 0) {

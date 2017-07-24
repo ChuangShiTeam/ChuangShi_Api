@@ -1,14 +1,16 @@
 package com.nowui.chuangshi.type;
 
-public enum StockAction {
-    IN("IN", "入库"),
-    OUT("OUT", "出库"),
-    REPLENISH("REPLENISH", "平台补充");
+public enum DeliveryOrderFlow {
+    
+    WAIT_SEND("WAIT_SEND", "待发货"),
+    WAIT_RECEIVE("WAIT_RECEIVE", "待收货"),
+    COMPLETE("COMPLETE", "已完成"),
+    CANCEL("CANCEL", "已取消");
 
     private String key;
     private String value;
 
-    private StockAction(String key, String value) {
+    private DeliveryOrderFlow(String key, String value) {
         this.key = key;
         this.value = value;
     }
@@ -20,6 +22,5 @@ public enum StockAction {
     public String getValue() {
         return value;
     }
-
 
 }

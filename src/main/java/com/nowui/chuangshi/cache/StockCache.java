@@ -16,12 +16,12 @@ public class StockCache extends Cache {
 
     private StockDao stockDao = new StockDao();
 
-    public Integer countByApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(String app_id, String warsehouse_id, String stock_type, String product_name, String user_name) {
-        return stockDao.countByApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(app_id, warsehouse_id, stock_type, product_name, user_name);
+    public Integer countByApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(String app_id, String warehouse_id, String stock_type, String product_name, String user_name) {
+        return stockDao.countByApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(app_id, warehouse_id, stock_type, product_name, user_name);
     }
 
-    public Integer countByOrApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(String app_id, String warsehouse_id, String stock_type, String product_name, String user_name) {
-        return stockDao.countByOrApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(app_id, warsehouse_id, stock_type, product_name, user_name);
+    public Integer countByOrApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(String app_id, String warehouse_id, String stock_type, String product_name, String user_name) {
+        return stockDao.countByOrApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(app_id, warehouse_id, stock_type, product_name, user_name);
     }
 
     public List<Stock> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
@@ -34,8 +34,8 @@ public class StockCache extends Cache {
         return stockList;
     }
 
-    public List<Stock> listByApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit(String app_id, String warsehouse_id, String stock_type, String product_name, String user_name, int m, int n) {
-        List<Stock> stockList = stockDao.listByApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit(app_id, warsehouse_id, stock_type, product_name, user_name, m, n);
+    public List<Stock> listByApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_type, String product_name, String user_name, int m, int n) {
+        List<Stock> stockList = stockDao.listByApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit(app_id, warehouse_id, stock_type, product_name, user_name, m, n);
 
         for (Stock stock : stockList) {
             stock.put(findByStock_idAndStock_type(stock.getStock_id(), stock_type));
@@ -44,8 +44,8 @@ public class StockCache extends Cache {
         return stockList;
     }
     
-    public List<Stock> listByOrApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit(String app_id, String warsehouse_id, String stock_type, String product_name, String user_name, int m, int n) {
-        List<Stock> stockList = stockDao.listByOrApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit(app_id, warsehouse_id, stock_type, product_name, user_name, m, n);
+    public List<Stock> listByOrApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_type, String product_name, String user_name, int m, int n) {
+        List<Stock> stockList = stockDao.listByOrApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit(app_id, warehouse_id, stock_type, product_name, user_name, m, n);
 
         for (Stock stock : stockList) {
             stock.put(findByStock_idAndStock_type(stock.getStock_id(), stock_type));
@@ -78,17 +78,17 @@ public class StockCache extends Cache {
         return stock;
     }
 
-    public Boolean save(String stock_id, String app_id, String warsehouse_id, String object_id, String stock_type, String product_category_id, String product_id, String product_sku_id, Integer stock_quantity, String system_create_user_id) {
-        return stockDao.save(stock_id, app_id, warsehouse_id, object_id, stock_type, product_category_id, product_id, product_sku_id, stock_quantity, system_create_user_id);
+    public Boolean save(String stock_id, String app_id, String warehouse_id, String object_id, String stock_type, String product_category_id, String product_id, String product_sku_id, Integer stock_quantity, String system_create_user_id) {
+        return stockDao.save(stock_id, app_id, warehouse_id, object_id, stock_type, product_category_id, product_id, product_sku_id, stock_quantity, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String stock_id, String warsehouse_id, String object_id, String stock_type, String product_category_id, String product_id, String product_sku_id, Integer stock_quantity, String system_update_user_id, Integer system_version) {
+    public Boolean updateValidateSystem_version(String stock_id, String warehouse_id, String object_id, String stock_type, String product_category_id, String product_id, String product_sku_id, Integer stock_quantity, String system_update_user_id, Integer system_version) {
         Stock stock = findByStock_id(stock_id);
         if (!stock.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = stockDao.update(stock_id, warsehouse_id, object_id, stock_type, product_category_id, product_id, product_sku_id, stock_quantity, system_update_user_id, system_version);
+        boolean result = stockDao.update(stock_id, warehouse_id, object_id, stock_type, product_category_id, product_id, product_sku_id, stock_quantity, system_update_user_id, system_version);
 
         if (result) {
             CacheUtil.remove(STOCK_BY_STOCK_ID_CACHE, stock_id);

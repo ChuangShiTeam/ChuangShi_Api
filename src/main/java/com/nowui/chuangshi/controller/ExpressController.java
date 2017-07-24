@@ -78,7 +78,7 @@ public class ExpressController extends Controller {
             Boolean success = jsonObject.getBoolean("Success");
 
             String express_flow = "无轨迹";
-            Boolean express_status = false;
+            Boolean express_is_complete = false;
             String express_traces = jsonObject.getString("Traces");
             if (success) {
                 String state = jsonObject.getString("State");
@@ -91,7 +91,7 @@ public class ExpressController extends Controller {
                 } else if (state.equals("3")) {
                     express_flow = "签收";
 
-                    express_status = true;
+                    express_is_complete = true;
                 } else if (state.equals("4")) {
                     express_flow = "问题件";
                 }
@@ -102,7 +102,7 @@ public class ExpressController extends Controller {
             Express express = new Express();
 
             express.setExpress_flow(express_flow);
-            express.setExpress_status(express_status);
+            express.setExpress_is_complete(express_is_complete);
             express.setExpress_traces(express_traces);
             express.setExpress_id(express_id);
 

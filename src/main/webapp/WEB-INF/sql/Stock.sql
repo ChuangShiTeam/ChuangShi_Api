@@ -1,6 +1,6 @@
 #namespace("stock")
 
-  #sql("countByApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name")
+  #sql("countByApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name")
     SELECT COUNT(*) FROM table_stock
     #if(product_name)
     LEFT JOIN table_product ON table_product.product_id = table_stock.product_id
@@ -10,8 +10,8 @@
     #end
     WHERE table_stock.system_status = 1
     AND table_stock.app_id = #p(app_id)
-    #if(warsehouse_id)
-    AND table_stock.warsehouse_id = #p(warsehouse_id)
+    #if(warehouse_id)
+    AND table_stock.warehouse_id = #p(warehouse_id)
     #end
     #if(stock_type)
     AND table_stock.stock_type = #p(stock_type)
@@ -26,7 +26,7 @@
     #end
   #end
 
-  #sql("countByOrApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name")
+  #sql("countByOrApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name")
     SELECT COUNT(*) FROM table_stock
     #if(product_name)
     LEFT JOIN table_product ON table_product.product_id = table_stock.product_id
@@ -38,8 +38,8 @@
     #if(app_id)
     AND table_stock.app_id = #p(app_id)
     #end
-    #if(warsehouse_id)
-    AND table_stock.warsehouse_id = #p(warsehouse_id)
+    #if(warehouse_id)
+    AND table_stock.warehouse_id = #p(warehouse_id)
     #end
     #if(stock_type)
     AND table_stock.stock_type = #p(stock_type)
@@ -65,7 +65,7 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit")
+  #sql("listByApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit")
     SELECT
     stock_id
     FROM table_stock
@@ -77,8 +77,8 @@
     #end
     WHERE table_stock.system_status = 1
     AND table_stock.app_id = #p(app_id)
-    #if(warsehouse_id)
-    AND table_stock.warsehouse_id = #p(warsehouse_id)
+    #if(warehouse_id)
+    AND table_stock.warehouse_id = #p(warehouse_id)
     #end
     #if(stock_type)
     AND table_stock.stock_type = #p(stock_type)
@@ -95,7 +95,7 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit")
+  #sql("listByOrApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit")
     SELECT
     stock_id
     FROM table_stock
@@ -109,8 +109,8 @@
     #if(app_id)
     AND table_stock.app_id = #p(app_id)
     #end
-    #if(warsehouse_id)
-    AND table_stock.warsehouse_id = #p(warsehouse_id)
+    #if(warehouse_id)
+    AND table_stock.warehouse_id = #p(warehouse_id)
     #end
     #if(stock_type)
     AND table_stock.stock_type = #p(stock_type)
@@ -137,7 +137,8 @@
   
   #sql("findByStock_idAndStock_type")
     SELECT
-    table_stock.*
+    table_stock.*,
+    table_product.product_name
     #if(stock_type == 'MEMBER')
     ,table_user.user_name
     #end
@@ -145,6 +146,7 @@
     ,table_app.app_name
     #end
     FROM table_stock
+    LEFT JOIN table_product ON table_product.product_id = table_stock.product_id
     #if(stock_type == 'MEMBER')
     LEFT JOIN table_user ON table_user.user_id = table_stock.object_id
     #end
@@ -159,7 +161,7 @@
     INSERT INTO table_stock (
       stock_id,
       app_id,
-      warsehouse_id,
+      warehouse_id,
       object_id,
       stock_type,
       product_category_id,
@@ -175,7 +177,7 @@
     ) VALUES (
       #p(stock_id),
       #p(app_id),
-      #p(warsehouse_id),
+      #p(warehouse_id),
       #p(object_id),
       #p(stock_type),
       #p(product_category_id),
@@ -193,7 +195,7 @@
 
   #sql("update")
     UPDATE table_stock SET
-    warsehouse_id = #p(warsehouse_id),
+    warehouse_id = #p(warehouse_id),
     object_id = #p(object_id),
     stock_type = #p(stock_type),
     product_category_id = #p(product_category_id),

@@ -1,14 +1,12 @@
 package com.nowui.chuangshi.controller;
 
-import com.alibaba.fastjson.JSONObject;
+import java.util.List;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.StockIn;
 import com.nowui.chuangshi.service.StockInService;
-import com.nowui.chuangshi.util.Util;
-
-import java.util.List;
 
 public class StockInController extends Controller {
 

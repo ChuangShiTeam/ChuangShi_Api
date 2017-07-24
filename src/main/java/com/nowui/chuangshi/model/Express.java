@@ -14,7 +14,10 @@ public class Express extends Model<Express> {
     public static final String APP_ID = "app_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
-    public static final String STOCK_ID = "stock_id";
+    public static final String TARDE_ID = "tarde_id";
+
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    public static final String DELIVERY_ORDER_ID = "delivery_order_id";
 
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "快递公司编码")
     public static final String EXPRESS_SHIPPER_CODE = "express_shipper_code";
@@ -92,11 +95,11 @@ public class Express extends Model<Express> {
     public static final String EXPRESS_FLOW = "express_flow";
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "")
-    public static final String EXPRESS_STATUS = "express_status";
+    public static final String EXPRESS_IS_COMPLETE = "express_is_complete";
 
     @Column(type = ColumnType.VARCHAR, length = 200, comment = "备注")
     public static final String EXPRESS_REMARK = "express_remark";
-
+    
     public static final String EXPRESS_TRADE_ID_LIST = "express_trade_id_list";
     
     public static final String EXPRESS_TRACES_LIST = "express_traces_list";
@@ -117,12 +120,20 @@ public class Express extends Model<Express> {
         set(APP_ID, app_id);
     }
 
-    public String getStock_id() {
-        return getStr(STOCK_ID);
+    public String getTarde_id() {
+        return getStr(TARDE_ID);
     }
 
-    public void setStock_id(String stock_id) {
-        set(STOCK_ID, stock_id);
+    public void setTarde_id(String tarde_id) {
+        set(TARDE_ID, tarde_id);
+    }
+
+    public String getDelivery_order_id() {
+        return getStr(DELIVERY_ORDER_ID);
+    }
+
+    public void setDelivery_order_id(String delivery_order_id) {
+        set(DELIVERY_ORDER_ID, delivery_order_id);
     }
 
     public String getExpress_shipper_code() {
@@ -325,12 +336,12 @@ public class Express extends Model<Express> {
         set(EXPRESS_FLOW, express_flow);
     }
 
-    public Boolean getExpress_status() {
-        return getBoolean(EXPRESS_STATUS);
+    public Boolean getExpress_is_complete() {
+        return getBoolean(EXPRESS_IS_COMPLETE);
     }
 
-    public void setExpress_status(Boolean express_status) {
-        set(EXPRESS_STATUS, express_status);
+    public void setExpress_is_complete(Boolean express_is_complete) {
+        set(EXPRESS_IS_COMPLETE, express_is_complete);
     }
 
     public String getExpress_remark() {

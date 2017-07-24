@@ -12,7 +12,7 @@ public class Stock extends Model<Stock> {
     public static final String APP_ID = "app_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "仓库id")
-    public static final String WARSEHOUSE_ID = "warsehouse_id";
+    public static final String WAREHOUSE_ID = "warehouse_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用id或会员id")
     public static final String OBJECT_ID = "object_id";
@@ -60,12 +60,12 @@ public class Stock extends Model<Stock> {
         set(APP_ID, app_id);
     }
 
-    public String getWarsehouse_id() {
-        return getStr(WARSEHOUSE_ID);
+    public String getWarehouse_id() {
+        return getStr(WAREHOUSE_ID);
     }
 
-    public void setWarsehouse_id(String warsehouse_id) {
-        set(WARSEHOUSE_ID, warsehouse_id);
+    public void setWarehouse_id(String warehouse_id) {
+        set(WAREHOUSE_ID, warehouse_id);
     }
 
     public String getObject_id() {

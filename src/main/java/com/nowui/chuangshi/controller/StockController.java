@@ -2,6 +2,8 @@ package com.nowui.chuangshi.controller;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
@@ -23,8 +25,8 @@ public class StockController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = stockService.countByApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(request_app_id, model.getWarsehouse_id(), model.getStock_type(), model.getProduct_name(), model.getUser_name());
-        List<Stock> resultList = stockService.listByApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit(request_app_id, model.getWarsehouse_id(), model.getStock_type(), model.getProduct_name(), model.getUser_name(), getM(), getN());
+        Integer total = stockService.countByApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(request_app_id, model.getWarehouse_id(), model.getStock_type(), model.getProduct_name(), model.getUser_name());
+        List<Stock> resultList = stockService.listByApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit(request_app_id, model.getWarehouse_id(), model.getStock_type(), model.getProduct_name(), model.getUser_name(), getM(), getN());
 
         for (Stock result : resultList) {
             result.keep(Stock.STOCK_ID, Stock.PRODUCT_NAME, Stock.USER_NAME, Stock.STOCK_QUANTITY, Stock.STOCK_TYPE, Stock.SYSTEM_VERSION);
@@ -54,16 +56,20 @@ public class StockController extends Controller {
     @ActionKey(Url.STOCK_ADMIN_SAVE)
     public void adminSave() {
         validateRequest_app_id();
-        validate(Stock.WARSEHOUSE_ID, Stock.OBJECT_ID, Stock.STOCK_TYPE, Stock.PRODUCT_CATEGORY_ID, Stock.PRODUCT_ID, Stock.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY);
+        validate(Stock.WAREHOUSE_ID, Stock.STOCK_TYPE, Stock.PRODUCT_CATEGORY_ID, Stock.PRODUCT_ID, Stock.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY);
 
         Stock model = getModel(Stock.class);
         String stock_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
+        String object_id = model.getObject_id();
+        if (StringUtils.isBlank(object_id)) {
+            object_id = request_app_id;
+        }
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = stockService.save(stock_id, request_app_id, model.getWarsehouse_id(), model.getObject_id(), model.getStock_type(), model.getProduct_category_id(), model.getProduct_id(), model.getProduct_sku_id(), model.getStock_quantity(), request_user_id);
+        Boolean result = stockService.save(stock_id, request_app_id, model.getWarehouse_id(), object_id, model.getStock_type(), model.getProduct_category_id(), model.getProduct_id(), model.getProduct_sku_id(), model.getStock_quantity(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -71,7 +77,7 @@ public class StockController extends Controller {
     @ActionKey(Url.STOCK_ADMIN_UPDATE)
     public void adminUpdate() {
         validateRequest_app_id();
-        validate(Stock.STOCK_ID, Stock.WARSEHOUSE_ID, Stock.OBJECT_ID, Stock.STOCK_TYPE, Stock.PRODUCT_CATEGORY_ID, Stock.PRODUCT_ID, Stock.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Stock.SYSTEM_VERSION);
+        validate(Stock.STOCK_ID, Stock.WAREHOUSE_ID, Stock.OBJECT_ID, Stock.STOCK_TYPE, Stock.PRODUCT_CATEGORY_ID, Stock.PRODUCT_ID, Stock.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Stock.SYSTEM_VERSION);
 
         Stock model = getModel(Stock.class);
         String request_user_id = getRequest_user_id();
@@ -82,7 +88,7 @@ public class StockController extends Controller {
 
         authenticateApp_id(stock.getApp_id());
 
-        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getWarsehouse_id(), model.getObject_id(), model.getStock_type(), model.getProduct_category_id(), model.getProduct_id(), model.getProduct_sku_id(), model.getStock_quantity(), request_user_id, model.getSystem_version());
+        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getWarehouse_id(), model.getObject_id(), model.getStock_type(), model.getProduct_category_id(), model.getProduct_id(), model.getProduct_sku_id(), model.getStock_quantity(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -113,8 +119,8 @@ public class StockController extends Controller {
 
         Stock model = getModel(Stock.class);
 
-        Integer total = stockService.countByOrApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(model.getApp_id(), model.getWarsehouse_id(), model.getStock_type(), model.getProduct_name(), model.getUser_name());
-        List<Stock> resultList = stockService.listByOrApp_idOrWarsehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit(model.getApp_id(), model.getWarsehouse_id(), model.getStock_type(), model.getProduct_name(), model.getUser_name(), getM(), getN());
+        Integer total = stockService.countByOrApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_name(model.getApp_id(), model.getWarehouse_id(), model.getStock_type(), model.getProduct_name(), model.getUser_name());
+        List<Stock> resultList = stockService.listByOrApp_idOrWarehouse_idOrStock_typeOrLikeProduct_nameOrLikeUser_nameAndLimit(model.getApp_id(), model.getWarehouse_id(), model.getStock_type(), model.getProduct_name(), model.getUser_name(), getM(), getN());
 
         for (Stock result : resultList) {
             result.keep(Stock.STOCK_ID, Stock.PRODUCT_NAME, Stock.USER_NAME, Stock.STOCK_QUANTITY, Stock.STOCK_TYPE, Stock.SYSTEM_VERSION);
@@ -140,13 +146,13 @@ public class StockController extends Controller {
     @ActionKey(Url.STOCK_SYSTEM_SAVE)
     public void systemSave() {
         validateRequest_app_id();
-        validate(Stock.APP_ID, Stock.WARSEHOUSE_ID, Stock.OBJECT_ID, Stock.STOCK_TYPE, Stock.PRODUCT_CATEGORY_ID, Stock.PRODUCT_ID, Stock.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY);
+        validate(Stock.APP_ID, Stock.WAREHOUSE_ID, Stock.OBJECT_ID, Stock.STOCK_TYPE, Stock.PRODUCT_CATEGORY_ID, Stock.PRODUCT_ID, Stock.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY);
 
         Stock model = getModel(Stock.class);
         String stock_id = Util.getRandomUUID();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = stockService.save(stock_id, model.getApp_id(), model.getWarsehouse_id(), model.getObject_id(), model.getStock_type(), model.getProduct_category_id(), model.getProduct_id(), model.getProduct_sku_id(), model.getStock_quantity(), request_user_id);
+        Boolean result = stockService.save(stock_id, model.getApp_id(), model.getWarehouse_id(), model.getObject_id(), model.getStock_type(), model.getProduct_category_id(), model.getProduct_id(), model.getProduct_sku_id(), model.getStock_quantity(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -154,12 +160,12 @@ public class StockController extends Controller {
     @ActionKey(Url.STOCK_SYSTEM_UPDATE)
     public void systemUpdate() {
         validateRequest_app_id();
-        validate(Stock.STOCK_ID, Stock.WARSEHOUSE_ID, Stock.OBJECT_ID, Stock.STOCK_TYPE, Stock.PRODUCT_CATEGORY_ID, Stock.PRODUCT_ID, Stock.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Stock.SYSTEM_VERSION);
+        validate(Stock.STOCK_ID, Stock.WAREHOUSE_ID, Stock.OBJECT_ID, Stock.STOCK_TYPE, Stock.PRODUCT_CATEGORY_ID, Stock.PRODUCT_ID, Stock.PRODUCT_SKU_ID, Stock.STOCK_QUANTITY, Stock.SYSTEM_VERSION);
 
         Stock model = getModel(Stock.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getWarsehouse_id(), model.getObject_id(), model.getStock_type(), model.getProduct_category_id(), model.getProduct_id(), model.getProduct_sku_id(), model.getStock_quantity(), request_user_id, model.getSystem_version());
+        Boolean result = stockService.updateValidateSystem_version(model.getStock_id(), model.getWarehouse_id(), model.getObject_id(), model.getStock_type(), model.getProduct_category_id(), model.getProduct_id(), model.getProduct_sku_id(), model.getStock_quantity(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
