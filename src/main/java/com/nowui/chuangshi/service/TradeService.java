@@ -199,6 +199,12 @@ public class TradeService extends Service {
                 system_version);
     }
     
+    public Boolean updateReceiver(String trade_id) {
+    	Trade trade = findByTrade_id(trade_id);
+    	
+    	return updateTrade_flowByTrade_idValidateSystem_version(trade_id, TradeFlow.WAIT_RECEIVE.getKey(), trade.getSystem_update_user_id(), trade.getSystem_version());
+    }
+    
     public Boolean updateFinish(String trade_id) {
     	Trade trade = findByTrade_id(trade_id);
     	

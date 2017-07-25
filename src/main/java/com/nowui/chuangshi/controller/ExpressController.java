@@ -18,6 +18,7 @@ import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
+import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.model.TradeProductSku;
 import com.nowui.chuangshi.model.Warehouse;
 import com.nowui.chuangshi.service.ExpressService;
@@ -263,6 +264,24 @@ public class ExpressController extends Controller {
         Boolean result = expressService.memberExpress(delivery_order_id, warehouse_id, model.getExpress_no(), model.getExpress_cost(), model.getExpress_shipper_code(), model.getExpress_remark(), request_user_id);
         
         renderSuccessJson(result);
+    }
+    
+    @ActionKey(Url.EXPRESS_ADMIN_SUPPLIER_EXPRESS)
+    public void adminSupplierExpress() {
+    	validateRequest_app_id();
+    	validate(Trade.TRADE_ID, Express.EXPRESS_NO, Express.EXPRESS_COST, Express.EXPRESS_SHIPPER_CODE,
+    			Express.EXPRESS_REMARK);
+    	
+    	Express model = getModel(Express.class);
+    	String request_user_id = getRequest_user_id();
+    	JSONObject jsonObject = getParameterJSONObject();
+    	String trade_id = jsonObject.getString(Trade.TRADE_ID);
+    	
+    	authenticateRequest_app_idAndRequest_user_id();
+    	
+    	Boolean result = expressService.supplierExpress(trade_id, model.getExpress_no(), model.getExpress_cost(), model.getExpress_shipper_code(), model.getExpress_remark(), request_user_id);
+    	
+    	renderSuccessJson(result);
     }
     
     @ActionKey(Url.EXPRESS_ADMIN_DELETE)

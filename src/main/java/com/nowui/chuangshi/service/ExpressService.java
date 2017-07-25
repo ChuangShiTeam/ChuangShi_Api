@@ -21,6 +21,7 @@ import com.nowui.chuangshi.model.StockOutProductSku;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.type.DeliveryOrderFlow;
 import com.nowui.chuangshi.type.ExpressFlow;
+import com.nowui.chuangshi.type.ExpressPayWay;
 import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.ExpressUtil;
 import com.nowui.chuangshi.util.Util;
@@ -155,7 +156,9 @@ public class ExpressService extends Service {
         if (result) {
             // 更新发货单流程为待收货
         	deliveryOrderService.updateDelivery_order_flowAndDelivery_is_completeByDelivery_order_idValidateSystem_version(delivery_order_id, DeliveryOrderFlow.WAIT_RECEIVE.getKey(), false, request_user_id, deliveryOrder.getSystem_version());
-        	
+        	if (StringUtils.isNotBlank(deliveryOrder.getTrade_id())) {
+        		tradeService.updateReceiver(deliveryOrder.getTrade_id());
+        	}
         	//保存快递单信息
         	String express_id = Util.getRandomUUID();
             Boolean flag = save(express_id, deliveryOrder.getApp_id(), deliveryOrder.getTrade_id(), delivery_order_id, express_shipper_code,
@@ -173,6 +176,28 @@ public class ExpressService extends Service {
         
         return result;
     }
+    
+    public Boolean supplierExpress(String trade_id, String express_no, BigDecimal express_cost,
+			String express_shipper_code, String express_remark, String request_user_id) {
+		Trade trade = tradeService.findByTrade_id(trade_id);
+		if (trade == null) {
+			throw new RuntimeException("找不到订单");
+		}
+    	//保存快递单信息
+    	String express_id = Util.getRandomUUID();
+        Boolean flag = save(express_id, trade.getApp_id(), trade_id, "", express_shipper_code,
+                express_no, "", trade.getTrade_receiver_name(), "", trade.getTrade_receiver_mobile(), "",
+                trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(),
+                trade.getTrade_receiver_address(), "", "", "", "", "", "", "", "", "", express_cost,
+                true, ExpressPayWay.THIRD_PARTY_PAY.getKey(), "", ExpressFlow.NOTRACK.getValue(), false,
+                express_remark, request_user_id);
+        // 快递订阅
+        if (flag) {
+        	tradeService.updateReceiver(trade_id);
+        	subscription(express_id, express_shipper_code, express_no);
+        }
+		return null;
+	}
     
     public void updateBusiness(List<Express> expressList) {
 		
