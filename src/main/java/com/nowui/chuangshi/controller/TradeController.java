@@ -404,63 +404,6 @@ public class TradeController extends Controller {
         renderSuccessJson(total, resultList);
     }
 
-    @ActionKey(Url.TRADE_SUPPLIER_LIST)
-    public void supplierList() {
-        validateRequest_app_id();
-        validate(Trade.TRADE_NUMBER, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
-
-        Trade model = getModel(Trade.class);
-        String request_app_id = getRequest_app_id();
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        //获取订单列表
-        Integer total = tradeService.countByApp_idOrLikeTrade_number(request_app_id, model.getTrade_number());
-        List<Trade> resultAllList = tradeService.listByApp_idOrLikeTrade_numberAndLimit(request_app_id,
-                model.getTrade_number(), getM(), getN());
-
-        List<Trade> resultList = new ArrayList<>();
-
-        for (Trade result : resultAllList) {
-            // 根据订单获取供应商商品列表
-            List<TradeProductSku> tradeProductSkuAllList = tradeProductSkuService.listByTrade_id(result.getTrade_id());
-
-            User request_user = userService.findByUser_id(getRequest_user_id());
-            if (request_user == null || StringUtils.isEmpty(request_user.getObject_Id())) {
-                throw new RuntimeException("找不到供应商信息");
-            }
-            List<SupplierProduct> supplierProductList = supplierProductService
-                    .listBySupplier_id(request_user.getObject_Id());
-
-            for (TradeProductSku tradeProductSku : tradeProductSkuAllList) {
-                for (SupplierProduct supplierProduct : supplierProductList) {
-                    String product_id = supplierProduct.getProduct_id();
-
-                    ProductSku productSku = productSkuService.findByProduct_sku_id(tradeProductSku.getProduct_sku_id());
-
-                    if (product_id.equals(productSku.getProduct_id())) {
-                        User user = userService.findByUser_id(result.getUser_id());
-                        if (user != null) {
-                            result.put(User.USER_NAME, user.getUser_name());
-                        }
-                        result.keep(Trade.TRADE_ID, Trade.APP_ID, Trade.USER_ID, User.USER_NAME, Trade.TRADE_NUMBER,
-                                Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE,
-                                Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS,
-                                Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT,
-                                Trade.TRADE_EXPRESS_AMOUNT, Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT,
-                                Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW,
-                                Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
-                        resultList.add(result);
-                        break;
-                    }
-                }
-            }
-
-        }
-
-        renderSuccessJson(total, resultList);
-    }
-
     @ActionKey(Url.TRADE_ADMIN_FIND)
     public void adminFind() {
         validateRequest_app_id();
@@ -518,6 +461,62 @@ public class TradeController extends Controller {
         result.put("expressList", expressList);
 
         renderSuccessJson(result);
+    }
+
+    @ActionKey(Url.TRADE_SUPPLIER_LIST)
+    public void supplierList() {
+        validateRequest_app_id();
+        validate(Trade.TRADE_NUMBER, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+
+        Trade model = getModel(Trade.class);
+        String request_app_id = getRequest_app_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        // 获取订单列表
+        List<Trade> resultAllList = tradeService.listByApp_idOrLikeTrade_numberAndLimit(request_app_id,
+                model.getTrade_number(), getM(), getN());
+
+        List<Trade> resultList = new ArrayList<>();
+
+        for (Trade result : resultAllList) {
+            // 根据订单获取供应商商品列表
+            List<TradeProductSku> tradeProductSkuAllList = tradeProductSkuService.listByTrade_id(result.getTrade_id());
+
+            User request_user = userService.findByUser_id(getRequest_user_id());
+            if (request_user == null || StringUtils.isEmpty(request_user.getObject_Id())) {
+                throw new RuntimeException("找不到供应商信息");
+            }
+            List<SupplierProduct> supplierProductList = supplierProductService
+                    .listBySupplier_id(request_user.getObject_Id());
+
+            for (TradeProductSku tradeProductSku : tradeProductSkuAllList) {
+                for (SupplierProduct supplierProduct : supplierProductList) {
+                    String product_id = supplierProduct.getProduct_id();
+
+                    ProductSku productSku = productSkuService.findByProduct_sku_id(tradeProductSku.getProduct_sku_id());
+
+                    if (product_id.equals(productSku.getProduct_id())) {
+                        User user = userService.findByUser_id(result.getUser_id());
+                        if (user != null) {
+                            result.put(User.USER_NAME, user.getUser_name());
+                        }
+                        result.keep(Trade.TRADE_ID, Trade.APP_ID, Trade.USER_ID, User.USER_NAME, Trade.TRADE_NUMBER,
+                                Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE,
+                                Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS,
+                                Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT,
+                                Trade.TRADE_EXPRESS_AMOUNT, Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT,
+                                Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW,
+                                Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
+                        resultList.add(result);
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        renderSuccessJson(resultList.size(), resultList);
     }
 
     @ActionKey(Url.TRADE_SUPPLIER_FIND)
