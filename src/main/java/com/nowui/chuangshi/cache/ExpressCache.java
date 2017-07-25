@@ -117,6 +117,7 @@ public class ExpressCache extends Cache {
 
         if (result) {
             CacheUtil.remove(EXPRESS_BY_EXPRESS_ID_CACHE, express_id);
+            CacheUtil.remove(EXPRESS_LIST_BY_TRADE_ID, express.getTrade_id());
         }
 
         return result;
