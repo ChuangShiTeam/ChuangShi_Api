@@ -127,7 +127,14 @@ public class StockCache extends Cache {
     }
     
     public Boolean batchUpdate(List<Stock> stockList) {
-    	return stockDao.batchUpdate(stockList);
+    	Boolean result = stockDao.batchUpdate(stockList);
+    	if (result) {
+    	    for (Stock stock : stockList) {
+    	        CacheUtil.remove(STOCK_BY_STOCK_ID_CACHE, stock.getStock_id());
+                CacheUtil.remove(STOCK_BY_STOCK_ID_AND_STOCK_TYPE_CACHE, stock.getStock_id() + stock.getStock_type());
+    	    }
+    	}
+    	return result;
     }
     
     public Boolean batchSave(List<Stock> stockList) {
