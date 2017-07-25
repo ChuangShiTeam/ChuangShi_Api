@@ -110,6 +110,7 @@ public class DeliveryOrderService extends Service {
             		StockInProductSku stockInProductSku = new StockInProductSku();
             		stockInProductSku.setProduct_sku_id(deliveryOrderProductSku.getProduct_sku_id());
             		stockInProductSku.setProduct_sku_quantity(deliveryOrderProductSku.getProduct_sku_quantity());
+            		stockInProductSkuList.add(stockInProductSku);
             	}
             	//查询默认仓库
             	List<Warehouse> warehouseList = warehouseService.listByApp_id(app_id);

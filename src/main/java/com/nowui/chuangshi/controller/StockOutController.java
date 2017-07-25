@@ -32,7 +32,7 @@ public class StockOutController extends Controller {
         List<StockOut> resultList = stockOutService.listByApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_nameAndLimit(request_app_id, model.getWarehouse_id(), model.getStock_out_type(), model.getUser_name(), getM(), getN());
 
         for (StockOut result : resultList) {
-            result.keep(StockOut.STOCK_OUT_ID, StockOut.WAREHOUSE_NAME, StockOut.STOCK_OUT_QUANTITY, StockOut.SYSTEM_CREATE_TIME, StockOut.SYSTEM_VERSION);
+            result.keep(StockOut.STOCK_OUT_ID, StockOut.WAREHOUSE_NAME, StockOut.USER_NAME, StockOut.STOCK_OUT_QUANTITY, StockOut.SYSTEM_CREATE_TIME, StockOut.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);

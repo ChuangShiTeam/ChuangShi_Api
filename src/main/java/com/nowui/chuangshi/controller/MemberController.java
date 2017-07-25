@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -328,12 +330,20 @@ public class MemberController extends Controller {
                     .toJavaObject(DeliveryOrderProductSku.class);
             deliveryOrderProductSkuList.add(deliveryOrderProductSku);
         }
+        String delivery_order_express_pay_way = deliveryOrder.getDelivery_order_express_pay_way();
+        if (StringUtils.isBlank(delivery_order_express_pay_way)) {
+            delivery_order_express_pay_way = "";
+        }
+        String delivery_order_express_shipper_code = deliveryOrder.getDelivery_order_express_shipper_code();
+        if (StringUtils.isBlank(delivery_order_express_shipper_code)) {
+            delivery_order_express_shipper_code = "";
+        }
         Boolean result = deliveryOrderService.save(request_app_id, "", request_user_id, request_user_id, "",
                 deliveryOrder.getDelivery_order_receiver_name(), deliveryOrder.getDelivery_order_receiver_mobile(),
                 deliveryOrder.getDelivery_order_receiver_province(), deliveryOrder.getDelivery_order_receiver_city(),
                 deliveryOrder.getDelivery_order_receiver_area(), deliveryOrder.getDelivery_order_receiver_address(),
-                deliveryOrder.getDelivery_order_express_pay_way(),
-                deliveryOrder.getDelivery_order_express_shipper_code(), false, deliveryOrderProductSkuList,
+                delivery_order_express_pay_way,
+                delivery_order_express_shipper_code, false, deliveryOrderProductSkuList,
                 request_user_id);
 
         renderSuccessJson(result);
