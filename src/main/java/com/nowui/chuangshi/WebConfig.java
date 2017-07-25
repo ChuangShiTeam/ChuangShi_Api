@@ -97,7 +97,6 @@ import com.nowui.chuangshi.model.StockIn;
 import com.nowui.chuangshi.model.StockInProductSku;
 import com.nowui.chuangshi.model.StockOut;
 import com.nowui.chuangshi.model.StockOutProductSku;
-import com.nowui.chuangshi.model.StockProductSku;
 import com.nowui.chuangshi.model.StockReplenish;
 import com.nowui.chuangshi.model.StockReplenishProductSku;
 import com.nowui.chuangshi.model.Supplier;
@@ -222,7 +221,6 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_member_address", "member_address_id", MemberAddress.class);
         activeRecordPlugin.addMapping("table_member_level", "member_level_id", MemberLevel.class);
         activeRecordPlugin.addMapping("table_stock", "stock_id", Stock.class);
-        activeRecordPlugin.addMapping("table_stock_product_sku", "stock_product_sku_id", StockProductSku.class);
         activeRecordPlugin.addMapping("table_express", "express_id", Express.class);
         activeRecordPlugin.addMapping("table_qrcode", "qrcode_id", Qrcode.class);
 

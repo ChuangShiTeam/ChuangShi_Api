@@ -1,12 +1,15 @@
 #namespace("stock_replenish")
 
-  #sql("countByApp_idAndStock_replenish_typeOrLikeUser_name")
+  #sql("countByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name")
     SELECT COUNT(*) FROM table_stock_replenish
     #if(stock_replenish_type == 'MEMBER' && user_name)
     LEFT JOIN table_user ON table_user.user_id = table_stock_replenish.object_id
     #end
     WHERE table_stock_replenish.system_status = 1
     AND table_stock_replenish.app_id = #p(app_id)
+    #if(warehouse_id)
+    AND table_stock_replenish.warehouse_id = #p(warehouse_id)
+    #end
     AND table_stock_replenish.stock_replenish_type = #p(stock_replenish_type)
     #if(stock_replenish_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
@@ -14,7 +17,7 @@
     #end
   #end
 
-  #sql("countByOrApp_idAndStock_replenish_typeOrLikeUser_name")
+  #sql("countByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name")
     SELECT COUNT(*) FROM table_stock_replenish
     #if(stock_replenish_type == 'MEMBER' && user_name)
     LEFT JOIN table_user ON table_user.user_id = table_stock_replenish.object_id
@@ -22,6 +25,9 @@
     WHERE table_stock_replenish.system_status = 1
     #if(app_id)
     AND app_id = #p(app_id)
+    #end
+    #if(warehouse_id)
+    AND table_stock_replenish.warehouse_id = #p(warehouse_id)
     #end
     AND table_stock_replenish.stock_replenish_type = #p(stock_replenish_type)
     #if(stock_replenish_type == 'MEMBER' && user_name)
@@ -42,7 +48,7 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByApp_idAndStock_replenish_typeOrLikeUser_nameAndLimit")
+  #sql("listByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit")
     SELECT
     table_stock_replenish.stock_replenish_id
     FROM table_stock_replenish
@@ -51,6 +57,9 @@
     #end
     WHERE table_stock_replenish.system_status = 1
     AND table_stock_replenish.app_id = #p(app_id)
+    #if(warehouse_id)
+    AND table_stock_replenish.warehouse_id = #p(warehouse_id)
+    #end
     AND table_stock_replenish.stock_replenish_type = #p(stock_replenish_type)
     #if(stock_replenish_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
@@ -60,7 +69,7 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idAndStock_replenish_typeOrLikeUser_nameAndLimit")
+  #sql("listByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit")
     SELECT
     table_stock_replenish.stock_replenish_id
     FROM table_stock_replenish
@@ -70,6 +79,9 @@
     WHERE table_stock_replenish.system_status = 1
     #if(app_id)
     AND table_stock_replenish.app_id = #p(app_id)
+    #end
+    #if(warehouse_id)
+    AND table_stock_replenish.warehouse_id = #p(warehouse_id)
     #end
     AND table_stock_replenish.stock_replenish_type = #p(stock_replenish_type)
     #if(stock_replenish_type == 'MEMBER' && user_name)
@@ -90,7 +102,8 @@
 
   #sql("findByStock_replenish_idAndStock_replenish_type")
     SELECT
-    table_stock_replenish.*
+    table_stock_replenish.*,
+    table_warehouse.warehouse_name
     #if(stock_replenish_type == 'MEMBER')
     ,table_user.user_name
     #end
@@ -98,6 +111,7 @@
     ,table_app.app_name
     #end
     FROM table_stock_replenish
+    LEFT JOIN table_warehouse ON table_warehouse.warehouse_id = table_stock_replenish.warehouse_id
     #if(stock_replenish_type == 'MEMBER')
     LEFT JOIN table_user ON table_user.user_id = table_stock_replenish.object_id
     #end
