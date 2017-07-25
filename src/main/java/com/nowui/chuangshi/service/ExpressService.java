@@ -189,14 +189,9 @@ public class ExpressService extends Service {
                 express_no, "", trade.getTrade_receiver_name(), "", trade.getTrade_receiver_mobile(), "",
                 trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(),
                 trade.getTrade_receiver_address(), "", "", "", "", "", "", "", "", "", express_cost,
-                true, ExpressPayWay.THIRD_PARTY_PAY.getKey(), "", ExpressFlow.NOTRACK.getValue(), false,
+                true, ExpressPayWay.THIRD_PARTY_PAY.getValue(), "", ExpressFlow.NOTRACK.getValue(), false,
                 express_remark, request_user_id);
-        // 快递订阅
-        if (flag) {
-        	tradeService.updateReceiver(trade_id);
-        	subscription(express_id, express_shipper_code, express_no);
-        }
-		return null;
+		return flag;
 	}
     
     public void updateBusiness(List<Express> expressList) {
@@ -214,7 +209,18 @@ public class ExpressService extends Service {
 				}
 				
 				if (StringUtils.isNotBlank(bean.getTrade_id())) {
-					tradeService.updateFinish(bean.getTrade_id());
+				    List<Express> express_list = listByTrade_id(bean.getTrade_id());
+				    Boolean flag = true;
+				    for (Express e : express_list) {
+				        if (e.getExpress_is_complete() || e.getExpress_id().equals(bean.getExpress_id())) {
+				            continue;
+				        }
+				        flag = false;
+				        break;
+				    }
+				    if (flag) {
+				        tradeService.updateFinish(bean.getTrade_id());
+				    }
 				}
 				
 			}

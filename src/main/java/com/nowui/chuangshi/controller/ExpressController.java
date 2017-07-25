@@ -26,6 +26,8 @@ import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.ProductService;
 import com.nowui.chuangshi.service.ProductSkuService;
 import com.nowui.chuangshi.service.TradeProductSkuService;
+import com.nowui.chuangshi.service.TradeService;
+import com.nowui.chuangshi.type.TradeFlow;
 import com.nowui.chuangshi.util.DateUtil;
 
 public class ExpressController extends Controller {
@@ -36,6 +38,7 @@ public class ExpressController extends Controller {
     private final ProductService productService = new ProductService();
     private final ProductSkuService productSkuService = new ProductSkuService();
     private final FileService fileService = new FileService();
+    private final TradeService tradeService = new TradeService();
 
     /**
      * 接收物流信息
@@ -298,10 +301,17 @@ public class ExpressController extends Controller {
     	
     	authenticateApp_id(express.getApp_id());
     	
-    	Boolean result = expressService.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(
-    			model.getExpress_id(), request_user_id, model.getSystem_version());
+    	//判断快递单未完成且订单未发货，才可删除
+    	if (!express.getExpress_is_complete() && StringUtils.isNotBlank(express.getTrade_id())) {
+    	    Trade trade = tradeService.findByTrade_id(express.getTrade_id());
+    	    if (trade.getTrade_flow().equals(TradeFlow.WAIT_SEND.getKey())) {
+    	        Boolean result = expressService.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(
+                        model.getExpress_id(), request_user_id, model.getSystem_version());
+                renderSuccessJson(result);
+    	    }
+    	}
     	
-    	renderSuccessJson(result);
+    	renderSuccessJson(true);
     }
 
     @ActionKey(Url.EXPRESS_SYSTEM_LIST)

@@ -307,15 +307,21 @@ public class TradeController extends Controller {
 
         Trade trade = tradeService.findByTrade_id(trade_id);
         authenticateApp_id(trade.getApp_id());
+        List<Express> express_list = expressService.listByTrade_id(trade_id);
         if (!trade.getTrade_flow().equals(TradeFlow.WAIT_SEND.getKey())) {
             throw new RuntimeException("该订单不能发货！");
-        } else if (expressService.listByTrade_id(trade_id).size() == 0) {
+        } else if (express_list.size() == 0) {
             throw new RuntimeException("该订单还没填写快递单！");
         }
 
         Boolean result = tradeService.updateTrade_flowByTrade_idValidateSystem_version(trade_id,
                 TradeFlow.WAIT_RECEIVE.getKey(), request_user_id, system_version);
-
+        if (result) {
+            //快递订阅
+            for (Express express : express_list) {
+                expressService.subscription(express.getExpress_id(), express.getExpress_shipper_code(), express.getExpress_no());
+            }
+        }
         renderSuccessJson(result);
     }
 
