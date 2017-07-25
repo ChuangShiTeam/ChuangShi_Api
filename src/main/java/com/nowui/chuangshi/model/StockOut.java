@@ -33,9 +33,13 @@ public class StockOut extends Model<StockOut> {
     
     public static final String USER_NAME = "user_name";
     
+    public static final String WAREHOUSE_NAME = "warehouse_name";
+    
     private String app_name;
     
     private String user_name;
+    
+    private String warehouse_name;
 
     public String getStock_out_id() {
         return getStr(STOCK_OUT_ID);
@@ -115,6 +119,14 @@ public class StockOut extends Model<StockOut> {
 
     public void setUser_name(String user_name) {
         this.user_name = user_name;
+    }
+
+    public String getWarehouse_name() {
+        return warehouse_name;
+    }
+
+    public void setWarehouse_name(String warehouse_name) {
+        this.warehouse_name = warehouse_name;
     }
 
 }

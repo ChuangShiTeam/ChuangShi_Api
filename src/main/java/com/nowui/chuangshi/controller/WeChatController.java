@@ -443,8 +443,10 @@ public class WeChatController extends Controller {
             if (is_update) {
                 // TODO 消息队列通知计算账单和分成
                 this.payChange(trade.getTrade_id());
-
-                this.createDeliveryOrder(trade.getTrade_id());
+                // 判断应用是否需要生成发货单
+                if (app.getApp_is_create_warehouse() && app.getApp_is_delivery()) {
+                    this.createDeliveryOrder(trade.getTrade_id());
+                }
                 renderText(Constant.WX_SUCCESS_MSG);
             } else {
                 renderText(Constant.WX_FAIL_MSG);
