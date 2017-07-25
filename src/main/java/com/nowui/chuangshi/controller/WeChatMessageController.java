@@ -206,12 +206,13 @@ public class WeChatMessageController extends MsgController {
         if (qrcode.getQrcode_type().equals(QrcodeType.PLATFORM.getKey())) {
             // 合伙人不用审核
             member_status = true;
+        } else if (app.getApp_is_audit_member()) {
+            // 该应用指定需要审核
+            member_status = false;
+        } else {
+            // 该应用指定不需要审核
+            member_status = true;
         }
-
-        /*
-         * else if (app.getApp_is_commission()) { // 该应用指定需要审核 member_status =
-         * true; } else { // 该应用指定不需要审核 member_status = false; }
-         */
 
         Member member = memberService.saveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id,
                 from_qrcode_id, member_level_id, member_parent_path, user_name, user_avatar, member_status,
@@ -227,8 +228,8 @@ public class WeChatMessageController extends MsgController {
                     MemberLevel memberLevel = memberLevelService.findByMember_level_sort(app_id, 1);
                     member_level_id = memberLevel.getMember_level_id();
 
-                    memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(
-                            member.getMember_id(), member_parent_id, member_parent_path, member_level_id,
+                    memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_idAndMember_status(
+                            member.getMember_id(), member_parent_id, member_parent_path, member_level_id, member_status,
                             system_create_user_id);
 
                     qrcodeService.updateQrcode_addByQrcode_id(from_qrcode_id, request_user_id);
@@ -260,8 +261,8 @@ public class WeChatMessageController extends MsgController {
                     member_level_id = memberLevel.getMember_level_id();
                 }
 
-                memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(
-                        member.getMember_id(), member_parent_id, member_parent_path, member_level_id,
+                memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_idAndMember_status(
+                        member.getMember_id(), member_parent_id, member_parent_path, member_level_id, member_status,
                         system_create_user_id);
 
                 qrcodeService.updateQrcode_addByQrcode_id(from_qrcode_id, request_user_id);

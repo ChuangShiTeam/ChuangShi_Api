@@ -1,14 +1,14 @@
 package com.nowui.chuangshi.dao;
 
+import java.util.Date;
+import java.util.List;
+
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.User;
-
-import java.util.Date;
-import java.util.List;
 
 public class MemberDao extends Dao {
 
@@ -46,7 +46,8 @@ public class MemberDao extends Dao {
         return new Member().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Member> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
+    public List<Member> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m,
+            int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Member.APP_ID, app_id);
         sqlMap.put(Member.SYSTEM_CREATE_TIME, system_create_time);
@@ -71,25 +72,25 @@ public class MemberDao extends Dao {
 
         return new Member().find(sqlPara.getSql(), sqlPara.getPara());
     }
-    
+
     public List<Member> listByApp_id(String app_id) {
-    	Kv sqlMap = Kv.create();
-    	sqlMap.put(Member.APP_ID, app_id);
-    	SqlPara sqlPara = Db.getSqlPara("member.listByApp_id", sqlMap);
-    	
-    	logSql("member", "listByApp_id", sqlPara);
-    	
-    	return new Member().find(sqlPara.getSql(), sqlPara.getPara());
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Member.APP_ID, app_id);
+        SqlPara sqlPara = Db.getSqlPara("member.listByApp_id", sqlMap);
+
+        logSql("member", "listByApp_id", sqlPara);
+
+        return new Member().find(sqlPara.getSql(), sqlPara.getPara());
     }
-    
+
     public List<Member> listByOrApp_id(String app_id) {
-    	Kv sqlMap = Kv.create();
-    	sqlMap.put(Member.APP_ID, app_id);
-    	SqlPara sqlPara = Db.getSqlPara("member.listByOrApp_id", sqlMap);
-    	
-    	logSql("member", "listByOrApp_id", sqlPara);
-    	
-    	return new Member().find(sqlPara.getSql(), sqlPara.getPara());
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Member.APP_ID, app_id);
+        SqlPara sqlPara = Db.getSqlPara("member.listByOrApp_id", sqlMap);
+
+        logSql("member", "listByOrApp_id", sqlPara);
+
+        return new Member().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
     public List<Member> listByOrApp_idOrLikeUser_nameAndLimit(String app_id, String user_name, int m, int n) {
@@ -120,7 +121,9 @@ public class MemberDao extends Dao {
         }
     }
 
-    public Boolean save(String member_id, String app_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_parent_path, Boolean member_status, String system_create_user_id) {
+    public Boolean save(String member_id, String app_id, String user_id, String member_parent_id, String from_qrcode_id,
+            String qrcode_id, String member_level_id, String member_parent_path, Boolean member_status,
+            String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Member.MEMBER_ID, member_id);
         sqlMap.put(Member.APP_ID, app_id);
@@ -144,7 +147,9 @@ public class MemberDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String member_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, String member_parent_path, Boolean member_status, String system_update_user_id, Integer system_version) {
+    public Boolean update(String member_id, String user_id, String member_parent_id, String from_qrcode_id,
+            String qrcode_id, String member_level_id, String member_parent_path, Boolean member_status,
+            String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Member.MEMBER_ID, member_id);
         sqlMap.put(Member.USER_ID, user_id);
@@ -164,30 +169,38 @@ public class MemberDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(String member_id, String member_parent_id, String member_parent_path, String member_level_id, String system_update_user_id) {
+    public Boolean updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_idAndMember_status(
+            String member_id, String member_parent_id, String member_parent_path, String member_level_id,
+            Boolean member_status, String system_update_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Member.MEMBER_ID, member_id);
         sqlMap.put(Member.MEMBER_PARENT_ID, member_parent_id);
         sqlMap.put(Member.MEMBER_PARENT_PATH, member_parent_path);
         sqlMap.put(Member.MEMBER_LEVEL_ID, member_level_id);
         sqlMap.put(Member.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(Member.MEMBER_STATUS, member_status);
         sqlMap.put(Member.SYSTEM_UPDATE_TIME, new Date());
-        SqlPara sqlPara = Db.getSqlPara("member.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara(
+                "member.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_idAndMember_status",
+                sqlMap);
 
-        logSql("member", "updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id", sqlPara);
+        logSql("member", "updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_idAndMember_status",
+                sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean updateByMember_idAndMember_level_id(String member_id, String member_level_id, String system_update_user_id) {
+    public Boolean updateByMember_idAndMember_level_idAndMember_status(String member_id, String member_level_id,
+            boolean member_status, String system_update_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Member.MEMBER_ID, member_id);
         sqlMap.put(Member.MEMBER_LEVEL_ID, member_level_id);
+        sqlMap.put(Member.MEMBER_STATUS, member_status);
         sqlMap.put(Member.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(Member.SYSTEM_UPDATE_TIME, new Date());
-        SqlPara sqlPara = Db.getSqlPara("member.updateByMember_idAndMember_level_id", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("member.updateByMember_idAndMember_level_idAndMember_status", sqlMap);
 
-        logSql("member", "updateByMember_idAndMember_level_id", sqlPara);
+        logSql("member", "updateByMember_idAndMember_level_idAndMember_status", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
@@ -204,8 +217,9 @@ public class MemberDao extends Dao {
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
-    
-    public Boolean deleteByMember_idAndSystem_version(String member_id, String system_update_user_id, Integer system_version) {
+
+    public Boolean deleteByMember_idAndSystem_version(String member_id, String system_update_user_id,
+            Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Member.MEMBER_ID, member_id);
         sqlMap.put(Member.SYSTEM_UPDATE_USER_ID, system_update_user_id);

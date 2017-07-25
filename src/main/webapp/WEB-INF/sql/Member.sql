@@ -170,11 +170,12 @@
     AND system_version = #p(system_version)
   #end
 
-  #sql("updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id")
+  #sql("updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_idAndMember_status")
     UPDATE table_member SET
     member_parent_id = #p(member_parent_id),
     member_parent_path = #p(member_parent_path),
     member_level_id = #p(member_level_id),
+    member_status = #p(member_status),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1
@@ -182,9 +183,10 @@
     AND member_id = #p(member_id)
   #end
 
-  #sql("updateByMember_idAndMember_level_id")
+  #sql("updateByMember_idAndMember_level_idAndMember_status")
     UPDATE table_member SET
     member_level_id = #p(member_level_id),
+    member_status = #p(member_status),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1
