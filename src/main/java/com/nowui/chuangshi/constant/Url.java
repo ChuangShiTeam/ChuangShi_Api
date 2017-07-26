@@ -555,6 +555,7 @@ public class Url {
     public static final String DELIVERY_ORDER_UPDATE = "/delivery/order/update";
     public static final String DELIVERY_ORDER_DELETE = "/delivery/order/delete";
     public static final String DELIVERY_ORDER_ADMIN_LIST = "/delivery/order/admin/list";
+    public static final String DELIVERY_ORDER_ADMIN_WAREHOUSE_DELIVER = "/delivery/order/admin/warehouse/deliver";
     public static final String DELIVERY_ORDER_ADMIN_FIND = "/delivery/order/admin/find";
     public static final String DELIVERY_ORDER_ADMIN_SAVE = "/delivery/order/admin/save";
     public static final String DELIVERY_ORDER_ADMIN_UPDATE = "/delivery/order/admin/update";

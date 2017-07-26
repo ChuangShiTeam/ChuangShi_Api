@@ -478,8 +478,9 @@ public class WeChatController extends Controller {
         String delivery_order_express_pay_way = ExpressPayWay.THIRD_PARTY_PAY.getValue(); // 订单产生会员发货设置快递支付方式为第三方支付
         String delivery_order_express_shipper_code = ""; // 快递公司由仓库发货时指定
         Boolean delivery_order_is_pay = true; // 快递费已支付
+        BigDecimal delivery_order_amount = trade.getTrade_total_amount();
         
-        deliveryOrderService.save(trade.getApp_id(), trade_id, user_id, "", user_id, trade.getTrade_receiver_name(), trade.getTrade_receiver_mobile(), trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(), trade.getTrade_receiver_address(), delivery_order_express_pay_way, delivery_order_express_shipper_code, delivery_order_is_pay, deliveryOrderProductSkuList, "");
+        deliveryOrderService.save(trade.getApp_id(), trade_id, user_id, "", user_id, trade.getTrade_receiver_name(), trade.getTrade_receiver_mobile(), trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(), trade.getTrade_receiver_address(), delivery_order_express_pay_way, delivery_order_express_shipper_code, delivery_order_amount, delivery_order_is_pay, deliveryOrderProductSkuList, "");
 
     }
 

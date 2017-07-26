@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -338,13 +339,13 @@ public class MemberController extends Controller {
         if (StringUtils.isBlank(delivery_order_express_shipper_code)) {
             delivery_order_express_shipper_code = "";
         }
+        BigDecimal delivery_order_amount = new BigDecimal(0);
         Boolean result = deliveryOrderService.save(request_app_id, "", request_user_id, request_user_id, "",
                 deliveryOrder.getDelivery_order_receiver_name(), deliveryOrder.getDelivery_order_receiver_mobile(),
                 deliveryOrder.getDelivery_order_receiver_province(), deliveryOrder.getDelivery_order_receiver_city(),
                 deliveryOrder.getDelivery_order_receiver_area(), deliveryOrder.getDelivery_order_receiver_address(),
-                delivery_order_express_pay_way,
-                delivery_order_express_shipper_code, false, deliveryOrderProductSkuList,
-                request_user_id);
+                delivery_order_express_pay_way, delivery_order_express_shipper_code, 
+                delivery_order_amount, false, deliveryOrderProductSkuList, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -365,8 +366,7 @@ public class MemberController extends Controller {
         // 查询会员库存
         Integer stock_quantity = stockService.sumQuantityByObject_id(request_user_id);
         // 查询会员发货单列表
-        List<Record> recordList = deliverOrderService
-                .listWithExpressByDelivery_order_sender_user_idAndLimit(request_user_id, getM(), getN());
+        List<Record> recordList = deliverOrderService.listByDelivery_order_sender_user_idAndLimit(request_user_id, getM(), getN());
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
         for (Record record : recordList) {
             Map<String, Object> map = new HashMap<String, Object>();
@@ -380,9 +380,8 @@ public class MemberController extends Controller {
             map.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA, record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA));
             map.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS,
                     record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS));
-            map.put(Express.EXPRESS_FLOW, record.get(Express.EXPRESS_FLOW));
-            map.put(Express.EXPRESS_NO, record.get(Express.EXPRESS_NO));
-            map.put(Express.EXPRESS_SHIPPER_CODE, record.get(Express.EXPRESS_SHIPPER_CODE));
+            map.put(DeliveryOrder.DELIVERY_ORDER_FLOW,
+                    record.get(DeliveryOrder.DELIVERY_ORDER_FLOW));
             resultList.add(map);
         }
         Map<String, Object> result = new HashMap<String, Object>();
@@ -459,13 +458,21 @@ public class MemberController extends Controller {
                     .toJavaObject(DeliveryOrderProductSku.class);
             deliveryOrderProductSkuList.add(deliveryOrderProductSku);
         }
+        String delivery_order_express_pay_way = deliveryOrder.getDelivery_order_express_pay_way();
+        if (StringUtils.isBlank(delivery_order_express_pay_way)) {
+            delivery_order_express_pay_way = "";
+        }
+        String delivery_order_express_shipper_code = deliveryOrder.getDelivery_order_express_shipper_code();
+        if (StringUtils.isBlank(delivery_order_express_shipper_code)) {
+            delivery_order_express_shipper_code = "";
+        }
+        BigDecimal delivery_order_amount = new BigDecimal(0);
         Boolean result = deliveryOrderService.save(request_app_id, "", member.getUser_id(), member.getUser_id(), "",
                 deliveryOrder.getDelivery_order_receiver_name(), deliveryOrder.getDelivery_order_receiver_mobile(),
                 deliveryOrder.getDelivery_order_receiver_province(), deliveryOrder.getDelivery_order_receiver_city(),
                 deliveryOrder.getDelivery_order_receiver_area(), deliveryOrder.getDelivery_order_receiver_address(),
-                deliveryOrder.getDelivery_order_express_pay_way(),
-                deliveryOrder.getDelivery_order_express_shipper_code(), false, deliveryOrderProductSkuList,
-                request_user_id);
+                deliveryOrder.getDelivery_order_express_pay_way(), deliveryOrder.getDelivery_order_express_shipper_code(), 
+                delivery_order_amount, false, deliveryOrderProductSkuList, request_user_id);
 
         renderSuccessJson(result);
     }

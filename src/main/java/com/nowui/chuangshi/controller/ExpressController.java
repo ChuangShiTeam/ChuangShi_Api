@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.jfinal.plugin.activerecord.Record;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Kdniao;
 import com.nowui.chuangshi.constant.Url;
@@ -20,13 +21,15 @@ import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.model.TradeProductSku;
-import com.nowui.chuangshi.model.Warehouse;
+import com.nowui.chuangshi.service.DeliveryOrderProductSkuService;
+import com.nowui.chuangshi.service.DeliveryOrderService;
 import com.nowui.chuangshi.service.ExpressService;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.ProductService;
 import com.nowui.chuangshi.service.ProductSkuService;
 import com.nowui.chuangshi.service.TradeProductSkuService;
 import com.nowui.chuangshi.service.TradeService;
+import com.nowui.chuangshi.type.DeliveryOrderFlow;
 import com.nowui.chuangshi.type.TradeFlow;
 import com.nowui.chuangshi.util.DateUtil;
 
@@ -39,6 +42,8 @@ public class ExpressController extends Controller {
     private final ProductSkuService productSkuService = new ProductSkuService();
     private final FileService fileService = new FileService();
     private final TradeService tradeService = new TradeService();
+    private final DeliveryOrderService deliveryOrderService = new DeliveryOrderService();
+    private final DeliveryOrderProductSkuService deliveryOrderProductSkuService = new DeliveryOrderProductSkuService();
 
     /**
      * 接收物流信息
@@ -155,13 +160,23 @@ public class ExpressController extends Controller {
             }
         }
 
-        List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(express.getTrade_id());
+        if (StringUtils.isNotBlank(express.getTrade_id())) {
+            List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(express.getTrade_id());
 
-        ProductSku productSku = productSkuService.findByProduct_sku_id(tradeProductSkuList.get(0).getProduct_sku_id());
-        Product product = productService.findByProduct_id(productSku.getProduct_id());
+            ProductSku productSku = productSkuService.findByProduct_sku_id(tradeProductSkuList.get(0).getProduct_sku_id());
+            Product product = productService.findByProduct_id(productSku.getProduct_id());
 
-        express.put(Product.PRODUCT_NAME, product.getProduct_name());
-        express.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+            express.put(Product.PRODUCT_NAME, product.getProduct_name());
+            express.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+        } else if (StringUtils.isNotBlank(express.getDelivery_order_id())) {
+            List<Record> deliveryOrderProductSkuList = deliveryOrderProductSkuService.listByDelivery_order_id(express.getDelivery_order_id());
+            ProductSku productSku = productSkuService.findByProduct_sku_id(deliveryOrderProductSkuList.get(0).get("product_sku_id"));
+            Product product = productService.findByProduct_id(productSku.getProduct_id());
+
+            express.put(Product.PRODUCT_NAME, product.getProduct_name());
+            express.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+        }
+        
 
         express.keep(Express.EXPRESS_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, Express.EXPRESS_FLOW,
                 Express.EXPRESS_TRACES_LIST, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Express.SYSTEM_VERSION);
@@ -222,7 +237,7 @@ public class ExpressController extends Controller {
     }
 
     @ActionKey(Url.EXPRESS_ADMIN_FIND_BY_DELIVERY_ORDER_ID)
-    public void adminFindByStock_id() {
+    public void adminFindByDelivery_order_id() {
         validateRequest_app_id();
         validate(Express.DELIVERY_ORDER_ID);
 
@@ -230,41 +245,25 @@ public class ExpressController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Express express = expressService.findByDelivery_order_id(model.getDelivery_order_id());
+        List<Express> express_list = expressService.listByDelivery_order_id(model.getDelivery_order_id());
 
-        if (express != null) {
-            authenticateApp_id(express.getApp_id());
-
-            express.keep(Express.EXPRESS_ID, Express.DELIVERY_ORDER_ID, Express.TRADE_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
-                    Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
-                    Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE,
-                    Express.EXPRESS_RECEIVER_PROVINCE, Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA,
-                    Express.EXPRESS_RECEIVER_ADDRESS, Express.EXPRESS_SENDER_COMPANY, Express.EXPRESS_SENDER_NAME,
-                    Express.EXPRESS_SENDER_TEL, Express.EXPRESS_SENDER_MOBILE, Express.EXPRESS_SENDER_POSTCODE,
-                    Express.EXPRESS_SENDER_PROVINCE, Express.EXPRESS_SENDER_CITY, Express.EXPRESS_SENDER_AREA,
-                    Express.EXPRESS_SENDER_ADDRESS, Express.EXPRESS_COST, Express.EXPRESS_IS_PAY,
-                    Express.EXPRESS_PAY_WAY, Express.EXPRESS_TRACES, Express.EXPRESS_FLOW, Express.EXPRESS_IS_COMPLETE,
-                    Express.EXPRESS_REMARK, Express.SYSTEM_VERSION);
-        }
-
-        renderSuccessJson(express);
+        renderSuccessJson(express_list);
     }
 
     @ActionKey(Url.EXPRESS_ADMIN_MEMBER_EXPRESS)
     public void adminMemberExpress() {
     	validateRequest_app_id();
-        validate(DeliveryOrder.DELIVERY_ORDER_ID, Warehouse.WAREHOUSE_ID, Express.EXPRESS_NO, Express.EXPRESS_COST, Express.EXPRESS_SHIPPER_CODE,
+        validate(DeliveryOrder.DELIVERY_ORDER_ID, Express.EXPRESS_NO, Express.EXPRESS_COST, Express.EXPRESS_SHIPPER_CODE,
                 Express.EXPRESS_REMARK);
 
         Express model = getModel(Express.class);
         String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
         String delivery_order_id = jsonObject.getString("delivery_order_id");
-        String warehouse_id = jsonObject.getString("warehouse_id");
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = expressService.memberExpress(delivery_order_id, warehouse_id, model.getExpress_no(), model.getExpress_cost(), model.getExpress_shipper_code(), model.getExpress_remark(), request_user_id);
+        Boolean result = expressService.memberExpress(delivery_order_id, model.getExpress_no(), model.getExpress_cost(), model.getExpress_shipper_code(), model.getExpress_remark(), request_user_id);
         
         renderSuccessJson(result);
     }
@@ -301,14 +300,29 @@ public class ExpressController extends Controller {
     	
     	authenticateApp_id(express.getApp_id());
     	
-    	//判断快递单未完成且订单未发货，才可删除
-    	if (!express.getExpress_is_complete() && StringUtils.isNotBlank(express.getTrade_id())) {
-    	    Trade trade = tradeService.findByTrade_id(express.getTrade_id());
-    	    if (trade.getTrade_flow().equals(TradeFlow.WAIT_SEND.getKey())) {
+    	//判断快递单未完成
+    	if (!express.getExpress_is_complete()) {
+    	    Boolean flag = false;
+    	    if (StringUtils.isNotBlank(express.getTrade_id())) {
+    	        Trade trade = tradeService.findByTrade_id(express.getTrade_id());
+                if (TradeFlow.WAIT_SEND.getKey().equals(trade.getTrade_flow())) {
+                   //订单是待发货状态才可以删除
+                   flag = true;
+                }    
+    	    } 
+    	    if (StringUtils.isNotBlank(express.getDelivery_order_id())) {
+    	        //发货单是待发货状态才可以删除
+    	        DeliveryOrder delivery_order = deliveryOrderService.findByDelivery_order_id(express.getDelivery_order_id());
+    	        if (DeliveryOrderFlow.WAIT_SEND.getKey().equals(delivery_order.getDelivery_order_flow())) {
+    	            flag = true;
+    	        }
+    	    }
+    	    if (flag) {
     	        Boolean result = expressService.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(
                         model.getExpress_id(), request_user_id, model.getSystem_version());
                 renderSuccessJson(result);
     	    }
+    	    
     	}
     	
     	renderSuccessJson(true);
