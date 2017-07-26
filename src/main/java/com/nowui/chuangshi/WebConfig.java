@@ -65,6 +65,7 @@ import com.nowui.chuangshi.model.Bill;
 import com.nowui.chuangshi.model.BillCommission;
 import com.nowui.chuangshi.model.Customer;
 import com.nowui.chuangshi.model.CustomerAttribute;
+import com.nowui.chuangshi.model.CustomerAttributeValue;
 import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.DeliveryOrderProductSku;
 import com.nowui.chuangshi.model.Exception;
@@ -171,6 +172,7 @@ public class WebConfig extends JFinalConfig {
         routes.add("/stock/replenish", StockReplenishController.class);
 
         routes.add("/delivery/order", DeliveryOrderController.class);
+
     }
 
     public void configEngine(Engine engine) {
@@ -236,6 +238,8 @@ public class WebConfig extends JFinalConfig {
 
         activeRecordPlugin.addMapping("table_customer", "customer_id", Customer.class);
         activeRecordPlugin.addMapping("table_customer_attribute", "customer_attribute_id", CustomerAttribute.class);
+        activeRecordPlugin.addMapping("table_customer_attribute_value", "customer_attribute_value_id",
+                CustomerAttributeValue.class);
 
         activeRecordPlugin.addMapping("table_guangqi_customer", "guangqi_customer_id", GuangqiCustomer.class);
         activeRecordPlugin.addMapping("table_guangqi_prize", "guangqi_prize_id", GuangqiPrize.class);
