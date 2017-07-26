@@ -16,6 +16,8 @@ public class ExpressCache extends Cache {
     public static final String EXPRESS_BY_EXPRESS_ID_CACHE = "express_by_express_id_cache";
 
     public static final String EXPRESS_LIST_BY_TRADE_ID = "express_list_by_trade_id";
+    
+    public static final String EXPRESS_LIST_BY_DELIVERY_ORDER_ID = "express_list_by_delivery_order_id";
 
     private ExpressDao expressDao = new ExpressDao();
 
@@ -79,6 +81,9 @@ public class ExpressCache extends Cache {
             if (StringUtils.isNotBlank(trade_id)) {
                 CacheUtil.remove(EXPRESS_LIST_BY_TRADE_ID, trade_id);
             }
+            if (StringUtils.isNotBlank(delivery_order_id)) {
+                CacheUtil.remove(EXPRESS_LIST_BY_DELIVERY_ORDER_ID, delivery_order_id);
+            }
         }
         return result;
     }
@@ -94,6 +99,7 @@ public class ExpressCache extends Cache {
         if (result) {
             CacheUtil.remove(EXPRESS_BY_EXPRESS_ID_CACHE, express_id);
             CacheUtil.remove(EXPRESS_LIST_BY_TRADE_ID, express.getTrade_id());
+            CacheUtil.remove(EXPRESS_LIST_BY_DELIVERY_ORDER_ID, express.getDelivery_order_id());
         }
 
         return result;
@@ -112,6 +118,7 @@ public class ExpressCache extends Cache {
         if (result) {
             CacheUtil.remove(EXPRESS_BY_EXPRESS_ID_CACHE, express_id);
             CacheUtil.remove(EXPRESS_LIST_BY_TRADE_ID, express.getTrade_id());
+            CacheUtil.remove(EXPRESS_LIST_BY_DELIVERY_ORDER_ID, express.getDelivery_order_id());
         }
 
         return result;
@@ -128,6 +135,7 @@ public class ExpressCache extends Cache {
         if (result) {
             CacheUtil.remove(EXPRESS_BY_EXPRESS_ID_CACHE, express_id);
             CacheUtil.remove(EXPRESS_LIST_BY_TRADE_ID, express.getTrade_id());
+            CacheUtil.remove(EXPRESS_LIST_BY_DELIVERY_ORDER_ID, express.getDelivery_order_id());
         }
 
         return result;
@@ -145,8 +153,16 @@ public class ExpressCache extends Cache {
         return expressList;
     }
     
-    public Express findByDelivery_order_id(String delivery_order_id) {
-    	return expressDao.findByDelivery_order_id(delivery_order_id);
+    public List<Express> listByDelivery_order_id(String delivery_order_id) {
+        List<Express> expressList = CacheUtil.get(EXPRESS_LIST_BY_DELIVERY_ORDER_ID, delivery_order_id);
+
+        if (expressList == null || expressList.size() == 0) {
+            expressList = expressDao.listByDelivery_order_id(delivery_order_id);
+
+            CacheUtil.put(EXPRESS_LIST_BY_DELIVERY_ORDER_ID, delivery_order_id, expressList);
+        }
+
+        return expressList;
     }
 
 }

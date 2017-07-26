@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
@@ -60,12 +63,18 @@ public class StockReplenishController extends Controller {
     @ActionKey(Url.STOCK_REPLENISH_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(StockReplenish.WAREHOUSE_ID, StockReplenish.OBJECT_ID, StockReplenish.STOCK_REPLENISH_TYPE, StockReplenish.STOCK_REPLENISH_QUANTITY, StockReplenish.STOCK_REPLENISH_ACTION, StockReplenish.STOCK_REPLENISH_STATUS);
+        validate(StockReplenish.WAREHOUSE_ID, StockReplenish.STOCK_REPLENISH_TYPE, StockReplenish.STOCK_REPLENISH_ACTION);
 
         StockReplenish model = getModel(StockReplenish.class);
         String stock_replenish_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
+        String object_id = model.getObject_id();
+        if (StringUtils.isBlank(object_id)) {
+            object_id = request_app_id;
+        }
+        JSONObject jsonObject = getParameterJSONObject();
+        JSONArray stock_replenish_product_sku_list = jsonObject.getJSONArray("stock_replenish_product_sku_list");
 
         authenticateRequest_app_idAndRequest_user_id();
 

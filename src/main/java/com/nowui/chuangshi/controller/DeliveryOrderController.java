@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +16,8 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.Express;
-import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.model.Warehouse;
 import com.nowui.chuangshi.service.DeliveryOrderProductSkuService;
 import com.nowui.chuangshi.service.DeliveryOrderService;
 import com.nowui.chuangshi.service.ExpressService;
@@ -58,30 +59,32 @@ public class DeliveryOrderController extends Controller {
 
         authenticateApp_id(delivery_order.getApp_id());
         authenticateSystem_create_user_id(delivery_order.getSystem_create_user_id());
-
         
-        Express express = expressService.findByDelivery_order_id(model.getDelivery_order_id());
-        String express_flow = null;
-        JSONArray express_traces = null;
-        
-        if (express != null) {
-        	express_flow = express.getExpress_flow();
-        	if (StringUtils.isNotBlank(express.getExpress_traces())) {
-        	    express_traces = JSONObject.parseArray(express.getExpress_traces());
-        	}
+        List<Express> expressList = expressService.listByDelivery_order_id(model.getDelivery_order_id());
+        List<Map<String, Object>> express_list = new ArrayList<Map<String, Object>>();
+        for (Express express : expressList) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("express_flow", express.getExpress_flow());
+            JSONArray express_traces = null;
+            if (StringUtils.isNotBlank(express.getExpress_traces())) {
+                express_traces = JSONObject.parseArray(express.getExpress_traces());
+            }
+            map.put("express_traces", express_traces);
+            map.put("express_id", express.getExpress_id());
+            express_list.add(map);
         }
-        
+        delivery_order.keep(DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY, 
+                            DeliveryOrder.DELIVERY_ORDER_EXPRESS_PAY_WAY,
+                            DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, 
+                            DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE, 
+                            DeliveryOrder.DELIVERY_ORDER_RECEIVER_PROVINCE,
+                            DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY,
+                            DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA,
+                            DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS,
+                            DeliveryOrder.DELIVERY_ORDER_FLOW);
         Map<String, Object> result = new HashMap<String, Object>();
-        result.put(DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY, delivery_order.getDelivery_order_total_quantity());
-        result.put(DeliveryOrder.DELIVERY_ORDER_EXPRESS_PAY_WAY, delivery_order.getDelivery_order_express_pay_way());
-        result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, delivery_order.getDelivery_order_receiver_name());
-        result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE, delivery_order.getDelivery_order_receiver_mobile());
-        result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_PROVINCE, delivery_order.getDelivery_order_receiver_province());
-        result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY, delivery_order.getDelivery_order_receiver_city());
-        result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA, delivery_order.getDelivery_order_receiver_area());
-        result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS, delivery_order.getDelivery_order_receiver_address());
-        result.put(Express.EXPRESS_FLOW, express_flow);
-        result.put(Express.EXPRESS_TRACES, express_traces);
+        result.put("delivery_order", delivery_order);
+        result.put("express_list", express_list);
         renderSuccessJson(result);
         
     }
@@ -152,7 +155,7 @@ public class DeliveryOrderController extends Controller {
         authenticateApp_id(delivery_order.getApp_id());
 
         List<Record> deliveryOrderProductSkuList = deliveryOrderProductSkuService.listByDelivery_order_id(model.getDelivery_order_id());
-        delivery_order.keep(DeliveryOrder.DELIVERY_ORDER_ID, DeliveryOrder.USER_NAME, DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY, DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE, DeliveryOrder.DELIVERY_ORDER_RECEIVER_PROVINCE, DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY, DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA, DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS, DeliveryOrder.DELIVERY_ORDER_EXPRESS_PAY_WAY, DeliveryOrder.DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, DeliveryOrder.DELIVERY_ORDER_IS_PAY, DeliveryOrder.DELIVERY_ORDER_FLOW, DeliveryOrder.SYSTEM_VERSION);
+        delivery_order.keep(DeliveryOrder.DELIVERY_ORDER_ID, DeliveryOrder.USER_NAME, DeliveryOrder.DELIVERY_ORDER_AMOUNT, DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY, DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE, DeliveryOrder.DELIVERY_ORDER_RECEIVER_PROVINCE, DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY, DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA, DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS, DeliveryOrder.DELIVERY_ORDER_EXPRESS_PAY_WAY, DeliveryOrder.DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, DeliveryOrder.DELIVERY_ORDER_IS_PAY, DeliveryOrder.DELIVERY_ORDER_FLOW, DeliveryOrder.SYSTEM_VERSION);
 
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("delivery_order", delivery_order);
@@ -176,6 +179,39 @@ public class DeliveryOrderController extends Controller {
 
         Boolean result = deliveryOrderService.deleteByDelivery_order_idAndSystem_update_user_idValidateSystem_version(model.getDelivery_order_id(), request_user_id, model.getSystem_version());
 
+        renderSuccessJson(result);
+    }
+    
+    //仓库发货
+    @ActionKey(Url.DELIVERY_ORDER_ADMIN_WAREHOUSE_DELIVER)
+    public void adminWarehouseDelivery() {
+        validateRequest_app_id();
+        validate(DeliveryOrder.DELIVERY_ORDER_ID, Warehouse.WAREHOUSE_ID);
+        
+        String request_user_id = getRequest_user_id();
+        JSONObject jsonObject = getParameterJSONObject();
+        String delivery_order_id = jsonObject.getString(DeliveryOrder.DELIVERY_ORDER_ID);
+        String warehouse_id = jsonObject.getString(Warehouse.WAREHOUSE_ID);
+        BigDecimal delivery_order_amount = jsonObject.getBigDecimal(DeliveryOrder.DELIVERY_ORDER_AMOUNT);
+        
+        authenticateRequest_app_idAndRequest_user_id();
+        
+        DeliveryOrder delivery_order = deliveryOrderService.findByDelivery_order_id(delivery_order_id);
+        
+        authenticateApp_id(delivery_order.getApp_id());
+        
+        List<Express> express_list = expressService.listByDelivery_order_id(delivery_order_id);
+        if (express_list == null || express_list.size() == 0) {
+            throw new RuntimeException("需填写快递单");
+        }
+        
+        Boolean result = deliveryOrderService.warehouseDelivery(delivery_order_id, warehouse_id, delivery_order_amount, request_user_id);        
+        if (result) {
+            //快递订阅
+            for (Express express : express_list) {
+                expressService.subscription(express.getExpress_id(), express.getExpress_shipper_code(), express.getExpress_no());
+            }
+        }
         renderSuccessJson(result);
     }
 
