@@ -66,7 +66,11 @@ public class StockController extends Controller {
         if (StringUtils.isBlank(object_id)) {
             object_id = request_app_id;
         }
+        Stock stock = stockService.findByWarehouse_idAndObject_idAndProduct_sku_id(model.getWarehouse_id(), object_id, model.getProduct_sku_id());
 
+        if (stock != null && StringUtils.isNotBlank(stock.getStock_id())) {
+            throw new RuntimeException("库存已初始化过");
+        }
         authenticateRequest_app_idAndRequest_user_id();
 
         Boolean result = stockService.save(stock_id, request_app_id, model.getWarehouse_id(), object_id, model.getStock_type(), model.getProduct_category_id(), model.getProduct_id(), model.getProduct_sku_id(), model.getStock_quantity(), request_user_id);

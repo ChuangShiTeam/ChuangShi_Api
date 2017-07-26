@@ -1,7 +1,6 @@
 package com.nowui.chuangshi.service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,18 +10,13 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.jfinal.plugin.activerecord.Record;
 import com.nowui.chuangshi.cache.ExpressCache;
 import com.nowui.chuangshi.constant.Kdniao;
 import com.nowui.chuangshi.model.DeliveryOrder;
-import com.nowui.chuangshi.model.DeliveryOrderProductSku;
 import com.nowui.chuangshi.model.Express;
-import com.nowui.chuangshi.model.StockOutProductSku;
 import com.nowui.chuangshi.model.Trade;
-import com.nowui.chuangshi.type.DeliveryOrderFlow;
 import com.nowui.chuangshi.type.ExpressFlow;
 import com.nowui.chuangshi.type.ExpressPayWay;
-import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.ExpressUtil;
 import com.nowui.chuangshi.util.Util;
 
@@ -30,11 +24,7 @@ public class ExpressService extends Service {
 
     private ExpressCache expressCache = new ExpressCache();
     
-    private StockOutService stockOutService = new StockOutService();
-    
     private DeliveryOrderService deliveryOrderService = new DeliveryOrderService();
-    
-    private DeliveryOrderProductSkuService deliveryOrderProductSkuService = new DeliveryOrderProductSkuService();
     
     private TradeService tradeService = new TradeService();
     
@@ -133,52 +123,28 @@ public class ExpressService extends Service {
         return expressCache.listByTrade_id(trade_id);
     }
     
-    public Express findByDelivery_order_id(String delivery_order_id) {
-    	return expressCache.findByDelivery_order_id(delivery_order_id);
+    public List<Express> listByDelivery_order_id(String delivery_order_id) {
+    	return expressCache.listByDelivery_order_id(delivery_order_id);
     }
 
-    public Boolean memberExpress(String delivery_order_id, String warehouse_id, String express_no, BigDecimal express_cost, String express_shipper_code, String express_remark, String request_user_id) {
+    public Boolean memberExpress(String delivery_order_id, String express_no, BigDecimal express_cost, String express_shipper_code, String express_remark, String request_user_id) {
         DeliveryOrder deliveryOrder = deliveryOrderService.findByDelivery_order_id(delivery_order_id);
         if (deliveryOrder == null) {
             throw new RuntimeException("找不到对应发货单");
         }
-        List<Record> deliveryOrderProductSkuList = deliveryOrderProductSkuService.listByDelivery_order_id(delivery_order_id);
-        List<StockOutProductSku> stockOutProductSkuList = new ArrayList<StockOutProductSku>();
-        for (Record record : deliveryOrderProductSkuList) {
-        	StockOutProductSku stockOutProductSku = new StockOutProductSku();
-        	stockOutProductSku.setProduct_sku_id(record.getStr(DeliveryOrderProductSku.PRODUCT_SKU_ID));
-        	stockOutProductSku.setProduct_sku_quantity(record.getInt(DeliveryOrderProductSku.PRODUCT_SKU_QUANTITY));
-        	stockOutProductSkuList.add(stockOutProductSku);
-        }
-        //出库
-        Boolean result = stockOutService.save(deliveryOrder.getApp_id(), warehouse_id, delivery_order_id, deliveryOrder.getDelivery_order_user_id(), StockType.MEMBER.getKey(), stockOutProductSkuList, request_user_id);
-        
-        if (result) {
-            // 更新发货单流程为待收货
-        	deliveryOrderService.updateDelivery_order_flowAndDelivery_is_completeByDelivery_order_idValidateSystem_version(delivery_order_id, DeliveryOrderFlow.WAIT_RECEIVE.getKey(), false, request_user_id, deliveryOrder.getSystem_version());
-        	if (StringUtils.isNotBlank(deliveryOrder.getTrade_id())) {
-        		tradeService.updateReceiver(deliveryOrder.getTrade_id());
-        	}
-        	//保存快递单信息
-        	String express_id = Util.getRandomUUID();
-            Boolean flag = save(express_id, deliveryOrder.getApp_id(), deliveryOrder.getTrade_id(), delivery_order_id, express_shipper_code,
-                    express_no, "", deliveryOrder.getDelivery_order_receiver_name(), "", deliveryOrder.getDelivery_order_receiver_mobile(), "",
-                    deliveryOrder.getDelivery_order_receiver_province(), deliveryOrder.getDelivery_order_receiver_city(), deliveryOrder.getDelivery_order_receiver_area(),
-                    deliveryOrder.getDelivery_order_receiver_address(), "", "", "", "", "", "", "", "", "", express_cost,
-                    deliveryOrder.getDelivery_order_is_pay(), deliveryOrder.getDelivery_order_express_pay_way(), "", ExpressFlow.NOTRACK.getValue(), false,
-                    express_remark, request_user_id);
-            // 快递订阅
-            if (flag) {
-            	subscription(express_id, express_shipper_code, express_no);
-            }
-            return flag;
-        }
+        //保存快递单信息
+        String express_id = Util.getRandomUUID();
+        Boolean result = save(express_id, deliveryOrder.getApp_id(), deliveryOrder.getTrade_id(), delivery_order_id, express_shipper_code,
+                express_no, "", deliveryOrder.getDelivery_order_receiver_name(), "", deliveryOrder.getDelivery_order_receiver_mobile(), "",
+                deliveryOrder.getDelivery_order_receiver_province(), deliveryOrder.getDelivery_order_receiver_city(), deliveryOrder.getDelivery_order_receiver_area(),
+                deliveryOrder.getDelivery_order_receiver_address(), "", "", "", "", "", "", "", "", "", express_cost,
+                deliveryOrder.getDelivery_order_is_pay(), deliveryOrder.getDelivery_order_express_pay_way(), "", ExpressFlow.NOTRACK.getValue(), false,
+                express_remark, request_user_id);
         
         return result;
     }
     
-    public Boolean supplierExpress(String trade_id, String express_no, BigDecimal express_cost,
-			String express_shipper_code, String express_remark, String request_user_id) {
+    public Boolean supplierExpress(String trade_id, String express_no, BigDecimal express_cost, String express_shipper_code, String express_remark, String request_user_id) {
 		Trade trade = tradeService.findByTrade_id(trade_id);
 		if (trade == null) {
 			throw new RuntimeException("找不到订单");
@@ -205,7 +171,18 @@ public class ExpressService extends Service {
 			if (!bean.getExpress_is_complete() && isComplete) {
 				
 				if (StringUtils.isNotBlank(bean.getDelivery_order_id())) {
-					deliveryOrderService.updateFinish(bean.getDelivery_order_id());
+					List<Express> express_list = listByDelivery_order_id(bean.getDelivery_order_id());
+                    Boolean flag = true;
+                    for (Express e : express_list) {
+                        if (e.getExpress_is_complete() || e.getExpress_id().equals(bean.getExpress_id())) {
+                            continue;
+                        }
+                        flag = false;
+                        break;
+                    }
+                    if (flag) {
+                        deliveryOrderService.updateFinish(bean.getDelivery_order_id());
+                    }
 				}
 				
 				if (StringUtils.isNotBlank(bean.getTrade_id())) {

@@ -2,9 +2,7 @@ package com.nowui.chuangshi.service;
 
 import java.util.List;
 
-import com.jfinal.plugin.activerecord.Db;
 import com.nowui.chuangshi.cache.StockOutProductSkuCache;
-import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.StockOutProductSku;
 
 public class StockOutProductSkuService extends Service {
@@ -25,14 +23,7 @@ public class StockOutProductSkuService extends Service {
     }
     
     public Boolean batchSave(List<StockOutProductSku> list) {
-        int[] result = Db.batchSave(list, Constant.BATCH_SIZE);
-
-        for (int i : result) {
-            if (i == 0) {
-                throw new RuntimeException("出库明细记录保存不成功");
-            }
-        }
-        return true;
+        return stockOutProductSkuCache.batchSave(list);
     }
 
 }

@@ -152,14 +152,14 @@
     AND stock_id = #p(stock_id)
   #end
   
-  #sql("findByWarehouse_idAndProduct_sku_idAndStock_type")
+  #sql("findByWarehouse_idAndObject_idAndProduct_sku_id")
     SELECT
     *
     FROM table_stock
     WHERE system_status = 1
     AND warehouse_id = #p(warehouse_id)
     AND product_sku_id = #p(product_sku_id)
-    AND stock_type = #p(stock_type)
+    AND object_id = #p(object_id)
   #end
   
   #sql("findByStock_idAndStock_type")

@@ -116,7 +116,7 @@
     *
     FROM table_express
     WHERE system_status = 1
-    AND table_express.trade_id = #p(trade_id)
+    AND trade_id = #p(trade_id)
   #end
 
   #sql("save")

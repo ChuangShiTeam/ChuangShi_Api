@@ -127,14 +127,14 @@ public class StockDao extends Dao {
         }
     }
     
-    public Stock findByWarehouse_idAndProduct_sku_idAndStock_type(String warehouse_id, String product_sku_id, String stock_type) {
+    public Stock findByWarehouse_idAndObject_idAndProduct_sku_id(String warehouse_id, String object_id, String product_sku_id) {
     	Kv sqlMap = Kv.create();
     	sqlMap.put(Stock.WAREHOUSE_ID, warehouse_id);
+    	sqlMap.put(Stock.OBJECT_ID, object_id);
     	sqlMap.put(Stock.PRODUCT_SKU_ID, product_sku_id);
-    	sqlMap.put(Stock.STOCK_TYPE, stock_type);
-    	SqlPara sqlPara = Db.getSqlPara("stock.findByWarehouse_idAndProduct_sku_idAndStock_type", sqlMap);
+    	SqlPara sqlPara = Db.getSqlPara("stock.findByWarehouse_idAndObject_idAndProduct_sku_id", sqlMap);
     	
-    	logSql("stock", "findByWarehouse_idAndProduct_sku_idAndStock_type", sqlPara);
+    	logSql("stock", "findByWarehouse_idAndObject_idAndProduct_sku_id", sqlPara);
     	
     	List<Stock> stockList = new Stock().find(sqlPara.getSql(), sqlPara.getPara());
     	if (stockList.size() == 0) {

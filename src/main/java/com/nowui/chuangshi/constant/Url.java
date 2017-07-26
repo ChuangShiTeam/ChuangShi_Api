@@ -245,12 +245,13 @@ public class Url {
     public static final String CUSTOMER_SYSTEM_UPDATE = "/customer/system/update";
     public static final String CUSTOMER_SYSTEM_DELETE = "/customer/system/delete";
 
-    // 用户模板数据
+    // 用户数据模板
     public static final String CUSTOMER_ATTRIBUTE_LIST = "/customer/attribute/list";
     public static final String CUSTOMER_ATTRIBUTE_FIND = "/customer/attribute/find";
     public static final String CUSTOMER_ATTRIBUTE_SAVE = "/customer/attribute/save";
     public static final String CUSTOMER_ATTRIBUTE_UPDATE = "/customer/attribute/update";
     public static final String CUSTOMER_ATTRIBUTE_DELETE = "/customer/attribute/delete";
+    public static final String CUSTOMER_ATTRIBUTE_ADMIN_APP_LIST = "/customer/attribute/admin/app/list";
     public static final String CUSTOMER_ATTRIBUTE_ADMIN_LIST = "/customer/attribute/admin/list";
     public static final String CUSTOMER_ATTRIBUTE_ADMIN_FIND = "/customer/attribute/admin/find";
     public static final String CUSTOMER_ATTRIBUTE_ADMIN_SAVE = "/customer/attribute/admin/save";
@@ -481,8 +482,8 @@ public class Url {
     public static final String SUPPLIER_SYSTEM_SAVE = "/supplier/system/save";
     public static final String SUPPLIER_SYSTEM_UPDATE = "/supplier/system/update";
     public static final String SUPPLIER_SYSTEM_DELETE = "/supplier/system/delete";
-    
-    //仓库
+
+    // 仓库
     public static final String WAREHOUSE_LIST = "/warehouse/list";
     public static final String WAREHOUSE_FIND = "/warehouse/find";
     public static final String WAREHOUSE_SAVE = "/warehouse/save";
@@ -500,8 +501,8 @@ public class Url {
     public static final String WAREHOUSE_SYSTEM_SAVE = "/warehouse/system/save";
     public static final String WAREHOUSE_SYSTEM_UPDATE = "/warehouse/system/update";
     public static final String WAREHOUSE_SYSTEM_DELETE = "/warehouse/system/delete";
-    
-    //库存
+
+    // 库存
     public static final String STOCK_ADMIN_LIST = "/stock/admin/list";
     public static final String STOCK_ADMIN_FIND = "/stock/admin/find";
     public static final String STOCK_ADMIN_SAVE = "/stock/admin/save";
@@ -512,8 +513,8 @@ public class Url {
     public static final String STOCK_SYSTEM_SAVE = "/stock/system/save";
     public static final String STOCK_SYSTEM_UPDATE = "/stock/system/update";
     public static final String STOCK_SYSTEM_DELETE = "/stock/system/delete";
-    
-    //入库
+
+    // 入库
     public static final String STOCK_IN_LIST = "/stock/in/list";
     public static final String STOCK_IN_FIND = "/stock/in/find";
     public static final String STOCK_IN_SAVE = "/stock/in/save";
@@ -529,8 +530,8 @@ public class Url {
     public static final String STOCK_IN_SYSTEM_SAVE = "/stock/in/system/save";
     public static final String STOCK_IN_SYSTEM_UPDATE = "/stock/in/system/update";
     public static final String STOCK_IN_SYSTEM_DELETE = "/stock/in/system/delete";
-    
-    //出库
+
+    // 出库
     public static final String STOCK_OUT_LIST = "/stock/out/list";
     public static final String STOCK_OUT_FIND = "/stock/out/find";
     public static final String STOCK_OUT_SAVE = "/stock/out/save";
@@ -546,14 +547,15 @@ public class Url {
     public static final String STOCK_OUT_SYSTEM_SAVE = "/stock/out/system/save";
     public static final String STOCK_OUT_SYSTEM_UPDATE = "/stock/out/system/update";
     public static final String STOCK_OUT_SYSTEM_DELETE = "/stock/out/system/delete";
-    
-    //发货单
+
+    // 发货单
     public static final String DELIVERY_ORDER_LIST = "/delivery/order/list";
     public static final String DELIVERY_ORDER_FIND = "/delivery/order/find";
     public static final String DELIVERY_ORDER_SAVE = "/delivery/order/save";
     public static final String DELIVERY_ORDER_UPDATE = "/delivery/order/update";
     public static final String DELIVERY_ORDER_DELETE = "/delivery/order/delete";
     public static final String DELIVERY_ORDER_ADMIN_LIST = "/delivery/order/admin/list";
+    public static final String DELIVERY_ORDER_ADMIN_WAREHOUSE_DELIVER = "/delivery/order/admin/warehouse/deliver";
     public static final String DELIVERY_ORDER_ADMIN_FIND = "/delivery/order/admin/find";
     public static final String DELIVERY_ORDER_ADMIN_SAVE = "/delivery/order/admin/save";
     public static final String DELIVERY_ORDER_ADMIN_UPDATE = "/delivery/order/admin/update";
@@ -563,8 +565,8 @@ public class Url {
     public static final String DELIVERY_ORDER_SYSTEM_SAVE = "/delivery/order/system/save";
     public static final String DELIVERY_ORDER_SYSTEM_UPDATE = "/delivery/order/system/update";
     public static final String DELIVERY_ORDER_SYSTEM_DELETE = "/delivery/order/system/delete";
-    
-    //报损报溢单
+
+    // 报损报溢单
     public static final String STOCK_REPLENISH_LIST = "/stock/replenish/list";
     public static final String STOCK_REPLENISH_FIND = "/stock/replenish/find";
     public static final String STOCK_REPLENISH_SAVE = "/stock/replenish/save";
