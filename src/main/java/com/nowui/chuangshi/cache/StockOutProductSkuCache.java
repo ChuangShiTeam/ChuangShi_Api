@@ -38,5 +38,9 @@ public class StockOutProductSkuCache extends Cache {
 
         return result;
     }
+    
+    public Boolean batchSave(List<StockOutProductSku> list) {
+        return stockOutProductSkuDao.batchSave(list);
+    }
 
 }

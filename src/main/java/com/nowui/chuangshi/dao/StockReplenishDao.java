@@ -8,6 +8,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.StockReplenish;
+import com.nowui.chuangshi.model.StockReplenishProductSku;
 
 public class StockReplenishDao extends Dao {
 
@@ -168,5 +169,5 @@ public class StockReplenishDao extends Dao {
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
-
+    
 }

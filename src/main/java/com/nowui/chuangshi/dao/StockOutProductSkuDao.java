@@ -6,6 +6,7 @@ import java.util.List;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.StockOutProductSku;
 
 public class StockOutProductSkuDao extends Dao {
@@ -49,6 +50,17 @@ public class StockOutProductSkuDao extends Dao {
         logSql("stock_out_product_sku", "deleteByStock_out_idAndSystem_version", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+    
+    public Boolean batchSave(List<StockOutProductSku> list) {
+        int[] result = Db.batchSave(list, Constant.BATCH_SIZE);
+
+        for (int i : result) {
+            if (i == 0) {
+                throw new RuntimeException("出库明细记录保存不成功");
+            }
+        }
+        return true;
     }
 
 }

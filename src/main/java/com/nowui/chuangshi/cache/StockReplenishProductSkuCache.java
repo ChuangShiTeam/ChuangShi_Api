@@ -38,5 +38,9 @@ public class StockReplenishProductSkuCache extends Cache {
 
         return result;
     }
+    
+    public Boolean batchSave(List<StockReplenishProductSku> list) {
+        return stockReplenishProductSkuDao.batchSave(list);
+    }
 
 }

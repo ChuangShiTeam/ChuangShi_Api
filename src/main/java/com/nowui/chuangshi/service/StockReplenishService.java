@@ -50,10 +50,6 @@ public class StockReplenishService extends Service {
     	return stockReplenishCache.findByStock_replenish_idAndStock_replenish_type(stock_replenish_id, stock_replenish_type);
     }
 
-    public Boolean save(String stock_replenish_id, String app_id, String warehouse_id, String object_id, String stock_replenish_type, Integer stock_replenish_quantity, String stock_replenish_action, String stock_replenish_status, String system_create_user_id) {
-        return stockReplenishCache.save(stock_replenish_id, app_id, warehouse_id, object_id, stock_replenish_type, stock_replenish_quantity, stock_replenish_action, stock_replenish_status, system_create_user_id);
-    }
-
     public Boolean updateValidateSystem_version(String stock_replenish_id, String warehouse_id, String object_id, String stock_replenish_type, Integer stock_replenish_quantity, String stock_replenish_action, String stock_replenish_status, String system_update_user_id, Integer system_version) {
         return stockReplenishCache.updateValidateSystem_version(stock_replenish_id, warehouse_id, object_id, stock_replenish_type, stock_replenish_quantity, stock_replenish_action, stock_replenish_status, system_update_user_id, system_version);
     }
@@ -68,20 +64,50 @@ public class StockReplenishService extends Service {
         List<StockReplenishProductSku> list = new ArrayList<StockReplenishProductSku>();
         List<Stock> stockList = new ArrayList<Stock>();
         for (StockReplenishProductSku stockReplenishProductSku : stock_replenish_product_sku_list) {
-            Stock stock = stockService.findByWarehouse_idAndProduct_sku_idAndStock_type(warehouse_id, stockReplenishProductSku.getProduct_sku_id(), stock_replenish_type);
+            Stock stock = stockService.findByWarehouse_idAndObject_idAndProduct_sku_id(warehouse_id, object_id, stockReplenishProductSku.getProduct_sku_id());
             //判断库存是否足够报损
             if (StockReplenishAction.BREAKAGE.equals(stock_replenish_action)) {
-                
+                if (stock == null || StringUtils.isBlank(stock.getStock_id())) {
+                    throw new RuntimeException("不能报损库存中不存在的商品");
+                }
+                if (stock.getStock_quantity() < stockReplenishProductSku.getProduct_sku_quantity()) {
+                    throw new RuntimeException("报损数量不能超过库存数量");
+                }
+                stock.setStock_quantity(stock.getStock_quantity() - stockReplenishProductSku.getProduct_sku_quantity());
+                stock.setSystem_update_user_id(system_create_user_id);
+                stock.setSystem_update_time(new Date());
+                stock.setSystem_version(stock.getSystem_version() + 1);
+                stockList.add(stock);
             } else if (StockReplenishAction.OVERFLOW.equals(stock_replenish_action)) {
-                
+                if (stock == null || StringUtils.isBlank(stock.getStock_id())) {
+                    throw new RuntimeException("不能报溢库存中不存在的商品");
+                }
+                stock.setStock_quantity(stock.getStock_quantity() + stockReplenishProductSku.getProduct_sku_quantity());
+                stock.setSystem_update_user_id(system_create_user_id);
+                stock.setSystem_update_time(new Date());
+                stock.setSystem_version(stock.getSystem_version() + 1);
+                stockList.add(stock);
             }
-            if (stock == null || StringUtils.isBlank(stock.getStock_id())) {
-                
-            }
-            
             stockReplenishProductSku.setStock_replenish_id(stock_replenish_id);
+            stockReplenishProductSku.setSystem_create_user_id(system_create_user_id);
+            stockReplenishProductSku.setSystem_create_time(new Date());
+            stockReplenishProductSku.setSystem_update_user_id(system_create_user_id);
+            stockReplenishProductSku.setSystem_update_time(new Date());
+            stockReplenishProductSku.setSystem_version(0);
+            stockReplenishProductSku.setSystem_status(true);
+            list.add(stockReplenishProductSku);
+            stock_replenish_quantity += stockReplenishProductSku.getProduct_sku_quantity();
         }
-        return false;
+        Boolean result = stockReplenishCache.save(stock_replenish_id, app_id, warehouse_id, object_id, stock_replenish_type, stock_replenish_quantity, stock_replenish_action, "", system_create_user_id);
+        if (result) {
+            boolean flag = stockReplenishProductSkuService.batchSave(list);
+            if (flag) {
+                if (stockList != null && stockList.size() > 0) {
+                    stockService.batchUpdate(stockList);
+                }
+            }
+        }
+        return result;
     }
 
 }

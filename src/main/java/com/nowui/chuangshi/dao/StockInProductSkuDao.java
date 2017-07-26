@@ -6,6 +6,7 @@ import java.util.List;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.StockInProductSku;
 
 public class StockInProductSkuDao extends Dao {
@@ -49,6 +50,17 @@ public class StockInProductSkuDao extends Dao {
         logSql("stock_in_product_sku", "deleteByStock_in_idAndSystem_version", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+    
+    public Boolean batchSave(List<StockInProductSku> list) {
+        int[] result = Db.batchSave(list, Constant.BATCH_SIZE);
+
+        for (int i : result) {
+            if (i == 0) {
+                throw new RuntimeException("入库明细记录保存不成功");
+            }
+        }
+        return true;
     }
 
 }
