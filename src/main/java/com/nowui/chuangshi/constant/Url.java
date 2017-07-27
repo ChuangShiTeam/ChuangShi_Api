@@ -585,4 +585,22 @@ public class Url {
 
     // 缓存
     public static final String REMOVE_ALL_CACHE = "/remove/all/cache";
+
+    // 会员证书
+    public static final String CERTIFICATE_LIST = "/certificate/list";
+    public static final String CERTIFICATE_FIND = "/certificate/find";
+    public static final String CERTIFICATE_SAVE = "/certificate/save";
+    public static final String CERTIFICATE_UPDATE = "/certificate/update";
+    public static final String CERTIFICATE_DELETE = "/certificate/delete";
+    public static final String CERTIFICATE_ADMIN_LIST = "/certificate/admin/list";
+    public static final String CERTIFICATE_ADMIN_FIND = "/certificate/admin/find";
+    public static final String CERTIFICATE_ADMIN_SAVE = "/certificate/admin/save";
+    public static final String CERTIFICATE_ADMIN_UPDATE = "/certificate/admin/update";
+    public static final String CERTIFICATE_ADMIN_DELETE = "/certificate/admin/delete";
+    public static final String CERTIFICATE_SYSTEM_LIST = "/certificate/system/list";
+    public static final String CERTIFICATE_SYSTEM_FIND = "/certificate/system/find";
+    public static final String CERTIFICATE_SYSTEM_SAVE = "/certificate/system/save";
+    public static final String CERTIFICATE_SYSTEM_UPDATE = "/certificate/system/update";
+    public static final String CERTIFICATE_SYSTEM_DELETE = "/certificate/system/delete";
+
 }

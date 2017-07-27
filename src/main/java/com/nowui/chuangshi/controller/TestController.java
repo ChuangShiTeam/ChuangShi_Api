@@ -10,8 +10,8 @@ public class TestController {
 
 
     public static void main(String[] args) {
-        BufferedImage sealBufferedImage = ImageUtil.loadImageLocal("/Users/yongqiangzhong/Documents/Workspace/React/website/images/seal.png");
-        BufferedImage templateBufferedImage = ImageUtil.loadImageLocal("/Users/yongqiangzhong/Documents/Workspace/React/website/images/template.png");
+        BufferedImage sealBufferedImage = ImageUtil.loadImageLocal("D:\\tmp\\seal.png");
+        BufferedImage templateBufferedImage = ImageUtil.loadImageLocal("D:\\tmp\\template.png");
 
         String[] numberArray = new String[1];
         numberArray[0] = "授权编号：XX-V-WB-20170418001";
@@ -54,7 +54,7 @@ public class TestController {
         statementDateArray[0] = "2017年4月19日";
         certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, statementDateArray, 635, 987 + 50, 300, 1, new Font("Microsoft YaHei", Font.BOLD, 18));
 
-        ImageUtil.writeImageLocal("/Users/yongqiangzhong/Documents/Workspace/React/website/images/123.jpg", ImageUtil.modifyImagetogeter(sealBufferedImage, certificateBufferedImage));
+        ImageUtil.writeImageLocal("D:\\tmp\\result.jpg", ImageUtil.modifyImagetogeter(sealBufferedImage, certificateBufferedImage));
 
         System.out.println("success");
     }

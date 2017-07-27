@@ -23,6 +23,7 @@ import com.nowui.chuangshi.controller.ApiController;
 import com.nowui.chuangshi.controller.AppController;
 import com.nowui.chuangshi.controller.BillController;
 import com.nowui.chuangshi.controller.CacheController;
+import com.nowui.chuangshi.controller.CertificateController;
 import com.nowui.chuangshi.controller.CodeController;
 import com.nowui.chuangshi.controller.CustomerAttributeController;
 import com.nowui.chuangshi.controller.CustomerController;
@@ -63,6 +64,7 @@ import com.nowui.chuangshi.model.Api;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Bill;
 import com.nowui.chuangshi.model.BillCommission;
+import com.nowui.chuangshi.model.Certificate;
 import com.nowui.chuangshi.model.Customer;
 import com.nowui.chuangshi.model.CustomerAttribute;
 import com.nowui.chuangshi.model.CustomerAttributeValue;
@@ -173,6 +175,8 @@ public class WebConfig extends JFinalConfig {
 
         routes.add("/delivery/order", DeliveryOrderController.class);
 
+        routes.add("/certificate", CertificateController.class);
+
     }
 
     public void configEngine(Engine engine) {
@@ -268,6 +272,8 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_delivery_order", "delivery_order_id", DeliveryOrder.class);
         activeRecordPlugin.addMapping("table_delivery_order_product_sku", "delivery_order_product_sku_id",
                 DeliveryOrderProductSku.class);
+        
+        activeRecordPlugin.addMapping("table_certificate", "certificate_id", Certificate.class);
 
         plugins.add(activeRecordPlugin);
 
