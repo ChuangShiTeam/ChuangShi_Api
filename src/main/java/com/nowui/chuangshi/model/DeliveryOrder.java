@@ -114,16 +114,16 @@ public class DeliveryOrder extends Model<DeliveryOrder> {
         return getStr(DELIVERY_ORDER_RECIEVER_USER_ID);
     }
     
+    public void setDelivery_order_reciever_user_id(String delivery_order_reciever_user_id) {
+        set(DELIVERY_ORDER_RECIEVER_USER_ID, delivery_order_reciever_user_id);
+    }
+    
     public BigDecimal getDelivery_order_amount() {
         return getBigDecimal(DELIVERY_ORDER_AMOUNT);
     }
 
     public void setDelivery_order_amount(BigDecimal delivery_order_amount) {
         set(DELIVERY_ORDER_AMOUNT, delivery_order_amount);
-    }
-
-    public void setDelivery_order_reciever_user_id(String delivery_order_reciever_user_id) {
-        set(DELIVERY_ORDER_RECIEVER_USER_ID, delivery_order_reciever_user_id);
     }
     
     public Integer getDelivery_order_total_quantity() {

@@ -97,6 +97,7 @@
     FROM table_delivery_order
     WHERE system_status = 1
     AND delivery_order_sender_user_id = #p(delivery_order_sender_user_id)
+    ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 

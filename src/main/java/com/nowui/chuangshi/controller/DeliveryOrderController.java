@@ -130,6 +130,7 @@ public class DeliveryOrderController extends Controller {
             result.put(DeliveryOrder.DELIVERY_ORDER_ID, record.get(DeliveryOrder.DELIVERY_ORDER_ID));
             result.put(DeliveryOrder.SYSTEM_VERSION, record.get(DeliveryOrder.SYSTEM_VERSION));
             result.put(DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY, record.get(DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY));
+            result.put(DeliveryOrder.DELIVERY_ORDER_AMOUNT, record.get(DeliveryOrder.DELIVERY_ORDER_AMOUNT));
             result.put(DeliveryOrder.DELIVERY_ORDER_FLOW, record.get(DeliveryOrder.DELIVERY_ORDER_FLOW));
             result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME));
             result.put(User.USER_NAME, record.get(User.USER_NAME));

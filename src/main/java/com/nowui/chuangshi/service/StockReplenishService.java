@@ -66,7 +66,7 @@ public class StockReplenishService extends Service {
         for (StockReplenishProductSku stockReplenishProductSku : stock_replenish_product_sku_list) {
             Stock stock = stockService.findByWarehouse_idAndObject_idAndProduct_sku_id(warehouse_id, object_id, stockReplenishProductSku.getProduct_sku_id());
             //判断库存是否足够报损
-            if (StockReplenishAction.BREAKAGE.equals(stock_replenish_action)) {
+            if (StockReplenishAction.BREAKAGE.getKey().equals(stock_replenish_action)) {
                 if (stock == null || StringUtils.isBlank(stock.getStock_id())) {
                     throw new RuntimeException("不能报损库存中不存在的商品");
                 }
@@ -78,7 +78,7 @@ public class StockReplenishService extends Service {
                 stock.setSystem_update_time(new Date());
                 stock.setSystem_version(stock.getSystem_version() + 1);
                 stockList.add(stock);
-            } else if (StockReplenishAction.OVERFLOW.equals(stock_replenish_action)) {
+            } else if (StockReplenishAction.OVERFLOW.getKey().equals(stock_replenish_action)) {
                 if (stock == null || StringUtils.isBlank(stock.getStock_id())) {
                     throw new RuntimeException("不能报溢库存中不存在的商品");
                 }
@@ -87,7 +87,7 @@ public class StockReplenishService extends Service {
                 stock.setSystem_update_time(new Date());
                 stock.setSystem_version(stock.getSystem_version() + 1);
                 stockList.add(stock);
-            }
+            } 
             stockReplenishProductSku.setStock_replenish_id(stock_replenish_id);
             stockReplenishProductSku.setSystem_create_user_id(system_create_user_id);
             stockReplenishProductSku.setSystem_create_time(new Date());
