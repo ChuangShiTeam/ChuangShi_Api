@@ -25,6 +25,7 @@ import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Bill;
 import com.nowui.chuangshi.model.BillCommission;
+import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.DeliveryOrderProductSku;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.ProductSkuCommission;
@@ -409,51 +410,87 @@ public class WeChatController extends Controller {
         parameter.put("total_fee", total_fee);
         parameter.put("trade_type", trade_type);
         parameter.put("transaction_id", transaction_id);
+        
+        if (Constant.WX_ATTACH_TRADE.equals(attach)) {   //订单支付
+            // 根据订单号查询订单
+            Trade trade = tradeService.findByTrade_id(out_trade_no);
+            if (trade == null) {
+                renderText(Constant.WX_FAIL_MSG);
+            }
+            App app = appService.findByApp_id(trade.getApp_id());
+            if (app == null) {
+                renderText(Constant.WX_FAIL_MSG);
+            }
+            String wx_app_id = app.getWechat_app_id();
+            if (!appid.equals(wx_app_id)) {
+                renderText(Constant.WX_FAIL_MSG);
+            }
+            String mch_key = app.getWechat_mch_key();
 
-        // 根据订单号查询订单
-        Trade trade = tradeService.findByTrade_id(out_trade_no);
-        if (trade == null) {
-            renderText(Constant.WX_FAIL_MSG);
-        }
-        App app = appService.findByApp_id(trade.getApp_id());
-        if (app == null) {
-            renderText(Constant.WX_FAIL_MSG);
-        }
-        String wx_app_id = app.getWechat_app_id();
-        if (!appid.equals(wx_app_id)) {
-            renderText(Constant.WX_FAIL_MSG);
-        }
-        String mch_key = app.getWechat_mch_key();
+            String endsign = PaymentKit.createSign(parameter, mch_key);
 
-        String endsign = PaymentKit.createSign(parameter, mch_key);
+            if (sign.equals(endsign)) {
+                BigDecimal trade_amount = new BigDecimal(total_fee).divide(BigDecimal.valueOf(100));
+                String trade_pay_type = PayType.WECHAT.getKey();
+                String trade_pay_number = transaction_id;
+                String trade_pay_account = openid;
+                String trade_pay_time = time_end;
+                String trade_pay_result = result;
+                Boolean trade_status = true;
 
-        if (sign.equals(endsign)) {
-            BigDecimal trade_amount = new BigDecimal(total_fee).divide(BigDecimal.valueOf(100));
-            String trade_pay_type = PayType.WECHAT.getKey();
-            String trade_pay_number = transaction_id;
-            String trade_pay_account = openid;
-            String trade_pay_time = time_end;
-            String trade_pay_result = result;
-            Boolean trade_status = true;
+                boolean is_update = tradeService.updateSend(trade.getTrade_id(), trade.getUser_id(), trade_amount,
+                        trade_pay_type, trade_pay_number, trade_pay_account, trade_pay_time, trade_pay_result, trade_status,
+                        trade.getSystem_version());
 
-            boolean is_update = tradeService.updateSend(trade.getTrade_id(), trade.getUser_id(), trade_amount,
-                    trade_pay_type, trade_pay_number, trade_pay_account, trade_pay_time, trade_pay_result, trade_status,
-                    trade.getSystem_version());
-
-            if (is_update) {
-                // TODO 消息队列通知计算账单和分成
-                this.payChange(trade.getTrade_id());
-                // 判断应用是否需要生成发货单
-                if (app.getApp_is_create_warehouse() && app.getApp_is_delivery()) {
-                    this.createDeliveryOrder(trade.getTrade_id());
+                if (is_update) {
+                    // TODO 消息队列通知计算账单和分成
+                    this.payChange(trade.getTrade_id());
+                    // 判断应用是否需要生成发货单
+                    if (app.getApp_is_create_warehouse() && app.getApp_is_delivery()) {
+                        this.createDeliveryOrder(trade.getTrade_id());
+                    }
+                    renderText(Constant.WX_SUCCESS_MSG);
+                } else {
+                    renderText(Constant.WX_FAIL_MSG);
                 }
-                renderText(Constant.WX_SUCCESS_MSG);
+
             } else {
                 renderText(Constant.WX_FAIL_MSG);
             }
+        } else if (Constant.WX_ATTACH_DELIVERY_ORDER.equals(attach)){  //发货单支付
+            DeliveryOrder deliveryOrder = deliveryOrderService.findByDelivery_order_id(out_trade_no);
+            if (deliveryOrder == null) {
+                renderText(Constant.WX_FAIL_MSG);
+            }
+            App app = appService.findByApp_id(deliveryOrder.getApp_id());
+            if (app == null) {
+                renderText(Constant.WX_FAIL_MSG);
+            }
+            String wx_app_id = app.getWechat_app_id();
+            if (!appid.equals(wx_app_id)) {
+                renderText(Constant.WX_FAIL_MSG);
+            }
+            String mch_key = app.getWechat_mch_key();
 
+            String endsign = PaymentKit.createSign(parameter, mch_key);
+
+            if (sign.equals(endsign)) {
+                String delivery_order_pay_type = PayType.WECHAT.getKey();
+                String delivery_order_pay_number = transaction_id;
+                String delivery_order_pay_account = openid;
+                String delivery_order_pay_time = time_end;
+                String delivery_order_pay_result = result;
+                boolean is_update = deliveryOrderService.updatePay(deliveryOrder.getDelivery_order_id(), delivery_order_pay_type, delivery_order_pay_number, delivery_order_pay_account, delivery_order_pay_time, delivery_order_pay_result, deliveryOrder.getDelivery_order_user_id(), deliveryOrder.getSystem_version());
+                if (is_update) {
+                    renderText(Constant.WX_SUCCESS_MSG);
+                } else {
+                    renderText(Constant.WX_FAIL_MSG);
+                }
+            } else {
+                renderText(Constant.WX_FAIL_MSG);
+            }
         } else {
-            renderText(Constant.WX_FAIL_MSG);
+            renderText(Constant.WX_FAIL_MSG); 
         }
     }
 

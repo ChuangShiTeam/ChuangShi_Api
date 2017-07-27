@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.cache.TradeCache;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Trade;
@@ -143,7 +144,7 @@ public class TradeService extends Service {
 
         SortedMap<String, String> parameter = new TreeMap<String, String>();
         parameter.put("appid", app_id);
-        parameter.put("attach", "TRADE");
+        parameter.put("attach", Constant.WX_ATTACH_TRADE);
         parameter.put("body", body);
         parameter.put("mch_id", mch_id);
         parameter.put("nonce_str", nonce_str);

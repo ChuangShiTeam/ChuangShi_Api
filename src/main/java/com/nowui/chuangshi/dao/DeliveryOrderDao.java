@@ -213,6 +213,20 @@ public class DeliveryOrderDao extends Dao {
         
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
+    
+    public Boolean updateDelivery_order_is_payByDelivery_order_idAndSystem_version(String delivery_order_id, Boolean delivery_order_is_pay, String system_update_user_id, Integer system_version) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(DeliveryOrder.DELIVERY_ORDER_ID, delivery_order_id);
+        sqlMap.put(DeliveryOrder.DELIVERY_ORDER_IS_PAY, delivery_order_is_pay);
+        sqlMap.put(DeliveryOrder.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(DeliveryOrder.SYSTEM_UPDATE_TIME, new Date());
+        sqlMap.put(DeliveryOrder.SYSTEM_VERSION, system_version);
+        SqlPara sqlPara = Db.getSqlPara("delivery_order.updateDelivery_order_is_payByDelivery_order_idAndSystem_version", sqlMap);
+        
+        logSql("delivery_order", "updateDelivery_order_is_payByDelivery_order_idAndSystem_version", sqlPara);
+        
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
 
     public Boolean deleteByDelivery_order_idAndSystem_version(String delivery_order_id, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
