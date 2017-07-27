@@ -16,7 +16,6 @@ import com.nowui.chuangshi.model.StockReplenish;
 import com.nowui.chuangshi.model.StockReplenishProductSku;
 import com.nowui.chuangshi.service.StockReplenishProductSkuService;
 import com.nowui.chuangshi.service.StockReplenishService;
-import com.nowui.chuangshi.util.Util;
 
 public class StockReplenishController extends Controller {
 
@@ -253,7 +252,6 @@ public class StockReplenishController extends Controller {
         validate(StockReplenish.APP_ID, StockReplenish.WAREHOUSE_ID, StockReplenish.OBJECT_ID, StockReplenish.STOCK_REPLENISH_TYPE, StockReplenish.STOCK_REPLENISH_QUANTITY, StockReplenish.STOCK_REPLENISH_ACTION, StockReplenish.STOCK_REPLENISH_STATUS);
 
         StockReplenish model = getModel(StockReplenish.class);
-        String stock_replenish_id = Util.getRandomUUID();
         String request_user_id = getRequest_user_id();
         
         String object_id = model.getObject_id();
