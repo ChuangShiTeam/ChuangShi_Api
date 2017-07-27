@@ -81,5 +81,9 @@ public class Constant {
     public static final String WX_SUCCESS_MSG = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
     
     public static final String WX_FAIL_MSG = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[]]></return_msg></xml>";
+    
+    public static final String WX_ATTACH_TRADE = "TRADE";
+    
+    public static final String WX_ATTACH_DELIVERY_ORDER = "DELIVERY_ORDER";
 
 }

@@ -16,6 +16,7 @@ import com.nowui.chuangshi.model.StockOutProductSku;
 import com.nowui.chuangshi.model.Warehouse;
 import com.nowui.chuangshi.type.DeliveryOrderFlow;
 import com.nowui.chuangshi.type.StockType;
+import com.nowui.chuangshi.type.TradeFlow;
 import com.nowui.chuangshi.util.Util;
 
 public class DeliveryOrderService extends Service {
@@ -33,6 +34,8 @@ public class DeliveryOrderService extends Service {
     private StockOutService stockOutService = new StockOutService();
     
     private TradeService tradeService = new TradeService();
+    
+    private DeliveryOrderPayService deliveryOrderPayService = new DeliveryOrderPayService();
     
     public Integer countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name(String app_id, String user_name, String delivery_order_receiver_name) {
         return deliveryOrderCache.countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name(app_id, user_name, delivery_order_receiver_name);
@@ -158,6 +161,10 @@ public class DeliveryOrderService extends Service {
     public Boolean updateDelivery_order_flowOrDelivery_order_amountByDelivery_order_idValidateSystem_version(String delivery_order_id, String delivery_order_flow, BigDecimal delivery_order_amount, String system_update_user_id, Integer system_version) {
         return deliveryOrderCache.updateDelivery_order_flowOrDelivery_order_amountByDelivery_order_idValidateSystem_version(delivery_order_id, delivery_order_flow, delivery_order_amount, system_update_user_id, system_version);
     }
+    
+    public Boolean updateDelivery_order_is_payByDelivery_order_idValidateSystem_version(String delivery_order_id, Boolean delivery_order_is_pay, String system_update_user_id, Integer system_version) {
+        return deliveryOrderCache.updateDelivery_order_is_payByDelivery_order_idValidateSystem_version(delivery_order_id, delivery_order_is_pay, system_update_user_id, system_version);
+    }
 
 	public void updateFinish(String delivery_order_id) {
 		DeliveryOrder deliveryOrder = findByDelivery_order_id(delivery_order_id);
@@ -165,6 +172,19 @@ public class DeliveryOrderService extends Service {
 			throw new RuntimeException("找不到发货单");
 		}
 		this.updateDelivery_order_flowAndDelivery_is_completeByDelivery_order_idValidateSystem_version(delivery_order_id, DeliveryOrderFlow.COMPLETE.getKey(), true, deliveryOrder.getSystem_create_user_id(), deliveryOrder.getSystem_version());
+	}
+	
+	public Boolean updatePay(String delivery_order_id, String delivery_order_pay_type,
+            String delivery_order_pay_number, String delivery_order_pay_account, String delivery_order_pay_time, String delivery_order_pay_result,
+            String user_id, Integer system_version) {
+	    Boolean flag = deliveryOrderPayService.save(delivery_order_id, delivery_order_pay_type, delivery_order_pay_number, delivery_order_pay_account,
+                delivery_order_pay_time, delivery_order_pay_result, user_id);
+	    if (flag) {
+	        flag = updateDelivery_order_is_payByDelivery_order_idValidateSystem_version(
+	                delivery_order_id, true, user_id, system_version);
+	    }
+        return flag;
+	    
 	}
 
 }

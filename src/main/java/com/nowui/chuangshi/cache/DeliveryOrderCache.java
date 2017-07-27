@@ -106,6 +106,22 @@ public class DeliveryOrderCache extends Cache {
         
         return result;
     }
+    
+    public Boolean updateDelivery_order_is_payByDelivery_order_idValidateSystem_version(String delivery_order_id, Boolean delivery_order_is_pay, String system_update_user_id, Integer system_version) {
+        DeliveryOrder delivery_order = findByDelivery_order_id(delivery_order_id);
+        if (!delivery_order.getSystem_version().equals(system_version)) {
+            throw new RuntimeException(Constant.ERROR_VERSION);
+        }
+        
+        boolean result = deliveryOrderDao.updateDelivery_order_is_payByDelivery_order_idAndSystem_version(delivery_order_id, delivery_order_is_pay, system_update_user_id, system_version);
+        
+        if (result) {
+            CacheUtil.remove(DELIVERY_ORDER_BY_DELIVERY_ORDER_ID_CACHE, delivery_order_id);
+        }
+        
+        return result;
+    }
+
 
     public Boolean deleteByDelivery_order_idAndSystem_update_user_idValidateSystem_version(String delivery_order_id, String system_update_user_id, Integer system_version) {
         DeliveryOrder delivery_order = findByDelivery_order_id(delivery_order_id);

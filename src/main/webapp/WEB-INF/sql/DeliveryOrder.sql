@@ -219,6 +219,17 @@
     AND delivery_order_id = #p(delivery_order_id)
     AND system_version = #p(system_version)
   #end
+  
+  #sql("updateDelivery_order_is_payByDelivery_order_idAndSystem_version")
+    UPDATE table_delivery_order SET
+    delivery_order_is_pay = #p(delivery_order_is_pay),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND delivery_order_id = #p(delivery_order_id)
+    AND system_version = #p(system_version)
+  #end
 
   #sql("deleteByDelivery_order_idAndSystem_version")
     UPDATE table_delivery_order SET
