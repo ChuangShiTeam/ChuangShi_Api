@@ -170,7 +170,7 @@ public class ExpressController extends Controller {
             express.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
         } else if (StringUtils.isNotBlank(express.getDelivery_order_id())) {
             List<Record> deliveryOrderProductSkuList = deliveryOrderProductSkuService.listByDelivery_order_id(express.getDelivery_order_id());
-            ProductSku productSku = productSkuService.findByProduct_sku_id(deliveryOrderProductSkuList.get(0).get("product_sku_id"));
+            ProductSku productSku = productSkuService.findByProduct_sku_id(deliveryOrderProductSkuList.get(0).getStr("product_sku_id"));
             Product product = productService.findByProduct_id(productSku.getProduct_id());
 
             express.put(Product.PRODUCT_NAME, product.getProduct_name());
