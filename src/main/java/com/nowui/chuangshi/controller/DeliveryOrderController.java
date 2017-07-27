@@ -118,12 +118,11 @@ public class DeliveryOrderController extends Controller {
         JSONObject jsonObject = getParameterJSONObject();
         String delivery_order_receiver_name = jsonObject.getString(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME);
         String user_name = jsonObject.getString("user_name");
-        String express_no = jsonObject.getString("express_no");
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = deliveryOrderService.countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no(request_app_id, user_name, delivery_order_receiver_name, express_no);
-        List<Record> recordList = deliveryOrderService.listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit(request_app_id, user_name, delivery_order_receiver_name, express_no, getM(), getN());
+        Integer total = deliveryOrderService.countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name(request_app_id, user_name, delivery_order_receiver_name);
+        List<Record> recordList = deliveryOrderService.listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit(request_app_id, user_name, delivery_order_receiver_name, getM(), getN());
 
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
         for (Record record : recordList) {
@@ -131,6 +130,7 @@ public class DeliveryOrderController extends Controller {
             result.put(DeliveryOrder.DELIVERY_ORDER_ID, record.get(DeliveryOrder.DELIVERY_ORDER_ID));
             result.put(DeliveryOrder.SYSTEM_VERSION, record.get(DeliveryOrder.SYSTEM_VERSION));
             result.put(DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY, record.get(DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY));
+            result.put(DeliveryOrder.DELIVERY_ORDER_AMOUNT, record.get(DeliveryOrder.DELIVERY_ORDER_AMOUNT));
             result.put(DeliveryOrder.DELIVERY_ORDER_FLOW, record.get(DeliveryOrder.DELIVERY_ORDER_FLOW));
             result.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME));
             result.put(User.USER_NAME, record.get(User.USER_NAME));
@@ -224,10 +224,9 @@ public class DeliveryOrderController extends Controller {
         String app_id = jsonObject.getString(DeliveryOrder.APP_ID);
         String delivery_order_receiver_name = jsonObject.getString(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME);
         String user_name = jsonObject.getString("user_name");
-        String express_no = jsonObject.getString("express_no");
 
-        Integer total = deliveryOrderService.countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no(app_id, user_name, delivery_order_receiver_name, express_no);
-        List<Record> recordList = deliveryOrderService.listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit(app_id, user_name, delivery_order_receiver_name, express_no, getM(), getN());
+        Integer total = deliveryOrderService.countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name(app_id, user_name, delivery_order_receiver_name);
+        List<Record> recordList = deliveryOrderService.listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit(app_id, user_name, delivery_order_receiver_name, getM(), getN());
 
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
         for (Record record : recordList) {

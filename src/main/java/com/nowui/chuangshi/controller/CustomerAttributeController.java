@@ -150,13 +150,13 @@ public class CustomerAttributeController extends Controller {
         List<CustomerAttribute> resultList = customerAttributeService.listByApp_id(request_app_id);
 
         for (CustomerAttribute result : resultList) {
+            result.put(CustomerAttributeValue.CUSTOMER_ATTRIBUTE_VALUE, null);
+
             for (CustomerAttributeValue customerAttributeValue : list) {
                 if (customerAttributeValue.getCustomer_attribute_id().equals(result.getCustomer_attribute_id())) {
-                    result.set(CustomerAttributeValue.CUSTOMER_ATTRIBUTE_VALUE,
+                    result.put(CustomerAttributeValue.CUSTOMER_ATTRIBUTE_VALUE,
                             customerAttributeValue.getCustomer_attribute_value());
                     break;
-                } else {
-                    result.set(CustomerAttributeValue.CUSTOMER_ATTRIBUTE_VALUE, null);
                 }
             }
 

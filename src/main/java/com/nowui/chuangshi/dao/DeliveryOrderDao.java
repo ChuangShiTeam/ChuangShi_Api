@@ -15,29 +15,27 @@ import com.nowui.chuangshi.model.User;
 
 public class DeliveryOrderDao extends Dao {
 
-    public Integer countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no(String app_id, String user_name, String delivery_order_receiver_name, String express_no) {
+    public Integer countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name(String app_id, String user_name, String delivery_order_receiver_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(DeliveryOrder.APP_ID, app_id);
         sqlMap.put(User.USER_NAME, user_name);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, delivery_order_receiver_name);
-        sqlMap.put(Express.EXPRESS_NO, express_no);
-        SqlPara sqlPara = Db.getSqlPara("delivery_order.countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("delivery_order.countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name", sqlMap);
 
-        logSql("delivery_order", "countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no", sqlPara);
+        logSql("delivery_order", "countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no(String app_id, String user_name, String delivery_order_receiver_name, String express_no) {
+    public Integer countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name(String app_id, String user_name, String delivery_order_receiver_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(DeliveryOrder.APP_ID, app_id);
         sqlMap.put(User.USER_NAME, user_name);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, delivery_order_receiver_name);
-        sqlMap.put(Express.EXPRESS_NO, express_no);
-        SqlPara sqlPara = Db.getSqlPara("delivery_order.countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("delivery_order.countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name", sqlMap);
 
-        logSql("delivery_order", "countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no", sqlPara);
+        logSql("delivery_order", "countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
@@ -67,32 +65,30 @@ public class DeliveryOrderDao extends Dao {
         return new DeliveryOrder().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Record> listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit(String app_id, String user_name, String delivery_order_receiver_name, String express_no, int m, int n) {
+    public List<Record> listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit(String app_id, String user_name, String delivery_order_receiver_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(DeliveryOrder.APP_ID, app_id);
         sqlMap.put(User.USER_NAME, user_name);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, delivery_order_receiver_name);
-        sqlMap.put(Express.EXPRESS_NO, express_no);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("delivery_order.listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("delivery_order.listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit", sqlMap);
 
-        logSql("delivery_order", "listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit", sqlPara);
+        logSql("delivery_order", "listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit", sqlPara);
 
         return Db.find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Record> listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit(String app_id, String user_name, String delivery_order_receiver_name, String express_no, int m, int n) {
+    public List<Record> listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit(String app_id, String user_name, String delivery_order_receiver_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(DeliveryOrder.APP_ID, app_id);
         sqlMap.put(User.USER_NAME, user_name);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, delivery_order_receiver_name);
-        sqlMap.put(Express.EXPRESS_NO, express_no);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("delivery_order.listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("delivery_order.listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit", sqlMap);
 
-        logSql("delivery_order", "listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit", sqlPara);
+        logSql("delivery_order", "listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit", sqlPara);
 
         return Db.find(sqlPara.getSql(), sqlPara.getPara());
     }

@@ -34,24 +34,24 @@ public class DeliveryOrderService extends Service {
     
     private TradeService tradeService = new TradeService();
     
-    public Integer countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no(String app_id, String user_name, String delivery_order_receiver_name, String express_no) {
-        return deliveryOrderCache.countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no(app_id, user_name, delivery_order_receiver_name, express_no);
+    public Integer countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name(String app_id, String user_name, String delivery_order_receiver_name) {
+        return deliveryOrderCache.countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name(app_id, user_name, delivery_order_receiver_name);
     }
 
-    public Integer countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no(String app_id, String user_name, String delivery_order_receiver_name, String express_no) {
-        return deliveryOrderCache.countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no(app_id, user_name, delivery_order_receiver_name, express_no);
+    public Integer countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name(String app_id, String user_name, String delivery_order_receiver_name) {
+        return deliveryOrderCache.countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name(app_id, user_name, delivery_order_receiver_name);
     }
 
     public List<DeliveryOrder> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         return deliveryOrderCache.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n);
     }
 
-    public List<Record> listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit(String app_id, String user_name, String delivery_order_receiver_name, String express_no, int m, int n) {
-        return deliveryOrderCache.listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit(app_id, user_name, delivery_order_receiver_name, express_no, m, n);
+    public List<Record> listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit(String app_id, String user_name, String delivery_order_receiver_name, int m, int n) {
+        return deliveryOrderCache.listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit(app_id, user_name, delivery_order_receiver_name, m, n);
     }
 
-    public List<Record> listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit(String app_id, String user_name, String delivery_order_receiver_name, String express_no, int m, int n) {
-        return deliveryOrderCache.listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit(app_id, user_name, delivery_order_receiver_name, express_no, m, n);
+    public List<Record> listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit(String app_id, String user_name, String delivery_order_receiver_name, int m, int n) {
+        return deliveryOrderCache.listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit(app_id, user_name, delivery_order_receiver_name, m, n);
     }
     
     public List<Record> listByDelivery_order_sender_user_idAndLimit(String delivery_order_sender_user_id, int m, int n) {

@@ -16,7 +16,6 @@ import com.nowui.chuangshi.model.StockReplenish;
 import com.nowui.chuangshi.model.StockReplenishProductSku;
 import com.nowui.chuangshi.service.StockReplenishProductSkuService;
 import com.nowui.chuangshi.service.StockReplenishService;
-import com.nowui.chuangshi.util.Util;
 
 public class StockReplenishController extends Controller {
 
@@ -144,7 +143,7 @@ public class StockReplenishController extends Controller {
         List<StockReplenish> resultList = stockReplenishService.listByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit(request_app_id, model.getWarehouse_id(), model.getStock_replenish_type(), model.getUser_name(), getM(), getN());
 
         for (StockReplenish result : resultList) {
-            result.keep(StockReplenish.STOCK_REPLENISH_ID, StockReplenish.STOCK_REPLENISH_QUANTITY, StockReplenish.STOCK_REPLENISH_ACTION, StockReplenish.USER_NAME, StockReplenish.WAREHOUSE_NAME, StockReplenish.SYSTEM_VERSION);
+            result.keep(StockReplenish.STOCK_REPLENISH_ID, StockReplenish.STOCK_REPLENISH_QUANTITY, StockReplenish.STOCK_REPLENISH_ACTION, StockReplenish.USER_NAME, StockReplenish.WAREHOUSE_NAME, StockReplenish.SYSTEM_CREATE_TIME, StockReplenish.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -159,13 +158,15 @@ public class StockReplenishController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        StockReplenish stock_replenish = stockReplenishService.findByStock_replenish_id(model.getStock_replenish_id());
+        StockReplenish bean = stockReplenishService.findByStock_replenish_id(model.getStock_replenish_id());
 
-        authenticateApp_id(stock_replenish.getApp_id());
+        authenticateApp_id(bean.getApp_id());
+        
+        StockReplenish stock_replenish = stockReplenishService.findByStock_replenish_idAndStock_replenish_type(bean.getStock_replenish_id(), bean.getStock_replenish_type());
         
         List<StockReplenishProductSku> stock_replenish_product_sku_list = stockReplenishProductSkuService.listByStock_replenish_id(stock_replenish.getStock_replenish_id());
 
-        stock_replenish.keep(StockReplenish.STOCK_REPLENISH_ID, StockReplenish.STOCK_REPLENISH_QUANTITY, StockReplenish.STOCK_REPLENISH_ACTION, StockReplenish.USER_NAME, StockReplenish.WAREHOUSE_NAME, StockReplenish.SYSTEM_VERSION);
+        stock_replenish.keep(StockReplenish.STOCK_REPLENISH_ID, StockReplenish.STOCK_REPLENISH_QUANTITY, StockReplenish.STOCK_REPLENISH_ACTION, StockReplenish.USER_NAME, StockReplenish.WAREHOUSE_ID, StockReplenish.SYSTEM_VERSION);
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("stock_replenish", stock_replenish);
@@ -253,7 +254,6 @@ public class StockReplenishController extends Controller {
         validate(StockReplenish.APP_ID, StockReplenish.WAREHOUSE_ID, StockReplenish.OBJECT_ID, StockReplenish.STOCK_REPLENISH_TYPE, StockReplenish.STOCK_REPLENISH_QUANTITY, StockReplenish.STOCK_REPLENISH_ACTION, StockReplenish.STOCK_REPLENISH_STATUS);
 
         StockReplenish model = getModel(StockReplenish.class);
-        String stock_replenish_id = Util.getRandomUUID();
         String request_user_id = getRequest_user_id();
         
         String object_id = model.getObject_id();
