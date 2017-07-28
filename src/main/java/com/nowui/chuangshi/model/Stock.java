@@ -16,6 +16,9 @@ public class Stock extends Model<Stock> {
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用id或会员id")
     public static final String OBJECT_ID = "object_id";
+    
+    @Column(type = ColumnType.VARCHAR, length = 25, comment = "批次")
+    public static final String STOCK_BATCH = "stock_batch";
 
     @Column(type = ColumnType.VARCHAR, length = 25, comment = "应用或会员")
     public static final String STOCK_TYPE = "stock_type";
@@ -74,6 +77,14 @@ public class Stock extends Model<Stock> {
 
     public void setObject_id(String object_id) {
         set(OBJECT_ID, object_id);
+    }
+    
+    public String getStock_batch() {
+        return getStr(STOCK_BATCH);
+    }
+
+    public void setStock_batch(String stock_batch) {
+        set(STOCK_BATCH, stock_batch);
     }
 
     public String getStock_type() {
