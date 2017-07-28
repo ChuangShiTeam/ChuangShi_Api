@@ -28,8 +28,8 @@ public class StockOutController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = stockOutService.countByApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_name(request_app_id, model.getWarehouse_id(), model.getStock_out_type(), model.getUser_name());
-        List<StockOut> resultList = stockOutService.listByApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_nameAndLimit(request_app_id, model.getWarehouse_id(), model.getStock_out_type(), model.getUser_name(), getM(), getN());
+        Integer total = stockOutService.countByApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_name(request_app_id, model.getWarehouse_id(), model.getStock_out_type(), model.getStock_out_batch(), model.getUser_name());
+        List<StockOut> resultList = stockOutService.listByApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_nameAndLimit(request_app_id, model.getWarehouse_id(), model.getStock_out_type(), model.getStock_out_batch(), model.getUser_name(), getM(), getN());
 
         for (StockOut result : resultList) {
             result.keep(StockOut.STOCK_OUT_ID, StockOut.WAREHOUSE_NAME, StockOut.USER_NAME, StockOut.STOCK_OUT_QUANTITY, StockOut.SYSTEM_CREATE_TIME, StockOut.SYSTEM_VERSION);
@@ -68,8 +68,8 @@ public class StockOutController extends Controller {
 
         StockOut model = getModel(StockOut.class);
 
-        Integer total = stockOutService.countByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_name(model.getApp_id(), model.getWarehouse_id(), model.getStock_out_type(), model.getUser_name());
-        List<StockOut> resultList = stockOutService.listByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_nameAndLimit(model.getApp_id(), model.getWarehouse_id(), model.getStock_out_type(), model.getUser_name(), getM(), getN());
+        Integer total = stockOutService.countByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_name(model.getApp_id(), model.getWarehouse_id(), model.getStock_out_type(), model.getStock_out_batch(), model.getUser_name());
+        List<StockOut> resultList = stockOutService.listByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_nameAndLimit(model.getApp_id(), model.getWarehouse_id(), model.getStock_out_type(), model.getStock_out_batch(), model.getUser_name(), getM(), getN());
 
         for (StockOut result : resultList) {
             result.keep(StockOut.STOCK_OUT_ID, StockOut.SYSTEM_VERSION);
