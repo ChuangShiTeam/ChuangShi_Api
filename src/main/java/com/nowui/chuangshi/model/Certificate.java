@@ -25,11 +25,8 @@ public class Certificate extends Model<Certificate> {
     @Column(type = ColumnType.DATETIME, length = 0, comment = "授权结束日期")
     public static final String CERTIFICATE_END_DATE = "certificate_end_date";
 
-    @Column(type = ColumnType.VARCHAR, length = 250, comment = "授权内容")
-    public static final String CERTIFICATE_CONTENT = "certificate_content";
-
-    @Column(type = ColumnType.VARCHAR, length = 100, comment = "授权文件id")
-    public static final String CERTIFICATE_FILE = "certificate_file";
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "")
+    public static final String CERTIFICATE_IS_PAY = "certificate_is_pay";
 
     public String getCertificate_id() {
         return getStr(CERTIFICATE_ID);
@@ -79,20 +76,12 @@ public class Certificate extends Model<Certificate> {
         set(CERTIFICATE_END_DATE, certificate_end_date);
     }
 
-    public String getCertificate_content() {
-        return getStr(CERTIFICATE_CONTENT);
+    public Boolean getCertificate_is_pay() {
+        return getBoolean(CERTIFICATE_IS_PAY);
     }
 
-    public void setCertificate_content(String certificate_content) {
-        set(CERTIFICATE_CONTENT, certificate_content);
-    }
-
-    public String getCertificate_file() {
-        return getStr(CERTIFICATE_FILE);
-    }
-
-    public void setCertificate_file(String certificate_file) {
-        set(CERTIFICATE_FILE, certificate_file);
+    public void setCertificate_is_pay(Boolean certificate_is_pay) {
+        set(CERTIFICATE_IS_PAY, certificate_is_pay);
     }
 
 }

@@ -586,7 +586,7 @@ public class Url {
     // 缓存
     public static final String REMOVE_ALL_CACHE = "/remove/all/cache";
 
-    // 会员证书
+    // 会员证书记录
     public static final String CERTIFICATE_LIST = "/certificate/list";
     public static final String CERTIFICATE_FIND = "/certificate/find";
     public static final String CERTIFICATE_SAVE = "/certificate/save";
@@ -602,5 +602,22 @@ public class Url {
     public static final String CERTIFICATE_SYSTEM_SAVE = "/certificate/system/save";
     public static final String CERTIFICATE_SYSTEM_UPDATE = "/certificate/system/update";
     public static final String CERTIFICATE_SYSTEM_DELETE = "/certificate/system/delete";
+
+    // 会员证书文件记录
+    public static final String CERTIFICATE_IMAGE_LIST = "/certificate/image/list";
+    public static final String CERTIFICATE_IMAGE_FIND = "/certificate/image/find";
+    public static final String CERTIFICATE_IMAGE_SAVE = "/certificate/image/save";
+    public static final String CERTIFICATE_IMAGE_UPDATE = "/certificate/image/update";
+    public static final String CERTIFICATE_IMAGE_DELETE = "/certificate/image/delete";
+    public static final String CERTIFICATE_IMAGE_ADMIN_LIST = "/certificate/image/admin/list";
+    public static final String CERTIFICATE_IMAGE_ADMIN_FIND = "/certificate/image/admin/find";
+    public static final String CERTIFICATE_IMAGE_ADMIN_SAVE = "/certificate/image/admin/save";
+    public static final String CERTIFICATE_IMAGE_ADMIN_UPDATE = "/certificate/image/admin/update";
+    public static final String CERTIFICATE_IMAGE_ADMIN_DELETE = "/certificate/image/admin/delete";
+    public static final String CERTIFICATE_IMAGE_SYSTEM_LIST = "/certificate/image/system/list";
+    public static final String CERTIFICATE_IMAGE_SYSTEM_FIND = "/certificate/image/system/find";
+    public static final String CERTIFICATE_IMAGE_SYSTEM_SAVE = "/certificate/image/system/save";
+    public static final String CERTIFICATE_IMAGE_SYSTEM_UPDATE = "/certificate/image/system/update";
+    public static final String CERTIFICATE_IMAGE_SYSTEM_DELETE = "/certificate/image/system/delete";
 
 }

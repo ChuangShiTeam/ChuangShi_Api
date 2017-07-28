@@ -38,7 +38,8 @@ public class CustomerAttributeValueCache extends Cache {
     }
 
     public Boolean deleteByCustomer_idAndSystem_update_user_id(String customer_id, String system_update_user_id) {
-        boolean result = customerAttributeValueDao.deleteByCustomer_idAndSystem_update_user_id(customer_id, system_update_user_id);
+        boolean result = customerAttributeValueDao.deleteByCustomer_idAndSystem_update_user_id(customer_id,
+                system_update_user_id);
 
         if (result) {
             CacheUtil.remove(CUSTOMER_ATTRIBUTE_VALUE_BY_CUSTOMER_ID_CACHE, customer_id);

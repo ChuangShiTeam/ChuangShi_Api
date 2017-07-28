@@ -15,7 +15,7 @@
     WHERE system_status = 1
     #if(app_id)
     AND app_id = #p(app_id)
-    #end
+    #end为
     #if(ertificate_number)
     #set(certificate_number = "%" + certificate_number + "%")
     AND certificate_number LIKE #p(certificate_number)
@@ -71,6 +71,14 @@
     AND certificate_id = #p(certificate_id)
   #end
 
+  #sql("findByUser_id")
+    SELECT
+    *
+    FROM table_certificate
+    WHERE system_status = 1
+    AND user_id = #p(user_id)
+  #end
+
   #sql("save")
     INSERT INTO table_certificate (
       certificate_id,
@@ -79,8 +87,6 @@
       certificate_number,
       certificate_start_date,
       certificate_end_date,
-      certificate_content,
-      certificate_file,
       system_create_user_id,
       system_create_time,
       system_update_user_id,
@@ -94,8 +100,6 @@
       #p(certificate_number),
       #p(certificate_start_date),
       #p(certificate_end_date),
-      #p(certificate_content),
-      #p(certificate_file),
       #p(system_create_user_id),
       #p(system_create_time),
       #p(system_update_user_id),
@@ -111,8 +115,6 @@
     certificate_number = #p(certificate_number),
     certificate_start_date = #p(certificate_start_date),
     certificate_end_date = #p(certificate_end_date),
-    certificate_content = #p(certificate_content),
-    certificate_file = #p(certificate_file),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1
