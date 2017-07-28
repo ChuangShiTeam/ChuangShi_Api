@@ -64,7 +64,7 @@ public class FileService extends Service {
 
         File file = findByFile_id(file_id);
 
-        return file.getFile_path();
+        return file.getFile_original_path();
     }
 
     public File getFile(String file_id) {
