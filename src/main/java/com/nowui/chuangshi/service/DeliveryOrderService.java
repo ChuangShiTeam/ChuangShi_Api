@@ -111,7 +111,7 @@ public class DeliveryOrderService extends Service {
         if (result) {
             deliveryOrderProductSkuService.batchSave(list);
             if (StringUtils.isNotBlank(trade_id)) {
-            	//会员入库
+            	/*//会员入库
             	List<StockInProductSku> stockInProductSkuList = new ArrayList<StockInProductSku>();
             	for (DeliveryOrderProductSku deliveryOrderProductSku : list) {
             		StockInProductSku stockInProductSku = new StockInProductSku();
@@ -123,7 +123,7 @@ public class DeliveryOrderService extends Service {
             	List<Warehouse> warehouseList = warehouseService.listByApp_id(app_id);
             	Warehouse warehouse = warehouseList.get(0);
             	stockInService.save(app_id, warehouse.getWarehouse_id(), trade_id, delivery_order_user_id, StockType.MEMBER.getKey(), stockInProductSkuList, system_create_user_id);
-            }
+*/            }
         }
         return result;
     }

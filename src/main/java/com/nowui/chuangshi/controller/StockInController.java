@@ -28,8 +28,8 @@ public class StockInController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = stockInService.countByApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_name(request_app_id, model.getWarehouse_id(), model.getStock_in_type(), model.getUser_name());
-        List<StockIn> resultList = stockInService.listByApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_nameAndLimit(request_app_id, model.getWarehouse_id(), model.getStock_in_type(), model.getUser_name(), getM(), getN());
+        Integer total = stockInService.countByApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_name(request_app_id, model.getWarehouse_id(), model.getStock_in_type(), model.getStock_in_batch(), model.getUser_name());
+        List<StockIn> resultList = stockInService.listByApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_nameAndLimit(request_app_id, model.getWarehouse_id(), model.getStock_in_type(), model.getStock_in_batch(), model.getUser_name(), getM(), getN());
 
         for (StockIn result : resultList) {
             result.keep(StockIn.STOCK_IN_ID, StockIn.WAREHOUSE_NAME, StockIn.USER_NAME, StockIn.STOCK_IN_QUANTITY, StockIn.SYSTEM_CREATE_TIME, StockIn.SYSTEM_VERSION);
@@ -68,8 +68,8 @@ public class StockInController extends Controller {
 
         StockIn model = getModel(StockIn.class);
 
-        Integer total = stockInService.countByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_name(model.getApp_id(), model.getWarehouse_id(), model.getStock_in_type(), model.getUser_name());
-        List<StockIn> resultList = stockInService.listByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_nameAndLimit(model.getApp_id(), model.getWarehouse_id(), model.getStock_in_type(), model.getUser_name(), getM(), getN());
+        Integer total = stockInService.countByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_name(model.getApp_id(), model.getWarehouse_id(), model.getStock_in_type(), model.getStock_in_batch(), model.getUser_name());
+        List<StockIn> resultList = stockInService.listByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_nameAndLimit(model.getApp_id(), model.getWarehouse_id(), model.getStock_in_type(), model.getStock_in_batch(), model.getUser_name(), getM(), getN());
 
         for (StockIn result : resultList) {
             result.keep(StockIn.STOCK_IN_ID, StockIn.SYSTEM_VERSION);

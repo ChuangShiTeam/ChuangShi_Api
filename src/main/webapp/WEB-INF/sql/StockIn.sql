@@ -1,6 +1,6 @@
 #namespace("stock_in")
 
-  #sql("countByApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_name")
+  #sql("countByApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_name")
     SELECT COUNT(*) FROM table_stock_in
     #if(stock_in_type == 'MEMBER' && user_name)
     LEFT JOIN table_user ON table_user.user_id = table_stock_in.object_id
@@ -11,13 +11,17 @@
     AND table_stock_in.warehouse_id = #p(warehouse_id)
     #end
     AND table_stock_in.stock_in_type = #p(stock_in_type)
+    #if(stock_in_batch)
+    #set(stock_in_batch = "%" + stock_in_batch + "%")
+    AND table_stock_in.stock_in_batch = #p(stock_in_batch)
+    #end
     #if(stock_in_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
     #end
   #end
 
-  #sql("countByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_name")
+  #sql("countByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_name")
     SELECT COUNT(*) FROM table_stock_in
     #if(stock_in_type == 'MEMBER' && user_name)
     LEFT JOIN table_user ON table_user.user_id = table_stock_in.object_id
@@ -30,6 +34,10 @@
     AND table_stock_in.warehouse_id = #p(warehouse_id)
     #end
     AND table_stock_in.stock_in_type = #p(stock_in_type)
+    #if(stock_in_batch)
+    #set(stock_in_batch = "%" + stock_in_batch + "%")
+    AND table_stock_in.stock_in_batch = #p(stock_in_batch)
+    #end
     #if(stock_in_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
@@ -48,7 +56,7 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_nameAndLimit")
+  #sql("listByApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_nameAndLimit")
     SELECT
     table_stock_in.stock_in_id
     FROM table_stock_in
@@ -61,6 +69,10 @@
     AND table_stock_in.warehouse_id = #p(warehouse_id)
     #end
     AND table_stock_in.stock_in_type = #p(stock_in_type)
+    #if(stock_in_batch)
+    #set(stock_in_batch = "%" + stock_in_batch + "%")
+    AND table_stock_in.stock_in_batch = #p(stock_in_batch)
+    #end
     #if(stock_in_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
@@ -69,7 +81,7 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_nameAndLimit")
+  #sql("listByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_nameAndLimit")
     SELECT
     table_stock_in.stock_in_id
     FROM table_stock_in
@@ -84,6 +96,10 @@
     AND table_stock_in.warehouse_id = #p(warehouse_id)
     #end
     AND table_stock_in.stock_in_type = #p(stock_in_type)
+    #if(stock_in_batch)
+    #set(stock_in_batch = "%" + stock_in_batch + "%")
+    AND table_stock_in.stock_in_batch = #p(stock_in_batch)
+    #end
     #if(stock_in_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
@@ -127,8 +143,9 @@
       stock_in_id,
       app_id,
       warehouse_id,
-      trade_id,
+      purchase_order_id,
       object_id,
+      stock_in_batch,
       stock_in_type,
       stock_in_quantity,
       stock_in_status,
@@ -142,8 +159,9 @@
       #p(stock_in_id),
       #p(app_id),
       #p(warehouse_id),
-      #p(trade_id),
+      #p(purchase_order_id),
       #p(object_id),
+      #p(stock_in_batch),
       #p(stock_in_type),
       #p(stock_in_quantity),
       #p(stock_in_status),
@@ -159,8 +177,9 @@
   #sql("update")
     UPDATE table_stock_in SET
     warehouse_id = #p(warehouse_id),
-    trade_id = #p(trade_id),
+    purchase_order_id = #p(purchase_order_id),
     object_id = #p(object_id),
+    stock_in_batch = #p(stock_in_batch),
     stock_in_type = #p(stock_in_type),
     stock_in_quantity = #p(stock_in_quantity),
     stock_in_status = #p(stock_in_status),
