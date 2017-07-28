@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.cache.TradeCache;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Trade;
@@ -143,7 +144,7 @@ public class TradeService extends Service {
 
         SortedMap<String, String> parameter = new TreeMap<String, String>();
         parameter.put("appid", app_id);
-        parameter.put("attach", "TRADE");
+        parameter.put("attach", Constant.WX_ATTACH_TRADE);
         parameter.put("body", body);
         parameter.put("mch_id", mch_id);
         parameter.put("nonce_str", nonce_str);
@@ -197,6 +198,18 @@ public class TradeService extends Service {
             String request_user_id, Integer system_version) {
         return tradeCache.updateTrade_flowByTrade_idValidateSystem_version(trade_id, trade_flow, request_user_id,
                 system_version);
+    }
+    
+    public Boolean updateReceiver(String trade_id) {
+    	Trade trade = findByTrade_id(trade_id);
+    	
+    	return updateTrade_flowByTrade_idValidateSystem_version(trade_id, TradeFlow.WAIT_RECEIVE.getKey(), trade.getSystem_update_user_id(), trade.getSystem_version());
+    }
+    
+    public Boolean updateFinish(String trade_id) {
+    	Trade trade = findByTrade_id(trade_id);
+    	
+    	return updateTrade_flowByTrade_idValidateSystem_version(trade_id, TradeFlow.COMPLETE.getKey(), trade.getSystem_update_user_id(), trade.getSystem_version());
     }
 
 }

@@ -69,7 +69,7 @@ public class StockInService extends Service {
     	List<Stock> stockSaveList = new ArrayList<Stock>();
     	List<Stock> stockUpdateList = new ArrayList<Stock>();
     	for (StockInProductSku stockInProductSku : stockInProductSkuList) {
-    		Stock stock = stockService.findByWarehouse_idAndProduct_sku_idAndStock_type(warehouse_id, stockInProductSku.getProduct_sku_id(), stock_in_type);
+    		Stock stock = stockService.findByWarehouse_idAndObject_idAndProduct_sku_id(warehouse_id, object_id, stockInProductSku.getProduct_sku_id());
 
     		if (stock == null || StringUtils.isBlank(stock.getStock_id())) {
     			ProductSku productSku = productSkuService.findByProduct_sku_id(stockInProductSku.getProduct_sku_id());

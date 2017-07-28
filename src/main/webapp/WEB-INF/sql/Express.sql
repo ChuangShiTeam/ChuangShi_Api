@@ -116,7 +116,7 @@
     *
     FROM table_express
     WHERE system_status = 1
-    AND table_express.trade_id = #p(trade_id)
+    AND trade_id = #p(trade_id)
   #end
 
   #sql("save")
@@ -238,10 +238,10 @@
     AND system_version = #p(system_version)
   #end
   
-  #sql("updateExpress_flowAndExpress_statusAndExpress_tracesByExpress_idAndSystem_version")
+  #sql("updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idAndSystem_version")
     UPDATE table_express SET
     express_flow = #p(express_flow),
-    express_status = #p(express_status),
+    express_is_complete = #p(express_is_complete),
     express_traces = #p(express_traces),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),

@@ -1,13 +1,13 @@
 package com.nowui.chuangshi.cache;
 
+import java.util.Date;
+import java.util.List;
+
 import com.alibaba.fastjson.JSONArray;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.dao.MemberDao;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.util.CacheUtil;
-
-import java.util.Date;
-import java.util.List;
 
 public class MemberCache extends Cache {
 
@@ -35,7 +35,8 @@ public class MemberCache extends Cache {
         return memberList;
     }
 
-    public List<Member> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
+    public List<Member> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m,
+            int n) {
         List<Member> memberList = memberDao.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n);
 
         for (Member member : memberList) {
@@ -96,10 +97,12 @@ public class MemberCache extends Cache {
 
         return member;
     }
-    
 
-    public Boolean save(String member_id, String app_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, JSONArray member_parent_path, Boolean member_status, String system_create_user_id) {
-        boolean result = memberDao.save(member_id, app_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path.toJSONString(), member_status, system_create_user_id);
+    public Boolean save(String member_id, String app_id, String user_id, String member_parent_id, String from_qrcode_id,
+            String qrcode_id, String member_level_id, JSONArray member_parent_path, Boolean member_status,
+            String system_create_user_id) {
+        boolean result = memberDao.save(member_id, app_id, user_id, member_parent_id, from_qrcode_id, qrcode_id,
+                member_level_id, member_parent_path.toJSONString(), member_status, system_create_user_id);
 
         if (result) {
             for (int i = 0; i < member_parent_path.size(); i++) {
@@ -113,13 +116,17 @@ public class MemberCache extends Cache {
         return result;
     }
 
-    public Boolean updateValidateSystem_version(String member_id, String user_id, String member_parent_id, String from_qrcode_id, String qrcode_id, String member_level_id, JSONArray member_parent_path, Boolean member_status, String system_update_user_id, Integer system_version) {
+    public Boolean updateValidateSystem_version(String member_id, String user_id, String member_parent_id,
+            String from_qrcode_id, String qrcode_id, String member_level_id, JSONArray member_parent_path,
+            Boolean member_status, String system_update_user_id, Integer system_version) {
         Member member = findByMember_id(member_id);
         if (!member.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = memberDao.update(member_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path.toJSONString(), member_status, system_update_user_id, system_version);
+        boolean result = memberDao.update(member_id, user_id, member_parent_id, from_qrcode_id, qrcode_id,
+                member_level_id, member_parent_path.toJSONString(), member_status, system_update_user_id,
+                system_version);
 
         if (result) {
             CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
@@ -135,8 +142,13 @@ public class MemberCache extends Cache {
         return result;
     }
 
-    public Boolean updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(String member_id, String member_parent_id, JSONArray member_parent_path, String member_level_id, String system_update_user_id) {
-        boolean result = memberDao.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_id(member_id, member_parent_id, member_parent_path.toJSONString(), member_level_id, system_update_user_id);
+    public Boolean updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_idAndMember_status(
+            String member_id, String member_parent_id, JSONArray member_parent_path, String member_level_id,
+            Boolean member_status, String system_update_user_id) {
+        boolean result = memberDao
+                .updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_idAndMember_status(member_id,
+                        member_parent_id, member_parent_path.toJSONString(), member_level_id, member_status,
+                        system_update_user_id);
 
         if (result) {
             CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
@@ -152,8 +164,10 @@ public class MemberCache extends Cache {
         return result;
     }
 
-    public Boolean updateByMember_idAndMember_level_id(String member_id, String member_level_id, String system_update_user_id) {
-        boolean result = memberDao.updateByMember_idAndMember_level_id(member_id, member_level_id, system_update_user_id);
+    public Boolean updateByMember_idAndMember_level_idAndMember_status(String member_id, String member_level_id,
+            boolean member_status, String system_update_user_id) {
+        boolean result = memberDao.updateByMember_idAndMember_level_idAndMember_status(member_id, member_level_id,
+                member_status, system_update_user_id);
 
         if (result) {
             CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
@@ -172,10 +186,26 @@ public class MemberCache extends Cache {
     }
 
     public Boolean updateByMember_idAndQrcode_id(String member_id, String qrcode_id, String system_update_user_id) {
-        return memberDao.updateByMember_idAndQrcode_id(member_id, qrcode_id, system_update_user_id);
+        boolean result = memberDao.updateByMember_idAndQrcode_id(member_id, qrcode_id, system_update_user_id);
+
+        if (result) {
+            CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
+
+            Member member = findByMember_id(member_id);
+            JSONArray jsonArray = JSONArray.parseArray(member.getMember_parent_path());
+            for (int i = 0; i < jsonArray.size(); i++) {
+                String member_parent_path_member_id = jsonArray.getString(i);
+                if (!member_parent_path_member_id.equals(Constant.PARENT_ID)) {
+                    CacheUtil.remove(MEMBER_LIST_BY_MEMBER_PARENT_ID_CACHE, member_parent_path_member_id);
+                }
+            }
+        }
+
+        return result;
     }
-    
-    public Boolean deleteByMember_idAndSystem_update_user_idValidateSystem_version(String member_id, String system_update_user_id, Integer system_version) {
+
+    public Boolean deleteByMember_idAndSystem_update_user_idValidateSystem_version(String member_id,
+            String system_update_user_id, Integer system_version) {
         Member member = findByMember_id(member_id);
         if (!member.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);

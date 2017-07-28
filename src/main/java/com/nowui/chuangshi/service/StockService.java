@@ -42,8 +42,8 @@ public class StockService extends Service {
         return stockCache.findByStock_id(stock_id);
     }
     
-    public Stock findByWarehouse_idAndProduct_sku_idAndStock_type(String warehouse_id, String product_sku_id, String stock_type) {
-    	return stockCache.findByWarehouse_idAndProduct_sku_idAndStock_type(warehouse_id, product_sku_id, stock_type);
+    public Stock findByWarehouse_idAndObject_idAndProduct_sku_id(String warehouse_id, String object_id, String product_sku_id) {
+        return stockCache.findByWarehouse_idAndObject_idAndProduct_sku_id(warehouse_id, object_id, product_sku_id);
     }
 
     public Boolean save(String stock_id, String app_id, String warehouse_id, String object_id, String stock_type, String product_category_id, String product_id, String product_sku_id, Integer stock_quantity, String system_create_user_id) {

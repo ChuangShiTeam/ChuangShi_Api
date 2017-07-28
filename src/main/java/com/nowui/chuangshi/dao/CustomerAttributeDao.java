@@ -1,13 +1,13 @@
 package com.nowui.chuangshi.dao;
 
+import java.util.Date;
+import java.util.List;
+
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.CustomerAttribute;
-
-import java.util.Date;
-import java.util.List;
 
 public class CustomerAttributeDao extends Dao {
 
@@ -35,7 +35,8 @@ public class CustomerAttributeDao extends Dao {
         return count.intValue();
     }
 
-    public List<CustomerAttribute> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
+    public List<CustomerAttribute> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time,
+            int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(CustomerAttribute.APP_ID, app_id);
         sqlMap.put(CustomerAttribute.SYSTEM_CREATE_TIME, system_create_time);
@@ -48,7 +49,18 @@ public class CustomerAttributeDao extends Dao {
         return new CustomerAttribute().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<CustomerAttribute> listByApp_idOrLikeCustomer_attribute_nameAndLimit(String app_id, String customer_attribute_name, int m, int n) {
+    public List<CustomerAttribute> listByApp_id(String app_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(CustomerAttribute.APP_ID, app_id);
+        SqlPara sqlPara = Db.getSqlPara("customer_attribute.listByApp_id", sqlMap);
+
+        logSql("customer_attribute", "listByApp_id", sqlPara);
+
+        return new CustomerAttribute().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+
+    public List<CustomerAttribute> listByApp_idOrLikeCustomer_attribute_nameAndLimit(String app_id,
+            String customer_attribute_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(CustomerAttribute.APP_ID, app_id);
         sqlMap.put(CustomerAttribute.CUSTOMER_ATTRIBUTE_NAME, customer_attribute_name);
@@ -61,13 +73,15 @@ public class CustomerAttributeDao extends Dao {
         return new CustomerAttribute().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<CustomerAttribute> listByOrApp_idOrLikeCustomer_attribute_nameAndLimit(String app_id, String customer_attribute_name, int m, int n) {
+    public List<CustomerAttribute> listByOrApp_idOrLikeCustomer_attribute_nameAndLimit(String app_id,
+            String customer_attribute_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(CustomerAttribute.APP_ID, app_id);
         sqlMap.put(CustomerAttribute.CUSTOMER_ATTRIBUTE_NAME, customer_attribute_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("customer_attribute.listByOrApp_idOrLikeCustomer_attribute_nameAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("customer_attribute.listByOrApp_idOrLikeCustomer_attribute_nameAndLimit",
+                sqlMap);
 
         logSql("customer_attribute", "listByOrApp_idOrLikeCustomer_attribute_nameAndLimit", sqlPara);
 
@@ -81,7 +95,8 @@ public class CustomerAttributeDao extends Dao {
 
         logSql("customer_attribute", "findByCustomer_attribute_id", sqlPara);
 
-        List<CustomerAttribute> customer_attributeList = new CustomerAttribute().find(sqlPara.getSql(), sqlPara.getPara());
+        List<CustomerAttribute> customer_attributeList = new CustomerAttribute().find(sqlPara.getSql(),
+                sqlPara.getPara());
         if (customer_attributeList.size() == 0) {
             return null;
         } else {
@@ -89,7 +104,9 @@ public class CustomerAttributeDao extends Dao {
         }
     }
 
-    public Boolean save(String customer_attribute_id, String app_id, String customer_attribute_name, String customer_attribute_key, String customer_attribute_input_type, String customer_attribute_data_type, String customer_attribute_default_value, Integer customer_attribute_sort, String system_create_user_id) {
+    public Boolean save(String customer_attribute_id, String app_id, String customer_attribute_name,
+            String customer_attribute_key, String customer_attribute_input_type, String customer_attribute_data_type,
+            String customer_attribute_default_value, Integer customer_attribute_sort, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(CustomerAttribute.CUSTOMER_ATTRIBUTE_ID, customer_attribute_id);
         sqlMap.put(CustomerAttribute.APP_ID, app_id);
@@ -112,7 +129,10 @@ public class CustomerAttributeDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String customer_attribute_id, String customer_attribute_name, String customer_attribute_key, String customer_attribute_input_type, String customer_attribute_data_type, String customer_attribute_default_value, Integer customer_attribute_sort, String system_update_user_id, Integer system_version) {
+    public Boolean update(String customer_attribute_id, String customer_attribute_name, String customer_attribute_key,
+            String customer_attribute_input_type, String customer_attribute_data_type,
+            String customer_attribute_default_value, Integer customer_attribute_sort, String system_update_user_id,
+            Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(CustomerAttribute.CUSTOMER_ATTRIBUTE_ID, customer_attribute_id);
         sqlMap.put(CustomerAttribute.CUSTOMER_ATTRIBUTE_NAME, customer_attribute_name);
@@ -131,7 +151,8 @@ public class CustomerAttributeDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean deleteByCustomer_attribute_idAndSystem_version(String customer_attribute_id, String system_update_user_id, Integer system_version) {
+    public Boolean deleteByCustomer_attribute_idAndSystem_version(String customer_attribute_id,
+            String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(CustomerAttribute.CUSTOMER_ATTRIBUTE_ID, customer_attribute_id);
         sqlMap.put(CustomerAttribute.SYSTEM_UPDATE_USER_ID, system_update_user_id);

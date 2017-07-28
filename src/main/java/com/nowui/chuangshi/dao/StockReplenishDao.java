@@ -8,30 +8,33 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.StockReplenish;
+import com.nowui.chuangshi.model.StockReplenishProductSku;
 
 public class StockReplenishDao extends Dao {
 
-    public Integer countByApp_idAndStock_replenish_typeOrLikeUser_name(String app_id, String stock_replenish_type, String user_name) {
+    public Integer countByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name(String app_id, String warehouse_id, String stock_replenish_type, String user_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockReplenish.APP_ID, app_id);
+        sqlMap.put(StockReplenish.WAREHOUSE_ID, warehouse_id);
         sqlMap.put(StockReplenish.STOCK_REPLENISH_TYPE, stock_replenish_type);
         sqlMap.put(StockReplenish.USER_NAME, user_name);
-        SqlPara sqlPara = Db.getSqlPara("stock_replenish.countByApp_idAndStock_replenish_typeOrLikeUser_name", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("stock_replenish.countByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name", sqlMap);
 
-        logSql("stock_replenish", "countByApp_idAndStock_replenish_typeOrLikeUser_name", sqlPara);
+        logSql("stock_replenish", "countByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_idAndStock_replenish_typeOrLikeUser_name(String app_id, String stock_replenish_type, String user_name) {
+    public Integer countByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name(String app_id, String warehouse_id, String stock_replenish_type, String user_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockReplenish.APP_ID, app_id);
+        sqlMap.put(StockReplenish.WAREHOUSE_ID, warehouse_id);
         sqlMap.put(StockReplenish.STOCK_REPLENISH_TYPE, stock_replenish_type);
         sqlMap.put(StockReplenish.USER_NAME, user_name);
-        SqlPara sqlPara = Db.getSqlPara("stock_replenish.countByOrApp_idAndStock_replenish_typeOrLikeUser_name", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("stock_replenish.countByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name", sqlMap);
 
-        logSql("stock_replenish", "countByOrApp_idAndStock_replenish_typeOrLikeUser_name", sqlPara);
+        logSql("stock_replenish", "countByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
@@ -51,30 +54,32 @@ public class StockReplenishDao extends Dao {
         return new StockReplenish().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<StockReplenish> listByApp_idAndStock_replenish_typeOrLikeUser_nameAndLimit(String app_id, String stock_replenish_type, String user_name, int m, int n) {
+    public List<StockReplenish> listByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_replenish_type, String user_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockReplenish.APP_ID, app_id);
+        sqlMap.put(StockReplenish.WAREHOUSE_ID, warehouse_id);
         sqlMap.put(StockReplenish.STOCK_REPLENISH_TYPE, stock_replenish_type);
         sqlMap.put(StockReplenish.USER_NAME, user_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("stock_replenish.listByApp_idAndStock_replenish_typeOrLikeUser_nameAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("stock_replenish.listByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit", sqlMap);
 
-        logSql("stock_replenish", "listByApp_idAndStock_replenish_typeOrLikeUser_nameAndLimit", sqlPara);
+        logSql("stock_replenish", "listByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit", sqlPara);
 
         return new StockReplenish().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<StockReplenish> listByOrApp_idAndStock_replenish_typeOrLikeUser_nameAndLimit(String app_id, String stock_replenish_type, String user_name, int m, int n) {
+    public List<StockReplenish> listByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_replenish_type, String user_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockReplenish.APP_ID, app_id);
+        sqlMap.put(StockReplenish.WAREHOUSE_ID, warehouse_id);
         sqlMap.put(StockReplenish.STOCK_REPLENISH_TYPE, stock_replenish_type);
         sqlMap.put(StockReplenish.USER_NAME, user_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("stock_replenish.listByOrApp_idAndStock_replenish_typeOrLikeUser_nameAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("stock_replenish.listByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit", sqlMap);
 
-        logSql("stock_replenish", "listByOrApp_idAndStock_replenish_typeOrLikeUser_nameAndLimit", sqlPara);
+        logSql("stock_replenish", "listByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit", sqlPara);
 
         return new StockReplenish().find(sqlPara.getSql(), sqlPara.getPara());
     }
@@ -164,5 +169,5 @@ public class StockReplenishDao extends Dao {
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
-
+    
 }

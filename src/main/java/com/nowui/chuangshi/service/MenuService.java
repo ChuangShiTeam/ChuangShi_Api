@@ -28,9 +28,13 @@ public class MenuService extends Service {
                 }
 
                 List<Map<String, Object>> childrenList = getChildren(menuList, menu.getMenu_id(), keys);
-                if (childrenList.size() > 0) {
-                    map.put(Constant.CHILDREN, childrenList);
-                }
+                // 没有下级返回空数组
+                map.put(Constant.CHILDREN, childrenList);
+                /*
+                 * if (childrenList.size() > 0) { map.put(Constant.CHILDREN,
+                 * childrenList); }
+                 */
+
                 list.add(map);
             }
         }
@@ -38,28 +42,31 @@ public class MenuService extends Service {
     }
 
     public List<Map<String, Object>> treeByApp_id(String app_id) {
-        List<Menu> menuList =  menuCache.listByApp_id(app_id);
+        List<Menu> menuList = menuCache.listByApp_id(app_id);
 
         return getChildren(menuList, Constant.PARENT_ID, Menu.MENU_IMAGE, Menu.MENU_URL);
     }
 
     public List<Map<String, Object>> treeByApp_idOrLikeMenu_name(String app_id, String menu_name) {
-        List<Menu> menuList =  menuCache.listByApp_idOrLikeMenu_name(app_id, menu_name);
+        List<Menu> menuList = menuCache.listByApp_idOrLikeMenu_name(app_id, menu_name);
 
-        return getChildren(menuList, Constant.PARENT_ID, Menu.MENU_IMAGE, Menu.MENU_URL, Menu.MENU_SORT, Menu.SYSTEM_VERSION);
+        return getChildren(menuList, Constant.PARENT_ID, Menu.MENU_IMAGE, Menu.MENU_URL, Menu.MENU_SORT,
+                Menu.SYSTEM_VERSION);
     }
 
     public List<Map<String, Object>> treeByOrApp_idOrLikeMenu_name(String app_id, String menu_name) {
         List<Menu> menuList = menuCache.listByOrApp_idOrLikeMenu_name(app_id, menu_name);
 
-        return getChildren(menuList, Constant.PARENT_ID, Menu.MENU_IMAGE, Menu.MENU_URL, Menu.MENU_SORT, Menu.SYSTEM_VERSION);
+        return getChildren(menuList, Constant.PARENT_ID, Menu.MENU_IMAGE, Menu.MENU_URL, Menu.MENU_SORT,
+                Menu.SYSTEM_VERSION);
     }
 
     public Menu findByMenu_id(String menu_id) {
         return menuCache.findByMenu_id(menu_id);
     }
 
-    public Boolean save(String menu_id, String app_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String system_create_user_id) {
+    public Boolean save(String menu_id, String app_id, String menu_parent_id, String menu_name, String menu_image,
+            String menu_url, Integer menu_sort, String system_create_user_id) {
         String menu_parent_path = "";
 
         if (ValidateUtil.isNullOrEmpty(menu_parent_id)) {
@@ -77,11 +84,14 @@ public class MenuService extends Service {
 
             menu_parent_path = jsonArray.toJSONString();
         }
-        
-        return menuCache.save(menu_id, app_id, menu_parent_id, menu_name, menu_image, menu_url, menu_sort, menu_parent_path, system_create_user_id);
+
+        return menuCache.save(menu_id, app_id, menu_parent_id, menu_name, menu_image, menu_url, menu_sort,
+                menu_parent_path, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String menu_id, String menu_parent_id, String menu_name, String menu_image, String menu_url, Integer menu_sort, String system_update_user_id, Integer system_version) {
+    public Boolean updateValidateSystem_version(String menu_id, String menu_parent_id, String menu_name,
+            String menu_image, String menu_url, Integer menu_sort, String system_update_user_id,
+            Integer system_version) {
         Menu menu = menuCache.findByMenu_id(menu_id);
 
         String menu_parent_path = menu.getMenu_parent_path();
@@ -95,11 +105,14 @@ public class MenuService extends Service {
             menu_parent_path = jsonArray.toJSONString();
         }
 
-        return menuCache.updateValidateSystem_version(menu_id, menu_parent_id, menu_name, menu_image, menu_url, menu_sort, menu_parent_path, system_update_user_id, system_version);
+        return menuCache.updateValidateSystem_version(menu_id, menu_parent_id, menu_name, menu_image, menu_url,
+                menu_sort, menu_parent_path, system_update_user_id, system_version);
     }
 
-    public Boolean deleteByMenu_idAndSystem_update_user_idValidateSystem_version(String menu_id, String system_update_user_id, Integer system_version) {
-        Boolean result = menuCache.deleteByMenu_idAndSystem_update_user_idValidateSystem_version(menu_id, system_update_user_id, system_version);
+    public Boolean deleteByMenu_idAndSystem_update_user_idValidateSystem_version(String menu_id,
+            String system_update_user_id, Integer system_version) {
+        Boolean result = menuCache.deleteByMenu_idAndSystem_update_user_idValidateSystem_version(menu_id,
+                system_update_user_id, system_version);
 
         if (result) {
             menuCache.deleteByMenu_parent_id(menu_id, system_update_user_id);

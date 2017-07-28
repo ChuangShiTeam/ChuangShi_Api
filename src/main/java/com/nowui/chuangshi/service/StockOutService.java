@@ -60,7 +60,7 @@ public class StockOutService extends Service {
     	List<StockOutProductSku> list = new ArrayList<StockOutProductSku>();
     	List<Stock> stockList = new ArrayList<Stock>();
     	for (StockOutProductSku stockOutProductSku : stockOutProductSkuList) {
-    		Stock stock = stockService.findByWarehouse_idAndProduct_sku_idAndStock_type(warehouse_id, stockOutProductSku.getProduct_sku_id(), stock_out_type);
+    		Stock stock = stockService.findByWarehouse_idAndObject_idAndProduct_sku_id(warehouse_id, object_id, stockOutProductSku.getProduct_sku_id());
 
     		if (stock == null || stock.getStock_quantity() < stockOutProductSku.getProduct_sku_quantity()) {
     			throw new RuntimeException("仓库库存不够");

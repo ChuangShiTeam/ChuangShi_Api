@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.dao;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -14,29 +15,27 @@ import com.nowui.chuangshi.model.User;
 
 public class DeliveryOrderDao extends Dao {
 
-    public Integer countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no(String app_id, String user_name, String delivery_order_receiver_name, String express_no) {
+    public Integer countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name(String app_id, String user_name, String delivery_order_receiver_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(DeliveryOrder.APP_ID, app_id);
         sqlMap.put(User.USER_NAME, user_name);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, delivery_order_receiver_name);
-        sqlMap.put(Express.EXPRESS_NO, express_no);
-        SqlPara sqlPara = Db.getSqlPara("delivery_order.countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("delivery_order.countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name", sqlMap);
 
-        logSql("delivery_order", "countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no", sqlPara);
+        logSql("delivery_order", "countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no(String app_id, String user_name, String delivery_order_receiver_name, String express_no) {
+    public Integer countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name(String app_id, String user_name, String delivery_order_receiver_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(DeliveryOrder.APP_ID, app_id);
         sqlMap.put(User.USER_NAME, user_name);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, delivery_order_receiver_name);
-        sqlMap.put(Express.EXPRESS_NO, express_no);
-        SqlPara sqlPara = Db.getSqlPara("delivery_order.countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("delivery_order.countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name", sqlMap);
 
-        logSql("delivery_order", "countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no", sqlPara);
+        logSql("delivery_order", "countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
@@ -66,44 +65,42 @@ public class DeliveryOrderDao extends Dao {
         return new DeliveryOrder().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Record> listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit(String app_id, String user_name, String delivery_order_receiver_name, String express_no, int m, int n) {
+    public List<Record> listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit(String app_id, String user_name, String delivery_order_receiver_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(DeliveryOrder.APP_ID, app_id);
         sqlMap.put(User.USER_NAME, user_name);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, delivery_order_receiver_name);
-        sqlMap.put(Express.EXPRESS_NO, express_no);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("delivery_order.listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("delivery_order.listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit", sqlMap);
 
-        logSql("delivery_order", "listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit", sqlPara);
+        logSql("delivery_order", "listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit", sqlPara);
 
         return Db.find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<Record> listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit(String app_id, String user_name, String delivery_order_receiver_name, String express_no, int m, int n) {
+    public List<Record> listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit(String app_id, String user_name, String delivery_order_receiver_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(DeliveryOrder.APP_ID, app_id);
         sqlMap.put(User.USER_NAME, user_name);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, delivery_order_receiver_name);
-        sqlMap.put(Express.EXPRESS_NO, express_no);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("delivery_order.listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("delivery_order.listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit", sqlMap);
 
-        logSql("delivery_order", "listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit", sqlPara);
+        logSql("delivery_order", "listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit", sqlPara);
 
         return Db.find(sqlPara.getSql(), sqlPara.getPara());
     }
     
-    public List<Record> listWithExpressByDelivery_order_sender_user_idAndLimit(String delivery_order_sender_user_id, int m, int n) {
+    public List<Record> listByDelivery_order_sender_user_idAndLimit(String delivery_order_sender_user_id, int m, int n) {
     	Kv sqlMap = Kv.create();
     	sqlMap.put(DeliveryOrder.DELIVERY_ORDER_SENDER_USER_ID, delivery_order_sender_user_id);
     	sqlMap.put(Constant.M, m);
     	sqlMap.put(Constant.N, n);
-    	SqlPara sqlPara = Db.getSqlPara("delivery_order.listWithExpressByDelivery_order_sender_user_idAndLimit", sqlMap);
+    	SqlPara sqlPara = Db.getSqlPara("delivery_order.listByDelivery_order_sender_user_idAndLimit", sqlMap);
     	
-    	logSql("delivery_order", "listWithExpressByDelivery_order_sender_user_idAndLimit", sqlPara);
+    	logSql("delivery_order", "listByDelivery_order_sender_user_idAndLimit", sqlPara);
     	
     	return Db.find(sqlPara.getSql(), sqlPara.getPara());
     }
@@ -123,7 +120,7 @@ public class DeliveryOrderDao extends Dao {
         }
     }
 
-    public Boolean save(String delivery_order_id, String app_id, String trade_id, String delivery_order_user_id, String delivery_order_sender_user_id, String delivery_order_reciever_user_id, Integer delivery_order_total_quantity, String delivery_order_receiver_name, String delivery_order_receiver_mobile, String delivery_order_receiver_province, String delivery_order_receiver_city, String delivery_order_receiver_area, String delivery_order_receiver_address, String delivery_order_express_pay_way, String delivery_order_express_shipper_code, Boolean delivery_order_is_pay, String delivery_order_flow, Boolean delivery_is_complete, String system_create_user_id) {
+    public Boolean save(String delivery_order_id, String app_id, String trade_id, String delivery_order_user_id, String delivery_order_sender_user_id, String delivery_order_reciever_user_id, BigDecimal delivery_order_amount, Integer delivery_order_total_quantity, String delivery_order_receiver_name, String delivery_order_receiver_mobile, String delivery_order_receiver_province, String delivery_order_receiver_city, String delivery_order_receiver_area, String delivery_order_receiver_address, String delivery_order_express_pay_way, String delivery_order_express_shipper_code, Boolean delivery_order_is_pay, String delivery_order_flow, Boolean delivery_is_complete, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_ID, delivery_order_id);
         sqlMap.put(DeliveryOrder.APP_ID, app_id);
@@ -131,6 +128,7 @@ public class DeliveryOrderDao extends Dao {
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_USER_ID, delivery_order_user_id);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_SENDER_USER_ID, delivery_order_sender_user_id);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_RECIEVER_USER_ID, delivery_order_reciever_user_id);
+        sqlMap.put(DeliveryOrder.DELIVERY_ORDER_AMOUNT, delivery_order_amount);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY, delivery_order_total_quantity);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, delivery_order_receiver_name);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE, delivery_order_receiver_mobile);
@@ -156,13 +154,14 @@ public class DeliveryOrderDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String delivery_order_id, String trade_id, String delivery_order_user_id, String delivery_order_sender_user_id, String delivery_order_reciever_user_id, Integer delivery_order_total_quantity, String delivery_order_receiver_name, String delivery_order_receiver_mobile, String delivery_order_receiver_province, String delivery_order_receiver_city, String delivery_order_receiver_area, String delivery_order_receiver_address, String delivery_order_express_pay_way, String delivery_order_express_shipper_code, Boolean delivery_order_is_pay, String delivery_order_flow, Boolean delivery_is_complete, String system_update_user_id, Integer system_version) {
+    public Boolean update(String delivery_order_id, String trade_id, String delivery_order_user_id, String delivery_order_sender_user_id, String delivery_order_reciever_user_id, BigDecimal delivery_order_amount, Integer delivery_order_total_quantity, String delivery_order_receiver_name, String delivery_order_receiver_mobile, String delivery_order_receiver_province, String delivery_order_receiver_city, String delivery_order_receiver_area, String delivery_order_receiver_address, String delivery_order_express_pay_way, String delivery_order_express_shipper_code, Boolean delivery_order_is_pay, String delivery_order_flow, Boolean delivery_is_complete, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_ID, delivery_order_id);
         sqlMap.put(DeliveryOrder.TRADE_ID, trade_id);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_USER_ID, delivery_order_user_id);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_SENDER_USER_ID, delivery_order_sender_user_id);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_RECIEVER_USER_ID, delivery_order_reciever_user_id);
+        sqlMap.put(DeliveryOrder.DELIVERY_ORDER_AMOUNT, delivery_order_amount);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_TOTAL_QUANTITY, delivery_order_total_quantity);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, delivery_order_receiver_name);
         sqlMap.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE, delivery_order_receiver_mobile);
@@ -198,6 +197,35 @@ public class DeliveryOrderDao extends Dao {
     	logSql("delivery_order", "updateDelivery_order_flowAndDelivery_is_completeByDelivery_order_idAndSystem_version", sqlPara);
     	
     	return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+    
+    public Boolean updateDelivery_order_flowOrDelivery_order_amountByDelivery_order_idAndSystem_version(String delivery_order_id, String delivery_order_flow, BigDecimal delivery_order_amount, String system_update_user_id, Integer system_version) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(DeliveryOrder.DELIVERY_ORDER_ID, delivery_order_id);
+        sqlMap.put(DeliveryOrder.DELIVERY_ORDER_FLOW, delivery_order_flow);
+        sqlMap.put(DeliveryOrder.DELIVERY_ORDER_AMOUNT, delivery_order_amount);
+        sqlMap.put(DeliveryOrder.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(DeliveryOrder.SYSTEM_UPDATE_TIME, new Date());
+        sqlMap.put(DeliveryOrder.SYSTEM_VERSION, system_version);
+        SqlPara sqlPara = Db.getSqlPara("delivery_order.updateDelivery_order_flowOrDelivery_order_amountByDelivery_order_idAndSystem_version", sqlMap);
+        
+        logSql("delivery_order", "updateDelivery_order_flowOrDelivery_order_amountByDelivery_order_idAndSystem_version", sqlPara);
+        
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+    
+    public Boolean updateDelivery_order_is_payByDelivery_order_idAndSystem_version(String delivery_order_id, Boolean delivery_order_is_pay, String system_update_user_id, Integer system_version) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(DeliveryOrder.DELIVERY_ORDER_ID, delivery_order_id);
+        sqlMap.put(DeliveryOrder.DELIVERY_ORDER_IS_PAY, delivery_order_is_pay);
+        sqlMap.put(DeliveryOrder.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(DeliveryOrder.SYSTEM_UPDATE_TIME, new Date());
+        sqlMap.put(DeliveryOrder.SYSTEM_VERSION, system_version);
+        SqlPara sqlPara = Db.getSqlPara("delivery_order.updateDelivery_order_is_payByDelivery_order_idAndSystem_version", sqlMap);
+        
+        logSql("delivery_order", "updateDelivery_order_is_payByDelivery_order_idAndSystem_version", sqlPara);
+        
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
     public Boolean deleteByDelivery_order_idAndSystem_version(String delivery_order_id, String system_update_user_id, Integer system_version) {

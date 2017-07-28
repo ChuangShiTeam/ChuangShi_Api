@@ -22,6 +22,10 @@ public class CustomerAttributeService extends Service {
         return customerAttributeCache.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n);
     }
 
+    public List<CustomerAttribute> listByApp_id(String app_id) {
+        return customerAttributeCache.listByApp_id(app_id);
+    }
+    
     public List<CustomerAttribute> listByApp_idOrLikeCustomer_attribute_nameAndLimit(String app_id, String customer_attribute_name, int m, int n) {
         return customerAttributeCache.listByApp_idOrLikeCustomer_attribute_nameAndLimit(app_id, customer_attribute_name, m, n);
     }

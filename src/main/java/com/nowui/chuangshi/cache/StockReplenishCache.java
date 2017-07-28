@@ -15,12 +15,12 @@ public class StockReplenishCache extends Cache {
 
     private StockReplenishDao stockReplenishDao = new StockReplenishDao();
 
-    public Integer countByApp_idAndStock_replenish_typeOrLikeUser_name(String app_id, String stock_replenish_type, String user_name) {
-        return stockReplenishDao.countByApp_idAndStock_replenish_typeOrLikeUser_name(app_id, stock_replenish_type, user_name);
+    public Integer countByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name(String app_id, String warehouse_id, String stock_replenish_type, String user_name) {
+        return stockReplenishDao.countByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name(app_id, warehouse_id, stock_replenish_type, user_name);
     }
 
-    public Integer countByOrApp_idAndStock_replenish_typeOrLikeUser_name(String app_id, String stock_replenish_type, String user_name) {
-        return stockReplenishDao.countByOrApp_idAndStock_replenish_typeOrLikeUser_name(app_id, stock_replenish_type, user_name);
+    public Integer countByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name(String app_id, String warehouse_id, String stock_replenish_type, String user_name) {
+        return stockReplenishDao.countByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name(app_id, warehouse_id, stock_replenish_type, user_name);
     }
 
     public List<StockReplenish> listByApp_idAndStock_replenish_typeAndSystem_create_timeAndLimit(String app_id, String stock_replenish_type, Date system_create_time, int m, int n) {
@@ -33,8 +33,8 @@ public class StockReplenishCache extends Cache {
         return stock_replenishList; 
     }
 
-    public List<StockReplenish> listByApp_idAndStock_replenish_typeOrLikeUser_nameAndLimit(String app_id, String stock_replenish_type, String user_name, int m, int n) {
-        List<StockReplenish> stock_replenishList = stockReplenishDao.listByApp_idAndStock_replenish_typeOrLikeUser_nameAndLimit(app_id, stock_replenish_type, user_name, m, n);
+    public List<StockReplenish> listByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_replenish_type, String user_name, int m, int n) {
+        List<StockReplenish> stock_replenishList = stockReplenishDao.listByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit(app_id, warehouse_id, stock_replenish_type, user_name, m, n);
 
         for (StockReplenish stock_replenish : stock_replenishList) {
         	stock_replenish.put(findByStock_replenish_idAndStock_replenish_type(stock_replenish.getStock_replenish_id(), stock_replenish_type));
@@ -43,8 +43,8 @@ public class StockReplenishCache extends Cache {
         return stock_replenishList;
     }
 
-    public List<StockReplenish> listByOrApp_idAndStock_replenish_typeOrLikeUser_nameAndLimit(String app_id, String stock_replenish_type, String user_name, int m, int n) {
-        List<StockReplenish> stock_replenishList = stockReplenishDao.listByOrApp_idAndStock_replenish_typeOrLikeUser_nameAndLimit(app_id, stock_replenish_type, user_name, m, n);
+    public List<StockReplenish> listByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_replenish_type, String user_name, int m, int n) {
+        List<StockReplenish> stock_replenishList = stockReplenishDao.listByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit(app_id, warehouse_id, stock_replenish_type, user_name, m, n);
 
         for (StockReplenish stock_replenish : stock_replenishList) {
         	stock_replenish.put(findByStock_replenish_idAndStock_replenish_type(stock_replenish.getStock_replenish_id(), stock_replenish_type));
@@ -66,12 +66,12 @@ public class StockReplenishCache extends Cache {
     }
     
     public StockReplenish findByStock_replenish_idAndStock_replenish_type(String stock_replenish_id, String stock_replenish_type) {
-        StockReplenish stock_replenish = CacheUtil.get(STOCK_REPLENISH_BY_STOCK_REPLENISH_ID_AND_STOCK_REPLENISH_TYPE_CACHE, stock_replenish_id);
+        StockReplenish stock_replenish = CacheUtil.get(STOCK_REPLENISH_BY_STOCK_REPLENISH_ID_AND_STOCK_REPLENISH_TYPE_CACHE, stock_replenish_id + stock_replenish_type);
 
         if (stock_replenish == null) {
             stock_replenish = stockReplenishDao.findByStock_replenish_idAndStock_replenish_type(stock_replenish_id, stock_replenish_type);
 
-            CacheUtil.put(STOCK_REPLENISH_BY_STOCK_REPLENISH_ID_AND_STOCK_REPLENISH_TYPE_CACHE, stock_replenish_id, stock_replenish);
+            CacheUtil.put(STOCK_REPLENISH_BY_STOCK_REPLENISH_ID_AND_STOCK_REPLENISH_TYPE_CACHE, stock_replenish_id + stock_replenish_type, stock_replenish);
         }
 
         return stock_replenish;
@@ -91,7 +91,7 @@ public class StockReplenishCache extends Cache {
 
         if (result) {
             CacheUtil.remove(STOCK_REPLENISH_BY_STOCK_REPLENISH_ID_CACHE, stock_replenish_id);
-            CacheUtil.remove(STOCK_REPLENISH_BY_STOCK_REPLENISH_ID_AND_STOCK_REPLENISH_TYPE_CACHE, stock_replenish_id);
+            CacheUtil.remove(STOCK_REPLENISH_BY_STOCK_REPLENISH_ID_AND_STOCK_REPLENISH_TYPE_CACHE, stock_replenish_id + stock_replenish.getStock_replenish_type());
         }
 
         return result;
@@ -107,7 +107,7 @@ public class StockReplenishCache extends Cache {
 
         if (result) {
             CacheUtil.remove(STOCK_REPLENISH_BY_STOCK_REPLENISH_ID_CACHE, stock_replenish_id);
-            CacheUtil.remove(STOCK_REPLENISH_BY_STOCK_REPLENISH_ID_AND_STOCK_REPLENISH_TYPE_CACHE, stock_replenish_id);
+            CacheUtil.remove(STOCK_REPLENISH_BY_STOCK_REPLENISH_ID_AND_STOCK_REPLENISH_TYPE_CACHE, stock_replenish_id + stock_replenish.getStock_replenish_type());
         }
 
         return result;

@@ -1,5 +1,7 @@
 package com.nowui.chuangshi.model;
 
+import java.math.BigDecimal;
+
 import com.nowui.chuangshi.constant.Column;
 import com.nowui.chuangshi.type.ColumnType;
 
@@ -22,6 +24,9 @@ public class DeliveryOrder extends Model<DeliveryOrder> {
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "收货人id")
     public static final String DELIVERY_ORDER_RECIEVER_USER_ID = "delivery_order_reciever_user_id";
+    
+    @Column(type = ColumnType.DECIMAL, length = 0, comment = "发货金额")
+    public static final String DELIVERY_ORDER_AMOUNT = "delivery_order_amount";
     
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "发货数量")
     public static final String DELIVERY_ORDER_TOTAL_QUANTITY = "delivery_order_total_quantity";
@@ -108,9 +113,17 @@ public class DeliveryOrder extends Model<DeliveryOrder> {
     public String getDelivery_order_reciever_user_id() {
         return getStr(DELIVERY_ORDER_RECIEVER_USER_ID);
     }
-
+    
     public void setDelivery_order_reciever_user_id(String delivery_order_reciever_user_id) {
         set(DELIVERY_ORDER_RECIEVER_USER_ID, delivery_order_reciever_user_id);
+    }
+    
+    public BigDecimal getDelivery_order_amount() {
+        return getBigDecimal(DELIVERY_ORDER_AMOUNT);
+    }
+
+    public void setDelivery_order_amount(BigDecimal delivery_order_amount) {
+        set(DELIVERY_ORDER_AMOUNT, delivery_order_amount);
     }
     
     public Integer getDelivery_order_total_quantity() {

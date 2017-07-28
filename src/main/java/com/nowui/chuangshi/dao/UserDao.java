@@ -1,5 +1,8 @@
 package com.nowui.chuangshi.dao;
 
+import java.util.Date;
+import java.util.List;
+
 import com.jfinal.kit.HashKit;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
@@ -10,13 +13,10 @@ import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
-import java.util.Date;
-import java.util.List;
-
 public class UserDao extends Dao {
 
     private String generatePassword(String user_password) {
-        if(ValidateUtil.isNullOrEmpty(user_password)) {
+        if (ValidateUtil.isNullOrEmpty(user_password)) {
             return "";
         }
 
@@ -113,7 +113,8 @@ public class UserDao extends Dao {
         }
     }
 
-    public User findByApp_idAndUser_typeAndWechat_open_idAndWechat_union_id(String app_id, String user_type, String wechat_open_id, String wechat_union_id) {
+    public User findByApp_idAndUser_typeAndWechat_open_idAndWechat_union_id(String app_id, String user_type,
+            String wechat_open_id, String wechat_union_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(User.APP_ID, app_id);
         sqlMap.put(User.USER_TYPE, user_type);
@@ -131,7 +132,8 @@ public class UserDao extends Dao {
         }
     }
 
-    public User findByApp_idAndUser_typeAndUser_accountAndUser_password(String app_id, String user_type, String user_account, String user_password) {
+    public User findByApp_idAndUser_typeAndUser_accountAndUser_password(String app_id, String user_type,
+            String user_account, String user_password) {
         user_password = generatePassword(user_password);
 
         Kv sqlMap = Kv.create();
@@ -151,7 +153,9 @@ public class UserDao extends Dao {
         }
     }
 
-    public Boolean save(String user_id, String app_id, String object_id, String user_type, String user_name, String user_avatar, String user_account, String user_mobile, String user_email, String user_password, String wechat_open_id, String wechat_union_id, String system_create_user_id) {
+    public Boolean save(String user_id, String app_id, String object_id, String user_type, String user_name,
+            String user_avatar, String user_account, String user_mobile, String user_email, String user_password,
+            String wechat_open_id, String wechat_union_id, String system_create_user_id) {
         user_name = Util.getEmoji(user_name);
         user_password = generatePassword(user_password);
 
@@ -209,7 +213,8 @@ public class UserDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean deleteByUser_idAndSystem_version(String user_id, String system_update_user_id, Integer system_version) {
+    public Boolean deleteByUser_idAndSystem_version(String user_id, String system_update_user_id,
+            Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(User.USER_ID, user_id);
         sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_update_user_id);
@@ -218,6 +223,25 @@ public class UserDao extends Dao {
         SqlPara sqlPara = Db.getSqlPara("user.deleteByUser_idAndSystem_version", sqlMap);
 
         logSql("user", "deleteByUser_idAndSystem_version", sqlPara);
+
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+
+    public boolean updateByUser_nameAndUser_accountAndUser_password(String user_id, String user_name,
+            String user_account, String user_password, String request_user_id) {
+        user_name = Util.getEmoji(user_name);
+        user_password = generatePassword(user_password);
+
+        Kv sqlMap = Kv.create();
+        sqlMap.put(User.USER_ID, user_id);
+        sqlMap.put(User.USER_NAME, user_name);
+        sqlMap.put(User.USER_ACCOUNT, user_account);
+        sqlMap.put(User.USER_PASSWORD, user_password);
+        sqlMap.put(User.SYSTEM_UPDATE_USER_ID, request_user_id);
+        sqlMap.put(User.SYSTEM_UPDATE_TIME, new Date());
+        SqlPara sqlPara = Db.getSqlPara("user.updateByUser_nameAndUser_accountAndUser_password", sqlMap);
+
+        logSql("user", "updateByUser_nameAndUser_accountAndUser_password", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }

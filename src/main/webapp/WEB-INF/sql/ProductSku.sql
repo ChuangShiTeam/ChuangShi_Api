@@ -12,7 +12,7 @@
     SELECT
     *
     FROM table_product_sku
-    WHERE system_status = 1
+    WHERE 1 = 1
     AND product_sku_id = #p(product_sku_id)
   #end
 

@@ -102,7 +102,8 @@
   
   #sql("findByStock_out_idAndStock_out_type")
     SELECT
-    table_stock_out.*
+    table_stock_out.*,
+    table_warehouse.warehouse_name
     #if(stock_out_type == 'MEMBER')
     ,table_user.user_name
     #end
@@ -110,6 +111,7 @@
     ,table_app.app_name
     #end
     FROM table_stock_out
+    LEFT JOIN table_warehouse ON table_warehouse.warehouse_id = table_stock_out.warehouse_id
     #if(stock_out_type == 'MEMBER')
     LEFT JOIN table_user ON table_user.user_id = table_stock_out.object_id
     #end

@@ -1,8 +1,7 @@
 #namespace("delivery_order")
 
-  #sql("countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no")
+  #sql("countByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name")
     SELECT COUNT(*) FROM table_delivery_order
-    LEFT JOIN table_express ON table_delivery_order.delivery_order_id = table_express.delivery_order_id
     LEFT JOIN table_user ON table_delivery_order.delivery_order_user_id = table_user.user_id
     WHERE table_delivery_order.system_status = 1
     AND table_delivery_order.app_id = #p(app_id)
@@ -14,15 +13,10 @@
     #set(delivery_order_receiver_name = "%" + delivery_order_receiver_name + "%")
     AND table_delivery_order.delivery_order_receiver_name LIKE #p(delivery_order_receiver_name)
     #end
-    #if(express_no)
-    #set(express_no = "%" + express_no + "%")
-    AND table_express.express_no LIKE #p(express_no)
-    #end
   #end
 
-  #sql("countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_no")
+  #sql("countByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_name")
     SELECT COUNT(*) FROM table_delivery_order
-    LEFT JOIN table_express ON table_delivery_order.delivery_order_id = table_express.delivery_order_id
     LEFT JOIN table_user ON table_delivery_order.delivery_order_user_id = table_user.user_id
     WHERE table_delivery_order.system_status = 1
     #if(app_id)
@@ -35,10 +29,6 @@
     #if(delivery_order_receiver_name)
     #set(delivery_order_receiver_name = "%" + delivery_order_receiver_name + "%")
     AND table_delivery_order.delivery_order_receiver_name LIKE #p(delivery_order_receiver_name)
-    #end
-    #if(express_no)
-    #set(express_no = "%" + express_no + "%")
-    AND table_express.express_no LIKE #p(express_no)
     #end
   #end
   
@@ -59,13 +49,11 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit")
+  #sql("listByApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit")
     SELECT
     table_delivery_order.*,
-    table_express.express_no,
     table_user.user_name
     FROM table_delivery_order
-    LEFT JOIN table_express ON table_delivery_order.delivery_order_id = table_express.delivery_order_id
     LEFT JOIN table_user ON table_delivery_order.delivery_order_user_id = table_user.user_id
     WHERE table_delivery_order.system_status = 1
     AND table_delivery_order.app_id = #p(app_id)
@@ -77,21 +65,15 @@
     #set(delivery_order_receiver_name = "%" + delivery_order_receiver_name + "%")
     AND table_delivery_order.delivery_order_receiver_name LIKE #p(delivery_order_receiver_name)
     #end
-    #if(express_no)
-    #set(express_no = "%" + express_no + "%")
-    AND table_express.express_no LIKE #p(express_no)
-    #end
     ORDER BY table_delivery_order.system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameOrLikeExpress_noAndLimit")
+  #sql("listByOrApp_idOrLikeUser_nameOrLikeDelivery_order_receiver_nameAndLimit")
     SELECT
     table_delivery_order.*,
-    table_express.express_no,
     table_user.user_name
     FROM table_delivery_order
-    LEFT JOIN table_express ON table_delivery_order.delivery_order_id = table_express.delivery_order_id
     LEFT JOIN table_user ON table_delivery_order.delivery_order_user_id = table_user.user_id
     WHERE table_delivery_order.system_status = 1
     #if(app_id)
@@ -105,24 +87,17 @@
     #set(delivery_order_receiver_name = "%" + delivery_order_receiver_name + "%")
     AND table_delivery_order.delivery_order_receiver_name LIKE #p(delivery_order_receiver_name)
     #end
-    #if(express_no)
-    #set(express_no = "%" + express_no + "%")
-    AND table_express.express_no LIKE #p(express_no)
-    #end
     ORDER BY table_delivery_order.system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
   
-  #sql("listWithExpressByDelivery_order_sender_user_idAndLimit")
+  #sql("listByDelivery_order_sender_user_idAndLimit")
     SELECT
-    table_delivery_order.*,
-    table_express.express_no,
-    table_express.express_flow,
-    table_express.express_shipper_code
+    *
     FROM table_delivery_order
-    LEFT JOIN table_express ON table_express.delivery_order_id = table_delivery_order.delivery_order_id
-    WHERE table_delivery_order.system_status = 1
-    AND table_delivery_order.delivery_order_sender_user_id = #p(delivery_order_sender_user_id)
+    WHERE system_status = 1
+    AND delivery_order_sender_user_id = #p(delivery_order_sender_user_id)
+    ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
@@ -144,6 +119,7 @@
       delivery_order_user_id,
       delivery_order_sender_user_id,
       delivery_order_reciever_user_id,
+      delivery_order_amount,
       delivery_order_total_quantity,
       delivery_order_receiver_name,
       delivery_order_receiver_mobile,
@@ -169,6 +145,7 @@
       #p(delivery_order_user_id),
       #p(delivery_order_sender_user_id),
       #p(delivery_order_reciever_user_id),
+      #p(delivery_order_amount),
       #p(delivery_order_total_quantity),
       #p(delivery_order_receiver_name),
       #p(delivery_order_receiver_mobile),
@@ -196,6 +173,7 @@
     delivery_order_user_id = #p(delivery_order_user_id),
     delivery_order_sender_user_id = #p(delivery_order_sender_user_id),
     delivery_order_reciever_user_id = #p(delivery_order_reciever_user_id),
+    delivery_order_amount = #p(delivery_order_amount),
     delivery_order_total_quantity = #p(delivery_order_total_quantity),
     delivery_order_receiver_name = #p(delivery_order_receiver_name),
     delivery_order_receiver_mobile = #p(delivery_order_receiver_mobile),
@@ -220,6 +198,31 @@
     UPDATE table_delivery_order SET
     delivery_order_flow = #p(delivery_order_flow),
     delivery_is_complete = #p(delivery_is_complete),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND delivery_order_id = #p(delivery_order_id)
+    AND system_version = #p(system_version)
+  #end
+  
+  #sql("updateDelivery_order_flowOrDelivery_order_amountByDelivery_order_idAndSystem_version")
+    UPDATE table_delivery_order SET
+    delivery_order_flow = #p(delivery_order_flow),
+    #if(delivery_order_amount)
+    delivery_order_amount = #p(delivery_order_amount),
+    #end
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND delivery_order_id = #p(delivery_order_id)
+    AND system_version = #p(system_version)
+  #end
+  
+  #sql("updateDelivery_order_is_payByDelivery_order_idAndSystem_version")
+    UPDATE table_delivery_order SET
+    delivery_order_is_pay = #p(delivery_order_is_pay),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1
