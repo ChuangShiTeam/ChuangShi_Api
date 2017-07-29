@@ -128,7 +128,7 @@ public class DeliveryOrderService extends Service {
         return result;
     }
     
-    public Boolean warehouseDelivery(String delivery_order_id, String warehouse_id, BigDecimal delivery_order_amount, String request_user_id) {
+    public Boolean warehouseDelivery(String delivery_order_id, String warehouse_id, String stock_out_batch, BigDecimal delivery_order_amount, String request_user_id) {
         DeliveryOrder deliveryOrder = findByDelivery_order_id(delivery_order_id);
         if (deliveryOrder == null) {
             throw new RuntimeException("找不到对应发货单");
@@ -142,7 +142,7 @@ public class DeliveryOrderService extends Service {
             stockOutProductSkuList.add(stockOutProductSku);
         }
         //出库
-        Boolean result = stockOutService.save(deliveryOrder.getApp_id(), warehouse_id, delivery_order_id, deliveryOrder.getDelivery_order_user_id(), StockType.MEMBER.getKey(), stockOutProductSkuList, request_user_id);
+        Boolean result = stockOutService.save(deliveryOrder.getApp_id(), warehouse_id, delivery_order_id, deliveryOrder.getDelivery_order_user_id(), stock_out_batch, StockType.MEMBER.getKey(), stockOutProductSkuList, request_user_id);
         
         if (result) {
             if (StringUtils.isNotBlank(deliveryOrder.getTrade_id())) {

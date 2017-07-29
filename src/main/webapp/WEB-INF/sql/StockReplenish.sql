@@ -1,6 +1,6 @@
 #namespace("stock_replenish")
 
-  #sql("countByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name")
+  #sql("countByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_name")
     SELECT COUNT(*) FROM table_stock_replenish
     #if(stock_replenish_type == 'MEMBER' && user_name)
     LEFT JOIN table_user ON table_user.user_id = table_stock_replenish.object_id
@@ -11,13 +11,17 @@
     AND table_stock_replenish.warehouse_id = #p(warehouse_id)
     #end
     AND table_stock_replenish.stock_replenish_type = #p(stock_replenish_type)
+    #if(stock_replenish_batch)
+    #set(stock_replenish_batch = "%" + stock_replenish_batch + "%")
+    AND table_stock_replenish.stock_replenish_batch = #p(stock_replenish_batch)
+    #end
     #if(stock_replenish_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_stock_replenish.user_name LIKE #p(user_name)
     #end
   #end
 
-  #sql("countByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name")
+  #sql("countByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_name")
     SELECT COUNT(*) FROM table_stock_replenish
     #if(stock_replenish_type == 'MEMBER' && user_name)
     LEFT JOIN table_user ON table_user.user_id = table_stock_replenish.object_id
@@ -30,6 +34,10 @@
     AND table_stock_replenish.warehouse_id = #p(warehouse_id)
     #end
     AND table_stock_replenish.stock_replenish_type = #p(stock_replenish_type)
+    #if(stock_replenish_batch)
+    #set(stock_replenish_batch = "%" + stock_replenish_batch + "%")
+    AND table_stock_replenish.stock_replenish_batch = #p(stock_replenish_batch)
+    #end
     #if(stock_replenish_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_stock_replenish.user_name LIKE #p(user_name)
@@ -48,7 +56,7 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit")
+  #sql("listByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_nameAndLimit")
     SELECT
     table_stock_replenish.stock_replenish_id
     FROM table_stock_replenish
@@ -61,6 +69,10 @@
     AND table_stock_replenish.warehouse_id = #p(warehouse_id)
     #end
     AND table_stock_replenish.stock_replenish_type = #p(stock_replenish_type)
+    #if(stock_replenish_batch)
+    #set(stock_replenish_batch = "%" + stock_replenish_batch + "%")
+    AND table_stock_replenish.stock_replenish_batch = #p(stock_replenish_batch)
+    #end
     #if(stock_replenish_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
@@ -69,7 +81,7 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit")
+  #sql("listByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_nameAndLimit")
     SELECT
     table_stock_replenish.stock_replenish_id
     FROM table_stock_replenish
@@ -84,6 +96,10 @@
     AND table_stock_replenish.warehouse_id = #p(warehouse_id)
     #end
     AND table_stock_replenish.stock_replenish_type = #p(stock_replenish_type)
+    #if(stock_replenish_batch)
+    #set(stock_replenish_batch = "%" + stock_replenish_batch + "%")
+    AND table_stock_replenish.stock_replenish_batch = #p(stock_replenish_batch)
+    #end
     #if(stock_replenish_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
@@ -128,6 +144,7 @@
       app_id,
       warehouse_id,
       object_id,
+      stock_replenish_batch,
       stock_replenish_type,
       stock_replenish_quantity,
       stock_replenish_action,
@@ -143,6 +160,7 @@
       #p(app_id),
       #p(warehouse_id),
       #p(object_id),
+      #p(stock_replenish_batch),
       #p(stock_replenish_type),
       #p(stock_replenish_quantity),
       #p(stock_replenish_action),
@@ -160,6 +178,7 @@
     UPDATE table_stock_replenish SET
     warehouse_id = #p(warehouse_id),
     object_id = #p(object_id),
+    stock_replenish_batch = #p(stock_replenish_batch),
     stock_replenish_type = #p(stock_replenish_type),
     stock_replenish_quantity = #p(stock_replenish_quantity),
     stock_replenish_action = #p(stock_replenish_action),

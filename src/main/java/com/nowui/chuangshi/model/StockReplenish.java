@@ -16,6 +16,9 @@ public class StockReplenish extends Model<StockReplenish> {
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用id或用户id")
     public static final String OBJECT_ID = "object_id";
+    
+    @Column(type = ColumnType.VARCHAR, length = 25, comment = "批次")
+    public static final String STOCK_REPLENISH_BATCH = "stock_replenish_batch";
 
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "公司或会员")
     public static final String STOCK_REPLENISH_TYPE = "stock_replenish_type";
@@ -71,6 +74,14 @@ public class StockReplenish extends Model<StockReplenish> {
 
     public void setObject_id(String object_id) {
         set(OBJECT_ID, object_id);
+    }
+    
+    public String getStock_replenish_batch() {
+        return getStr(STOCK_REPLENISH_BATCH);
+    }
+
+    public void setStock_replenish_batch(String stock_replenish_batch) {
+        set(STOCK_REPLENISH_BATCH, stock_replenish_batch);
     }
 
     public String getStock_replenish_type() {

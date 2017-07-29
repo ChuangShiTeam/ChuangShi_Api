@@ -193,6 +193,7 @@ public class DeliveryOrderController extends Controller {
         String delivery_order_id = jsonObject.getString(DeliveryOrder.DELIVERY_ORDER_ID);
         String warehouse_id = jsonObject.getString(Warehouse.WAREHOUSE_ID);
         BigDecimal delivery_order_amount = jsonObject.getBigDecimal(DeliveryOrder.DELIVERY_ORDER_AMOUNT);
+        String stock_out_batch = jsonObject.getString("stock_out_batch");
         
         authenticateRequest_app_idAndRequest_user_id();
         
@@ -205,7 +206,7 @@ public class DeliveryOrderController extends Controller {
             throw new RuntimeException("需填写快递单");
         }
         
-        Boolean result = deliveryOrderService.warehouseDelivery(delivery_order_id, warehouse_id, delivery_order_amount, request_user_id);        
+        Boolean result = deliveryOrderService.warehouseDelivery(delivery_order_id, warehouse_id, stock_out_batch, delivery_order_amount, request_user_id);        
         if (result) {
             //快递订阅
             for (Express express : express_list) {
