@@ -8,6 +8,7 @@ public class Url {
     public static final String WECHAT_NOTIFY = "/wechat/notify";
 
     public static final String CODE_ADMIN_LIST = "/code/admin/list";
+    public static final String CODE_ADMIN_FIND = "/code/admin/find";
     public static final String CODE_ADMIN_SAVE = "/code/admin/save";
     public static final String CODE_SYSTEM_LIST = "/code/system/list";
     public static final String CODE_SYSTEM_SAVE = "/code/system/save";

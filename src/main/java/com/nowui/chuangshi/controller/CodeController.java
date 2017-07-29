@@ -50,6 +50,31 @@ public class CodeController extends Controller {
         renderSuccessJson(recordList.size(), resultList);
     }
 
+    @ActionKey(Url.CODE_ADMIN_FIND)
+    public void adminFind() {
+        validateRequest_app_id();
+
+        JSONObject jsonObject = getParameterJSONObject();
+        String table_name = jsonObject.getString("table_name");
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        List<Record> recordList = codeService.listByTable_name(table_name);
+
+        List<Record> resultList = new ArrayList<Record>();
+
+        for (Record record : recordList) {
+            if (!record.getStr("column_name").startsWith("system_")) {
+                record.set("is_search", false);
+                record.set("is_list", true);
+                record.set("is_update", true);
+                resultList.add(record);
+            }
+        }
+
+        renderSuccessJson(resultList);
+    }
+
     @ActionKey(Url.CODE_ADMIN_SAVE)
     public void adminSave() {
         JSONObject jsonObject = getParameterJSONObject();
