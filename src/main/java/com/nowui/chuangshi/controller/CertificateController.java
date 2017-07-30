@@ -78,7 +78,7 @@ public class CertificateController extends Controller {
 
         Boolean result = certificateService.save(certificate_id, request_app_id, model.getUser_id(),
                 model.getCertificate_number(), model.getCertificate_start_date(), model.getCertificate_end_date(),
-                request_user_id);
+                false, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -285,7 +285,7 @@ public class CertificateController extends Controller {
 
         Boolean result = certificateService.save(certificate_id, model.getApp_id(), model.getUser_id(),
                 model.getCertificate_number(), model.getCertificate_start_date(), model.getCertificate_end_date(),
-                request_user_id);
+                false, request_user_id);
 
         renderSuccessJson(result);
     }

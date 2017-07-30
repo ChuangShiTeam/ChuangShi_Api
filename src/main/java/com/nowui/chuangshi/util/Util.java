@@ -179,4 +179,9 @@ public class Util {
 
         return map;
     }
+
+    // 获取6位随机数
+    public static int getRandomNumber() {
+        return (int) ((Math.random() * 9 + 1) * 100000);
+    }
 }

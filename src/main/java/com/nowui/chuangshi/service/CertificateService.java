@@ -42,9 +42,10 @@ public class CertificateService extends Service {
     }
 
     public Boolean save(String certificate_id, String app_id, String user_id, String certificate_number,
-            Date certificate_start_date, Date certificate_end_date, String system_create_user_id) {
+            Date certificate_start_date, Date certificate_end_date, Boolean certificate_is_pay,
+            String system_create_user_id) {
         return certificateCache.save(certificate_id, app_id, user_id, certificate_number, certificate_start_date,
-                certificate_end_date, system_create_user_id);
+                certificate_end_date, certificate_is_pay, system_create_user_id);
     }
 
     public Boolean updateValidateSystem_version(String certificate_id, String user_id, String certificate_number,

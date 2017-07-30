@@ -9,10 +9,15 @@ public class DateUtil {
 
     public static final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public static final SimpleDateFormat cnDateFormat = new SimpleDateFormat("yyyy年MM月dd日");
     public static final SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
 
     public static String getDateString(Date dateTime) {
         return dateFormat.format(dateTime);
+    }
+
+    public static String getCNDateString(Date dateTime) {
+        return dateFormat.format(cnDateFormat);
     }
 
     public static String getDateTimeString(Date dateTime) {

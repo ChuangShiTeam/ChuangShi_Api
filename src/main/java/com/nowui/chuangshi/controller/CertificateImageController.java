@@ -1,16 +1,29 @@
 package com.nowui.chuangshi.controller;
 
+import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Url;
+import com.nowui.chuangshi.model.Certificate;
 import com.nowui.chuangshi.model.CertificateImage;
+import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.CertificateImageService;
+import com.nowui.chuangshi.service.CertificateService;
+import com.nowui.chuangshi.service.FileService;
+import com.nowui.chuangshi.service.UserService;
+import com.nowui.chuangshi.type.FileType;
+import com.nowui.chuangshi.util.DateUtil;
+import com.nowui.chuangshi.util.Util;
 
 public class CertificateImageController extends Controller {
 
+    private final CertificateService certificateService = new CertificateService();
     private final CertificateImageService certificateImageService = new CertificateImageService();
+    private final UserService userService = new UserService();
+    private final FileService fileService = new FileService();
 
     @ActionKey(Url.CERTIFICATE_IMAGE_LIST)
     public void list() {
@@ -92,7 +105,51 @@ public class CertificateImageController extends Controller {
 
     @ActionKey(Url.CERTIFICATE_IMAGE_ADMIN_SAVE)
     public void adminSave() {
-        save();
+        validateRequest_app_id();
+        validate(User.USER_ID, CertificateImage.CERTIFICATE_TYPE, CertificateImage.CERTIFICATE_PEOPLE_NAME,
+                CertificateImage.CERTIFICATE_PEOPLE_ID_CARD, CertificateImage.CERTIFICATE_PEOPLE_MOBILE,
+                CertificateImage.CERTIFICATE_START_DATE, CertificateImage.CERTIFICATE_END_DATE);
+
+        CertificateImage model = getModel(CertificateImage.class);
+        String app_id = getRequest_app_id();
+        String request_user_id = getRequest_user_id();
+        JSONObject jsonObject = getParameterJSONObject();
+        String user_id = jsonObject.getString(User.USER_ID);
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        // 判断是否支付
+        Certificate certificate = certificateService.findByUser_id(user_id);
+        User user = userService.findByUser_id(user_id);
+        String certificate_number = "";
+        if (certificate == null) {
+            certificate_number = DateUtil.getDateString(new Date()).replace("-", "") + Util.getRandomNumber();
+
+            certificateService.save(Util.getRandomUUID(), app_id, user_id, certificate_number,
+                    model.getCertificate_start_date(), model.getCertificate_end_date(), false, request_user_id);
+        } else {
+            certificate_number = certificate.getCertificate_number();
+        }
+
+        String file_id = Util.getRandomUUID();
+
+        String filePath = certificateImageService.saveCertificateFile(model.getCertificate_type(), certificate_number,
+                user.getUser_name(), model.getCertificate_people_name(), model.getCertificate_people_id_card(),
+                model.getCertificate_people_mobile(), model.getCertificate_start_date(),
+                model.getCertificate_end_date());
+        File file = new File(filePath);
+        String suffix = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+
+        fileService.save(file_id, app_id, FileType.IMAGE.getKey(), file.getName(), suffix,
+                new Long(file.getTotalSpace()).intValue(), file.getAbsolutePath(), file.getAbsolutePath(),
+                file.getAbsolutePath(), file.getAbsolutePath(), false, request_user_id);
+
+        Boolean result = certificateImageService.save(Util.getRandomUUID(), file_id, model.getCertificate_type(), "",
+                "", model.getCertificate_people_name(), model.getCertificate_people_id_card(),
+                model.getCertificate_people_mobile(), "", "", model.getCertificate_start_date(),
+                model.getCertificate_end_date(), request_user_id);
+
+        renderSuccessJson(result);
     }
 
     @ActionKey(Url.CERTIFICATE_IMAGE_ADMIN_DELETE)
