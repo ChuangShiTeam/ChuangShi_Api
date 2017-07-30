@@ -17,6 +17,8 @@ public class MemberDeliveryOrderPayCache extends Cache {
 
         if (member_delivery_order_payList == null) {
             member_delivery_order_payList = memberDeliveryOrderPayDao.listByMember_delivery_order_id(member_delivery_order_id);
+        
+            CacheUtil.put(MEMBER_DELIVERY_ORDER_PAY_LIST_BY_MEMBER_DELIVERY_ORDER_ID_CACHE, member_delivery_order_id, member_delivery_order_payList);
         }
         
         return member_delivery_order_payList;

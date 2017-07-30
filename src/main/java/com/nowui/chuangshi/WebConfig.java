@@ -43,6 +43,7 @@ import com.nowui.chuangshi.controller.MemberAddressController;
 import com.nowui.chuangshi.controller.MemberController;
 import com.nowui.chuangshi.controller.MemberDeliveryOrderController;
 import com.nowui.chuangshi.controller.MemberLevelController;
+import com.nowui.chuangshi.controller.MemberPurchaseOrderController;
 import com.nowui.chuangshi.controller.MenuController;
 import com.nowui.chuangshi.controller.ProductBrandController;
 import com.nowui.chuangshi.controller.ProductCategoryController;
@@ -83,6 +84,7 @@ import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberAddress;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.model.MemberLevel;
+import com.nowui.chuangshi.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.model.Menu;
 import com.nowui.chuangshi.model.MenuApi;
 import com.nowui.chuangshi.model.Product;
@@ -147,6 +149,7 @@ public class WebConfig extends JFinalConfig {
         routes.add("/member/address", MemberAddressController.class);
         routes.add("/member/level", MemberLevelController.class);
         routes.add("/member/delivery/order", MemberDeliveryOrderController.class);
+        routes.add("/member/purchase/order", MemberPurchaseOrderController.class);
 
         routes.add("/express", ExpressController.class);
         routes.add("/qrcode", QrcodeController.class);
@@ -232,6 +235,7 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_member_address", "member_address_id", MemberAddress.class);
         activeRecordPlugin.addMapping("table_member_level", "member_level_id", MemberLevel.class);
         activeRecordPlugin.addMapping("table_member_delivery_order", "member_delivery_order_id", MemberDeliveryOrder.class);
+        activeRecordPlugin.addMapping("table_member_purchase_order", "member_purchase_order_id", MemberPurchaseOrder.class);
         activeRecordPlugin.addMapping("table_stock", "stock_id", Stock.class);
         activeRecordPlugin.addMapping("table_express", "express_id", Express.class);
         activeRecordPlugin.addMapping("table_qrcode", "qrcode_id", Qrcode.class);

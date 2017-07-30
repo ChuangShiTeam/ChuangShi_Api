@@ -2,8 +2,8 @@ package com.nowui.chuangshi.cache;
 
 import java.util.List;
 
+import com.jfinal.plugin.activerecord.Record;
 import com.nowui.chuangshi.dao.MemberDeliveryOrderProductSkuDao;
-import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 import com.nowui.chuangshi.util.CacheUtil;
 
 public class MemberDeliveryOrderProductSkuCache extends Cache {
@@ -12,11 +12,13 @@ public class MemberDeliveryOrderProductSkuCache extends Cache {
 
     private MemberDeliveryOrderProductSkuDao memberDeliveryOrderProductSkuDao = new MemberDeliveryOrderProductSkuDao();
 
-    public List<MemberDeliveryOrderProductSku> listByMember_delivery_order_id(String member_delivery_order_id) {
-        List<MemberDeliveryOrderProductSku> member_delivery_order_product_sku_list = CacheUtil.get(MEMBER_DELIVERY_ORDER_PRODUCT_SKU_LIST_BY_MEMBER_DELIVERY_ORDER_ID_CACHE, member_delivery_order_id);
+    public List<Record> listByMember_delivery_order_id(String member_delivery_order_id) {
+        List<Record> member_delivery_order_product_sku_list = CacheUtil.get(MEMBER_DELIVERY_ORDER_PRODUCT_SKU_LIST_BY_MEMBER_DELIVERY_ORDER_ID_CACHE, member_delivery_order_id);
         
         if (member_delivery_order_product_sku_list == null) {
             member_delivery_order_product_sku_list = memberDeliveryOrderProductSkuDao.listByMember_delivery_order_id(member_delivery_order_id);
+        
+            CacheUtil.put(MEMBER_DELIVERY_ORDER_PRODUCT_SKU_LIST_BY_MEMBER_DELIVERY_ORDER_ID_CACHE, member_delivery_order_id, member_delivery_order_product_sku_list);
         }
         return member_delivery_order_product_sku_list;
     }

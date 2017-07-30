@@ -5,19 +5,20 @@ import java.util.List;
 
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 
 public class MemberDeliveryOrderProductSkuDao extends Dao {
 
-    public List<MemberDeliveryOrderProductSku> listByMember_delivery_order_id(String member_delivery_order_id) {
+    public List<Record> listByMember_delivery_order_id(String member_delivery_order_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberDeliveryOrderProductSku.MEMBER_DELIVERY_ORDER_ID, member_delivery_order_id);
         SqlPara sqlPara = Db.getSqlPara("member_delivery_order_product_sku.listByMember_delivery_order_id", sqlMap);
 
         logSql("member_delivery_order_product_sku", "listByMember_delivery_order_id", sqlPara);
 
-        return new MemberDeliveryOrderProductSku().find(sqlPara.getSql(), sqlPara.getPara());
+        return Db.find(sqlPara.getSql(), sqlPara.getPara());
     }
 
     public Boolean save(String member_delivery_order_id, String product_sku_id, Integer product_sku_quantity, String system_create_user_id) {

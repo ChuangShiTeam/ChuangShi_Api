@@ -2,14 +2,14 @@ package com.nowui.chuangshi.service;
 
 import java.util.List;
 
+import com.jfinal.plugin.activerecord.Record;
 import com.nowui.chuangshi.cache.MemberDeliveryOrderProductSkuCache;
-import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 
 public class MemberDeliveryOrderProductSkuService extends Service {
 
     private MemberDeliveryOrderProductSkuCache memberDeliveryOrderProductSkuCache = new MemberDeliveryOrderProductSkuCache();
 
-    public List<MemberDeliveryOrderProductSku> listByMember_delivery_order_id(String member_delivery_order_id) {
+    public List<Record> listByMember_delivery_order_id(String member_delivery_order_id) {
         return memberDeliveryOrderProductSkuCache.listByMember_delivery_order_id(member_delivery_order_id);
     }
 
