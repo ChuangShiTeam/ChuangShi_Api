@@ -11,9 +11,11 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Certificate;
 import com.nowui.chuangshi.model.CertificateImage;
+import com.nowui.chuangshi.model.File;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.CertificateImageService;
 import com.nowui.chuangshi.service.CertificateService;
+import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.CertificateImageType;
 import com.nowui.chuangshi.util.Util;
@@ -23,6 +25,7 @@ public class CertificateController extends Controller {
     private final CertificateService certificateService = new CertificateService();
     private final CertificateImageService certificateImageService = new CertificateImageService();
     private final UserService userService = new UserService();
+    private final FileService fileService = new FileService();
 
     @ActionKey(Url.CERTIFICATE_LIST)
     public void list() {
@@ -47,20 +50,47 @@ public class CertificateController extends Controller {
     @ActionKey(Url.CERTIFICATE_FIND)
     public void find() {
         validateRequest_app_id();
-        validate(Certificate.CERTIFICATE_ID);
-
-        Certificate model = getModel(Certificate.class);
+        validate();
+        String user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Certificate certificate = certificateService.findByCertificate_id(model.getCertificate_id());
+        Certificate certificate = certificateService.findByUser_id(user_id);
 
-        authenticateApp_id(certificate.getApp_id());
-        authenticateSystem_create_user_id(certificate.getSystem_create_user_id());
+        List<CertificateImage> certificateImageWXList = new ArrayList<>();
+        List<CertificateImage> certificateImageOtherList = new ArrayList<>();
+        Map<String, Object> result = new HashMap<>();
 
-        certificate.keep(Certificate.CERTIFICATE_ID, Certificate.SYSTEM_VERSION);
+        if (certificate != null) {
+            authenticateApp_id(certificate.getApp_id());
 
-        renderSuccessJson(certificate);
+            User user = userService.findByUser_id(user_id);
+            certificate.put(User.USER_NAME, user.getUser_name());
+
+            List<CertificateImage> certificateImageList = certificateImageService
+                    .listByCertificate_id(certificate.getCertificate_id());
+
+            for (CertificateImage certificateImage : certificateImageList) {
+                File file = fileService.findByFile_id(certificateImage.getFile_id());
+                certificateImage.put(File.FILE_ORIGINAL_PATH, file.getFile_original_path());
+
+                if (certificateImage.getCertificate_type().equals(CertificateImageType.WX.getValue())) {
+                    certificateImageWXList.add(certificateImage);
+                } else {
+                    certificateImageOtherList.add(certificateImage);
+                }
+            }
+
+            certificate.keep(Certificate.CERTIFICATE_ID, Certificate.USER_ID, User.USER_NAME,
+                    Certificate.CERTIFICATE_NUMBER, Certificate.CERTIFICATE_START_DATE,
+                    Certificate.CERTIFICATE_END_DATE, Certificate.CERTIFICATE_IS_PAY, Certificate.SYSTEM_VERSION);
+        }
+
+        result.put("certificate", certificate == null ? new Certificate() : certificate);
+        result.put("certificateImageWXList", certificateImageWXList);
+        result.put("certificateImageOtherList", certificateImageOtherList);
+
+        renderSuccessJson(result);
     }
 
     @ActionKey(Url.CERTIFICATE_SAVE)
@@ -174,6 +204,9 @@ public class CertificateController extends Controller {
                     .listByCertificate_id(certificate.getCertificate_id());
 
             for (CertificateImage certificateImage : certificateImageList) {
+                File file = fileService.findByFile_id(certificateImage.getFile_id());
+                certificateImage.put(File.FILE_ORIGINAL_PATH, file.getFile_original_path());
+
                 if (certificateImage.getCertificate_type().equals(CertificateImageType.WX.getValue())) {
                     certificateImageWXList.add(certificateImage);
                 } else {

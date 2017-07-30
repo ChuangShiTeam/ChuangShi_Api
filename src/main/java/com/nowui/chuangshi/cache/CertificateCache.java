@@ -87,8 +87,13 @@ public class CertificateCache extends Cache {
     public Boolean save(String certificate_id, String app_id, String user_id, String certificate_number,
             Date certificate_start_date, Date certificate_end_date, Boolean certificate_is_pay,
             String system_create_user_id) {
-        return certificateDao.save(certificate_id, app_id, user_id, certificate_number, certificate_start_date,
-                certificate_end_date, certificate_is_pay, system_create_user_id);
+        Boolean result = certificateDao.save(certificate_id, app_id, user_id, certificate_number,
+                certificate_start_date, certificate_end_date, certificate_is_pay, system_create_user_id);
+        if (result) {
+            CacheUtil.remove(CERTIFICATE_BY_CERTIFICATE_ID_CACHE, certificate_id);
+            CacheUtil.remove(CERTIFICATE_BY_USER_ID_CACHE, user_id);
+        }
+        return result;
     }
 
     public Boolean updateValidateSystem_version(String certificate_id, String user_id, String certificate_number,

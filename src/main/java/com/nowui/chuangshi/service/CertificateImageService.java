@@ -26,6 +26,8 @@ public class CertificateImageService extends Service {
 
     private CertificateImageCache certificateImageCache = new CertificateImageCache();
 
+    private final FileService fileService = new FileService();
+
     public List<CertificateImage> listByCertificate_id(String certificate_id) {
         return certificateImageCache.listByCertificate_id(certificate_id);
     }
@@ -44,16 +46,17 @@ public class CertificateImageService extends Service {
                 system_create_user_id);
     }
 
-    public String saveCertificateFile(String certificate_type, String certificate_number, String user_name,
-            String certificate_people_name, String certificate_people_id_card, String certificate_people_mobile,
-            Date certificate_start_date, Date certificate_end_date) {
+    public Map<String, Object> saveCertificateFile(String app_id, String system_create_user_id, String certificate_type,
+            String certificate_number, String user_name, String certificate_people_name,
+            String certificate_people_id_card, String certificate_people_mobile, Date certificate_start_date,
+            Date certificate_end_date) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
         String start_date = sdf.format(certificate_start_date);
         String end_date = sdf.format(certificate_end_date);
 
-        BufferedImage sealBufferedImage = ImageUtil.loadImageLocal("D:\\tmp\\seal.png");
-        BufferedImage templateBufferedImage = ImageUtil.loadImageLocal("D:\\tmp\\template.png");
+        BufferedImage sealBufferedImage = ImageUtil.loadImageLocal("D:\\seal.png");
+        BufferedImage templateBufferedImage = ImageUtil.loadImageLocal("D:\\template.png");
 
         String[] numberArray = new String[1];
         numberArray[0] = "授权编号：" + certificate_number;
@@ -106,68 +109,61 @@ public class CertificateImageService extends Service {
         certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, statementDateArray, 635, 987 + 50,
                 300, 1, new Font("Microsoft YaHei", Font.BOLD, 18));
 
-        String resultFilePath = "D:\\tmp\\" + user_name + certificate_type + "授权证书.jpg";
+        String file_id = Util.getRandomUUID();
+        String resultFilePath = "D:\\" + file_id + ".jpg";
         ImageUtil.writeImageLocal(resultFilePath,
                 ImageUtil.modifyImagetogeter(sealBufferedImage, certificateBufferedImage));
 
-        return resultFilePath;
-    }
-    
-   /* private void saveFile(){
+        File uploadFile = new File(resultFilePath);
+
+        // 优化分离
+        // TODO
         String path = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + app_id + "/" + system_create_user_id;
-        String thumbnailPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + app_id + "/" + system_create_user_id + "/" + Constant.THUMBNAIL;
-        String originalPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + app_id + "/" + system_create_user_id + "/" + Constant.ORIGINAL;
+        String thumbnailPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + app_id + "/"
+                + system_create_user_id + "/" + Constant.THUMBNAIL;
+        String originalPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + app_id + "/"
+                + system_create_user_id + "/" + Constant.ORIGINAL;
 
         FileUtil.createPath(path);
         FileUtil.createPath(thumbnailPath);
         FileUtil.createPath(originalPath);
 
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        String file_suffix = uploadFile.getName().substring(uploadFile.getName().lastIndexOf(".") + 1);
+        String file_name = Util.getRandomUUID() + "." + file_suffix;
 
-        for (UploadFile uploadFile : uploadFileList) {
-            String file_suffix = uploadFile.getFileName().substring(uploadFile.getFileName().lastIndexOf(".") + 1);
-            String file_name = Util.getRandomUUID() + "." + file_suffix;
+        path = path + "/" + file_name;
+        thumbnailPath = thumbnailPath + "/" + file_name;
+        originalPath = originalPath + "/" + file_name;
 
-            path = path + "/" + file_name;
-            thumbnailPath = thumbnailPath + "/" + file_name;
-            originalPath = originalPath + "/" + file_name;
+        String file_type = FileType.IMAGE.getKey();
 
-            String file_type = FileType.IMAGE.getKey();
+        FileUtil.resizeImage(uploadFile, file_suffix, thumbnailPath, 100);
+        FileUtil.resizeImage(uploadFile, file_suffix, path, 360);
+        FileUtil.resizeImage(uploadFile, file_suffix, originalPath, 0);
 
-            if (file_suffix.equals("png") || file_suffix.equals("jpg") || file_suffix.equals("jpeg")) {
-                FileUtil.resizeImage(uploadFile.getFile(), file_suffix, thumbnailPath, 100);
-                FileUtil.resizeImage(uploadFile.getFile(), file_suffix, path, 360);
-                FileUtil.resizeImage(uploadFile.getFile(), file_suffix, originalPath, 0);
-            } else {
-                FileUtil.copy(uploadFile.getFile(), new java.io.File(path));
+        FileKit.delete(uploadFile);
 
-                thumbnailPath = path;
-                originalPath = path;
+        Integer file_size = (int) uploadFile.length();
+        String file_path = path.replace(PathKit.getWebRootPath(), "");
+        String file_thumbnail_path = thumbnailPath.replace(PathKit.getWebRootPath(), "");
+        String file_original_path = originalPath.replace(PathKit.getWebRootPath(), "");
+        String file_image = "";
+        Boolean file_is_external = false;
 
-                file_type = FileType.OTHER.getKey();
-            }
+        Boolean result = fileService.save(file_id, app_id, file_type, file_name, file_suffix, file_size, file_path,
+                file_thumbnail_path, file_original_path, file_image, file_is_external, system_create_user_id);
 
-            FileKit.delete(uploadFile.getFile());
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (result) {
+            map.put(com.nowui.chuangshi.model.File.FILE_ID, file_id);
+            map.put(com.nowui.chuangshi.model.File.FILE_NAME, file_name);
+            map.put(com.nowui.chuangshi.model.File.FILE_PATH, file_path);
+        }
 
-            String file_id = Util.getRandomUUID();
-            Integer file_size = (int) uploadFile.getFile().length();
-            String file_path = path.replace(PathKit.getWebRootPath(), "");
-            String file_thumbnail_path = thumbnailPath.replace(PathKit.getWebRootPath(), "");
-            String file_original_path = originalPath.replace(PathKit.getWebRootPath(), "");
-            String file_image = "";
-            Boolean file_is_external = false;
+        return map;
+    }
 
-            Boolean result = save(file_id, app_id, file_type, file_name, file_suffix, file_size, file_path, file_thumbnail_path, file_original_path, file_image, file_is_external, system_create_user_id);
-
-            if (!result) {
-                throw new RuntimeException("上传不成功");
-            }
-
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(File.FILE_ID, file_id);
-            map.put(File.FILE_NAME, file_name);
-            map.put(File.FILE_PATH, file_path);
-            list.add(map);
-    }*/
-
+    public static void main(String[] args) {
+        System.out.println("PathKit.getWebRootPath()" + PathKit.getWebRootPath());
+    }
 }

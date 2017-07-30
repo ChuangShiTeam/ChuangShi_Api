@@ -9,7 +9,6 @@ import java.net.URL;
 
 public class ImageUtil {
 
-
     public static BufferedImage loadImageLocal(String imgName) {
         try {
             return ImageIO.read(new File(imgName));
@@ -40,7 +39,20 @@ public class ImageUtil {
         }
     }
 
-    public static BufferedImage modifyImage(BufferedImage bufferedImage, String[] contentArray, int x, int y, int width, double lineHeight, Font font) {
+    public static File writeImageLocalReturn(String newImage, BufferedImage img) {
+        File outputfile = new File(newImage);
+        if (newImage != null && img != null) {
+            try {
+                ImageIO.write(img, "jpg", outputfile);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return outputfile;
+    }
+
+    public static BufferedImage modifyImage(BufferedImage bufferedImage, String[] contentArray, int x, int y, int width,
+            double lineHeight, Font font) {
         try {
             Graphics2D graphics2D = bufferedImage.createGraphics();
             graphics2D.setBackground(Color.WHITE);
@@ -78,7 +90,6 @@ public class ImageUtil {
         try {
             int w = newBufferedImage.getWidth();
             int h = newBufferedImage.getHeight();
-
 
             Graphics2D graphics2D = bufferedImage.createGraphics();
             graphics2D.drawImage(newBufferedImage, 0, 0, w, h, null);
