@@ -3,13 +3,13 @@ package com.nowui.chuangshi.service;
 import java.util.List;
 
 import com.nowui.chuangshi.cache.MemberDeliveryOrderExpressCache;
-import com.nowui.chuangshi.model.MemberDeliveryOrderExpress;
+import com.nowui.chuangshi.model.Express;
 
 public class MemberDeliveryOrderExpressService extends Service {
 
     private MemberDeliveryOrderExpressCache memberDeliveryOrderExpressCache = new MemberDeliveryOrderExpressCache();
 
-    public List<MemberDeliveryOrderExpress> listByMember_delivery_order_id(String member_delivery_order_id) {
+    public List<Express> listByMember_delivery_order_id(String member_delivery_order_id) {
         return memberDeliveryOrderExpressCache.listByMember_delivery_order_id(member_delivery_order_id);
     }
     

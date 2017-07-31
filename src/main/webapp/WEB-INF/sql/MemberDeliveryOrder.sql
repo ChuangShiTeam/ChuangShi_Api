@@ -169,6 +169,41 @@
     AND member_delivery_order_id = #p(member_delivery_order_id)
     AND system_version = #p(system_version)
   #end
+  
+  #sql("updateMember_delivery_order_flowAndMember_delivery_order_is_payByMember_delivery_order_idAndSystem_version")
+    UPDATE table_member_delivery_order SET
+    member_delivery_order_is_pay = #p(member_delivery_order_is_pay),
+    member_delivery_order_flow = #p(member_delivery_order_flow),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND member_delivery_order_id = #p(member_delivery_order_id)
+    AND system_version = #p(system_version)
+  #end
+  
+  #sql("updateMember_delivery_order_flowByMember_delivery_order_idAndSystem_version")
+    UPDATE table_member_delivery_order SET
+    member_delivery_order_flow = #p(member_delivery_order_flow),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND member_delivery_order_id = #p(member_delivery_order_id)
+    AND system_version = #p(system_version)
+  #end
+  
+  #sql("updateMember_delivery_order_flowAndMember_delivery_order_is_completeByMember_delivery_order_idAndSystem_version")
+    UPDATE table_member_delivery_order SET
+    member_delivery_order_is_complete = #p(member_delivery_order_is_complete),
+    member_delivery_order_flow = #p(member_delivery_order_flow),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND member_delivery_order_id = #p(member_delivery_order_id)
+    AND system_version = #p(system_version)
+  #end
 
   #sql("deleteByMember_delivery_order_idAndSystem_version")
     UPDATE table_member_delivery_order SET
