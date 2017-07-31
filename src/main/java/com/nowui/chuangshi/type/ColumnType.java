@@ -5,7 +5,7 @@ public enum ColumnType {
     TINYINT("TINYINT"),
     VARCHAR("VARCHAR"),
     DECIMAL("DECIMAL"),
-    BOOLEAN("BOOLEAN"),
+    TEXT("TEXT"),
     LONGTEXT("LONGTEXT"),
     DATETIME("DATETIME");
 

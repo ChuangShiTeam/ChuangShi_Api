@@ -29,7 +29,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     @Column(type = ColumnType.INT, length = 5, comment = "")
     public static final String SYSTEM_VERSION = "system_version";
 
-    @Column(type = ColumnType.BOOLEAN, length = 0, comment = "")
+    @Column(type = ColumnType.TINYINT, length = 0, comment = "")
     public static final String SYSTEM_STATUS = "system_status";
 
     private List<Map<String, Object>> columnList;

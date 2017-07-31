@@ -12,7 +12,9 @@ public @interface Column {
 
     int length() default 0;
 
-    String defaultValue() default "";
+    String default_value() default "";
 
     String comment() default "";
+
+    boolean is_update() default true;
 }
