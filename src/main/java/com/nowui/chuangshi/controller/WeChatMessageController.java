@@ -145,12 +145,14 @@ public class WeChatMessageController extends MsgController {
             qrcodeService.updateQrcode_cancelByQrcode_id(member.getFrom_qrcode_id(), system_create_user_id);
         }
 
-        if (app_id == "df2078d6c9eb46babb0df957127273ab") {
+        if (app_id.equals("df2078d6c9eb46babb0df957127273ab")) {
             OutNewsMsg outNewsMsg = new OutNewsMsg(inFollowEvent);
             outNewsMsg.addNews("欢迎使用济颐馆健康管理平台！", "广州市济颐馆贸易有限公司",
                     "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg",
                     "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg");
             render(outNewsMsg);
+        } else {
+
         }
 
         OutTextMsg outMsg = new OutTextMsg(inFollowEvent);
@@ -172,6 +174,8 @@ public class WeChatMessageController extends MsgController {
         String request_user_id = "";
         Boolean member_status = false;
         String system_create_user_id = "";
+
+        System.out.println(app_id);
 
         App app = appService.findByApp_id(app_id);
 
@@ -276,17 +280,17 @@ public class WeChatMessageController extends MsgController {
 
         }
 
-        if (app_id == "df2078d6c9eb46babb0df957127273ab") {
+        if (app_id.equals("df2078d6c9eb46babb0df957127273ab")) {
             OutNewsMsg outNewsMsg = new OutNewsMsg(inQrCodeEvent);
             outNewsMsg.addNews("欢迎使用济颐馆健康管理平台！", "广州市济颐馆贸易有限公司",
                     "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg",
                     "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg");
             render(outNewsMsg);
+        } else {
+            OutTextMsg outMsg = new OutTextMsg(inQrCodeEvent);
+            outMsg.setContent("恭喜您，成为我们平台的会员!");
+            render(outMsg);
         }
-
-        OutTextMsg outMsg = new OutTextMsg(inQrCodeEvent);
-        outMsg.setContent("恭喜您，成为我们平台的会员!");
-        render(outMsg);
     }
 
     @Override
