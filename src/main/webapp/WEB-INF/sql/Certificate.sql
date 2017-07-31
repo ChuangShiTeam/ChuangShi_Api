@@ -117,6 +117,7 @@
     certificate_number = #p(certificate_number),
     certificate_start_date = #p(certificate_start_date),
     certificate_end_date = #p(certificate_end_date),
+    certificate_is_pay = #p(certificate_is_pay),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1

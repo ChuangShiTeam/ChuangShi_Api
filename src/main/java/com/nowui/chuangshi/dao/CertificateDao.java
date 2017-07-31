@@ -133,13 +133,15 @@ public class CertificateDao extends Dao {
     }
 
     public Boolean update(String certificate_id, String user_id, String certificate_number, Date certificate_start_date,
-            Date certificate_end_date, String system_update_user_id, Integer system_version) {
+            Date certificate_end_date, boolean certificate_is_pay, String system_update_user_id,
+            Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Certificate.CERTIFICATE_ID, certificate_id);
         sqlMap.put(Certificate.USER_ID, user_id);
         sqlMap.put(Certificate.CERTIFICATE_NUMBER, certificate_number);
         sqlMap.put(Certificate.CERTIFICATE_START_DATE, certificate_start_date);
         sqlMap.put(Certificate.CERTIFICATE_END_DATE, certificate_end_date);
+        sqlMap.put(Certificate.CERTIFICATE_IS_PAY, certificate_is_pay);
         sqlMap.put(Certificate.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(Certificate.SYSTEM_UPDATE_TIME, new Date());
         sqlMap.put(Certificate.SYSTEM_VERSION, system_version);
