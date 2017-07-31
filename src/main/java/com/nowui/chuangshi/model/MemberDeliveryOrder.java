@@ -17,7 +17,7 @@ public class MemberDeliveryOrder extends Model<MemberDeliveryOrder> {
     public static final String MEMBER_PURCHASE_ORDER_ID = "member_purchase_order_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户id")
-    public static final String MEMBER_DELIVERY_ORDER_USER_ID = "member_delivery_order_user_id";
+    public static final String USER_ID = "user_id";
 
     @Column(type = ColumnType.DECIMAL, length = 0, comment = "发货总金额")
     public static final String MEMBER_DELIVERY_ORDER_AMOUNT = "member_delivery_order_amount";
@@ -59,7 +59,11 @@ public class MemberDeliveryOrder extends Model<MemberDeliveryOrder> {
     public static final String MEMBER_DELIVERY_ORDER_FLOW = "member_delivery_order_flow";
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "是否完成")
-    public static final String MEMBER_DELIVERY_ORDER_IS_COMPLETE = "member_delivery_is_complete";
+    public static final String MEMBER_DELIVERY_ORDER_IS_COMPLETE = "member_delivery_order_is_complete";
+    
+    public static final String MEMBER_DELIVERY_ORDER_PRODUCT_SKU_LIST = "member_delivery_order_product_sku_list";
+    
+    public static final String MEMBER_DELIVERY_ORDER_EXPRESS_LIST = "member_delivery_order_express_list";
 
     public String getMember_delivery_order_id() {
         return getStr(MEMBER_DELIVERY_ORDER_ID);
@@ -85,12 +89,12 @@ public class MemberDeliveryOrder extends Model<MemberDeliveryOrder> {
         set(MEMBER_PURCHASE_ORDER_ID, member_purchase_order_id);
     }
 
-    public String getMember_delivery_order_user_id() {
-        return getStr(MEMBER_DELIVERY_ORDER_USER_ID);
+    public String getUser_id() {
+        return getStr(USER_ID);
     }
 
-    public void setMember_delivery_order_user_id(String member_delivery_order_user_id) {
-        set(MEMBER_DELIVERY_ORDER_USER_ID, member_delivery_order_user_id);
+    public void setUser_id(String user_id) {
+        set(USER_ID, user_id);
     }
 
     public BigDecimal getMember_delivery_order_amount() {

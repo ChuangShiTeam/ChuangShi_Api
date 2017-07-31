@@ -1,34 +1,77 @@
 package com.nowui.chuangshi.controller;
 
+import java.util.List;
+
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
+import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
+import com.nowui.chuangshi.model.MemberPurchaseOrder;
+import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
+import com.nowui.chuangshi.model.Product;
+import com.nowui.chuangshi.model.ProductSku;
 import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.service.FileService;
+import com.nowui.chuangshi.service.MemberAddressService;
+import com.nowui.chuangshi.service.MemberDeliveryOrderExpressService;
+import com.nowui.chuangshi.service.MemberDeliveryOrderProductSkuService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderService;
+import com.nowui.chuangshi.service.MemberService;
+import com.nowui.chuangshi.service.ProductService;
+import com.nowui.chuangshi.service.ProductSkuPriceService;
+import com.nowui.chuangshi.service.ProductSkuService;
+import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.util.Util;
-
-import java.util.List;
 
 public class MemberDeliveryOrderController extends Controller {
 
     private final MemberDeliveryOrderService memberDeliveryOrderService = new MemberDeliveryOrderService();
+    private final MemberDeliveryOrderProductSkuService memberDeliveryOrderProductSkuService = new MemberDeliveryOrderProductSkuService();
+    private final MemberDeliveryOrderExpressService memberDeliveryOrderExpressService = new MemberDeliveryOrderExpressService();
+    private final UserService userService = new UserService();
+    private final MemberService memberService = new MemberService();
+    private final MemberAddressService memberAddressService = new MemberAddressService();
+    private final ProductService productService = new ProductService();
+    private final ProductSkuService productSkuService = new ProductSkuService();
+    private final ProductSkuPriceService productSkuPriceService = new ProductSkuPriceService();
+    private final FileService fileService = new FileService();
 
     @ActionKey(Url.MEMBER_DELIVERY_ORDER_LIST)
     public void list() {
         validateRequest_app_id();
-        validate(Constant.PAGE_SIZE, Constant.FIRST_CREATE_TIME, Constant.LAST_CREATE_TIME);
+        /*validate(Constant.PAGE_SIZE, Constant.FIRST_CREATE_TIME, Constant.LAST_CREATE_TIME);
 
         String request_app_id = getRequest_app_id();
-        JSONObject jsonObject = getParameterJSONObject();
+        JSONObject jsonObject = getParameterJSONObject();*/
 
         authenticateRequest_app_idAndRequest_user_id();
+        
+        String request_user_id = getRequest_user_id();
 
-        List<MemberDeliveryOrder> resultList = memberDeliveryOrderService.listByApp_idAndSystem_create_timeAndLimit(request_app_id, jsonObject.getDate(Constant.LAST_CREATE_TIME), 0, getN());
-
+        List<MemberDeliveryOrder> resultList = memberDeliveryOrderService.listByUser_id(request_user_id);
+        
         for (MemberDeliveryOrder result : resultList) {
-            result.keep(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, MemberDeliveryOrder.SYSTEM_VERSION);
+            User user = userService.findByUser_id(result.getUser_id());
+            if (user != null) {
+                result.put(User.USER_NAME, user.getUser_name());
+            }
+
+            // 根据进货单获取商品列表
+            List<MemberDeliveryOrderProductSku> memberDeliveryOrderProductSkuList = memberDeliveryOrderProductSkuService.listByMember_delivery_order_id(result.getMember_delivery_order_id());
+            for (MemberDeliveryOrderProductSku memberDeliveryOrderProductSku : memberDeliveryOrderProductSkuList) {
+                ProductSku productSku = productSkuService.findByProduct_sku_id(memberDeliveryOrderProductSku.getProduct_sku_id());
+                Product product = productService.findByProduct_id(productSku.getProduct_id());
+                memberDeliveryOrderProductSku.put(Product.PRODUCT_NAME, product.getProduct_name());  //商品名称
+                memberDeliveryOrderProductSku.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+                memberDeliveryOrderProductSku.keep(MemberDeliveryOrderProductSku.PRODUCT_SKU_ID, MemberDeliveryOrderProductSku.PRODUCT_SKU_AMOUNT,
+                		MemberDeliveryOrderProductSku.PRODUCT_SKU_QUANTITY, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE);
+            }
+            result.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_PRODUCT_SKU_LIST, memberDeliveryOrderProductSkuList);
+
+            result.keep(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_TOTAL_QUANTITY,
+            			MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_AMOUNT, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_PRODUCT_SKU_LIST);
         }
 
         renderSuccessJson(resultList);
@@ -56,7 +99,7 @@ public class MemberDeliveryOrderController extends Controller {
     @ActionKey(Url.MEMBER_DELIVERY_ORDER_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_USER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_AMOUNT, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_TOTAL_QUANTITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_MOBILE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_PROVINCE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_CITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_AREA, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_ADDRESS, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_PAY_WAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE);
+        validate(MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_AMOUNT, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_TOTAL_QUANTITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_MOBILE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_PROVINCE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_CITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_AREA, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_ADDRESS, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_PAY_WAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE);
 
         MemberDeliveryOrder model = getModel(MemberDeliveryOrder.class);
         String member_delivery_order_id = Util.getRandomUUID();
@@ -65,7 +108,7 @@ public class MemberDeliveryOrderController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = memberDeliveryOrderService.save(member_delivery_order_id, request_app_id, model.getMember_purchase_order_id(), model.getMember_delivery_order_user_id(), model.getMember_delivery_order_amount(), model.getMember_delivery_order_total_quantity(), model.getMember_delivery_order_receiver_name(), model.getMember_delivery_order_receiver_mobile(), model.getMember_delivery_order_receiver_province(), model.getMember_delivery_order_receiver_city(), model.getMember_delivery_order_receiver_area(), model.getMember_delivery_order_receiver_address(), model.getMember_delivery_order_express_pay_way(), model.getMember_delivery_order_express_shipper_code(), model.getMember_delivery_order_is_pay(), model.getMember_delivery_order_is_warehouse_deliver(), model.getMember_delivery_order_flow(), model.getMember_delivery_order_is_complete(), request_user_id);
+        Boolean result = memberDeliveryOrderService.save(member_delivery_order_id, request_app_id, model.getMember_purchase_order_id(), model.getUser_id(), model.getMember_delivery_order_amount(), model.getMember_delivery_order_total_quantity(), model.getMember_delivery_order_receiver_name(), model.getMember_delivery_order_receiver_mobile(), model.getMember_delivery_order_receiver_province(), model.getMember_delivery_order_receiver_city(), model.getMember_delivery_order_receiver_area(), model.getMember_delivery_order_receiver_address(), model.getMember_delivery_order_express_pay_way(), model.getMember_delivery_order_express_shipper_code(), model.getMember_delivery_order_is_pay(), model.getMember_delivery_order_is_warehouse_deliver(), model.getMember_delivery_order_flow(), model.getMember_delivery_order_is_complete(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -73,7 +116,7 @@ public class MemberDeliveryOrderController extends Controller {
     @ActionKey(Url.MEMBER_DELIVERY_ORDER_UPDATE)
     public void update() {
         validateRequest_app_id();
-        validate(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_USER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_AMOUNT, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_TOTAL_QUANTITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_MOBILE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_PROVINCE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_CITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_AREA, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_ADDRESS, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_PAY_WAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE, MemberDeliveryOrder.SYSTEM_VERSION);
+        validate(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_AMOUNT, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_TOTAL_QUANTITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_MOBILE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_PROVINCE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_CITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_AREA, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_ADDRESS, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_PAY_WAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE, MemberDeliveryOrder.SYSTEM_VERSION);
 
         MemberDeliveryOrder model = getModel(MemberDeliveryOrder.class);
         String request_user_id = getRequest_user_id();
@@ -85,7 +128,7 @@ public class MemberDeliveryOrderController extends Controller {
         authenticateApp_id(member_delivery_order.getApp_id());
         authenticateSystem_create_user_id(member_delivery_order.getSystem_create_user_id());
 
-        Boolean result = memberDeliveryOrderService.updateValidateSystem_version(model.getMember_delivery_order_id(), model.getMember_purchase_order_id(), model.getMember_delivery_order_user_id(), model.getMember_delivery_order_amount(), model.getMember_delivery_order_total_quantity(), model.getMember_delivery_order_receiver_name(), model.getMember_delivery_order_receiver_mobile(), model.getMember_delivery_order_receiver_province(), model.getMember_delivery_order_receiver_city(), model.getMember_delivery_order_receiver_area(), model.getMember_delivery_order_receiver_address(), model.getMember_delivery_order_express_pay_way(), model.getMember_delivery_order_express_shipper_code(), model.getMember_delivery_order_is_pay(), model.getMember_delivery_order_is_warehouse_deliver(), model.getMember_delivery_order_flow(), model.getMember_delivery_order_is_complete(), request_user_id, model.getSystem_version());
+        Boolean result = memberDeliveryOrderService.updateValidateSystem_version(model.getMember_delivery_order_id(), model.getMember_purchase_order_id(), model.getMember_delivery_order_amount(), model.getMember_delivery_order_total_quantity(), model.getMember_delivery_order_receiver_name(), model.getMember_delivery_order_receiver_mobile(), model.getMember_delivery_order_receiver_province(), model.getMember_delivery_order_receiver_city(), model.getMember_delivery_order_receiver_area(), model.getMember_delivery_order_receiver_address(), model.getMember_delivery_order_express_pay_way(), model.getMember_delivery_order_express_shipper_code(), model.getMember_delivery_order_is_pay(), model.getMember_delivery_order_is_warehouse_deliver(), model.getMember_delivery_order_flow(), model.getMember_delivery_order_is_complete(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -158,7 +201,7 @@ public class MemberDeliveryOrderController extends Controller {
     @ActionKey(Url.MEMBER_DELIVERY_ORDER_ADMIN_UPDATE)
     public void adminUpdate() {
         validateRequest_app_id();
-        validate(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_USER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_AMOUNT, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_TOTAL_QUANTITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_MOBILE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_PROVINCE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_CITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_AREA, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_ADDRESS, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_PAY_WAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE, MemberDeliveryOrder.SYSTEM_VERSION);
+        validate(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_AMOUNT, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_TOTAL_QUANTITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_MOBILE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_PROVINCE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_CITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_AREA, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_ADDRESS, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_PAY_WAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE, MemberDeliveryOrder.SYSTEM_VERSION);
 
         MemberDeliveryOrder model = getModel(MemberDeliveryOrder.class);
         String request_user_id = getRequest_user_id();
@@ -169,7 +212,7 @@ public class MemberDeliveryOrderController extends Controller {
 
         authenticateApp_id(member_delivery_order.getApp_id());
 
-        Boolean result = memberDeliveryOrderService.updateValidateSystem_version(model.getMember_delivery_order_id(), model.getMember_purchase_order_id(), model.getMember_delivery_order_user_id(), model.getMember_delivery_order_amount(), model.getMember_delivery_order_total_quantity(), model.getMember_delivery_order_receiver_name(), model.getMember_delivery_order_receiver_mobile(), model.getMember_delivery_order_receiver_province(), model.getMember_delivery_order_receiver_city(), model.getMember_delivery_order_receiver_area(), model.getMember_delivery_order_receiver_address(), model.getMember_delivery_order_express_pay_way(), model.getMember_delivery_order_express_shipper_code(), model.getMember_delivery_order_is_pay(), model.getMember_delivery_order_is_warehouse_deliver(), model.getMember_delivery_order_flow(), model.getMember_delivery_order_is_complete(), request_user_id, model.getSystem_version());
+        Boolean result = memberDeliveryOrderService.updateValidateSystem_version(model.getMember_delivery_order_id(), model.getMember_purchase_order_id(), model.getMember_delivery_order_amount(), model.getMember_delivery_order_total_quantity(), model.getMember_delivery_order_receiver_name(), model.getMember_delivery_order_receiver_mobile(), model.getMember_delivery_order_receiver_province(), model.getMember_delivery_order_receiver_city(), model.getMember_delivery_order_receiver_area(), model.getMember_delivery_order_receiver_address(), model.getMember_delivery_order_express_pay_way(), model.getMember_delivery_order_express_shipper_code(), model.getMember_delivery_order_is_pay(), model.getMember_delivery_order_is_warehouse_deliver(), model.getMember_delivery_order_flow(), model.getMember_delivery_order_is_complete(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -229,13 +272,13 @@ public class MemberDeliveryOrderController extends Controller {
     @ActionKey(Url.MEMBER_DELIVERY_ORDER_SYSTEM_SAVE)
     public void systemSave() {
         validateRequest_app_id();
-        validate(MemberDeliveryOrder.APP_ID, MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_USER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_AMOUNT, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_TOTAL_QUANTITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_MOBILE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_PROVINCE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_CITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_AREA, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_ADDRESS, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_PAY_WAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE);
+        validate(MemberDeliveryOrder.APP_ID, MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_AMOUNT, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_TOTAL_QUANTITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_MOBILE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_PROVINCE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_CITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_AREA, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_ADDRESS, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_PAY_WAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE);
 
         MemberDeliveryOrder model = getModel(MemberDeliveryOrder.class);
         String member_delivery_order_id = Util.getRandomUUID();
         String request_user_id = getRequest_user_id();
 
-        Boolean result = memberDeliveryOrderService.save(member_delivery_order_id, model.getApp_id(), model.getMember_purchase_order_id(), model.getMember_delivery_order_user_id(), model.getMember_delivery_order_amount(), model.getMember_delivery_order_total_quantity(), model.getMember_delivery_order_receiver_name(), model.getMember_delivery_order_receiver_mobile(), model.getMember_delivery_order_receiver_province(), model.getMember_delivery_order_receiver_city(), model.getMember_delivery_order_receiver_area(), model.getMember_delivery_order_receiver_address(), model.getMember_delivery_order_express_pay_way(), model.getMember_delivery_order_express_shipper_code(), model.getMember_delivery_order_is_pay(), model.getMember_delivery_order_is_warehouse_deliver(), model.getMember_delivery_order_flow(), model.getMember_delivery_order_is_complete(), request_user_id);
+        Boolean result = memberDeliveryOrderService.save(member_delivery_order_id, model.getApp_id(), model.getMember_purchase_order_id(), model.getUser_id(), model.getMember_delivery_order_amount(), model.getMember_delivery_order_total_quantity(), model.getMember_delivery_order_receiver_name(), model.getMember_delivery_order_receiver_mobile(), model.getMember_delivery_order_receiver_province(), model.getMember_delivery_order_receiver_city(), model.getMember_delivery_order_receiver_area(), model.getMember_delivery_order_receiver_address(), model.getMember_delivery_order_express_pay_way(), model.getMember_delivery_order_express_shipper_code(), model.getMember_delivery_order_is_pay(), model.getMember_delivery_order_is_warehouse_deliver(), model.getMember_delivery_order_flow(), model.getMember_delivery_order_is_complete(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -243,12 +286,12 @@ public class MemberDeliveryOrderController extends Controller {
     @ActionKey(Url.MEMBER_DELIVERY_ORDER_SYSTEM_UPDATE)
     public void systemUpdate() {
         validateRequest_app_id();
-        validate(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_USER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_AMOUNT, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_TOTAL_QUANTITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_MOBILE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_PROVINCE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_CITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_AREA, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_ADDRESS, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_PAY_WAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE, MemberDeliveryOrder.SYSTEM_VERSION);
+        validate(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_AMOUNT, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_TOTAL_QUANTITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_MOBILE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_PROVINCE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_CITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_AREA, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_ADDRESS, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_PAY_WAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE, MemberDeliveryOrder.SYSTEM_VERSION);
 
         MemberDeliveryOrder model = getModel(MemberDeliveryOrder.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = memberDeliveryOrderService.updateValidateSystem_version(model.getMember_delivery_order_id(), model.getMember_purchase_order_id(), model.getMember_delivery_order_user_id(), model.getMember_delivery_order_amount(), model.getMember_delivery_order_total_quantity(), model.getMember_delivery_order_receiver_name(), model.getMember_delivery_order_receiver_mobile(), model.getMember_delivery_order_receiver_province(), model.getMember_delivery_order_receiver_city(), model.getMember_delivery_order_receiver_area(), model.getMember_delivery_order_receiver_address(), model.getMember_delivery_order_express_pay_way(), model.getMember_delivery_order_express_shipper_code(), model.getMember_delivery_order_is_pay(), model.getMember_delivery_order_is_warehouse_deliver(), model.getMember_delivery_order_flow(), model.getMember_delivery_order_is_complete(), request_user_id, model.getSystem_version());
+        Boolean result = memberDeliveryOrderService.updateValidateSystem_version(model.getMember_delivery_order_id(), model.getMember_purchase_order_id(), model.getMember_delivery_order_amount(), model.getMember_delivery_order_total_quantity(), model.getMember_delivery_order_receiver_name(), model.getMember_delivery_order_receiver_mobile(), model.getMember_delivery_order_receiver_province(), model.getMember_delivery_order_receiver_city(), model.getMember_delivery_order_receiver_area(), model.getMember_delivery_order_receiver_address(), model.getMember_delivery_order_express_pay_way(), model.getMember_delivery_order_express_shipper_code(), model.getMember_delivery_order_is_pay(), model.getMember_delivery_order_is_warehouse_deliver(), model.getMember_delivery_order_flow(), model.getMember_delivery_order_is_complete(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

@@ -2,7 +2,7 @@
 
   #sql("countByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name")
     SELECT COUNT(*) FROM table_member_delivery_order
-    LEFT JOIN table_user ON table_member_delivery_order.member_delivery_order_user_id = table_user.user_id
+    LEFT JOIN table_user ON table_member_delivery_order.user_id = table_user.user_id
     WHERE table_member_delivery_order.system_status = 1
     AND table_member_delivery_order.app_id = #p(app_id)
     #if(user_name)
@@ -17,7 +17,7 @@
 
   #sql("countByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name")
     SELECT COUNT(*) FROM table_member_delivery_order
-    LEFT JOIN table_user ON table_member_delivery_order.member_delivery_order_user_id = table_user.user_id
+    LEFT JOIN table_user ON table_member_delivery_order.user_id = table_user.user_id
     WHERE table_member_delivery_order.system_status = 1
     #if(app_id)
     AND table_member_delivery_order.app_id = #p(app_id)
@@ -47,7 +47,7 @@
     SELECT
     member_delivery_order_id
     FROM table_member_delivery_order
-    LEFT JOIN table_user ON table_member_delivery_order.member_delivery_order_user_id = table_user.user_id
+    LEFT JOIN table_user ON table_member_delivery_order.user_id = table_user.user_id
     WHERE table_member_delivery_order.system_status = 1
     AND table_member_delivery_order.app_id = #p(app_id)
     #if(user_name)
@@ -81,6 +81,15 @@
     ORDER BY table_member_delivery_order.system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
+  
+  #sql("listByUser_id")
+    SELECT
+    *
+    FROM table_member_delivery_order
+    WHERE system_status = 1
+    AND user_id = #p(user_id)
+    ORDER BY system_update_time DESC
+  #end
 
   #sql("findByMember_delivery_order_id")
     SELECT
@@ -95,7 +104,7 @@
       member_delivery_order_id,
       app_id,
       member_purchase_order_id,
-      member_delivery_order_user_id,
+      user_id,
       member_delivery_order_amount,
       member_delivery_order_total_quantity,
       member_delivery_order_receiver_name,
@@ -120,7 +129,7 @@
       #p(member_delivery_order_id),
       #p(app_id),
       #p(member_purchase_order_id),
-      #p(member_delivery_order_user_id),
+      #p(user_id),
       #p(member_delivery_order_amount),
       #p(member_delivery_order_total_quantity),
       #p(member_delivery_order_receiver_name),
@@ -147,7 +156,6 @@
   #sql("update")
     UPDATE table_member_delivery_order SET
     member_purchase_order_id = #p(member_purchase_order_id),
-    member_delivery_order_user_id = #p(member_delivery_order_user_id),
     member_delivery_order_amount = #p(member_delivery_order_amount),
     member_delivery_order_total_quantity = #p(member_delivery_order_total_quantity),
     member_delivery_order_receiver_name = #p(member_delivery_order_receiver_name),
