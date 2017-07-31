@@ -95,7 +95,7 @@ public class MemberDeliveryOrderDao extends Dao {
         }
     }
 
-    public Boolean save(String member_delivery_order_id, String app_id, String member_purchase_order_id, String member_delivery_order_user_id, BigDecimal member_delivery_order_amount, Integer member_delivery_order_total_quantity, String member_delivery_order_receiver_name, String member_delivery_order_receiver_mobile, String member_delivery_order_receiver_province, String member_delivery_order_receiver_city, String member_delivery_order_receiver_area, String member_delivery_order_receiver_address, String member_delivery_order_express_pay_way, String member_delivery_order_express_shipper_code, Boolean member_delivery_order_is_pay, Boolean member_delivery_order_is_warehouse_deliver, String member_delivery_order_flow, Boolean member_delivery_is_complete, String system_create_user_id) {
+    public Boolean save(String member_delivery_order_id, String app_id, String member_purchase_order_id, String member_delivery_order_user_id, BigDecimal member_delivery_order_amount, Integer member_delivery_order_total_quantity, String member_delivery_order_receiver_name, String member_delivery_order_receiver_mobile, String member_delivery_order_receiver_province, String member_delivery_order_receiver_city, String member_delivery_order_receiver_area, String member_delivery_order_receiver_address, String member_delivery_order_express_pay_way, String member_delivery_order_express_shipper_code, Boolean member_delivery_order_is_pay, Boolean member_delivery_order_is_warehouse_deliver, String member_delivery_order_flow, Boolean member_delivery_order_is_complete, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, member_delivery_order_id);
         sqlMap.put(MemberDeliveryOrder.APP_ID, app_id);
@@ -114,7 +114,7 @@ public class MemberDeliveryOrderDao extends Dao {
         sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, member_delivery_order_is_pay);
         sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, member_delivery_order_is_warehouse_deliver);
         sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, member_delivery_order_flow);
-        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_IS_COMPLETE, member_delivery_is_complete);
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE, member_delivery_order_is_complete);
         sqlMap.put(MemberDeliveryOrder.SYSTEM_CREATE_USER_ID, system_create_user_id);
         sqlMap.put(MemberDeliveryOrder.SYSTEM_CREATE_TIME, new Date());
         sqlMap.put(MemberDeliveryOrder.SYSTEM_UPDATE_USER_ID, system_create_user_id);
@@ -128,7 +128,7 @@ public class MemberDeliveryOrderDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String member_delivery_order_id, String member_purchase_order_id, String member_delivery_order_user_id, BigDecimal member_delivery_order_amount, Integer member_delivery_order_total_quantity, String member_delivery_order_receiver_name, String member_delivery_order_receiver_mobile, String member_delivery_order_receiver_province, String member_delivery_order_receiver_city, String member_delivery_order_receiver_area, String member_delivery_order_receiver_address, String member_delivery_order_express_pay_way, String member_delivery_order_express_shipper_code, Boolean member_delivery_order_is_pay, Boolean member_delivery_order_is_warehouse_deliver, String member_delivery_order_flow, Boolean member_delivery_is_complete, String system_update_user_id, Integer system_version) {
+    public Boolean update(String member_delivery_order_id, String member_purchase_order_id, String member_delivery_order_user_id, BigDecimal member_delivery_order_amount, Integer member_delivery_order_total_quantity, String member_delivery_order_receiver_name, String member_delivery_order_receiver_mobile, String member_delivery_order_receiver_province, String member_delivery_order_receiver_city, String member_delivery_order_receiver_area, String member_delivery_order_receiver_address, String member_delivery_order_express_pay_way, String member_delivery_order_express_shipper_code, Boolean member_delivery_order_is_pay, Boolean member_delivery_order_is_warehouse_deliver, String member_delivery_order_flow, Boolean member_delivery_order_is_complete, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, member_delivery_order_id);
         sqlMap.put(MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, member_purchase_order_id);
@@ -146,7 +146,7 @@ public class MemberDeliveryOrderDao extends Dao {
         sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, member_delivery_order_is_pay);
         sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, member_delivery_order_is_warehouse_deliver);
         sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, member_delivery_order_flow);
-        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_IS_COMPLETE, member_delivery_is_complete);
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE, member_delivery_order_is_complete);
         sqlMap.put(MemberDeliveryOrder.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(MemberDeliveryOrder.SYSTEM_UPDATE_TIME, new Date());
         sqlMap.put(MemberDeliveryOrder.SYSTEM_VERSION, system_version);
@@ -154,6 +154,50 @@ public class MemberDeliveryOrderDao extends Dao {
 
         logSql("member_delivery_order", "update", sqlPara);
 
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+    
+    public Boolean updateMember_delivery_order_flowAndMember_delivery_order_is_payByMember_delivery_order_idAndSystem_version(String member_delivery_order_id, String member_delivery_order_flow, Boolean member_delivery_order_is_pay, String system_update_user_id, Integer system_version) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, member_delivery_order_id);
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, member_delivery_order_is_pay);
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, member_delivery_order_flow);
+        sqlMap.put(MemberDeliveryOrder.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(MemberDeliveryOrder.SYSTEM_UPDATE_TIME, new Date());
+        sqlMap.put(MemberDeliveryOrder.SYSTEM_VERSION, system_version);
+        SqlPara sqlPara = Db.getSqlPara("member_delivery_order.updateMember_delivery_order_flowAndMember_delivery_order_is_payByMember_delivery_order_idAndSystem_version", sqlMap);
+        
+        logSql("member_delivery_order", "updateMember_delivery_order_flowAndMember_delivery_order_is_payByMember_delivery_order_idAndSystem_version", sqlPara);
+        
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+    
+    public Boolean updateMember_delivery_order_flowByMember_delivery_order_idAndSystem_version(String member_delivery_order_id, String member_delivery_order_flow, String system_update_user_id, Integer system_version) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, member_delivery_order_id);
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, member_delivery_order_flow);
+        sqlMap.put(MemberDeliveryOrder.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(MemberDeliveryOrder.SYSTEM_UPDATE_TIME, new Date());
+        sqlMap.put(MemberDeliveryOrder.SYSTEM_VERSION, system_version);
+        SqlPara sqlPara = Db.getSqlPara("member_delivery_order.updateMember_delivery_order_flowByMember_delivery_order_idAndSystem_version", sqlMap);
+        
+        logSql("member_delivery_order", "updateMember_delivery_order_flowByMember_delivery_order_idAndSystem_version", sqlPara);
+        
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+    
+    public Boolean updateMember_delivery_order_flowAndMember_delivery_order_is_completeByMember_delivery_order_idAndSystem_version(String member_delivery_order_id, String member_delivery_order_flow, Boolean member_delivery_order_is_complete, String system_update_user_id, Integer system_version) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, member_delivery_order_id);
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE, member_delivery_order_is_complete);
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, member_delivery_order_flow);
+        sqlMap.put(MemberDeliveryOrder.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(MemberDeliveryOrder.SYSTEM_UPDATE_TIME, new Date());
+        sqlMap.put(MemberDeliveryOrder.SYSTEM_VERSION, system_version);
+        SqlPara sqlPara = Db.getSqlPara("member_delivery_order.updateMember_delivery_order_flowAndMember_delivery_order_is_completeByMember_delivery_order_idAndSystem_version", sqlMap);
+        
+        logSql("member_delivery_order", "updateMember_delivery_order_flowAndMember_delivery_order_is_completeByMember_delivery_order_idAndSystem_version", sqlPara);
+        
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 

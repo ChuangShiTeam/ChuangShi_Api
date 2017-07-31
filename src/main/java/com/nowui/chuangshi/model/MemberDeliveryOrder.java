@@ -59,7 +59,7 @@ public class MemberDeliveryOrder extends Model<MemberDeliveryOrder> {
     public static final String MEMBER_DELIVERY_ORDER_FLOW = "member_delivery_order_flow";
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "是否完成")
-    public static final String MEMBER_DELIVERY_IS_COMPLETE = "member_delivery_is_complete";
+    public static final String MEMBER_DELIVERY_ORDER_IS_COMPLETE = "member_delivery_is_complete";
 
     public String getMember_delivery_order_id() {
         return getStr(MEMBER_DELIVERY_ORDER_ID);
@@ -197,12 +197,12 @@ public class MemberDeliveryOrder extends Model<MemberDeliveryOrder> {
         set(MEMBER_DELIVERY_ORDER_FLOW, member_delivery_order_flow);
     }
 
-    public Boolean getMember_delivery_is_complete() {
-        return getBoolean(MEMBER_DELIVERY_IS_COMPLETE);
+    public Boolean getMember_delivery_order_is_complete() {
+        return getBoolean(MEMBER_DELIVERY_ORDER_IS_COMPLETE);
     }
 
-    public void setMember_delivery_is_complete(Boolean member_delivery_is_complete) {
-        set(MEMBER_DELIVERY_IS_COMPLETE, member_delivery_is_complete);
+    public void setMember_delivery_is_order_complete(Boolean member_delivery_order_is_complete) {
+        set(MEMBER_DELIVERY_ORDER_IS_COMPLETE, member_delivery_order_is_complete);
     }
 
 }
