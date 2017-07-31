@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,11 +12,14 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Certificate;
 import com.nowui.chuangshi.model.CertificateImage;
+import com.nowui.chuangshi.model.File;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.CertificateImageService;
 import com.nowui.chuangshi.service.CertificateService;
+import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.CertificateImageType;
+import com.nowui.chuangshi.util.DateUtil;
 import com.nowui.chuangshi.util.Util;
 
 public class CertificateController extends Controller {
@@ -23,6 +27,7 @@ public class CertificateController extends Controller {
     private final CertificateService certificateService = new CertificateService();
     private final CertificateImageService certificateImageService = new CertificateImageService();
     private final UserService userService = new UserService();
+    private final FileService fileService = new FileService();
 
     @ActionKey(Url.CERTIFICATE_LIST)
     public void list() {
@@ -47,38 +52,72 @@ public class CertificateController extends Controller {
     @ActionKey(Url.CERTIFICATE_FIND)
     public void find() {
         validateRequest_app_id();
-        validate(Certificate.CERTIFICATE_ID);
-
-        Certificate model = getModel(Certificate.class);
+        validate();
+        String user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Certificate certificate = certificateService.findByCertificate_id(model.getCertificate_id());
+        Certificate certificate = certificateService.findByUser_id(user_id);
 
-        authenticateApp_id(certificate.getApp_id());
-        authenticateSystem_create_user_id(certificate.getSystem_create_user_id());
+        List<CertificateImage> certificateImageWXList = new ArrayList<>();
+        List<CertificateImage> certificateImageOtherList = new ArrayList<>();
+        Map<String, Object> result = new HashMap<>();
 
-        certificate.keep(Certificate.CERTIFICATE_ID, Certificate.SYSTEM_VERSION);
+        if (certificate != null) {
+            authenticateApp_id(certificate.getApp_id());
 
-        renderSuccessJson(certificate);
+            User user = userService.findByUser_id(user_id);
+            certificate.put(User.USER_NAME, user.getUser_name());
+
+            List<CertificateImage> certificateImageList = certificateImageService
+                    .listByCertificate_id(certificate.getCertificate_id());
+
+            for (CertificateImage certificateImage : certificateImageList) {
+                File file = fileService.findByFile_id(certificateImage.getFile_id());
+                certificateImage.put(File.FILE_ORIGINAL_PATH, file.getFile_original_path());
+
+                if (certificateImage.getCertificate_type().equals(CertificateImageType.WX.getValue())) {
+                    certificateImageWXList.add(certificateImage);
+                } else {
+                    certificateImageOtherList.add(certificateImage);
+                }
+            }
+
+            certificate.keep(Certificate.CERTIFICATE_ID, Certificate.USER_ID, User.USER_NAME,
+                    Certificate.CERTIFICATE_NUMBER, Certificate.CERTIFICATE_START_DATE,
+                    Certificate.CERTIFICATE_END_DATE, Certificate.CERTIFICATE_IS_PAY, Certificate.SYSTEM_VERSION);
+        }
+
+        result.put("certificate", certificate == null ? new Certificate() : certificate);
+        result.put("certificateImageWXList", certificateImageWXList);
+        result.put("certificateImageOtherList", certificateImageOtherList);
+
+        renderSuccessJson(result);
     }
 
+    // 授权证书支付
     @ActionKey(Url.CERTIFICATE_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(Certificate.USER_ID, Certificate.CERTIFICATE_NUMBER, Certificate.CERTIFICATE_START_DATE,
-                Certificate.CERTIFICATE_END_DATE);
+        validate();
 
-        Certificate model = getModel(Certificate.class);
-        String certificate_id = Util.getRandomUUID();
-        String request_app_id = getRequest_app_id();
+        String app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
+        JSONObject jsonObject = getParameterJSONObject();
+        String open_id = jsonObject.getString("open_id");
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = certificateService.save(certificate_id, request_app_id, model.getUser_id(),
-                model.getCertificate_number(), model.getCertificate_start_date(), model.getCertificate_end_date(),
-                request_user_id);
+        String certificate_number = DateUtil.getDateString(new Date()).replace("-", "") + Util.getRandomNumber();
+        String certificate_id = Util.getRandomUUID();
+
+        Boolean flag = certificateService.save(certificate_id, app_id, request_user_id, certificate_number, new Date(),
+                new Date(), false, request_user_id);
+
+        Map<String, String> result = new HashMap<>();
+        if (flag) {
+            result = certificateService.pay(certificate_id, open_id, "WX", request_user_id);
+        }
 
         renderSuccessJson(result);
     }
@@ -87,7 +126,8 @@ public class CertificateController extends Controller {
     public void update() {
         validateRequest_app_id();
         validate(Certificate.CERTIFICATE_ID, Certificate.USER_ID, Certificate.CERTIFICATE_NUMBER,
-                Certificate.CERTIFICATE_START_DATE, Certificate.CERTIFICATE_END_DATE, Certificate.SYSTEM_VERSION);
+                Certificate.CERTIFICATE_START_DATE, Certificate.CERTIFICATE_END_DATE, Certificate.CERTIFICATE_IS_PAY,
+                Certificate.SYSTEM_VERSION);
 
         Certificate model = getModel(Certificate.class);
         String request_user_id = getRequest_user_id();
@@ -101,7 +141,7 @@ public class CertificateController extends Controller {
 
         Boolean result = certificateService.updateValidateSystem_version(model.getCertificate_id(), model.getUser_id(),
                 model.getCertificate_number(), model.getCertificate_start_date(), model.getCertificate_end_date(),
-                request_user_id, model.getSystem_version());
+                model.getCertificate_is_pay(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -174,6 +214,9 @@ public class CertificateController extends Controller {
                     .listByCertificate_id(certificate.getCertificate_id());
 
             for (CertificateImage certificateImage : certificateImageList) {
+                File file = fileService.findByFile_id(certificateImage.getFile_id());
+                certificateImage.put(File.FILE_ORIGINAL_PATH, file.getFile_original_path());
+
                 if (certificateImage.getCertificate_type().equals(CertificateImageType.WX.getValue())) {
                     certificateImageWXList.add(certificateImage);
                 } else {
@@ -202,7 +245,8 @@ public class CertificateController extends Controller {
     public void adminUpdate() {
         validateRequest_app_id();
         validate(Certificate.CERTIFICATE_ID, Certificate.USER_ID, Certificate.CERTIFICATE_NUMBER,
-                Certificate.CERTIFICATE_START_DATE, Certificate.CERTIFICATE_END_DATE, Certificate.SYSTEM_VERSION);
+                Certificate.CERTIFICATE_START_DATE, Certificate.CERTIFICATE_END_DATE, Certificate.CERTIFICATE_IS_PAY,
+                Certificate.SYSTEM_VERSION);
 
         Certificate model = getModel(Certificate.class);
         String request_user_id = getRequest_user_id();
@@ -215,7 +259,7 @@ public class CertificateController extends Controller {
 
         Boolean result = certificateService.updateValidateSystem_version(model.getCertificate_id(), model.getUser_id(),
                 model.getCertificate_number(), model.getCertificate_start_date(), model.getCertificate_end_date(),
-                request_user_id, model.getSystem_version());
+                model.getCertificate_is_pay(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -285,7 +329,7 @@ public class CertificateController extends Controller {
 
         Boolean result = certificateService.save(certificate_id, model.getApp_id(), model.getUser_id(),
                 model.getCertificate_number(), model.getCertificate_start_date(), model.getCertificate_end_date(),
-                request_user_id);
+                false, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -294,14 +338,15 @@ public class CertificateController extends Controller {
     public void systemUpdate() {
         validateRequest_app_id();
         validate(Certificate.CERTIFICATE_ID, Certificate.USER_ID, Certificate.CERTIFICATE_NUMBER,
-                Certificate.CERTIFICATE_START_DATE, Certificate.CERTIFICATE_END_DATE, Certificate.SYSTEM_VERSION);
+                Certificate.CERTIFICATE_START_DATE, Certificate.CERTIFICATE_END_DATE, Certificate.CERTIFICATE_IS_PAY,
+                Certificate.SYSTEM_VERSION);
 
         Certificate model = getModel(Certificate.class);
         String request_user_id = getRequest_user_id();
 
         Boolean result = certificateService.updateValidateSystem_version(model.getCertificate_id(), model.getUser_id(),
                 model.getCertificate_number(), model.getCertificate_start_date(), model.getCertificate_end_date(),
-                request_user_id, model.getSystem_version());
+                model.getCertificate_is_pay(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

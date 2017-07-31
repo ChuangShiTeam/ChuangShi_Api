@@ -67,6 +67,7 @@ import com.nowui.chuangshi.model.Bill;
 import com.nowui.chuangshi.model.BillCommission;
 import com.nowui.chuangshi.model.Certificate;
 import com.nowui.chuangshi.model.CertificateImage;
+import com.nowui.chuangshi.model.CertificatePay;
 import com.nowui.chuangshi.model.Customer;
 import com.nowui.chuangshi.model.CustomerAttribute;
 import com.nowui.chuangshi.model.CustomerAttributeValue;
@@ -278,6 +279,7 @@ public class WebConfig extends JFinalConfig {
 
         activeRecordPlugin.addMapping("table_certificate", "certificate_id", Certificate.class);
         activeRecordPlugin.addMapping("table_certificate_image", "certificate_image_id", CertificateImage.class);
+        activeRecordPlugin.addMapping("table_certificate_pay", "certificate_id", CertificatePay.class);
 
         plugins.add(activeRecordPlugin);
 

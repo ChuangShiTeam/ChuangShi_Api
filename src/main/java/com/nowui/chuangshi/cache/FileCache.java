@@ -23,7 +23,8 @@ public class FileCache extends Cache {
         return fileDao.countByOrApp_id(app_id);
     }
 
-    public Integer countByApp_idAndFile_typeAndSystem_create_user_id(String app_id, String file_type, String system_create_user_id) {
+    public Integer countByApp_idAndFile_typeAndSystem_create_user_id(String app_id, String file_type,
+            String system_create_user_id) {
         return fileDao.countByApp_idAndFile_typeAndSystem_create_user_id(app_id, file_type, system_create_user_id);
     }
 
@@ -61,8 +62,10 @@ public class FileCache extends Cache {
         return fileList;
     }
 
-    public List<File> listByApp_idAndFile_typeAndSystem_create_user_idAndLimit(String app_id, String file_type, String system_create_user_id, int m, int n) {
-        List<File> fileList = fileDao.listByApp_idAndFile_typeAndSystem_create_user_idAndLimit(app_id, file_type, system_create_user_id, m, n);
+    public List<File> listByApp_idAndFile_typeAndSystem_create_user_idAndLimit(String app_id, String file_type,
+            String system_create_user_id, int m, int n) {
+        List<File> fileList = fileDao.listByApp_idAndFile_typeAndSystem_create_user_idAndLimit(app_id, file_type,
+                system_create_user_id, m, n);
 
         for (File file : fileList) {
             file.put(findByFile_id(file.getFile_id()));
@@ -93,17 +96,29 @@ public class FileCache extends Cache {
         return file;
     }
 
-    public Boolean save(String file_id, String app_id, String file_type, String file_name, String file_suffix, Integer file_size, String file_path, String file_thumbnail_path, String file_original_path, String file_image, Boolean file_is_external, String system_create_user_id) {
-        return fileDao.save(file_id, app_id, file_type, file_name, file_suffix, file_size, file_path, file_thumbnail_path, file_original_path, file_image, file_is_external, system_create_user_id);
+    public Boolean save(String file_id, String app_id, String file_type, String file_name, String file_suffix,
+            Integer file_size, String file_path, String file_thumbnail_path, String file_original_path,
+            String file_image, Boolean file_is_external, String system_create_user_id) {
+        Boolean result = fileDao.save(file_id, app_id, file_type, file_name, file_suffix, file_size, file_path,
+                file_thumbnail_path, file_original_path, file_image, file_is_external, system_create_user_id);
+
+        if (result) {
+            CacheUtil.remove(FILE_BY_FILE_ID_CACHE, file_id);
+        }
+
+        return result;
     }
 
-    public Boolean updateValidateSystem_version(String file_id, String file_type, String file_name, String file_suffix, Integer file_size, String file_path, String file_thumbnail_path, String file_original_path, String file_image, String system_update_user_id, Integer system_version) {
+    public Boolean updateValidateSystem_version(String file_id, String file_type, String file_name, String file_suffix,
+            Integer file_size, String file_path, String file_thumbnail_path, String file_original_path,
+            String file_image, String system_update_user_id, Integer system_version) {
         File file = findByFile_id(file_id);
         if (!file.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);
         }
 
-        boolean result = fileDao.update(file_id, file_type, file_name, file_suffix, file_size, file_path, file_thumbnail_path, file_original_path, file_image, system_update_user_id, system_version);
+        boolean result = fileDao.update(file_id, file_type, file_name, file_suffix, file_size, file_path,
+                file_thumbnail_path, file_original_path, file_image, system_update_user_id, system_version);
 
         if (result) {
             CacheUtil.remove(FILE_BY_FILE_ID_CACHE, file_id);
@@ -126,7 +141,8 @@ public class FileCache extends Cache {
         return result;
     }
 
-    public Boolean deleteByFile_idAndSystem_update_user_idValidateSystem_version(String file_id, String system_update_user_id, Integer system_version) {
+    public Boolean deleteByFile_idAndSystem_update_user_idValidateSystem_version(String file_id,
+            String system_update_user_id, Integer system_version) {
         File file = findByFile_id(file_id);
         if (!file.getSystem_version().equals(system_version)) {
             throw new RuntimeException(Constant.ERROR_VERSION);

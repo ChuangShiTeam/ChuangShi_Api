@@ -25,6 +25,7 @@ import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Bill;
 import com.nowui.chuangshi.model.BillCommission;
+import com.nowui.chuangshi.model.Certificate;
 import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.DeliveryOrderProductSku;
 import com.nowui.chuangshi.model.Member;
@@ -36,6 +37,8 @@ import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.service.BillCommissionService;
 import com.nowui.chuangshi.service.BillService;
+import com.nowui.chuangshi.service.CertificatePayService;
+import com.nowui.chuangshi.service.CertificateService;
 import com.nowui.chuangshi.service.DeliveryOrderService;
 import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.ProductSkuCommissionService;
@@ -65,6 +68,10 @@ public class WeChatController extends Controller {
     private final UserService userService = new UserService();
     private final BillCommissionService billCommissionService = new BillCommissionService();
     private final DeliveryOrderService deliveryOrderService = new DeliveryOrderService();
+
+    // 授权证书
+    private final CertificateService certificateService = new CertificateService();
+    private final CertificatePayService certificatePayService = new CertificatePayService();
 
     @ActionKey(Url.WECHAT_CONFIG)
     public void config() {
@@ -140,9 +147,9 @@ public class WeChatController extends Controller {
             String token = memberService.login(app_id, wechat_open_id, wechat_union_id, member_parent_id,
                     from_qrcode_id, member_parent_id, member_parent_path, user_name, user_avatar, member_status,
                     request_user_id);
-            //url = url.contains("?") ? url + "&" : url + "?";
+            // url = url.contains("?") ? url + "&" : url + "?";
 
-            //System.out.println("url : " + url);
+            // System.out.println("url : " + url);
 
             redirect(url + "?&open_id=" + wechat_open_id + "&token=" + token);
         }
@@ -160,16 +167,17 @@ public class WeChatController extends Controller {
         ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"爆水丸\",\"url\":\"http://h5."
                 + "xingxiao.nowui.com" + "/?#/team\"}]}");
 
-
-//        App app = appService.findByApp_id("df2078d6c9eb46babb0df957127273ab");
-//
-//        String wechat_app_id = ApiConfigKit.getAppId();
-//        if (!wechat_app_id.equals(app.getWechat_app_id())) {
-//            ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
-//        }
-//
-//        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"健康推荐\",\"url\":\"http://h5."
-//                + "jiyiguan.nowui.com" + "/?#/index\"}]}");
+        // App app =
+        // appService.findByApp_id("df2078d6c9eb46babb0df957127273ab");
+        //
+        // String wechat_app_id = ApiConfigKit.getAppId();
+        // if (!wechat_app_id.equals(app.getWechat_app_id())) {
+        // ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+        // }
+        //
+        // ApiResult apiResult =
+        // MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"健康推荐\",\"url\":\"http://h5."
+        // + "jiyiguan.nowui.com" + "/?#/index\"}]}");
 
         renderText(apiResult.getJson());
     }
@@ -369,6 +377,7 @@ public class WeChatController extends Controller {
         billService.batchSave(billList);
     }
 
+    // 支付成功回调接口
     @ActionKey(Url.WECHAT_NOTIFY)
     public void payNotify() {
         String result = HttpKit.readData(getRequest());
@@ -410,8 +419,8 @@ public class WeChatController extends Controller {
         parameter.put("total_fee", total_fee);
         parameter.put("trade_type", trade_type);
         parameter.put("transaction_id", transaction_id);
-        
-        if (Constant.WX_ATTACH_TRADE.equals(attach)) {   //订单支付
+
+        if (Constant.WX_ATTACH_TRADE.equals(attach)) { // 订单支付
             // 根据订单号查询订单
             Trade trade = tradeService.findByTrade_id(out_trade_no);
             if (trade == null) {
@@ -439,8 +448,8 @@ public class WeChatController extends Controller {
                 Boolean trade_status = true;
 
                 boolean is_update = tradeService.updateSend(trade.getTrade_id(), trade.getUser_id(), trade_amount,
-                        trade_pay_type, trade_pay_number, trade_pay_account, trade_pay_time, trade_pay_result, trade_status,
-                        trade.getSystem_version());
+                        trade_pay_type, trade_pay_number, trade_pay_account, trade_pay_time, trade_pay_result,
+                        trade_status, trade.getSystem_version());
 
                 if (is_update) {
                     // TODO 消息队列通知计算账单和分成
@@ -457,7 +466,7 @@ public class WeChatController extends Controller {
             } else {
                 renderText(Constant.WX_FAIL_MSG);
             }
-        } else if (Constant.WX_ATTACH_DELIVERY_ORDER.equals(attach)){  //发货单支付
+        } else if (Constant.WX_ATTACH_DELIVERY_ORDER.equals(attach)) { // 发货单支付
             DeliveryOrder deliveryOrder = deliveryOrderService.findByDelivery_order_id(out_trade_no);
             if (deliveryOrder == null) {
                 renderText(Constant.WX_FAIL_MSG);
@@ -480,7 +489,10 @@ public class WeChatController extends Controller {
                 String delivery_order_pay_account = openid;
                 String delivery_order_pay_time = time_end;
                 String delivery_order_pay_result = result;
-                boolean is_update = deliveryOrderService.updatePay(deliveryOrder.getDelivery_order_id(), delivery_order_pay_type, delivery_order_pay_number, delivery_order_pay_account, delivery_order_pay_time, delivery_order_pay_result, deliveryOrder.getDelivery_order_user_id(), deliveryOrder.getSystem_version());
+                boolean is_update = deliveryOrderService.updatePay(deliveryOrder.getDelivery_order_id(),
+                        delivery_order_pay_type, delivery_order_pay_number, delivery_order_pay_account,
+                        delivery_order_pay_time, delivery_order_pay_result, deliveryOrder.getDelivery_order_user_id(),
+                        deliveryOrder.getSystem_version());
                 if (is_update) {
                     renderText(Constant.WX_SUCCESS_MSG);
                 } else {
@@ -489,8 +501,54 @@ public class WeChatController extends Controller {
             } else {
                 renderText(Constant.WX_FAIL_MSG);
             }
+        } else if (Constant.WX_ATTACH_CERTIFICATE_ORDER.equals(attach)) {// 授权证书支付
+            Certificate certificate = certificateService.findByCertificate_id(out_trade_no);
+            if (certificate == null) {
+                renderText(Constant.WX_FAIL_MSG);
+            }
+            App app = appService.findByApp_id(certificate.getApp_id());
+            if (app == null) {
+                renderText(Constant.WX_FAIL_MSG);
+            }
+            String wx_app_id = app.getWechat_app_id();
+            if (!appid.equals(wx_app_id)) {
+                renderText(Constant.WX_FAIL_MSG);
+            }
+            String mch_key = app.getWechat_mch_key();
+
+            String endsign = PaymentKit.createSign(parameter, mch_key);
+
+            if (sign.equals(endsign)) {
+                boolean certificate_is_pay = true;
+
+                boolean is_update = certificateService.updateValidateSystem_version(certificate.getCertificate_id(),
+                        certificate.getUser_id(), certificate.getCertificate_number(),
+                        certificate.getCertificate_start_date(), certificate.getCertificate_end_date(),
+                        certificate_is_pay, certificate.getUser_id(), certificate.getSystem_version());
+
+                if (is_update) {
+                    User user = userService.findByUser_id(certificate.getUser_id());
+                    Member member = memberService.findByMember_id(user.getObject_Id());
+
+                    // 设置小数位数，第一个变量是小数位数，第二个变量是取舍方法(四舍五入)
+                    BigDecimal bd = new BigDecimal(total_fee);
+                    bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+                    // 转日期
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String str = sdf.format(new Date());
+
+                    certificatePayService.save(certificate.getCertificate_id(), member.getMember_level_id(), bd, openid,
+                            str, result, certificate.getUser_id());
+                    renderText(Constant.WX_SUCCESS_MSG);
+                } else {
+                    renderText(Constant.WX_FAIL_MSG);
+                }
+            } else {
+                renderText(Constant.WX_FAIL_MSG);
+            }
         } else {
-            renderText(Constant.WX_FAIL_MSG); 
+            renderText(Constant.WX_FAIL_MSG);
         }
     }
 
@@ -504,10 +562,10 @@ public class WeChatController extends Controller {
         List<DeliveryOrderProductSku> deliveryOrderProductSkuList = new ArrayList<DeliveryOrderProductSku>();
 
         for (TradeProductSku tradeProductSku : tradeProductSkuList) {
-        	DeliveryOrderProductSku deliveryOrderProductSku = new DeliveryOrderProductSku();
-        	deliveryOrderProductSku.setProduct_sku_id(tradeProductSku.getProduct_sku_id());
-        	deliveryOrderProductSku.setProduct_sku_quantity(tradeProductSku.getProduct_sku_quantity());
-        	deliveryOrderProductSkuList.add(deliveryOrderProductSku);
+            DeliveryOrderProductSku deliveryOrderProductSku = new DeliveryOrderProductSku();
+            deliveryOrderProductSku.setProduct_sku_id(tradeProductSku.getProduct_sku_id());
+            deliveryOrderProductSku.setProduct_sku_quantity(tradeProductSku.getProduct_sku_quantity());
+            deliveryOrderProductSkuList.add(deliveryOrderProductSku);
         }
 
         // 会员发货
@@ -516,8 +574,12 @@ public class WeChatController extends Controller {
         String delivery_order_express_shipper_code = ""; // 快递公司由仓库发货时指定
         Boolean delivery_order_is_pay = true; // 快递费已支付
         BigDecimal delivery_order_amount = trade.getTrade_total_amount();
-        
-        deliveryOrderService.save(trade.getApp_id(), trade_id, user_id, "", user_id, trade.getTrade_receiver_name(), trade.getTrade_receiver_mobile(), trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(), trade.getTrade_receiver_address(), delivery_order_express_pay_way, delivery_order_express_shipper_code, delivery_order_amount, delivery_order_is_pay, deliveryOrderProductSkuList, "");
+
+        deliveryOrderService.save(trade.getApp_id(), trade_id, user_id, "", user_id, trade.getTrade_receiver_name(),
+                trade.getTrade_receiver_mobile(), trade.getTrade_receiver_province(), trade.getTrade_receiver_city(),
+                trade.getTrade_receiver_area(), trade.getTrade_receiver_address(), delivery_order_express_pay_way,
+                delivery_order_express_shipper_code, delivery_order_amount, delivery_order_is_pay,
+                deliveryOrderProductSkuList, "");
 
     }
 

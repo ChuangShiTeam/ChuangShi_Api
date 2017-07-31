@@ -85,13 +85,19 @@ public class CertificateCache extends Cache {
     }
 
     public Boolean save(String certificate_id, String app_id, String user_id, String certificate_number,
-            Date certificate_start_date, Date certificate_end_date, String system_create_user_id) {
-        return certificateDao.save(certificate_id, app_id, user_id, certificate_number, certificate_start_date,
-                certificate_end_date, system_create_user_id);
+            Date certificate_start_date, Date certificate_end_date, Boolean certificate_is_pay,
+            String system_create_user_id) {
+        Boolean result = certificateDao.save(certificate_id, app_id, user_id, certificate_number,
+                certificate_start_date, certificate_end_date, certificate_is_pay, system_create_user_id);
+        if (result) {
+            CacheUtil.remove(CERTIFICATE_BY_CERTIFICATE_ID_CACHE, certificate_id);
+            CacheUtil.remove(CERTIFICATE_BY_USER_ID_CACHE, user_id);
+        }
+        return result;
     }
 
     public Boolean updateValidateSystem_version(String certificate_id, String user_id, String certificate_number,
-            Date certificate_start_date, Date certificate_end_date, String system_update_user_id,
+            Date certificate_start_date, Date certificate_end_date, boolean certificate_is_pay, String system_update_user_id,
             Integer system_version) {
         Certificate certificate = findByCertificate_id(certificate_id);
         if (!certificate.getSystem_version().equals(system_version)) {
@@ -99,7 +105,7 @@ public class CertificateCache extends Cache {
         }
 
         boolean result = certificateDao.update(certificate_id, user_id, certificate_number, certificate_start_date,
-                certificate_end_date, system_update_user_id, system_version);
+                certificate_end_date,certificate_is_pay, system_update_user_id, system_version);
 
         if (result) {
             CacheUtil.remove(CERTIFICATE_BY_CERTIFICATE_ID_CACHE, certificate_id);

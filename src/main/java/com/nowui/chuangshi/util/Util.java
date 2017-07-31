@@ -179,4 +179,10 @@ public class Util {
 
         return map;
     }
+
+    // 获取4位随机数
+    public static int getRandomNumber() {
+        // 位数 1000
+        return (int) ((Math.random() * 9 + 1) * 1000);
+    }
 }
