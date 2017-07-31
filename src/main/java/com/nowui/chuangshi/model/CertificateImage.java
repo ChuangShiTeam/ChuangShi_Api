@@ -31,6 +31,9 @@ public class CertificateImage extends Model<CertificateImage> {
     @Column(type = ColumnType.VARCHAR, length = 20, comment = "授权人手机")
     public static final String CERTIFICATE_PEOPLE_MOBILE = "certificate_people_mobile";
 
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "授权人微信")
+    public static final String CERTIFICATE_PEOPLE_WX = "certificate_people_wx";
+
     @Column(type = ColumnType.VARCHAR, length = 20, comment = "店铺名称")
     public static final String CERTIFICATE_SHOP_NAME = "certificate_shop_name";
 
@@ -105,6 +108,14 @@ public class CertificateImage extends Model<CertificateImage> {
 
     public void setCertificate_people_mobile(String certificate_people_mobile) {
         set(CERTIFICATE_PEOPLE_MOBILE, certificate_people_mobile);
+    }
+
+    public String getCertificate_people_wx() {
+        return getStr(CERTIFICATE_PEOPLE_WX);
+    }
+
+    public void setCertificate_people_wx(String certificate_people_wx) {
+        set(CERTIFICATE_PEOPLE_WX, certificate_people_wx);
     }
 
     public String getCertificate_shop_name() {

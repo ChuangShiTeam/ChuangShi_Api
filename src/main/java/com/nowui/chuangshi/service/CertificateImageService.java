@@ -35,18 +35,19 @@ public class CertificateImageService extends Service {
 
     public Boolean save(String certificate_id, String file_id, String certificate_type, String certificate_channel_name,
             String certificate_channel_url, String certificate_people_name, String certificate_people_id_card,
-            String certificate_people_mobile, String certificate_shop_name, String certificate_shop_url,
-            Date certificate_start_date, Date certificate_end_date, String system_create_user_id) {
+            String certificate_people_mobile, String certificate_people_wx, String certificate_shop_name,
+            String certificate_shop_url, Date certificate_start_date, Date certificate_end_date,
+            String system_create_user_id) {
         return certificateImageCache.save(certificate_id, file_id, certificate_type, certificate_channel_name,
                 certificate_channel_url, certificate_people_name, certificate_people_id_card, certificate_people_mobile,
-                certificate_shop_name, certificate_shop_url, certificate_start_date, certificate_end_date,
-                system_create_user_id);
+                certificate_people_wx, certificate_shop_name, certificate_shop_url, certificate_start_date,
+                certificate_end_date, system_create_user_id);
     }
 
     public Map<String, Object> saveCertificateFile(String app_id, String system_create_user_id, String certificate_type,
             String certificate_number, String user_name, String certificate_people_name,
-            String certificate_people_id_card, String certificate_people_mobile, Date certificate_start_date,
-            Date certificate_end_date) {
+            String certificate_people_id_card, String certificate_people_mobile, String certificate_people_wx,
+            Date certificate_start_date, Date certificate_end_date) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
         String start_date = sdf.format(certificate_start_date);
@@ -70,7 +71,7 @@ public class CertificateImageService extends Service {
         String[] contentArray = new String[4];
         contentArray[0] = "        我司 上海星销信息技术有限公司  为“V+LAB”品牌在中国区域的授权总代理，兹正式授权以下人员为“V+LAB”品牌的经销商：";
         contentArray[1] = "        " + certificate_people_name + "（身份证号：" + certificate_people_id_card + "）";
-        contentArray[2] = "        手机号：" + certificate_people_mobile;
+        contentArray[2] = "        电话：" + certificate_people_mobile + "    微信：" + certificate_people_wx;
         contentArray[3] = "        本公司证明该渠道销售的所有“V+LAB”品牌产品均为本公司所提供的正品。";
         certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, contentArray, 222, 437, 540, 2, // TODO
                 new Font("Microsoft YaHei", Font.BOLD, 18));
