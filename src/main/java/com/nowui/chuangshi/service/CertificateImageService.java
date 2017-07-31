@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -12,12 +11,10 @@ import java.util.Map;
 
 import com.jfinal.kit.FileKit;
 import com.jfinal.kit.PathKit;
-import com.jfinal.upload.UploadFile;
 import com.nowui.chuangshi.cache.CertificateImageCache;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.CertificateImage;
 import com.nowui.chuangshi.type.FileType;
-import com.nowui.chuangshi.util.DateUtil;
 import com.nowui.chuangshi.util.FileUtil;
 import com.nowui.chuangshi.util.ImageUtil;
 import com.nowui.chuangshi.util.Util;
@@ -70,11 +67,12 @@ public class CertificateImageService extends Service {
         certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, titleArray, 447, 346, 300, 1,
                 new Font("Microsoft YaHei", Font.BOLD, 34));
 
-        String[] contentArray = new String[3];
+        String[] contentArray = new String[4];
         contentArray[0] = "        我司 上海星销信息技术有限公司  为“V+LAB”品牌在中国区域的授权总代理，兹正式授权以下人员为“V+LAB”品牌的经销商：";
-        contentArray[1] = "        " + certificate_people_name + "（" + user_name + "）（身份证号："+ certificate_people_id_card + "）（手机号：" + certificate_people_mobile + "）";
-        contentArray[2] = "        本公司证明该渠道销售的所有“V+LAB”品牌产品均为本公司所提供的正品。";
-        certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, contentArray, 225, 437, 532, 2,// TODO
+        contentArray[1] = "        " + certificate_people_name + "（身份证号：" + certificate_people_id_card + "）";
+        contentArray[2] = "        手机号：" + certificate_people_mobile;
+        contentArray[3] = "        本公司证明该渠道销售的所有“V+LAB”品牌产品均为本公司所提供的正品。";
+        certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, contentArray, 222, 437, 540, 2, // TODO
                 new Font("Microsoft YaHei", Font.BOLD, 18));
 
         String[] statementTitleArray = new String[1];
@@ -96,17 +94,17 @@ public class CertificateImageService extends Service {
         statementContentArray[0] = "若出现下列行为（包括但不限于），我司将立即取消其经销商资格，并由该经销商承担因此造成的责任和损失：利用我司名义从事非法活动，利用我司名义从事未授权的活动、销售非从我司采购的该品牌商品、私自降价或抬价、严重损害客户合法权益并造成损失、不正当竞争等等。";
         statementContentArray[1] = "授权书授权期限：" + start_date + "至" + end_date + "。";
         statementContentArray[2] = "本授权书盖章即可生效，期满后自动失效。";
-        certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, statementContentArray, 248, 759 + 50,
-                510, 1.2, new Font("Microsoft YaHei", Font.BOLD, 13));
+        certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, statementContentArray, 255, 759 + 50,
+                518, 1.2, new Font("Microsoft YaHei", Font.BOLD, 13));
 
         String[] statementUnitArray = new String[1];
         statementUnitArray[0] = "授权单位：上海星销信息技术有限公司";
-        certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, statementUnitArray, 459, 940 + 50,
+        certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, statementUnitArray, 470, 940 + 50,
                 300, 1, new Font("Microsoft YaHei", Font.BOLD, 18));
 
         String[] statementDateArray = new String[1];
         statementDateArray[0] = "2017年4月19日";
-        certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, statementDateArray, 635, 987 + 50,
+        certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, statementDateArray, 645, 987 + 50,
                 300, 1, new Font("Microsoft YaHei", Font.BOLD, 18));
 
         String file_id = Util.getRandomUUID();
