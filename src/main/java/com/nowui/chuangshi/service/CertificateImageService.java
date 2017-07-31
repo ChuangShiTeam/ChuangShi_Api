@@ -55,26 +55,26 @@ public class CertificateImageService extends Service {
         String start_date = sdf.format(certificate_start_date);
         String end_date = sdf.format(certificate_end_date);
 
-        BufferedImage sealBufferedImage = ImageUtil.loadImageLocal("D:\\seal.png");
-        BufferedImage templateBufferedImage = ImageUtil.loadImageLocal("D:\\template.png");
+        BufferedImage sealBufferedImage = ImageUtil
+                .loadImageLocal(PathKit.getRootClassPath() + File.separator + "seal.png");
+        BufferedImage templateBufferedImage = ImageUtil
+                .loadImageLocal(PathKit.getRootClassPath() + File.separator + "template.png");
 
         String[] numberArray = new String[1];
         numberArray[0] = "授权编号：" + certificate_number;
-        BufferedImage certificateBufferedImage = ImageUtil.modifyImage(templateBufferedImage, numberArray, 515, 250,
-                300, 1, new Font("Microsoft YaHei", Font.BOLD, 16));
+        BufferedImage certificateBufferedImage = ImageUtil.modifyImage(templateBufferedImage, numberArray, 576, 250,
+                300, 1, new Font("Microsoft YaHei", Font.BOLD, 16));// TODO
 
         String[] titleArray = new String[1];
         titleArray[0] = "授权书";
         certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, titleArray, 447, 346, 300, 1,
                 new Font("Microsoft YaHei", Font.BOLD, 34));
 
-        String[] contentArray = new String[4];
+        String[] contentArray = new String[3];
         contentArray[0] = "        我司 上海星销信息技术有限公司  为“V+LAB”品牌在中国区域的授权总代理，兹正式授权以下人员为“V+LAB”品牌的经销商：";
-        contentArray[1] = "        " + certificate_people_name + "（" + user_name + "）（身份证号："
-                + certificate_people_id_card + "）";
-        contentArray[2] = "        " + certificate_people_mobile;
-        contentArray[3] = "        本公司证明该渠道销售的所有“V+LAB”品牌产品均为本公司所提供的正品。";
-        certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, contentArray, 225, 437, 530, 2,
+        contentArray[1] = "        " + certificate_people_name + "（" + user_name + "）（身份证号："+ certificate_people_id_card + "）（手机号：" + certificate_people_mobile + "）";
+        contentArray[2] = "        本公司证明该渠道销售的所有“V+LAB”品牌产品均为本公司所提供的正品。";
+        certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, contentArray, 225, 437, 532, 2,// TODO
                 new Font("Microsoft YaHei", Font.BOLD, 18));
 
         String[] statementTitleArray = new String[1];
@@ -110,7 +110,7 @@ public class CertificateImageService extends Service {
                 300, 1, new Font("Microsoft YaHei", Font.BOLD, 18));
 
         String file_id = Util.getRandomUUID();
-        String resultFilePath = "D:\\" + file_id + ".jpg";
+        String resultFilePath = PathKit.getRootClassPath() + File.separator + file_id + ".jpg";
         ImageUtil.writeImageLocal(resultFilePath,
                 ImageUtil.modifyImagetogeter(sealBufferedImage, certificateBufferedImage));
 
@@ -165,5 +165,7 @@ public class CertificateImageService extends Service {
 
     public static void main(String[] args) {
         System.out.println("PathKit.getWebRootPath()" + PathKit.getWebRootPath());
+        System.out.println("PathKit.getRootClassPath()" + PathKit.getRootClassPath());
+        System.out.println("File.separator" + File.separator);
     }
 }
