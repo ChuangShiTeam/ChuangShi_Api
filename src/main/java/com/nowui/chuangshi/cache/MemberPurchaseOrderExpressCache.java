@@ -1,8 +1,10 @@
 package com.nowui.chuangshi.cache;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.nowui.chuangshi.dao.MemberPurchaseOrderExpressDao;
+import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.MemberPurchaseOrderExpress;
 import com.nowui.chuangshi.util.CacheUtil;
 
@@ -13,14 +15,15 @@ public class MemberPurchaseOrderExpressCache extends Cache {
     
     private MemberPurchaseOrderExpressDao memberPurchaseOrderExpressDao = new MemberPurchaseOrderExpressDao();
 
-    public List<MemberPurchaseOrderExpress> listByMember_purchase_order_id(String member_purchase_order_id) {
+    public List<Express> listByMember_purchase_order_id(String member_purchase_order_id) {
         List<MemberPurchaseOrderExpress> member_purchase_order_express_list = CacheUtil.get(MEMBER_PURCHASE_ORDER_EXPRESS_LIST_BY_MEMBER_PURCHASE_ORDER_ID_CACHE, member_purchase_order_id);
         
+        List<Express> express_list = new ArrayList<Express>();
         for (MemberPurchaseOrderExpress memberPurchaseOrderExpress: member_purchase_order_express_list) {
-            memberPurchaseOrderExpress.put(expressCache.findByExpress_id(memberPurchaseOrderExpress.getExpress_id()));
+            express_list.add(expressCache.findByExpress_id(memberPurchaseOrderExpress.getExpress_id()));
         }
         
-        return member_purchase_order_express_list;
+        return express_list;
     }
 
     public Boolean save(String member_purchase_order_id, String express_id, String system_create_user_id) {

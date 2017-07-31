@@ -84,6 +84,8 @@ public class Constant {
     
     public static final String WX_ATTACH_TRADE = "TRADE";
     
-    public static final String WX_ATTACH_DELIVERY_ORDER = "DELIVERY_ORDER";
+    public static final String WX_ATTACH_MEMBER_DELIVERY_ORDER = "MEMBER_DELIVERY_ORDER";
+    
+    public static final String WX_ATTACH_MEMBER_PURCHASE_ORDER = "MEMBER_PURCHASE_ORDER";
 
 }

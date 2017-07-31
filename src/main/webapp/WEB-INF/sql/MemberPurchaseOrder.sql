@@ -2,7 +2,7 @@
 
   #sql("countByApp_idOrLikeUser_name")
     SELECT COUNT(*) FROM table_member_purchase_order
-    LEFT JOIN table_user ON table_member_purchase_order.member_purchase_order_user_id = table_user.user_id
+    LEFT JOIN table_user ON table_member_purchase_order.user_id = table_user.user_id
     WHERE table_member_purchase_order.system_status = 1
     AND table_member_purchase_order.app_id = #p(app_id)
     #if(user_name)
@@ -13,7 +13,7 @@
 
   #sql("countByOrApp_idOrLikeUser_name")
     SELECT COUNT(*) FROM table_member_purchase_order
-    LEFT JOIN table_user ON table_member_purchase_order.member_purchase_order_user_id = table_user.user_id
+    LEFT JOIN table_user ON table_member_purchase_order.user_id = table_user.user_id
     WHERE table_member_purchase_order.system_status = 1
     #if(app_id)
     AND table_member_purchase_order.app_id = #p(app_id)
@@ -39,7 +39,7 @@
     SELECT
     table_member_purchase_order.member_purchase_order_id
     FROM table_member_purchase_order
-    LEFT JOIN table_user ON table_member_purchase_order.member_purchase_order_user_id = table_user.user_id
+    LEFT JOIN table_user ON table_member_purchase_order.user_id = table_user.user_id
     WHERE table_member_purchase_order.system_status = 1
     AND table_member_purchase_order.app_id = #p(app_id)
     #if(user_name)
@@ -54,7 +54,7 @@
     SELECT
     table_member_purchase_order.member_purchase_order_id
     FROM table_member_purchase_order
-    LEFT JOIN table_user ON table_member_purchase_order.member_purchase_order_user_id = table_user.user_id
+    LEFT JOIN table_user ON table_member_purchase_order.user_id = table_user.user_id
     WHERE table_member_purchase_order.system_status = 1
     #if(app_id)
     AND table_member_purchase_order.app_id = #p(app_id)
@@ -65,6 +65,15 @@
     #end
     ORDER BY table_member_purchase_order.system_create_time DESC
     LIMIT #p(m), #p(n)
+  #end
+  
+  #sql("listByUser_id")
+    SELECT
+    *
+    FROM table_member_purchase_order
+    WHERE system_status = 1
+    AND user_id = #p(user_id)
+    ORDER BY system_update_time DESC
   #end
 
   #sql("findByMember_purchase_order_id")
@@ -79,7 +88,10 @@
     INSERT INTO table_member_purchase_order (
       member_purchase_order_id,
       app_id,
-      member_purchase_order_user_id,
+      user_id,
+      member_purchase_order_product_amount,
+      member_purchase_order_express_amount,
+      member_purchase_order_discount_amount,
       member_purchase_order_amount,
       member_purchase_order_total_quantity,
       member_purchase_order_receiver_name,
@@ -94,6 +106,7 @@
       member_purchase_order_is_pay,
       member_purchase_order_flow,
       member_purchase_order_is_complete,
+      member_purchase_order_message,
       system_create_user_id,
       system_create_time,
       system_update_user_id,
@@ -103,7 +116,10 @@
     ) VALUES (
       #p(member_purchase_order_id),
       #p(app_id),
-      #p(member_purchase_order_user_id),
+      #p(user_id),
+      #p(member_purchase_order_product_amount),
+      #p(member_purchase_order_express_amount),
+      #p(member_purchase_order_discount_amount),
       #p(member_purchase_order_amount),
       #p(member_purchase_order_total_quantity),
       #p(member_purchase_order_receiver_name),
@@ -118,6 +134,7 @@
       #p(member_purchase_order_is_pay),
       #p(member_purchase_order_flow),
       #p(member_purchase_order_is_complete),
+      #p(member_purchase_order_message),
       #p(system_create_user_id),
       #p(system_create_time),
       #p(system_update_user_id),
@@ -129,7 +146,9 @@
 
   #sql("update")
     UPDATE table_member_purchase_order SET
-    member_purchase_order_user_id = #p(member_purchase_order_user_id),
+    member_purchase_order_product_amount = #p(member_purchase_order_product_amount),
+    member_purchase_order_express_amount = #p(member_purchase_order_express_amount),
+    member_purchase_order_discount_amount = #p(member_purchase_order_discount_amount),
     member_purchase_order_amount = #p(member_purchase_order_amount),
     member_purchase_order_total_quantity = #p(member_purchase_order_total_quantity),
     member_purchase_order_receiver_name = #p(member_purchase_order_receiver_name),
@@ -144,6 +163,7 @@
     member_purchase_order_is_pay = #p(member_purchase_order_is_pay),
     member_purchase_order_flow = #p(member_purchase_order_flow),
     member_purchase_order_is_complete = #p(member_purchase_order_is_complete),
+    member_purchase_order_message = #p(member_purchase_order_message),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1
@@ -151,7 +171,42 @@
     AND member_purchase_order_id = #p(member_purchase_order_id)
     AND system_version = #p(system_version)
   #end
-
+  
+  #sql("updateMember_purchase_order_flowAndMember_purchase_order_is_payByMember_purchase_order_idAndSystem_version")
+    UPDATE table_member_purchase_order SET
+    member_purchase_order_is_pay = #p(member_purchase_order_is_pay),
+    member_purchase_order_flow = #p(member_purchase_order_flow),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND member_purchase_order_id = #p(member_purchase_order_id)
+    AND system_version = #p(system_version)
+  #end
+  
+  #sql("updateMember_purchase_order_flowByMember_purchase_order_idAndSystem_version")
+    UPDATE table_member_purchase_order SET
+    member_purchase_order_flow = #p(member_purchase_order_flow),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND member_purchase_order_id = #p(member_purchase_order_id)
+    AND system_version = #p(system_version)
+  #end
+  
+  #sql("updateMember_purchase_order_flowAndMember_purchase_order_is_completeByMember_purchase_order_idAndSystem_version")
+    UPDATE table_member_purchase_order SET
+    member_purchase_order_is_complete = #p(member_purchase_order_is_complete),
+    member_purchase_order_flow = #p(member_purchase_order_flow),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND member_purchase_order_id = #p(member_purchase_order_id)
+    AND system_version = #p(system_version)
+  #end
+  
   #sql("deleteByMember_purchase_order_idAndSystem_version")
     UPDATE table_member_purchase_order SET
     system_update_user_id = #p(system_update_user_id),

@@ -13,12 +13,6 @@ public class Express extends Model<Express> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用id")
     public static final String APP_ID = "app_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
-    public static final String TRADE_ID = "trade_id";
-
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
-    public static final String DELIVERY_ORDER_ID = "delivery_order_id";
-
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "快递公司编码")
     public static final String EXPRESS_SHIPPER_CODE = "express_shipper_code";
 
@@ -118,22 +112,6 @@ public class Express extends Model<Express> {
 
     public void setApp_id(String app_id) {
         set(APP_ID, app_id);
-    }
-
-    public String getTrade_id() {
-        return getStr(TRADE_ID);
-    }
-
-    public void setTrade_id(String trade_id) {
-        set(TRADE_ID, trade_id);
-    }
-
-    public String getDelivery_order_id() {
-        return getStr(DELIVERY_ORDER_ID);
-    }
-
-    public void setDelivery_order_id(String delivery_order_id) {
-        set(DELIVERY_ORDER_ID, delivery_order_id);
     }
 
     public String getExpress_shipper_code() {

@@ -99,12 +99,12 @@ public class ExpressService extends Service {
         return expressCache.findByExpress_id(express_id);
     }
 
-    public Boolean save(String express_id, String app_id, String trade_id, String delivery_order_id, String express_shipper_code, String express_no, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile, String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address, String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province, String express_sender_city, String express_sender_area, String express_sender_address, BigDecimal express_cost, Boolean express_is_pay, String express_pay_way, String express_traces, String express_flow, Boolean express_is_complete, String express_remark, String system_create_user_id) {
-        return expressCache.save(express_id, app_id, trade_id, delivery_order_id, express_shipper_code, express_no, express_receiver_company, express_receiver_name, express_receiver_tel, express_receiver_mobile, express_receiver_postcode, express_receiver_province, express_receiver_city, express_receiver_area, express_receiver_address, express_sender_company, express_sender_name, express_sender_tel, express_sender_mobile, express_sender_postcode, express_sender_province, express_sender_city, express_sender_area, express_sender_address, express_cost, express_is_pay, express_pay_way, express_traces, express_flow, express_is_complete, express_remark, system_create_user_id);
+    public Boolean save(String express_id, String app_id, String express_shipper_code, String express_no, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile, String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address, String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province, String express_sender_city, String express_sender_area, String express_sender_address, BigDecimal express_cost, Boolean express_is_pay, String express_pay_way, String express_traces, String express_flow, Boolean express_is_complete, String express_remark, String system_create_user_id) {
+        return expressCache.save(express_id, app_id, express_shipper_code, express_no, express_receiver_company, express_receiver_name, express_receiver_tel, express_receiver_mobile, express_receiver_postcode, express_receiver_province, express_receiver_city, express_receiver_area, express_receiver_address, express_sender_company, express_sender_name, express_sender_tel, express_sender_mobile, express_sender_postcode, express_sender_province, express_sender_city, express_sender_area, express_sender_address, express_cost, express_is_pay, express_pay_way, express_traces, express_flow, express_is_complete, express_remark, system_create_user_id);
     }
 
-    public Boolean updateValidateSystem_version(String express_id, String trade_id, String delivery_order_id, String express_shipper_code, String express_no, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile, String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address, String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province, String express_sender_city, String express_sender_area, String express_sender_address, BigDecimal express_cost, Boolean express_is_pay, String express_pay_way, String express_traces, String express_flow, Boolean express_is_complete, String express_remark, String system_update_user_id, Integer system_version) {
-        return expressCache.updateValidateSystem_version(express_id, trade_id, delivery_order_id, express_shipper_code, express_no, express_receiver_company, express_receiver_name, express_receiver_tel, express_receiver_mobile, express_receiver_postcode, express_receiver_province, express_receiver_city, express_receiver_area, express_receiver_address, express_sender_company, express_sender_name, express_sender_tel, express_sender_mobile, express_sender_postcode, express_sender_province, express_sender_city, express_sender_area, express_sender_address, express_cost, express_is_pay, express_pay_way, express_traces, express_flow, express_is_complete, express_remark, system_update_user_id, system_version);
+    public Boolean updateValidateSystem_version(String express_id, String express_shipper_code, String express_no, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile, String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address, String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province, String express_sender_city, String express_sender_area, String express_sender_address, BigDecimal express_cost, Boolean express_is_pay, String express_pay_way, String express_traces, String express_flow, Boolean express_is_complete, String express_remark, String system_update_user_id, Integer system_version) {
+        return expressCache.updateValidateSystem_version(express_id, express_shipper_code, express_no, express_receiver_company, express_receiver_name, express_receiver_tel, express_receiver_mobile, express_receiver_postcode, express_receiver_province, express_receiver_city, express_receiver_area, express_receiver_address, express_sender_company, express_sender_name, express_sender_tel, express_sender_mobile, express_sender_postcode, express_sender_province, express_sender_city, express_sender_area, express_sender_address, express_cost, express_is_pay, express_pay_way, express_traces, express_flow, express_is_complete, express_remark, system_update_user_id, system_version);
     }
 
     public Boolean updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idValidateSystem_version(String express_id, String express_flow, Boolean express_is_complete, String express_traces,
@@ -119,15 +119,7 @@ public class ExpressService extends Service {
                 system_update_user_id, system_version);
     }
 
-    public List<Express> listByTrade_id(String trade_id) {
-        return expressCache.listByTrade_id(trade_id);
-    }
-    
-    public List<Express> listByDelivery_order_id(String delivery_order_id) {
-    	return expressCache.listByDelivery_order_id(delivery_order_id);
-    }
-
-    public Boolean memberExpress(String delivery_order_id, String express_no, BigDecimal express_cost, String express_shipper_code, String express_remark, String request_user_id) {
+    /*public Boolean memberExpress(String delivery_order_id, String express_no, BigDecimal express_cost, String express_shipper_code, String express_remark, String request_user_id) {
         DeliveryOrder deliveryOrder = deliveryOrderService.findByDelivery_order_id(delivery_order_id);
         if (deliveryOrder == null) {
             throw new RuntimeException("找不到对应发货单");
@@ -208,6 +200,6 @@ public class ExpressService extends Service {
 		
 		
 		
-	}
+	}*/
 
 }

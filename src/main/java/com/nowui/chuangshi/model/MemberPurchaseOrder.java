@@ -14,7 +14,16 @@ public class MemberPurchaseOrder extends Model<MemberPurchaseOrder> {
     public static final String APP_ID = "app_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户id")
-    public static final String MEMBER_PURCHASE_ORDER_USER_ID = "member_purchase_order_user_id";
+    public static final String USER_ID = "user_id";
+
+    @Column(type = ColumnType.DECIMAL, length = 0, comment = "商品总金额")
+    public static final String MEMBER_PURCHASE_ORDER_PRODUCT_AMOUNT = "member_purchase_order_product_amount";
+
+    @Column(type = ColumnType.DECIMAL, length = 0, comment = "快递费")
+    public static final String MEMBER_PURCHASE_ORDER_EXPRESS_AMOUNT = "member_purchase_order_express_amount";
+
+    @Column(type = ColumnType.DECIMAL, length = 0, comment = "折扣金额")
+    public static final String MEMBER_PURCHASE_ORDER_DISCOUNT_AMOUNT = "member_purchase_order_discount_amount";
 
     @Column(type = ColumnType.DECIMAL, length = 0, comment = "进货总金额")
     public static final String MEMBER_PURCHASE_ORDER_AMOUNT = "member_purchase_order_amount";
@@ -49,14 +58,21 @@ public class MemberPurchaseOrder extends Model<MemberPurchaseOrder> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "是否仓库代收")
     public static final String MEMBER_PURCHASE_ORDER_IS_WAREHOUSE_RECEIVE = "member_purchase_order_is_warehouse_receive";
 
-    @Column(type = ColumnType.TINYINT, length = 1, comment = "")
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否支付")
     public static final String MEMBER_PURCHASE_ORDER_IS_PAY = "member_purchase_order_is_pay";
 
     @Column(type = ColumnType.VARCHAR, length = 25, comment = "进货流程")
     public static final String MEMBER_PURCHASE_ORDER_FLOW = "member_purchase_order_flow";
 
-    @Column(type = ColumnType.TINYINT, length = 1, comment = "")
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否完成")
     public static final String MEMBER_PURCHASE_ORDER_IS_COMPLETE = "member_purchase_order_is_complete";
+
+    @Column(type = ColumnType.VARCHAR, length = 200, comment = "进货留言")
+    public static final String MEMBER_PURCHASE_ORDER_MESSAGE = "member_purchase_order_message";
+    
+    public static final String MEMBER_PURCHASE_ORDER_PRODUCT_SKU_LIST = "member_purchase_order_product_sku_list";
+    
+    public static final String MEMBER_PURCHASE_ORDER_EXPRESS_LIST = "member_purchase_order_express_list";
 
     public String getMember_purchase_order_id() {
         return getStr(MEMBER_PURCHASE_ORDER_ID);
@@ -74,12 +90,36 @@ public class MemberPurchaseOrder extends Model<MemberPurchaseOrder> {
         set(APP_ID, app_id);
     }
 
-    public String getMember_purchase_order_user_id() {
-        return getStr(MEMBER_PURCHASE_ORDER_USER_ID);
+    public String getUser_id() {
+        return getStr(USER_ID);
     }
 
-    public void setMember_purchase_order_user_id(String member_purchase_order_user_id) {
-        set(MEMBER_PURCHASE_ORDER_USER_ID, member_purchase_order_user_id);
+    public void setUser_id(String user_id) {
+        set(USER_ID, user_id);
+    }
+
+    public BigDecimal getMember_purchase_order_product_amount() {
+        return getBigDecimal(MEMBER_PURCHASE_ORDER_PRODUCT_AMOUNT);
+    }
+
+    public void setMember_purchase_order_product_amount(BigDecimal member_purchase_order_product_amount) {
+        set(MEMBER_PURCHASE_ORDER_PRODUCT_AMOUNT, member_purchase_order_product_amount);
+    }
+
+    public BigDecimal getMember_purchase_order_express_amount() {
+        return getBigDecimal(MEMBER_PURCHASE_ORDER_EXPRESS_AMOUNT);
+    }
+
+    public void setMember_purchase_order_express_amount(BigDecimal member_purchase_order_express_amount) {
+        set(MEMBER_PURCHASE_ORDER_EXPRESS_AMOUNT, member_purchase_order_express_amount);
+    }
+
+    public BigDecimal getMember_purchase_order_discount_amount() {
+        return getBigDecimal(MEMBER_PURCHASE_ORDER_DISCOUNT_AMOUNT);
+    }
+
+    public void setMember_purchase_order_discount_amount(BigDecimal member_purchase_order_discount_amount) {
+        set(MEMBER_PURCHASE_ORDER_DISCOUNT_AMOUNT, member_purchase_order_discount_amount);
     }
 
     public BigDecimal getMember_purchase_order_amount() {
@@ -192,6 +232,14 @@ public class MemberPurchaseOrder extends Model<MemberPurchaseOrder> {
 
     public void setMember_purchase_order_is_complete(Boolean member_purchase_order_is_complete) {
         set(MEMBER_PURCHASE_ORDER_IS_COMPLETE, member_purchase_order_is_complete);
+    }
+
+    public String getMember_purchase_order_message() {
+        return getStr(MEMBER_PURCHASE_ORDER_MESSAGE);
+    }
+
+    public void setMember_purchase_order_message(String member_purchase_order_message) {
+        set(MEMBER_PURCHASE_ORDER_MESSAGE, member_purchase_order_message);
     }
 
 }

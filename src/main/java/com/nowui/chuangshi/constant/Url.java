@@ -251,6 +251,9 @@ public class Url {
     public static final String MEMBER_PURCHASE_ORDER_SAVE = "/member/purchase/order/save";
     public static final String MEMBER_PURCHASE_ORDER_UPDATE = "/member/purchase/order/update";
     public static final String MEMBER_PURCHASE_ORDER_DELETE = "/member/purchase/order/delete";
+    public static final String MEMBER_PURCHASE_ORDER_CHECK = "/member/purchase/order/check";
+    public static final String MEMBER_PURCHASE_ORDER_CONFIRM = "/member/purchase/order/confirm";
+    public static final String MEMBER_PURCHASE_ORDER_PAY = "/member/purchase/order/pay";
     public static final String MEMBER_PURCHASE_ORDER_ADMIN_LIST = "/member/purchase/order/admin/list";
     public static final String MEMBER_PURCHASE_ORDER_ADMIN_FIND = "/member/purchase/order/admin/find";
     public static final String MEMBER_PURCHASE_ORDER_ADMIN_SAVE = "/member/purchase/order/admin/save";

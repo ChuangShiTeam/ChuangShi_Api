@@ -3,13 +3,13 @@ package com.nowui.chuangshi.service;
 import java.util.List;
 
 import com.nowui.chuangshi.cache.MemberPurchaseOrderExpressCache;
-import com.nowui.chuangshi.model.MemberPurchaseOrderExpress;
+import com.nowui.chuangshi.model.Express;
 
 public class MemberPurchaseOrderExpressService extends Service {
 
     private MemberPurchaseOrderExpressCache memberPurchaseOrderExpressCache = new MemberPurchaseOrderExpressCache();
 
-    public List<MemberPurchaseOrderExpress> listByMember_purchase_order_id(String member_purchase_order_id) {
+    public List<Express> listByMember_purchase_order_id(String member_purchase_order_id) {
         return memberPurchaseOrderExpressCache.listByMember_purchase_order_id(member_purchase_order_id);
     }
 
