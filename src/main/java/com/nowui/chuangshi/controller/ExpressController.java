@@ -250,24 +250,6 @@ public class ExpressController extends Controller {
         renderSuccessJson(express_list);
     }
 
-    @ActionKey(Url.EXPRESS_ADMIN_MEMBER_EXPRESS)
-    public void adminMemberExpress() {
-    	validateRequest_app_id();
-        validate(DeliveryOrder.DELIVERY_ORDER_ID, Express.EXPRESS_NO, Express.EXPRESS_COST, Express.EXPRESS_SHIPPER_CODE,
-                Express.EXPRESS_REMARK);
-
-        Express model = getModel(Express.class);
-        String request_user_id = getRequest_user_id();
-        JSONObject jsonObject = getParameterJSONObject();
-        String delivery_order_id = jsonObject.getString("delivery_order_id");
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        Boolean result = expressService.memberExpress(delivery_order_id, model.getExpress_no(), model.getExpress_cost(), model.getExpress_shipper_code(), model.getExpress_remark(), request_user_id);
-        
-        renderSuccessJson(result);
-    }
-    
     @ActionKey(Url.EXPRESS_ADMIN_SUPPLIER_EXPRESS)
     public void adminSupplierExpress() {
     	validateRequest_app_id();

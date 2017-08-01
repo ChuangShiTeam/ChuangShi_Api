@@ -1,26 +1,16 @@
 package com.nowui.chuangshi.service;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
-import com.jfinal.kit.HttpKit;
-import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.cache.MemberPurchaseOrderCache;
 import com.nowui.chuangshi.constant.Constant;
-import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
-import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
-import com.nowui.chuangshi.model.Trade;
-import com.nowui.chuangshi.type.DeliveryOrderFlow;
 import com.nowui.chuangshi.type.MemberPurchaseOrderFlow;
-import com.nowui.chuangshi.util.Util;
 
 public class MemberPurchaseOrderService extends Service {
 
@@ -31,6 +21,8 @@ public class MemberPurchaseOrderService extends Service {
     private AppService appService = new AppService();
     
     private WeChatService wechatService = new WeChatService();
+    
+    private MemberPurchaseOrderExpressService memberPurchaseOrderExpressService =  new MemberPurchaseOrderExpressService();
 
     public Integer countByApp_idOrLikeUser_name(String app_id, String user_name) {
         return memberPurchaseOrderCache.countByApp_idOrLikeUser_name(app_id, user_name);
@@ -145,6 +137,10 @@ public class MemberPurchaseOrderService extends Service {
             String member_purchase_order_id, String member_purchase_order_flow, Boolean member_purchase_order_is_complete,
             String system_update_user_id, Integer system_version) {
         return memberPurchaseOrderCache.updateMember_purchase_order_flowAndMember_purchase_order_is_completeByMember_purchase_order_idValidateSystem_version(member_purchase_order_id, member_purchase_order_flow, member_purchase_order_is_complete, system_update_user_id, system_version);
+    }
+    
+    public Boolean expressSave(String member_purchase_order_id, String express_id, String system_create_user_id) {
+        return memberPurchaseOrderExpressService.save(member_purchase_order_id, express_id, system_create_user_id);
     }
 
 }

@@ -48,5 +48,18 @@ public class MemberDeliveryOrderExpressDao extends Dao {
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
+    
+    public Boolean deleteByMember_delivery_order_idAndExpress_id(String member_delivery_order_id, String express_id, String system_update_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(MemberDeliveryOrderExpress.MEMBER_DELIVERY_ORDER_ID, member_delivery_order_id);
+        sqlMap.put(MemberDeliveryOrderExpress.EXPRESS_ID, express_id);
+        sqlMap.put(MemberDeliveryOrderExpress.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(MemberDeliveryOrderExpress.SYSTEM_UPDATE_TIME, new Date());
+        SqlPara sqlPara = Db.getSqlPara("member_delivery_order_express.deleteByMember_delivery_order_idAndExpress_id", sqlMap);
+        
+        logSql("member_delivery_order_express", "deleteByMember_delivery_order_idAndExpress_id", sqlPara);
+        
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
 
 }

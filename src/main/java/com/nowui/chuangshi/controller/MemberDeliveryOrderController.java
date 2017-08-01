@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.controller;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
+import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
 import com.nowui.chuangshi.model.User;
@@ -281,6 +283,14 @@ public class MemberDeliveryOrderController extends Controller {
         
         //查询发货单明细
         List<MemberDeliveryOrderProductSku> member_delivery_order_product_sku_list = memberDeliveryOrderProductSkuService.listByMember_delivery_order_id(member_delivery_order.getMember_delivery_order_id());
+        for (MemberDeliveryOrderProductSku memberDeliveryOrderProductSku : member_delivery_order_product_sku_list) {
+            ProductSku productSku = productSkuService.findByProduct_sku_id(memberDeliveryOrderProductSku.getProduct_sku_id());
+            Product product = productService.findByProduct_id(productSku.getProduct_id());
+            memberDeliveryOrderProductSku.put(Product.PRODUCT_NAME, product.getProduct_name());  //商品名称
+            memberDeliveryOrderProductSku.keep(MemberDeliveryOrderProductSku.PRODUCT_SKU_ID, MemberDeliveryOrderProductSku.PRODUCT_SKU_AMOUNT,
+                    MemberDeliveryOrderProductSku.PRODUCT_SKU_QUANTITY, Product.PRODUCT_NAME);
+
+        }
         result.put("member_delivery_order_product_sku_list", member_delivery_order_product_sku_list);
         member_delivery_order.keep(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, 
                 MemberDeliveryOrder.USER_NAME, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME,
@@ -317,7 +327,7 @@ public class MemberDeliveryOrderController extends Controller {
 
         renderSuccessJson(result);
     }
-
+    
     @ActionKey(Url.MEMBER_DELIVERY_ORDER_ADMIN_DELETE)
     public void adminDelete() {
         validateRequest_app_id();
@@ -334,6 +344,45 @@ public class MemberDeliveryOrderController extends Controller {
 
         Boolean result = memberDeliveryOrderService.deleteByMember_delivery_order_idAndSystem_update_user_idValidateSystem_version(model.getMember_delivery_order_id(), request_user_id, model.getSystem_version());
 
+        renderSuccessJson(result);
+    }
+    
+    @ActionKey(Url.MEMBER_DELIVERY_ORDER_ADMIN_EXPRESS_SAVE)
+    public void adminExpressSave() {
+        validateRequest_app_id();
+        validate(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, Express.EXPRESS_NO, Express.EXPRESS_COST, Express.EXPRESS_SHIPPER_CODE,
+                Express.EXPRESS_REMARK);       
+       
+        String request_user_id = getRequest_user_id();
+        JSONObject jsonObject = getParameterJSONObject();
+        String member_delivery_order_id = jsonObject.getString("member_delivery_order_id");
+        String express_no = jsonObject.getString("express_no");
+        BigDecimal express_cost = jsonObject.getBigDecimal("express_cost");
+        String express_shipper_code = jsonObject.getString("express_shipper_code");
+        String express_remark = jsonObject.getString("express_remark");
+        
+        authenticateRequest_app_idAndRequest_user_id();
+        
+        Boolean result = memberDeliveryOrderService.expressSave(member_delivery_order_id, express_no, express_cost, express_shipper_code, express_remark, request_user_id);        
+        
+        renderSuccessJson(result);
+    }
+    
+    @ActionKey(Url.MEMBER_DELIVERY_ORDER_ADMIN_EXPRESS_DELETE)
+    public void adminExpressDelete() {
+        validateRequest_app_id();
+        validate(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, Express.EXPRESS_ID, Express.SYSTEM_VERSION);       
+        
+        String request_user_id = getRequest_user_id();
+        JSONObject jsonObject = getParameterJSONObject();
+        String member_delivery_order_id = jsonObject.getString("member_delivery_order_id");
+        String express_id = jsonObject.getString("express_id");
+        Integer system_version = jsonObject.getInteger("system_version");
+        
+        authenticateRequest_app_idAndRequest_user_id();
+        
+        Boolean result = memberDeliveryOrderService.expressDelete(member_delivery_order_id, express_id, request_user_id, system_version);        
+        
         renderSuccessJson(result);
     }
 

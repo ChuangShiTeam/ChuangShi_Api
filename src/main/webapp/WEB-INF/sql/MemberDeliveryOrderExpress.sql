@@ -40,5 +40,16 @@
     WHERE system_status = 1
     AND member_delivery_order_id = #p(member_delivery_order_id)
   #end
+  
+  #sql("deleteByMember_delivery_order_idAndExpress_id")
+    UPDATE table_member_delivery_order_express SET
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1,
+    system_status = 0
+    WHERE system_status = 1
+    AND member_delivery_order_id = #p(member_delivery_order_id)
+    AND express_id = #p(express_id)
+  #end
 
 #end
