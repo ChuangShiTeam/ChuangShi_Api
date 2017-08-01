@@ -30,8 +30,8 @@
     *
     FROM table_certificate_image
     WHERE system_status = 1
-    #if(Certificate_id)
-    AND Certificate_id = #p(Certificate_id)
+    #if(certificate_id)
+    AND certificate_id = #p(certificate_id)
     #end
     ORDER BY system_create_time DESC
   #end

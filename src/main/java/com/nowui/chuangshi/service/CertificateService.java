@@ -110,7 +110,7 @@ public class CertificateService extends Service {
         String out_trade_no = certificate.getCertificate_id();
         String spbill_create_ip = "0.0.0.0";
         DecimalFormat format = new DecimalFormat("0");
-        BigDecimal total_fee_decimal = new BigDecimal(2000);
+        BigDecimal total_fee_decimal = new BigDecimal(0.01);
         String total_fee = format.format(total_fee_decimal.multiply(BigDecimal.valueOf(100)));
         String trade_type = "JSAPI";
 
@@ -128,11 +128,11 @@ public class CertificateService extends Service {
         parameter.put("trade_type", trade_type);
         parameter.put("sign", PaymentKit.createSign(parameter, mch_key));
 
-        System.out.println("parameter" + parameter);
+        System.out.println("parameter：" + parameter);
 
         String result = HttpKit.post("https://api.mch.weixin.qq.com/pay/unifiedorder", PaymentKit.toXml(parameter));
 
-        System.out.println("result" + result);
+        System.out.println("result： " + result);
 
         Map<String, String> map = PaymentKit.xmlToMap(result);
 

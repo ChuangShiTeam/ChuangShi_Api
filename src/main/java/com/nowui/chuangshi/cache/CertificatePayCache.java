@@ -28,8 +28,14 @@ public class CertificatePayCache extends Cache {
     public Boolean save(String certificate_id, String member_level_id, BigDecimal certificate_amount,
             String certificate_pay_account, String certificate_pay_time, String certificate_pay_result,
             String system_create_user_id) {
-        return certificatePayDao.save(certificate_id, member_level_id, certificate_amount, certificate_pay_account,
-                certificate_pay_time, certificate_pay_result, system_create_user_id);
+        boolean result = certificatePayDao.save(certificate_id, member_level_id, certificate_amount,
+                certificate_pay_account, certificate_pay_time, certificate_pay_result, system_create_user_id);
+
+        if (result) {
+            CacheUtil.remove(CERTIFICATE_PAY_BY_CERTIFICATE_PAY_ID_CACHE, certificate_id);
+        }
+
+        return result;
     }
 
     public Boolean updateValidateSystem_version(String certificate_id, String member_level_id,
