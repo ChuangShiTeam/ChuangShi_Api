@@ -47,6 +47,10 @@ public class Controller extends com.jfinal.core.Controller {
         }
     }
 
+    public void validateRequest_app_id() {
+
+    }
+
     public void validateResponse(String... keys) {
         validateResponseKey = keys;
     }
@@ -176,7 +180,9 @@ public class Controller extends com.jfinal.core.Controller {
     }
 
     public void renderSuccessModelJson(Model result) {
-        result.keep(validateResponseKey);
+        if (result != null) {
+            result.keep(validateResponseKey);
+        }
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put(Constant.CODE, HttpStatus.SC_OK);
