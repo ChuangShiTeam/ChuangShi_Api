@@ -14,6 +14,8 @@ import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
+import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
+import com.nowui.chuangshi.model.StockInProductSku;
 import com.nowui.chuangshi.model.StockOutProductSku;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.type.ExpressFlow;
@@ -35,6 +37,8 @@ public class MemberDeliveryOrderService extends Service {
     private ExpressService expressService = new ExpressService();
     
     private MemberPurchaseOrderService memberPurchaseOrderService = new MemberPurchaseOrderService();
+    
+    private MemberPurchaseOrderProductSkuService memberPurchaseOrderProductSkuService = new MemberPurchaseOrderProductSkuService();
     
     private StockOutService stockOutService = new StockOutService();
     
@@ -184,10 +188,24 @@ public class MemberDeliveryOrderService extends Service {
             if (StringUtils.isNotBlank(member_delivery_order.getMember_purchase_order_id())) {
                 MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService.findByMember_purchase_order_id(member_delivery_order.getMember_purchase_order_id());
                 if (memberPurchaseOrder.getMember_purchase_order_is_warehouse_receive()) {
+                	//入库
+                	List<MemberPurchaseOrderProductSku> memberPurchaseOrderProductSkuList = memberPurchaseOrderProductSkuService.listByMember_purchase_order_id(member_delivery_order.getMember_purchase_order_id());
+                    List<StockInProductSku> stockInProductSkuList = new ArrayList<StockInProductSku>();
+                    for (MemberPurchaseOrderProductSku memberPurchaseOrderProductSku : memberPurchaseOrderProductSkuList) {
+                    	StockInProductSku stockInProductSku = new StockInProductSku();
+                    	stockInProductSku.setProduct_sku_id(memberPurchaseOrderProductSku.getProduct_sku_id());
+                    	stockInProductSku.setProduct_sku_quantity(memberPurchaseOrderProductSku.getProduct_sku_quantity());
+                        stockInProductSkuList.add(stockInProductSku);
+                    }
+                    stockInService.save(member_delivery_order.getApp_id(), warehouse_id, memberPurchaseOrder.getMember_purchase_order_id(), memberPurchaseOrder.getUser_id(), StockType.MEMBER.getKey(), stockInProductSkuList, request_user_id);
+                    // 更新进货单流程为完成
+                    memberPurchaseOrderService.updateMember_purchase_order_flowAndMember_purchase_order_is_completeByMember_purchase_order_idValidateSystem_version(memberPurchaseOrder.getMember_purchase_order_id(), MemberPurchaseOrderFlow.COMPLETE.getKey(), true, request_user_id, memberPurchaseOrder.getSystem_version());
                     is_direct_deliver = true;
+                } else {
+                	// 更新进货单流程为待收货
+                    memberPurchaseOrderService.updateMember_purchase_order_flowByMember_purchase_order_idAndSystem_version(memberPurchaseOrder.getMember_purchase_order_id(), MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey(), request_user_id, memberPurchaseOrder.getSystem_version());
                 }
-                // 更新进货单流程为待收货
-                memberPurchaseOrderService.updateMember_purchase_order_flowByMember_purchase_order_idAndSystem_version(memberPurchaseOrder.getMember_purchase_order_id(), MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey(), request_user_id, memberPurchaseOrder.getSystem_version());
+                
             }
             
             if (!is_direct_deliver) {
@@ -200,9 +218,8 @@ public class MemberDeliveryOrderService extends Service {
                 for (Express express : express_list) {
                     expressService.subscription(express.getExpress_id(), Constant.EXPRESS_ORDER_CODE_MEMBER_DELIVERY_ORDER, express.getExpress_shipper_code(), express.getExpress_no());
                 }
-            } 
+            }
         }
-        
         return result;
     }
     
