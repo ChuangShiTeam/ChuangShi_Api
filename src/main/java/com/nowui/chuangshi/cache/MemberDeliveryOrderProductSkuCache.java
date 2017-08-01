@@ -37,5 +37,9 @@ public class MemberDeliveryOrderProductSkuCache extends Cache {
 
         return result;
     }
+    
+    public Boolean batchSave(List<MemberDeliveryOrderProductSku> list) {
+        return memberDeliveryOrderProductSkuDao.batchSave(list);
+    }
 
 }

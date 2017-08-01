@@ -8,6 +8,7 @@ import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.constant.Constant;
+import com.nowui.chuangshi.model.DeliveryOrderProductSku;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.model.User;
 
@@ -35,6 +36,32 @@ public class MemberDeliveryOrderDao extends Dao {
 
         logSql("member_delivery_order", "countByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name", sqlPara);
 
+        Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
+        return count.intValue();
+    }
+    
+    public Integer countWarehouse_deliverByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name(String app_id, String user_name, String member_delivery_order_receiver_name) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(MemberDeliveryOrder.APP_ID, app_id);
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, member_delivery_order_receiver_name);
+        sqlMap.put(User.USER_NAME, user_name);
+        SqlPara sqlPara = Db.getSqlPara("member_delivery_order.countWarehouse_deliverByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name", sqlMap);
+        
+        logSql("member_delivery_order", "countWarehouse_deliverByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name", sqlPara);
+        
+        Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
+        return count.intValue();
+    }
+    
+    public Integer countWarehouse_deliverByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name(String app_id, String user_name, String member_delivery_order_receiver_name) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(MemberDeliveryOrder.APP_ID, app_id);
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, member_delivery_order_receiver_name);
+        sqlMap.put(User.USER_NAME, user_name);
+        SqlPara sqlPara = Db.getSqlPara("member_delivery_order.countWarehouse_deliverByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name", sqlMap);
+        
+        logSql("member_delivery_order", "countWarehouse_deliverByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name", sqlPara);
+        
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
@@ -77,6 +104,34 @@ public class MemberDeliveryOrderDao extends Dao {
 
         logSql("member_delivery_order", "listByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_nameAndLimit", sqlPara);
 
+        return new MemberDeliveryOrder().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+    
+    public List<MemberDeliveryOrder> listWarehouse_deliverByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_nameAndLimit(String app_id, String user_name, String member_delivery_order_receiver_name, int m, int n) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(MemberDeliveryOrder.APP_ID, app_id);
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, member_delivery_order_receiver_name);
+        sqlMap.put(User.USER_NAME, user_name);
+        sqlMap.put(Constant.M, m);
+        sqlMap.put(Constant.N, n);
+        SqlPara sqlPara = Db.getSqlPara("member_delivery_order.listWarehouse_deliverByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_nameAndLimit", sqlMap);
+        
+        logSql("member_delivery_order", "listWarehouse_deliverByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_nameAndLimit", sqlPara);
+        
+        return new MemberDeliveryOrder().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+    
+    public List<MemberDeliveryOrder> listWarehouse_deliverByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_nameAndLimit(String app_id, String user_name, String member_delivery_order_receiver_name, int m, int n) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(MemberDeliveryOrder.APP_ID, app_id);
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, member_delivery_order_receiver_name);
+        sqlMap.put(User.USER_NAME, user_name);
+        sqlMap.put(Constant.M, m);
+        sqlMap.put(Constant.N, n);
+        SqlPara sqlPara = Db.getSqlPara("member_delivery_order.listWarehouse_deliverByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_nameAndLimit", sqlMap);
+        
+        logSql("member_delivery_order", "listWarehouse_deliverByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_nameAndLimit", sqlPara);
+        
         return new MemberDeliveryOrder().find(sqlPara.getSql(), sqlPara.getPara());
     }
     
@@ -181,6 +236,21 @@ public class MemberDeliveryOrderDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
     
+    public Boolean updateMember_delivery_order_flowAndMember_delivery_order_is_warehouse_deliverByMember_delivery_order_idAndSystem_version(String member_delivery_order_id, String member_delivery_order_flow, Boolean member_delivery_order_is_warehouse_deliver, String system_update_user_id, Integer system_version) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, member_delivery_order_id);
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, member_delivery_order_is_warehouse_deliver);
+        sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, member_delivery_order_flow);
+        sqlMap.put(MemberDeliveryOrder.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(MemberDeliveryOrder.SYSTEM_UPDATE_TIME, new Date());
+        sqlMap.put(MemberDeliveryOrder.SYSTEM_VERSION, system_version);
+        SqlPara sqlPara = Db.getSqlPara("member_delivery_order.updateMember_delivery_order_flowAndMember_delivery_order_is_warehouse_deliverByMember_delivery_order_idAndSystem_version", sqlMap);
+        
+        logSql("member_delivery_order", "updateMember_delivery_order_flowAndMember_delivery_order_is_warehouse_deliverByMember_delivery_order_idAndSystem_version", sqlPara);
+        
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+    
     public Boolean updateMember_delivery_order_flowByMember_delivery_order_idAndSystem_version(String member_delivery_order_id, String member_delivery_order_flow, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, member_delivery_order_id);
@@ -222,5 +292,5 @@ public class MemberDeliveryOrderDao extends Dao {
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
-
+    
 }

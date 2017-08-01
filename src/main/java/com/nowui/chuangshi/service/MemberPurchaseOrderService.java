@@ -26,7 +26,7 @@ public class MemberPurchaseOrderService extends Service {
 
     private MemberPurchaseOrderCache memberPurchaseOrderCache = new MemberPurchaseOrderCache();
     
-    private MemberPurchaseOrderPayService memberPurchaseOrderService = new MemberPurchaseOrderPayService();
+    private MemberPurchaseOrderPayService memberPurchaseOrderPayService = new MemberPurchaseOrderPayService();
     
     private AppService appService = new AppService();
     
@@ -99,7 +99,7 @@ public class MemberPurchaseOrderService extends Service {
             String member_purchase_order_pay_number, String member_purchase_order_pay_account,
             String member_purchase_order_pay_time, String member_purchase_order_pay_result, String user_id,
             Integer system_version) {
-        Boolean flag = memberPurchaseOrderService.save(member_purchase_order_id, member_purchase_order_pay_type,
+        Boolean flag = memberPurchaseOrderPayService.save(member_purchase_order_id, member_purchase_order_pay_type,
                 member_purchase_order_pay_number, member_purchase_order_pay_account,
                 member_purchase_order_pay_time, member_purchase_order_pay_result, user_id);
         if (flag) {
@@ -129,7 +129,7 @@ public class MemberPurchaseOrderService extends Service {
         return flag;
     }
     
-    private Boolean updateMember_purchase_order_flowAndMember_purchase_order_is_payByMember_purchase_order_idValidateSystem_version(
+    public Boolean updateMember_purchase_order_flowAndMember_purchase_order_is_payByMember_purchase_order_idValidateSystem_version(
             String member_purchase_order_id, String member_purchase_order_flow, Boolean member_purchase_order_is_pay, String user_id, Integer system_version) {
         
         return memberPurchaseOrderCache.updateMember_purchase_order_flowAndMember_purchase_order_is_payByMember_purchase_order_idValidateSystem_version(member_purchase_order_id, member_purchase_order_flow, member_purchase_order_is_pay, user_id, system_version);

@@ -234,11 +234,14 @@ public class Url {
     public static final String MEMBER_DELIVERY_ORDER_SAVE = "/member/delivery/order/save";
     public static final String MEMBER_DELIVERY_ORDER_UPDATE = "/member/delivery/order/update";
     public static final String MEMBER_DELIVERY_ORDER_DELETE = "/member/delivery/order/delete";
+    public static final String MEMBER_DELIVERY_ORDER_SELF_DELIVER = "/member/delivery/order/self/deliver";  //自己发货
+    public static final String MEMBER_DELIVERY_ORDER_WAREHOUSE_REPLACE_DELIVER = "/member/delivery/order/warehouse/replace/deliver"; //仓库代发
     public static final String MEMBER_DELIVERY_ORDER_ADMIN_LIST = "/member/delivery/order/admin/list";
     public static final String MEMBER_DELIVERY_ORDER_ADMIN_FIND = "/member/delivery/order/admin/find";
     public static final String MEMBER_DELIVERY_ORDER_ADMIN_SAVE = "/member/delivery/order/admin/save";
     public static final String MEMBER_DELIVERY_ORDER_ADMIN_UPDATE = "/member/delivery/order/admin/update";
     public static final String MEMBER_DELIVERY_ORDER_ADMIN_DELETE = "/member/delivery/order/admin/delete";
+    public static final String MEMBER_DELIVERY_ORDER_ADMIN_WAREHOUSE_DELIVER_LIST = "/member/delivery/order/admin/warehouse/deliver/list";
     public static final String MEMBER_DELIVERY_ORDER_SYSTEM_LIST = "/member/delivery/order/system/list";
     public static final String MEMBER_DELIVERY_ORDER_SYSTEM_FIND = "/member/delivery/order/system/find";
     public static final String MEMBER_DELIVERY_ORDER_SYSTEM_SAVE = "/member/delivery/order/system/save";

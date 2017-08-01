@@ -64,6 +64,10 @@ public class MemberDeliveryOrder extends Model<MemberDeliveryOrder> {
     public static final String MEMBER_DELIVERY_ORDER_PRODUCT_SKU_LIST = "member_delivery_order_product_sku_list";
     
     public static final String MEMBER_DELIVERY_ORDER_EXPRESS_LIST = "member_delivery_order_express_list";
+    
+    public static final String USER_NAME = "user_name";
+    
+    private String user_name;
 
     public String getMember_delivery_order_id() {
         return getStr(MEMBER_DELIVERY_ORDER_ID);
@@ -207,6 +211,14 @@ public class MemberDeliveryOrder extends Model<MemberDeliveryOrder> {
 
     public void setMember_delivery_is_order_complete(Boolean member_delivery_order_is_complete) {
         set(MEMBER_DELIVERY_ORDER_IS_COMPLETE, member_delivery_order_is_complete);
+    }
+    
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
 }

@@ -14,7 +14,7 @@
     AND table_member_delivery_order.member_delivery_order_receiver_name LIKE #p(member_delivery_order_receiver_name)
     #end
   #end
-
+  
   #sql("countByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name")
     SELECT COUNT(*) FROM table_member_delivery_order
     LEFT JOIN table_user ON table_member_delivery_order.user_id = table_user.user_id
@@ -31,7 +31,43 @@
     AND table_member_delivery_order.member_delivery_order_receiver_name LIKE #p(member_delivery_order_receiver_name)
     #end
   #end
-
+  
+  #sql("countWarehouse_deliverByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name")
+    SELECT COUNT(*) FROM table_member_delivery_order
+    LEFT JOIN table_user ON table_member_delivery_order.user_id = table_user.user_id
+    WHERE table_member_delivery_order.system_status = 1
+    AND table_member_delivery_order.member_delivery_order_is_warehouse_deliver = 1
+    AND table_member_delivery_order.member_delivery_order_flow != 'WAIT_SEND'
+    AND table_member_delivery_order.app_id = #p(app_id)
+    #if(user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND table_user.user_name LIKE #p(user_name)
+    #end
+    #if(member_delivery_order_receiver_name)
+    #set(member_delivery_order_receiver_name = "%" + member_delivery_order_receiver_name + "%")
+    AND table_member_delivery_order.member_delivery_order_receiver_name LIKE #p(member_delivery_order_receiver_name)
+    #end
+  #end
+  
+  #sql("countWarehouse_deliverByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name")
+    SELECT COUNT(*) FROM table_member_delivery_order
+    LEFT JOIN table_user ON table_member_delivery_order.user_id = table_user.user_id
+    WHERE table_member_delivery_order.system_status = 1
+    AND table_member_delivery_order.member_delivery_order_is_warehouse_deliver = 1
+    AND table_member_delivery_order.member_delivery_order_flow != 'WAIT_SEND'
+    #if(app_id)
+    AND table_member_delivery_order.app_id = #p(app_id)
+    #end
+    #if(user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND table_user.user_name LIKE #p(user_name)
+    #end
+    #if(member_delivery_order_receiver_name)
+    #set(member_delivery_order_receiver_name = "%" + member_delivery_order_receiver_name + "%")
+    AND table_member_delivery_order.member_delivery_order_receiver_name LIKE #p(member_delivery_order_receiver_name)
+    #end
+  #end
+  
   #sql("listByApp_idAndSystem_create_timeAndLimit")
     SELECT
     member_delivery_order_id
@@ -61,12 +97,55 @@
     ORDER BY table_member_delivery_order.system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
-
+  
   #sql("listByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_nameAndLimit")
     SELECT
     member_delivery_order_id
     FROM table_member_delivery_order
     WHERE table_member_delivery_order.system_status = 1
+    #if(app_id)
+    AND table_member_delivery_order.app_id = #p(app_id)
+    #end
+    #if(user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND table_user.user_name LIKE #p(user_name)
+    #end
+    #if(member_delivery_order_receiver_name)
+    #set(member_delivery_order_receiver_name = "%" + member_delivery_order_receiver_name + "%")
+    AND table_member_delivery_order.member_delivery_order_receiver_name LIKE #p(member_delivery_order_receiver_name)
+    #end
+    ORDER BY table_member_delivery_order.system_create_time DESC
+    LIMIT #p(m), #p(n)
+  #end
+  
+  #sql("listWarehouse_deliverByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_nameAndLimit")
+    SELECT
+    member_delivery_order_id
+    FROM table_member_delivery_order
+    LEFT JOIN table_user ON table_member_delivery_order.user_id = table_user.user_id
+    WHERE table_member_delivery_order.system_status = 1
+    AND table_member_delivery_order.member_delivery_order_is_warehouse_deliver = 1
+    AND table_member_delivery_order.member_delivery_order_flow != 'WAIT_SEND'
+    AND table_member_delivery_order.app_id = #p(app_id)
+    #if(user_name)
+    #set(user_name = "%" + user_name + "%")
+    AND table_user.user_name LIKE #p(user_name)
+    #end
+    #if(member_delivery_order_receiver_name)
+    #set(member_delivery_order_receiver_name = "%" + member_delivery_order_receiver_name + "%")
+    AND table_member_delivery_order.member_delivery_order_receiver_name LIKE #p(member_delivery_order_receiver_name)
+    #end
+    ORDER BY table_member_delivery_order.system_create_time DESC
+    LIMIT #p(m), #p(n)
+  #end
+  
+  #sql("listWarehouse_deliverByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_nameAndLimit")
+    SELECT
+    member_delivery_order_id
+    FROM table_member_delivery_order
+    WHERE table_member_delivery_order.system_status = 1
+    AND table_member_delivery_order.member_delivery_order_is_warehouse_deliver = 1
+    AND table_member_delivery_order.member_delivery_order_flow != 'WAIT_SEND'
     #if(app_id)
     AND table_member_delivery_order.app_id = #p(app_id)
     #end
@@ -93,10 +172,12 @@
 
   #sql("findByMember_delivery_order_id")
     SELECT
-    *
+    table_member_delivery_order.*,
+    table_user.user_name
     FROM table_member_delivery_order
-    WHERE system_status = 1
-    AND member_delivery_order_id = #p(member_delivery_order_id)
+    LEFT JOIN table_user ON table_user.user_id = table_member_delivery_order.user_id
+    WHERE table_member_delivery_order.system_status = 1
+    AND table_member_delivery_order.member_delivery_order_id = #p(member_delivery_order_id)
   #end
 
   #sql("save")
@@ -181,6 +262,18 @@
   #sql("updateMember_delivery_order_flowAndMember_delivery_order_is_payByMember_delivery_order_idAndSystem_version")
     UPDATE table_member_delivery_order SET
     member_delivery_order_is_pay = #p(member_delivery_order_is_pay),
+    member_delivery_order_flow = #p(member_delivery_order_flow),
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1
+    WHERE system_status = 1
+    AND member_delivery_order_id = #p(member_delivery_order_id)
+    AND system_version = #p(system_version)
+  #end
+  
+  #sql("updateMember_delivery_order_flowAndMember_delivery_order_is_warehouse_deliverByMember_delivery_order_idAndSystem_version")
+    UPDATE table_member_delivery_order SET
+    member_delivery_order_is_warehouse_deliver = #p(member_delivery_order_is_warehouse_deliver),
     member_delivery_order_flow = #p(member_delivery_order_flow),
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),

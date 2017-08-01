@@ -22,6 +22,14 @@ public class MemberDeliveryOrderCache extends Cache {
     public Integer countByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name(String app_id, String user_name, String member_delivery_order_receiver_name) {
         return memberDeliveryOrderDao.countByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name(app_id, user_name, member_delivery_order_receiver_name);
     }
+    
+    public Integer countWarehouse_deliverByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name(String app_id, String user_name, String member_delivery_order_receiver_name) {
+        return memberDeliveryOrderDao.countWarehouse_deliverByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name(app_id, user_name, member_delivery_order_receiver_name);
+    }
+    
+    public Integer countWarehouse_deliverByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name(String app_id, String user_name, String member_delivery_order_receiver_name) {
+        return memberDeliveryOrderDao.countWarehouse_deliverByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name(app_id, user_name, member_delivery_order_receiver_name);
+    }
 
     public List<MemberDeliveryOrder> listByApp_idAndSystem_create_timeAndLimit(String app_id, Date system_create_time, int m, int n) {
         List<MemberDeliveryOrder> member_delivery_orderList = memberDeliveryOrderDao.listByApp_idAndSystem_create_timeAndLimit(app_id, system_create_time, m, n);
@@ -50,6 +58,26 @@ public class MemberDeliveryOrderCache extends Cache {
             member_delivery_order.put(findByMember_delivery_order_id(member_delivery_order.getMember_delivery_order_id()));
         }
 
+        return member_delivery_orderList;
+    }
+    
+    public List<MemberDeliveryOrder> listWarehouse_deliverByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_nameAndLimit(String app_id, String user_name, String member_delivery_order_receiver_name, int m, int n) {
+        List<MemberDeliveryOrder> member_delivery_orderList = memberDeliveryOrderDao.listWarehouse_deliverByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_nameAndLimit(app_id, user_name, member_delivery_order_receiver_name, m, n);
+        
+        for (MemberDeliveryOrder member_delivery_order : member_delivery_orderList) {
+            member_delivery_order.put(findByMember_delivery_order_id(member_delivery_order.getMember_delivery_order_id()));
+        }
+        
+        return member_delivery_orderList;
+    }
+    
+    public List<MemberDeliveryOrder> listWarehouse_deliverByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_nameAndLimit(String app_id, String user_name, String member_delivery_order_receiver_name, int m, int n) {
+        List<MemberDeliveryOrder> member_delivery_orderList = memberDeliveryOrderDao.listWarehouse_deliverByOrApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_nameAndLimit(app_id, user_name, member_delivery_order_receiver_name, m, n);
+        
+        for (MemberDeliveryOrder member_delivery_order : member_delivery_orderList) {
+            member_delivery_order.put(findByMember_delivery_order_id(member_delivery_order.getMember_delivery_order_id()));
+        }
+        
         return member_delivery_orderList;
     }
     
@@ -96,6 +124,64 @@ public class MemberDeliveryOrderCache extends Cache {
 
         boolean result = memberDeliveryOrderDao.deleteByMember_delivery_order_idAndSystem_version(member_delivery_order_id, system_update_user_id, system_version);
 
+        if (result) {
+            CacheUtil.remove(MEMBER_DELIVERY_ORDER_BY_MEMBER_DELIVERY_ORDER_ID_CACHE, member_delivery_order_id);
+        }
+
+        return result;
+    }
+    
+    public Boolean updateMember_delivery_order_flowAndMember_delivery_order_is_payByMember_delivery_order_idValidateSystem_version(String member_delivery_order_id, String member_delivery_order_flow, Boolean member_delivery_order_is_pay, String system_update_user_id, Integer system_version) {
+        MemberDeliveryOrder member_delivery_order = findByMember_delivery_order_id(member_delivery_order_id);
+        if (!member_delivery_order.getSystem_version().equals(system_version)) {
+            throw new RuntimeException(Constant.ERROR_VERSION);
+        }
+
+        boolean result = memberDeliveryOrderDao.updateMember_delivery_order_flowAndMember_delivery_order_is_payByMember_delivery_order_idAndSystem_version(member_delivery_order_id, member_delivery_order_flow, member_delivery_order_is_pay, system_update_user_id, system_version);
+       
+        if (result) {
+            CacheUtil.remove(MEMBER_DELIVERY_ORDER_BY_MEMBER_DELIVERY_ORDER_ID_CACHE, member_delivery_order_id);
+        }
+
+        return result;
+    }
+    
+    public Boolean updateMember_delivery_order_flowAndMember_delivery_order_is_warehouse_deliverByMember_delivery_order_idValidateSystem_version(String member_delivery_order_id, String member_delivery_order_flow, Boolean member_delivery_order_is_warehouse_deliver, String system_update_user_id, Integer system_version) {
+        MemberDeliveryOrder member_delivery_order = findByMember_delivery_order_id(member_delivery_order_id);
+        if (!member_delivery_order.getSystem_version().equals(system_version)) {
+            throw new RuntimeException(Constant.ERROR_VERSION);
+        }
+
+        boolean result = memberDeliveryOrderDao.updateMember_delivery_order_flowAndMember_delivery_order_is_warehouse_deliverByMember_delivery_order_idAndSystem_version(member_delivery_order_id, member_delivery_order_flow, member_delivery_order_is_warehouse_deliver, system_update_user_id, system_version);
+        if (result) {
+            CacheUtil.remove(MEMBER_DELIVERY_ORDER_BY_MEMBER_DELIVERY_ORDER_ID_CACHE, member_delivery_order_id);
+        }
+
+        return result;
+    }
+    
+    public Boolean updateMember_delivery_order_flowByMember_delivery_order_idValidateSystem_version(String member_delivery_order_id, String member_delivery_order_flow, String system_update_user_id, Integer system_version) {
+        MemberDeliveryOrder member_delivery_order = findByMember_delivery_order_id(member_delivery_order_id);
+        if (!member_delivery_order.getSystem_version().equals(system_version)) {
+            throw new RuntimeException(Constant.ERROR_VERSION);
+        }
+
+        boolean result = memberDeliveryOrderDao.updateMember_delivery_order_flowByMember_delivery_order_idAndSystem_version(member_delivery_order_id, member_delivery_order_flow, system_update_user_id, system_version);
+        
+        if (result) {
+            CacheUtil.remove(MEMBER_DELIVERY_ORDER_BY_MEMBER_DELIVERY_ORDER_ID_CACHE, member_delivery_order_id);
+        }
+
+        return result;
+    }
+    
+    public Boolean updateMember_delivery_order_flowAndMember_delivery_order_is_completeByMember_delivery_order_idValidateSystem_version(String member_delivery_order_id, String member_delivery_order_flow, Boolean member_delivery_order_is_complete, String system_update_user_id, Integer system_version) {
+        MemberDeliveryOrder member_delivery_order = findByMember_delivery_order_id(member_delivery_order_id);
+        if (!member_delivery_order.getSystem_version().equals(system_version)) {
+            throw new RuntimeException(Constant.ERROR_VERSION);
+        }
+
+        boolean result = memberDeliveryOrderDao.updateMember_delivery_order_flowAndMember_delivery_order_is_completeByMember_delivery_order_idAndSystem_version(member_delivery_order_id, member_delivery_order_flow, member_delivery_order_is_complete, system_update_user_id, system_version);
         if (result) {
             CacheUtil.remove(MEMBER_DELIVERY_ORDER_BY_MEMBER_DELIVERY_ORDER_ID_CACHE, member_delivery_order_id);
         }

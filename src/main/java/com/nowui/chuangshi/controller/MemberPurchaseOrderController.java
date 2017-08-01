@@ -209,21 +209,25 @@ public class MemberPurchaseOrderController extends Controller {
                     MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_RECEIVER_AREA, 
                     MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_RECEIVER_ADDRESS);
         } 
-        
-        JSONArray jsonArray = jsonObject.getJSONArray(Product.PRODUCT_SKU_LIST);
-        String open_id = jsonObject.getString("open_id");
-        
         MemberPurchaseOrder model = getModel(MemberPurchaseOrder.class);
+        
         String member_purchase_order_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
 
+        JSONArray jsonArray = jsonObject.getJSONArray(Product.PRODUCT_SKU_LIST);
+        String open_id = jsonObject.getString("open_id");
+        
         authenticateRequest_app_idAndRequest_user_id();
         
-        int member_purchase_order_total_quantity = 0;
-        BigDecimal member_purchase_order_product_amount = new BigDecimal(0);
         User user = userService.findByUser_id(request_user_id);
         Member member = memberService.findByMember_id(user.getObject_Id());
+        //判断会员是否有上级，无上级不能进货
+        if (StringUtils.isBlank(member.getMember_parent_id())) {
+            throw new RuntimeException("没有上级，不能进货");
+        }
+        int member_purchase_order_total_quantity = 0;
+        BigDecimal member_purchase_order_product_amount = new BigDecimal(0);
         for (int i = 0; i < jsonArray.size(); i++) {
             MemberPurchaseOrderProductSku memberPurchaseOrderProductSku = jsonArray.getJSONObject(i).toJavaObject(MemberPurchaseOrderProductSku.class);
             BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(
@@ -243,15 +247,29 @@ public class MemberPurchaseOrderController extends Controller {
         String member_purchase_order_express_shipper_code = "";
         boolean member_purchase_order_is_pay = false;
         boolean member_purchase_order_is_complete = false;
+        String member_purchase_order_receiver_name = "";
+        String member_purchase_order_receiver_mobile = "";
+        String member_purchase_order_receiver_province = "";
+        String member_purchase_order_receiver_city = "";
+        String member_purchase_order_receiver_area = "";
+        String member_purchase_order_receiver_address = "";
+        if (member_purchase_order_is_warehouse_receive) {
+            member_purchase_order_receiver_name = model.getMember_purchase_order_receiver_name();
+            member_purchase_order_receiver_mobile = model.getMember_purchase_order_receiver_mobile();
+            member_purchase_order_receiver_province = model.getMember_purchase_order_receiver_province();
+            member_purchase_order_receiver_city = model.getMember_purchase_order_receiver_city();
+            member_purchase_order_receiver_area = model.getMember_purchase_order_receiver_area();
+            member_purchase_order_receiver_address = model.getMember_purchase_order_receiver_address();
+        }
 
         Boolean flag = memberPurchaseOrderService.save(member_purchase_order_id, request_app_id, request_user_id,
                 member_purchase_order_product_amount, member_purchase_order_express_amount, 
                 member_purchase_order_discount_amount, member_purchase_order_product_amount,
-                member_purchase_order_total_quantity, model.getMember_purchase_order_receiver_name(), 
-                model.getMember_purchase_order_receiver_mobile(), model.getMember_purchase_order_receiver_province(), 
-                model.getMember_purchase_order_receiver_city(), model.getMember_purchase_order_receiver_area(), 
-                model.getMember_purchase_order_receiver_address(), member_purchase_order_express_pay_way, 
-                member_purchase_order_express_shipper_code, model.getMember_purchase_order_is_warehouse_receive(), 
+                member_purchase_order_total_quantity, member_purchase_order_receiver_name, 
+                member_purchase_order_receiver_mobile, member_purchase_order_receiver_province, 
+                member_purchase_order_receiver_city, member_purchase_order_receiver_area, 
+                member_purchase_order_receiver_address, member_purchase_order_express_pay_way, 
+                member_purchase_order_express_shipper_code, member_purchase_order_is_warehouse_receive, 
                 member_purchase_order_is_pay, member_purchase_order_flow, 
                 member_purchase_order_is_complete, 
                 model.getMember_purchase_order_message(), request_user_id);

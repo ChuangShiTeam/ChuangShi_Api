@@ -7,6 +7,7 @@ import java.util.List;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 
 public class MemberDeliveryOrderProductSkuDao extends Dao {
@@ -51,6 +52,17 @@ public class MemberDeliveryOrderProductSkuDao extends Dao {
         logSql("member_delivery_order_product_sku", "deleteByMember_delivery_order_id", sqlPara);
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
+    
+    public Boolean batchSave(List<MemberDeliveryOrderProductSku> list) {
+        int[] result = Db.batchSave(list, Constant.BATCH_SIZE);
+
+        for (int i : result) {
+            if (i == 0) {
+                throw new RuntimeException("发货单明细记录保存不成功");
+            }
+        }
+        return true;
     }
 
 }
