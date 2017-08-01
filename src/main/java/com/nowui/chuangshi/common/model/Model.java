@@ -22,6 +22,8 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     private StringBuilder conditionSql = new StringBuilder();
     private StringBuilder orderSql = new StringBuilder();
     private StringBuilder paginateSql = new StringBuilder();
+    private Boolean is_system_version = true;
+    private Boolean is_system_status = true;
     private List<Map<String, Object>> columnList;
 
     private Table getTable() {
@@ -90,7 +92,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     }
 
     public M where(String name) {
-        conditionSql.append("AND ");
+        conditionSql.append("WHERE ");
         conditionSql.append(regexCondition(name, "equal", get(name)));
         conditionSql.append("\n");
 
@@ -98,7 +100,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     }
 
     public M where(String name, Object value) {
-        conditionSql.append("AND ");
+        conditionSql.append("WHERE ");
         conditionSql.append(regexCondition(name, "equal", value));
         conditionSql.append("\n");
 
@@ -106,7 +108,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     }
 
     public M whereLike(String name, String value) {
-        conditionSql.append("AND ");
+        conditionSql.append("WHERE ");
         conditionSql.append(regexCondition(name, "like", value));
         conditionSql.append("\n");
 
@@ -114,7 +116,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     }
 
     public M whereLeftLike(String name, String value) {
-        conditionSql.append("AND ");
+        conditionSql.append("WHERE ");
         conditionSql.append(regexCondition(name, "left_like", value));
         conditionSql.append("\n");
 
@@ -122,7 +124,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     }
 
     public M whereLeftLike(String name) {
-        conditionSql.append("AND ");
+        conditionSql.append("WHERE ");
         conditionSql.append(regexCondition(name, "like", get(name)));
         conditionSql.append("\n");
 
@@ -130,7 +132,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     }
 
     public M whereRightLike(String name, String value) {
-        conditionSql.append("AND ");
+        conditionSql.append("WHERE ");
         conditionSql.append(regexCondition(name, "right_like", value));
         conditionSql.append("\n");
 
@@ -175,8 +177,14 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return (M) this;
     }
 
-    public M notStatus() {
+    public M notSystemStatus() {
+        is_system_status = false;
 
+        return (M) this;
+    }
+
+    public M notSystemVersion() {
+        is_system_version = false;
 
         return (M) this;
     }
@@ -270,20 +278,57 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return stringBuilder.toString();
     }
 
+    private Boolean regexExit(String name) {
+        Boolean isExit = false;
+
+        for (int i = 0; i < getColumnList().size(); i++) {
+            Map<String, Object> column = getColumnList().get(i);
+
+            if (column.get("name").toString().equals(name)) {
+                isExit = true;
+
+                break;
+            }
+        }
+
+        return isExit;
+    }
+
+    private void regexCondition() {
+        if (is_system_status) {
+            is_system_status = regexExit(Constant.SYSTEM_STATUS);
+        }
+
+        if (is_system_status) {
+            String condition = conditionSql.toString();
+            if (condition.equals("")) {
+                conditionSql.append("WHERE ");
+            } else {
+                conditionSql.append("AND ");
+            }
+            conditionSql.append(Constant.SYSTEM_STATUS);
+            conditionSql.append(" = 1\n");
+        }
+    }
+
     public String buildCountSql() {
+        regexCondition();
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("SELECT \n");
         stringBuilder.append("COUNT(*) \n");
         stringBuilder.append("FROM ");
         stringBuilder.append(getTable().getName());
         stringBuilder.append(" \n");
-        stringBuilder.append("WHERE system_status = 1\n");
+//        stringBuilder.append("WHERE system_status = 1\n");
         stringBuilder.append(conditionSql);
 
         return stringBuilder.toString();
     }
 
     public String buildListSql() {
+        regexCondition();
+
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("SELECT \n");
         stringBuilder.append("*");
@@ -291,7 +336,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         stringBuilder.append("FROM ");
         stringBuilder.append(getTable().getName());
         stringBuilder.append(" \n");
-        stringBuilder.append("WHERE system_status = 1\n");
+//        stringBuilder.append("WHERE system_status = 1\n");
         stringBuilder.append(conditionSql);
         stringBuilder.append(paginateSql);
 
@@ -369,6 +414,8 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
             return "";
         }
 
+        regexCondition();
+
         StringBuilder stringBuilder = new StringBuilder();
 
         List<Map<String, Object>> updateColumnList = new ArrayList<Map<String, Object>>();
@@ -401,7 +448,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
                 stringBuilder.append("\n");
             }
         }
-        stringBuilder.append(condition);
+        stringBuilder.append(conditionSql);
 
         return stringBuilder.toString();
     }
@@ -412,9 +459,27 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
             return "";
         }
 
+        regexCondition();
+
         String set = setSql.toString();
         if (set.equals("")) {
             return "";
+        }
+
+        if (is_system_version) {
+            is_system_version = regexExit(Constant.SYSTEM_VERSION);
+            is_system_version = false;
+        }
+
+        if (is_system_version) {
+            setSql.append(Constant.SYSTEM_VERSION);
+            setSql.append(" = ");
+            setSql.append(Constant.SYSTEM_VERSION);
+            setSql.append(" + 1\n");
+
+            set = setSql.toString();
+        } else {
+            set = set.substring(0, set.length() - 2) + "\n";
         }
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -423,7 +488,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         stringBuilder.append(getTable().getName());
         stringBuilder.append(" SET\n");
         stringBuilder.append(set);
-        stringBuilder.append(condition);
+        stringBuilder.append(conditionSql);
 
         return stringBuilder.toString();
     }

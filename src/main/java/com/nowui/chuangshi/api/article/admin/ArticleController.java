@@ -72,7 +72,7 @@ public class ArticleController extends Controller {
         validateRequest(Article.ARTICLE_ID, Article.SYSTEM_VERSION);
 
         Article model = getModel(Article.class);
-        model.where(model.ARTICLE_ID).and(Article.SYSTEM_VERSION);
+        model.where(model.ARTICLE_ID).and(Article.SYSTEM_VERSION).notSystemVersion();
 
         Boolean result = articleService.delete(model);
 
