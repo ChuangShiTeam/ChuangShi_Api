@@ -228,6 +228,49 @@ public class Url {
     public static final String MEMBER_LEVEL_SYSTEM_SAVE = "/member/level/system/save";
     public static final String MEMBER_LEVEL_SYSTEM_UPDATE = "/member/level/system/update";
     public static final String MEMBER_LEVEL_SYSTEM_DELETE = "/member/level/system/delete";
+    
+    //会员发货单
+    public static final String MEMBER_DELIVERY_ORDER_LIST = "/member/delivery/order/list";
+    public static final String MEMBER_DELIVERY_ORDER_FIND = "/member/delivery/order/find";
+    public static final String MEMBER_DELIVERY_ORDER_SAVE = "/member/delivery/order/save";
+    public static final String MEMBER_DELIVERY_ORDER_UPDATE = "/member/delivery/order/update";
+    public static final String MEMBER_DELIVERY_ORDER_DELETE = "/member/delivery/order/delete";
+    public static final String MEMBER_DELIVERY_ORDER_SELF_DELIVER = "/member/delivery/order/self/deliver";  //自己发货
+    public static final String MEMBER_DELIVERY_ORDER_WAREHOUSE_REPLACE_DELIVER = "/member/delivery/order/warehouse/replace/deliver"; //仓库代发
+    public static final String MEMBER_DELIVERY_ORDER_ADMIN_LIST = "/member/delivery/order/admin/list";
+    public static final String MEMBER_DELIVERY_ORDER_ADMIN_FIND = "/member/delivery/order/admin/find";
+    public static final String MEMBER_DELIVERY_ORDER_ADMIN_SAVE = "/member/delivery/order/admin/save";
+    public static final String MEMBER_DELIVERY_ORDER_ADMIN_UPDATE = "/member/delivery/order/admin/update";
+    public static final String MEMBER_DELIVERY_ORDER_ADMIN_DELETE = "/member/delivery/order/admin/delete";
+    public static final String MEMBER_DELIVERY_ORDER_ADMIN_WAREHOUSE_DELIVER_LIST = "/member/delivery/order/admin/warehouse/deliver/list";
+    public static final String MEMBER_DELIVERY_ORDER_ADMIN_WAREHOUSE_DELIVER = "/member/delivery/order/admin/warehouse/deliver";
+    public static final String MEMBER_DELIVERY_ORDER_ADMIN_EXPRESS_SAVE = "/member/delivery/order/admin/express/save";
+    public static final String MEMBER_DELIVERY_ORDER_ADMIN_EXPRESS_DELETE = "/member/delivery/order/admin/express/delete";
+    public static final String MEMBER_DELIVERY_ORDER_SYSTEM_LIST = "/member/delivery/order/system/list";
+    public static final String MEMBER_DELIVERY_ORDER_SYSTEM_FIND = "/member/delivery/order/system/find";
+    public static final String MEMBER_DELIVERY_ORDER_SYSTEM_SAVE = "/member/delivery/order/system/save";
+    public static final String MEMBER_DELIVERY_ORDER_SYSTEM_UPDATE = "/member/delivery/order/system/update";
+    public static final String MEMBER_DELIVERY_ORDER_SYSTEM_DELETE = "/member/delivery/order/system/delete";
+    
+    //会员进货单
+    public static final String MEMBER_PURCHASE_ORDER_LIST = "/member/purchase/order/list";
+    public static final String MEMBER_PURCHASE_ORDER_FIND = "/member/purchase/order/find";
+    public static final String MEMBER_PURCHASE_ORDER_SAVE = "/member/purchase/order/save";
+    public static final String MEMBER_PURCHASE_ORDER_UPDATE = "/member/purchase/order/update";
+    public static final String MEMBER_PURCHASE_ORDER_DELETE = "/member/purchase/order/delete";
+    public static final String MEMBER_PURCHASE_ORDER_CHECK = "/member/purchase/order/check";
+    public static final String MEMBER_PURCHASE_ORDER_CONFIRM = "/member/purchase/order/confirm";
+    public static final String MEMBER_PURCHASE_ORDER_PAY = "/member/purchase/order/pay";
+    public static final String MEMBER_PURCHASE_ORDER_ADMIN_LIST = "/member/purchase/order/admin/list";
+    public static final String MEMBER_PURCHASE_ORDER_ADMIN_FIND = "/member/purchase/order/admin/find";
+    public static final String MEMBER_PURCHASE_ORDER_ADMIN_SAVE = "/member/purchase/order/admin/save";
+    public static final String MEMBER_PURCHASE_ORDER_ADMIN_UPDATE = "/member/purchase/order/admin/update";
+    public static final String MEMBER_PURCHASE_ORDER_ADMIN_DELETE = "/member/purchase/order/admin/delete";
+    public static final String MEMBER_PURCHASE_ORDER_SYSTEM_LIST = "/member/purchase/order/system/list";
+    public static final String MEMBER_PURCHASE_ORDER_SYSTEM_FIND = "/member/purchase/order/system/find";
+    public static final String MEMBER_PURCHASE_ORDER_SYSTEM_SAVE = "/member/purchase/order/system/save";
+    public static final String MEMBER_PURCHASE_ORDER_SYSTEM_UPDATE = "/member/purchase/order/system/update";
+    public static final String MEMBER_PURCHASE_ORDER_SYSTEM_DELETE = "/member/purchase/order/system/delete";
 
     // 用户管理
     public static final String CUSTOMER_LIST = "/customer/list";
@@ -548,24 +591,6 @@ public class Url {
     public static final String STOCK_OUT_SYSTEM_SAVE = "/stock/out/system/save";
     public static final String STOCK_OUT_SYSTEM_UPDATE = "/stock/out/system/update";
     public static final String STOCK_OUT_SYSTEM_DELETE = "/stock/out/system/delete";
-
-    // 发货单
-    public static final String DELIVERY_ORDER_LIST = "/delivery/order/list";
-    public static final String DELIVERY_ORDER_FIND = "/delivery/order/find";
-    public static final String DELIVERY_ORDER_SAVE = "/delivery/order/save";
-    public static final String DELIVERY_ORDER_UPDATE = "/delivery/order/update";
-    public static final String DELIVERY_ORDER_DELETE = "/delivery/order/delete";
-    public static final String DELIVERY_ORDER_ADMIN_LIST = "/delivery/order/admin/list";
-    public static final String DELIVERY_ORDER_ADMIN_WAREHOUSE_DELIVER = "/delivery/order/admin/warehouse/deliver";
-    public static final String DELIVERY_ORDER_ADMIN_FIND = "/delivery/order/admin/find";
-    public static final String DELIVERY_ORDER_ADMIN_SAVE = "/delivery/order/admin/save";
-    public static final String DELIVERY_ORDER_ADMIN_UPDATE = "/delivery/order/admin/update";
-    public static final String DELIVERY_ORDER_ADMIN_DELETE = "/delivery/order/admin/delete";
-    public static final String DELIVERY_ORDER_SYSTEM_LIST = "/delivery/order/system/list";
-    public static final String DELIVERY_ORDER_SYSTEM_FIND = "/delivery/order/system/find";
-    public static final String DELIVERY_ORDER_SYSTEM_SAVE = "/delivery/order/system/save";
-    public static final String DELIVERY_ORDER_SYSTEM_UPDATE = "/delivery/order/system/update";
-    public static final String DELIVERY_ORDER_SYSTEM_DELETE = "/delivery/order/system/delete";
 
     // 报损报溢单
     public static final String STOCK_REPLENISH_LIST = "/stock/replenish/list";

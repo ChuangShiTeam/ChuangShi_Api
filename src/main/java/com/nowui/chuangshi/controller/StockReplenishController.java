@@ -139,8 +139,8 @@ public class StockReplenishController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Integer total = stockReplenishService.countByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name(request_app_id, model.getWarehouse_id(), model.getStock_replenish_type(), model.getUser_name());
-        List<StockReplenish> resultList = stockReplenishService.listByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit(request_app_id, model.getWarehouse_id(), model.getStock_replenish_type(), model.getUser_name(), getM(), getN());
+        Integer total = stockReplenishService.countByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_name(request_app_id, model.getWarehouse_id(), model.getStock_replenish_type(), model.getStock_replenish_batch(), model.getUser_name());
+        List<StockReplenish> resultList = stockReplenishService.listByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_nameAndLimit(request_app_id, model.getWarehouse_id(), model.getStock_replenish_type(), model.getStock_replenish_batch(), model.getUser_name(), getM(), getN());
 
         for (StockReplenish result : resultList) {
             result.keep(StockReplenish.STOCK_REPLENISH_ID, StockReplenish.STOCK_REPLENISH_QUANTITY, StockReplenish.STOCK_REPLENISH_ACTION, StockReplenish.USER_NAME, StockReplenish.WAREHOUSE_NAME, StockReplenish.SYSTEM_CREATE_TIME, StockReplenish.SYSTEM_VERSION);
@@ -224,8 +224,8 @@ public class StockReplenishController extends Controller {
 
         StockReplenish model = getModel(StockReplenish.class);
 
-        Integer total = stockReplenishService.countByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name(model.getApp_id(), model.getWarehouse_id(), model.getStock_replenish_type(), model.getUser_name());
-        List<StockReplenish> resultList = stockReplenishService.listByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit(model.getApp_id(), model.getWarehouse_id(), model.getStock_replenish_type(), model.getUser_name(), getM(), getN());
+        Integer total = stockReplenishService.countByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_name(model.getApp_id(), model.getWarehouse_id(), model.getStock_replenish_type(), model.getStock_replenish_batch(), model.getUser_name());
+        List<StockReplenish> resultList = stockReplenishService.listByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_nameAndLimit(model.getApp_id(), model.getWarehouse_id(), model.getStock_replenish_type(), model.getStock_replenish_batch(), model.getUser_name(), getM(), getN());
 
         for (StockReplenish result : resultList) {
             result.keep(StockReplenish.STOCK_REPLENISH_ID, StockReplenish.SYSTEM_VERSION);

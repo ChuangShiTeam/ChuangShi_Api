@@ -1,6 +1,6 @@
 #namespace("stock_out")
 
-  #sql("countByApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_name")
+  #sql("countByApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_name")
     SELECT COUNT(*) FROM table_stock_out
     #if(stock_out_type == 'MEMBER' && user_name)
     LEFT JOIN table_user ON table_user.user_id = table_stock_out.object_id
@@ -11,13 +11,17 @@
     AND table_stock_out.warehouse_id = #p(warehouse_id)
     #end
     AND table_stock_out.stock_out_type = #p(stock_out_type)
+    #if(stock_out_batch)
+    #set(stock_out_batch = "%" + stock_out_batch + "%")
+    AND table_stock_out.stock_out_batch = #p(stock_out_batch)
+    #end
     #if(stock_out_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
     #end
   #end
 
-  #sql("countByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_name")
+  #sql("countByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_name")
     SELECT COUNT(*) FROM table_stock_out
     #if(stock_out_type == 'MEMBER' && user_name)
     LEFT JOIN table_user ON table_user.user_id = table_stock_out.object_id
@@ -30,6 +34,10 @@
     AND table_stock_out.warehouse_id = #p(warehouse_id)
     #end
     AND table_stock_out.stock_out_type = #p(stock_out_type)
+    #if(stock_out_batch)
+    #set(stock_out_batch = "%" + stock_out_batch + "%")
+    AND table_stock_out.stock_out_batch = #p(stock_out_batch)
+    #end
     #if(stock_out_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
@@ -48,7 +56,7 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_nameAndLimit")
+  #sql("listByApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_nameAndLimit")
     SELECT
     table_stock_out.stock_out_id
     FROM table_stock_out
@@ -61,6 +69,10 @@
     AND table_stock_out.warehouse_id = #p(warehouse_id)
     #end
     AND table_stock_out.stock_out_type = #p(stock_out_type)
+    #if(stock_out_batch)
+    #set(stock_out_batch = "%" + stock_out_batch + "%")
+    AND table_stock_out.stock_out_batch = #p(stock_out_batch)
+    #end
     #if(stock_out_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
@@ -69,7 +81,7 @@
     LIMIT #p(m), #p(n)
   #end
 
-  #sql("listByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_nameAndLimit")
+  #sql("listByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_nameAndLimit")
     SELECT
     table_stock_out.stock_out_id
     FROM table_stock_out
@@ -84,6 +96,10 @@
     AND table_stock_out.warehouse_id = #p(warehouse_id)
     #end
     AND table_stock_out.stock_out_type = #p(stock_out_type)
+    #if(stock_out_batch)
+    #set(stock_out_batch = "%" + stock_out_batch + "%")
+    AND table_stock_out.stock_out_batch = #p(stock_out_batch)
+    #end
     #if(stock_out_type == 'MEMBER' && user_name)
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
@@ -129,6 +145,7 @@
       warehouse_id,
       delivery_order_id,
       object_id,
+      stock_out_batch,
       stock_out_type,
       stock_out_quantity,
       stock_out_status,
@@ -144,6 +161,7 @@
       #p(warehouse_id),
       #p(delivery_order_id),
       #p(object_id),
+      #p(stock_out_batch),
       #p(stock_out_type),
       #p(stock_out_quantity),
       #p(stock_out_status),
@@ -161,6 +179,7 @@
     warehouse_id = #p(warehouse_id),
     delivery_order_id = #p(delivery_order_id),
     object_id = #p(object_id),
+    stock_out_batch = #p(stock_out_batch),
     stock_out_type = #p(stock_out_type),
     stock_out_quantity = #p(stock_out_quantity),
     stock_out_status = #p(stock_out_status),

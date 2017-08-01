@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.nowui.chuangshi.cache.StockReplenishCache;
-import com.nowui.chuangshi.cache.StockReplenishProductSkuCache;
 import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.StockReplenish;
 import com.nowui.chuangshi.model.StockReplenishProductSku;
@@ -22,24 +21,25 @@ public class StockReplenishService extends Service {
     
     private StockService stockService = new StockService();
 
-    public Integer countByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name(String app_id, String warehouse_id, String stock_replenish_type, String user_name) {
-        return stockReplenishCache.countByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name(app_id, warehouse_id, stock_replenish_type, user_name);
+
+    public Integer countByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_name(String app_id, String warehouse_id, String stock_replenish_type, String stock_replenish_batch, String user_name) {
+        return stockReplenishCache.countByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_name(app_id, warehouse_id, stock_replenish_type, stock_replenish_batch, user_name);
     }
 
-    public Integer countByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name(String app_id, String warehouse_id, String stock_replenish_type, String user_name) {
-        return stockReplenishCache.countByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_name(app_id, warehouse_id, stock_replenish_type, user_name);
+    public Integer countByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_name(String app_id, String warehouse_id, String stock_replenish_type, String stock_replenish_batch, String user_name) {
+        return stockReplenishCache.countByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_name(app_id, warehouse_id, stock_replenish_type, stock_replenish_batch, user_name);
     }
 
     public List<StockReplenish> listByApp_idAndStock_replenish_typeAndSystem_create_timeAndLimit(String app_id, String stock_replenish_type, Date system_create_time, int m, int n) {
         return stockReplenishCache.listByApp_idAndStock_replenish_typeAndSystem_create_timeAndLimit(app_id, stock_replenish_type, system_create_time, m, n);
     }
 
-    public List<StockReplenish> listByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_replenish_type, String user_name, int m, int n) {
-        return stockReplenishCache.listByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit(app_id, warehouse_id, stock_replenish_type, user_name, m, n);
+    public List<StockReplenish> listByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_replenish_type, String stock_replenish_batch, String user_name, int m, int n) {
+        return stockReplenishCache.listByApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_nameAndLimit(app_id, warehouse_id, stock_replenish_type, stock_replenish_batch, user_name, m, n);
     }
 
-    public List<StockReplenish> listByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_replenish_type, String user_name, int m, int n) {
-        return stockReplenishCache.listByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeUser_nameAndLimit(app_id, warehouse_id, stock_replenish_type, user_name, m, n);
+    public List<StockReplenish> listByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_replenish_type, String stock_replenish_batch, String user_name, int m, int n) {
+        return stockReplenishCache.listByOrApp_idOrWarehouse_idAndStock_replenish_typeOrLikeStock_replenish_batchOrLikeUser_nameAndLimit(app_id, warehouse_id, stock_replenish_type, stock_replenish_batch, user_name, m, n);
     }
 
     public StockReplenish findByStock_replenish_id(String stock_replenish_id) {

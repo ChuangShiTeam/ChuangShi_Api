@@ -11,29 +11,31 @@ import java.util.List;
 
 public class StockOutDao extends Dao {
 
-    public Integer countByApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_name(String app_id, String warehouse_id, String stock_out_type, String user_name) {
+    public Integer countByApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_name(String app_id, String warehouse_id, String stock_out_type, String stock_out_batch, String user_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockOut.APP_ID, app_id);
         sqlMap.put(StockOut.WAREHOUSE_ID, warehouse_id);
         sqlMap.put(StockOut.STOCK_OUT_TYPE, stock_out_type);
+        sqlMap.put(StockOut.STOCK_OUT_BATCH, stock_out_batch);
         sqlMap.put(StockOut.USER_NAME, user_name);
-        SqlPara sqlPara = Db.getSqlPara("stock_out.countByApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_name", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("stock_out.countByApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_name", sqlMap);
 
-        logSql("stock_out", "countByApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_name", sqlPara);
+        logSql("stock_out", "countByApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_name(String app_id, String warehouse_id, String stock_out_type, String user_name) {
+    public Integer countByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_name(String app_id, String warehouse_id, String stock_out_type, String stock_out_batch, String user_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockOut.APP_ID, app_id);
         sqlMap.put(StockOut.WAREHOUSE_ID, warehouse_id);
         sqlMap.put(StockOut.STOCK_OUT_TYPE, stock_out_type);
+        sqlMap.put(StockOut.STOCK_OUT_BATCH, stock_out_batch);
         sqlMap.put(StockOut.USER_NAME, user_name);
-        SqlPara sqlPara = Db.getSqlPara("stock_out.countByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_name", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("stock_out.countByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_name", sqlMap);
 
-        logSql("stock_out", "countByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_name", sqlPara);
+        logSql("stock_out", "countByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
@@ -53,32 +55,34 @@ public class StockOutDao extends Dao {
         return new StockOut().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<StockOut> listByApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_out_type, String user_name, int m, int n) {
+    public List<StockOut> listByApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_out_type, String stock_out_batch, String user_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockOut.APP_ID, app_id);
         sqlMap.put(StockOut.WAREHOUSE_ID, warehouse_id);
         sqlMap.put(StockOut.STOCK_OUT_TYPE, stock_out_type);
+        sqlMap.put(StockOut.STOCK_OUT_BATCH, stock_out_batch);
         sqlMap.put(StockOut.USER_NAME, user_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("stock_out.listByApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_nameAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("stock_out.listByApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_nameAndLimit", sqlMap);
 
-        logSql("stock_out", "listByApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_nameAndLimit", sqlPara);
+        logSql("stock_out", "listByApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_nameAndLimit", sqlPara);
 
         return new StockOut().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<StockOut> listByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_out_type, String user_name, int m, int n) {
+    public List<StockOut> listByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_out_type, String stock_out_batch, String user_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockOut.APP_ID, app_id);
         sqlMap.put(StockOut.WAREHOUSE_ID, warehouse_id);
         sqlMap.put(StockOut.STOCK_OUT_TYPE, stock_out_type);
+        sqlMap.put(StockOut.STOCK_OUT_BATCH, stock_out_batch);
         sqlMap.put(StockOut.USER_NAME, user_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("stock_out.listByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_nameAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("stock_out.listByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_nameAndLimit", sqlMap);
 
-        logSql("stock_out", "listByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeUser_nameAndLimit", sqlPara);
+        logSql("stock_out", "listByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_nameAndLimit", sqlPara);
 
         return new StockOut().find(sqlPara.getSql(), sqlPara.getPara());
     }
@@ -114,13 +118,14 @@ public class StockOutDao extends Dao {
         }
     }
 
-    public Boolean save(String stock_out_id, String app_id, String warehouse_id, String delivery_order_id, String object_id, String stock_out_type, Integer stock_out_quantity, String stock_out_status, String system_create_user_id) {
+    public Boolean save(String stock_out_id, String app_id, String warehouse_id, String delivery_order_id, String object_id, String stock_out_batch, String stock_out_type, Integer stock_out_quantity, String stock_out_status, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockOut.STOCK_OUT_ID, stock_out_id);
         sqlMap.put(StockOut.APP_ID, app_id);
         sqlMap.put(StockOut.WAREHOUSE_ID, warehouse_id);
         sqlMap.put(StockOut.DELIVERY_ORDER_ID, delivery_order_id);
         sqlMap.put(StockOut.OBJECT_ID, object_id);
+        sqlMap.put(StockOut.STOCK_OUT_BATCH, stock_out_batch);
         sqlMap.put(StockOut.STOCK_OUT_TYPE, stock_out_type);
         sqlMap.put(StockOut.STOCK_OUT_QUANTITY, stock_out_quantity);
         sqlMap.put(StockOut.STOCK_OUT_STATUS, stock_out_status);
@@ -137,12 +142,13 @@ public class StockOutDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String stock_out_id, String warehouse_id, String delivery_order_id, String object_id, String stock_out_type, Integer stock_out_quantity, String stock_out_status, String system_update_user_id, Integer system_version) {
+    public Boolean update(String stock_out_id, String warehouse_id, String delivery_order_id, String object_id, String stock_out_batch, String stock_out_type, Integer stock_out_quantity, String stock_out_status, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockOut.STOCK_OUT_ID, stock_out_id);
         sqlMap.put(StockOut.WAREHOUSE_ID, warehouse_id);
         sqlMap.put(StockOut.DELIVERY_ORDER_ID, delivery_order_id);
         sqlMap.put(StockOut.OBJECT_ID, object_id);
+        sqlMap.put(StockOut.STOCK_OUT_BATCH, stock_out_batch);
         sqlMap.put(StockOut.STOCK_OUT_TYPE, stock_out_type);
         sqlMap.put(StockOut.STOCK_OUT_QUANTITY, stock_out_quantity);
         sqlMap.put(StockOut.STOCK_OUT_STATUS, stock_out_status);

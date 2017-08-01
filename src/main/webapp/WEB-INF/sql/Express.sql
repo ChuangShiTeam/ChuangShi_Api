@@ -103,28 +103,10 @@
     AND express_id = #p(express_id)
   #end
   
-  #sql("listByDelivery_order_id")
-    SELECT
-    *
-    FROM table_express
-    WHERE system_status = 1
-    AND delivery_order_id = #p(delivery_order_id)
-  #end
-
-  #sql("listByTrade_id")
-    SELECT
-    *
-    FROM table_express
-    WHERE system_status = 1
-    AND trade_id = #p(trade_id)
-  #end
-
   #sql("save")
     INSERT INTO table_express (
       express_id,
       app_id,
-      trade_id,
-      delivery_order_id,
       express_shipper_code,
       express_no,
       express_receiver_company,
@@ -161,8 +143,6 @@
     ) VALUES (
       #p(express_id),
       #p(app_id),
-      #p(trade_id),
-      #p(delivery_order_id),
       #p(express_shipper_code),
       #p(express_no),
       #p(express_receiver_company),
@@ -201,8 +181,6 @@
 
   #sql("update")
     UPDATE table_express SET
-    trade_id = #p(trade_id),
-    delivery_order_id = #p(delivery_order_id),
     express_shipper_code = #p(express_shipper_code),
     express_no = #p(express_no),
     express_receiver_company = #p(express_receiver_company),

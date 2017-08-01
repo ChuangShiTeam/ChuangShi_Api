@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -26,9 +28,11 @@ import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Bill;
 import com.nowui.chuangshi.model.BillCommission;
 import com.nowui.chuangshi.model.Certificate;
-import com.nowui.chuangshi.model.DeliveryOrder;
-import com.nowui.chuangshi.model.DeliveryOrderProductSku;
 import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.MemberDeliveryOrder;
+import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
+import com.nowui.chuangshi.model.MemberPurchaseOrder;
+import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
 import com.nowui.chuangshi.model.ProductSkuCommission;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.model.TradeCommossion;
@@ -39,7 +43,10 @@ import com.nowui.chuangshi.service.BillCommissionService;
 import com.nowui.chuangshi.service.BillService;
 import com.nowui.chuangshi.service.CertificatePayService;
 import com.nowui.chuangshi.service.CertificateService;
-import com.nowui.chuangshi.service.DeliveryOrderService;
+import com.nowui.chuangshi.service.MemberDeliveryOrderProductSkuService;
+import com.nowui.chuangshi.service.MemberDeliveryOrderService;
+import com.nowui.chuangshi.service.MemberPurchaseOrderProductSkuService;
+import com.nowui.chuangshi.service.MemberPurchaseOrderService;
 import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.ProductSkuCommissionService;
 import com.nowui.chuangshi.service.TradeCommossionService;
@@ -49,6 +56,8 @@ import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.BillFlow;
 import com.nowui.chuangshi.type.BillType;
 import com.nowui.chuangshi.type.ExpressPayWay;
+import com.nowui.chuangshi.type.MemberDeliveryOrderFlow;
+import com.nowui.chuangshi.type.MemberPurchaseOrderFlow;
 import com.nowui.chuangshi.type.PayType;
 import com.nowui.chuangshi.util.HttpUtil;
 import com.nowui.chuangshi.util.Util;
@@ -67,11 +76,15 @@ public class WeChatController extends Controller {
     private final ProductSkuCommissionService productSkuCommissionService = new ProductSkuCommissionService();
     private final UserService userService = new UserService();
     private final BillCommissionService billCommissionService = new BillCommissionService();
-    private final DeliveryOrderService deliveryOrderService = new DeliveryOrderService();
 
     // 授权证书
     private final CertificateService certificateService = new CertificateService();
     private final CertificatePayService certificatePayService = new CertificatePayService();
+
+    private final MemberPurchaseOrderService memberPurchaseOrderService = new MemberPurchaseOrderService();
+    private final MemberPurchaseOrderProductSkuService memberPurchaseOrderProductSkuService = new MemberPurchaseOrderProductSkuService();
+    private final MemberDeliveryOrderService memberDeliveryOrderService = new MemberDeliveryOrderService();
+    private final MemberDeliveryOrderProductSkuService memberDeliveryOrderProductSkuService = new MemberDeliveryOrderProductSkuService();
 
     @ActionKey(Url.WECHAT_CONFIG)
     public void config() {
@@ -186,45 +199,17 @@ public class WeChatController extends Controller {
     public void paySuccess() {
         validateRequest_app_id();
 
-        // validate(Trade.TRADE_NUMBER);
         JSONObject jsonObject = getParameterJSONObject();
-        String trade_number = jsonObject.getString("trade_number");
-
-        // 根据订单号查询订单
-        Trade trade = tradeService.findByTrade_number("20170711734043");
-        if (trade == null) {
-            throw new RuntimeException("找不到订单");
+        String test = getAttr("member_purchase_order_id");
+        String member_purchase_order_id = jsonObject.getString("member_purchase_order_id");
+        MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService.findByMember_purchase_order_id(member_purchase_order_id);
+        Boolean flag = memberPurchaseOrderService.updateMember_purchase_order_flowAndMember_purchase_order_is_payByMember_purchase_order_idValidateSystem_version(
+                member_purchase_order_id, MemberPurchaseOrderFlow.WAIT_SEND.getKey(), true, memberPurchaseOrder.getUser_id(), memberPurchaseOrder.getSystem_version());
+        if (flag) {
+            this.createMemberDeliveryOrder(member_purchase_order_id);
+            renderSuccessJson("支付成功");
         }
-
-        if (!trade.getTrade_flow().equals("WAIT_PAY")) {
-            throw new RuntimeException("订单不能支付");
-        }
-
-        BigDecimal trade_amount = trade.getTrade_product_amount().add(trade.getTrade_express_amount())
-                .subtract(trade.getTrade_discount_amount());
-        String trade_pay_type = PayType.WECHAT.getKey();
-        String trade_pay_number = trade.getTrade_number();
-        String trade_pay_account = trade.getTrade_number();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        java.util.Date date = new java.util.Date();
-        String str = sdf.format(date);
-
-        String trade_pay_time = str;
-        String trade_pay_result = "success";
-        Boolean trade_status = true;
-
-        boolean is_update = tradeService.updateSend(trade.getTrade_id(), trade.getUser_id(), trade_amount,
-                trade_pay_type, trade_pay_number, trade_pay_account, trade_pay_time, trade_pay_result, trade_status,
-                trade.getSystem_version());
-
-        if (is_update) {
-            // TODO 消息队列通知计算账单和分成
-            this.payChange(trade.getTrade_id());
-            renderSuccessJson("订单支付成功");
-        } else {
-            throw new RuntimeException("订单支付失败");
-        }
+       
     }
 
     private void payChange(String trade_id) {
@@ -419,7 +404,7 @@ public class WeChatController extends Controller {
         parameter.put("total_fee", total_fee);
         parameter.put("trade_type", trade_type);
         parameter.put("transaction_id", transaction_id);
-
+        
         if (Constant.WX_ATTACH_TRADE.equals(attach)) { // 订单支付
             // 根据订单号查询订单
             Trade trade = tradeService.findByTrade_id(out_trade_no);
@@ -454,10 +439,7 @@ public class WeChatController extends Controller {
                 if (is_update) {
                     // TODO 消息队列通知计算账单和分成
                     this.payChange(trade.getTrade_id());
-                    // 判断应用是否需要生成发货单
-                    if (app.getApp_is_create_warehouse() && app.getApp_is_delivery()) {
-                        this.createDeliveryOrder(trade.getTrade_id());
-                    }
+                    
                     renderText(Constant.WX_SUCCESS_MSG);
                 } else {
                     renderText(Constant.WX_FAIL_MSG);
@@ -466,12 +448,49 @@ public class WeChatController extends Controller {
             } else {
                 renderText(Constant.WX_FAIL_MSG);
             }
-        } else if (Constant.WX_ATTACH_DELIVERY_ORDER.equals(attach)) { // 发货单支付
-            DeliveryOrder deliveryOrder = deliveryOrderService.findByDelivery_order_id(out_trade_no);
-            if (deliveryOrder == null) {
+        } else if (Constant.WX_ATTACH_MEMBER_PURCHASE_ORDER.equals(attach)) { //会员进货单支付
+            MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService.findByMember_purchase_order_id(out_trade_no);
+            if (memberPurchaseOrder == null) {
                 renderText(Constant.WX_FAIL_MSG);
             }
-            App app = appService.findByApp_id(deliveryOrder.getApp_id());
+            App app = appService.findByApp_id(memberPurchaseOrder.getApp_id());
+            if (app == null) {
+                renderText(Constant.WX_FAIL_MSG);
+            }
+            String wx_app_id = app.getWechat_app_id();
+            if (!appid.equals(wx_app_id)) {
+                renderText(Constant.WX_FAIL_MSG);
+            }
+            
+            String mch_key = app.getWechat_mch_key();
+
+            String endsign = PaymentKit.createSign(parameter, mch_key);
+
+            if (sign.equals(endsign)) {
+                String member_purchase_order_pay_type = PayType.WECHAT.getKey();
+                String member_purchase_order_pay_number = transaction_id;
+                String member_purchase_order_pay_account = openid;
+                String member_purchase_order_pay_time = time_end;
+                String member_purchase_order_pay_result = result;
+                boolean is_update = memberPurchaseOrderService.updatePay(memberPurchaseOrder.getMember_purchase_order_id(), member_purchase_order_pay_type, member_purchase_order_pay_number, member_purchase_order_pay_account, member_purchase_order_pay_time, member_purchase_order_pay_result, memberPurchaseOrder.getUser_id(), memberPurchaseOrder.getSystem_version());
+                if (is_update) {
+                    // 生成会员发货单
+                    this.createMemberDeliveryOrder(memberPurchaseOrder.getMember_purchase_order_id());
+                    
+                    renderText(Constant.WX_SUCCESS_MSG);
+                } else {
+                    renderText(Constant.WX_FAIL_MSG);
+                }
+            } else {
+                renderText(Constant.WX_FAIL_MSG);
+            }
+            
+        } else if (Constant.WX_ATTACH_MEMBER_DELIVERY_ORDER.equals(attach)){  //会员发货单支付
+            MemberDeliveryOrder memberDeliveryOrder = memberDeliveryOrderService.findByMember_delivery_order_id(out_trade_no);
+            if (memberDeliveryOrder == null) {
+                renderText(Constant.WX_FAIL_MSG);
+            }
+            App app = appService.findByApp_id(memberDeliveryOrder.getApp_id());
             if (app == null) {
                 renderText(Constant.WX_FAIL_MSG);
             }
@@ -484,15 +503,12 @@ public class WeChatController extends Controller {
             String endsign = PaymentKit.createSign(parameter, mch_key);
 
             if (sign.equals(endsign)) {
-                String delivery_order_pay_type = PayType.WECHAT.getKey();
-                String delivery_order_pay_number = transaction_id;
-                String delivery_order_pay_account = openid;
-                String delivery_order_pay_time = time_end;
-                String delivery_order_pay_result = result;
-                boolean is_update = deliveryOrderService.updatePay(deliveryOrder.getDelivery_order_id(),
-                        delivery_order_pay_type, delivery_order_pay_number, delivery_order_pay_account,
-                        delivery_order_pay_time, delivery_order_pay_result, deliveryOrder.getDelivery_order_user_id(),
-                        deliveryOrder.getSystem_version());
+                String member_delivery_order_pay_type = PayType.WECHAT.getKey();
+                String member_delivery_order_pay_number = transaction_id;
+                String member_delivery_order_pay_account = openid;
+                String member_delivery_order_pay_time = time_end;
+                String member_delivery_order_pay_result = result;
+                boolean is_update = memberDeliveryOrderService.updatePay(memberDeliveryOrder.getMember_delivery_order_id(), member_delivery_order_pay_type, member_delivery_order_pay_number, member_delivery_order_pay_account, member_delivery_order_pay_time, member_delivery_order_pay_result, memberDeliveryOrder.getUser_id(), memberDeliveryOrder.getSystem_version());
                 if (is_update) {
                     renderText(Constant.WX_SUCCESS_MSG);
                 } else {
@@ -507,37 +523,6 @@ public class WeChatController extends Controller {
         } else {
             renderText(Constant.WX_FAIL_MSG);
         }
-    }
-
-    // 生成发货单
-    private void createDeliveryOrder(String trade_id) {
-        Trade trade = tradeService.findByTrade_id(trade_id);
-
-        String user_id = trade.getUser_id();
-
-        List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(trade_id);
-        List<DeliveryOrderProductSku> deliveryOrderProductSkuList = new ArrayList<DeliveryOrderProductSku>();
-
-        for (TradeProductSku tradeProductSku : tradeProductSkuList) {
-            DeliveryOrderProductSku deliveryOrderProductSku = new DeliveryOrderProductSku();
-            deliveryOrderProductSku.setProduct_sku_id(tradeProductSku.getProduct_sku_id());
-            deliveryOrderProductSku.setProduct_sku_quantity(tradeProductSku.getProduct_sku_quantity());
-            deliveryOrderProductSkuList.add(deliveryOrderProductSku);
-        }
-
-        // 会员发货
-        // 快递支付方式、快递公司编码、是否支付
-        String delivery_order_express_pay_way = ExpressPayWay.THIRD_PARTY_PAY.getValue(); // 订单产生会员发货设置快递支付方式为第三方支付
-        String delivery_order_express_shipper_code = ""; // 快递公司由仓库发货时指定
-        Boolean delivery_order_is_pay = true; // 快递费已支付
-        BigDecimal delivery_order_amount = trade.getTrade_total_amount();
-
-        deliveryOrderService.save(trade.getApp_id(), trade_id, user_id, "", user_id, trade.getTrade_receiver_name(),
-                trade.getTrade_receiver_mobile(), trade.getTrade_receiver_province(), trade.getTrade_receiver_city(),
-                trade.getTrade_receiver_area(), trade.getTrade_receiver_address(), delivery_order_express_pay_way,
-                delivery_order_express_shipper_code, delivery_order_amount, delivery_order_is_pay,
-                deliveryOrderProductSkuList, "");
-
     }
 
     // 授权证书支付回调
@@ -588,6 +573,72 @@ public class WeChatController extends Controller {
             }
         } else {
             renderText(Constant.WX_FAIL_MSG);
+        }
+
+    }
+
+    // 生成会员上级发货单
+    private void createMemberDeliveryOrder(String member_purchase_order_id) {
+        MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService.findByMember_purchase_order_id(member_purchase_order_id);
+
+        String user_id = memberPurchaseOrder.getUser_id();
+        //找到该会员的上级
+        User user = userService.findByUser_id(user_id);
+        Member member = memberService.findByMember_id(user.getObject_Id());
+        //会员有上级的情况下才可以生成上级发货单
+        if (StringUtils.isBlank(member.getMember_parent_id())) {
+            return;
+        }
+        Member parent = memberService.findByMember_id(member.getMember_parent_id());
+        String parent_user_id = parent.getUser_id();
+
+        List<MemberPurchaseOrderProductSku> memberPurchaseOrderProductSkuList = memberPurchaseOrderProductSkuService.listByMember_purchase_order_id(member_purchase_order_id);;
+        
+        String member_delivery_order_id = Util.getRandomUUID();
+        List<MemberDeliveryOrderProductSku> memberDeliveryOrderProductSkuList = new ArrayList<MemberDeliveryOrderProductSku>();
+        for (MemberPurchaseOrderProductSku memberPurchaseOrderProductSku : memberPurchaseOrderProductSkuList) {
+            MemberDeliveryOrderProductSku memberDeliveryOrderProductSku = new MemberDeliveryOrderProductSku();
+            memberDeliveryOrderProductSku.setProduct_sku_id(memberPurchaseOrderProductSku.getProduct_sku_id());
+            memberDeliveryOrderProductSku.setProduct_sku_quantity(memberPurchaseOrderProductSku.getProduct_sku_quantity());
+            memberDeliveryOrderProductSku.setProduct_snap_id(memberPurchaseOrderProductSku.getProduct_snap_id());
+            memberDeliveryOrderProductSku.setProduct_sku_amount(memberPurchaseOrderProductSku.getProduct_sku_amount());
+            memberDeliveryOrderProductSku.setMember_delivery_order_id(member_delivery_order_id);
+            memberDeliveryOrderProductSku.setSystem_create_user_id(user_id);
+            memberDeliveryOrderProductSku.setSystem_create_time(new Date());
+            memberDeliveryOrderProductSku.setSystem_update_user_id(user_id);
+            memberDeliveryOrderProductSku.setSystem_update_time(new Date());
+            memberDeliveryOrderProductSku.setSystem_version(0);
+            memberDeliveryOrderProductSku.setSystem_status(true);
+            memberDeliveryOrderProductSkuList.add(memberDeliveryOrderProductSku);
+        }
+        Boolean member_delivery_order_is_warehouse_deliver = false;
+        //TODO 如果仓库代收，则发货单仓库代发
+        if (memberPurchaseOrder.getMember_purchase_order_is_warehouse_receive()) {
+            member_delivery_order_is_warehouse_deliver = true;
+        }
+        // 会员发货
+        // 快递支付方式、快递公司编码、是否支付
+        String member_delivery_order_express_pay_way = ExpressPayWay.THIRD_PARTY_PAY.getValue(); // 进货单产生会员发货设置快递支付方式为第三方支付
+        String member_delivery_order_express_shipper_code = ""; // 快递公司由仓库发货时指定
+        Boolean member_delivery_order_is_pay = true; // 已支付
+        BigDecimal member_delivery_order_amount = memberPurchaseOrder.getMember_purchase_order_amount();
+        Integer member_delivery_order_total_quantity = memberPurchaseOrder.getMember_purchase_order_total_quantity();
+        String member_delivery_order_flow = MemberDeliveryOrderFlow.WAIT_SEND.getKey();
+        Boolean member_delivery_order_is_complete = false;
+        
+        Boolean flag = memberDeliveryOrderService.save(member_delivery_order_id, memberPurchaseOrder.getApp_id(), 
+                member_purchase_order_id, parent_user_id, member_delivery_order_amount, 
+                member_delivery_order_total_quantity, memberPurchaseOrder.getMember_purchase_order_receiver_name(), 
+                memberPurchaseOrder.getMember_purchase_order_receiver_mobile(), memberPurchaseOrder.getMember_purchase_order_receiver_province(),
+                memberPurchaseOrder.getMember_purchase_order_receiver_city(), memberPurchaseOrder.getMember_purchase_order_receiver_area(), 
+                memberPurchaseOrder.getMember_purchase_order_receiver_address(), member_delivery_order_express_pay_way, 
+                member_delivery_order_express_shipper_code, member_delivery_order_is_pay, 
+                member_delivery_order_is_warehouse_deliver, member_delivery_order_flow, 
+                member_delivery_order_is_complete, user_id);
+
+        //保存会员发货单明细
+        if (flag) {
+            memberDeliveryOrderProductSkuService.batchSave(memberDeliveryOrderProductSkuList);
         }
 
     }

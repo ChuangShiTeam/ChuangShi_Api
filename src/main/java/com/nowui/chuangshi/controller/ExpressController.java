@@ -15,35 +15,32 @@ import com.jfinal.plugin.activerecord.Record;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Kdniao;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.Express;
-import com.nowui.chuangshi.model.Product;
-import com.nowui.chuangshi.model.ProductSku;
-import com.nowui.chuangshi.model.Trade;
-import com.nowui.chuangshi.model.TradeProductSku;
-import com.nowui.chuangshi.service.DeliveryOrderProductSkuService;
-import com.nowui.chuangshi.service.DeliveryOrderService;
+
+import com.nowui.chuangshi.model.MemberDeliveryOrderExpress;
+import com.nowui.chuangshi.model.TradeExpress;
 import com.nowui.chuangshi.service.ExpressService;
 import com.nowui.chuangshi.service.FileService;
+import com.nowui.chuangshi.service.MemberDeliveryOrderExpressService;
+import com.nowui.chuangshi.service.MemberDeliveryOrderService;
 import com.nowui.chuangshi.service.ProductService;
 import com.nowui.chuangshi.service.ProductSkuService;
+import com.nowui.chuangshi.service.TradeExpressService;
 import com.nowui.chuangshi.service.TradeProductSkuService;
 import com.nowui.chuangshi.service.TradeService;
-import com.nowui.chuangshi.type.DeliveryOrderFlow;
-import com.nowui.chuangshi.type.TradeFlow;
 import com.nowui.chuangshi.util.DateUtil;
 
 public class ExpressController extends Controller {
 
     private final ExpressService expressService = new ExpressService();
 
-    private final TradeProductSkuService tradeProductSkuService = new TradeProductSkuService();
-    private final ProductService productService = new ProductService();
-    private final ProductSkuService productSkuService = new ProductSkuService();
-    private final FileService fileService = new FileService();
+    private final MemberDeliveryOrderExpressService memberDeliveryOrderExpressService = new MemberDeliveryOrderExpressService();
+    
+    private final MemberDeliveryOrderService memberDeliveryOrderService = new MemberDeliveryOrderService();
+    
+    private final TradeExpressService tradeExpressService = new TradeExpressService();
+    
     private final TradeService tradeService = new TradeService();
-    private final DeliveryOrderService deliveryOrderService = new DeliveryOrderService();
-    private final DeliveryOrderProductSkuService deliveryOrderProductSkuService = new DeliveryOrderProductSkuService();
 
     /**
      * 接收物流信息
@@ -80,7 +77,7 @@ public class ExpressController extends Controller {
             // String express_shipper_code =
             // jsonObject.getString("ShipperCode");
             // String express_no = jsonObject.getString("LogisticCode");
-
+            String orderCode = jsonObject.getString("OrderCode");
             Boolean success = jsonObject.getBoolean("Success");
 
             String express_flow = "无轨迹";
@@ -105,17 +102,43 @@ public class ExpressController extends Controller {
                 express_traces = jsonObject.getString("Traces");
             }
 
-            Express express = new Express();
+            Express bean = expressService.findByExpress_id(express_id);
+            if (!bean.getExpress_is_complete() && express_is_complete) {
+            	if (Constant.EXPRESS_ORDER_CODE_MEMBER_DELIVERY_ORDER.equals(orderCode)) {
+            		MemberDeliveryOrderExpress memberDeliveryOrderExpress = memberDeliveryOrderExpressService.findByExpress_id(bean.getExpress_id());
+            		List<Express> express_list = memberDeliveryOrderExpressService.listByMember_delivery_order_id(memberDeliveryOrderExpress.getMember_delivery_order_id());
+                    Boolean flag = true;
+                    for (Express e : express_list) {
+                        if (e.getExpress_is_complete() || e.getExpress_id().equals(bean.getExpress_id())) {
+                            continue;
+                        }
+                        flag = false;
+                        break;
+                    }
+                    if (flag) {
+                        memberDeliveryOrderService.updateFinish(memberDeliveryOrderExpress.getMember_delivery_order_id());
+                    }
+            	} else if (Constant.EXPRESS_ORDER_CODE_TRADE.equals(orderCode)) {
+            		TradeExpress tradeExpress = tradeExpressService.findByExpress_id(express_id);
+            		List<Express> express_list = tradeExpressService.listByTrade_id(tradeExpress.getTrade_id());
+				    Boolean flag = true;
+				    for (Express e : express_list) {
+				        if (e.getExpress_is_complete() || e.getExpress_id().equals(bean.getExpress_id())) {
+				            continue;
+				        }
+				        flag = false;
+				        break;
+				    }
+				    if (flag) {
+				        tradeService.updateFinish(tradeExpress.getTrade_id());
+				    }
+            	}
+				
+            }
+            
+            expressService.updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idValidateSystem_version(express_id, express_flow, express_is_complete, express_traces, bean.getSystem_create_user_id(), bean.getSystem_version());
 
-            express.setExpress_flow(express_flow);
-            express.setExpress_is_complete(express_is_complete);
-            express.setExpress_traces(express_traces);
-            express.setExpress_id(express_id);
-
-            expressList.add(express);
         }
-
-        expressService.updateBusiness(expressList);
 
         renderJson(resultMap);
     }
@@ -160,26 +183,8 @@ public class ExpressController extends Controller {
             }
         }
 
-        if (StringUtils.isNotBlank(express.getTrade_id())) {
-            List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(express.getTrade_id());
-
-            ProductSku productSku = productSkuService.findByProduct_sku_id(tradeProductSkuList.get(0).getProduct_sku_id());
-            Product product = productService.findByProduct_id(productSku.getProduct_id());
-
-            express.put(Product.PRODUCT_NAME, product.getProduct_name());
-            express.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
-        } else if (StringUtils.isNotBlank(express.getDelivery_order_id())) {
-            List<Record> deliveryOrderProductSkuList = deliveryOrderProductSkuService.listByDelivery_order_id(express.getDelivery_order_id());
-            ProductSku productSku = productSkuService.findByProduct_sku_id(deliveryOrderProductSkuList.get(0).getStr("product_sku_id"));
-            Product product = productService.findByProduct_id(productSku.getProduct_id());
-
-            express.put(Product.PRODUCT_NAME, product.getProduct_name());
-            express.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
-        }
-        
-
         express.keep(Express.EXPRESS_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO, Express.EXPRESS_FLOW,
-                Express.EXPRESS_TRACES_LIST, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Express.SYSTEM_VERSION);
+                Express.EXPRESS_TRACES_LIST, Express.SYSTEM_VERSION);
 
         renderSuccessJson(express);
     }
@@ -223,7 +228,7 @@ public class ExpressController extends Controller {
 
         authenticateApp_id(express.getApp_id());
 
-        express.keep(Express.EXPRESS_ID, Express.DELIVERY_ORDER_ID, Express.TRADE_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
+        express.keep(Express.EXPRESS_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
                 Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
                 Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
                 Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,
@@ -235,99 +240,7 @@ public class ExpressController extends Controller {
 
         renderSuccessJson(express);
     }
-
-    @ActionKey(Url.EXPRESS_ADMIN_FIND_BY_DELIVERY_ORDER_ID)
-    public void adminFindByDelivery_order_id() {
-        validateRequest_app_id();
-        validate(Express.DELIVERY_ORDER_ID);
-
-        Express model = getModel(Express.class);
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        List<Express> express_list = expressService.listByDelivery_order_id(model.getDelivery_order_id());
-
-        renderSuccessJson(express_list);
-    }
-
-    @ActionKey(Url.EXPRESS_ADMIN_MEMBER_EXPRESS)
-    public void adminMemberExpress() {
-    	validateRequest_app_id();
-        validate(DeliveryOrder.DELIVERY_ORDER_ID, Express.EXPRESS_NO, Express.EXPRESS_COST, Express.EXPRESS_SHIPPER_CODE,
-                Express.EXPRESS_REMARK);
-
-        Express model = getModel(Express.class);
-        String request_user_id = getRequest_user_id();
-        JSONObject jsonObject = getParameterJSONObject();
-        String delivery_order_id = jsonObject.getString("delivery_order_id");
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        Boolean result = expressService.memberExpress(delivery_order_id, model.getExpress_no(), model.getExpress_cost(), model.getExpress_shipper_code(), model.getExpress_remark(), request_user_id);
-        
-        renderSuccessJson(result);
-    }
     
-    @ActionKey(Url.EXPRESS_ADMIN_SUPPLIER_EXPRESS)
-    public void adminSupplierExpress() {
-    	validateRequest_app_id();
-    	validate(Trade.TRADE_ID, Express.EXPRESS_NO, Express.EXPRESS_COST, Express.EXPRESS_SHIPPER_CODE,
-    			Express.EXPRESS_REMARK);
-    	
-    	Express model = getModel(Express.class);
-    	String request_user_id = getRequest_user_id();
-    	JSONObject jsonObject = getParameterJSONObject();
-    	String trade_id = jsonObject.getString(Trade.TRADE_ID);
-    	
-    	authenticateRequest_app_idAndRequest_user_id();
-    	
-    	Boolean result = expressService.supplierExpress(trade_id, model.getExpress_no(), model.getExpress_cost(), model.getExpress_shipper_code(), model.getExpress_remark(), request_user_id);
-    	
-    	renderSuccessJson(result);
-    }
-    
-    @ActionKey(Url.EXPRESS_ADMIN_DELETE)
-    public void adminDelete() {
-    	validateRequest_app_id();
-    	validate(Express.EXPRESS_ID, Express.SYSTEM_VERSION);
-    	
-    	Express model = getModel(Express.class);
-    	String request_user_id = getRequest_user_id();
-    	
-    	authenticateRequest_app_idAndRequest_user_id();
-    	
-    	Express express = expressService.findByExpress_id(model.getExpress_id());
-    	
-    	authenticateApp_id(express.getApp_id());
-    	
-    	//判断快递单未完成
-    	if (!express.getExpress_is_complete()) {
-    	    Boolean flag = false;
-    	    if (StringUtils.isNotBlank(express.getTrade_id())) {
-    	        Trade trade = tradeService.findByTrade_id(express.getTrade_id());
-                if (TradeFlow.WAIT_SEND.getKey().equals(trade.getTrade_flow())) {
-                   //订单是待发货状态才可以删除
-                   flag = true;
-                }    
-    	    } 
-    	    if (StringUtils.isNotBlank(express.getDelivery_order_id())) {
-    	        //发货单是待发货状态才可以删除
-    	        DeliveryOrder delivery_order = deliveryOrderService.findByDelivery_order_id(express.getDelivery_order_id());
-    	        if (DeliveryOrderFlow.WAIT_SEND.getKey().equals(delivery_order.getDelivery_order_flow())) {
-    	            flag = true;
-    	        }
-    	    }
-    	    if (flag) {
-    	        Boolean result = expressService.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(
-                        model.getExpress_id(), request_user_id, model.getSystem_version());
-                renderSuccessJson(result);
-    	    }
-    	    
-    	}
-    	
-    	renderSuccessJson(true);
-    }
-
     @ActionKey(Url.EXPRESS_SYSTEM_LIST)
     public void systemList() {
         validateRequest_app_id();
@@ -360,7 +273,7 @@ public class ExpressController extends Controller {
 
         Express express = expressService.findByExpress_id(model.getExpress_id());
 
-        express.keep(Express.EXPRESS_ID, Express.DELIVERY_ORDER_ID, Express.TRADE_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
+        express.keep(Express.EXPRESS_ID, Express.EXPRESS_SHIPPER_CODE, Express.EXPRESS_NO,
                 Express.EXPRESS_RECEIVER_COMPANY, Express.EXPRESS_RECEIVER_NAME, Express.EXPRESS_RECEIVER_TEL,
                 Express.EXPRESS_RECEIVER_MOBILE, Express.EXPRESS_RECEIVER_POSTCODE, Express.EXPRESS_RECEIVER_PROVINCE,
                 Express.EXPRESS_RECEIVER_CITY, Express.EXPRESS_RECEIVER_AREA, Express.EXPRESS_RECEIVER_ADDRESS,

@@ -11,29 +11,31 @@ import java.util.List;
 
 public class StockInDao extends Dao {
 
-    public Integer countByApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_name(String app_id, String warehouse_id, String stock_in_type, String user_name) {
+    public Integer countByApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_name(String app_id, String warehouse_id, String stock_in_type, String stock_in_batch, String user_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockIn.APP_ID, app_id);
         sqlMap.put(StockIn.WAREHOUSE_ID, warehouse_id);
         sqlMap.put(StockIn.STOCK_IN_TYPE, stock_in_type);
+        sqlMap.put(StockIn.STOCK_IN_BATCH, stock_in_batch);
         sqlMap.put(StockIn.USER_NAME, user_name);
-        SqlPara sqlPara = Db.getSqlPara("stock_in.countByApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_name", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("stock_in.countByApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_name", sqlMap);
 
-        logSql("stock_in", "countByApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_name", sqlPara);
+        logSql("stock_in", "countByApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
     }
 
-    public Integer countByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_name(String app_id, String warehouse_id, String stock_in_type, String user_name) {
+    public Integer countByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_name(String app_id, String warehouse_id, String stock_in_type, String stock_in_batch, String user_name) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockIn.APP_ID, app_id);
         sqlMap.put(StockIn.WAREHOUSE_ID, warehouse_id);
         sqlMap.put(StockIn.STOCK_IN_TYPE, stock_in_type);
+        sqlMap.put(StockIn.STOCK_IN_BATCH, stock_in_batch);
         sqlMap.put(StockIn.USER_NAME, user_name);
-        SqlPara sqlPara = Db.getSqlPara("stock_in.countByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_name", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("stock_in.countByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_name", sqlMap);
 
-        logSql("stock_in", "countByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_name", sqlPara);
+        logSql("stock_in", "countByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_name", sqlPara);
 
         Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
         return count.intValue();
@@ -53,32 +55,34 @@ public class StockInDao extends Dao {
         return new StockIn().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<StockIn> listByApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_in_type, String user_name, int m, int n) {
+    public List<StockIn> listByApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_in_type, String stock_in_batch, String user_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockIn.APP_ID, app_id);
         sqlMap.put(StockIn.WAREHOUSE_ID, warehouse_id);
         sqlMap.put(StockIn.STOCK_IN_TYPE, stock_in_type);
+        sqlMap.put(StockIn.STOCK_IN_BATCH, stock_in_batch);
         sqlMap.put(StockIn.USER_NAME, user_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("stock_in.listByApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_nameAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("stock_in.listByApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_nameAndLimit", sqlMap);
 
-        logSql("stock_in", "listByApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_nameAndLimit", sqlPara);
+        logSql("stock_in", "listByApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_nameAndLimit", sqlPara);
 
         return new StockIn().find(sqlPara.getSql(), sqlPara.getPara());
     }
 
-    public List<StockIn> listByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_in_type, String user_name, int m, int n) {
+    public List<StockIn> listByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_in_type, String stock_in_batch, String user_name, int m, int n) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockIn.APP_ID, app_id);
         sqlMap.put(StockIn.WAREHOUSE_ID, warehouse_id);
         sqlMap.put(StockIn.STOCK_IN_TYPE, stock_in_type);
+        sqlMap.put(StockIn.STOCK_IN_BATCH, stock_in_batch);
         sqlMap.put(StockIn.USER_NAME, user_name);
         sqlMap.put(Constant.M, m);
         sqlMap.put(Constant.N, n);
-        SqlPara sqlPara = Db.getSqlPara("stock_in.listByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_nameAndLimit", sqlMap);
+        SqlPara sqlPara = Db.getSqlPara("stock_in.listByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_nameAndLimit", sqlMap);
 
-        logSql("stock_in", "listByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeUser_nameAndLimit", sqlPara);
+        logSql("stock_in", "listByOrApp_idOrWarehouse_idAndStock_in_typeOrLikeStock_in_batchOrLikeUser_nameAndLimit", sqlPara);
 
         return new StockIn().find(sqlPara.getSql(), sqlPara.getPara());
     }
@@ -114,13 +118,14 @@ public class StockInDao extends Dao {
         }
     }
 
-    public Boolean save(String stock_in_id, String app_id, String warehouse_id, String trade_id, String object_id, String stock_in_type, Integer stock_in_quantity, String stock_in_status, String system_create_user_id) {
+    public Boolean save(String stock_in_id, String app_id, String warehouse_id, String purchase_order_id, String object_id, String stock_in_batch, String stock_in_type, Integer stock_in_quantity, String stock_in_status, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockIn.STOCK_IN_ID, stock_in_id);
         sqlMap.put(StockIn.APP_ID, app_id);
         sqlMap.put(StockIn.WAREHOUSE_ID, warehouse_id);
-        sqlMap.put(StockIn.TRADE_ID, trade_id);
+        sqlMap.put(StockIn.PURCHASE_ORDER_ID, purchase_order_id);
         sqlMap.put(StockIn.OBJECT_ID, object_id);
+        sqlMap.put(StockIn.STOCK_IN_BATCH, stock_in_batch);
         sqlMap.put(StockIn.STOCK_IN_TYPE, stock_in_type);
         sqlMap.put(StockIn.STOCK_IN_QUANTITY, stock_in_quantity);
         sqlMap.put(StockIn.STOCK_IN_STATUS, stock_in_status);
@@ -137,12 +142,13 @@ public class StockInDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
-    public Boolean update(String stock_in_id, String warehouse_id, String trade_id, String object_id, String stock_in_type, Integer stock_in_quantity, String stock_in_status, String system_update_user_id, Integer system_version) {
+    public Boolean update(String stock_in_id, String warehouse_id, String purchase_order_id, String object_id, String stock_in_batch, String stock_in_type, Integer stock_in_quantity, String stock_in_status, String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(StockIn.STOCK_IN_ID, stock_in_id);
         sqlMap.put(StockIn.WAREHOUSE_ID, warehouse_id);
-        sqlMap.put(StockIn.TRADE_ID, trade_id);
+        sqlMap.put(StockIn.PURCHASE_ORDER_ID, purchase_order_id);
         sqlMap.put(StockIn.OBJECT_ID, object_id);
+        sqlMap.put(StockIn.STOCK_IN_BATCH, stock_in_batch);
         sqlMap.put(StockIn.STOCK_IN_TYPE, stock_in_type);
         sqlMap.put(StockIn.STOCK_IN_QUANTITY, stock_in_quantity);
         sqlMap.put(StockIn.STOCK_IN_STATUS, stock_in_status);

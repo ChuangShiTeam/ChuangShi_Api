@@ -14,11 +14,14 @@ public class StockIn extends Model<StockIn> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
     public static final String WAREHOUSE_ID = "warehouse_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "订单id")
-    public static final String TRADE_ID = "trade_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "进货单id")
+    public static final String PURCHASE_ORDER_ID = "purchase_order_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用id或用户id")
     public static final String OBJECT_ID = "object_id";
+    
+    @Column(type = ColumnType.VARCHAR, length = 25, comment = "批次")
+    public static final String STOCK_IN_BATCH = "stock_in_batch";
 
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "公司或会员")
     public static final String STOCK_IN_TYPE = "stock_in_type";
@@ -65,12 +68,12 @@ public class StockIn extends Model<StockIn> {
         set(WAREHOUSE_ID, warehouse_id);
     }
 
-    public String getTrade_id() {
-        return getStr(TRADE_ID);
+    public String getPurchase_order_id() {
+        return getStr(PURCHASE_ORDER_ID);
     }
 
-    public void setTrade_id(String trade_id) {
-        set(TRADE_ID, trade_id);
+    public void setPurchase_order_id(String purchase_order_id) {
+        set(PURCHASE_ORDER_ID, purchase_order_id);
     }
 
     public String getObject_id() {
@@ -79,6 +82,14 @@ public class StockIn extends Model<StockIn> {
 
     public void setObject_id(String object_id) {
         set(OBJECT_ID, object_id);
+    }
+    
+    public String getStock_in_batch() {
+        return getStr(STOCK_IN_BATCH);
+    }
+
+    public void setStock_in_batch(String stock_in_batch) {
+        set(STOCK_IN_BATCH, stock_in_batch);
     }
 
     public String getStock_in_type() {

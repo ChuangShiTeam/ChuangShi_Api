@@ -24,11 +24,11 @@ import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.constant.Config;
+
 import com.nowui.chuangshi.controller.*;
 import com.nowui.chuangshi.interceptor.GlobalActionInterceptor;
 import com.nowui.chuangshi.model.*;
 import com.nowui.chuangshi.model.Exception;
-import com.nowui.chuangshi.model.Menu;
 import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -65,6 +65,9 @@ public class WebConfig extends JFinalConfig {
         routes.add("/member", MemberController.class);
         routes.add("/member/address", MemberAddressController.class);
         routes.add("/member/level", MemberLevelController.class);
+        routes.add("/member/delivery/order", MemberDeliveryOrderController.class);
+        routes.add("/member/purchase/order", MemberPurchaseOrderController.class);
+
         routes.add("/express", ExpressController.class);
         routes.add("/qrcode", QrcodeController.class);
 
@@ -91,8 +94,6 @@ public class WebConfig extends JFinalConfig {
         routes.add("/stock/in", StockInController.class);
         routes.add("/stock/out", StockOutController.class);
         routes.add("/stock/replenish", StockReplenishController.class);
-
-        routes.add("/delivery/order", DeliveryOrderController.class);
 
         routes.add("/certificate", CertificateController.class);
         routes.add("/certificate/image", CertificateImageController.class);
@@ -234,6 +235,12 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_member", "member_id", Member.class);
         activeRecordPlugin.addMapping("table_member_address", "member_address_id", MemberAddress.class);
         activeRecordPlugin.addMapping("table_member_level", "member_level_id", MemberLevel.class);
+        activeRecordPlugin.addMapping("table_member_delivery_order", "member_delivery_order_id", MemberDeliveryOrder.class);
+        activeRecordPlugin.addMapping("table_member_delivery_order_product_sku", "member_delivery_order_id", MemberDeliveryOrderProductSku.class);
+        activeRecordPlugin.addMapping("table_member_delivery_order_express", "member_delivery_order_id", MemberDeliveryOrderExpress.class);
+        activeRecordPlugin.addMapping("table_member_purchase_order", "member_purchase_order_id", MemberPurchaseOrder.class);
+        activeRecordPlugin.addMapping("table_member_purchase_order_product_sku", "member_purchase_order_id", MemberPurchaseOrderProductSku.class);
+        activeRecordPlugin.addMapping("table_member_purchase_order_express", "member_purchase_order_id", MemberPurchaseOrderExpress.class);
         activeRecordPlugin.addMapping("table_stock", "stock_id", Stock.class);
         activeRecordPlugin.addMapping("table_express", "express_id", Express.class);
         activeRecordPlugin.addMapping("table_qrcode", "qrcode_id", Qrcode.class);
@@ -273,10 +280,6 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_stock_replenish", "stock_replenish_id", StockReplenish.class);
         activeRecordPlugin.addMapping("table_stock_replenish_product_sku", "stock_produc_sku_replenish_id",
                 StockReplenishProductSku.class);
-
-        activeRecordPlugin.addMapping("table_delivery_order", "delivery_order_id", DeliveryOrder.class);
-        activeRecordPlugin.addMapping("table_delivery_order_product_sku", "delivery_order_product_sku_id",
-                DeliveryOrderProductSku.class);
 
         activeRecordPlugin.addMapping("table_certificate", "certificate_id", Certificate.class);
         activeRecordPlugin.addMapping("table_certificate_image", "certificate_image_id", CertificateImage.class);
