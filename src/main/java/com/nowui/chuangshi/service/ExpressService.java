@@ -6,27 +6,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.nowui.chuangshi.cache.ExpressCache;
 import com.nowui.chuangshi.constant.Kdniao;
-import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.Express;
-import com.nowui.chuangshi.model.Trade;
-import com.nowui.chuangshi.type.ExpressFlow;
-import com.nowui.chuangshi.type.ExpressPayWay;
 import com.nowui.chuangshi.util.ExpressUtil;
-import com.nowui.chuangshi.util.Util;
 
 public class ExpressService extends Service {
 
     private ExpressCache expressCache = new ExpressCache();
-    
-    private DeliveryOrderService deliveryOrderService = new DeliveryOrderService();
-    
-    private TradeService tradeService = new TradeService();
     
     /**
      * 订阅快递
@@ -35,13 +24,13 @@ public class ExpressService extends Service {
      * @param expCode
      * @param expNo
      */
-    public void subscription(String express_id, String expCode, String expNo) {
+    public void subscription(String express_id, String orderCode, String expCode, String expNo) {
         String eBusinessID = Kdniao.EBusinessID;
         String appKey = Kdniao.AppKey;
         String reqURL = Kdniao.ReqURL;
 
         try {
-            String requestData = "{'CallBack':'" + express_id + "','OrderCode':'','ShipperCode':'" + expCode
+            String requestData = "{'CallBack':'" + express_id + "','OrderCode':'" + orderCode + "','ShipperCode':'" + expCode
                     + "','LogisticCode':'" + expNo + "'}";
 
             Map<String, String> params = new HashMap<String, String>();
@@ -118,88 +107,5 @@ public class ExpressService extends Service {
         return expressCache.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(express_id,
                 system_update_user_id, system_version);
     }
-
-    /*public Boolean memberExpress(String delivery_order_id, String express_no, BigDecimal express_cost, String express_shipper_code, String express_remark, String request_user_id) {
-        DeliveryOrder deliveryOrder = deliveryOrderService.findByDelivery_order_id(delivery_order_id);
-        if (deliveryOrder == null) {
-            throw new RuntimeException("找不到对应发货单");
-        }
-        //保存快递单信息
-        String express_id = Util.getRandomUUID();
-        Boolean result = save(express_id, deliveryOrder.getApp_id(), deliveryOrder.getTrade_id(), delivery_order_id, express_shipper_code,
-                express_no, "", deliveryOrder.getDelivery_order_receiver_name(), "", deliveryOrder.getDelivery_order_receiver_mobile(), "",
-                deliveryOrder.getDelivery_order_receiver_province(), deliveryOrder.getDelivery_order_receiver_city(), deliveryOrder.getDelivery_order_receiver_area(),
-                deliveryOrder.getDelivery_order_receiver_address(), "", "", "", "", "", "", "", "", "", express_cost,
-                deliveryOrder.getDelivery_order_is_pay(), deliveryOrder.getDelivery_order_express_pay_way(), "", ExpressFlow.NOTRACK.getValue(), false,
-                express_remark, request_user_id);
-        
-        return result;
-    }
-    
-    public Boolean supplierExpress(String trade_id, String express_no, BigDecimal express_cost, String express_shipper_code, String express_remark, String request_user_id) {
-		Trade trade = tradeService.findByTrade_id(trade_id);
-		if (trade == null) {
-			throw new RuntimeException("找不到订单");
-		}
-    	//保存快递单信息
-    	String express_id = Util.getRandomUUID();
-        Boolean flag = save(express_id, trade.getApp_id(), trade_id, "", express_shipper_code,
-                express_no, "", trade.getTrade_receiver_name(), "", trade.getTrade_receiver_mobile(), "",
-                trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(),
-                trade.getTrade_receiver_address(), "", "", "", "", "", "", "", "", "", express_cost,
-                true, ExpressPayWay.THIRD_PARTY_PAY.getValue(), "", ExpressFlow.NOTRACK.getValue(), false,
-                express_remark, request_user_id);
-		return flag;
-	}
-    
-    public void updateBusiness(List<Express> expressList) {
-		
-		for (Express express : expressList) {
-			
-			Express bean = findByExpress_id(express.getExpress_id());
-			
-			Boolean isComplete = express.getExpress_is_complete();
-
-			if (!bean.getExpress_is_complete() && isComplete) {
-				
-				if (StringUtils.isNotBlank(bean.getDelivery_order_id())) {
-					List<Express> express_list = listByDelivery_order_id(bean.getDelivery_order_id());
-                    Boolean flag = true;
-                    for (Express e : express_list) {
-                        if (e.getExpress_is_complete() || e.getExpress_id().equals(bean.getExpress_id())) {
-                            continue;
-                        }
-                        flag = false;
-                        break;
-                    }
-                    if (flag) {
-                        deliveryOrderService.updateFinish(bean.getDelivery_order_id());
-                    }
-				}
-				
-				if (StringUtils.isNotBlank(bean.getTrade_id())) {
-				    List<Express> express_list = listByTrade_id(bean.getTrade_id());
-				    Boolean flag = true;
-				    for (Express e : express_list) {
-				        if (e.getExpress_is_complete() || e.getExpress_id().equals(bean.getExpress_id())) {
-				            continue;
-				        }
-				        flag = false;
-				        break;
-				    }
-				    if (flag) {
-				        tradeService.updateFinish(bean.getTrade_id());
-				    }
-				}
-				
-			}
-			
-			this.updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idValidateSystem_version(express.getExpress_id(), express.getExpress_flow(), express.getExpress_is_complete(), express.getExpress_traces(), bean.getSystem_create_user_id(), bean.getSystem_version());
-
-		}
-		
-		
-		
-	}*/
 
 }

@@ -24,6 +24,10 @@ public class TradeExpressCache extends Cache {
         
         return express_list;
     }
+    
+    public TradeExpress findByExpress_id(String express_id) {
+    	return tradeExpressDao.findByExpress_id(express_id);
+    }
 
     public Boolean save(String trade_id, String express_id, String system_create_user_id) {
         return tradeExpressDao.save(trade_id, express_id, system_create_user_id);

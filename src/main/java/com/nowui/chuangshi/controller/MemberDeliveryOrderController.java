@@ -1,22 +1,22 @@
 package com.nowui.chuangshi.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
-import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
 import com.nowui.chuangshi.model.User;
@@ -26,7 +26,6 @@ import com.nowui.chuangshi.service.MemberAddressService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderExpressService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderProductSkuService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderService;
-import com.nowui.chuangshi.service.MemberPurchaseOrderExpressService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderService;
 import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.ProductService;
@@ -105,27 +104,83 @@ public class MemberDeliveryOrderController extends Controller {
 
         authenticateApp_id(member_delivery_order.getApp_id());
         authenticateSystem_create_user_id(member_delivery_order.getSystem_create_user_id());
-
-        member_delivery_order.keep(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, MemberDeliveryOrder.SYSTEM_VERSION);
-
-        renderSuccessJson(member_delivery_order);
+        
+        List<Express> expressList = memberDeliveryOrderExpressService.listByMember_delivery_order_id(model.getMember_delivery_order_id());
+        List<Map<String, Object>> express_list = new ArrayList<Map<String, Object>>();
+        for (Express express : expressList) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("express_flow", express.getExpress_flow());
+            JSONArray express_traces = null;
+            if (StringUtils.isNotBlank(express.getExpress_traces())) {
+                express_traces = JSONObject.parseArray(express.getExpress_traces());
+            }
+            map.put("express_traces", express_traces);
+            map.put("express_id", express.getExpress_id());
+            express_list.add(map);
+        }
+        member_delivery_order.keep(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_TOTAL_QUANTITY, 
+        							MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_PAY_WAY,
+        							MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, 
+        							MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_MOBILE, 
+        							MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_PROVINCE,
+        							MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_CITY,
+        							MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_AREA,
+        							MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_ADDRESS,
+        							MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW);
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("member_delivery_order", member_delivery_order);
+        result.put("express_list", express_list);
+        renderSuccessJson(result);
     }
 
     @ActionKey(Url.MEMBER_DELIVERY_ORDER_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_AMOUNT, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_TOTAL_QUANTITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_MOBILE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_PROVINCE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_CITY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_AREA, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_ADDRESS, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_PAY_WAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_EXPRESS_SHIPPER_CODE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE);
-
+        validate(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_ADDRESS,
+        		MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_AREA, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_CITY,
+        		MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_MOBILE, MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_PRODUCT_SKU_LIST,
+        		MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER);
         MemberDeliveryOrder model = getModel(MemberDeliveryOrder.class);
-        String member_delivery_order_id = Util.getRandomUUID();
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
 
+        JSONObject jsonObject = getParameterJSONObject();
+        JSONArray productSkuList = jsonObject.getJSONArray(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_PRODUCT_SKU_LIST);
+        if (productSkuList == null || productSkuList.size() == 0) {
+            throw new RuntimeException("产品sku不能为空");
+        }
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = memberDeliveryOrderService.save(member_delivery_order_id, request_app_id, model.getMember_purchase_order_id(), model.getUser_id(), model.getMember_delivery_order_amount(), model.getMember_delivery_order_total_quantity(), model.getMember_delivery_order_receiver_name(), model.getMember_delivery_order_receiver_mobile(), model.getMember_delivery_order_receiver_province(), model.getMember_delivery_order_receiver_city(), model.getMember_delivery_order_receiver_area(), model.getMember_delivery_order_receiver_address(), model.getMember_delivery_order_express_pay_way(), model.getMember_delivery_order_express_shipper_code(), model.getMember_delivery_order_is_pay(), model.getMember_delivery_order_is_warehouse_deliver(), model.getMember_delivery_order_flow(), model.getMember_delivery_order_is_complete(), request_user_id);
-
-        renderSuccessJson(result);
+        List<MemberDeliveryOrderProductSku> memberDeliveryOrderProductSkuList = new ArrayList<MemberDeliveryOrderProductSku>();
+        for (int j = 0; j < productSkuList.size(); j++) {
+        	MemberDeliveryOrderProductSku memberDeliveryOrderProductSku = productSkuList.getJSONObject(j)
+                    .toJavaObject(MemberDeliveryOrderProductSku.class);
+        	memberDeliveryOrderProductSkuList.add(memberDeliveryOrderProductSku);
+        }
+        String member_delivery_order_express_pay_way = model.getMember_delivery_order_express_pay_way();
+        if (StringUtils.isBlank(member_delivery_order_express_pay_way)) {
+        	member_delivery_order_express_pay_way = "";
+        }
+        String member_delivery_order_express_shipper_code = model.getMember_delivery_order_express_shipper_code();
+        if (StringUtils.isBlank(member_delivery_order_express_shipper_code)) {
+        	member_delivery_order_express_shipper_code = "";
+        }
+        //仓库代发货
+        if (model.getMember_delivery_order_is_warehouse_deliver()) {
+        	BigDecimal member_delivery_order_amount = new BigDecimal(0);
+        	Boolean result = memberDeliveryOrderService.warehouseDeliverSave(request_app_id, request_user_id, 
+        			model.getMember_delivery_order_receiver_name(), 
+        			model.getMember_delivery_order_receiver_mobile(), 
+        			model.getMember_delivery_order_receiver_province(), 
+        			model.getMember_delivery_order_receiver_city(), 
+        			model.getMember_delivery_order_receiver_area(), 
+        			model.getMember_delivery_order_receiver_address(), 
+        			member_delivery_order_express_pay_way, 
+        			member_delivery_order_express_shipper_code, member_delivery_order_amount, false, memberDeliveryOrderProductSkuList, request_user_id);
+        	renderSuccessJson(result);
+        } else { //TODO 自己发货
+        	
+        }
     }
 
     @ActionKey(Url.MEMBER_DELIVERY_ORDER_UPDATE)

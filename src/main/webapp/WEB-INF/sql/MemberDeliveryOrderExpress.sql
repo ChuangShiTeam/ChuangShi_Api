@@ -30,6 +30,14 @@
       #p(system_status)
     )
   #end
+  
+  #sql("findByExpress_id")
+    SELECT
+    member_delivery_order_id
+    FROM table_member_delivery_order_express
+    WHERE system_status = 1
+    AND express_id = #p(express_id)
+  #end
 
   #sql("deleteByMember_delivery_order_id")
     UPDATE table_member_delivery_order_express SET

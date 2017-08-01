@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.dao.MemberPurchaseOrderDao;
-import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.util.CacheUtil;
 

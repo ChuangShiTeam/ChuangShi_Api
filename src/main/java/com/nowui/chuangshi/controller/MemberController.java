@@ -1,36 +1,27 @@
 package com.nowui.chuangshi.controller;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
-import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.jfinal.weixin.sdk.api.ApiResult;
 import com.jfinal.weixin.sdk.api.QrcodeApi;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
-import com.nowui.chuangshi.model.DeliveryOrder;
-import com.nowui.chuangshi.model.DeliveryOrderProductSku;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberLevel;
 import com.nowui.chuangshi.model.Qrcode;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.AppService;
-import com.nowui.chuangshi.service.DeliveryOrderService;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberLevelService;
 import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.QrcodeService;
-import com.nowui.chuangshi.service.StockService;
 import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.QrcodeType;
 import com.nowui.chuangshi.util.Util;
@@ -40,13 +31,10 @@ public class MemberController extends Controller {
 
     private final MemberService memberService = new MemberService();
     private final UserService userService = new UserService();
-    private final DeliveryOrderService deliveryOrderService = new DeliveryOrderService();
     private final MemberLevelService memberLevelService = new MemberLevelService();
     private final FileService fileService = new FileService();
     private final QrcodeService qrcodeService = new QrcodeService();
     private final AppService appService = new AppService();
-    private final StockService stockService = new StockService();
-    private final DeliveryOrderService deliverOrderService = new DeliveryOrderService();
 
     private List<Map<String, Object>> getChildren(List<Member> memberList, String member_parent_id, String... keys) {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -304,91 +292,6 @@ public class MemberController extends Controller {
         renderSuccessJson();
     }
 
-    // 会员发货
-    @ActionKey(Url.MEMBER_SEND)
-    public void send() {
-        validateRequest_app_id();
-        validate(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS,
-                DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA, DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY,
-                DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE, DeliveryOrder.DELIVERY_ORDER_PRODUCT_SKU_LIST);
-
-        String request_app_id = getRequest_app_id();
-        String request_user_id = getRequest_user_id();
-        DeliveryOrder deliveryOrder = getModel(DeliveryOrder.class);
-        JSONObject jsonObject = getParameterJSONObject();
-        JSONArray productSkuList = jsonObject.getJSONArray(DeliveryOrder.DELIVERY_ORDER_PRODUCT_SKU_LIST);
-        if (productSkuList == null || productSkuList.size() == 0) {
-            throw new RuntimeException("产品sku不能为空");
-        }
-        authenticateRequest_app_idAndRequest_user_id();
-
-        authenticateApp_id(request_app_id);
-
-        List<DeliveryOrderProductSku> deliveryOrderProductSkuList = new ArrayList<DeliveryOrderProductSku>();
-        for (int j = 0; j < productSkuList.size(); j++) {
-            DeliveryOrderProductSku deliveryOrderProductSku = productSkuList.getJSONObject(j)
-                    .toJavaObject(DeliveryOrderProductSku.class);
-            deliveryOrderProductSkuList.add(deliveryOrderProductSku);
-        }
-        String delivery_order_express_pay_way = deliveryOrder.getDelivery_order_express_pay_way();
-        if (StringUtils.isBlank(delivery_order_express_pay_way)) {
-            delivery_order_express_pay_way = "";
-        }
-        String delivery_order_express_shipper_code = deliveryOrder.getDelivery_order_express_shipper_code();
-        if (StringUtils.isBlank(delivery_order_express_shipper_code)) {
-            delivery_order_express_shipper_code = "";
-        }
-        BigDecimal delivery_order_amount = new BigDecimal(0);
-        Boolean result = deliveryOrderService.save(request_app_id, "", request_user_id, request_user_id, "",
-                deliveryOrder.getDelivery_order_receiver_name(), deliveryOrder.getDelivery_order_receiver_mobile(),
-                deliveryOrder.getDelivery_order_receiver_province(), deliveryOrder.getDelivery_order_receiver_city(),
-                deliveryOrder.getDelivery_order_receiver_area(), deliveryOrder.getDelivery_order_receiver_address(),
-                delivery_order_express_pay_way, delivery_order_express_shipper_code, 
-                delivery_order_amount, false, deliveryOrderProductSkuList, request_user_id);
-
-        renderSuccessJson(result);
-    }
-
-    // 会员发货明细
-    @ActionKey(Url.MEMBER_SEND_DETAIL)
-    public void sendDetail() {
-        validateRequest_app_id();
-        validate(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
-
-        String request_app_id = getRequest_app_id();
-        String request_user_id = getRequest_user_id();
-
-        authenticateRequest_app_idAndRequest_user_id();
-
-        authenticateApp_id(request_app_id);
-
-        // 查询会员库存
-        Integer stock_quantity = stockService.sumQuantityByObject_id(request_user_id);
-        // 查询会员发货单列表
-        List<Record> recordList = deliverOrderService.listByDelivery_order_sender_user_idAndLimit(request_user_id, getM(), getN());
-        List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
-        for (Record record : recordList) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(DeliveryOrder.DELIVERY_ORDER_ID, record.get(DeliveryOrder.DELIVERY_ORDER_ID));
-            map.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME, record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME));
-            map.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE,
-                    record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE));
-            map.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_PROVINCE,
-                    record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_PROVINCE));
-            map.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY, record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY));
-            map.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA, record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA));
-            map.put(DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS,
-                    record.get(DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS));
-            map.put(DeliveryOrder.DELIVERY_ORDER_FLOW,
-                    record.get(DeliveryOrder.DELIVERY_ORDER_FLOW));
-            resultList.add(map);
-        }
-        Map<String, Object> result = new HashMap<String, Object>();
-        result.put("stock_quantity", stock_quantity);
-        result.put("delivery_order_list", resultList);
-        renderSuccessJson(result);
-    }
-
     @ActionKey(Url.MEMBER_ADMIN_LIST)
     public void adminList() {
         validateRequest_app_id();
@@ -426,54 +329,6 @@ public class MemberController extends Controller {
         member.keep(Member.MEMBER_ID, Member.SYSTEM_VERSION);
 
         renderSuccessJson(member);
-    }
-
-    // 会员发货，由公司仓库发货，减去会员库存，快递到会员指定地址
-    @ActionKey(Url.MEMBER_ADMIN_SEND)
-    public void adminSend() {
-        validateRequest_app_id();
-        validate(Member.MEMBER_ID, DeliveryOrder.DELIVERY_ORDER_RECEIVER_NAME,
-                DeliveryOrder.DELIVERY_ORDER_RECEIVER_ADDRESS, DeliveryOrder.DELIVERY_ORDER_RECEIVER_AREA,
-                DeliveryOrder.DELIVERY_ORDER_RECEIVER_CITY, DeliveryOrder.DELIVERY_ORDER_RECEIVER_MOBILE,
-                DeliveryOrder.DELIVERY_ORDER_PRODUCT_SKU_LIST);
-
-        String request_app_id = getRequest_app_id();
-        String request_user_id = getRequest_user_id();
-        DeliveryOrder deliveryOrder = getModel(DeliveryOrder.class);
-        JSONObject jsonObject = getParameterJSONObject();
-        String member_id = jsonObject.getString("member_id");
-        JSONArray productSkuList = jsonObject.getJSONArray(DeliveryOrder.DELIVERY_ORDER_PRODUCT_SKU_LIST);
-        if (productSkuList == null || productSkuList.size() == 0) {
-            throw new RuntimeException("产品sku不能为空");
-        }
-        authenticateRequest_app_idAndRequest_user_id();
-
-        authenticateApp_id(request_app_id);
-
-        Member member = memberService.findByMember_id(member_id);
-        List<DeliveryOrderProductSku> deliveryOrderProductSkuList = new ArrayList<DeliveryOrderProductSku>();
-        for (int j = 0; j < productSkuList.size(); j++) {
-            DeliveryOrderProductSku deliveryOrderProductSku = productSkuList.getJSONObject(j)
-                    .toJavaObject(DeliveryOrderProductSku.class);
-            deliveryOrderProductSkuList.add(deliveryOrderProductSku);
-        }
-        String delivery_order_express_pay_way = deliveryOrder.getDelivery_order_express_pay_way();
-        if (StringUtils.isBlank(delivery_order_express_pay_way)) {
-            delivery_order_express_pay_way = "";
-        }
-        String delivery_order_express_shipper_code = deliveryOrder.getDelivery_order_express_shipper_code();
-        if (StringUtils.isBlank(delivery_order_express_shipper_code)) {
-            delivery_order_express_shipper_code = "";
-        }
-        BigDecimal delivery_order_amount = new BigDecimal(0);
-        Boolean result = deliveryOrderService.save(request_app_id, "", member.getUser_id(), member.getUser_id(), "",
-                deliveryOrder.getDelivery_order_receiver_name(), deliveryOrder.getDelivery_order_receiver_mobile(),
-                deliveryOrder.getDelivery_order_receiver_province(), deliveryOrder.getDelivery_order_receiver_city(),
-                deliveryOrder.getDelivery_order_receiver_area(), deliveryOrder.getDelivery_order_receiver_address(),
-                deliveryOrder.getDelivery_order_express_pay_way(), deliveryOrder.getDelivery_order_express_shipper_code(), 
-                delivery_order_amount, false, deliveryOrderProductSkuList, request_user_id);
-
-        renderSuccessJson(result);
     }
 
     @ActionKey(Url.MEMBER_SYSTEM_LIST)

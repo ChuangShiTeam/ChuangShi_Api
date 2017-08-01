@@ -6,6 +6,7 @@ import java.util.List;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
+import com.nowui.chuangshi.model.MemberDeliveryOrderExpress;
 import com.nowui.chuangshi.model.TradeExpress;
 
 public class TradeExpressDao extends Dao {
@@ -18,6 +19,21 @@ public class TradeExpressDao extends Dao {
         logSql("trade_express", "listByTrade_id", sqlPara);
 
         return new TradeExpress().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+    
+    public TradeExpress findByExpress_id(String express_id) {
+    	Kv sqlMap = Kv.create();
+        sqlMap.put(TradeExpress.EXPRESS_ID, express_id);
+        SqlPara sqlPara = Db.getSqlPara("trade_express.findByExpress_id", sqlMap);
+
+        logSql("trade_express", "findByExpress_id", sqlPara);
+        
+        List<TradeExpress> tradeExpressList = new TradeExpress().find(sqlPara.getSql(), sqlPara.getPara());
+        if (tradeExpressList.size() == 0) {
+            return null;
+        } else {
+            return tradeExpressList.get(0);
+        }
     }
 
     public Boolean save(String trade_id, String express_id, String system_create_user_id) {

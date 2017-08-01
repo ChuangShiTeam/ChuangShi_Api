@@ -26,8 +26,8 @@ import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Bill;
 import com.nowui.chuangshi.model.BillCommission;
-import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
@@ -39,7 +39,6 @@ import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.service.BillCommissionService;
 import com.nowui.chuangshi.service.BillService;
-import com.nowui.chuangshi.service.DeliveryOrderService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderProductSkuService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderProductSkuService;
@@ -73,7 +72,6 @@ public class WeChatController extends Controller {
     private final ProductSkuCommissionService productSkuCommissionService = new ProductSkuCommissionService();
     private final UserService userService = new UserService();
     private final BillCommissionService billCommissionService = new BillCommissionService();
-    private final DeliveryOrderService deliveryOrderService = new DeliveryOrderService();
     private final MemberPurchaseOrderService memberPurchaseOrderService = new MemberPurchaseOrderService();
     private final MemberPurchaseOrderProductSkuService memberPurchaseOrderProductSkuService = new MemberPurchaseOrderProductSkuService();
     private final MemberDeliveryOrderService memberDeliveryOrderService = new MemberDeliveryOrderService();
@@ -478,11 +476,11 @@ public class WeChatController extends Controller {
             }
             
         } else if (Constant.WX_ATTACH_MEMBER_DELIVERY_ORDER.equals(attach)){  //会员发货单支付
-            DeliveryOrder deliveryOrder = deliveryOrderService.findByDelivery_order_id(out_trade_no);
-            if (deliveryOrder == null) {
+            MemberDeliveryOrder memberDeliveryOrder = memberDeliveryOrderService.findByMember_delivery_order_id(out_trade_no);
+            if (memberDeliveryOrder == null) {
                 renderText(Constant.WX_FAIL_MSG);
             }
-            App app = appService.findByApp_id(deliveryOrder.getApp_id());
+            App app = appService.findByApp_id(memberDeliveryOrder.getApp_id());
             if (app == null) {
                 renderText(Constant.WX_FAIL_MSG);
             }
@@ -495,12 +493,12 @@ public class WeChatController extends Controller {
             String endsign = PaymentKit.createSign(parameter, mch_key);
 
             if (sign.equals(endsign)) {
-                String delivery_order_pay_type = PayType.WECHAT.getKey();
-                String delivery_order_pay_number = transaction_id;
-                String delivery_order_pay_account = openid;
-                String delivery_order_pay_time = time_end;
-                String delivery_order_pay_result = result;
-                boolean is_update = deliveryOrderService.updatePay(deliveryOrder.getDelivery_order_id(), delivery_order_pay_type, delivery_order_pay_number, delivery_order_pay_account, delivery_order_pay_time, delivery_order_pay_result, deliveryOrder.getDelivery_order_user_id(), deliveryOrder.getSystem_version());
+                String member_delivery_order_pay_type = PayType.WECHAT.getKey();
+                String member_delivery_order_pay_number = transaction_id;
+                String member_delivery_order_pay_account = openid;
+                String member_delivery_order_pay_time = time_end;
+                String member_delivery_order_pay_result = result;
+                boolean is_update = memberDeliveryOrderService.updatePay(memberDeliveryOrder.getMember_delivery_order_id(), member_delivery_order_pay_type, member_delivery_order_pay_number, member_delivery_order_pay_account, member_delivery_order_pay_time, member_delivery_order_pay_result, memberDeliveryOrder.getUser_id(), memberDeliveryOrder.getSystem_version());
                 if (is_update) {
                     renderText(Constant.WX_SUCCESS_MSG);
                 } else {

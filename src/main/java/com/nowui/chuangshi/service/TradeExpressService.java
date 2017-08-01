@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.nowui.chuangshi.cache.TradeExpressCache;
 import com.nowui.chuangshi.model.Express;
+import com.nowui.chuangshi.model.TradeExpress;
 
 public class TradeExpressService extends Service {
 
@@ -11,6 +12,10 @@ public class TradeExpressService extends Service {
 
     public List<Express> listByTrade_id(String trade_id) {
         return tradeExpressCache.listByTrade_id(trade_id);
+    }
+    
+    public TradeExpress findByExpress_id(String express_id) {
+    	return tradeExpressCache.findByExpress_id(express_id);
     }
 
     public Boolean save(String trade_id, String express_id, String system_create_user_id) {

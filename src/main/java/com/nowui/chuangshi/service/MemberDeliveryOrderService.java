@@ -7,15 +7,15 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.jfinal.plugin.activerecord.Record;
 import com.nowui.chuangshi.cache.MemberDeliveryOrderCache;
-import com.nowui.chuangshi.model.DeliveryOrderProductSku;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.Express;
+import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.model.StockOutProductSku;
-import com.nowui.chuangshi.type.DeliveryOrderFlow;
+import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.type.ExpressFlow;
 import com.nowui.chuangshi.type.MemberDeliveryOrderFlow;
 import com.nowui.chuangshi.type.MemberPurchaseOrderFlow;
@@ -30,6 +30,8 @@ public class MemberDeliveryOrderService extends Service {
     
     private MemberDeliveryOrderExpressService memberDeliveryOrderExpressService = new MemberDeliveryOrderExpressService();
     
+    private MemberDeliveryOrderPayService memberDeliveryOrderPayService = new MemberDeliveryOrderPayService();
+    
     private ExpressService expressService = new ExpressService();
     
     private MemberPurchaseOrderService memberPurchaseOrderService = new MemberPurchaseOrderService();
@@ -37,6 +39,14 @@ public class MemberDeliveryOrderService extends Service {
     private StockOutService stockOutService = new StockOutService();
     
     private StockInService stockInService = new StockInService();
+    
+    private StockService stockService = new StockService();
+    
+    private UserService userService = new UserService();
+    
+    private MemberService memberService = new MemberService();
+    
+    private ProductSkuPriceService productSkuPriceService = new ProductSkuPriceService();
 
     public Integer countByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name(String app_id, String user_name, String member_delivery_order_receiver_name) {
         return memberDeliveryOrderCache.countByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name(app_id, user_name, member_delivery_order_receiver_name);
@@ -188,12 +198,87 @@ public class MemberDeliveryOrderService extends Service {
                 }
                 //快递订阅
                 for (Express express : express_list) {
-                    expressService.subscription(express.getExpress_id(), express.getExpress_shipper_code(), express.getExpress_no());
+                    expressService.subscription(express.getExpress_id(), Constant.EXPRESS_ORDER_CODE_MEMBER_DELIVERY_ORDER, express.getExpress_shipper_code(), express.getExpress_no());
                 }
             } 
         }
         
         return result;
     }
+    
+    public Boolean warehouseDeliverSave(String app_id, String user_id, String member_delivery_order_receiver_name, String member_delivery_order_receiver_mobile, String member_delivery_order_receiver_province, String member_delivery_order_receiver_city, String member_delivery_order_receiver_area, String member_delivery_order_receiver_address, String member_delivery_order_express_pay_way, String member_delivery_order_express_shipper_code, BigDecimal member_delivery_order_amount, Boolean member_delivery_order_is_pay, List<MemberDeliveryOrderProductSku> memberDeliveryOrderProductSkuList, String system_create_user_id) {
+        Integer member_delivery_order_total_quantity = 0;
+        String member_delivery_order_id = Util.getRandomUUID();
+        List<MemberDeliveryOrderProductSku> list = new ArrayList<MemberDeliveryOrderProductSku>();
+        User user = userService.findByUser_id(user_id);
+        Member member = memberService.findByMember_id(user.getObject_Id());
+        for (MemberDeliveryOrderProductSku memberDeliveryOrderProductSku : memberDeliveryOrderProductSkuList) {
+            if (StringUtils.isBlank(memberDeliveryOrderProductSku.getProduct_sku_id())) {
+                throw new RuntimeException("商品skuid不能为空");
+            }
+            if (memberDeliveryOrderProductSku.getProduct_sku_quantity() == null) {
+                throw new RuntimeException("商品数量不能为空");
+            }
+            if (memberDeliveryOrderProductSku.getProduct_sku_quantity() <= 0) {
+                throw new RuntimeException("商品数量必须大于0");
+            }
+            //判断会员库存是否足够
+        	Integer stock_quantity = stockService.sumQuantityByApp_idOrWarehouse_idAndObject_idAndProduct_sku_id(app_id, null, user_id, memberDeliveryOrderProductSku.getProduct_sku_id());
+        	if (memberDeliveryOrderProductSku.getProduct_sku_quantity() > stock_quantity) {
+        		throw new RuntimeException("库存不足");
+        	}
+        	BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(
+        			memberDeliveryOrderProductSku.getProduct_sku_id(), member.getMember_level_id());
+            BigDecimal product_sku_amount = product_sku_price
+                    .multiply(new BigDecimal(memberDeliveryOrderProductSku.getProduct_sku_quantity()));
+
+        	memberDeliveryOrderProductSku.setMember_delivery_order_id(member_delivery_order_id);
+        	memberDeliveryOrderProductSku.setProduct_snap_id("");
+        	memberDeliveryOrderProductSku.setProduct_sku_amount(product_sku_amount);
+        	memberDeliveryOrderProductSku.setSystem_create_user_id(system_create_user_id);
+        	memberDeliveryOrderProductSku.setSystem_create_time(new Date());
+        	memberDeliveryOrderProductSku.setSystem_update_user_id(system_create_user_id);
+        	memberDeliveryOrderProductSku.setSystem_update_time(new Date());
+        	memberDeliveryOrderProductSku.setSystem_version(0);
+        	memberDeliveryOrderProductSku.setSystem_status(true);
+            
+        	member_delivery_order_total_quantity += memberDeliveryOrderProductSku.getProduct_sku_quantity();
+            list.add(memberDeliveryOrderProductSku);
+        }
+        Boolean member_delivery_order_is_complete = false;
+        String member_delivery_order_flow = MemberDeliveryOrderFlow.WAIT_WAREHOUSE_SEND.getKey();
+        Boolean member_delivery_order_is_warehouse_deliver = true;
+        Boolean result = memberDeliveryOrderCache.save(member_delivery_order_id, app_id, "", user_id, 
+        		member_delivery_order_amount, member_delivery_order_total_quantity, 
+        		member_delivery_order_receiver_name, member_delivery_order_receiver_mobile, 
+        		member_delivery_order_receiver_province, member_delivery_order_receiver_city, 
+        		member_delivery_order_receiver_area, member_delivery_order_receiver_address, 
+        		member_delivery_order_express_pay_way, member_delivery_order_express_shipper_code, 
+        		member_delivery_order_is_pay, member_delivery_order_is_warehouse_deliver, 
+        		member_delivery_order_flow, member_delivery_order_is_complete, system_create_user_id);
+        if (result) {
+            memberDeliveryOrderProductSkuService.batchSave(list);
+        }
+        return result;
+    }
+
+	public boolean updatePay(String member_delivery_order_id, String member_delivery_order_pay_type,
+			String member_delivery_order_pay_number, String member_delivery_order_pay_account,
+			String member_delivery_order_pay_time, String member_delivery_order_pay_result, String user_id,
+			Integer system_version) {
+		Boolean flag = memberDeliveryOrderPayService.save(member_delivery_order_id, member_delivery_order_pay_type,
+				member_delivery_order_pay_number, member_delivery_order_pay_account,
+				member_delivery_order_pay_time, member_delivery_order_pay_result, user_id);
+        if (flag) {
+            flag = updateMember_delivery_order_flowAndMember_delivery_order_is_payByMember_delivery_order_idValidateSystem_version(
+            		member_delivery_order_id, MemberDeliveryOrderFlow.WAIT_SEND.getKey(), true, user_id, system_version);
+        }
+        return flag;
+	}
+
+	public void updateFinish(String member_delivery_order_id) {
+		
+		
+	}
 
 }

@@ -30,6 +30,14 @@
       #p(system_status)
     )
   #end
+  
+  #sql("findByExpress_id")
+    SELECT
+    trade_id
+    FROM table_trade_express
+    WHERE system_status = 1
+    AND express_id = #p(express_id)
+  #end
 
   #sql("deleteByTrade_id")
     UPDATE table_trade_express SET

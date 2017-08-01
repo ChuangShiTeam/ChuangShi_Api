@@ -591,24 +591,6 @@ public class Url {
     public static final String STOCK_OUT_SYSTEM_UPDATE = "/stock/out/system/update";
     public static final String STOCK_OUT_SYSTEM_DELETE = "/stock/out/system/delete";
 
-    // 发货单
-    public static final String DELIVERY_ORDER_LIST = "/delivery/order/list";
-    public static final String DELIVERY_ORDER_FIND = "/delivery/order/find";
-    public static final String DELIVERY_ORDER_SAVE = "/delivery/order/save";
-    public static final String DELIVERY_ORDER_UPDATE = "/delivery/order/update";
-    public static final String DELIVERY_ORDER_DELETE = "/delivery/order/delete";
-    public static final String DELIVERY_ORDER_ADMIN_LIST = "/delivery/order/admin/list";
-    public static final String DELIVERY_ORDER_ADMIN_WAREHOUSE_DELIVER = "/delivery/order/admin/warehouse/deliver";
-    public static final String DELIVERY_ORDER_ADMIN_FIND = "/delivery/order/admin/find";
-    public static final String DELIVERY_ORDER_ADMIN_SAVE = "/delivery/order/admin/save";
-    public static final String DELIVERY_ORDER_ADMIN_UPDATE = "/delivery/order/admin/update";
-    public static final String DELIVERY_ORDER_ADMIN_DELETE = "/delivery/order/admin/delete";
-    public static final String DELIVERY_ORDER_SYSTEM_LIST = "/delivery/order/system/list";
-    public static final String DELIVERY_ORDER_SYSTEM_FIND = "/delivery/order/system/find";
-    public static final String DELIVERY_ORDER_SYSTEM_SAVE = "/delivery/order/system/save";
-    public static final String DELIVERY_ORDER_SYSTEM_UPDATE = "/delivery/order/system/update";
-    public static final String DELIVERY_ORDER_SYSTEM_DELETE = "/delivery/order/system/delete";
-
     // 报损报溢单
     public static final String STOCK_REPLENISH_LIST = "/stock/replenish/list";
     public static final String STOCK_REPLENISH_FIND = "/stock/replenish/find";

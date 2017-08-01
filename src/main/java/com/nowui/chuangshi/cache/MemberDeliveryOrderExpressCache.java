@@ -22,6 +22,10 @@ public class MemberDeliveryOrderExpressCache extends Cache {
         return express_list;
     }
 
+    public MemberDeliveryOrderExpress findByExpress_id(String express_id) {
+    	return memberDeliveryOrderExpressDao.findByExpress_id(express_id);
+    }
+    
     public Boolean save(String member_delivery_order_id, String express_id, String system_create_user_id) {
         return memberDeliveryOrderExpressDao.save(member_delivery_order_id, express_id, system_create_user_id);
     }

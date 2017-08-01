@@ -320,7 +320,7 @@ public class TradeController extends Controller {
         if (result) {
             //快递订阅
             for (Express express : express_list) {
-                expressService.subscription(express.getExpress_id(), express.getExpress_shipper_code(), express.getExpress_no());
+                expressService.subscription(express.getExpress_id(), Constant.EXPRESS_ORDER_CODE_TRADE, express.getExpress_shipper_code(), express.getExpress_no());
             }
         }
         renderSuccessJson(result);

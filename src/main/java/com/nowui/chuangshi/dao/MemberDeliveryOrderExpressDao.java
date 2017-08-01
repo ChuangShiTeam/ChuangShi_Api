@@ -6,6 +6,7 @@ import java.util.List;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
+import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.MemberDeliveryOrderExpress;
 
 public class MemberDeliveryOrderExpressDao extends Dao {
@@ -18,6 +19,21 @@ public class MemberDeliveryOrderExpressDao extends Dao {
         logSql("member_delivery_order_express", "listByMember_delivery_order_id", sqlPara);
 
         return new MemberDeliveryOrderExpress().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+    
+    public MemberDeliveryOrderExpress findByExpress_id(String express_id) {
+    	Kv sqlMap = Kv.create();
+        sqlMap.put(MemberDeliveryOrderExpress.EXPRESS_ID, express_id);
+        SqlPara sqlPara = Db.getSqlPara("member_delivery_order_express.findByExpress_id", sqlMap);
+
+        logSql("member_delivery_order_express", "findByExpress_id", sqlPara);
+        
+        List<MemberDeliveryOrderExpress> memberDeliveryOrderExpressList = new MemberDeliveryOrderExpress().find(sqlPara.getSql(), sqlPara.getPara());
+        if (memberDeliveryOrderExpressList.size() == 0) {
+            return null;
+        } else {
+            return memberDeliveryOrderExpressList.get(0);
+        }
     }
 
     public Boolean save(String member_delivery_order_id, String express_id, String system_create_user_id) {

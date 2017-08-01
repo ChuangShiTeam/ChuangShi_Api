@@ -27,7 +27,6 @@ import com.nowui.chuangshi.controller.CertificateController;
 import com.nowui.chuangshi.controller.CodeController;
 import com.nowui.chuangshi.controller.CustomerAttributeController;
 import com.nowui.chuangshi.controller.CustomerController;
-import com.nowui.chuangshi.controller.DeliveryOrderController;
 import com.nowui.chuangshi.controller.ExceptionController;
 import com.nowui.chuangshi.controller.ExpressController;
 import com.nowui.chuangshi.controller.FeijiuController;
@@ -181,8 +180,6 @@ public class WebConfig extends JFinalConfig {
         routes.add("/stock/in", StockInController.class);
         routes.add("/stock/out", StockOutController.class);
         routes.add("/stock/replenish", StockReplenishController.class);
-
-        routes.add("/delivery/order", DeliveryOrderController.class);
 
         routes.add("/certificate", CertificateController.class);
 

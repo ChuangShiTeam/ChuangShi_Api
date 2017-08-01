@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.nowui.chuangshi.cache.MemberDeliveryOrderExpressCache;
 import com.nowui.chuangshi.model.Express;
+import com.nowui.chuangshi.model.MemberDeliveryOrderExpress;
 
 public class MemberDeliveryOrderExpressService extends Service {
 
@@ -11,6 +12,10 @@ public class MemberDeliveryOrderExpressService extends Service {
 
     public List<Express> listByMember_delivery_order_id(String member_delivery_order_id) {
         return memberDeliveryOrderExpressCache.listByMember_delivery_order_id(member_delivery_order_id);
+    }
+    
+    public MemberDeliveryOrderExpress findByExpress_id(String express_id) {
+    	return memberDeliveryOrderExpressCache.findByExpress_id(express_id);
     }
     
     public Boolean save(String member_delivery_order_id, String express_id, String system_create_user_id) {
