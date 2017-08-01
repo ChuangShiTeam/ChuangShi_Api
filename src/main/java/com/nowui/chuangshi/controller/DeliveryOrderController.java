@@ -182,40 +182,6 @@ public class DeliveryOrderController extends Controller {
         renderSuccessJson(result);
     }
     
-    //仓库发货
-    @ActionKey(Url.DELIVERY_ORDER_ADMIN_WAREHOUSE_DELIVER)
-    public void adminWarehouseDelivery() {
-        validateRequest_app_id();
-        validate(DeliveryOrder.DELIVERY_ORDER_ID, Warehouse.WAREHOUSE_ID);
-        
-        String request_user_id = getRequest_user_id();
-        JSONObject jsonObject = getParameterJSONObject();
-        String delivery_order_id = jsonObject.getString(DeliveryOrder.DELIVERY_ORDER_ID);
-        String warehouse_id = jsonObject.getString(Warehouse.WAREHOUSE_ID);
-        BigDecimal delivery_order_amount = jsonObject.getBigDecimal(DeliveryOrder.DELIVERY_ORDER_AMOUNT);
-        String stock_out_batch = jsonObject.getString("stock_out_batch");
-        
-        authenticateRequest_app_idAndRequest_user_id();
-        
-        DeliveryOrder delivery_order = deliveryOrderService.findByDelivery_order_id(delivery_order_id);
-        
-        authenticateApp_id(delivery_order.getApp_id());
-        
-        List<Express> express_list = expressService.listByDelivery_order_id(delivery_order_id);
-        if (express_list == null || express_list.size() == 0) {
-            throw new RuntimeException("需填写快递单");
-        }
-        
-        Boolean result = deliveryOrderService.warehouseDelivery(delivery_order_id, warehouse_id, stock_out_batch, delivery_order_amount, request_user_id);        
-        if (result) {
-            //快递订阅
-            for (Express express : express_list) {
-                expressService.subscription(express.getExpress_id(), express.getExpress_shipper_code(), express.getExpress_no());
-            }
-        }
-        renderSuccessJson(result);
-    }
-
     @ActionKey(Url.DELIVERY_ORDER_SYSTEM_LIST)
     public void systemList() {
         validateRequest_app_id();

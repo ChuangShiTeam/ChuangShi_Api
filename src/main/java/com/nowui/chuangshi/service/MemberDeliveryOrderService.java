@@ -1,22 +1,42 @@
 package com.nowui.chuangshi.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.jfinal.plugin.activerecord.Record;
 import com.nowui.chuangshi.cache.MemberDeliveryOrderCache;
+import com.nowui.chuangshi.model.DeliveryOrderProductSku;
+import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
+import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
+import com.nowui.chuangshi.model.MemberPurchaseOrder;
+import com.nowui.chuangshi.model.StockOutProductSku;
+import com.nowui.chuangshi.type.DeliveryOrderFlow;
 import com.nowui.chuangshi.type.ExpressFlow;
 import com.nowui.chuangshi.type.MemberDeliveryOrderFlow;
+import com.nowui.chuangshi.type.MemberPurchaseOrderFlow;
+import com.nowui.chuangshi.type.StockType;
 import com.nowui.chuangshi.util.Util;
 
 public class MemberDeliveryOrderService extends Service {
 
     private MemberDeliveryOrderCache memberDeliveryOrderCache = new MemberDeliveryOrderCache();
     
+    private MemberDeliveryOrderProductSkuService memberDeliveryOrderProductSkuService = new MemberDeliveryOrderProductSkuService();
+    
     private MemberDeliveryOrderExpressService memberDeliveryOrderExpressService = new MemberDeliveryOrderExpressService();
     
     private ExpressService expressService = new ExpressService();
+    
+    private MemberPurchaseOrderService memberPurchaseOrderService = new MemberPurchaseOrderService();
+    
+    private StockOutService stockOutService = new StockOutService();
+    
+    private StockInService stockInService = new StockInService();
 
     public Integer countByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name(String app_id, String user_name, String member_delivery_order_receiver_name) {
         return memberDeliveryOrderCache.countByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name(app_id, user_name, member_delivery_order_receiver_name);
@@ -126,6 +146,53 @@ public class MemberDeliveryOrderService extends Service {
         if (result) {
             memberDeliveryOrderExpressService.deleteByMember_delivery_order_idAndExpress_idAndSystem_update_user_id(member_delivery_order_id, express_id, request_user_id);
         }
+        return result;
+    }
+
+    public Boolean warehouseDeliver(String member_delivery_order_id, String warehouse_id, String request_user_id) {
+        MemberDeliveryOrder member_delivery_order = findByMember_delivery_order_id(member_delivery_order_id);
+        if (member_delivery_order == null) {
+            throw new RuntimeException("找不到发货单");
+        }
+        //更新发货单状态，及会员出库
+        List<MemberDeliveryOrderProductSku> memberDeliveryOrderProductSkuList = memberDeliveryOrderProductSkuService.listByMember_delivery_order_id(member_delivery_order_id);
+        List<StockOutProductSku> stockOutProductSkuList = new ArrayList<StockOutProductSku>();
+        for (MemberDeliveryOrderProductSku memberDeliveryOrderProductSku : memberDeliveryOrderProductSkuList) {
+            StockOutProductSku stockOutProductSku = new StockOutProductSku();
+            stockOutProductSku.setProduct_sku_id(memberDeliveryOrderProductSku.getProduct_sku_id());
+            stockOutProductSku.setProduct_sku_quantity(memberDeliveryOrderProductSku.getProduct_sku_quantity());
+            stockOutProductSkuList.add(stockOutProductSku);
+        }
+        //出库
+        Boolean result = stockOutService.save(member_delivery_order.getApp_id(), warehouse_id, member_delivery_order_id, member_delivery_order.getUser_id(), StockType.MEMBER.getKey(), stockOutProductSkuList, request_user_id);
+
+        if (result) {
+            // 更新发货单流程为待收货
+            this.updateMember_delivery_order_flowByMember_delivery_order_idValidateSystem_version(member_delivery_order_id, MemberDeliveryOrderFlow.WAIT_RECEIVE.getKey(), request_user_id, member_delivery_order.getSystem_version());
+            Boolean is_direct_deliver = false;
+            //根据进货单是否仓库代收来判断是否直接则增减库存
+            if (StringUtils.isNotBlank(member_delivery_order.getMember_purchase_order_id())) {
+                MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService.findByMember_purchase_order_id(member_delivery_order.getMember_purchase_order_id());
+                if (memberPurchaseOrder.getMember_purchase_order_is_warehouse_receive()) {
+                    is_direct_deliver = true;
+                }
+                // 更新进货单流程为待收货
+                memberPurchaseOrderService.updateMember_purchase_order_flowByMember_purchase_order_idAndSystem_version(memberPurchaseOrder.getMember_purchase_order_id(), MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey(), request_user_id, memberPurchaseOrder.getSystem_version());
+            }
+            
+            if (!is_direct_deliver) {
+                //不是直接发货，需填写快递单, 订阅快递
+                List<Express> express_list = memberDeliveryOrderExpressService.listByMember_delivery_order_id(member_delivery_order_id);
+                if (express_list == null || express_list.size() == 0) {
+                    throw new RuntimeException("需填写快递单");
+                }
+                //快递订阅
+                for (Express express : express_list) {
+                    expressService.subscription(express.getExpress_id(), express.getExpress_shipper_code(), express.getExpress_no());
+                }
+            } 
+        }
+        
         return result;
     }
 

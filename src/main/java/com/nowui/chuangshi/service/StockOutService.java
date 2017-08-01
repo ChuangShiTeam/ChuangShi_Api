@@ -54,7 +54,7 @@ public class StockOutService extends Service {
         return stockOutCache.deleteByStock_out_idAndSystem_update_user_idValidateSystem_version(stock_out_id, system_update_user_id, system_version);
     }
     
-    public Boolean save(String app_id, String warehouse_id, String delivery_order_id, String object_id, String stock_out_batch, String stock_out_type, List<StockOutProductSku> stockOutProductSkuList, String system_create_user_id) {
+    public Boolean save(String app_id, String warehouse_id, String delivery_order_id, String object_id, String stock_out_type, List<StockOutProductSku> stockOutProductSkuList, String system_create_user_id) {
     	String stock_out_id = Util.getRandomUUID();
     	Integer stock_out_quantity = 0;
     	List<StockOutProductSku> list = new ArrayList<StockOutProductSku>();
@@ -84,7 +84,7 @@ public class StockOutService extends Service {
             stock_out_quantity += stockOutProductSku.getProduct_sku_quantity();
             list.add(stockOutProductSku);
     	}
-    	Boolean result = stockOutCache.save(stock_out_id, app_id, warehouse_id, delivery_order_id, object_id, stock_out_batch, stock_out_type, stock_out_quantity, "", system_create_user_id);
+    	Boolean result = stockOutCache.save(stock_out_id, app_id, warehouse_id, delivery_order_id, object_id, "", stock_out_type, stock_out_quantity, "", system_create_user_id);
 		if (result) {
 			boolean flag = stockOutProductSkuService.batchSave(list);
 			if (flag) {

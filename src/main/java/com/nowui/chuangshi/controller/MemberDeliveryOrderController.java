@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
+import com.nowui.chuangshi.model.DeliveryOrder;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
@@ -19,6 +20,7 @@ import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
 import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.model.Warehouse;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberAddressService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderExpressService;
@@ -249,6 +251,28 @@ public class MemberDeliveryOrderController extends Controller {
         }
         
         renderSuccessJson(total, resultList);
+    }
+    
+    //仓库发货
+    @ActionKey(Url.MEMBER_DELIVERY_ORDER_ADMIN_WAREHOUSE_DELIVER)
+    public void adminWarehouseDeliver() {
+        validateRequest_app_id();
+        validate(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, Warehouse.WAREHOUSE_ID);
+        
+        String request_user_id = getRequest_user_id();
+        JSONObject jsonObject = getParameterJSONObject();
+        String member_delivery_order_id = jsonObject.getString(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID);
+        String warehouse_id = jsonObject.getString(Warehouse.WAREHOUSE_ID);
+        
+        authenticateRequest_app_idAndRequest_user_id();
+        
+        MemberDeliveryOrder member_delivery_order = memberDeliveryOrderService.findByMember_delivery_order_id(member_delivery_order_id);
+        
+        authenticateApp_id(member_delivery_order.getApp_id());
+        
+        Boolean result = memberDeliveryOrderService.warehouseDeliver(member_delivery_order_id, warehouse_id, request_user_id);        
+        
+        renderSuccessJson(result);
     }
 
     @ActionKey(Url.MEMBER_DELIVERY_ORDER_ADMIN_FIND)
