@@ -591,6 +591,7 @@ public class Url {
     public static final String CERTIFICATE_LIST = "/certificate/list";
     public static final String CERTIFICATE_FIND = "/certificate/find";
     public static final String CERTIFICATE_SAVE = "/certificate/save";
+    public static final String CERTIFICATE_CONFIRM = "/certificate/confirm";
     public static final String CERTIFICATE_UPDATE = "/certificate/update";
     public static final String CERTIFICATE_DELETE = "/certificate/delete";
     public static final String CERTIFICATE_ADMIN_LIST = "/certificate/admin/list";
@@ -607,12 +608,14 @@ public class Url {
     // 会员授权证书文件记录
     public static final String CERTIFICATE_IMAGE_LIST = "/certificate/image/list";
     public static final String CERTIFICATE_IMAGE_FIND = "/certificate/image/find";
-    public static final String CERTIFICATE_IMAGE_SAVE = "/certificate/image/save";
+    public static final String CERTIFICATE_IMAGE_WX_SAVE = "/certificate/image/wx/save";
+    public static final String CERTIFICATE_IMAGE_OTHER_SAVE = "/certificate/image/other/save";
     public static final String CERTIFICATE_IMAGE_UPDATE = "/certificate/image/update";
     public static final String CERTIFICATE_IMAGE_DELETE = "/certificate/image/delete";
     public static final String CERTIFICATE_IMAGE_ADMIN_LIST = "/certificate/image/admin/list";
     public static final String CERTIFICATE_IMAGE_ADMIN_FIND = "/certificate/image/admin/find";
-    public static final String CERTIFICATE_IMAGE_ADMIN_SAVE = "/certificate/image/admin/save";
+    public static final String CERTIFICATE_IMAGE_WX_ADMIN_SAVE = "/certificate/image/wx/admin/save";
+    public static final String CERTIFICATE_IMAGE_OTHER_ADMIN_SAVE = "/certificate/image/other/admin/save";
     public static final String CERTIFICATE_IMAGE_ADMIN_UPDATE = "/certificate/image/admin/update";
     public static final String CERTIFICATE_IMAGE_ADMIN_DELETE = "/certificate/image/admin/delete";
     public static final String CERTIFICATE_IMAGE_SYSTEM_LIST = "/certificate/image/system/list";

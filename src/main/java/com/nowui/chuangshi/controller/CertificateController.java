@@ -1,5 +1,7 @@
 package com.nowui.chuangshi.controller;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,11 +14,15 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Certificate;
 import com.nowui.chuangshi.model.CertificateImage;
+import com.nowui.chuangshi.model.CertificatePay;
 import com.nowui.chuangshi.model.File;
+import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.CertificateImageService;
+import com.nowui.chuangshi.service.CertificatePayService;
 import com.nowui.chuangshi.service.CertificateService;
 import com.nowui.chuangshi.service.FileService;
+import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.CertificateImageType;
 import com.nowui.chuangshi.util.DateUtil;
@@ -28,6 +34,8 @@ public class CertificateController extends Controller {
     private final CertificateImageService certificateImageService = new CertificateImageService();
     private final UserService userService = new UserService();
     private final FileService fileService = new FileService();
+    private final MemberService memberService = new MemberService();
+    private final CertificatePayService certificatePayService = new CertificatePayService();
 
     @ActionKey(Url.CERTIFICATE_LIST)
     public void list() {
@@ -107,12 +115,22 @@ public class CertificateController extends Controller {
         String open_id = jsonObject.getString("open_id");
 
         authenticateRequest_app_idAndRequest_user_id();
+        Certificate certificate = certificateService.findByUser_id(request_user_id);
 
-        String certificate_number = DateUtil.getDateString(new Date()).replace("-", "") + Util.getRandomNumber();
-        String certificate_id = Util.getRandomUUID();
+        Boolean flag = true;
+        String certificate_id = "";
 
-        Boolean flag = certificateService.save(certificate_id, app_id, request_user_id, certificate_number, new Date(),
-                new Date(), false, request_user_id);
+        if (certificate == null) {
+            String certificate_number = DateUtil.getDateString(new Date()).replace("-", "") + Util.getRandomNumber();
+            Util.getRandomUUID();
+
+            flag = certificateService.save(certificate_id, app_id, request_user_id, certificate_number, new Date(),
+                    new Date(), false, request_user_id);
+        } else if (certificate.getCertificate_is_pay()) {
+            throw new RuntimeException("授权已支付!");
+        } else {
+            certificate_id = certificate.getCertificate_id();
+        }
 
         Map<String, String> result = new HashMap<>();
         if (flag) {
@@ -120,6 +138,87 @@ public class CertificateController extends Controller {
         }
 
         renderSuccessJson(result);
+    }
+
+    // 授权证书支付 本地测试
+    @ActionKey("/certificate/pay")
+    public void pay() {
+        validateRequest_app_id();
+        validate();
+
+        String app_id = getRequest_app_id();
+        String request_user_id = getRequest_user_id();
+        JSONObject jsonObject = getParameterJSONObject();
+        String open_id = jsonObject.getString("open_id");
+
+        authenticateRequest_app_idAndRequest_user_id();
+        Certificate certificate = certificateService.findByUser_id(request_user_id);
+
+        Boolean flag = false;
+        String certificate_id = "";
+
+        if (certificate == null) {
+            String certificate_number = DateUtil.getDateString(new Date()).replace("-", "") + Util.getRandomNumber();
+            certificate_id = Util.getRandomUUID();
+
+            flag = certificateService.save(certificate_id, app_id, request_user_id, certificate_number, new Date(),
+                    new Date(), false, request_user_id);
+        } else {
+            certificate_id = certificate.getCertificate_id();
+        }
+
+        if (flag) {
+            boolean certificate_is_pay = true;
+
+            Certificate certificate1 = certificateService.findByCertificate_id(certificate_id);
+
+            boolean is_update = certificateService.updateValidateSystem_version(certificate1.getCertificate_id(),
+                    certificate1.getUser_id(), certificate1.getCertificate_number(),
+                    certificate1.getCertificate_start_date(), certificate1.getCertificate_end_date(),
+                    certificate_is_pay, certificate1.getUser_id(), certificate1.getSystem_version());
+
+            if (is_update) {
+                User user = userService.findByUser_id(certificate1.getUser_id());
+                Member member = memberService.findByMember_id(user.getObject_Id());
+
+                // 设置小数位数，第一个变量是小数位数，第二个变量是取舍方法(四舍五入)
+                BigDecimal bd = new BigDecimal(0.01);
+                bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+                // 转日期
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String str = sdf.format(new Date());
+
+                certificatePayService.save(certificate1.getCertificate_id(), member.getMember_level_id(), bd, open_id,
+                        str, "", certificate1.getUser_id());
+            }
+        }
+
+        Map<String, String> result = new HashMap<>();
+        result.put("certificate_id", certificate_id);
+        renderSuccessJson(result);
+    }
+
+    // 支付成功确认
+    @ActionKey(Url.CERTIFICATE_CONFIRM)
+    public void confirm() {
+        validateRequest_app_id();
+        validate(Certificate.CERTIFICATE_ID);
+
+        Certificate model = getModel(Certificate.class);
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        Certificate certificate = certificateService.findByCertificate_id(model.getCertificate_id());
+
+        authenticateApp_id(certificate.getApp_id());
+        authenticateSystem_create_user_id(certificate.getSystem_create_user_id());
+
+        CertificatePay certificatePay = certificatePayService.findByCertificate_id(model.getCertificate_id());
+        certificate.put(CertificatePay.CERTIFICATE_AMOUNT, certificatePay.getCertificate_amount());
+        certificate.keep(Certificate.CERTIFICATE_IS_PAY, CertificatePay.CERTIFICATE_AMOUNT);
+
+        renderSuccessJson(certificate);
     }
 
     @ActionKey(Url.CERTIFICATE_UPDATE)

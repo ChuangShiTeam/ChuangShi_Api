@@ -501,52 +501,9 @@ public class WeChatController extends Controller {
             } else {
                 renderText(Constant.WX_FAIL_MSG);
             }
-        } else if (Constant.WX_ATTACH_CERTIFICATE_ORDER.equals(attach)) {// 授权证书支付
-            Certificate certificate = certificateService.findByCertificate_id(out_trade_no);
-            if (certificate == null) {
-                renderText(Constant.WX_FAIL_MSG);
-            }
-            App app = appService.findByApp_id(certificate.getApp_id());
-            if (app == null) {
-                renderText(Constant.WX_FAIL_MSG);
-            }
-            String wx_app_id = app.getWechat_app_id();
-            if (!appid.equals(wx_app_id)) {
-                renderText(Constant.WX_FAIL_MSG);
-            }
-            String mch_key = app.getWechat_mch_key();
-
-            String endsign = PaymentKit.createSign(parameter, mch_key);
-
-            if (sign.equals(endsign)) {
-                boolean certificate_is_pay = true;
-
-                boolean is_update = certificateService.updateValidateSystem_version(certificate.getCertificate_id(),
-                        certificate.getUser_id(), certificate.getCertificate_number(),
-                        certificate.getCertificate_start_date(), certificate.getCertificate_end_date(),
-                        certificate_is_pay, certificate.getUser_id(), certificate.getSystem_version());
-
-                if (is_update) {
-                    User user = userService.findByUser_id(certificate.getUser_id());
-                    Member member = memberService.findByMember_id(user.getObject_Id());
-
-                    // 设置小数位数，第一个变量是小数位数，第二个变量是取舍方法(四舍五入)
-                    BigDecimal bd = new BigDecimal(total_fee);
-                    bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
-
-                    // 转日期
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String str = sdf.format(new Date());
-
-                    certificatePayService.save(certificate.getCertificate_id(), member.getMember_level_id(), bd, openid,
-                            str, result, certificate.getUser_id());
-                    renderText(Constant.WX_SUCCESS_MSG);
-                } else {
-                    renderText(Constant.WX_FAIL_MSG);
-                }
-            } else {
-                renderText(Constant.WX_FAIL_MSG);
-            }
+        } else if (Constant.WX_ATTACH_CERTIFICATE_ORDER.equals(attach)) {
+            // 授权证书支付
+            this.certificatePayNotify(out_trade_no, total_fee, appid, sign, parameter, openid, result_code);
         } else {
             renderText(Constant.WX_FAIL_MSG);
         }
@@ -580,6 +537,58 @@ public class WeChatController extends Controller {
                 trade.getTrade_receiver_area(), trade.getTrade_receiver_address(), delivery_order_express_pay_way,
                 delivery_order_express_shipper_code, delivery_order_amount, delivery_order_is_pay,
                 deliveryOrderProductSkuList, "");
+
+    }
+
+    // 授权证书支付回调
+    private void certificatePayNotify(String out_trade_no, String total_fee, String appid, String sign,
+            SortedMap<String, String> parameter, String openid, String result) {
+        // 授权证书支付
+        Certificate certificate = certificateService.findByCertificate_id(out_trade_no);
+        if (certificate == null) {
+            renderText(Constant.WX_FAIL_MSG);
+        }
+        App app = appService.findByApp_id(certificate.getApp_id());
+        if (app == null) {
+            renderText(Constant.WX_FAIL_MSG);
+        }
+        String wx_app_id = app.getWechat_app_id();
+        if (!appid.equals(wx_app_id)) {
+            renderText(Constant.WX_FAIL_MSG);
+        }
+        String mch_key = app.getWechat_mch_key();
+
+        String endsign = PaymentKit.createSign(parameter, mch_key);
+
+        if (sign.equals(endsign)) {
+            boolean certificate_is_pay = true;
+
+            boolean is_update = certificateService.updateValidateSystem_version(certificate.getCertificate_id(),
+                    certificate.getUser_id(), certificate.getCertificate_number(),
+                    certificate.getCertificate_start_date(), certificate.getCertificate_end_date(), certificate_is_pay,
+                    certificate.getUser_id(), certificate.getSystem_version());
+
+            if (is_update) {
+                User user = userService.findByUser_id(certificate.getUser_id());
+                Member member = memberService.findByMember_id(user.getObject_Id());
+
+                // 设置小数位数，第一个变量是小数位数，第二个变量是取舍方法(四舍五入)
+                BigDecimal bd = new BigDecimal(total_fee);
+                bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+                // 转日期
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String str = sdf.format(new Date());
+
+                certificatePayService.save(certificate.getCertificate_id(), member.getMember_level_id(), bd, openid,
+                        str, result, certificate.getUser_id());
+                renderText(Constant.WX_SUCCESS_MSG);
+            } else {
+                renderText(Constant.WX_FAIL_MSG);
+            }
+        } else {
+            renderText(Constant.WX_FAIL_MSG);
+        }
 
     }
 
