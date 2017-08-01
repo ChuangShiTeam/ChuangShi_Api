@@ -122,7 +122,7 @@ public class CertificateController extends Controller {
 
         if (certificate == null) {
             String certificate_number = DateUtil.getDateString(new Date()).replace("-", "") + Util.getRandomNumber();
-            Util.getRandomUUID();
+            certificate_id = Util.getRandomUUID();
 
             flag = certificateService.save(certificate_id, app_id, request_user_id, certificate_number, new Date(),
                     new Date(), false, request_user_id);

@@ -128,11 +128,11 @@ public class CertificateService extends Service {
         parameter.put("trade_type", trade_type);
         parameter.put("sign", PaymentKit.createSign(parameter, mch_key));
 
-        System.out.println("parameter" + parameter);
+        System.out.println("parameter：" + parameter);
 
         String result = HttpKit.post("https://api.mch.weixin.qq.com/pay/unifiedorder", PaymentKit.toXml(parameter));
 
-        System.out.println("result" + result);
+        System.out.println("result： " + result);
 
         Map<String, String> map = PaymentKit.xmlToMap(result);
 
