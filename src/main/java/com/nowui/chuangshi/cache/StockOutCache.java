@@ -52,6 +52,10 @@ public class StockOutCache extends Cache {
 
         return stock_outList;
     }
+    
+    public List<StockOut> listByDelivery_order_id(String delivery_order_id) {
+    	return stockOutDao.listByDelivery_order_id(delivery_order_id);
+    }
 
     public StockOut findByStock_out_id(String stock_out_id) {
         StockOut stock_out = CacheUtil.get(STOCK_OUT_BY_STOCK_OUT_ID_CACHE, stock_out_id);

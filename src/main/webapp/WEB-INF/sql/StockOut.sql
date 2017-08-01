@@ -107,6 +107,14 @@
     ORDER BY table_stock_out.system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
+  
+  #sql("listByDelivery_order_id")
+    SELECT
+    *
+    FROM table_stock_out
+    WHERE system_status = 1
+    AND delivery_order_id = #p(delivery_order_id)
+  #end
 
   #sql("findByStock_out_id")
     SELECT

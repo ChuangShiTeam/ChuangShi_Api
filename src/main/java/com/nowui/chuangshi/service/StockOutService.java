@@ -37,6 +37,10 @@ public class StockOutService extends Service {
     public List<StockOut> listByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_nameAndLimit(String app_id, String warehouse_id, String stock_out_type, String stock_out_batch, String user_name, int m, int n) {
         return stockOutCache.listByOrApp_idOrWarehouse_idAndStock_out_typeOrLikeStock_out_batchOrLikeUser_nameAndLimit(app_id, warehouse_id, stock_out_type, stock_out_batch, user_name, m, n);
     }
+    
+    public List<StockOut> listByDelivery_order_id(String delivery_order_id) {
+    	return stockOutCache.listByDelivery_order_id(delivery_order_id);
+    }
 
     public StockOut findByStock_out_id(String stock_out_id) {
         return stockOutCache.findByStock_out_id(stock_out_id);

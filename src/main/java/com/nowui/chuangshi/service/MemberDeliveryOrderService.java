@@ -16,6 +16,7 @@ import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
 import com.nowui.chuangshi.model.StockInProductSku;
+import com.nowui.chuangshi.model.StockOut;
 import com.nowui.chuangshi.model.StockOutProductSku;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.type.ExpressFlow;
@@ -294,8 +295,32 @@ public class MemberDeliveryOrderService extends Service {
 	}
 
 	public void updateFinish(String member_delivery_order_id) {
+		MemberDeliveryOrder memberDeliveryOrder = findByMember_delivery_order_id(member_delivery_order_id);
 		
-		
+		if (StringUtils.isNotBlank(memberDeliveryOrder.getMember_purchase_order_id())) {
+			
+			//入库
+			MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService.findByMember_purchase_order_id(memberDeliveryOrder.getMember_purchase_order_id());
+            if (memberPurchaseOrder.getMember_purchase_order_is_warehouse_receive()) {
+            	//入库
+            	List<MemberPurchaseOrderProductSku> memberPurchaseOrderProductSkuList = memberPurchaseOrderProductSkuService.listByMember_purchase_order_id(memberDeliveryOrder.getMember_purchase_order_id());
+                List<StockInProductSku> stockInProductSkuList = new ArrayList<StockInProductSku>();
+                for (MemberPurchaseOrderProductSku memberPurchaseOrderProductSku : memberPurchaseOrderProductSkuList) {
+                	StockInProductSku stockInProductSku = new StockInProductSku();
+                	stockInProductSku.setProduct_sku_id(memberPurchaseOrderProductSku.getProduct_sku_id());
+                	stockInProductSku.setProduct_sku_quantity(memberPurchaseOrderProductSku.getProduct_sku_quantity());
+                    stockInProductSkuList.add(stockInProductSku);
+                }
+                //查询发货单出库记录，找到对应仓库
+                List<StockOut> stockOutList = stockOutService.listByDelivery_order_id(member_delivery_order_id);
+                String warehouse_id = stockOutList.get(0).getWarehouse_id();
+                stockInService.save(memberDeliveryOrder.getApp_id(), warehouse_id, memberPurchaseOrder.getMember_purchase_order_id(), memberPurchaseOrder.getUser_id(), StockType.MEMBER.getKey(), stockInProductSkuList, memberDeliveryOrder.getUser_id());
+                // 更新进货单流程为完成
+                memberPurchaseOrderService.updateMember_purchase_order_flowAndMember_purchase_order_is_completeByMember_purchase_order_idValidateSystem_version(memberPurchaseOrder.getMember_purchase_order_id(), MemberPurchaseOrderFlow.COMPLETE.getKey(), true, memberDeliveryOrder.getUser_id(), memberPurchaseOrder.getSystem_version());
+            }
+		}
+		//更新发货单为完成
+		this.updateMember_delivery_order_flowAndMember_delivery_order_is_completeByMember_delivery_order_idValidateSystem_version(member_delivery_order_id, MemberDeliveryOrderFlow.COMPLETE.getKey(), true, memberDeliveryOrder.getUser_id(), memberDeliveryOrder.getSystem_version());
 	}
 
 }
