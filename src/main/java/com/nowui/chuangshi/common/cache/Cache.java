@@ -13,15 +13,11 @@ public class Cache {
         return dao.count(model);
     }
 
-    public List<Model> list(Model model) {
+    public <M> List<M> list(Model model) {
         return dao.list(model);
     }
 
-    public List<Model> listWithoutCache(Model model) {
-        return dao.listWithoutCache(model);
-    }
-
-    public Model find(Model model) {
+    public <M> M find(Model model) {
         return dao.find(model);
     }
 

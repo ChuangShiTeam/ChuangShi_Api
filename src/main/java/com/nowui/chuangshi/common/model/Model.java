@@ -1,6 +1,8 @@
 package com.nowui.chuangshi.common.model;
 
-import com.nowui.chuangshi.constant.Column;
+import com.jfinal.plugin.activerecord.Table;
+import com.jfinal.plugin.activerecord.TableMapping;
+import com.nowui.chuangshi.common.annotation.Column;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.ColumnType;
 import com.nowui.chuangshi.util.DateUtil;
@@ -15,193 +17,23 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
     private static final long serialVersionUID = 1L;
 
-    private static String TABLE_NAME = "";
-    private static String PRIMARY_KEY = null;
     private StringBuilder selectSql = new StringBuilder();
+    private StringBuilder setSql = new StringBuilder();
     private StringBuilder conditionSql = new StringBuilder();
     private StringBuilder orderSql = new StringBuilder();
     private StringBuilder paginateSql = new StringBuilder();
-
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
-    public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
-
-    @Column(type = ColumnType.DATETIME, length = 0, comment = "")
-    public static final String SYSTEM_CREATE_TIME = "system_create_time";
-
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
-    public static final String SYSTEM_UPDATE_USER_ID = "system_update_user_id";
-
-    @Column(type = ColumnType.DATETIME, length = 0, comment = "")
-    public static final String SYSTEM_UPDATE_TIME = "system_update_time";
-
-    @Column(type = ColumnType.INT, length = 5, comment = "")
-    public static final String SYSTEM_VERSION = "system_version";
-
-    @Column(type = ColumnType.TINYINT, length = 0, comment = "")
-    public static final String SYSTEM_STATUS = "system_status";
-
     private List<Map<String, Object>> columnList;
 
-    public String getSystem_create_user_id() {
-        return getStr(SYSTEM_CREATE_USER_ID);
+    private Table getTable() {
+        return TableMapping.me().getTable(getUsefulClass());
     }
 
-    public void setSystem_create_user_id(String system_create_user_id) {
-        set(SYSTEM_CREATE_USER_ID, system_create_user_id);
+    private Class<? extends com.jfinal.plugin.activerecord.Model> getUsefulClass() {
+        Class c = getClass();
+        return c.getName().indexOf("EnhancerByCGLIB") == -1 ? c : c.getSuperclass();
     }
 
-    public Date getSystem_create_time() {
-        return getDate(SYSTEM_CREATE_TIME);
-    }
-
-    public void setSystem_create_time(Date system_create_time) {
-        set(SYSTEM_CREATE_TIME, system_create_time);
-    }
-
-    public String getSystem_update_user_id() {
-        return getStr(SYSTEM_UPDATE_USER_ID);
-    }
-
-    public void setSystem_update_user_id(String system_update_user_id) {
-        set(SYSTEM_UPDATE_USER_ID, system_update_user_id);
-    }
-
-    public Date getSystem_update_time() {
-        return getDate(SYSTEM_UPDATE_TIME);
-    }
-
-    public void setSystem_update_time(Date system_update_time) {
-        set(SYSTEM_UPDATE_TIME, system_update_time);
-    }
-
-    public Integer getSystem_version() {
-        return getInt(SYSTEM_VERSION);
-    }
-
-    public void setSystem_version(Integer system_version) {
-        set(SYSTEM_VERSION, system_version);
-    }
-
-    public Boolean getSystem_status() {
-        return getBoolean(SYSTEM_STATUS);
-    }
-
-    public void setSystem_status(Boolean system_status) {
-        set(SYSTEM_STATUS, system_status);
-    }
-
-    public void setTable_name(String table_name) {
-        TABLE_NAME = table_name;
-    }
-
-    public String getTable_name() {
-        return TABLE_NAME;
-    }
-
-    public void setPrimary_key(String primary_key) {
-        PRIMARY_KEY = primary_key;
-    }
-
-    public String getPrimary_key() {
-        return PRIMARY_KEY;
-    }
-
-    public void validate(String... keys) {
-        for (String key : keys) {
-            if (this.getAttrs().containsKey(key)) {
-                if (ValidateUtil.isNull(this.get(key))) {
-                    throw new RuntimeException(key + " is null");
-                }
-
-
-            } else {
-                throw new RuntimeException(key + " is null");
-            }
-        }
-    }
-
-//    public List<Map<String, Object>> getAttributeList() {
-//        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-//
-//        Table table = getTable();
-//        Map<String, Class<?>> columnTypeMap = table.getColumnTypeMap();
-//
-//        for (Map.Entry<String, Class<?>> column : columnTypeMap.entrySet()) {
-//            Map<String, Object> map = new HashMap<String, Object>();
-//
-//            Boolean isExit = false;
-//            for (Map.Entry<String, Object> attribute : this.getAttrs().entrySet()) {
-//                if (column.getKey().equals(attribute.getKey())) {
-//                    map.put("key", attribute.getKey());
-//                    map.put("value", attribute.getValue());
-//
-//                    isExit = true;
-//
-//                    break;
-//                }
-//            }
-//
-//            if (isExit) {
-//                list.add(map);
-//            }
-//        }
-//
-//        return list;
-//    }
-
-//    public List<Map<String, Object>> getAttributeAllList() {
-//        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-//
-//        Table table = getTable();
-//        Map<String, Class<?>> columnTypeMap = table.getColumnTypeMap();
-//
-//        for (Map.Entry<String, Class<?>> column : columnTypeMap.entrySet()) {
-//            Map<String, Object> map = new HashMap<String, Object>();
-//
-//            map.put("key", column.getKey());
-//
-//            Boolean isExit = false;
-//            for (Map.Entry<String, Object> attribute : this.getAttrs().entrySet()) {
-//                if (column.getKey().equals(attribute.getKey())) {
-//                    map.put("value", attribute.getValue());
-//
-//                    isExit = true;
-//
-//                    break;
-//                }
-//            }
-//
-//            if (isExit) {
-//
-//            } else {
-//                if (column.getValue().getName().equals(String.class.getName())) {
-//                    map.put("value", "");
-//                } else if (column.getValue().getName().equals(Boolean.class.getName())) {
-//                    map.put("value", true);
-//                } else if (column.getValue().getName().equals(BigDecimal.class.getName())) {
-//                    map.put("value", BigDecimal.valueOf(0));
-//                } else if (column.getValue().getName().equals(Timestamp.class.getName())) {
-//                    map.put("value", new Date());
-//                } else {
-//                    map.put("value", "");
-//                }
-//            }
-//            list.add(map);
-//        }
-//
-//        return list;
-//    }
-
-//    public Table getTable() {
-//        return TableMapping.me().getTable(getUsefulClass());
-//    }
-//
-//    private Class<? extends com.jfinal.plugin.activerecord.Model> getUsefulClass() {
-//        Class c = getClass();
-//        return c.getName().indexOf("EnhancerByCGLIB") == -1 ? c : c.getSuperclass();    // com.demo.blog.Blog$$EnhancerByCGLIB$$69a17158
-//    }
-
-    public List<Map<String, Object>> getColumnList() {
+    private List<Map<String, Object>> getColumnList() {
         if (columnList == null) {
             columnList = new ArrayList<Map<String, Object>>();
 
@@ -224,44 +56,168 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
                     columnList.add(map);
                 }
             }
-
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(Constant.NAME, SYSTEM_CREATE_USER_ID);
-            map.put("type", ColumnType.VARCHAR);
-            map.put("length", 32);
-            map.put("comment", "");
-            columnList.add(map);
-
-            map = new HashMap<String, Object>();
-            map.put(Constant.NAME, SYSTEM_CREATE_TIME);
-            map.put("type", ColumnType.DATETIME);
-            map.put("length", 0);
-            map.put("comment", "");
-            columnList.add(map);
-
-            map = new HashMap<String, Object>();
-            map.put(Constant.NAME, SYSTEM_UPDATE_USER_ID);
-            map.put("type", ColumnType.VARCHAR);
-            map.put("length", 32);
-            map.put("comment", "");
-            columnList.add(map);
-
-            map = new HashMap<String, Object>();
-            map.put(Constant.NAME, SYSTEM_UPDATE_TIME);
-            map.put("type", ColumnType.DATETIME);
-            map.put("length", 0);
-            map.put("comment", "");
-            columnList.add(map);
-
-            map = new HashMap<String, Object>();
-            map.put(Constant.NAME, SYSTEM_STATUS);
-            map.put("type", ColumnType.TINYINT);
-            map.put("length", 1);
-            map.put("comment", "");
-            columnList.add(map);
         }
 
         return columnList;
+    }
+
+    public M select(String... keys) {
+        if (keys.length > 0) {
+            selectSql = new StringBuilder();
+
+            for (int i = 0; i < keys.length; i++) {
+                selectSql.append(keys[i]);
+
+                if (i + 1 < keys.length) {
+                    selectSql.append(",\n");
+                } else {
+                    selectSql.append("\n");
+                }
+            }
+        } else {
+            selectSql = new StringBuilder("*\n");
+        }
+
+        return (M) this;
+    }
+
+    public M whereEmpty(String name) {
+        if (!ValidateUtil.isNullOrEmpty(get(name))) {
+            where(name);
+        }
+
+        return (M) this;
+    }
+
+    public M where(String name) {
+        conditionSql.append("AND ");
+        conditionSql.append(regexCondition(name, "equal", get(name)));
+        conditionSql.append("\n");
+
+        return (M) this;
+    }
+
+    public M where(String name, Object value) {
+        conditionSql.append("AND ");
+        conditionSql.append(regexCondition(name, "equal", value));
+        conditionSql.append("\n");
+
+        return (M) this;
+    }
+
+    public M whereLike(String name, String value) {
+        conditionSql.append("AND ");
+        conditionSql.append(regexCondition(name, "like", value));
+        conditionSql.append("\n");
+
+        return (M) this;
+    }
+
+    public M whereLeftLike(String name, String value) {
+        conditionSql.append("AND ");
+        conditionSql.append(regexCondition(name, "left_like", value));
+        conditionSql.append("\n");
+
+        return (M) this;
+    }
+
+    public M whereLeftLike(String name) {
+        conditionSql.append("AND ");
+        conditionSql.append(regexCondition(name, "like", get(name)));
+        conditionSql.append("\n");
+
+        return (M) this;
+    }
+
+    public M whereRightLike(String name, String value) {
+        conditionSql.append("AND ");
+        conditionSql.append(regexCondition(name, "right_like", value));
+        conditionSql.append("\n");
+
+        return (M) this;
+    }
+
+    public M and(String name) {
+        conditionSql.append("AND ");
+        conditionSql.append(regexCondition(name, "equal", get(name)));
+        conditionSql.append("\n");
+
+        return (M) this;
+    }
+
+    public M and(String name, Object value) {
+        conditionSql.append("AND ");
+        conditionSql.append(regexCondition(name, "equal", value));
+        conditionSql.append("\n");
+
+        return (M) this;
+    }
+
+    public M or(String name) {
+        conditionSql.append("OR ");
+        conditionSql.append(regexCondition(name, "or", get(name)));
+        conditionSql.append("\n");
+
+        return (M) this;
+    }
+
+    public M set(String name) {
+        setSql.append(regexCondition(name, "equal", get(name)));
+        setSql.append(",\n");
+
+        return (M) this;
+    }
+
+    public M set(String name, Object value) {
+        setSql.append(regexCondition(name, "equal", value));
+        setSql.append(",\n");
+
+        return (M) this;
+    }
+
+    public M notStatus() {
+
+
+        return (M) this;
+    }
+
+    public M paginate() {
+        paginateSql = new StringBuilder();
+        paginateSql.append("LIMIT ");
+        paginateSql.append(getInt(Constant.LIMIT_M));
+        paginateSql.append(", ");
+        paginateSql.append(getInt(Constant.LIMIT_N));
+        paginateSql.append("\n");
+
+        return (M) this;
+    }
+
+    private String regexVariable(ColumnType columnType, Object value) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (columnType.equals(ColumnType.TINYINT)) {
+            stringBuilder.append((Boolean) value ? 1 : 1);
+        } else if (columnType.equals(ColumnType.VARCHAR)) {
+            stringBuilder.append("'");
+            stringBuilder.append(value);
+            stringBuilder.append("'");
+        } else if (columnType.equals(ColumnType.TEXT)) {
+            stringBuilder.append("'");
+            stringBuilder.append(value);
+            stringBuilder.append("'");
+        } else if (columnType.equals(ColumnType.LONGTEXT)) {
+            stringBuilder.append("'");
+            stringBuilder.append(value);
+            stringBuilder.append("'");
+        } else if (columnType.equals(ColumnType.DATETIME)) {
+            stringBuilder.append("'");
+            stringBuilder.append(DateUtil.getDateTimeString((Date) value));
+            stringBuilder.append("'");
+        } else {
+            stringBuilder.append(value);
+        }
+
+        return stringBuilder.toString();
     }
 
     private String regexCondition(String name, String operation, Object value) {
@@ -303,105 +259,53 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
             stringBuilder.append("'");
         } else if (value instanceof Boolean) {
             stringBuilder.append((Boolean) value ? 1 : 0);
+        } else if (value instanceof Date) {
+            stringBuilder.append("'");
+            stringBuilder.append(DateUtil.getDateTimeString((Date) value));
+            stringBuilder.append("'");
         } else {
             stringBuilder.append(value);
         }
 
-        stringBuilder.append(" \n");
-
         return stringBuilder.toString();
     }
 
-    public M where(String name, Object value) {
-        conditionSql = new StringBuilder();
-        conditionSql.append("WHERE ");
-        conditionSql.append(regexCondition(name, "equal", value));
-
-        return (M) this;
-    }
-
-    public M whereLike(String name, String value) {
-        conditionSql = new StringBuilder();
-        conditionSql.append("WHERE ");
-        conditionSql.append(regexCondition(name, "like", value));
-
-        return (M) this;
-    }
-
-    public M whereLeftLike(String name, String value) {
-        conditionSql = new StringBuilder();
-        conditionSql.append("WHERE ");
-        conditionSql.append(regexCondition(name, "left_like", value));
-
-        return (M) this;
-    }
-
-    public M whereRightLike(String name, String value) {
-        conditionSql = new StringBuilder();
-        conditionSql.append("WHERE ");
-        conditionSql.append(regexCondition(name, "right_like", value));
-
-        return (M) this;
-    }
-
-    public M and(String name, String value) {
-        conditionSql.append("AND ");
-        conditionSql.append(regexCondition(name, "equal", value));
-
-        return (M) this;
-    }
-
-    public M or() {
-
-
-        return (M) this;
-    }
-
-    public String getCountSql() {
+    public String buildCountSql() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("SELECT \n");
         stringBuilder.append("COUNT(*) \n");
         stringBuilder.append("FROM ");
-        stringBuilder.append(getTable_name());
+        stringBuilder.append(getTable().getName());
         stringBuilder.append(" \n");
+        stringBuilder.append("WHERE system_status = 1\n");
         stringBuilder.append(conditionSql);
 
         return stringBuilder.toString();
     }
 
-    public String getListSql() {
+    public String buildListSql() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("SELECT \n");
-        stringBuilder.append(getPrimary_key());
-        stringBuilder.append(" \n");
+        stringBuilder.append("*");
+        stringBuilder.append("\n");
         stringBuilder.append("FROM ");
-        stringBuilder.append(getTable_name());
+        stringBuilder.append(getTable().getName());
         stringBuilder.append(" \n");
+        stringBuilder.append("WHERE system_status = 1\n");
         stringBuilder.append(conditionSql);
+        stringBuilder.append(paginateSql);
 
         return stringBuilder.toString();
     }
 
-    public String getListWithoutCacheSql() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("SELECT \n");
-        stringBuilder.append("* \n");
-        stringBuilder.append("FROM ");
-        stringBuilder.append(getTable_name());
-        stringBuilder.append(" \n");
-        stringBuilder.append(conditionSql);
-
-        return stringBuilder.toString();
-    }
-
-    public String getSaveSql() {
+    public String buildSaveSql() {
         StringBuilder stringBuilder = new StringBuilder();
 
         StringBuilder stringBuilder2 = new StringBuilder();
         String condition = conditionSql.toString();
-        if (condition.equals("")) {
+        if (ValidateUtil.isNullOrEmpty(condition)) {
             stringBuilder.append("INSERT INTO ");
-            stringBuilder.append(getTable_name());
+            stringBuilder.append(getTable().getName());
             stringBuilder.append(" ");
             stringBuilder.append("(\n");
             for (int i = 0; i < getColumnList().size(); i++) {
@@ -459,10 +363,10 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return stringBuilder.toString();
     }
 
-    public String getUpdateSql() {
+    public String buildUpdateSql() {
         String condition = conditionSql.toString();
         if (condition.equals("")) {
-            throw new RuntimeException("sql lost condition");
+            return "";
         }
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -483,7 +387,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         }
 
         stringBuilder.append("UPDATE ");
-        stringBuilder.append(getTable_name());
+        stringBuilder.append(getTable().getName());
         stringBuilder.append(" SET\n");
         for (int i = 0; i < updateColumnList.size(); i++) {
             Map<String, Object> column = updateColumnList.get(i);
@@ -497,35 +401,29 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
                 stringBuilder.append("\n");
             }
         }
-        stringBuilder.append(conditionSql);
+        stringBuilder.append(condition);
 
         return stringBuilder.toString();
     }
 
-    private String regexVariable(ColumnType columnType, Object value) {
+    public String buildDeleteSql() {
+        String condition = conditionSql.toString();
+        if (condition.equals("")) {
+            return "";
+        }
+
+        String set = setSql.toString();
+        if (set.equals("")) {
+            return "";
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
 
-        if (columnType.equals(ColumnType.TINYINT)) {
-            stringBuilder.append((Boolean) value ? 1 : 1);
-        } else if (columnType.equals(ColumnType.VARCHAR)) {
-            stringBuilder.append("'");
-            stringBuilder.append(value);
-            stringBuilder.append("'");
-        } else if (columnType.equals(ColumnType.TEXT)) {
-            stringBuilder.append("'");
-            stringBuilder.append(value);
-            stringBuilder.append("'");
-        } else if (columnType.equals(ColumnType.LONGTEXT)) {
-            stringBuilder.append("'");
-            stringBuilder.append(value);
-            stringBuilder.append("'");
-        } else if (columnType.equals(ColumnType.DATETIME)) {
-            stringBuilder.append("'");
-            stringBuilder.append(value);
-            stringBuilder.append("'");
-        } else {
-            stringBuilder.append(value);
-        }
+        stringBuilder.append("UPDATE ");
+        stringBuilder.append(getTable().getName());
+        stringBuilder.append(" SET\n");
+        stringBuilder.append(set);
+        stringBuilder.append(condition);
 
         return stringBuilder.toString();
     }

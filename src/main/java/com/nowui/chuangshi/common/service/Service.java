@@ -1,5 +1,4 @@
 package com.nowui.chuangshi.common.service;
-
 import com.nowui.chuangshi.common.cache.Cache;
 import com.nowui.chuangshi.common.model.Model;
 
@@ -13,15 +12,11 @@ public class Service {
         return cache.count(model);
     }
 
-    public List<Model> list(Model model) {
+    public <M> List<M> list(Model model) {
         return cache.list(model);
     }
 
-    public List<Model> listWithoutCache(Model model) {
-        return cache.listWithoutCache(model);
-    }
-
-    public Model find(Model model) {
+    public <M> M find(Model model) {
         return cache.find(model);
     }
 

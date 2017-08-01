@@ -52,7 +52,19 @@ public class Constant {
 
     public static final String PAGE_INDEX = "page_index";
 
+    public static final String LIMIT_M = "limit_m";
+
+    public static final String LIMIT_N = "limit_n";
+
     public static final String PAGE_SIZE = "page_size";
+
+    public static final String SYSTEM_CREATE_TIME = "system_create_time";
+
+    public static final String SYSTEM_UPDATE_TIME = "system_update_time";
+
+    public static final String SYSTEM_VERSION = "system_version";
+
+    public static final String SYSTEM_STATUS = "system_status";
 
     public static final String LAST_CREATE_TIME = "last_create_time";
 

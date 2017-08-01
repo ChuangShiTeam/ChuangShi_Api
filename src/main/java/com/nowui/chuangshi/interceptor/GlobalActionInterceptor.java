@@ -73,6 +73,14 @@ public class GlobalActionInterceptor implements Interceptor {
                 ((com.nowui.chuangshi.controller.Controller) controller).setRequest_http_id(request_http_id);
                 ((com.nowui.chuangshi.controller.Controller) controller).setRequest_user_id(request_user_id);
                 ((com.nowui.chuangshi.controller.Controller) controller).setParameter(http_request);
+            } else if (controller instanceof com.nowui.chuangshi.common.controller.Controller) {
+                ((com.nowui.chuangshi.common.controller.Controller) controller).setPlatform(http_platform);
+                ((com.nowui.chuangshi.common.controller.Controller) controller).setVersion(http_version);
+                ((com.nowui.chuangshi.common.controller.Controller) controller).setIp_address(http_ip_address);
+                ((com.nowui.chuangshi.common.controller.Controller) controller).setRequest_app_id(request_app_id);
+                ((com.nowui.chuangshi.common.controller.Controller) controller).setRequest_http_id(request_http_id);
+                ((com.nowui.chuangshi.common.controller.Controller) controller).setRequest_user_id(request_user_id);
+                ((com.nowui.chuangshi.common.controller.Controller) controller).setParameter(http_request);
             }
 
             invocation.invoke();
