@@ -163,14 +163,14 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return (M) this;
     }
 
-    public M set(String name) {
+    public M setUpdate(String name) {
         setSql.append(regexCondition(name, "equal", get(name)));
         setSql.append(",\n");
 
         return (M) this;
     }
 
-    public M set(String name, Object value) {
+    public M setUpdate(String name, Object value) {
         setSql.append(regexCondition(name, "equal", value));
         setSql.append(",\n");
 
@@ -320,7 +320,6 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         stringBuilder.append("FROM ");
         stringBuilder.append(getTable().getName());
         stringBuilder.append(" \n");
-//        stringBuilder.append("WHERE system_status = 1\n");
         stringBuilder.append(conditionSql);
 
         return stringBuilder.toString();
@@ -336,7 +335,27 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         stringBuilder.append("FROM ");
         stringBuilder.append(getTable().getName());
         stringBuilder.append(" \n");
-//        stringBuilder.append("WHERE system_status = 1\n");
+        stringBuilder.append(conditionSql);
+        stringBuilder.append(paginateSql);
+
+        return stringBuilder.toString();
+    }
+
+    public String buildFindSql() {
+        String condition = conditionSql.toString();
+        if (condition.equals("")) {
+            throw new RuntimeException("sql without condition");
+        }
+
+        regexCondition();
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("SELECT \n");
+        stringBuilder.append("*");
+        stringBuilder.append("\n");
+        stringBuilder.append("FROM ");
+        stringBuilder.append(getTable().getName());
+        stringBuilder.append(" \n");
         stringBuilder.append(conditionSql);
         stringBuilder.append(paginateSql);
 
@@ -411,12 +430,14 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     public String buildUpdateSql() {
         String condition = conditionSql.toString();
         if (condition.equals("")) {
-            return "";
+            throw new RuntimeException("sql without condition");
         }
 
         regexCondition();
 
         StringBuilder stringBuilder = new StringBuilder();
+
+        remove(Constant.SYSTEM_CREATE_USER_ID, Constant.SYSTEM_VERSION);
 
         List<Map<String, Object>> updateColumnList = new ArrayList<Map<String, Object>>();
         for (int i = 0; i < getColumnList().size(); i++) {
@@ -433,6 +454,10 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
         }
 
+        if (updateColumnList.size() == 0) {
+            throw new RuntimeException("sql without set variable");
+        }
+
         stringBuilder.append("UPDATE ");
         stringBuilder.append(getTable().getName());
         stringBuilder.append(" SET\n");
@@ -442,11 +467,17 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
             stringBuilder.append(column.get("name"));
             stringBuilder.append(" = ");
             stringBuilder.append(regexVariable((ColumnType) column.get("type"), column.get("value")));
-            if (i + 1 < updateColumnList.size()) {
+            if (i + 1 < updateColumnList.size() || is_system_version) {
                 stringBuilder.append(",\n");
             } else {
                 stringBuilder.append("\n");
             }
+        }
+        if (is_system_version) {
+            stringBuilder.append(Constant.SYSTEM_VERSION);
+            stringBuilder.append(" = ");
+            stringBuilder.append(Constant.SYSTEM_VERSION);
+            stringBuilder.append(" + 1\n");
         }
         stringBuilder.append(conditionSql);
 
@@ -456,19 +487,14 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     public String buildDeleteSql() {
         String condition = conditionSql.toString();
         if (condition.equals("")) {
-            return "";
+            throw new RuntimeException("sql without condition");
         }
 
         regexCondition();
 
         String set = setSql.toString();
         if (set.equals("")) {
-            return "";
-        }
-
-        if (is_system_version) {
-            is_system_version = regexExit(Constant.SYSTEM_VERSION);
-            is_system_version = false;
+            throw new RuntimeException("sql without set variable");
         }
 
         if (is_system_version) {

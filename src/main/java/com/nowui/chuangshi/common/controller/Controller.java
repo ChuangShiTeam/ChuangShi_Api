@@ -21,8 +21,11 @@ public class Controller extends com.jfinal.core.Controller {
                 throw new RuntimeException("getModel only support class of Model, using getBean for other class.");
             } else {
                 JSONObject jsonObject = getAttr(Constant.REQUEST_PARAMETER);
-                jsonObject.put(Constant.LIMIT_M, getM());
-                jsonObject.put(Constant.LIMIT_N, getN());
+
+                if (jsonObject.containsKey(Constant.PAGE_INDEX) && jsonObject.containsKey(Constant.PAGE_SIZE)) {
+                    jsonObject.put(Constant.LIMIT_M, getM());
+                    jsonObject.put(Constant.LIMIT_N, getN());
+                }
 
                 ((Model) model).put(jsonObject);
 

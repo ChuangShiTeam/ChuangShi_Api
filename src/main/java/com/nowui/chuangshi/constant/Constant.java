@@ -58,7 +58,11 @@ public class Constant {
 
     public static final String PAGE_SIZE = "page_size";
 
+    public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
+
     public static final String SYSTEM_CREATE_TIME = "system_create_time";
+
+    public static final String SYSTEM_UPDATE_USER_ID = "system_update_user_id";
 
     public static final String SYSTEM_UPDATE_TIME = "system_update_time";
 

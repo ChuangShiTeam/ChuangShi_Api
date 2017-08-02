@@ -27,7 +27,7 @@ public class Dao {
     }
 
     public <M> M find(Model model) {
-        String sql = model.buildListSql();
+        String sql = model.buildFindSql();
 
         System.out.println(sql);
 
@@ -64,8 +64,8 @@ public class Dao {
     }
 
     public Boolean delete(Model model) {
-        model.set(Constant.SYSTEM_UPDATE_TIME, new Date());
-        model.set(Constant.SYSTEM_STATUS, false);
+        model.setUpdate(Constant.SYSTEM_UPDATE_TIME, new Date());
+        model.setUpdate(Constant.SYSTEM_STATUS, false);
 
         String sql = model.buildDeleteSql();
 

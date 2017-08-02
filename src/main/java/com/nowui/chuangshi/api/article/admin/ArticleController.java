@@ -35,6 +35,7 @@ public class ArticleController extends Controller {
         validateRequest(Article.ARTICLE_ID);
 
         Article model = getModel(Article.class);
+        model.where(Article.ARTICLE_ID);
 
         Article result = articleService.find(model);
 
