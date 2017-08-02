@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.controller;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -44,14 +45,15 @@ public class CertificateImageController extends Controller {
 
     // 会员添加微信授权文件（需要校验）
     @ActionKey(Url.CERTIFICATE_IMAGE_WX_SAVE)
-    public void saveWX() {
+    public void saveWX() throws ParseException {
         validateRequest_app_id();
         validate(CertificateImage.CERTIFICATE_TYPE, CertificateImage.CERTIFICATE_PEOPLE_NAME,
                 CertificateImage.CERTIFICATE_PEOPLE_ID_CARD, CertificateImage.CERTIFICATE_PEOPLE_MOBILE,
-                CertificateImage.CERTIFICATE_PEOPLE_WX, CertificateImage.CERTIFICATE_START_DATE,
-                CertificateImage.CERTIFICATE_END_DATE);
+                CertificateImage.CERTIFICATE_PEOPLE_WX);
 
         CertificateImage model = getModel(CertificateImage.class);
+        model.setCertificate_start_date(new Date());
+        model.setCertificate_end_date(DateUtil.getNowYearLastDay());
         String app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
 
@@ -94,12 +96,14 @@ public class CertificateImageController extends Controller {
         validateRequest_app_id();
         validate(CertificateImage.CERTIFICATE_TYPE, CertificateImage.CERTIFICATE_PEOPLE_NAME,
                 CertificateImage.CERTIFICATE_PEOPLE_ID_CARD, CertificateImage.CERTIFICATE_PEOPLE_MOBILE,
-                CertificateImage.CERTIFICATE_PEOPLE_WX, CertificateImage.CERTIFICATE_START_DATE,
-                CertificateImage.CERTIFICATE_END_DATE, CertificateImage.CERTIFICATE_CHANNEL_NAME,
-                CertificateImage.CERTIFICATE_CHANNEL_URL, CertificateImage.CERTIFICATE_SHOP_NAME,
+                CertificateImage.CERTIFICATE_PEOPLE_WX, CertificateImage.CERTIFICATE_SHOP_NAME,
                 CertificateImage.CERTIFICATE_SHOP_URL);
 
         CertificateImage model = getModel(CertificateImage.class);
+        model.setCertificate_start_date(new Date());
+        model.setCertificate_end_date(DateUtil.getNowYearLastDay());
+        model.setCertificate_channel_name("");
+        model.setCertificate_channel_url("");
         String app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
 
