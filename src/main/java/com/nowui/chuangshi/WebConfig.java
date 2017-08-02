@@ -1,6 +1,7 @@
 package com.nowui.chuangshi;
 
 import java.util.List;
+import java.util.Set;
 
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
@@ -19,17 +20,112 @@ import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
 import com.jfinal.weixin.sdk.api.ApiConfig;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
-import com.nowui.chuangshi.api.article.model.Article;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.constant.Config;
-
-import com.nowui.chuangshi.controller.*;
+import com.nowui.chuangshi.controller.AdminController;
+import com.nowui.chuangshi.controller.ApiController;
+import com.nowui.chuangshi.controller.AppController;
+import com.nowui.chuangshi.controller.BillController;
+import com.nowui.chuangshi.controller.CacheController;
+import com.nowui.chuangshi.controller.CertificateController;
+import com.nowui.chuangshi.controller.CertificateImageController;
+import com.nowui.chuangshi.controller.CodeController;
+import com.nowui.chuangshi.controller.CustomerAttributeController;
+import com.nowui.chuangshi.controller.CustomerController;
+import com.nowui.chuangshi.controller.ExceptionController;
+import com.nowui.chuangshi.controller.ExpressController;
+import com.nowui.chuangshi.controller.FeijiuController;
+import com.nowui.chuangshi.controller.FeijiuFastCustomerController;
+import com.nowui.chuangshi.controller.FeijiuRecommendCustomerController;
+import com.nowui.chuangshi.controller.FeijiuRecommendProductController;
+import com.nowui.chuangshi.controller.FileController;
+import com.nowui.chuangshi.controller.GuangqiController;
+import com.nowui.chuangshi.controller.GuangqiCustomerController;
+import com.nowui.chuangshi.controller.GuangqiPrizeController;
+import com.nowui.chuangshi.controller.HttpController;
+import com.nowui.chuangshi.controller.MemberAddressController;
+import com.nowui.chuangshi.controller.MemberController;
+import com.nowui.chuangshi.controller.MemberDeliveryOrderController;
+import com.nowui.chuangshi.controller.MemberLevelController;
+import com.nowui.chuangshi.controller.MemberPurchaseOrderController;
+import com.nowui.chuangshi.controller.MenuController;
+import com.nowui.chuangshi.controller.ProductBrandController;
+import com.nowui.chuangshi.controller.ProductCategoryController;
+import com.nowui.chuangshi.controller.ProductController;
+import com.nowui.chuangshi.controller.QrcodeController;
+import com.nowui.chuangshi.controller.SqlController;
+import com.nowui.chuangshi.controller.StockController;
+import com.nowui.chuangshi.controller.StockInController;
+import com.nowui.chuangshi.controller.StockOutController;
+import com.nowui.chuangshi.controller.StockReplenishController;
+import com.nowui.chuangshi.controller.SupplierController;
+import com.nowui.chuangshi.controller.TradeController;
+import com.nowui.chuangshi.controller.UserController;
+import com.nowui.chuangshi.controller.WarehouseController;
+import com.nowui.chuangshi.controller.WeChatController;
+import com.nowui.chuangshi.controller.WeChatMessageController;
 import com.nowui.chuangshi.interceptor.GlobalActionInterceptor;
-import com.nowui.chuangshi.model.*;
+import com.nowui.chuangshi.model.Admin;
+import com.nowui.chuangshi.model.Api;
+import com.nowui.chuangshi.model.App;
+import com.nowui.chuangshi.model.Bill;
+import com.nowui.chuangshi.model.BillCommission;
+import com.nowui.chuangshi.model.Certificate;
+import com.nowui.chuangshi.model.CertificateImage;
+import com.nowui.chuangshi.model.CertificatePay;
+import com.nowui.chuangshi.model.Customer;
+import com.nowui.chuangshi.model.CustomerAttribute;
+import com.nowui.chuangshi.model.CustomerAttributeValue;
 import com.nowui.chuangshi.model.Exception;
+import com.nowui.chuangshi.model.Express;
+import com.nowui.chuangshi.model.FeijiuFastCustomer;
+import com.nowui.chuangshi.model.FeijiuRecommendCustomer;
+import com.nowui.chuangshi.model.FeijiuRecommendProduct;
+import com.nowui.chuangshi.model.File;
+import com.nowui.chuangshi.model.GuangqiCustomer;
+import com.nowui.chuangshi.model.GuangqiCustomerPrize;
+import com.nowui.chuangshi.model.GuangqiPrize;
+import com.nowui.chuangshi.model.Http;
+import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.MemberAddress;
+import com.nowui.chuangshi.model.MemberDeliveryOrder;
+import com.nowui.chuangshi.model.MemberDeliveryOrderExpress;
+import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
+import com.nowui.chuangshi.model.MemberLevel;
+import com.nowui.chuangshi.model.MemberPurchaseOrder;
+import com.nowui.chuangshi.model.MemberPurchaseOrderExpress;
+import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
+import com.nowui.chuangshi.model.Menu;
+import com.nowui.chuangshi.model.MenuApi;
+import com.nowui.chuangshi.model.Product;
+import com.nowui.chuangshi.model.ProductBrand;
+import com.nowui.chuangshi.model.ProductCategory;
+import com.nowui.chuangshi.model.ProductImage;
+import com.nowui.chuangshi.model.ProductSku;
+import com.nowui.chuangshi.model.ProductSkuAttribute;
+import com.nowui.chuangshi.model.ProductSkuCommission;
+import com.nowui.chuangshi.model.ProductSkuPrice;
+import com.nowui.chuangshi.model.Qrcode;
+import com.nowui.chuangshi.model.Sql;
+import com.nowui.chuangshi.model.Stock;
+import com.nowui.chuangshi.model.StockIn;
+import com.nowui.chuangshi.model.StockInProductSku;
+import com.nowui.chuangshi.model.StockOut;
+import com.nowui.chuangshi.model.StockOutProductSku;
+import com.nowui.chuangshi.model.StockReplenish;
+import com.nowui.chuangshi.model.StockReplenishProductSku;
+import com.nowui.chuangshi.model.Supplier;
+import com.nowui.chuangshi.model.SupplierProduct;
+import com.nowui.chuangshi.model.Trade;
+import com.nowui.chuangshi.model.TradeCommossion;
+import com.nowui.chuangshi.model.TradePay;
+import com.nowui.chuangshi.model.TradeProductSku;
+import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.model.Warehouse;
 import com.nowui.chuangshi.service.AppService;
+import com.nowui.chuangshi.util.ClassUtil;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 import net.dreamlu.event.EventPlugin;
@@ -98,43 +194,17 @@ public class WebConfig extends JFinalConfig {
         routes.add("/certificate", CertificateController.class);
         routes.add("/certificate/image", CertificateImageController.class);
 
-        String controllerPath = "";
-        try {
-            controllerPath = WebConfig.class.getResource("/").toURI().getPath();
-        } catch (java.lang.Exception e) {
-
+        // 扫码包中的类添加到routes
+        Set<Class<?>> set = ClassUtil.scanPackageByAnnotation("com.nowui.chuangshi.api", false, ControllerKey.class);
+        for (Class<?> clazz : set) {
+            ControllerKey controllerKey = clazz.getAnnotation(ControllerKey.class);
+            routes.add(controllerKey.value(), (Class<? extends Controller>) clazz);
         }
-        // getController(routes, controllerPath + "/com/nowui/chuangshi/api",
-        // controllerPath);
+
     }
 
     public void configEngine(Engine engine) {
 
-    }
-
-    private void getController(Routes routes, String path, String controllerPath) {
-        java.io.File[] files = new java.io.File(path).listFiles();
-        for (java.io.File file : files) {
-            if (file.isFile() && file.getName().endsWith("Controller.class")) {
-                String filePackage = file.getPath().replace(controllerPath, "").replaceAll("/", ".").replace(".class",
-                        "");
-                try {
-                    Class<?> clazz = Class.forName(filePackage);
-
-                    ControllerKey controllerKey = clazz.getAnnotation(ControllerKey.class);
-                    if (controllerKey != null) {
-                        routes.add(controllerKey.value(), (Class<? extends Controller>) clazz);
-                    }
-
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (file.isDirectory()) {
-                getController(routes, file.getPath(), controllerPath);
-            }
-        }
     }
 
     private void getModel(ActiveRecordPlugin activeRecordPlugin, String path, String controllerPath) {
