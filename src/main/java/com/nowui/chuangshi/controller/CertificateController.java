@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
+import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Certificate;
 import com.nowui.chuangshi.model.CertificateImage;
 import com.nowui.chuangshi.model.CertificatePay;
@@ -36,6 +37,41 @@ public class CertificateController extends Controller {
     private final FileService fileService = new FileService();
     private final MemberService memberService = new MemberService();
     private final CertificatePayService certificatePayService = new CertificatePayService();
+
+    // 官网根据授权编号返回授权证书列表
+    // 默认最低100条
+    @ActionKey(Url.CERTIFICATE_WEBSITE_FIND)
+    public void websiteFind() {
+        validate(Certificate.CERTIFICATE_NUMBER, App.APP_ID);
+
+        Certificate model = getModel(Certificate.class);
+
+        List<Certificate> certificateList = certificateService
+                .listByApp_idOrLikeCertificate_numberAndLimit(model.getApp_id(), model.getCertificate_number(), 0, 100);
+
+        List<CertificateImage> certificateImageWXList = new ArrayList<>();
+        List<CertificateImage> certificateImageOtherList = new ArrayList<>();
+
+        if (certificateList != null && certificateList.size() > 0 && certificateList.get(0) != null) {
+            List<CertificateImage> certificateImageList = certificateImageService
+                    .listByCertificate_id(certificateList.get(0).getCertificate_id());
+
+            for (CertificateImage certificateImage : certificateImageList) {
+                File file = fileService.findByFile_id(certificateImage.getFile_id());
+                certificateImage.put(File.FILE_ORIGINAL_PATH, file.getFile_original_path());
+                certificateImage.keep(CertificateImage.CERTIFICATE_TYPE, File.FILE_ORIGINAL_PATH);
+
+                if (certificateImage.getCertificate_type().equals(CertificateImageType.WX.getValue())) {
+                    certificateImageWXList.add(certificateImage);
+                } else {
+                    certificateImageOtherList.add(certificateImage);
+                }
+            }
+        }
+
+        certificateImageWXList.addAll(certificateImageOtherList);
+        renderSuccessJson(certificateImageWXList);
+    }
 
     @ActionKey(Url.CERTIFICATE_LIST)
     public void list() {

@@ -104,7 +104,8 @@ public class WebConfig extends JFinalConfig {
         } catch (java.lang.Exception e) {
 
         }
-        getController(routes, controllerPath + "/com/nowui/chuangshi/api", controllerPath);
+        // getController(routes, controllerPath + "/com/nowui/chuangshi/api",
+        // controllerPath);
     }
 
     public void configEngine(Engine engine) {
@@ -115,7 +116,8 @@ public class WebConfig extends JFinalConfig {
         java.io.File[] files = new java.io.File(path).listFiles();
         for (java.io.File file : files) {
             if (file.isFile() && file.getName().endsWith("Controller.class")) {
-                String filePackage = file.getPath().replace(controllerPath, "").replaceAll("/", ".").replace(".class", "");
+                String filePackage = file.getPath().replace(controllerPath, "").replaceAll("/", ".").replace(".class",
+                        "");
                 try {
                     Class<?> clazz = Class.forName(filePackage);
 
@@ -139,7 +141,8 @@ public class WebConfig extends JFinalConfig {
         java.io.File[] files = new java.io.File(path).listFiles();
         for (java.io.File file : files) {
             if (file.isFile() && file.getName().endsWith("class") && file.getPath().contains("/model/")) {
-                String filePackage = file.getPath().replace(controllerPath, "").replaceAll("/", ".").replace(".class", "");
+                String filePackage = file.getPath().replace(controllerPath, "").replaceAll("/", ".").replace(".class",
+                        "");
                 try {
                     Class<?> clazz = Class.forName(filePackage);
 
@@ -147,7 +150,8 @@ public class WebConfig extends JFinalConfig {
                     if (table != null) {
                         Primary primary = clazz.getAnnotation(Primary.class);
 
-                        activeRecordPlugin.addMapping(table.value(), primary.value(), (Class<? extends Model<?>>) clazz);
+                        activeRecordPlugin.addMapping(table.value(), primary.value(),
+                                (Class<? extends Model<?>>) clazz);
                     }
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
@@ -204,12 +208,13 @@ public class WebConfig extends JFinalConfig {
         }
 
         activeRecordPlugin.setBaseSqlTemplatePath(baseSqlTemplatePath);
-//        java.io.File[] files = new java.io.File(baseSqlTemplatePath).listFiles();
-//        for (java.io.File file : files) {
-//            if (file.isFile() && file.getName().endsWith(".sql")) {
-//                activeRecordPlugin.addSqlTemplate(file.getName());
-//            }
-//        }
+        // java.io.File[] files = new
+        // java.io.File(baseSqlTemplatePath).listFiles();
+        // for (java.io.File file : files) {
+        // if (file.isFile() && file.getName().endsWith(".sql")) {
+        // activeRecordPlugin.addSqlTemplate(file.getName());
+        // }
+        // }
         getSql(activeRecordPlugin, baseSqlTemplatePath, baseSqlTemplatePath);
 
         activeRecordPlugin.addMapping("table_http", "http_id", Http.class);
@@ -235,12 +240,18 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_member", "member_id", Member.class);
         activeRecordPlugin.addMapping("table_member_address", "member_address_id", MemberAddress.class);
         activeRecordPlugin.addMapping("table_member_level", "member_level_id", MemberLevel.class);
-        activeRecordPlugin.addMapping("table_member_delivery_order", "member_delivery_order_id", MemberDeliveryOrder.class);
-        activeRecordPlugin.addMapping("table_member_delivery_order_product_sku", "member_delivery_order_id", MemberDeliveryOrderProductSku.class);
-        activeRecordPlugin.addMapping("table_member_delivery_order_express", "member_delivery_order_id", MemberDeliveryOrderExpress.class);
-        activeRecordPlugin.addMapping("table_member_purchase_order", "member_purchase_order_id", MemberPurchaseOrder.class);
-        activeRecordPlugin.addMapping("table_member_purchase_order_product_sku", "member_purchase_order_id", MemberPurchaseOrderProductSku.class);
-        activeRecordPlugin.addMapping("table_member_purchase_order_express", "member_purchase_order_id", MemberPurchaseOrderExpress.class);
+        activeRecordPlugin.addMapping("table_member_delivery_order", "member_delivery_order_id",
+                MemberDeliveryOrder.class);
+        activeRecordPlugin.addMapping("table_member_delivery_order_product_sku", "member_delivery_order_id",
+                MemberDeliveryOrderProductSku.class);
+        activeRecordPlugin.addMapping("table_member_delivery_order_express", "member_delivery_order_id",
+                MemberDeliveryOrderExpress.class);
+        activeRecordPlugin.addMapping("table_member_purchase_order", "member_purchase_order_id",
+                MemberPurchaseOrder.class);
+        activeRecordPlugin.addMapping("table_member_purchase_order_product_sku", "member_purchase_order_id",
+                MemberPurchaseOrderProductSku.class);
+        activeRecordPlugin.addMapping("table_member_purchase_order_express", "member_purchase_order_id",
+                MemberPurchaseOrderExpress.class);
         activeRecordPlugin.addMapping("table_stock", "stock_id", Stock.class);
         activeRecordPlugin.addMapping("table_express", "express_id", Express.class);
         activeRecordPlugin.addMapping("table_qrcode", "qrcode_id", Qrcode.class);
@@ -331,22 +342,24 @@ public class WebConfig extends JFinalConfig {
             }
         }
 
-//        Article article = new Article();
-//        article.setArticle_id("123456");
-//        article.setArticle_content("asdfgh");
-//
-//        ArticleService articleService = new ArticleService();
-//
-//
-//        articleService.update(article.whereLeftLike(Article.ARTICLE_NAME).and(Article.ARTICLE_CONTENT));
-//
-////        System.out.println(articleService.save(article));
-////        System.out.println(article.whereLeftLike(Article.ARTICLE_NAME, "aaa").and(Article.ARTICLE_CONTENT, "qqq").getListSql());
-//
-//        Dao dao = new Dao();
-//        dao.count(new Article().whereLeftLike(Article.ARTICLE_NAME, "aaa").and(Article.ARTICLE_CONTENT, "qqq"));
-//        System.out.println("++++++++++");
-//        System.out.println(dao.count(article));
+        // Article article = new Article();
+        // article.setArticle_id("123456");
+        // article.setArticle_content("asdfgh");
+        //
+        // ArticleService articleService = new ArticleService();
+        //
+        //
+        // articleService.update(article.whereLeftLike(Article.ARTICLE_NAME).and(Article.ARTICLE_CONTENT));
+        //
+        //// System.out.println(articleService.save(article));
+        //// System.out.println(article.whereLeftLike(Article.ARTICLE_NAME,
+        // "aaa").and(Article.ARTICLE_CONTENT, "qqq").getListSql());
+        //
+        // Dao dao = new Dao();
+        // dao.count(new Article().whereLeftLike(Article.ARTICLE_NAME,
+        // "aaa").and(Article.ARTICLE_CONTENT, "qqq"));
+        // System.out.println("++++++++++");
+        // System.out.println(dao.count(article));
     }
 
 }

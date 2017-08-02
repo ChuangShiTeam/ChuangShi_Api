@@ -613,6 +613,7 @@ public class Url {
     public static final String REMOVE_ALL_CACHE = "/remove/all/cache";
 
     // 会员授权证书记录
+    public static final String CERTIFICATE_WEBSITE_FIND = "/certificate/website/find";
     public static final String CERTIFICATE_LIST = "/certificate/list";
     public static final String CERTIFICATE_FIND = "/certificate/find";
     public static final String CERTIFICATE_SAVE = "/certificate/save";

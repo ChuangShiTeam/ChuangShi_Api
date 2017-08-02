@@ -39,9 +39,9 @@
     FROM table_certificate
     WHERE system_status = 1
     AND app_id = #p(app_id)
-    #if(Certificate_number)
-    #set(Certificate_number = "%" + Certificate_number + "%")
-    AND Certificate_number LIKE #p(Certificate_number)
+    #if(certificate_number)
+    #set(certificate_number = "%" + certificate_number + "%")
+    AND certificate_number LIKE #p(certificate_number)
     #end
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)

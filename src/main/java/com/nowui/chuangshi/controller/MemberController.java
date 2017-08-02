@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
@@ -16,11 +14,15 @@ import com.jfinal.weixin.sdk.api.QrcodeApi;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
+import com.nowui.chuangshi.model.Certificate;
+import com.nowui.chuangshi.model.CertificatePay;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberLevel;
 import com.nowui.chuangshi.model.Qrcode;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.AppService;
+import com.nowui.chuangshi.service.CertificatePayService;
+import com.nowui.chuangshi.service.CertificateService;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberLevelService;
 import com.nowui.chuangshi.service.MemberService;
@@ -38,6 +40,8 @@ public class MemberController extends Controller {
     private final FileService fileService = new FileService();
     private final QrcodeService qrcodeService = new QrcodeService();
     private final AppService appService = new AppService();
+    private final CertificateService certificateService = new CertificateService();
+    private final CertificatePayService certificatePayService = new CertificatePayService();
 
     private List<Map<String, Object>> getChildren(List<Member> memberList, String member_parent_id, String... keys) {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -151,6 +155,17 @@ public class MemberController extends Controller {
             MemberLevel memberLevel = memberLevelService.findByMember_level_id(member.getMember_level_id());
             result.put(MemberLevel.MEMBER_LEVEL_NAME, memberLevel.getMember_level_name());
         }
+
+        // 返回授权保证金
+        BigDecimal certificate_amount = BigDecimal.ZERO;
+        Certificate certificate = certificateService.findByUser_id(member.getUser_id());
+        if (certificate != null) {
+            CertificatePay certificatePay = certificatePayService.findByCertificate_id(certificate.getCertificate_id());
+            if (certificatePay != null && certificatePay.getCertificate_amount() != null) {
+                certificate_amount = certificatePay.getCertificate_amount();
+            }
+        }
+        result.put(CertificatePay.CERTIFICATE_AMOUNT, certificate_amount);
 
         authenticateApp_id(user.getApp_id());
 

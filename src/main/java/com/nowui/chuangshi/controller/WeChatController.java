@@ -558,7 +558,7 @@ public class WeChatController extends Controller {
                 Member member = memberService.findByMember_id(user.getObject_Id());
 
                 // 设置小数位数，第一个变量是小数位数，第二个变量是取舍方法(四舍五入)
-                BigDecimal bd = new BigDecimal(total_fee);
+                BigDecimal bd = new BigDecimal(total_fee).divide(BigDecimal.valueOf(100));
                 bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
 
                 // 转日期
