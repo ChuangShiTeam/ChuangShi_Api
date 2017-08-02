@@ -10,6 +10,7 @@ import java.util.List;
 public class Dao {
 
     public Integer count(Model model) {
+
         String sql = model.buildCountSql();
 
         System.out.println(sql);

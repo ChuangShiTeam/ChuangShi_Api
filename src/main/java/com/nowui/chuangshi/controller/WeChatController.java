@@ -177,7 +177,7 @@ public class WeChatController extends Controller {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
         }
 
-        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"爆水丸\",\"url\":\"http://h5."
+        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"星创会\",\"url\":\"http://h5."
                 + "xingxiao.nowui.com" + "/?#/team\"}]}");
 
         // App app =
