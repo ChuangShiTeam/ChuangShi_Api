@@ -194,7 +194,7 @@ public class WebConfig extends JFinalConfig {
         routes.add("/certificate", CertificateController.class);
         routes.add("/certificate/image", CertificateImageController.class);
 
-        // 扫码包中的类添加到routes
+        // 扫码包中的Controller注解类添加到routes
         Set<Class<?>> set = ClassUtil.scanPackageByAnnotation("com.nowui.chuangshi.api", false, ControllerKey.class);
         for (Class<?> clazz : set) {
             ControllerKey controllerKey = clazz.getAnnotation(ControllerKey.class);
@@ -205,33 +205,6 @@ public class WebConfig extends JFinalConfig {
 
     public void configEngine(Engine engine) {
 
-    }
-
-    private void getModel(ActiveRecordPlugin activeRecordPlugin, String path, String controllerPath) {
-        java.io.File[] files = new java.io.File(path).listFiles();
-        for (java.io.File file : files) {
-            if (file.isFile() && file.getName().endsWith("class") && file.getPath().contains("/model/")) {
-                String filePackage = file.getPath().replace(controllerPath, "").replaceAll("/", ".").replace(".class",
-                        "");
-                try {
-                    Class<?> clazz = Class.forName(filePackage);
-
-                    Table table = clazz.getAnnotation(Table.class);
-                    if (table != null) {
-                        Primary primary = clazz.getAnnotation(Primary.class);
-
-                        activeRecordPlugin.addMapping(table.value(), primary.value(),
-                                (Class<? extends Model<?>>) clazz);
-                    }
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (file.isDirectory()) {
-                getModel(activeRecordPlugin, file.getPath(), controllerPath);
-            }
-        }
     }
 
     private void getSql(ActiveRecordPlugin activeRecordPlugin, String path, String baseSqlTemplatePath) {
@@ -366,13 +339,13 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_certificate_image", "certificate_image_id", CertificateImage.class);
         activeRecordPlugin.addMapping("table_certificate_pay", "certificate_id", CertificatePay.class);
 
-        String modelPath = "";
-        try {
-            modelPath = WebConfig.class.getResource("/").toURI().getPath();
-        } catch (java.lang.Exception e) {
-
+        // 扫码包中的Table注解类添加到ActiveRecord
+        Set<Class<?>> set = ClassUtil.scanPackageByAnnotation("com.nowui.chuangshi.api", false, Table.class);
+        for (Class<?> clazz : set) {
+            Table table = clazz.getAnnotation(Table.class);
+            Primary primary = clazz.getAnnotation(Primary.class);
+            activeRecordPlugin.addMapping(table.value(), primary.value(), (Class<? extends Model<?>>) clazz);
         }
-        getModel(activeRecordPlugin, modelPath + "/com/nowui/chuangshi/api", modelPath);
 
         plugins.add(activeRecordPlugin);
 
