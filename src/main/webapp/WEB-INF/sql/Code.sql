@@ -1,7 +1,7 @@
 #namespace("code")
 
   #sql("listByTable_schema")
-    SELECT table_name
+    SELECT table_name, engine, table_rows
     FROM information_schema.tables
     WHERE table_schema = #p(table_schema)
     #if(table_name)

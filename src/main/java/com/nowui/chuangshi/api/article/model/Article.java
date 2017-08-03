@@ -6,14 +6,15 @@ import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.type.ColumnType;
 
-import java.util.Date;
-
 @Table("table_article")
 @Primary("article_id")
 public class Article extends Model<Article> {
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "文章编号")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "文章编号", updatable = false)
     public static final String ARTICLE_ID = "article_id";
+
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
+    public static final String APP_ID = "app_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "分类编号")
     public static final String CATEGORY_ID = "category_id";
@@ -30,22 +31,22 @@ public class Article extends Model<Article> {
     @Column(type = ColumnType.LONGTEXT, length = 0, comment = "文章内容")
     public static final String ARTICLE_CONTENT = "article_content";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
 
-    @Column(type = ColumnType.DATETIME, length = 0, comment = "")
+    @Column(type = ColumnType.DATETIME, length = 0, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_TIME = "system_create_time";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_UPDATE_USER_ID = "system_update_user_id";
 
-    @Column(type = ColumnType.DATETIME, length = 0, comment = "")
+    @Column(type = ColumnType.DATETIME, length = 0, comment = "", updatable = false)
     public static final String SYSTEM_UPDATE_TIME = "system_update_time";
 
-    @Column(type = ColumnType.INT, length = 5, comment = "")
+    @Column(type = ColumnType.INT, length = 5, comment = "", updatable = false)
     public static final String SYSTEM_VERSION = "system_version";
 
-    @Column(type = ColumnType.TINYINT, length = 0, comment = "")
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
     public String getArticle_id() {
@@ -54,6 +55,14 @@ public class Article extends Model<Article> {
 
     public void setArticle_id(String article_id) {
         set(ARTICLE_ID, article_id);
+    }
+
+    public String getApp_id() {
+        return getStr(APP_ID);
+    }
+
+    public void setApp_id(String app_id) {
+        set(APP_ID, app_id);
     }
 
     public String getCategory_id() {
@@ -104,11 +113,11 @@ public class Article extends Model<Article> {
         set(SYSTEM_CREATE_USER_ID, system_create_user_id);
     }
 
-    public Date getSystem_create_time() {
-        return getDate(SYSTEM_CREATE_TIME);
+    public String getSystem_create_time() {
+        return getStr(SYSTEM_CREATE_TIME);
     }
 
-    public void setSystem_create_time(Date system_create_time) {
+    public void setSystem_create_time(String system_create_time) {
         set(SYSTEM_CREATE_TIME, system_create_time);
     }
 
@@ -120,11 +129,11 @@ public class Article extends Model<Article> {
         set(SYSTEM_UPDATE_USER_ID, system_update_user_id);
     }
 
-    public Date getSystem_update_time() {
-        return getDate(SYSTEM_UPDATE_TIME);
+    public String getSystem_update_time() {
+        return getStr(SYSTEM_UPDATE_TIME);
     }
 
-    public void setSystem_update_time(Date system_update_time) {
+    public void setSystem_update_time(String system_update_time) {
         set(SYSTEM_UPDATE_TIME, system_update_time);
     }
 
@@ -143,4 +152,5 @@ public class Article extends Model<Article> {
     public void setSystem_status(Boolean system_status) {
         set(SYSTEM_STATUS, system_status);
     }
+
 }

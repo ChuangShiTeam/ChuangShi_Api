@@ -1,5 +1,3 @@
 #namespace("article")
 
-
-
 #end

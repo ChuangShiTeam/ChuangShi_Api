@@ -3,24 +3,15 @@ package com.nowui.chuangshi.common.cache;
 import com.nowui.chuangshi.common.dao.Dao;
 import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.util.CacheUtil;
-import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.List;
 
 public class Cache {
 
     private final Dao dao = new Dao();
-    private String item_cache_name = "";
-    private String item_cache_key = "";
-    private Boolean is_item_cache = false;
-
-    public void setItemCache(String name, String key) {
-        if (!ValidateUtil.isNullOrEmpty(name) && !ValidateUtil.isNullOrEmpty(key)) {
-            item_cache_name = name;
-            item_cache_key = key;
-            is_item_cache = true;
-        }
-    }
+    private String item_cache_name = "aaa";
+    private String item_cache_key = "article_id";
+    private Boolean is_item_cache = true;
 
     private Boolean isExitKey(Model model, String key) {
         return false;
@@ -35,8 +26,13 @@ public class Cache {
     }
 
     public <M> M find(Model model) {
-        M item;
+        Boolean is_only_condition = false;
         if (is_item_cache) {
+            is_only_condition = model.isOnlyCondition(item_cache_key);
+        }
+
+        M item;
+        if (is_item_cache && is_only_condition) {
             item = CacheUtil.get(item_cache_name, item_cache_key);
 
             if (item == null) {

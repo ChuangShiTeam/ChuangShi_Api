@@ -29,6 +29,8 @@ public class Controller extends com.jfinal.core.Controller {
 
                 ((Model) model).put(jsonObject);
 
+                ((Model) model).put(Constant.APP_ID, getRequest_app_id());
+
                 return (T) model;
             }
         } catch (Exception e) {

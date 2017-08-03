@@ -52,6 +52,20 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         }
     }
 
+    public Boolean isOnlyCondition(String key) {
+        Boolean isExit = false;
+
+        for (Condition condition : conditionList) {
+            if (condition.getExpression() != null) {
+                if (condition.getExpression().getKey().equals(key)) {
+                    isExit = true;
+                }
+            }
+        }
+
+        return isExit;
+    }
+
     private Table getTable() {
         return TableMapping.me().getTable(getUsefulClass());
     }
@@ -109,14 +123,6 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return (M) this;
     }
 
-    public M whereEmpty(String name) {
-        if (!ValidateUtil.isNullOrEmpty(get(name))) {
-            where(name);
-        }
-
-        return (M) this;
-    }
-
     public M where(String name) {
         Expression expression = new Expression(name, ExpressionType.EQUAL, get(name));
         Condition condition = new Condition(ConditionType.WHERE, expression, false);
@@ -129,6 +135,14 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         Expression expression = new Expression(name, ExpressionType.EQUAL, value);
         Condition condition = new Condition(ConditionType.WHERE, expression, false);
         addConditionList(condition);
+
+        return (M) this;
+    }
+
+    public M whereEmpty(String name) {
+        if (!ValidateUtil.isNullOrEmpty(get(name))) {
+            where(name);
+        }
 
         return (M) this;
     }
@@ -193,6 +207,14 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         Expression expression = new Expression(name, ExpressionType.EQUAL, value);
         Condition condition = new Condition(ConditionType.AND, expression, false);
         addConditionList(condition);
+
+        return (M) this;
+    }
+
+    public M andEmpty(String name) {
+        if (!ValidateUtil.isNullOrEmpty(get(name))) {
+            and(name);
+        }
 
         return (M) this;
     }

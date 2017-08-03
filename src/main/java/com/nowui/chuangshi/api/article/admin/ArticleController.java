@@ -20,7 +20,7 @@ public class ArticleController extends Controller {
         validateRequest(Article.ARTICLE_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         Article model = getModel(Article.class);
-        model.whereEmpty(Article.ARTICLE_NAME);
+        model.where(Article.APP_ID).andEmpty(Article.ARTICLE_NAME);
 
         Integer resultCount = articleService.count(model);
         List<Article> resultList = articleService.list(model.paginate());
@@ -39,14 +39,14 @@ public class ArticleController extends Controller {
 
         Article result = articleService.find(model);
 
-        validateResponse(Article.ARTICLE_ID, Article.CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_SUMMARY, Article.ARTICLE_CONTENT, Article.SYSTEM_VERSION);
+        validateResponse(Article.CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_SUMMARY, Article.ARTICLE_CONTENT, Article.SYSTEM_VERSION);
 
         renderSuccessModelJson(result);
     }
 
     @ActionKey("/admin/article/save")
     public void save() {
-        validateRequest(Article.ARTICLE_NAME);
+        validateRequest(Article.CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_SUMMARY, Article.ARTICLE_CONTENT);
 
         Article model = getModel(Article.class);
         model.setArticle_id(Util.getRandomUUID());
@@ -58,7 +58,7 @@ public class ArticleController extends Controller {
 
     @ActionKey("/admin/article/update")
     public void update() {
-        validateRequest(Article.ARTICLE_ID, Article.ARTICLE_NAME, Article.SYSTEM_VERSION);
+        validateRequest(Article.ARTICLE_ID, Article.CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_SUMMARY, Article.ARTICLE_CONTENT, Article.SYSTEM_VERSION);
 
         Article model = getModel(Article.class);
         model.where(model.ARTICLE_ID).and(Article.SYSTEM_VERSION);
@@ -73,7 +73,7 @@ public class ArticleController extends Controller {
         validateRequest(Article.ARTICLE_ID, Article.SYSTEM_VERSION);
 
         Article model = getModel(Article.class);
-        model.where(model.ARTICLE_ID).and(Article.SYSTEM_VERSION).notSystemVersion();
+        model.where(model.ARTICLE_ID).and(Article.SYSTEM_VERSION);
 
         Boolean result = articleService.delete(model);
 

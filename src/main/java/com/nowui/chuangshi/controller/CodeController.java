@@ -1,11 +1,5 @@
 package com.nowui.chuangshi.controller;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +15,7 @@ import com.jfinal.template.Template;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.service.CodeService;
+import com.nowui.chuangshi.util.FileUtil;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 public class CodeController extends Controller {
@@ -39,15 +34,7 @@ public class CodeController extends Controller {
 
         List<Record> recordList = codeService.listByTable_schema(table_name);
 
-        List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
-
-        for (Record record : recordList) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("table_name", record.getStr("table_name"));
-            resultList.add(map);
-        }
-
-        renderSuccessJson(recordList.size(), resultList);
+        renderSuccessJson(recordList.size(), recordList);
     }
 
     @ActionKey(Url.CODE_ADMIN_FIND)
@@ -61,18 +48,7 @@ public class CodeController extends Controller {
 
         List<Record> recordList = codeService.listByTable_name(table_name);
 
-        List<Record> resultList = new ArrayList<Record>();
-
-        for (Record record : recordList) {
-            if (!record.getStr("column_name").startsWith("system_")) {
-                record.set("is_search", false);
-                record.set("is_list", true);
-                record.set("is_update", true);
-                resultList.add(record);
-            }
-        }
-
-        renderSuccessJson(resultList);
+        renderSuccessJson(recordList);
     }
 
     @ActionKey(Url.CODE_ADMIN_SAVE)
@@ -238,16 +214,9 @@ public class CodeController extends Controller {
 
         Template template = engine.getTemplate(templateName);
 
-        String result = template.renderToString(templateMap);
+        String content = template.renderToString(templateMap);
 
-        try {
-            Writer writer = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(new File(Config.code_generate_url + fileName)), "UTF-8"));
-            writer.write(result.toCharArray());
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FileUtil.writeFile(content, Config.code_generate_url + fileName);
     }
 
 }

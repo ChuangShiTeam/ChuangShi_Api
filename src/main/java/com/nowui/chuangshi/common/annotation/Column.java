@@ -16,5 +16,5 @@ public @interface Column {
 
     String comment() default "";
 
-    boolean is_update() default true;
+    boolean updatable() default true;
 }

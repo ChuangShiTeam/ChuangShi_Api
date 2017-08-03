@@ -152,12 +152,11 @@ public class WeChatMessageController extends MsgController {
                     "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg");
             render(outNewsMsg);
         } else {
-
+            OutTextMsg outMsg = new OutTextMsg(inFollowEvent);
+            outMsg.setContent("恭喜您，成为我们平台的会员!");
+            render(outMsg);
         }
 
-        OutTextMsg outMsg = new OutTextMsg(inFollowEvent);
-        outMsg.setContent("恭喜您，成为我们平台的会员!");
-        render(outMsg);
     }
 
     @Override
