@@ -8,10 +8,24 @@ import java.util.List;
 
 public class Cache {
 
-    private final Dao dao = new Dao();
-    private String item_cache_name = "aaa";
-    private String item_cache_key = "article_id";
-    private Boolean is_item_cache = true;
+    protected Dao dao;
+    private String item_cache_name = "";
+    private String item_cache_key = "";
+    private Boolean is_item_cache = false;
+
+    public void setItemCache(String name, String key) {
+        this.item_cache_name = item_cache_name;
+        this.item_cache_key = item_cache_key;
+        this.is_item_cache = false;
+    }
+
+    public Dao getDao() {
+        return dao;
+    }
+
+    public void setDao(Dao dao) {
+        this.dao = dao;
+    }
 
     private Boolean isExitKey(Model model, String key) {
         return false;
@@ -27,6 +41,7 @@ public class Cache {
 
     public <M> M find(Model model) {
         Boolean is_only_condition = false;
+
         if (is_item_cache) {
             is_only_condition = model.isOnlyCondition(item_cache_key);
         }

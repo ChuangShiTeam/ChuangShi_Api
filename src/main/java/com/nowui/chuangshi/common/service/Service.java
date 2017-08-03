@@ -6,29 +6,37 @@ import java.util.List;
 
 public class Service {
 
-    private final Cache cache = new Cache();
+    protected Cache cache;
+
+    public Cache getCache() {
+        return cache;
+    }
+
+    public void setCache(Cache cache) {
+        this.cache = cache;
+    }
 
     public Integer count(Model model) {
-        return cache.count(model);
+        return getCache().count(model);
     }
 
     public <M> List<M> list(Model model) {
-        return cache.list(model);
+        return getCache().list(model);
     }
 
     public <M> M find(Model model) {
-        return cache.find(model);
+        return getCache().find(model);
     }
 
     public Boolean save(Model model) {
-        return cache.save(model);
+        return getCache().save(model);
     }
 
     public Boolean update(Model model) {
-        return cache.update(model);
+        return getCache().update(model);
     }
 
     public Boolean delete(Model model) {
-        return cache.delete(model);
+        return getCache().delete(model);
     }
 }
