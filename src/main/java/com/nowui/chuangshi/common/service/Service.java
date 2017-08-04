@@ -24,6 +24,14 @@ public class Service {
         return getCache().list(model);
     }
 
+    public <M> List<M> list(String key, Object value) {
+        return getCache().list(key, value);
+    }
+
+    public <M> M findById(String id) {
+        return getCache().findById(id);
+    }
+
     public <M> M find(Model model) {
         return getCache().find(model);
     }

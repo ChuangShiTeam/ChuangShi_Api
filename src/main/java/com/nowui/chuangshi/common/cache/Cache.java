@@ -39,6 +39,10 @@ public class Cache {
         return dao.list(model);
     }
 
+    public <M> List<M> list(String key, Object value) {
+        return dao.list(key, value);
+    }
+
     public <M> M find(Model model) {
         Boolean is_only_condition = false;
 
@@ -57,6 +61,47 @@ public class Cache {
             }
         } else {
             item = dao.find(model);
+        }
+
+        return item;
+    }
+
+    public <M> M find(String key, Object value) {
+        Boolean is_only_condition = false;
+
+        if (is_item_cache) {
+            is_only_condition = key.equals(item_cache_key);
+        }
+
+        M item;
+        if (is_item_cache && is_only_condition) {
+            item = CacheUtil.get(item_cache_name, item_cache_key);
+
+            if (item == null) {
+                item = dao.find(key, value);
+
+                CacheUtil.put(item_cache_name, item_cache_key, item);
+            }
+        } else {
+            item = dao.find(key, value);
+        }
+
+        return item;
+    }
+
+    public <M> M findById(String id) {
+        M item;
+
+        if (is_item_cache) {
+            item = CacheUtil.get(item_cache_name, item_cache_key);
+
+            if (item == null) {
+                item = dao.findById(id);
+
+                CacheUtil.put(item_cache_name, item_cache_key, item);
+            }
+        } else {
+            item = dao.findById(id);
         }
 
         return item;

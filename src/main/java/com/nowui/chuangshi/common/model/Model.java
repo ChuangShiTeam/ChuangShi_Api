@@ -123,6 +123,13 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return (M) this;
     }
 
+    public M findById(String id) {
+        System.out.println(getTable());
+        where(getTable().getPrimaryKey()[0], id);
+
+        return (M) this;
+    }
+
     public M where(String name) {
         Expression expression = new Expression(name, ExpressionType.EQUAL, get(name));
         Condition condition = new Condition(ConditionType.WHERE, expression, false);

@@ -9,6 +9,12 @@ import java.util.List;
 
 public class Dao {
 
+    protected Class<? extends Model> clazz;
+
+    public void setClazz(Class<? extends Model> clazz) {
+        this.clazz = clazz;
+    }
+
     public Integer count(Model model) {
 
         String sql = model.buildCountSql();
@@ -27,11 +33,71 @@ public class Dao {
         return model.find(sql);
     }
 
+    public <M> List<M> list(String key, Object value) {
+        Model model = null;
+        try {
+            model = clazz.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        model.where(key, value);
+
+        String sql = model.buildListSql();
+
+        System.out.println(sql);
+
+        return model.find(sql);
+    }
+
     public <M> M find(Model model) {
         String sql = model.buildFindSql();
 
         System.out.println(sql);
 
+        List<M> list = model.find(sql);
+
+        if (list.size() == 0) {
+            return null;
+        } else {
+            return list.get(0);
+        }
+    }
+
+    public <M> M find(String key, Object value) {
+        Model model = null;
+        try {
+            model = clazz.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        model.where(key, value);
+
+        String sql = model.buildFindSql();
+        List<M> list = model.find(sql);
+
+        if (list.size() == 0) {
+            return null;
+        } else {
+            return list.get(0);
+        }
+    }
+
+    public <M> M findById(String id) {
+        Model model = null;
+        try {
+            model = clazz.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        model.findById(id);
+
+        String sql = model.buildFindSql();
         List<M> list = model.find(sql);
 
         if (list.size() == 0) {

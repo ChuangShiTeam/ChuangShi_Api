@@ -344,7 +344,7 @@ public class WebConfig extends JFinalConfig {
         for (Class<?> clazz : set) {
             Table table = clazz.getAnnotation(Table.class);
             Primary primary = clazz.getAnnotation(Primary.class);
-            activeRecordPlugin.addMapping(table.value(), primary.value(), (Class<? extends Model<?>>) clazz);
+            activeRecordPlugin.addMapping(table.value(), ValidateUtil.isNullOrEmpty(primary.value()) ? "id" : primary.value(), (Class<? extends Model<?>>) clazz);
         }
 
         plugins.add(activeRecordPlugin);

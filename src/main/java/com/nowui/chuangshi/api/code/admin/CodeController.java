@@ -111,7 +111,10 @@ public class CodeController extends Controller {
                 detailColumnList.add(record);
             }
         }
-        String first_upper_primary_key = primary_key.substring(0, 1).toUpperCase() + primary_key.substring(1);
+        String first_upper_primary_key = "";
+        if (!ValidateUtil.isNullOrEmpty(primary_key)) {
+            first_upper_primary_key = primary_key.substring(0, 1).toUpperCase() + primary_key.substring(1);
+        }
         String upper_primary_key = primary_key.toUpperCase();
         String url_model_name = lower_model_name.replaceAll("_", "/");
 
@@ -133,23 +136,24 @@ public class CodeController extends Controller {
         templateMap.put("listColumnList", listColumnList);
         templateMap.put("detailColumnList", detailColumnList);
 
-        FileUtil.createPath(Config.code_generate_url + "sql");
-        FileUtil.createPath(Config.code_generate_url + "model");
-        FileUtil.createPath(Config.code_generate_url + "dao");
-        FileUtil.createPath(Config.code_generate_url + "cache");
-        FileUtil.createPath(Config.code_generate_url + "service");
-        FileUtil.createPath(Config.code_generate_url + "mobile");
-        FileUtil.createPath(Config.code_generate_url + "admin");
-        FileUtil.createPath(Config.code_generate_url + "system");
+        FileUtil.createPath(Config.code_generate_url + package_name);
+        FileUtil.createPath(Config.code_generate_url + package_name + "/sql");
+        FileUtil.createPath(Config.code_generate_url + package_name + "/model");
+        FileUtil.createPath(Config.code_generate_url + package_name + "/dao");
+        FileUtil.createPath(Config.code_generate_url + package_name + "/cache");
+        FileUtil.createPath(Config.code_generate_url + package_name + "/service");
+        FileUtil.createPath(Config.code_generate_url + package_name + "/mobile");
+        FileUtil.createPath(Config.code_generate_url + package_name + "/admin");
+        FileUtil.createPath(Config.code_generate_url + package_name + "/system");
 
-        write(templateMap,"sql.template", "sql/" + first_upper_model_name_without_underline + ".sql");
-        write(templateMap,"model.template", "model/" + first_upper_model_name_without_underline + ".java");
-        write(templateMap,"dao.template", "dao/" + first_upper_model_name_without_underline + "Dao.java");
-        write(templateMap,"cache.template", "cache/" + first_upper_model_name_without_underline + "Cache.java");
-        write(templateMap,"service.template", "service/" + first_upper_model_name_without_underline + "Service.java");
-        write(templateMap,"mobile.template", "mobile/" + first_upper_model_name_without_underline + "Controller.java");
-        write(templateMap,"admin.template", "admin/" + first_upper_model_name_without_underline + "Controller.java");
-        write(templateMap,"system.template", "system/" + first_upper_model_name_without_underline + "Controller.java");
+        write(templateMap,"sql.template", package_name + "/sql/" + first_upper_model_name_without_underline + ".sql");
+        write(templateMap,"model.template", package_name + "/model/" + first_upper_model_name_without_underline + ".java");
+        write(templateMap,"dao.template", package_name + "/dao/" + first_upper_model_name_without_underline + "Dao.java");
+        write(templateMap,"cache.template", package_name + "/cache/" + first_upper_model_name_without_underline + "Cache.java");
+        write(templateMap,"service.template", package_name + "/service/" + first_upper_model_name_without_underline + "Service.java");
+        write(templateMap,"mobile.template", package_name + "/mobile/" + first_upper_model_name_without_underline + "Controller.java");
+        write(templateMap,"admin.template", package_name + "/admin/" + first_upper_model_name_without_underline + "Controller.java");
+        write(templateMap,"system.template", package_name + "/system/" + first_upper_model_name_without_underline + "Controller.java");
         write(templateMap,"state.template", lower_model_name + ".js");
         write(templateMap,"index.template", first_upper_model_name_without_underline + "Index.js");
         write(templateMap,"detail.template", first_upper_model_name_without_underline + "Detail.js");

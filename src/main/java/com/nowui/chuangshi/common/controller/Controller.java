@@ -215,6 +215,18 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(map);
     }
 
+    public void renderSuccessModeListlJson(List<? extends Model> resultList) {
+        for (Model result : resultList) {
+            result.keep(validateResponseKey);
+        }
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(Constant.CODE, HttpStatus.SC_OK);
+        map.put(Constant.DATA, resultList);
+
+        renderJson(map);
+    }
+
     public void renderSuccessModeListlJson(Integer total, List<? extends Model> resultList) {
         for (Model result : resultList) {
             result.keep(validateResponseKey);
