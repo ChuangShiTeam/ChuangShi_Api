@@ -11,7 +11,7 @@ import com.nowui.chuangshi.common.interceptor.SystemInterceptor;
 @ControllerKey("/system/member")
 public class MemberController extends Controller {
 
-    private final MemberService articleService = new MemberService();
+    private final MemberService memberService = new MemberService();
 
     @ActionKey("/system/member/list")
     public void list() {

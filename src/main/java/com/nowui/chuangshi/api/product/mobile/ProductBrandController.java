@@ -23,14 +23,14 @@ import java.util.List;
 @ControllerKey("/mobile/product/brand")
 public class ProductBrandController extends Controller {
 
-    private final ProductBrandService articleService = new ProductBrandService();
+    private final ProductBrandService productBrandService = new ProductBrandService();
 
     @ActionKey("/mobile/product/brand/list")
     public void list() {
         ProductBrand model = getModel(ProductBrand.class);
         model.where(ProductBrand.APP_ID);
 
-        List<ProductBrand> resultList = articleService.list(model);
+        List<ProductBrand> resultList = productBrandService.list(model);
 
         for (ProductBrand productBrand : resultList) {
             productBrand.put(ProductBrand.PRODUCT_BRAND_IMAGE, FileService.me.getFile_path(productBrand.getProduct_brand_image()));

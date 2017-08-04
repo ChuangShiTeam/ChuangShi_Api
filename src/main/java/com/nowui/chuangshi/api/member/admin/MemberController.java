@@ -16,7 +16,7 @@ import java.util.List;
 @ControllerKey("/admin/member")
 public class MemberController extends Controller {
 
-    private final MemberService articleService = MemberService.me;
+    private final MemberService memberService = MemberService.me;
 
     @ActionKey("/admin/member/list")
     public void list() {
@@ -25,8 +25,8 @@ public class MemberController extends Controller {
         Member model = getModel(Member.class);
         model.where(Member.APP_ID).andEmpty(Member.USER_ID).andEmpty(Member.MEMBER_LEVEL_ID).andEmpty(Member.MEMBER_STATUS);
 
-        Integer resultCount = articleService.count(model);
-        List<Member> resultList = articleService.list(model.paginate());
+        Integer resultCount = memberService.count(model);
+        List<Member> resultList = memberService.list(model.paginate());
 
         validateResponse(Member.MEMBER_ID, Member.USER_ID, Member.MEMBER_PARENT_ID, Member.QRCODE_ID, Member.MEMBER_LEVEL_ID, Member.MEMBER_STATUS, Member.SYSTEM_VERSION);
 
@@ -40,7 +40,7 @@ public class MemberController extends Controller {
         Member model = getModel(Member.class);
         model.where(Member.MEMBER_ID);
 
-        Member result = articleService.find(model);
+        Member result = memberService.find(model);
 
         validateResponse(Member.USER_ID, Member.MEMBER_PARENT_ID, Member.FROM_QRCODE_ID, Member.QRCODE_ID, Member.MEMBER_LEVEL_ID, Member.MEMBER_PARENT_PATH, Member.MEMBER_STATUS, Member.SYSTEM_VERSION);
 
@@ -54,7 +54,7 @@ public class MemberController extends Controller {
         Member model = getModel(Member.class);
         model.setMember_id(Util.getRandomUUID());
 
-        Boolean result = articleService.save(model);
+        Boolean result = memberService.save(model);
 
         renderSuccessJson(result);
     }
@@ -66,7 +66,7 @@ public class MemberController extends Controller {
         Member model = getModel(Member.class);
         model.where(model.MEMBER_ID).and(Member.SYSTEM_VERSION);
 
-        Boolean result = articleService.update(model);
+        Boolean result = memberService.update(model);
 
         renderSuccessJson(result);
     }
@@ -78,7 +78,7 @@ public class MemberController extends Controller {
         Member model = getModel(Member.class);
         model.where(model.MEMBER_ID).and(Member.SYSTEM_VERSION);
 
-        Boolean result = articleService.delete(model);
+        Boolean result = memberService.delete(model);
 
         renderSuccessJson(result);
     }

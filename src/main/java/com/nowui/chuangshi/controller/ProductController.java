@@ -149,6 +149,8 @@ public class ProductController extends Controller {
 
         Integer product_quantity_min = 1;
 
+
+
         if (request_app_id.equals("c1af3f1ae00e4e0da9b20f5bd41b4279")) {
             product_quantity_min = 10;
             if (member_level_value == 1) {

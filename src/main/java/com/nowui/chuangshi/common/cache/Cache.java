@@ -35,6 +35,10 @@ public class Cache {
         return dao.count(model);
     }
 
+    public Integer count(String key, Object value) {
+        return dao.count(key, value);
+    }
+
     public <M> List<M> list(Model model) {
         return dao.list(model);
     }

@@ -25,6 +25,25 @@ public class Dao {
         return count.intValue();
     }
 
+    public Integer count(String key, Object value) {
+        Model model = null;
+        try {
+            model = clazz.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        model.where(key, value);
+
+        String sql = model.buildCountSql();
+
+        System.out.println(sql);
+
+        Number count = Db.queryFirst(sql);
+        return count.intValue();
+    }
+
     public <M> List<M> list(Model model) {
         String sql = model.buildListSql();
 

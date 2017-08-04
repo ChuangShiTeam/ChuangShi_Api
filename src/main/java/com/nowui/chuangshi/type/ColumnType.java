@@ -7,6 +7,7 @@ public enum ColumnType {
     DECIMAL("DECIMAL"),
     TEXT("TEXT"),
     LONGTEXT("LONGTEXT"),
+    DATE("DATE"),
     DATETIME("DATETIME");
 
     private String key;

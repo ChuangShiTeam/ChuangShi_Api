@@ -20,6 +20,10 @@ public class Service {
         return getCache().count(model);
     }
 
+    public Integer count(String key, Object value) {
+        return getCache().count(key, value);
+    }
+
     public <M> List<M> list(Model model) {
         return getCache().list(model);
     }

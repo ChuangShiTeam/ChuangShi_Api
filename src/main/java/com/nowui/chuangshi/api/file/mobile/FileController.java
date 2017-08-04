@@ -8,7 +8,7 @@ import com.nowui.chuangshi.common.controller.Controller;
 @ControllerKey("/mobile/file")
 public class FileController extends Controller {
 
-    private final FileService articleService = new FileService();
+    private final FileService fileService = new FileService();
 
     @ActionKey("/mobile/file/list")
     public void list() {

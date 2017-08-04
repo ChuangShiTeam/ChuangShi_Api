@@ -16,7 +16,7 @@ import java.util.List;
 @ControllerKey("/admin/file")
 public class FileController extends Controller {
 
-    private final FileService articleService = FileService.me;
+    private final FileService fileService = FileService.me;
 
     @ActionKey("/admin/file/list")
     public void list() {
@@ -25,8 +25,8 @@ public class FileController extends Controller {
         File model = getModel(File.class);
         model.where(File.APP_ID).andEmpty(File.FILE_TYPE);
 
-        Integer resultCount = articleService.count(model);
-        List<File> resultList = articleService.list(model.paginate());
+        Integer resultCount = fileService.count(model);
+        List<File> resultList = fileService.list(model.paginate());
 
         validateResponse(File.FILE_ID, File.FILE_TYPE, File.FILE_NAME, File.FILE_SUFFIX, File.FILE_SIZE, File.SYSTEM_VERSION);
 
@@ -40,7 +40,7 @@ public class FileController extends Controller {
         File model = getModel(File.class);
         model.where(File.FILE_ID);
 
-        File result = articleService.find(model);
+        File result = fileService.find(model);
 
         validateResponse(File.FILE_TYPE, File.FILE_NAME, File.FILE_SUFFIX, File.FILE_SIZE, File.FILE_PATH, File.FILE_THUMBNAIL_PATH, File.FILE_ORIGINAL_PATH, File.FILE_IMAGE, File.FILE_IS_EXTERNAL, File.SYSTEM_VERSION);
 
@@ -54,7 +54,7 @@ public class FileController extends Controller {
         File model = getModel(File.class);
         model.setFile_id(Util.getRandomUUID());
 
-        Boolean result = articleService.save(model);
+        Boolean result = fileService.save(model);
 
         renderSuccessJson(result);
     }
@@ -66,7 +66,7 @@ public class FileController extends Controller {
         File model = getModel(File.class);
         model.where(model.FILE_ID).and(File.SYSTEM_VERSION);
 
-        Boolean result = articleService.update(model);
+        Boolean result = fileService.update(model);
 
         renderSuccessJson(result);
     }
@@ -78,7 +78,7 @@ public class FileController extends Controller {
         File model = getModel(File.class);
         model.where(model.FILE_ID).and(File.SYSTEM_VERSION);
 
-        Boolean result = articleService.delete(model);
+        Boolean result = fileService.delete(model);
 
         renderSuccessJson(result);
     }

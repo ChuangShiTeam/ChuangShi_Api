@@ -17,7 +17,7 @@ import java.util.List;
 @ControllerKey("/admin/product/brand")
 public class ProductBrandController extends Controller {
 
-    private final ProductBrandService articleService = ProductBrandService.me;
+    private final ProductBrandService productBrandService = ProductBrandService.me;
 
     @ActionKey("/admin/product/brand/list")
     public void list() {
@@ -26,8 +26,8 @@ public class ProductBrandController extends Controller {
         ProductBrand model = getModel(ProductBrand.class);
         model.where(ProductBrand.APP_ID).andEmpty(ProductBrand.PRODUCT_BRAND_NAME);
 
-        Integer resultCount = articleService.count(model);
-        List<ProductBrand> resultList = articleService.list(model.paginate());
+        Integer resultCount = productBrandService.count(model);
+        List<ProductBrand> resultList = productBrandService.list(model.paginate());
 
         validateResponse(ProductBrand.PRODUCT_BRAND_ID, ProductBrand.PRODUCT_BRAND_NAME, ProductBrand.SYSTEM_VERSION);
 
@@ -41,7 +41,7 @@ public class ProductBrandController extends Controller {
         ProductBrand model = getModel(ProductBrand.class);
         model.where(ProductBrand.PRODUCT_BRAND_ID);
 
-        ProductBrand result = articleService.find(model);
+        ProductBrand result = productBrandService.find(model);
 
         result.put(ProductBrand.PRODUCT_BRAND_IMAGE_FILE, FileService.me.getFile(result.getProduct_brand_image()));
 
@@ -57,7 +57,7 @@ public class ProductBrandController extends Controller {
         ProductBrand model = getModel(ProductBrand.class);
         model.setProduct_brand_id(Util.getRandomUUID());
 
-        Boolean result = articleService.save(model);
+        Boolean result = productBrandService.save(model);
 
         renderSuccessJson(result);
     }
@@ -69,7 +69,7 @@ public class ProductBrandController extends Controller {
         ProductBrand model = getModel(ProductBrand.class);
         model.where(model.PRODUCT_BRAND_ID).and(ProductBrand.SYSTEM_VERSION);
 
-        Boolean result = articleService.update(model);
+        Boolean result = productBrandService.update(model);
 
         renderSuccessJson(result);
     }
@@ -81,7 +81,7 @@ public class ProductBrandController extends Controller {
         ProductBrand model = getModel(ProductBrand.class);
         model.where(model.PRODUCT_BRAND_ID).and(ProductBrand.SYSTEM_VERSION);
 
-        Boolean result = articleService.delete(model);
+        Boolean result = productBrandService.delete(model);
 
         renderSuccessJson(result);
     }

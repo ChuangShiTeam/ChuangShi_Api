@@ -6,6 +6,8 @@ import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.type.ColumnType;
 
+import java.util.Date;
+
 @Table("table_product_brand")
 @Primary("product_brand_id")
 public class ProductBrand extends Model<ProductBrand> {
@@ -93,11 +95,11 @@ public class ProductBrand extends Model<ProductBrand> {
         set(SYSTEM_CREATE_USER_ID, system_create_user_id);
     }
 
-    public String getSystem_create_time() {
-        return getStr(SYSTEM_CREATE_TIME);
+    public Date getSystem_create_time() {
+        return getDate(SYSTEM_CREATE_TIME);
     }
 
-    public void setSystem_create_time(String system_create_time) {
+    public void setSystem_create_time(Date system_create_time) {
         set(SYSTEM_CREATE_TIME, system_create_time);
     }
 
@@ -109,11 +111,11 @@ public class ProductBrand extends Model<ProductBrand> {
         set(SYSTEM_UPDATE_USER_ID, system_update_user_id);
     }
 
-    public String getSystem_update_time() {
-        return getStr(SYSTEM_UPDATE_TIME);
+    public Date getSystem_update_time() {
+        return getDate(SYSTEM_UPDATE_TIME);
     }
 
-    public void setSystem_update_time(String system_update_time) {
+    public void setSystem_update_time(Date system_update_time) {
         set(SYSTEM_UPDATE_TIME, system_update_time);
     }
 
