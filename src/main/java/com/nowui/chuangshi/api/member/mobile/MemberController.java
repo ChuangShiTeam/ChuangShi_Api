@@ -100,7 +100,7 @@ public class MemberController extends Controller {
         }
         result.put(CertificatePay.CERTIFICATE_AMOUNT, certificate_amount);
 
-        validateResponse(Member.MEMBER_ID, User.USER_NAME, User.USER_AVATAR, Member.MEMBER_PARENT_ID, Member.QRCODE_ID, Member.MEMBER_LEVEL_ID, Bill.BILL_AMOUNT, CertificatePay.CERTIFICATE_AMOUNT, Member.MEMBER_STATUS);
+        validateResponse(Member.MEMBER_ID, User.USER_NAME, User.USER_AVATAR, Member.MEMBER_PARENT_ID, Member.QRCODE_ID, MemberLevel.MEMBER_LEVEL_ID, MemberLevel.MEMBER_LEVEL_NAME, Bill.BILL_AMOUNT, CertificatePay.CERTIFICATE_AMOUNT, Member.MEMBER_STATUS);
 
         renderSuccessModelJson(result);
     }
