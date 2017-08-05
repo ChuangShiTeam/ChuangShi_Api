@@ -11,6 +11,7 @@ import com.nowui.chuangshi.api.enchashment.model.Enchashment;
 import com.nowui.chuangshi.api.enchashment.service.EnchashmentService;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.member.model.Member;
+import com.nowui.chuangshi.api.member.model.MemberAddress;
 import com.nowui.chuangshi.api.member.model.MemberLevel;
 import com.nowui.chuangshi.api.member.service.MemberLevelService;
 import com.nowui.chuangshi.api.member.service.MemberService;
@@ -35,6 +36,18 @@ public class MemberController extends Controller {
     public void list() {
 
         renderSuccessJson();
+    }
+
+    @ActionKey("/mobile/member/children/address/list")
+    public void childrenAddresslist() {
+        validateRequest(MemberAddress.MEMBER_ID);
+        MemberAddress model = getModel(MemberAddress.class);
+
+        List<MemberAddress> memberAddressList = MemberService.me.list(new MemberAddress().where(MemberAddress.MEMBER_ID, model.getMember_id()));
+
+        validateResponse(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_POSTCODE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA, MemberAddress.MEMBER_ADDRESS_ADDRESS);
+
+        renderSuccessModeListlJson(memberAddressList);
     }
 
     @ActionKey("/mobile/member/find")

@@ -20,7 +20,7 @@ public class MemberController extends Controller {
 
     @ActionKey("/admin/member/list")
     public void list() {
-        validateRequest(Member.USER_ID, Member.MEMBER_LEVEL_ID, Member.MEMBER_STATUS, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(Member.MEMBER_LEVEL_ID, Member.MEMBER_STATUS, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         Member model = getModel(Member.class);
         model.where(Member.APP_ID).andEmpty(Member.USER_ID).andEmpty(Member.MEMBER_LEVEL_ID).andEmpty(Member.MEMBER_STATUS);

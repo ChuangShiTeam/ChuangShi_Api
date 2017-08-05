@@ -55,10 +55,10 @@ public class ProductBrandController extends Controller {
         for (Product product : resultList) {
             product.put(Product.PRODUCT_IMAGE, FileService.me.getFile_path(product.getProduct_image()));
 
-            List<ProductSku> productSkuList = ProductSkuService.me.list(ProductSku.PRODUCT_ID, product.getProduct_id());
+            List<ProductSku> productSkuList = ProductSkuService.me.list(new ProductSku().where(ProductSku.PRODUCT_ID, product.getProduct_id()));
             for (ProductSku productSku : productSkuList) {
                 if (productSku.getProduct_sku_is_default()) {
-                    List<ProductSkuPrice> productSkuPriceList = ProductSkuPriceService.me.list(ProductSkuPrice.PRODUCT_SKU_ID, productSku.getProduct_sku_id());
+                    List<ProductSkuPrice> productSkuPriceList = ProductSkuPriceService.me.list(new ProductSkuPrice().where(ProductSkuPrice.PRODUCT_SKU_ID, productSku.getProduct_sku_id()));
                     for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
                         if (ValidateUtil.isNullOrEmpty(member.getMember_level_id())) {
                             if (productSkuPrice.getMember_level_id().equals("")) {

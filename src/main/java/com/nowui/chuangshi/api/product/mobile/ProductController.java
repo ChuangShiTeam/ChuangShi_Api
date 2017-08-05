@@ -47,10 +47,10 @@ public class ProductController extends Controller {
         Product result = productService.find(model);
         result.put(Product.PRODUCT_IMAGE, FileService.me.getFile_path(result.getProduct_image()));
 
-        List<ProductSku> productSkuList = ProductSkuService.me.list(ProductSku.PRODUCT_ID, result.getProduct_id());
+        List<ProductSku> productSkuList = ProductSkuService.me.list(new ProductSku().where(ProductSku.PRODUCT_ID, result.getProduct_id()));
         for (ProductSku productSku : productSkuList) {
             if (productSku.getProduct_sku_is_default()) {
-                List<ProductSkuPrice> productSkuPriceList = ProductSkuPriceService.me.list(ProductSkuPrice.PRODUCT_SKU_ID, productSku.getProduct_sku_id());
+                List<ProductSkuPrice> productSkuPriceList = ProductSkuPriceService.me.list(new ProductSkuPrice().where(ProductSkuPrice.PRODUCT_SKU_ID, productSku.getProduct_sku_id()));
                 for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
                     if (productSkuPrice.getMember_level_id().equals("")) {
                         result.put(ProductSkuPrice.PRODUCT_SKU_PRICE, productSkuPrice.getProduct_sku_price());
@@ -74,7 +74,7 @@ public class ProductController extends Controller {
             member_level_value = memberLevel.getMember_level_value();
         }
 
-        Integer count = MemberPurchaseOrderService.me.count(MemberPurchaseOrder.USER_ID, request_user_id);
+        Integer count = MemberPurchaseOrderService.me.count(new MemberPurchaseOrder().where(MemberPurchaseOrder.USER_ID, request_user_id));
 
         result.put("is_first_purchase", count == 0);
 
@@ -101,6 +101,8 @@ public class ProductController extends Controller {
         } else if (member_level_value == 7) {
             product_quantity_min = 10;
         }
+
+        product_quantity_min = 1;
 
         result.put("product_sku_quantity", product_quantity_min);
 
