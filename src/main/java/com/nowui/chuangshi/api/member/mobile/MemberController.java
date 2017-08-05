@@ -2,7 +2,6 @@ package com.nowui.chuangshi.api.member.mobile;
 
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.bill.model.Bill;
-import com.nowui.chuangshi.api.bill.service.BillService;
 import com.nowui.chuangshi.api.certificate.model.Certificate;
 import com.nowui.chuangshi.api.certificate.model.CertificatePay;
 import com.nowui.chuangshi.api.certificate.service.CertificatePayService;
@@ -15,13 +14,12 @@ import com.nowui.chuangshi.api.member.model.MemberAddress;
 import com.nowui.chuangshi.api.member.model.MemberLevel;
 import com.nowui.chuangshi.api.member.service.MemberLevelService;
 import com.nowui.chuangshi.api.member.service.MemberService;
-import com.nowui.chuangshi.api.trade.model.MemberPurchaseOrder;
-import com.nowui.chuangshi.api.trade.service.MemberPurchaseOrderService;
+import com.nowui.chuangshi.api.trade.model.MemberDeliveryOrder;
+import com.nowui.chuangshi.api.trade.service.MemberDeliveryOrderService;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.type.BillType;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.math.BigDecimal;
@@ -80,9 +78,9 @@ public class MemberController extends Controller {
 //        result.put(Bill.BILL_AMOUNT, bill_amount);
 
         BigDecimal bill_amount = BigDecimal.ZERO;
-        List<MemberPurchaseOrder> memberPurchaseOrderList = MemberPurchaseOrderService.me.list(new MemberPurchaseOrder().where(MemberPurchaseOrder.USER_ID, request_user_id).and(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_PAY, true));
-        for (MemberPurchaseOrder memberPurchaseOrder : memberPurchaseOrderList) {
-            bill_amount = bill_amount.add(memberPurchaseOrder.getMember_purchase_order_amount());
+        List<MemberDeliveryOrder> memberPurchaseOrderList = MemberDeliveryOrderService.me.list(new MemberDeliveryOrder().where(MemberDeliveryOrder.USER_ID, request_user_id).and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, true));
+        for (MemberDeliveryOrder memberDeliveryOrder : memberPurchaseOrderList) {
+            bill_amount = bill_amount.add(memberDeliveryOrder.getMember_delivery_order_amount());
         }
         List<Enchashment> enchashmentList = EnchashmentService.me.list(new Enchashment().where(Enchashment.USER_ID, request_user_id));
         for (Enchashment enchashment : enchashmentList) {

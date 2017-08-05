@@ -4,7 +4,9 @@ import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.bill.model.Bill;
 import com.nowui.chuangshi.api.enchashment.model.Enchashment;
 import com.nowui.chuangshi.api.enchashment.service.EnchashmentService;
+import com.nowui.chuangshi.api.trade.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.api.trade.model.MemberPurchaseOrder;
+import com.nowui.chuangshi.api.trade.service.MemberDeliveryOrderService;
 import com.nowui.chuangshi.api.trade.service.MemberPurchaseOrderService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
@@ -52,9 +54,9 @@ public class EnchashmentController extends Controller {
 
         Map<String, Object> result = new HashMap<String, Object>();
         BigDecimal bill_amount = BigDecimal.ZERO;
-        List<MemberPurchaseOrder> memberPurchaseOrderList = MemberPurchaseOrderService.me.list(new MemberPurchaseOrder().where(MemberPurchaseOrder.USER_ID, request_user_id).and(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_PAY, true));
-        for (MemberPurchaseOrder memberPurchaseOrder : memberPurchaseOrderList) {
-            bill_amount = bill_amount.add(memberPurchaseOrder.getMember_purchase_order_amount());
+        List<MemberDeliveryOrder> memberPurchaseOrderList = MemberDeliveryOrderService.me.list(new MemberDeliveryOrder().where(MemberDeliveryOrder.USER_ID, request_user_id).and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, true));
+        for (MemberDeliveryOrder memberDeliveryOrder : memberPurchaseOrderList) {
+            bill_amount = bill_amount.add(memberDeliveryOrder.getMember_delivery_order_amount());
         }
 
         List<Enchashment> enchashmentList = EnchashmentService.me.list(new Enchashment().where(Enchashment.USER_ID, request_user_id));
