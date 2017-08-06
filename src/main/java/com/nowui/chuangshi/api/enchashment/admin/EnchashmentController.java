@@ -7,6 +7,7 @@ import com.nowui.chuangshi.api.enchashment.service.EnchashmentService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
@@ -16,17 +17,15 @@ import java.util.List;
 @ControllerKey("/admin/enchashment")
 public class EnchashmentController extends Controller {
 
-    private final EnchashmentService enchashmentService = EnchashmentService.me;
-
     @ActionKey("/admin/enchashment/list")
     public void list() {
         validateRequest(Enchashment.USER_ID, Enchashment.ENCHASHMENT_STATUS, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         Enchashment model = getModel(Enchashment.class);
-        model.where(Enchashment.APP_ID).andEmpty(Enchashment.USER_ID).andEmpty(Enchashment.ENCHASHMENT_STATUS);
+        Cnd cnd = Cnd.where(Enchashment.APP_ID, model.getApp_id()).andAllowEmpty(Enchashment.USER_ID, model.getUser_id()).andAllowEmpty(Enchashment.ENCHASHMENT_STATUS, model.getEnchashment_status());
 
-        Integer resultCount = enchashmentService.count(model);
-        List<Enchashment> resultList = enchashmentService.list(model.paginate());
+        Integer resultCount = EnchashmentService.me.count(cnd);
+        List<Enchashment> resultList = EnchashmentService.me.list(cnd.paginate(getM(), getN()));
 
         validateResponse(Enchashment.ENCHASHMENT_ID, Enchashment.USER_ID, Enchashment.ENCHASHMENT_AMOUNT, Enchashment.ENCHASHMENT_STATUS, Enchashment.SYSTEM_VERSION);
 
@@ -38,9 +37,8 @@ public class EnchashmentController extends Controller {
         validateRequest(Enchashment.ENCHASHMENT_ID);
 
         Enchashment model = getModel(Enchashment.class);
-        model.where(Enchashment.ENCHASHMENT_ID);
 
-        Enchashment result = enchashmentService.find(model);
+        Enchashment result = EnchashmentService.me.findById(model.getEnchashment_id());
 
         validateResponse(Enchashment.USER_ID, Enchashment.ENCHASHMENT_AMOUNT, Enchashment.ENCHASHMENT_STATUS, Enchashment.SYSTEM_VERSION);
 
@@ -54,7 +52,7 @@ public class EnchashmentController extends Controller {
         Enchashment model = getModel(Enchashment.class);
         model.setEnchashment_id(Util.getRandomUUID());
 
-        Boolean result = enchashmentService.save(model);
+        Boolean result = EnchashmentService.me.save(model);
 
         renderSuccessJson(result);
     }
@@ -64,9 +62,8 @@ public class EnchashmentController extends Controller {
         validateRequest(Enchashment.ENCHASHMENT_ID, Enchashment.USER_ID, Enchashment.ENCHASHMENT_AMOUNT, Enchashment.ENCHASHMENT_STATUS, Enchashment.SYSTEM_VERSION);
 
         Enchashment model = getModel(Enchashment.class);
-        model.where(model.ENCHASHMENT_ID).and(Enchashment.SYSTEM_VERSION);
 
-        Boolean result = enchashmentService.update(model);
+        Boolean result = EnchashmentService.me.update(model, Cnd.where(model.ENCHASHMENT_ID, model.getEnchashment_id()).and(Enchashment.SYSTEM_VERSION, model.getSystem_version()));
 
         renderSuccessJson(result);
     }
@@ -76,9 +73,8 @@ public class EnchashmentController extends Controller {
         validateRequest(Enchashment.ENCHASHMENT_ID, Enchashment.SYSTEM_VERSION);
 
         Enchashment model = getModel(Enchashment.class);
-        model.where(model.ENCHASHMENT_ID).and(Enchashment.SYSTEM_VERSION);
 
-        Boolean result = enchashmentService.delete(model);
+        Boolean result = EnchashmentService.me.delete(model, Cnd.where(model.ENCHASHMENT_ID, model.getEnchashment_id()).and(Enchashment.SYSTEM_VERSION, model.getSystem_version()));
 
         renderSuccessJson(result);
     }

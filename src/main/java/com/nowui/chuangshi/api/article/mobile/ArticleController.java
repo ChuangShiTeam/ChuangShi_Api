@@ -1,14 +1,11 @@
 package com.nowui.chuangshi.api.article.mobile;
 
 import com.jfinal.core.ActionKey;
-import com.nowui.chuangshi.api.article.service.ArticleService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 
 @ControllerKey("/mobile/article")
 public class ArticleController extends Controller {
-
-    private final ArticleService articleService = new ArticleService();
 
     @ActionKey("/mobile/article/list")
     public void list() {

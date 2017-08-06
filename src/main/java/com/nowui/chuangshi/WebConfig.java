@@ -386,25 +386,6 @@ public class WebConfig extends JFinalConfig {
                 ApiConfigKit.putApiConfig(apiConfig);
             }
         }
-
-        // Article article = new Article();
-        // article.setArticle_id("123456");
-        // article.setArticle_content("asdfgh");
-        //
-        // ArticleService articleService = new ArticleService();
-        //
-        //
-        // articleService.update(article.whereLeftLike(Article.ARTICLE_NAME).and(Article.ARTICLE_CONTENT));
-        //
-        //// System.out.println(articleService.save(article));
-        //// System.out.println(article.whereLeftLike(Article.ARTICLE_NAME,
-        // "aaa").and(Article.ARTICLE_CONTENT, "qqq").getListSql());
-        //
-        // Dao dao = new Dao();
-        // dao.count(new Article().whereLeftLike(Article.ARTICLE_NAME,
-        // "aaa").and(Article.ARTICLE_CONTENT, "qqq"));
-        // System.out.println("++++++++++");
-        // System.out.println(dao.count(article));
     }
 
 }

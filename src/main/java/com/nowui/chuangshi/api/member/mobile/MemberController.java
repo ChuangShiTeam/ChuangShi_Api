@@ -20,6 +20,7 @@ import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
+import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.math.BigDecimal;
@@ -27,8 +28,6 @@ import java.util.List;
 
 @ControllerKey("/mobile/member")
 public class MemberController extends Controller {
-
-    private final MemberService memberService = MemberService.me;
 
     @ActionKey("/mobile/member/list")
     public void list() {
@@ -41,7 +40,7 @@ public class MemberController extends Controller {
         validateRequest(MemberAddress.MEMBER_ID);
         MemberAddress model = getModel(MemberAddress.class);
 
-        List<MemberAddress> memberAddressList = MemberService.me.list(new MemberAddress().where(MemberAddress.MEMBER_ID, model.getMember_id()));
+        List<MemberAddress> memberAddressList = MemberService.me.list(Cnd.where(MemberAddress.MEMBER_ID, model.getMember_id()));
 
         validateResponse(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_POSTCODE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA, MemberAddress.MEMBER_ADDRESS_ADDRESS);
 
@@ -70,28 +69,21 @@ public class MemberController extends Controller {
             result.put(MemberLevel.MEMBER_LEVEL_NAME, memberLevel.getMember_level_name());
         }
 
-//        BigDecimal bill_amount = BigDecimal.ZERO;
-//        List<Bill> billList = BillService.me.list(new Bill().where(Bill.USER_ID, request_user_id).and(Bill.BILL_IS_INCOME, true));
-//        for (Bill bill : billList) {
-//            bill_amount.add(bill.getBill_amount());
-//        }
-//        result.put(Bill.BILL_AMOUNT, bill_amount);
-
         BigDecimal bill_amount = BigDecimal.ZERO;
-        List<MemberDeliveryOrder> memberPurchaseOrderList = MemberDeliveryOrderService.me.list(new MemberDeliveryOrder().where(MemberDeliveryOrder.USER_ID, request_user_id).and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, true));
+        List<MemberDeliveryOrder> memberPurchaseOrderList = MemberDeliveryOrderService.me.list(Cnd.where(MemberDeliveryOrder.USER_ID, request_user_id).and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, true));
         for (MemberDeliveryOrder memberDeliveryOrder : memberPurchaseOrderList) {
             bill_amount = bill_amount.add(memberDeliveryOrder.getMember_delivery_order_amount());
         }
-        List<Enchashment> enchashmentList = EnchashmentService.me.list(new Enchashment().where(Enchashment.USER_ID, request_user_id));
+        List<Enchashment> enchashmentList = EnchashmentService.me.list(Cnd.where(Enchashment.USER_ID, request_user_id));
         for (Enchashment enchashment : enchashmentList) {
             bill_amount = bill_amount.subtract(enchashment.getEnchashment_amount());
         }
         result.put(Bill.BILL_AMOUNT, bill_amount);
 
         BigDecimal certificate_amount = BigDecimal.ZERO;
-        Certificate certificate = CertificateService.me.find(new Certificate().where(Certificate.USER_ID, request_user_id));
+        Certificate certificate = CertificateService.me.find(Cnd.where(Certificate.USER_ID, request_user_id));
         if (certificate != null) {
-            CertificatePay certificatePay = CertificatePayService.me.find(new CertificatePay().where(CertificatePay.CERTIFICATE_ID, certificate.getCertificate_id()));
+            CertificatePay certificatePay = CertificatePayService.me.find(Cnd.where(CertificatePay.CERTIFICATE_ID, certificate.getCertificate_id()));
             if (certificatePay != null && certificatePay.getCertificate_amount() != null) {
                 certificate_amount = certificatePay.getCertificate_amount();
             }

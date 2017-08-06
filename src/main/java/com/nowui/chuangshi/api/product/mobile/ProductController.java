@@ -18,14 +18,13 @@ import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
+import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.List;
 
 @ControllerKey("/mobile/product")
 public class ProductController extends Controller {
-
-    private final ProductService productService = new ProductService();
 
     @ActionKey("/mobile/product/list")
     public void list() {
@@ -38,19 +37,18 @@ public class ProductController extends Controller {
         validateRequest(Product.PRODUCT_ID);
 
         Product model = getModel(Product.class);
-        model.where(Product.PRODUCT_ID);
 
         String request_user_id = getRequest_user_id();
         User user = UserService.me.findById(request_user_id);
         Member member = MemberService.me.findById(user.getObject_id());
 
-        Product result = productService.find(model);
+        Product result = ProductService.me.findById(model.getProduct_id());
         result.put(Product.PRODUCT_IMAGE, FileService.me.getFile_path(result.getProduct_image()));
 
-        List<ProductSku> productSkuList = ProductSkuService.me.list(new ProductSku().where(ProductSku.PRODUCT_ID, result.getProduct_id()));
+        List<ProductSku> productSkuList = ProductSkuService.me.list(Cnd.where(ProductSku.PRODUCT_ID, result.getProduct_id()));
         for (ProductSku productSku : productSkuList) {
             if (productSku.getProduct_sku_is_default()) {
-                List<ProductSkuPrice> productSkuPriceList = ProductSkuPriceService.me.list(new ProductSkuPrice().where(ProductSkuPrice.PRODUCT_SKU_ID, productSku.getProduct_sku_id()));
+                List<ProductSkuPrice> productSkuPriceList = ProductSkuPriceService.me.list(Cnd.where(ProductSkuPrice.PRODUCT_SKU_ID, productSku.getProduct_sku_id()));
                 for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
                     if (productSkuPrice.getMember_level_id().equals("")) {
                         result.put(ProductSkuPrice.PRODUCT_SKU_PRICE, productSkuPrice.getProduct_sku_price());
@@ -74,7 +72,7 @@ public class ProductController extends Controller {
             member_level_value = memberLevel.getMember_level_value();
         }
 
-        Integer count = MemberPurchaseOrderService.me.count(new MemberPurchaseOrder().where(MemberPurchaseOrder.USER_ID, request_user_id));
+        Integer count = MemberPurchaseOrderService.me.count(Cnd.where(MemberPurchaseOrder.USER_ID, request_user_id));
 
         result.put("is_first_purchase", count == 0);
 

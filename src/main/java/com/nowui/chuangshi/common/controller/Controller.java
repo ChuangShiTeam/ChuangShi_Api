@@ -23,8 +23,6 @@ public class Controller extends com.jfinal.core.Controller {
                 JSONObject jsonObject = getAttr(Constant.REQUEST_PARAMETER);
 
                 if (jsonObject.containsKey(Constant.PAGE_INDEX) && jsonObject.containsKey(Constant.PAGE_SIZE)) {
-                    jsonObject.put(Constant.LIMIT_M, getM());
-                    jsonObject.put(Constant.LIMIT_N, getN());
                 }
 
                 ((Model) model).put(jsonObject);
@@ -96,7 +94,7 @@ public class Controller extends com.jfinal.core.Controller {
         setAttr(Constant.PAGE_SIZE, page_size);
     }
 
-    private int getM() {
+    public Integer getM() {
         JSONObject jsonObject = getParameterJSONObject();
 
         int page_index = jsonObject.getIntValue(Constant.PAGE_INDEX);
@@ -109,7 +107,7 @@ public class Controller extends com.jfinal.core.Controller {
         }
     }
 
-    private int getN() {
+    public Integer getN() {
         JSONObject jsonObject = getParameterJSONObject();
 
         int page_size = jsonObject.getIntValue(Constant.PAGE_SIZE);

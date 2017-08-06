@@ -16,6 +16,7 @@ import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
+import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.List;
@@ -23,14 +24,11 @@ import java.util.List;
 @ControllerKey("/mobile/product/brand")
 public class ProductBrandController extends Controller {
 
-    private final ProductBrandService productBrandService = new ProductBrandService();
-
     @ActionKey("/mobile/product/brand/list")
     public void list() {
         ProductBrand model = getModel(ProductBrand.class);
-        model.where(ProductBrand.APP_ID);
 
-        List<ProductBrand> resultList = productBrandService.list(model);
+        List<ProductBrand> resultList = ProductBrandService.me.list(Cnd.where(ProductBrand.APP_ID, model.getApp_id()));
 
         for (ProductBrand productBrand : resultList) {
             productBrand.put(ProductBrand.PRODUCT_BRAND_IMAGE, FileService.me.getFile_path(productBrand.getProduct_brand_image()));
@@ -44,21 +42,20 @@ public class ProductBrandController extends Controller {
     @ActionKey("/mobile/product/brand/product/list")
     public void productList() {
         Product model = getModel(Product.class);
-        model.where(ProductBrand.APP_ID).and(ProductBrand.PRODUCT_BRAND_ID);
 
         String request_user_id = getRequest_user_id();
         User user = UserService.me.findById(request_user_id);
         Member member = MemberService.me.findById(user.getObject_id());
 
-        List<Product> resultList = ProductService.me.list(model);
+        List<Product> resultList = ProductService.me.list(Cnd.where(ProductBrand.APP_ID, model.getApp_id()).and(ProductBrand.PRODUCT_BRAND_ID, model.getProduct_brand_id()));
 
         for (Product product : resultList) {
             product.put(Product.PRODUCT_IMAGE, FileService.me.getFile_path(product.getProduct_image()));
 
-            List<ProductSku> productSkuList = ProductSkuService.me.list(new ProductSku().where(ProductSku.PRODUCT_ID, product.getProduct_id()));
+            List<ProductSku> productSkuList = ProductSkuService.me.list(Cnd.where(ProductSku.PRODUCT_ID, product.getProduct_id()));
             for (ProductSku productSku : productSkuList) {
                 if (productSku.getProduct_sku_is_default()) {
-                    List<ProductSkuPrice> productSkuPriceList = ProductSkuPriceService.me.list(new ProductSkuPrice().where(ProductSkuPrice.PRODUCT_SKU_ID, productSku.getProduct_sku_id()));
+                    List<ProductSkuPrice> productSkuPriceList = ProductSkuPriceService.me.list(Cnd.where(ProductSkuPrice.PRODUCT_SKU_ID, productSku.getProduct_sku_id()));
                     for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
                         if (ValidateUtil.isNullOrEmpty(member.getMember_level_id())) {
                             if (productSkuPrice.getMember_level_id().equals("")) {

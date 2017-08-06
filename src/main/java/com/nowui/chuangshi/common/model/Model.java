@@ -3,10 +3,7 @@ package com.nowui.chuangshi.common.model;
 import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
 import com.nowui.chuangshi.common.annotation.Column;
-import com.nowui.chuangshi.common.sql.Condition;
-import com.nowui.chuangshi.common.sql.ConditionType;
-import com.nowui.chuangshi.common.sql.Expression;
-import com.nowui.chuangshi.common.sql.ExpressionType;
+import com.nowui.chuangshi.common.sql.*;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.ColumnType;
 import com.nowui.chuangshi.util.DateUtil;
@@ -21,50 +18,80 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
     private static final long serialVersionUID = 1L;
 
-    private String conditionSql;
-    private List<Condition> conditionList = new ArrayList<Condition>();
-    private StringBuilder selectSql = new StringBuilder();
-    private StringBuilder setSql = new StringBuilder();
-    private StringBuilder orderSql = new StringBuilder();
-    private StringBuilder paginateSql = new StringBuilder();
+//    private String conditionSql;
+//    private List<Condition> conditionList = new ArrayList<Condition>();
+//    private StringBuilder selectSql = new StringBuilder();
+//    private StringBuilder setSql = new StringBuilder();
+//    private StringBuilder orderSql = new StringBuilder();
+//    private StringBuilder paginateSql = new StringBuilder();
     private Boolean isSystemVersion = true;
     private Boolean isSystemStatus = true;
     private List<Map<String, Object>> columnList;
 
-    private void addConditionList(Condition condition) {
-        Boolean isExit = false;
+    private Criteria criteria;
 
-        Expression expression = condition.getExpression();
-        if (expression != null) {
-            for (int i = 0; i < getColumnList().size(); i++) {
-                Map<String, Object> column = getColumnList().get(i);
+    public void setPrimaryKeyCriteria(String id) {
+        Expression expression = new Expression(getTable().getPrimaryKey()[0], ExpressionType.EQUAL, id);
+        Criteria criteria = new Criteria();
+        criteria.addCondition(new Condition(ConditionType.WHERE, expression, false));
 
-                if (column.get("name").toString().equals(expression.getKey())) {
-                    isExit = true;
-
-                    break;
-                }
-            }
-        }
-
-        if (isExit) {
-            conditionList.add(condition);
-        }
+        setCriteria(criteria);
     }
 
-    public Boolean isOnlyCondition(String key) {
-        Boolean isExit = false;
-
-        for (Condition condition : conditionList) {
-            if (condition.getExpression() != null) {
-                if (condition.getExpression().getKey().equals(key)) {
-                    isExit = true;
-                }
-            }
-        }
-
-        return isExit;
+    public void setCriteria(Criteria criteria) {
+        this.criteria = criteria;
     }
+
+//    public Integer getM() {
+//        return getInt(Constant.LIMIT_M);
+//    }
+
+//    public void setM(Integer m) {
+//        put(Constant.LIMIT_M, m);
+//    }
+
+//    public Integer getN() {
+//        return getInt(Constant.LIMIT_N);
+//    }
+
+//    public void setN(Integer n) {
+//        put(Constant.LIMIT_N, n);
+//    }
+
+//    private void addConditionList(Condition condition) {
+//        Boolean isExit = false;
+//
+//        Expression expression = condition.getExpression();
+//        if (expression != null) {
+//            for (int i = 0; i < getColumnList().size(); i++) {
+//                Map<String, Object> column = getColumnList().get(i);
+//
+//                if (column.get("name").toString().equals(expression.getKey())) {
+//                    isExit = true;
+//
+//                    break;
+//                }
+//            }
+//        }
+//
+//        if (isExit) {
+//            conditionList.add(condition);
+//        }
+//    }
+
+//    public Boolean isOnlyCondition(String key) {
+//        Boolean isExit = false;
+//
+//        for (Condition condition : criteria.getConditionList()) {
+//            if (condition.getExpression() != null) {
+//                if (condition.getExpression().getKey().equals(key)) {
+//                    isExit = true;
+//                }
+//            }
+//        }
+//
+//        return isExit;
+//    }
 
     private Table getTable() {
         return TableMapping.me().getTable(getUsefulClass());
@@ -103,7 +130,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return columnList;
     }
 
-    public M select(String... keys) {
+    /*public M select(String... keys) {
         if (keys.length > 0) {
             selectSql = new StringBuilder();
 
@@ -277,7 +304,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         paginateSql.append("\n");
 
         return (M) this;
-    }
+    }*/
 
     private String regexVariable(ColumnType columnType, Object value) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -373,7 +400,123 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return isExit;
     }
 
+    public String buildSetSql() {
+        if (criteria == null) {
+            throw new RuntimeException("sql without set");
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (Map<String, Object> map : criteria.getSetList()) {
+
+        }
+
+        return stringBuilder.toString();
+
+        /*String set = setSql.toString();
+        if (set.equals("")) {
+            throw new RuntimeException("sql without set variable");
+        }
+
+        if (isSystemVersion) {
+            setSql.append(Constant.SYSTEM_VERSION);
+            setSql.append(" = ");
+            setSql.append(Constant.SYSTEM_VERSION);
+            setSql.append(" + 1\n");
+
+            set = setSql.toString();
+        } else {
+            set = set.substring(0, set.length() - 2) + "\n";
+        }*/
+    }
+
     public String buildConditionSql() {
+        if (criteria == null) {
+            throw new RuntimeException("sql without condition");
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        Boolean isWhere = false;
+        Boolean isLeftLike = false;
+        Boolean isRightike = false;
+
+        if (isSystemStatus) {
+            Expression expression = new Expression(Constant.SYSTEM_STATUS, ExpressionType.EQUAL, true);
+            Condition condition = new Condition(ConditionType.WHERE, expression, false);
+            criteria.addCondition(condition);
+        }
+
+        for(Condition condition : criteria.getConditionList()) {
+            if(condition.getExpression() != null) {
+                Expression expression = condition.getExpression();
+                if (isWhere) {
+                    stringBuilder.append("AND ");
+                } else {
+                    isWhere = true;
+                    stringBuilder.append("WHERE ");
+                }
+                stringBuilder.append(expression.getKey());
+                switch (expression.getExpressionType()) {
+                    case EQUAL:
+                        stringBuilder.append(" = ");
+                        break;
+                    case LIKE:
+                        isLeftLike = true;
+                        isRightike = true;
+
+                        stringBuilder.append(" LIKE ");
+                        break;
+                    case LEFT_LIKE:
+                        isLeftLike = true;
+
+                        break;
+                    case RIGHT_LIKE:
+                        isRightike = true;
+
+                        break;
+                    case LESS_THAN:
+                        break;
+                    case GREAT_THAN_EQUAL:
+                        break;
+                    case LESS_THAN_EQUAL:
+                        break;
+                }
+
+                if (expression.getValue() instanceof String) {
+                    stringBuilder.append("'");
+
+                    if (isLeftLike) {
+                        stringBuilder.append("%");
+                    }
+
+                    stringBuilder.append(expression.getValue());
+
+                    if (isRightike) {
+                        stringBuilder.append("%");
+                    }
+
+                    stringBuilder.append("'");
+                } else if (expression.getValue() instanceof Boolean) {
+                    stringBuilder.append((Boolean) expression.getValue() ? 1 : 0);
+                } else if (expression.getValue() instanceof Date) {
+                    stringBuilder.append("'");
+                    stringBuilder.append(DateUtil.getDateTimeString((Date) expression.getValue()));
+                    stringBuilder.append("'");
+                } else {
+                    stringBuilder.append(expression.getValue());
+                }
+                stringBuilder.append("\n");
+
+            } else if(condition.getExpressionGroup() != null) {
+
+            }
+        }
+
+        return stringBuilder.toString();
+    }
+
+    /*public String buildConditionSql() {
         if (!ValidateUtil.isNullOrEmpty(conditionSql)) {
             return conditionSql.toString();
         }
@@ -459,7 +602,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         conditionSql = stringBuilder.toString();
 
         return conditionSql;
-    }
+    }*/
 
     public String buildCountSql() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -482,7 +625,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         stringBuilder.append(getTable().getName());
         stringBuilder.append(" \n");
         stringBuilder.append(buildConditionSql());
-        stringBuilder.append(paginateSql);
+//        stringBuilder.append(paginateSql);
 
         buildConditionSql();
 
@@ -490,7 +633,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     }
 
     public String buildFindSql() {
-        if (conditionList.size() == 0) {
+        if (criteria.getConditionList().size() == 0) {
             throw new RuntimeException("sql without condition");
         }
 
@@ -502,7 +645,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         stringBuilder.append(getTable().getName());
         stringBuilder.append(" \n");
         stringBuilder.append(buildConditionSql());
-        stringBuilder.append(paginateSql);
+//        stringBuilder.append(paginateSql);
 
         return stringBuilder.toString();
     }
@@ -511,7 +654,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         StringBuilder stringBuilder = new StringBuilder();
 
         StringBuilder stringBuilder2 = new StringBuilder();
-        if (conditionList.size() == 0) {
+        if (criteria.getConditionList().size() == 0) {
             stringBuilder.append("INSERT INTO ");
             stringBuilder.append(getTable().getName());
             stringBuilder.append(" ");
@@ -572,7 +715,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     }
 
     public String buildUpdateSql() {
-        if (conditionList.size() == 0) {
+        if (criteria.getConditionList().size() == 0) {
             throw new RuntimeException("sql without condition");
         }
 
@@ -626,24 +769,12 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     }
 
     public String buildDeleteSql() {
-        if (conditionList.size() == 0) {
+        if (criteria.getSetList().size() == 0) {
+            throw new RuntimeException("sql without set");
+        }
+
+        if (criteria.getConditionList().size() == 0) {
             throw new RuntimeException("sql without condition");
-        }
-
-        String set = setSql.toString();
-        if (set.equals("")) {
-            throw new RuntimeException("sql without set variable");
-        }
-
-        if (isSystemVersion) {
-            setSql.append(Constant.SYSTEM_VERSION);
-            setSql.append(" = ");
-            setSql.append(Constant.SYSTEM_VERSION);
-            setSql.append(" + 1\n");
-
-            set = setSql.toString();
-        } else {
-            set = set.substring(0, set.length() - 2) + "\n";
         }
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -651,7 +782,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         stringBuilder.append("UPDATE ");
         stringBuilder.append(getTable().getName());
         stringBuilder.append(" SET\n");
-        stringBuilder.append(set);
+        stringBuilder.append(buildSetSql());
         stringBuilder.append(buildConditionSql());
 
         return stringBuilder.toString();
