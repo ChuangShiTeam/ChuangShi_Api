@@ -1,9 +1,7 @@
 package com.nowui.chuangshi.common.sql;
 
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.ValidateUtil;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Cnd {
 
@@ -130,14 +128,34 @@ public class Cnd {
         }
     }
 
+    public Cnd andNotSystemStatus() {
+        this.criteria.setSystemStatus(false);
+
+        return this;
+    }
+
+    public Cnd andNotSystemVersion() {
+        this.criteria.setSystemVersion(false);
+
+        return this;
+    }
+
     public Cnd set(String key, Object value) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put(key, value);
-        this.criteria.addSet(map);
+        this.criteria.addSet(key, value);
         return this;
     }
 
     public Cnd paginate(Integer m, Integer n) {
+        this.criteria.setPaginate(m, n);
+        return this;
+    }
+
+    public Cnd addSystemStatus() {
+        if (this.criteria.getSystemStatus()) {
+            Expression expression = new Expression(Constant.SYSTEM_STATUS, ExpressionType.EQUAL, true);
+            this.criteria.addCondition(new Condition(ConditionType.WHERE, expression, false));
+        }
+
         return this;
     }
 

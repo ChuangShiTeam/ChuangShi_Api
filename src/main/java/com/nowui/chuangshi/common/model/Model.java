@@ -4,6 +4,7 @@ import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
 import com.nowui.chuangshi.common.annotation.Column;
 import com.nowui.chuangshi.common.sql.*;
+import com.nowui.chuangshi.common.sql.Set;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.ColumnType;
 import com.nowui.chuangshi.util.DateUtil;
@@ -171,28 +172,24 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        for (Map<String, Object> map : criteria.getSetList()) {
-//            stringBuilder.append(regexCondition(name, "equal", value));
-//            stringBuilder.append(",\n");
+        for (int i = 0; i < criteria.getSetList().size(); i++) {
+            Set set = criteria.getSetList().get(i);
+
+            if (set.getSetType().equals(SetType.NORMAL)) {
+                stringBuilder.append(regexCondition(set.getKey(), "equal", set.getValue()));
+            } else {
+                stringBuilder.append(set.getKey());
+                stringBuilder.append(" = ");
+                stringBuilder.append(set.getValue());
+            }
+            if (i + 1 == criteria.getSetList().size()) {
+                stringBuilder.append("\n");
+            } else {
+                stringBuilder.append(",\n");
+            }
         }
 
         return stringBuilder.toString();
-
-        /*String set = setSql.toString();
-        if (set.equals("")) {
-            throw new RuntimeException("sql without set variable");
-        }
-
-        if (isSystemVersion) {
-            setSql.append(Constant.SYSTEM_VERSION);
-            setSql.append(" = ");
-            setSql.append(Constant.SYSTEM_VERSION);
-            setSql.append(" + 1\n");
-
-            set = setSql.toString();
-        } else {
-            set = set.substring(0, set.length() - 2) + "\n";
-        }*/
     }
 
     public String buildConditionSql() {
@@ -207,8 +204,8 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         Boolean isRightike = false;
 
         for(Condition condition : criteria.getConditionList()) {
-            if(condition.getExpression() != null) {
-                Expression expression = condition.getExpression();
+            Expression expression = condition.getExpression();
+            if(expression != null) {
                 if (isWhere) {
                     stringBuilder.append("AND ");
                 } else {
@@ -275,6 +272,23 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return stringBuilder.toString();
     }
 
+    public String buildPaginateSql() {
+        if (criteria == null) {
+            throw new RuntimeException("sql without condition");
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        if (criteria.getIsPaginate()) {
+            stringBuilder.append("LIMIT ");
+            stringBuilder.append(criteria.getM());
+            stringBuilder.append(", ");
+            stringBuilder.append(criteria.getN());
+            stringBuilder.append("\n");
+        }
+
+        return stringBuilder.toString();
+    }
+
     public String buildCountSql() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("SELECT \n");
@@ -296,9 +310,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         stringBuilder.append(getTable().getName());
         stringBuilder.append(" \n");
         stringBuilder.append(buildConditionSql());
-//        stringBuilder.append(paginateSql);
-
-        buildConditionSql();
+        stringBuilder.append(buildPaginateSql());
 
         return stringBuilder.toString();
     }
@@ -316,7 +328,6 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         stringBuilder.append(getTable().getName());
         stringBuilder.append(" \n");
         stringBuilder.append(buildConditionSql());
-//        stringBuilder.append(paginateSql);
 
         return stringBuilder.toString();
     }

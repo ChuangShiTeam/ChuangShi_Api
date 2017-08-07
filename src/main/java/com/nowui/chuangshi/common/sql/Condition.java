@@ -23,31 +23,31 @@ public class Condition {
         return conditionType;
     }
 
-    public void setConditionType(ConditionType conditionType) {
-        this.conditionType = conditionType;
-    }
+//    public void setConditionType(ConditionType conditionType) {
+//        this.conditionType = conditionType;
+//    }
 
     public ExpressionGroup getExpressionGroup() {
         return expressionGroup;
     }
 
-    public void setExpressionGroup(ExpressionGroup expressionGroup) {
-        this.expressionGroup = expressionGroup;
-    }
+//    public void setExpressionGroup(ExpressionGroup expressionGroup) {
+//        this.expressionGroup = expressionGroup;
+//    }
 
     public Expression getExpression() {
         return expression;
     }
 
-    public void setExpression(Expression expression) {
-        this.expression = expression;
-    }
+//    public void setExpression(Expression expression) {
+//        this.expression = expression;
+//    }
 
     public Boolean getAllowEmpty() {
         return isAllowEmpty;
     }
 
-    public void setAllowEmpty(Boolean allowEmpty) {
-        isAllowEmpty = allowEmpty;
-    }
+//    public void setAllowEmpty(Boolean allowEmpty) {
+//        isAllowEmpty = allowEmpty;
+//    }
 }
