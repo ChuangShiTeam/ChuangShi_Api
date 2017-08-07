@@ -21,7 +21,7 @@ public class Criteria {
     public Criteria() {
         setList = new ArrayList<Set>();
         conditionList = new ArrayList<Condition>();
-        isPaginate = true;
+        isPaginate = false;
         isSystemVersion = true;
         isSystemStatus = true;
     }
