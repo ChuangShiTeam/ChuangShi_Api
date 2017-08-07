@@ -29,7 +29,7 @@ public class ArticleController extends Controller {
 
         validateResponse(Article.ARTICLE_ID, Article.ARTICLE_NAME, Article.SYSTEM_VERSION);
 
-        renderSuccessModeListlJson(resultCount, resultList);
+        renderSuccessJson(resultCount, resultList);
     }
 
     @ActionKey("/admin/article/find")
@@ -42,7 +42,7 @@ public class ArticleController extends Controller {
 
         validateResponse(Article.CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_SUMMARY, Article.ARTICLE_CONTENT, Article.SYSTEM_VERSION);
 
-        renderSuccessModelJson(result);
+        renderSuccessJson(result);
     }
 
     @ActionKey("/admin/article/save")

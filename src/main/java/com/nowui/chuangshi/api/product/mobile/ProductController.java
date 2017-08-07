@@ -106,7 +106,7 @@ public class ProductController extends Controller {
 
         validateResponse(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_CONTENT, ProductSkuPrice.PRODUCT_SKU_ID, ProductSkuPrice.PRODUCT_SKU_PRICE, "product_sku_quantity", "is_first_purchase");
 
-        renderSuccessModelJson(result);
+        renderSuccessJson(result);
     }
 
     @ActionKey("/mobile/product/purchase/find")

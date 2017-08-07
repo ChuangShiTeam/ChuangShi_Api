@@ -36,7 +36,7 @@ public class ProductBrandController extends Controller {
 
         validateResponse(ProductBrand.PRODUCT_BRAND_ID, ProductBrand.PRODUCT_BRAND_NAME, ProductBrand.PRODUCT_BRAND_IMAGE);
 
-        renderSuccessModeListlJson(resultList);
+        renderSuccessJson(resultList);
     }
 
     @ActionKey("/mobile/product/brand/product/list")
@@ -75,7 +75,7 @@ public class ProductBrandController extends Controller {
 
         validateResponse(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, ProductSkuPrice.PRODUCT_SKU_PRICE);
 
-        renderSuccessModeListlJson(resultList);
+        renderSuccessJson(resultList);
     }
 
     @ActionKey("/mobile/product/brand/find")

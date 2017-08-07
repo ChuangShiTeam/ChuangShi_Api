@@ -174,7 +174,7 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(map);
     }
 
-    public void renderSuccessJson(Object result) {
+    public void renderSuccessJson(Boolean result) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put(Constant.CODE, HttpStatus.SC_OK);
         map.put(Constant.DATA, result);
@@ -182,7 +182,15 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(map);
     }
 
-    public void renderSuccessModelJson(Model result) {
+//    public void renderSuccessJson(Map<String, Object> result) {
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put(Constant.CODE, HttpStatus.SC_OK);
+//        map.put(Constant.DATA, result);
+//
+//        renderJson(map);
+//    }
+
+    public void renderSuccessJson(Model result) {
         if (result != null) {
             result.keep(validateResponseKey);
         }
@@ -194,7 +202,7 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(map);
     }
 
-    public void renderSuccessMaplJson(Map<String, Object> result) {
+    public void renderSuccessJson(Map<String, Object> result) {
         Map<String, Object> newResult = new HashMap<String, Object>();
         for (String key : validateResponseKey) {
             for (Map.Entry<String, Object> map : result.entrySet()) {
@@ -213,7 +221,7 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(map);
     }
 
-    public void renderSuccessModeListlJson(List<? extends Model> resultList) {
+    public void renderSuccessJson(List<? extends Model> resultList) {
         for (Model result : resultList) {
             result.keep(validateResponseKey);
         }
@@ -225,7 +233,7 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(map);
     }
 
-    public void renderSuccessModeListlJson(Integer total, List<? extends Model> resultList) {
+    public void renderSuccessJson(Integer total, List<? extends Model> resultList) {
         for (Model result : resultList) {
             result.keep(validateResponseKey);
         }

@@ -29,7 +29,7 @@ public class EnchashmentController extends Controller {
 
         validateResponse(Enchashment.ENCHASHMENT_ID, Enchashment.USER_ID, Enchashment.ENCHASHMENT_AMOUNT, Enchashment.ENCHASHMENT_STATUS, Enchashment.SYSTEM_VERSION);
 
-        renderSuccessModeListlJson(resultCount, resultList);
+        renderSuccessJson(resultCount, resultList);
     }
 
     @ActionKey("/admin/enchashment/find")
@@ -42,7 +42,7 @@ public class EnchashmentController extends Controller {
 
         validateResponse(Enchashment.USER_ID, Enchashment.ENCHASHMENT_AMOUNT, Enchashment.ENCHASHMENT_STATUS, Enchashment.SYSTEM_VERSION);
 
-        renderSuccessModelJson(result);
+        renderSuccessJson(result);
     }
 
     @ActionKey("/admin/enchashment/save")

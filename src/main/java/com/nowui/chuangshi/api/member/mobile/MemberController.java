@@ -12,10 +12,13 @@ import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.member.model.Member;
 import com.nowui.chuangshi.api.member.model.MemberAddress;
 import com.nowui.chuangshi.api.member.model.MemberLevel;
+import com.nowui.chuangshi.api.member.service.MemberAddressService;
 import com.nowui.chuangshi.api.member.service.MemberLevelService;
 import com.nowui.chuangshi.api.member.service.MemberService;
 import com.nowui.chuangshi.api.trade.model.MemberDeliveryOrder;
+import com.nowui.chuangshi.api.trade.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.api.trade.service.MemberDeliveryOrderService;
+import com.nowui.chuangshi.api.trade.service.MemberPurchaseOrderService;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -40,11 +43,25 @@ public class MemberController extends Controller {
         validateRequest(MemberAddress.MEMBER_ID);
         MemberAddress model = getModel(MemberAddress.class);
 
-        List<MemberAddress> memberAddressList = MemberService.me.list(Cnd.where(MemberAddress.MEMBER_ID, model.getMember_id()));
+        List<MemberAddress> memberAddressList = MemberAddressService.me.list(Cnd.where(MemberAddress.MEMBER_ID, model.getMember_id()));
 
         validateResponse(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_POSTCODE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA, MemberAddress.MEMBER_ADDRESS_ADDRESS);
 
-        renderSuccessModeListlJson(memberAddressList);
+        renderSuccessJson(memberAddressList);
+    }
+
+    @ActionKey("/mobile/member/children/purchase/order/list")
+    public void childrenPurchaseOrderlist() {
+        validateRequest(MemberAddress.MEMBER_ID);
+        Member model = getModel(Member.class);
+
+        Member member = MemberService.me.findById(model.getMember_id());
+
+        List<MemberPurchaseOrder> memberPurchaseOrderList = MemberPurchaseOrderService.me.list(Cnd.where(MemberPurchaseOrder.USER_ID, model.getUser_id()));
+
+        validateResponse(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_POSTCODE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA, MemberAddress.MEMBER_ADDRESS_ADDRESS);
+
+        renderSuccessJson(memberPurchaseOrderList);
     }
 
     @ActionKey("/mobile/member/find")
@@ -92,7 +109,7 @@ public class MemberController extends Controller {
 
         validateResponse(Member.MEMBER_ID, User.USER_NAME, User.USER_AVATAR, Member.MEMBER_PARENT_ID, Member.QRCODE_ID, MemberLevel.MEMBER_LEVEL_ID, MemberLevel.MEMBER_LEVEL_NAME, Bill.BILL_AMOUNT, CertificatePay.CERTIFICATE_AMOUNT, Member.MEMBER_STATUS);
 
-        renderSuccessModelJson(result);
+        renderSuccessJson(result);
     }
 
     @ActionKey("/mobile/member/save")

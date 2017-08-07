@@ -44,6 +44,8 @@ public class EnchashmentController extends Controller {
 
         result.put(Constant.LIST, enchashmentList);
 
+        validateResponse(Bill.BILL_AMOUNT, Constant.LIST);
+
         renderSuccessJson(result);
     }
 
@@ -63,6 +65,8 @@ public class EnchashmentController extends Controller {
             bill_amount = bill_amount.subtract(enchashment.getEnchashment_amount());
         }
         result.put(Bill.BILL_AMOUNT, bill_amount);
+
+        validateResponse(Bill.BILL_AMOUNT);
 
         renderSuccessJson(result);
     }
