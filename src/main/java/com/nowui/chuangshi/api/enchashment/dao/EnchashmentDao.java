@@ -6,7 +6,7 @@ import com.nowui.chuangshi.common.dao.Dao;
 public class EnchashmentDao extends Dao {
 
     public EnchashmentDao() {
-        setClazz(Enchashment.class);
+        setModel(new Enchashment());
     }
 
 }

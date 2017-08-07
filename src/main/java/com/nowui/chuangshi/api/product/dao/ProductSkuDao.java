@@ -6,7 +6,7 @@ import com.nowui.chuangshi.common.dao.Dao;
 public class ProductSkuDao extends Dao {
 
     public ProductSkuDao() {
-        setClazz(ProductSku.class);
+        setModel(new ProductSku());
     }
 
 }

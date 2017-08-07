@@ -2,6 +2,9 @@ package com.nowui.chuangshi.common.sql;
 
 import com.nowui.chuangshi.util.ValidateUtil;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Cnd {
 
     private Criteria criteria;
@@ -119,12 +122,19 @@ public class Cnd {
         return this;
     }
 
-    public Cnd andRightLikeLikeAllowEmpty(String key, Object value) {
+    public Cnd andRightLikeAllowEmpty(String key, Object value) {
         if (ValidateUtil.isNullOrEmpty(value)) {
             return this;
         } else {
             return andRightLike(key, value);
         }
+    }
+
+    public Cnd set(String key, Object value) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(key, value);
+        this.criteria.addSet(map);
+        return this;
     }
 
     public Cnd paginate(Integer m, Integer n) {

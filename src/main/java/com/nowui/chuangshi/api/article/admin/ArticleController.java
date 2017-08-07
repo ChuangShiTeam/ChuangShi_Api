@@ -22,7 +22,7 @@ public class ArticleController extends Controller {
         validateRequest(Article.ARTICLE_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         Article model = getModel(Article.class);
-        Cnd cnd = Cnd.where(Article.APP_ID, model.getArticle_id()).andAllowEmpty(Article.ARTICLE_NAME, model.getArticle_name());
+        Cnd cnd = Cnd.where(Article.APP_ID, model.getApp_id()).andAllowEmpty(Article.ARTICLE_NAME, model.getArticle_name());
 
         Integer resultCount = ArticleService.me.count(cnd);
         List<Article> resultList = ArticleService.me.list(cnd.paginate(getM(), getN()));

@@ -6,7 +6,7 @@ import com.nowui.chuangshi.common.dao.Dao;
 public class ArticleDao extends Dao {
 
     public ArticleDao() {
-        setClazz(Article.class);
+        setModel(new Article());
     }
 
 }

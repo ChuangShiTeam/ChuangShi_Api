@@ -7,7 +7,6 @@ import com.nowui.chuangshi.common.sql.*;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.ColumnType;
 import com.nowui.chuangshi.util.DateUtil;
-import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -18,14 +17,6 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
     private static final long serialVersionUID = 1L;
 
-//    private String conditionSql;
-//    private List<Condition> conditionList = new ArrayList<Condition>();
-//    private StringBuilder selectSql = new StringBuilder();
-//    private StringBuilder setSql = new StringBuilder();
-//    private StringBuilder orderSql = new StringBuilder();
-//    private StringBuilder paginateSql = new StringBuilder();
-    private Boolean isSystemVersion = true;
-    private Boolean isSystemStatus = true;
     private List<Map<String, Object>> columnList;
 
     private Criteria criteria;
@@ -41,57 +32,6 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     public void setCriteria(Criteria criteria) {
         this.criteria = criteria;
     }
-
-//    public Integer getM() {
-//        return getInt(Constant.LIMIT_M);
-//    }
-
-//    public void setM(Integer m) {
-//        put(Constant.LIMIT_M, m);
-//    }
-
-//    public Integer getN() {
-//        return getInt(Constant.LIMIT_N);
-//    }
-
-//    public void setN(Integer n) {
-//        put(Constant.LIMIT_N, n);
-//    }
-
-//    private void addConditionList(Condition condition) {
-//        Boolean isExit = false;
-//
-//        Expression expression = condition.getExpression();
-//        if (expression != null) {
-//            for (int i = 0; i < getColumnList().size(); i++) {
-//                Map<String, Object> column = getColumnList().get(i);
-//
-//                if (column.get("name").toString().equals(expression.getKey())) {
-//                    isExit = true;
-//
-//                    break;
-//                }
-//            }
-//        }
-//
-//        if (isExit) {
-//            conditionList.add(condition);
-//        }
-//    }
-
-//    public Boolean isOnlyCondition(String key) {
-//        Boolean isExit = false;
-//
-//        for (Condition condition : criteria.getConditionList()) {
-//            if (condition.getExpression() != null) {
-//                if (condition.getExpression().getKey().equals(key)) {
-//                    isExit = true;
-//                }
-//            }
-//        }
-//
-//        return isExit;
-//    }
 
     private Table getTable() {
         return TableMapping.me().getTable(getUsefulClass());
@@ -129,182 +69,6 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
         return columnList;
     }
-
-    /*public M select(String... keys) {
-        if (keys.length > 0) {
-            selectSql = new StringBuilder();
-
-            for (int i = 0; i < keys.length; i++) {
-                selectSql.append(keys[i]);
-
-                if (i + 1 < keys.length) {
-                    selectSql.append(",\n");
-                } else {
-                    selectSql.append("\n");
-                }
-            }
-        } else {
-            selectSql = new StringBuilder("*\n");
-        }
-
-        return (M) this;
-    }
-
-    public M findById(String id) {
-        System.out.println(getTable());
-        where(getTable().getPrimaryKey()[0], id);
-
-        return (M) this;
-    }
-
-    public M where(String name) {
-        Expression expression = new Expression(name, ExpressionType.EQUAL, get(name));
-        Condition condition = new Condition(ConditionType.WHERE, expression, false);
-        addConditionList(condition);
-
-        return (M) this;
-    }
-
-    public M where(String name, Object value) {
-        Expression expression = new Expression(name, ExpressionType.EQUAL, value);
-        Condition condition = new Condition(ConditionType.WHERE, expression, false);
-        addConditionList(condition);
-
-        return (M) this;
-    }
-
-    public M whereEmpty(String name) {
-        if (!ValidateUtil.isNullOrEmpty(get(name))) {
-            where(name);
-        }
-
-        return (M) this;
-    }
-
-    public M whereLike(String name) {
-        Expression expression = new Expression(name, ExpressionType.LIKE, get(name));
-        Condition condition = new Condition(ConditionType.WHERE, expression, false);
-        addConditionList(condition);
-
-        return (M) this;
-    }
-
-    public M whereLike(String name, String value) {
-        Expression expression = new Expression(name, ExpressionType.LIKE, value);
-        Condition condition = new Condition(ConditionType.WHERE, expression, false);
-        addConditionList(condition);
-
-        return (M) this;
-    }
-
-    public M whereLeftLike(String name) {
-        Expression expression = new Expression(name, ExpressionType.LEFT_LIKE, get(name));
-        Condition condition = new Condition(ConditionType.WHERE, expression, false);
-        addConditionList(condition);
-
-        return (M) this;
-    }
-
-    public M whereLeftLike(String name, String value) {
-        Expression expression = new Expression(name, ExpressionType.LEFT_LIKE, value);
-        Condition condition = new Condition(ConditionType.WHERE, expression, false);
-        addConditionList(condition);
-
-        return (M) this;
-    }
-
-    public M whereRightLike(String name) {
-        Expression expression = new Expression(name, ExpressionType.RIGHT_LIKE, get(name));
-        Condition condition = new Condition(ConditionType.WHERE, expression, false);
-        addConditionList(condition);
-
-        return (M) this;
-    }
-
-    public M whereRightLike(String name, String value) {
-        Expression expression = new Expression(name, ExpressionType.RIGHT_LIKE, value);
-        Condition condition = new Condition(ConditionType.WHERE, expression, false);
-        addConditionList(condition);
-
-        return (M) this;
-    }
-
-    public M and(String name) {
-        Expression expression = new Expression(name, ExpressionType.EQUAL, get(name));
-        Condition condition = new Condition(ConditionType.AND, expression, false);
-        addConditionList(condition);
-
-        return (M) this;
-    }
-
-    public M and(String name, Object value) {
-        Expression expression = new Expression(name, ExpressionType.EQUAL, value);
-        Condition condition = new Condition(ConditionType.AND, expression, false);
-        addConditionList(condition);
-
-        return (M) this;
-    }
-
-    public M andEmpty(String name) {
-        if (!ValidateUtil.isNullOrEmpty(get(name))) {
-            and(name);
-        }
-
-        return (M) this;
-    }
-
-    public M or(String name) {
-        Expression expression = new Expression(name, ExpressionType.EQUAL, get(name));
-        Condition condition = new Condition(ConditionType.OR, expression, false);
-        addConditionList(condition);
-
-        return (M) this;
-    }
-
-    public M or(String name, Object value) {
-        Expression expression = new Expression(name, ExpressionType.EQUAL, value);
-        Condition condition = new Condition(ConditionType.OR, expression, false);
-        addConditionList(condition);
-
-        return (M) this;
-    }
-
-    public M setUpdate(String name) {
-        setSql.append(regexCondition(name, "equal", get(name)));
-        setSql.append(",\n");
-
-        return (M) this;
-    }
-
-    public M setUpdate(String name, Object value) {
-        setSql.append(regexCondition(name, "equal", value));
-        setSql.append(",\n");
-
-        return (M) this;
-    }
-
-    public M notSystemStatus() {
-        isSystemStatus = false;
-
-        return (M) this;
-    }
-
-    public M notSystemVersion() {
-        isSystemVersion = false;
-
-        return (M) this;
-    }
-
-    public M paginate() {
-        paginateSql = new StringBuilder();
-        paginateSql.append("LIMIT ");
-        paginateSql.append(getInt(Constant.LIMIT_M));
-        paginateSql.append(", ");
-        paginateSql.append(getInt(Constant.LIMIT_N));
-        paginateSql.append("\n");
-
-        return (M) this;
-    }*/
 
     private String regexVariable(ColumnType columnType, Object value) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -408,7 +172,8 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         StringBuilder stringBuilder = new StringBuilder();
 
         for (Map<String, Object> map : criteria.getSetList()) {
-
+//            stringBuilder.append(regexCondition(name, "equal", value));
+//            stringBuilder.append(",\n");
         }
 
         return stringBuilder.toString();
@@ -440,12 +205,6 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         Boolean isWhere = false;
         Boolean isLeftLike = false;
         Boolean isRightike = false;
-
-        if (isSystemStatus) {
-            Expression expression = new Expression(Constant.SYSTEM_STATUS, ExpressionType.EQUAL, true);
-            Condition condition = new Condition(ConditionType.WHERE, expression, false);
-            criteria.addCondition(condition);
-        }
 
         for(Condition condition : criteria.getConditionList()) {
             if(condition.getExpression() != null) {
@@ -516,94 +275,6 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return stringBuilder.toString();
     }
 
-    /*public String buildConditionSql() {
-        if (!ValidateUtil.isNullOrEmpty(conditionSql)) {
-            return conditionSql.toString();
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        Boolean isWhere = false;
-        Boolean isLeftLike = false;
-        Boolean isRightike = false;
-        
-        if (isSystemStatus) {
-            Expression expression = new Expression(Constant.SYSTEM_STATUS, ExpressionType.EQUAL, true);
-            Condition condition = new Condition(ConditionType.WHERE, expression, false);
-            addConditionList(condition);
-        }
-
-        for(Condition condition : conditionList) {
-            if(condition.getExpression() != null) {
-                Expression expression = condition.getExpression();
-                if (isWhere) {
-                    stringBuilder.append("AND ");
-                } else {
-                    isWhere = true;
-                    stringBuilder.append("WHERE ");
-                }
-                stringBuilder.append(expression.getKey());
-                switch (expression.getExpressionType()) {
-                    case EQUAL:
-                        stringBuilder.append(" = ");
-                        break;
-                    case LIKE:
-                        isLeftLike = true;
-                        isRightike = true;
-
-                        stringBuilder.append(" LIKE ");
-                        break;
-                    case LEFT_LIKE:
-                        isLeftLike = true;
-
-                        break;
-                    case RIGHT_LIKE:
-                        isRightike = true;
-
-                        break;
-                    case LESS_THAN:
-                        break;
-                    case GREAT_THAN_EQUAL:
-                        break;
-                    case LESS_THAN_EQUAL:
-                        break;
-                }
-
-                if (expression.getValue() instanceof String) {
-                    stringBuilder.append("'");
-
-                    if (isLeftLike) {
-                        stringBuilder.append("%");
-                    }
-
-                    stringBuilder.append(expression.getValue());
-
-                    if (isRightike) {
-                        stringBuilder.append("%");
-                    }
-
-                    stringBuilder.append("'");
-                } else if (expression.getValue() instanceof Boolean) {
-                    stringBuilder.append((Boolean) expression.getValue() ? 1 : 0);
-                } else if (expression.getValue() instanceof Date) {
-                    stringBuilder.append("'");
-                    stringBuilder.append(DateUtil.getDateTimeString((Date) expression.getValue()));
-                    stringBuilder.append("'");
-                } else {
-                    stringBuilder.append(expression.getValue());
-                }
-                stringBuilder.append("\n");
-
-            } else if(condition.getExpressionGroup() != null) {
-
-            }
-        }
-
-        conditionSql = stringBuilder.toString();
-
-        return conditionSql;
-    }*/
-
     public String buildCountSql() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("SELECT \n");
@@ -654,7 +325,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         StringBuilder stringBuilder = new StringBuilder();
 
         StringBuilder stringBuilder2 = new StringBuilder();
-        if (criteria.getConditionList().size() == 0) {
+        if (criteria == null) {
             stringBuilder.append("INSERT INTO ");
             stringBuilder.append(getTable().getName());
             stringBuilder.append(" ");
@@ -721,8 +392,6 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        remove(Constant.SYSTEM_CREATE_USER_ID, Constant.SYSTEM_VERSION);
-
         List<Map<String, Object>> updateColumnList = new ArrayList<Map<String, Object>>();
         for (int i = 0; i < getColumnList().size(); i++) {
             Map<String, Object> column = getColumnList().get(i);
@@ -751,13 +420,13 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
             stringBuilder.append(column.get("name"));
             stringBuilder.append(" = ");
             stringBuilder.append(regexVariable((ColumnType) column.get("type"), column.get("value")));
-            if (i + 1 < updateColumnList.size() || isSystemVersion) {
+            if (i + 1 < updateColumnList.size() || criteria.getSystemVersion()) {
                 stringBuilder.append(",\n");
             } else {
                 stringBuilder.append("\n");
             }
         }
-        if (isSystemVersion) {
+        if (criteria.getSystemVersion()) {
             stringBuilder.append(Constant.SYSTEM_VERSION);
             stringBuilder.append(" = ");
             stringBuilder.append(Constant.SYSTEM_VERSION);

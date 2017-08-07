@@ -6,7 +6,7 @@ import com.nowui.chuangshi.common.dao.Dao;
 public class MemberPurchaseOrderDao extends Dao {
 
     public MemberPurchaseOrderDao() {
-        setClazz(MemberPurchaseOrder.class);
+        setModel(new MemberPurchaseOrder());
     }
 
 }

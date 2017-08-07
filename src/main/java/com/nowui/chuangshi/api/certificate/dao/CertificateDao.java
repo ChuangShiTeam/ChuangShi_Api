@@ -6,7 +6,7 @@ import com.nowui.chuangshi.common.dao.Dao;
 public class CertificateDao extends Dao {
 
     public CertificateDao() {
-        setClazz(Certificate.class);
+        setModel(new Certificate());
     }
 
 }

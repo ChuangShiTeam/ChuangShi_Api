@@ -6,7 +6,7 @@ import com.nowui.chuangshi.common.dao.Dao;
 public class MemberLevelDao extends Dao {
 
     public MemberLevelDao() {
-        setClazz(MemberLevel.class);
+        setModel(new MemberLevel());
     }
 
 }

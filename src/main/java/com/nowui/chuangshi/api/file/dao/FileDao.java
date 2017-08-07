@@ -6,7 +6,7 @@ import com.nowui.chuangshi.common.dao.Dao;
 public class FileDao extends Dao {
 
     public FileDao() {
-        setClazz(File.class);
+        setModel(new File());
     }
 
 }

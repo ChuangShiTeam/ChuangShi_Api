@@ -6,7 +6,7 @@ import com.nowui.chuangshi.common.dao.Dao;
 public class MemberAddressDao extends Dao {
 
     public MemberAddressDao() {
-        setClazz(MemberAddress.class);
+        setModel(new MemberAddress());
     }
 
 }

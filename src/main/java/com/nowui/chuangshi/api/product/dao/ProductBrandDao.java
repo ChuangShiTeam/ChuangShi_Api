@@ -6,7 +6,7 @@ import com.nowui.chuangshi.common.dao.Dao;
 public class ProductBrandDao extends Dao {
 
     public ProductBrandDao() {
-        setClazz(ProductBrand.class);
+        setModel(new ProductBrand());
     }
 
 }
