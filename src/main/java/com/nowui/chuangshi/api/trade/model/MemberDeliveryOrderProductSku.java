@@ -1,4 +1,4 @@
-package com.nowui.chuangshi.api.article.model;
+package com.nowui.chuangshi.api.trade.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
 import com.nowui.chuangshi.common.annotation.Primary;
@@ -6,32 +6,27 @@ import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.type.ColumnType;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
-@Table("table_article")
-@Primary("article_id")
-public class Article extends Model<Article> {
+@Table("table_member_delivery_order_product_sku")
+@Primary("")
+public class MemberDeliveryOrderProductSku extends Model<MemberDeliveryOrderProductSku> {
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "文章编号", updatable = false)
-    public static final String ARTICLE_ID = "article_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    public static final String MEMBER_DELIVERY_ORDER_ID = "member_delivery_order_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
-    public static final String APP_ID = "app_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "商品skuid")
+    public static final String PRODUCT_SKU_ID = "product_sku_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "分类编号")
-    public static final String CATEGORY_ID = "category_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "商品快照id")
+    public static final String PRODUCT_SNAP_ID = "product_snap_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 100, comment = "文章名称")
-    public static final String ARTICLE_NAME = "article_name";
+    @Column(type = ColumnType.INT, length = 5, comment = "商品sku数量")
+    public static final String PRODUCT_SKU_QUANTITY = "product_sku_quantity";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "文章图片")
-    public static final String ARTICLE_IMAGE = "article_image";
-
-    @Column(type = ColumnType.VARCHAR, length = 250, comment = "文章摘要")
-    public static final String ARTICLE_SUMMARY = "article_summary";
-
-    @Column(type = ColumnType.LONGTEXT, length = 0, comment = "文章内容")
-    public static final String ARTICLE_CONTENT = "article_content";
+    @Column(type = ColumnType.DECIMAL, length = 0, comment = "商品sku总金额")
+    public static final String PRODUCT_SKU_AMOUNT = "product_sku_amount";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -51,62 +46,44 @@ public class Article extends Model<Article> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
-    public static final String ARTICLE_IMAGE_FILE = "article_image_file";
-
-    public String getArticle_id() {
-        return getStr(ARTICLE_ID);
+    public String getMember_delivery_order_id() {
+        return getStr(MEMBER_DELIVERY_ORDER_ID);
     }
 
-    public void setArticle_id(String article_id) {
-        set(ARTICLE_ID, article_id);
+    public void setMember_delivery_order_id(String member_delivery_order_id) {
+        set(MEMBER_DELIVERY_ORDER_ID, member_delivery_order_id);
     }
 
-    public String getApp_id() {
-        return getStr(APP_ID);
+    public String getProduct_sku_id() {
+        return getStr(PRODUCT_SKU_ID);
     }
 
-    public void setApp_id(String app_id) {
-        set(APP_ID, app_id);
+    public void setProduct_sku_id(String product_sku_id) {
+        set(PRODUCT_SKU_ID, product_sku_id);
     }
 
-    public String getCategory_id() {
-        return getStr(CATEGORY_ID);
+    public String getProduct_snap_id() {
+        return getStr(PRODUCT_SNAP_ID);
     }
 
-    public void setCategory_id(String category_id) {
-        set(CATEGORY_ID, category_id);
+    public void setProduct_snap_id(String product_snap_id) {
+        set(PRODUCT_SNAP_ID, product_snap_id);
     }
 
-    public String getArticle_name() {
-        return getStr(ARTICLE_NAME);
+    public Integer getProduct_sku_quantity() {
+        return getInt(PRODUCT_SKU_QUANTITY);
     }
 
-    public void setArticle_name(String article_name) {
-        set(ARTICLE_NAME, article_name);
+    public void setProduct_sku_quantity(Integer product_sku_quantity) {
+        set(PRODUCT_SKU_QUANTITY, product_sku_quantity);
     }
 
-    public String getArticle_image() {
-        return getStr(ARTICLE_IMAGE);
+    public BigDecimal getProduct_sku_amount() {
+        return getBigDecimal(PRODUCT_SKU_AMOUNT);
     }
 
-    public void setArticle_image(String article_image) {
-        set(ARTICLE_IMAGE, article_image);
-    }
-
-    public String getArticle_summary() {
-        return getStr(ARTICLE_SUMMARY);
-    }
-
-    public void setArticle_summary(String article_summary) {
-        set(ARTICLE_SUMMARY, article_summary);
-    }
-
-    public String getArticle_content() {
-        return getStr(ARTICLE_CONTENT);
-    }
-
-    public void setArticle_content(String article_content) {
-        set(ARTICLE_CONTENT, article_content);
+    public void setProduct_sku_amount(BigDecimal product_sku_amount) {
+        set(PRODUCT_SKU_AMOUNT, product_sku_amount);
     }
 
     public String getSystem_create_user_id() {
@@ -125,6 +102,7 @@ public class Article extends Model<Article> {
         set(SYSTEM_CREATE_TIME, system_create_time);
     }
 
+
     public String getSystem_update_user_id() {
         return getStr(SYSTEM_UPDATE_USER_ID);
     }
@@ -140,6 +118,7 @@ public class Article extends Model<Article> {
     public void setSystem_update_time(Date system_update_time) {
         set(SYSTEM_UPDATE_TIME, system_update_time);
     }
+
 
     public Integer getSystem_version() {
         return getInt(SYSTEM_VERSION);

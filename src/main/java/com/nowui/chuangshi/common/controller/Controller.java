@@ -182,13 +182,13 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(map);
     }
 
-//    public void renderSuccessJson(Map<String, Object> result) {
-//        Map<String, Object> map = new HashMap<String, Object>();
-//        map.put(Constant.CODE, HttpStatus.SC_OK);
-//        map.put(Constant.DATA, result);
-//
-//        renderJson(map);
-//    }
+    public void renderSuccessJson(Integer result) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(Constant.CODE, HttpStatus.SC_OK);
+        map.put(Constant.DATA, result);
+
+        renderJson(map);
+    }
 
     public void renderSuccessJson(Model result) {
         if (result != null) {

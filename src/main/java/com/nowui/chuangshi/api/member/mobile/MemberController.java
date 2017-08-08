@@ -57,7 +57,13 @@ public class MemberController extends Controller {
 
         Member member = MemberService.me.findById(model.getMember_id());
 
-        List<MemberPurchaseOrder> memberPurchaseOrderList = MemberPurchaseOrderService.me.list(Cnd.where(MemberPurchaseOrder.USER_ID, model.getUser_id()));
+        BigDecimal member_purchase_order_product_amount = BigDecimal.ZERO;
+
+        List<MemberPurchaseOrder> memberPurchaseOrderList = MemberPurchaseOrderService.me.list(Cnd.where(MemberPurchaseOrder.USER_ID, member.getUser_id()));
+
+        for (MemberPurchaseOrder memberPurchaseOrder : memberPurchaseOrderList) {
+
+        }
 
         validateResponse(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_POSTCODE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA, MemberAddress.MEMBER_ADDRESS_ADDRESS);
 

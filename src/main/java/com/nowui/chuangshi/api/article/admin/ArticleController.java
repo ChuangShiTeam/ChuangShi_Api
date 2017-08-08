@@ -4,6 +4,7 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.article.model.Article;
 import com.nowui.chuangshi.api.article.service.ArticleService;
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
@@ -40,7 +41,9 @@ public class ArticleController extends Controller {
 
         Article result = ArticleService.me.findById(model.getArticle_id());
 
-        validateResponse(Article.CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_SUMMARY, Article.ARTICLE_CONTENT, Article.SYSTEM_VERSION);
+        result.put(Article.ARTICLE_IMAGE_FILE, FileService.me.getFile(result.getArticle_image()));
+
+        validateResponse(Article.CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE_FILE, Article.ARTICLE_SUMMARY, Article.ARTICLE_CONTENT, Article.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }

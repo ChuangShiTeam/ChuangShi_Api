@@ -76,7 +76,7 @@ public class CertificateService extends Service {
                 system_update_user_id, system_version);
     }
 
-    public Map<String, String> pay(String certificate_id, String open_id, String pay_type, String request_user_id) {
+    public Map<String, String> pay(String certificate_id, String open_id, String pay_type, BigDecimal total_fee_decimal, String request_user_id) {
         Certificate certificate = certificateCache.findByCertificate_id(certificate_id);
 
         if (certificate.getCertificate_is_pay() || !certificate.getUser_id().equals(request_user_id)) {
@@ -90,15 +90,13 @@ public class CertificateService extends Service {
                 throw new RuntimeException("应用不存在");
             }
             String body = app.getApp_name() + "-订单";
-            return unifiedCertificate(certificate, open_id, body, app.getWechat_app_id(), app.getWechat_mch_id(),
-                    app.getWechat_mch_key());
+            return unifiedCertificate(certificate, open_id, body, app.getWechat_app_id(), app.getWechat_mch_id(), app.getWechat_mch_key(), total_fee_decimal);
         }
         // TODO 其他方式支付
         return new HashMap<String, String>();
     }
 
-    public Map<String, String> unifiedCertificate(Certificate certificate, String open_id, String body, String app_id,
-            String mch_id, String mch_key) {
+    public Map<String, String> unifiedCertificate(Certificate certificate, String open_id, String body, String app_id, String mch_id, String mch_key, BigDecimal total_fee_decimal) {
         System.out.println(open_id);
         System.out.println(app_id);
         System.out.println(mch_id);
@@ -110,7 +108,6 @@ public class CertificateService extends Service {
         String out_trade_no = certificate.getCertificate_id();
         String spbill_create_ip = "0.0.0.0";
         DecimalFormat format = new DecimalFormat("0");
-        BigDecimal total_fee_decimal = new BigDecimal(0.01);
         String total_fee = format.format(total_fee_decimal.multiply(BigDecimal.valueOf(100)));
         String trade_type = "JSAPI";
 

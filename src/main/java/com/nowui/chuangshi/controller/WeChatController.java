@@ -178,7 +178,7 @@ public class WeChatController extends Controller {
         }
 
         ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"星创会\",\"url\":\"http://h5."
-                + "xingxiao.nowui.com" + "/?#/team\"}]}");
+                + "xingxiao.nowui.com" + "/?#/launch\"}]}");
 
         // App app =
         // appService.findByApp_id("df2078d6c9eb46babb0df957127273ab");
@@ -586,7 +586,7 @@ public class WeChatController extends Controller {
         User user = userService.findByUser_id(user_id);
         Member member = memberService.findByMember_id(user.getObject_Id());
         //会员有上级的情况下才可以生成上级发货单
-        if (StringUtils.isBlank(member.getMember_parent_id())) {
+        if (StringUtils.isBlank(member.getMember_parent_id()) || member.getMember_parent_id().equals(Constant.PARENT_ID)) {
             return;
         }
         Member parent = memberService.findByMember_id(member.getMember_parent_id());

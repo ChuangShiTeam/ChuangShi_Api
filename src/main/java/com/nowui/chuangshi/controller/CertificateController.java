@@ -12,22 +12,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.App;
-import com.nowui.chuangshi.model.Certificate;
-import com.nowui.chuangshi.model.CertificateImage;
-import com.nowui.chuangshi.model.CertificatePay;
-import com.nowui.chuangshi.model.File;
-import com.nowui.chuangshi.model.Member;
-import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.service.CertificateImageService;
-import com.nowui.chuangshi.service.CertificatePayService;
-import com.nowui.chuangshi.service.CertificateService;
-import com.nowui.chuangshi.service.FileService;
-import com.nowui.chuangshi.service.MemberService;
-import com.nowui.chuangshi.service.UserService;
+import com.nowui.chuangshi.model.*;
+import com.nowui.chuangshi.service.*;
 import com.nowui.chuangshi.type.CertificateImageType;
 import com.nowui.chuangshi.util.DateUtil;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 public class CertificateController extends Controller {
 
@@ -36,6 +26,7 @@ public class CertificateController extends Controller {
     private final UserService userService = new UserService();
     private final FileService fileService = new FileService();
     private final MemberService memberService = new MemberService();
+    private final MemberLevelService memberLevelService = new MemberLevelService();
     private final CertificatePayService certificatePayService = new CertificatePayService();
 
     // 官网根据授权编号返回授权证书列表
@@ -150,6 +141,32 @@ public class CertificateController extends Controller {
         JSONObject jsonObject = getParameterJSONObject();
         String open_id = jsonObject.getString("open_id");
 
+        Integer member_level_value = 0;
+        BigDecimal total_fee_decimal;
+        Member member = memberService.findByUser_id(request_user_id);
+        if (!ValidateUtil.isNullOrEmpty(member.getMember_level_id())) {
+            MemberLevel memberLevel = memberLevelService.findByMember_level_id(member.getMember_level_id());
+            member_level_value = memberLevel.getMember_level_value();
+        }
+        if (member_level_value == 1) {
+            total_fee_decimal = new BigDecimal(5000);
+        } else if (member_level_value == 2) {
+            total_fee_decimal = new BigDecimal(5000);
+        } else if (member_level_value == 3) {
+            total_fee_decimal = new BigDecimal(5000);
+        } else if (member_level_value == 4) {
+            total_fee_decimal = new BigDecimal(2000);
+        } else if (member_level_value == 5) {
+            total_fee_decimal = new BigDecimal(2000);
+        } else if (member_level_value == 6) {
+            total_fee_decimal = new BigDecimal(2000);
+        } else if (member_level_value == 7) {
+            total_fee_decimal = new BigDecimal(2000);
+        } else {
+            total_fee_decimal = new BigDecimal(2000);
+        }
+        total_fee_decimal = new BigDecimal(0.01);
+
         authenticateRequest_app_idAndRequest_user_id();
         Certificate certificate = certificateService.findByUser_id(request_user_id);
 
@@ -170,7 +187,7 @@ public class CertificateController extends Controller {
 
         Map<String, String> result = new HashMap<>();
         if (flag) {
-            result = certificateService.pay(certificate_id, open_id, "WX", request_user_id);
+            result = certificateService.pay(certificate_id, open_id, "WX", total_fee_decimal, request_user_id);
         }
 
         renderSuccessJson(result);

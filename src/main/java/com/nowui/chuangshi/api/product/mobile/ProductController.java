@@ -89,7 +89,7 @@ public class ProductController extends Controller {
         } else if (member_level_value == 2) {
             product_quantity_min = count == 0 ? 10000 : 5000;
         } else if (member_level_value == 3) {
-            product_quantity_min = count == 0 ? 10000 : 5000;
+            product_quantity_min = count == 0 ? 10000 : 5000;//可以改//5000
         } else if (member_level_value == 4) {
             product_quantity_min = count == 0 ? 2500 : 1250;
         } else if (member_level_value == 5) {
