@@ -26,4 +26,9 @@ public class TradeExpressService extends Service {
         return tradeExpressCache.deleteByTrade_idAndSystem_update_user_id(trade_id, system_update_user_id);
     }
 
+    public Boolean deleteByTrade_idAndExpress_idAndSystem_update_user_id(String trade_id, String express_id,
+            String system_update_user_id) {
+        return tradeExpressCache.deleteByTrade_idAndExpress_idAndSystem_update_user_id(trade_id, express_id, system_update_user_id);
+    }
+
 }

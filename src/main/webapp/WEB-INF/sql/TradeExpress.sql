@@ -48,5 +48,16 @@
     WHERE system_status = 1
     AND trade_id = #p(trade_id)
   #end
+  
+  #sql("deleteByTrade_idAndExpress_id")
+    UPDATE table_trade_express SET
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_version = system_version + 1,
+    system_status = 0
+    WHERE system_status = 1
+    AND trade_id = #p(trade_id)
+    AND express_id = #p(express_id)
+  #end
 
 #end
