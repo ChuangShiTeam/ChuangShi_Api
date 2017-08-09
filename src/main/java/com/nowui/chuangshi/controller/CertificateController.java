@@ -132,7 +132,7 @@ public class CertificateController extends Controller {
         result.put("certificateImageList", certificateImageList);
         result.put("certificateImageWXList", certificateImageWXList);
         result.put("certificateImageOtherList", certificateImageOtherList);
-        result.put("certificateImageOtherList", total_fee);
+        result.put("total_fee", total_fee);
 
         renderSuccessJson(result);
     }
