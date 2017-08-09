@@ -94,6 +94,7 @@ public class CertificateController extends Controller {
 
         Certificate certificate = certificateService.findByUser_id(user_id);
 
+        List<CertificateImage> certificateImageList = new ArrayList<>();
         List<CertificateImage> certificateImageWXList = new ArrayList<>();
         List<CertificateImage> certificateImageOtherList = new ArrayList<>();
         Map<String, Object> result = new HashMap<>();
@@ -104,12 +105,14 @@ public class CertificateController extends Controller {
             User user = userService.findByUser_id(user_id);
             certificate.put(User.USER_NAME, user.getUser_name());
 
-            List<CertificateImage> certificateImageList = certificateImageService
+            certificateImageList = certificateImageService
                     .listByCertificate_id(certificate.getCertificate_id());
 
             for (CertificateImage certificateImage : certificateImageList) {
                 File file = fileService.findByFile_id(certificateImage.getFile_id());
                 certificateImage.put(File.FILE_ORIGINAL_PATH, file.getFile_original_path());
+
+                certificateImage.keep(Certificate.CERTIFICATE_ID, File.FILE_ORIGINAL_PATH, CertificateImage.CERTIFICATE_TYPE);
 
                 if (certificateImage.getCertificate_type().equals(CertificateImageType.WX.getValue())) {
                     certificateImageWXList.add(certificateImage);
@@ -122,44 +125,46 @@ public class CertificateController extends Controller {
                     Certificate.CERTIFICATE_NUMBER, Certificate.CERTIFICATE_START_DATE,
                     Certificate.CERTIFICATE_END_DATE, Certificate.CERTIFICATE_IS_PAY, Certificate.SYSTEM_VERSION);
         }
+
         BigDecimal total_fee = getMoney(user_id);
 
         result.put("certificate", certificate == null ? new Certificate() : certificate);
+        result.put("certificateImageList", certificateImageList);
         result.put("certificateImageWXList", certificateImageWXList);
         result.put("certificateImageOtherList", certificateImageOtherList);
-        result.put("total_fee", total_fee);
+        result.put("certificateImageOtherList", total_fee);
 
         renderSuccessJson(result);
     }
 
     private BigDecimal getMoney(String request_user_id) {
         Integer member_level_value = 0;
-        BigDecimal total_fee;
+        BigDecimal total_fee_decimal;
         Member member = memberService.findByUser_id(request_user_id);
         if (!ValidateUtil.isNullOrEmpty(member.getMember_level_id())) {
             MemberLevel memberLevel = memberLevelService.findByMember_level_id(member.getMember_level_id());
             member_level_value = memberLevel.getMember_level_value();
         }
         if (member_level_value == 1) {
-            total_fee = new BigDecimal(5000);
+            total_fee_decimal = new BigDecimal(5000);
         } else if (member_level_value == 2) {
-            total_fee = new BigDecimal(5000);
+            total_fee_decimal = new BigDecimal(5000);
         } else if (member_level_value == 3) {
-            total_fee = new BigDecimal(5000);
+            total_fee_decimal = new BigDecimal(5000);
         } else if (member_level_value == 4) {
-            total_fee = new BigDecimal(2000);
+            total_fee_decimal = new BigDecimal(2000);
         } else if (member_level_value == 5) {
-            total_fee = new BigDecimal(2000);
+            total_fee_decimal = new BigDecimal(2000);
         } else if (member_level_value == 6) {
-            total_fee = new BigDecimal(2000);
+            total_fee_decimal = new BigDecimal(2000);
         } else if (member_level_value == 7) {
-            total_fee = new BigDecimal(2000);
+            total_fee_decimal = new BigDecimal(2000);
         } else {
-            total_fee = new BigDecimal(2000);
+            total_fee_decimal = new BigDecimal(2000);
         }
-        total_fee = new BigDecimal(0.01);
+        total_fee_decimal = new BigDecimal(0.01);
 
-        return total_fee.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return total_fee_decimal;
     }
 
     // 授权证书支付
@@ -173,7 +178,7 @@ public class CertificateController extends Controller {
         JSONObject jsonObject = getParameterJSONObject();
         String open_id = jsonObject.getString("open_id");
 
-        BigDecimal total_fee = getMoney(request_user_id);
+        BigDecimal total_fee_decimal = getMoney(request_user_id);
 
         authenticateRequest_app_idAndRequest_user_id();
         Certificate certificate = certificateService.findByUser_id(request_user_id);
@@ -195,7 +200,7 @@ public class CertificateController extends Controller {
 
         Map<String, String> result = new HashMap<>();
         if (flag) {
-            result = certificateService.pay(certificate_id, open_id, "WX", total_fee, request_user_id);
+            result = certificateService.pay(certificate_id, open_id, "WX", total_fee_decimal, request_user_id);
         }
 
         renderSuccessJson(result);

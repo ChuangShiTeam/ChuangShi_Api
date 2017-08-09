@@ -85,14 +85,14 @@ public class ImageUtil {
         return bufferedImage;
     }
 
-    public static BufferedImage modifyImagetogeter(BufferedImage newBufferedImage, BufferedImage bufferedImage) {
+    public static BufferedImage modifyImagetogeter(BufferedImage newBufferedImage, BufferedImage bufferedImage, int x, int y) {
 
         try {
             int w = newBufferedImage.getWidth();
             int h = newBufferedImage.getHeight();
 
             Graphics2D graphics2D = bufferedImage.createGraphics();
-            graphics2D.drawImage(newBufferedImage, 0, 0, w, h, null);
+            graphics2D.drawImage(newBufferedImage, x, y, w, h, null);
             graphics2D.dispose();
         } catch (Exception e) {
             System.out.println(e.getMessage());

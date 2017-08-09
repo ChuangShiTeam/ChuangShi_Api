@@ -1,6 +1,6 @@
 package com.nowui.chuangshi.service;
 
-import java.awt.Font;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -58,6 +58,7 @@ public class CertificateImageService extends Service {
                 .loadImageLocal(PathKit.getRootClassPath() + File.separator + "seal.png");
         BufferedImage templateBufferedImage = ImageUtil
                 .loadImageLocal(PathKit.getRootClassPath() + File.separator + "template.png");
+        BufferedImage maskBufferedImage = ImageUtil.loadImageLocal(PathKit.getRootClassPath() + File.separator + "mask.png");
 
         String[] numberArray = new String[1];
         numberArray[0] = "授权编号：" + certificate_number;
@@ -111,10 +112,27 @@ public class CertificateImageService extends Service {
 
         String file_id = Util.getRandomUUID();
         String resultFilePath = PathKit.getRootClassPath() + File.separator + file_id + ".jpg";
-        ImageUtil.writeImageLocal(resultFilePath,
-                ImageUtil.modifyImagetogeter(sealBufferedImage, certificateBufferedImage));
+        String maskFilePath = PathKit.getRootClassPath() + File.separator + file_id + "_mask.jpg";
 
-        return this.saveFile(resultFilePath, app_id, system_create_user_id, file_id);
+        certificateBufferedImage = ImageUtil.modifyImagetogeter(sealBufferedImage, certificateBufferedImage, 0, 0);
+
+        Graphics2D graphics2D = certificateBufferedImage.createGraphics();
+        graphics2D.setBackground(Color.WHITE);
+        graphics2D.setColor(Color.BLACK);
+        graphics2D.setFont(new Font("Microsoft YaHei", Font.BOLD, 18));
+        graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        FontMetrics fm = graphics2D.getFontMetrics();
+
+        int maxX = 222;
+        char[] textChar = ("        " + certificate_people_name + "（身份证号：").toCharArray();
+        for (int i = 0; i < textChar.length; i++) {
+            maxX += fm.charWidth(textChar[i]);
+        }
+
+        ImageUtil.writeImageLocal(resultFilePath, certificateBufferedImage);
+        ImageUtil.writeImageLocal(maskFilePath, ImageUtil.modifyImagetogeter(maskBufferedImage, certificateBufferedImage, maxX, 540));
+
+        return this.saveFile(resultFilePath, maskFilePath, app_id, system_create_user_id, file_id);
     }
 
     public static void main(String[] args) {
@@ -134,10 +152,9 @@ public class CertificateImageService extends Service {
         String start_date = sdf.format(certificate_start_date);
         String end_date = sdf.format(certificate_end_date);
 
-        BufferedImage sealBufferedImage = ImageUtil
-                .loadImageLocal(PathKit.getRootClassPath() + File.separator + "seal.png");
-        BufferedImage templateBufferedImage = ImageUtil
-                .loadImageLocal(PathKit.getRootClassPath() + File.separator + "template.png");
+        BufferedImage sealBufferedImage = ImageUtil.loadImageLocal(PathKit.getRootClassPath() + File.separator + "seal.png");
+        BufferedImage templateBufferedImage = ImageUtil.loadImageLocal(PathKit.getRootClassPath() + File.separator + "template.png");
+        BufferedImage maskBufferedImage = ImageUtil.loadImageLocal(PathKit.getRootClassPath() + File.separator + "mask.png");
 
         String[] numberArray = new String[1];
         numberArray[0] = "授权编号：" + certificate_number;
@@ -193,15 +210,33 @@ public class CertificateImageService extends Service {
 
         String file_id = Util.getRandomUUID();
         String resultFilePath = PathKit.getRootClassPath() + File.separator + file_id + ".jpg";
-        ImageUtil.writeImageLocal(resultFilePath,
-                ImageUtil.modifyImagetogeter(sealBufferedImage, certificateBufferedImage));
+        String maskFilePath = PathKit.getRootClassPath() + File.separator + file_id + "_mask.jpg";
 
-        return this.saveFile(resultFilePath, app_id, system_create_user_id, file_id);
+        certificateBufferedImage = ImageUtil.modifyImagetogeter(sealBufferedImage, certificateBufferedImage, 0, 0);
+
+        Graphics2D graphics2D = certificateBufferedImage.createGraphics();
+        graphics2D.setBackground(Color.WHITE);
+        graphics2D.setColor(Color.BLACK);
+        graphics2D.setFont(new Font("Microsoft YaHei", Font.BOLD, 18));
+        graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        FontMetrics fm = graphics2D.getFontMetrics();
+
+        int maxX = 222;
+        char[] textChar = ("        " + certificate_people_name + "（身份证号：").toCharArray();
+        for (int i = 0; i < textChar.length; i++) {
+            maxX += fm.charWidth(textChar[i]);
+        }
+
+        ImageUtil.writeImageLocal(resultFilePath, certificateBufferedImage);
+        ImageUtil.writeImageLocal(maskFilePath, ImageUtil.modifyImagetogeter(maskBufferedImage, certificateBufferedImage, maxX, 540));
+
+        return this.saveFile(resultFilePath, maskFilePath, app_id, system_create_user_id, file_id);
     }
 
-    private Map<String, Object> saveFile(String resultFilePath, String app_id, String system_create_user_id,
+    private Map<String, Object> saveFile(String resultFilePath, String maskFilePath, String app_id, String system_create_user_id,
             String file_id) {
         File uploadFile = new File(resultFilePath);
+        File maskUploadFile = new File(maskFilePath);
         // 优化分离
         // TODO
         String path = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + app_id + "/" + system_create_user_id;
@@ -224,10 +259,11 @@ public class CertificateImageService extends Service {
         String file_type = FileType.IMAGE.getKey();
 
         FileUtil.resizeImage(uploadFile, file_suffix, thumbnailPath, 100);
-        FileUtil.resizeImage(uploadFile, file_suffix, path, 360);
+        FileUtil.resizeImage(maskUploadFile, file_suffix, path, 0);
         FileUtil.resizeImage(uploadFile, file_suffix, originalPath, 0);
 
         FileKit.delete(uploadFile);
+        FileKit.delete(maskUploadFile);
 
         Integer file_size = (int) uploadFile.length();
         String file_path = path.replace(PathKit.getWebRootPath(), "");
