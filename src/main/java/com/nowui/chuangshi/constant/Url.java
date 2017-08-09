@@ -244,6 +244,7 @@ public class Url {
     public static final String MEMBER_DELIVERY_ORDER_ADMIN_DELETE = "/member/delivery/order/admin/delete";
     public static final String MEMBER_DELIVERY_ORDER_ADMIN_WAREHOUSE_DELIVER_LIST = "/member/delivery/order/admin/warehouse/deliver/list";
     public static final String MEMBER_DELIVERY_ORDER_ADMIN_WAREHOUSE_DELIVER = "/member/delivery/order/admin/warehouse/deliver";
+    public static final String MEMBER_DELIVERY_ORDER_ADMIN_EXPRESS_LIST = "/member/delivery/order/admin/express/list";
     public static final String MEMBER_DELIVERY_ORDER_ADMIN_EXPRESS_SAVE = "/member/delivery/order/admin/express/save";
     public static final String MEMBER_DELIVERY_ORDER_ADMIN_EXPRESS_DELETE = "/member/delivery/order/admin/express/delete";
     public static final String MEMBER_DELIVERY_ORDER_SYSTEM_LIST = "/member/delivery/order/system/list";

@@ -17,6 +17,12 @@ public class MemberPurchaseOrderExpressCache extends Cache {
 
     public List<Express> listByMember_purchase_order_id(String member_purchase_order_id) {
         List<MemberPurchaseOrderExpress> member_purchase_order_express_list = CacheUtil.get(MEMBER_PURCHASE_ORDER_EXPRESS_LIST_BY_MEMBER_PURCHASE_ORDER_ID_CACHE, member_purchase_order_id);
+
+        if (member_purchase_order_express_list == null) {
+            member_purchase_order_express_list = memberPurchaseOrderExpressDao.listByMember_purchase_order_id(member_purchase_order_id);
+
+            CacheUtil.put(MEMBER_PURCHASE_ORDER_EXPRESS_LIST_BY_MEMBER_PURCHASE_ORDER_ID_CACHE, member_purchase_order_id, member_purchase_order_express_list);
+        }
         
         List<Express> express_list = new ArrayList<Express>();
         for (MemberPurchaseOrderExpress memberPurchaseOrderExpress: member_purchase_order_express_list) {

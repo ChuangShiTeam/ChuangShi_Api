@@ -627,6 +627,20 @@ public class MemberDeliveryOrderController extends Controller {
         renderSuccessJson(result);
     }
 
+    @ActionKey(Url.MEMBER_DELIVERY_ORDER_ADMIN_EXPRESS_LIST)
+    public void adminExpressList() {
+        validateRequest_app_id();
+        validate(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID);
+
+        JSONObject jsonObject = getParameterJSONObject();
+        String member_delivery_order_id = jsonObject.getString("member_delivery_order_id");
+
+
+        List<Express> expressList = memberDeliveryOrderExpressService.listByMember_delivery_order_id(member_delivery_order_id);
+
+        renderSuccessJson(expressList);
+    }
+
     @ActionKey(Url.MEMBER_DELIVERY_ORDER_ADMIN_EXPRESS_SAVE)
     public void adminExpressSave() {
         validateRequest_app_id();

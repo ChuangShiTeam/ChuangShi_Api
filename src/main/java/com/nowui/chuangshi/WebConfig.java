@@ -356,10 +356,10 @@ public class WebConfig extends JFinalConfig {
         plugins.add(cron4jPlugin);
 
         // JFinal-event事件驱动插件()
-        EventPlugin eventPlugin = new EventPlugin(false, "com.nowui.chuangshi", true);
-        eventPlugin.setRmiServer(15555);
-        eventPlugin.setRmiClient("127.0.0.1", 15555);
-        plugins.add(eventPlugin);
+//        EventPlugin eventPlugin = new EventPlugin(false, "com.nowui.chuangshi", true);
+//        eventPlugin.setRmiServer(15555);
+//        eventPlugin.setRmiClient("127.0.0.1", 15555);
+//        plugins.add(eventPlugin);
 
     }
 
