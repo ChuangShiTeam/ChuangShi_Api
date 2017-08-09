@@ -49,7 +49,7 @@ public class CertificateController extends Controller {
 
             for (CertificateImage certificateImage : certificateImageList) {
                 File file = fileService.findByFile_id(certificateImage.getFile_id());
-                certificateImage.put(File.FILE_ORIGINAL_PATH, file.getFile_original_path());
+                certificateImage.put(File.FILE_ORIGINAL_PATH, file.getFile_path());
                 certificateImage.keep(CertificateImage.CERTIFICATE_TYPE, File.FILE_ORIGINAL_PATH);
 
                 if (certificateImage.getCertificate_type().equals(CertificateImageType.WX.getValue())) {
