@@ -149,8 +149,8 @@ public class MemberDeliveryOrderController extends Controller {
         if (member_purchase_order.getMember_purchase_order_flow().equals(MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey())
                 || member_purchase_order.getMember_purchase_order_flow()
                         .equals(MemberPurchaseOrderFlow.COMPLETE.getKey())) {
-            expressList = memberPurchaseOrderExpressService
-                    .listByMember_purchase_order_id(member_purchase_order.getMember_purchase_order_id());
+            expressList = memberDeliveryOrderExpressService
+                    .listByMember_delivery_order_id(member_delivery_order.getMember_delivery_order_id());
             for (Express express : expressList) {
                 Map<String, Object> traces = new HashMap<>();
 
