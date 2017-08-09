@@ -37,17 +37,17 @@ public class StockController extends Controller {
             stock_quantity += stock.getStock_quantity();
         }
 
-        List<MemberDeliveryOrder> memberDeliveryOrderList = MemberDeliveryOrderService.me.list(Cnd.where(MemberDeliveryOrder.USER_ID, request_user_id).and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrderFlow.WAIT_WAREHOUSE_SEND.getKey()));
+        List<MemberDeliveryOrder> memberDeliveryOrderList = MemberDeliveryOrderService.me.list(Cnd.where(MemberDeliveryOrder.USER_ID, request_user_id).and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, true).and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrderFlow.WAIT_WAREHOUSE_SEND.getKey()));
         for (MemberDeliveryOrder memberDeliveryOrder : memberDeliveryOrderList) {
             stock_quantity -= memberDeliveryOrder.getMember_delivery_order_total_quantity();
         }
 
-        List<MemberDeliveryOrder> memberDeliveryOrderList2 = MemberDeliveryOrderService.me.list(Cnd.where(MemberDeliveryOrder.USER_ID, request_user_id).and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrderFlow.WAIT_RECEIVE.getKey()));
+        List<MemberDeliveryOrder> memberDeliveryOrderList2 = MemberDeliveryOrderService.me.list(Cnd.where(MemberDeliveryOrder.USER_ID, request_user_id).and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, true).and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrderFlow.WAIT_RECEIVE.getKey()));
         for (MemberDeliveryOrder memberDeliveryOrder : memberDeliveryOrderList2) {
             stock_quantity -= memberDeliveryOrder.getMember_delivery_order_total_quantity();
         }
 
-        List<MemberDeliveryOrder> memberDeliveryOrderList3 = MemberDeliveryOrderService.me.list(Cnd.where(MemberDeliveryOrder.USER_ID, request_user_id).and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrderFlow.COMPLETE.getKey()));
+        List<MemberDeliveryOrder> memberDeliveryOrderList3 = MemberDeliveryOrderService.me.list(Cnd.where(MemberDeliveryOrder.USER_ID, request_user_id).and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, true).and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, MemberDeliveryOrderFlow.COMPLETE.getKey()));
         for (MemberDeliveryOrder memberDeliveryOrder : memberDeliveryOrderList3) {
             stock_quantity -= memberDeliveryOrder.getMember_delivery_order_total_quantity();
         }

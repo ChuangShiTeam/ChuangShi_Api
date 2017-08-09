@@ -1,11 +1,16 @@
 package com.nowui.chuangshi.controller;
 
+import java.lang.Exception;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nowui.chuangshi.api.trade.model.MemberDeliveryOrder;
+import com.nowui.chuangshi.api.trade.service.MemberDeliveryOrderService;
+import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.model.*;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
@@ -13,15 +18,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.Express;
-import com.nowui.chuangshi.model.Member;
-import com.nowui.chuangshi.model.MemberAddress;
-import com.nowui.chuangshi.model.MemberPurchaseOrder;
-import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
-import com.nowui.chuangshi.model.Product;
-import com.nowui.chuangshi.model.ProductSku;
-import com.nowui.chuangshi.model.ProductSkuPrice;
-import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberAddressService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderExpressService;
@@ -111,9 +107,14 @@ public class MemberPurchaseOrderController extends Controller {
         List<MemberPurchaseOrder> resultList = memberPurchaseOrderService.listByUser_id(request_user_id);
 
         for (MemberPurchaseOrder result : resultList) {
-            User user = userService.findByUser_id(result.getUser_id());
-            if (user != null) {
-                result.put(User.USER_NAME, user.getUser_name());
+            MemberDeliveryOrder memberDeliveryOrder = MemberDeliveryOrderService.me.find(Cnd.where(MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, result.getMember_purchase_order_id()));
+            if (memberDeliveryOrder != null) {
+                User user = userService.findByUser_id(memberDeliveryOrder.getUser_id());
+                if (user != null) {
+                    result.put(User.USER_NAME, user.getUser_name());
+                    File file = fileService.findByFile_id(user.getUser_avatar());
+                    result.put(User.USER_AVATAR, file.getFile_original_path());
+                }
             }
 
             // 根据进货单获取商品列表
@@ -133,7 +134,7 @@ public class MemberPurchaseOrderController extends Controller {
             }
             result.put(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_PRODUCT_SKU_LIST, memberPurchaseOrderProductSkuList);
 
-            result.keep(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_ID,
+            result.keep(User.USER_NAME, User.USER_AVATAR, MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_ID,
                     MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_WAREHOUSE_RECEIVE,
                     MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_RECEIVER_NAME,
                     MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_RECEIVER_MOBILE,
