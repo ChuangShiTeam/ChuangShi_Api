@@ -35,6 +35,8 @@ public class ExpressService extends Service {
             String requestData = "{'CallBack':'" + express_id + "','OrderCode':'" + orderCode + "','ShipperCode':'" + expCode
                     + "','LogisticCode':'" + expNo + "'}";
 
+            System.out.println(requestData);
+
             Map<String, String> params = new HashMap<String, String>();
             params.put("RequestData", ExpressUtil.urlEncoder(requestData, "UTF-8"));
             params.put("EBusinessID", eBusinessID);

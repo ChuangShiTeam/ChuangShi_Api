@@ -120,17 +120,16 @@ public class MemberDeliveryOrderService extends Service {
         return memberDeliveryOrderCache.updateMember_delivery_order_flowAndMember_delivery_order_is_completeByMember_delivery_order_idValidateSystem_version(member_delivery_order_id, member_delivery_order_flow, member_delivery_order_is_complete, system_update_user_id, system_version);
     }
     
-    public Boolean expressSave(String member_delivery_order_id, String express_no, BigDecimal express_cost, String express_shipper_code, String express_remark, String request_user_id) {
+    public Boolean expressSave(String express_id, String member_delivery_order_id, String express_no, BigDecimal express_cost, String express_shipper_code, String express_remark, String request_user_id) {
         MemberDeliveryOrder memberDeliveryOrder = findByMember_delivery_order_id(member_delivery_order_id);
         if (memberDeliveryOrder == null) {
             throw new RuntimeException("找不到发货单");
         }
-        if (!(MemberDeliveryOrderFlow.WAIT_WAREHOUSE_SEND.getKey().equals(memberDeliveryOrder.getMember_delivery_order_flow()))) {
-            throw new RuntimeException("发货单处于待仓库发货时才可添加快递单");
-        }
+//        if (!(MemberDeliveryOrderFlow.WAIT_WAREHOUSE_SEND.getKey().equals(memberDeliveryOrder.getMember_delivery_order_flow()))) {
+//            throw new RuntimeException("发货单处于待仓库发货时才可添加快递单");
+//        }
         
         //保存快递单信息
-        String express_id = Util.getRandomUUID();
         Boolean result = expressService.save(express_id, memberDeliveryOrder.getApp_id(), express_shipper_code,
                 express_no, "", memberDeliveryOrder.getMember_delivery_order_receiver_name(), "", memberDeliveryOrder.getMember_delivery_order_receiver_mobile(), "",
                 memberDeliveryOrder.getMember_delivery_order_receiver_province(), memberDeliveryOrder.getMember_delivery_order_receiver_city(), memberDeliveryOrder.getMember_delivery_order_receiver_area(),

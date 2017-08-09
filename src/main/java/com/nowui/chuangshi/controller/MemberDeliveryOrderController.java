@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nowui.chuangshi.service.*;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
@@ -24,17 +25,6 @@ import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.model.Warehouse;
-import com.nowui.chuangshi.service.FileService;
-import com.nowui.chuangshi.service.MemberDeliveryOrderExpressService;
-import com.nowui.chuangshi.service.MemberDeliveryOrderProductSkuService;
-import com.nowui.chuangshi.service.MemberDeliveryOrderService;
-import com.nowui.chuangshi.service.MemberPurchaseOrderExpressService;
-import com.nowui.chuangshi.service.MemberPurchaseOrderProductSkuService;
-import com.nowui.chuangshi.service.MemberPurchaseOrderService;
-import com.nowui.chuangshi.service.ProductService;
-import com.nowui.chuangshi.service.ProductSkuService;
-import com.nowui.chuangshi.service.StockService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.MemberDeliveryOrderFlow;
 import com.nowui.chuangshi.type.MemberPurchaseOrderFlow;
 import com.nowui.chuangshi.util.Util;
@@ -52,6 +42,7 @@ public class MemberDeliveryOrderController extends Controller {
     private final MemberPurchaseOrderService memberPurchaseOrderService = new MemberPurchaseOrderService();
     private final MemberPurchaseOrderExpressService memberPurchaseOrderExpressService = new MemberPurchaseOrderExpressService();
     private final MemberPurchaseOrderProductSkuService memberPurchaseOrderProductSkuService = new MemberPurchaseOrderProductSkuService();
+    private final ExpressService expressService = new ExpressService();
 
     @ActionKey(Url.MEMBER_DELIVERY_ORDER_LIST)
     public void list() {
@@ -148,7 +139,7 @@ public class MemberDeliveryOrderController extends Controller {
         List<Express> expressList = new ArrayList<>();
         if (member_purchase_order.getMember_purchase_order_flow().equals(MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey())
                 || member_purchase_order.getMember_purchase_order_flow()
-                        .equals(MemberPurchaseOrderFlow.COMPLETE.getKey())) {
+                .equals(MemberPurchaseOrderFlow.COMPLETE.getKey())) {
             expressList = memberDeliveryOrderExpressService
                     .listByMember_delivery_order_id(member_delivery_order.getMember_delivery_order_id());
             for (Express express : expressList) {
@@ -185,6 +176,30 @@ public class MemberDeliveryOrderController extends Controller {
 
         renderSuccessJson(member_purchase_order);
     }
+
+//    @ActionKey(Url.MEMBER_DELIVERY_ORDER_EXPRESS_CHECK)
+//    public void expressCheck() {
+//        validateRequest_app_id();
+//        validate(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID);
+//
+//        MemberDeliveryOrder model = getModel(MemberDeliveryOrder.class);
+//
+//        MemberDeliveryOrder member_delivery_order = memberDeliveryOrderService.findByMember_delivery_order_id(model.getMember_delivery_order_id());
+//
+//        List<MemberDeliveryOrderProductSku> memberDeliveryOrderProductSkuList = memberDeliveryOrderProductSkuService.listByMember_delivery_order_id(model.getMember_delivery_order_id());
+//        for (MemberDeliveryOrderProductSku memberDeliveryOrderProductSku : memberDeliveryOrderProductSkuList) {
+//            ProductSku productSku = productSkuService
+//                    .findByProduct_sku_id(memberDeliveryOrderProductSku.getProduct_sku_id());
+//            Product product = productService.findByProduct_id(productSku.getProduct_id());
+//            memberDeliveryOrderProductSku.put(Product.PRODUCT_NAME, product.getProduct_name());
+//            memberDeliveryOrderProductSku.put(Product.PRODUCT_IMAGE,
+//                    fileService.getFile_path(product.getProduct_image()));
+//            memberDeliveryOrderProductSku.keep(MemberPurchaseOrderProductSku.PRODUCT_SKU_ID, MemberPurchaseOrderProductSku.PRODUCT_SKU_AMOUNT, MemberPurchaseOrderProductSku.PRODUCT_SKU_QUANTITY, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE);
+//        }
+//        member_delivery_order.put(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_PRODUCT_SKU_LIST, memberDeliveryOrderProductSkuList);
+//
+//        renderSuccessJson(member_delivery_order);
+//    }
 
     public void findOld() {
         validateRequest_app_id();
@@ -341,6 +356,64 @@ public class MemberDeliveryOrderController extends Controller {
         Boolean result = memberDeliveryOrderService
                 .deleteByMember_delivery_order_idAndSystem_update_user_idValidateSystem_version(
                         model.getMember_delivery_order_id(), request_user_id, model.getSystem_version());
+
+        renderSuccessJson(result);
+    }
+
+    @ActionKey(Url.MEMBER_DELIVERY_ORDER_SELF_DELIVER)
+    public void selfReplaceDeliver() {
+        validateRequest_app_id();
+        validate(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_ID, "express_list");
+
+        MemberDeliveryOrder model = getModel(MemberDeliveryOrder.class);
+        String request_user_id = getRequest_user_id();
+        JSONObject jsonObject = getParameterJSONObject();
+        JSONArray jsonArray = jsonObject.getJSONArray("express_list");
+
+
+        MemberDeliveryOrder member_delivery_order = memberDeliveryOrderService.findByMember_delivery_order_id(model.getMember_delivery_order_id());
+
+        System.out.println(member_delivery_order.getMember_delivery_order_flow());
+        // 验证发货单是否是待发货状态
+        if (!MemberDeliveryOrderFlow.WAIT_SEND.getKey().equals(member_delivery_order.getMember_delivery_order_flow())) {
+            throw new RuntimeException("发货单不是待发货状态");
+        }
+
+        Boolean member_delivery_order_is_warehouse_deliver = false;
+        String member_delivery_order_flow = MemberDeliveryOrderFlow.WAIT_RECEIVE.getKey();
+        Boolean result = memberDeliveryOrderService
+                .updateMember_delivery_order_flowAndMember_delivery_order_is_warehouse_deliverByMember_delivery_order_idValidateSystem_version(
+                        member_delivery_order.getMember_delivery_order_id(), member_delivery_order_flow,
+                        member_delivery_order_is_warehouse_deliver, request_user_id,
+                        member_delivery_order.getSystem_version());
+
+        if (!result) {
+            throw new RuntimeException("发货单更新不成功");
+        }
+
+        MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService.findByMember_purchase_order_id(member_delivery_order.getMember_purchase_order_id());
+        // 更新进货单流程为待收货
+        result = memberPurchaseOrderService.updateMember_purchase_order_flowByMember_purchase_order_idAndSystem_version(memberPurchaseOrder.getMember_purchase_order_id(), MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey(), request_user_id, memberPurchaseOrder.getSystem_version());
+
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JSONObject expressObject = jsonArray.getJSONObject(i);
+            String express_no = expressObject.getString("express_no");
+            BigDecimal express_cost = expressObject.getBigDecimal("express_cost");
+            String express_shipper_code = expressObject.getString("express_shipper_code");
+            String express_remark = "";
+
+            String express_id = Util.getRandomUUID();
+            result = memberDeliveryOrderService.expressSave(express_id, model.getMember_delivery_order_id(), express_no, express_cost,
+                    express_shipper_code, express_remark, request_user_id);
+
+            if (!result) {
+                throw new RuntimeException("发货单更新不成功");
+            }
+
+
+            expressService.subscription(express_id, Constant.EXPRESS_ORDER_CODE_MEMBER_DELIVERY_ORDER, express_shipper_code, express_no);
+        }
 
         renderSuccessJson(result);
     }
@@ -657,7 +730,8 @@ public class MemberDeliveryOrderController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        Boolean result = memberDeliveryOrderService.expressSave(member_delivery_order_id, express_no, express_cost,
+        String express_id = Util.getRandomUUID();
+        Boolean result = memberDeliveryOrderService.expressSave(express_id, member_delivery_order_id, express_no, express_cost,
                 express_shipper_code, express_remark, request_user_id);
 
         renderSuccessJson(result);
