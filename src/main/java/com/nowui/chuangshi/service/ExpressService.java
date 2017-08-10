@@ -17,8 +17,6 @@ public class ExpressService extends Service {
 
     private ExpressCache expressCache = new ExpressCache();
     
-    private TradeService tradeService = new TradeService();
-    
     /**
      * 订阅快递
      * 
