@@ -16,6 +16,7 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Trade;
+import com.nowui.chuangshi.type.ExpressFlow;
 import com.nowui.chuangshi.type.TradeFlow;
 import com.nowui.chuangshi.util.Util;
 
@@ -26,6 +27,10 @@ public class TradeService extends Service {
     private TradePayService tradePayService = new TradePayService();
 
     private AppService appService = new AppService();
+    
+    private ExpressService expressService = new ExpressService();
+    
+    private TradeExpressService tradeExpressService = new TradeExpressService();
 
     public Integer countByApp_idOrLikeTrade_number(String app_id, String trade_number) {
         return tradeCache.countByApp_idOrLikeTrade_number(app_id, trade_number);
@@ -211,5 +216,44 @@ public class TradeService extends Service {
     	
     	return updateTrade_flowByTrade_idValidateSystem_version(trade_id, TradeFlow.COMPLETE.getKey(), trade.getSystem_update_user_id(), trade.getSystem_version());
     }
+    
+    public Boolean expressSave(String trade_id, String express_no, BigDecimal express_cost, String express_shipper_code,
+            String express_remark, String request_user_id) {
+        Trade trade = findByTrade_id(trade_id);
+        if (trade == null) {
+            throw new RuntimeException("找不到订单");
+        }
+        if (!(TradeFlow.WAIT_SEND.getKey().equals(trade.getTrade_flow()))) {
+            throw new RuntimeException("订单处于待发货时才可添加快递单");
+        }
+        //保存快递单信息
+        String express_id = Util.getRandomUUID();
+        Boolean result = expressService.save(express_id, trade.getApp_id(), express_shipper_code,
+                express_no, "", trade.getTrade_receiver_name(), "", trade.getTrade_receiver_mobile(), "",
+                trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(),
+                trade.getTrade_receiver_address(), "", "", "", "", "", "", "", "", "", express_cost,
+                trade.getTrade_is_pay(), "", "", ExpressFlow.NOTRACK.getValue(), false,
+                express_remark, request_user_id);
+        if (result) {
+            tradeExpressService.save(trade_id, express_id, request_user_id);
+        }
+        return result;
+    }
+
+    public Boolean expressDelete(String trade_id, String express_id, String request_user_id, Integer system_version) {
+        Trade trade = findByTrade_id(trade_id);
+        if (trade == null) {
+            throw new RuntimeException("找不到发货单");
+        }
+        if (!(TradeFlow.WAIT_SEND.getKey().equals(trade.getTrade_flow()))) {
+            throw new RuntimeException("订单处于待发货时才可删除快递单");
+        }
+        Boolean result = expressService.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(express_id, request_user_id, system_version);
+        if (result) {
+            tradeExpressService.deleteByTrade_idAndExpress_idAndSystem_update_user_id(trade_id, express_id, request_user_id);
+        }
+        return result;
+    }
+
 
 }

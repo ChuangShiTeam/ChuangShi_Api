@@ -120,6 +120,7 @@ import com.nowui.chuangshi.model.Supplier;
 import com.nowui.chuangshi.model.SupplierProduct;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.model.TradeCommossion;
+import com.nowui.chuangshi.model.TradeExpress;
 import com.nowui.chuangshi.model.TradePay;
 import com.nowui.chuangshi.model.TradeProductSku;
 import com.nowui.chuangshi.model.User;
@@ -127,8 +128,6 @@ import com.nowui.chuangshi.model.Warehouse;
 import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.util.ClassUtil;
 import com.nowui.chuangshi.util.ValidateUtil;
-
-import net.dreamlu.event.EventPlugin;
 
 public class WebConfig extends JFinalConfig {
 
@@ -303,6 +302,7 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_trade_commossion", "trade_commossion_id", TradeCommossion.class);
         activeRecordPlugin.addMapping("table_trade_pay", "trade_pay_id", TradePay.class);
         activeRecordPlugin.addMapping("table_trade_product_sku", "trade_product_sku_id", TradeProductSku.class);
+        activeRecordPlugin.addMapping("table_trade_express", "trade_id", TradeExpress.class);
         activeRecordPlugin.addMapping("table_bill", "bill_id", Bill.class);
         activeRecordPlugin.addMapping("table_bill_commission", "bill_commission_id", BillCommission.class);
 

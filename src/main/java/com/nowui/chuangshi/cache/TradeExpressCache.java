@@ -36,5 +36,9 @@ public class TradeExpressCache extends Cache {
     public Boolean deleteByTrade_idAndSystem_update_user_id(String trade_id, String system_update_user_id) {
         return tradeExpressDao.deleteByTrade_id(trade_id, system_update_user_id);
     }
+    
+    public Boolean deleteByTrade_idAndExpress_idAndSystem_update_user_id(String trade_id, String express_id, String system_update_user_id) {
+        return tradeExpressDao.deleteByTrade_idAndExpress_id(trade_id, express_id, system_update_user_id);
+    }
 
 }
