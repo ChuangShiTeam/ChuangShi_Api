@@ -631,16 +631,54 @@ public class TradeController extends Controller {
         renderSuccessJson(result);
     }
 
-    @ActionKey(Url.TRADE_ADD_EXPRESS)
-    public void adminDelivery() {
+    @ActionKey(Url.TRADE_EXPRESS_SAVE)
+    public void expressSave() {
         // TODO
     }
 
-    @ActionKey(Url.TRADE_DECREASE_EXPRESS)
-    public void addDelivery() {
+    @ActionKey(Url.TRADE_EXPRESS_DELETE)
+    public void expressDelete() {
         // TODO
     }
-
+    
+    @ActionKey(Url.TRADE_ADMIN_EXPRESS_SAVE)
+    public void adminExpressSave() {
+        validateRequest_app_id();
+        validate(Trade.TRADE_ID, Express.EXPRESS_NO, Express.EXPRESS_COST, Express.EXPRESS_SHIPPER_CODE,
+                Express.EXPRESS_REMARK);       
+       
+        String request_user_id = getRequest_user_id();
+        JSONObject jsonObject = getParameterJSONObject();
+        String trade_id = jsonObject.getString("trade_id");
+        String express_no = jsonObject.getString("express_no");
+        BigDecimal express_cost = jsonObject.getBigDecimal("express_cost");
+        String express_shipper_code = jsonObject.getString("express_shipper_code");
+        String express_remark = jsonObject.getString("express_remark");
+        
+        authenticateRequest_app_idAndRequest_user_id();
+        
+        Boolean result = tradeService.expressSave(trade_id, express_no, express_cost, express_shipper_code, express_remark, request_user_id);        
+        
+        renderSuccessJson(result);
+    }
+    
+    @ActionKey(Url.TRADE_ADMIN_EXPRESS_DELETE)
+    public void adminExpressDelete() {
+        validateRequest_app_id();
+        validate(Trade.TRADE_ID, Express.EXPRESS_ID, Express.SYSTEM_VERSION);       
+        
+        String request_user_id = getRequest_user_id();
+        JSONObject jsonObject = getParameterJSONObject();
+        String trade_id = jsonObject.getString("trade_id");
+        String express_id = jsonObject.getString("express_id");
+        Integer system_version = jsonObject.getInteger("system_version");
+        
+        authenticateRequest_app_idAndRequest_user_id();
+        
+        Boolean result = tradeService.expressDelete(trade_id, express_id, request_user_id, system_version);        
+        
+        renderSuccessJson(result);
+    }
     @ActionKey(Url.TRADE_ADMIN_DELETE)
     public void adminDelete() {
         validateRequest_app_id();

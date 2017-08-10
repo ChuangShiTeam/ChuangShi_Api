@@ -64,5 +64,18 @@ public class TradeExpressDao extends Dao {
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
+    
+    public Boolean deleteByTrade_idAndExpress_id(String trade_id, String express_id, String system_update_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(TradeExpress.TRADE_ID, trade_id);
+        sqlMap.put(TradeExpress.EXPRESS_ID, express_id);
+        sqlMap.put(TradeExpress.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(TradeExpress.SYSTEM_UPDATE_TIME, new Date());
+        SqlPara sqlPara = Db.getSqlPara("trade_express.deleteByTrade_idAndExpress_id", sqlMap);
+        
+        logSql("trade_express", "deleteByTrade_idAndExpress_id", sqlPara);
+        
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
 
 }
