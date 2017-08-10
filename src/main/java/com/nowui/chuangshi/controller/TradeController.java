@@ -93,6 +93,10 @@ public class TradeController extends Controller {
             trade_product_amount = trade_product_amount
                     .add(product_sku_price.multiply(productSkuObject.getBigDecimal("product_sku_quantity")));
             productSkuObject.put(ProductSkuPrice.PRODUCT_SKU_PRICE, product_sku_price);
+
+//            if (request_user_id.equals("229736797b4d4283b284f6aef128585c") || request_user_id.equals("519b7acab2374f129ef4df5d4ab3ec25")) {
+//                productSkuObject.put(ProductSkuPrice.PRODUCT_SKU_PRICE, new BigDecimal(0.01));
+//            }
         }
 
         Map<String, Object> result = new HashMap<String, Object>();
