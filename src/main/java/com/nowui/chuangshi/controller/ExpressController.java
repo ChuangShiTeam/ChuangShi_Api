@@ -1,6 +1,5 @@
 package com.nowui.chuangshi.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,22 +10,16 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
-import com.jfinal.plugin.activerecord.Record;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Kdniao;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Express;
-
 import com.nowui.chuangshi.model.MemberDeliveryOrderExpress;
 import com.nowui.chuangshi.model.TradeExpress;
 import com.nowui.chuangshi.service.ExpressService;
-import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderExpressService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderService;
-import com.nowui.chuangshi.service.ProductService;
-import com.nowui.chuangshi.service.ProductSkuService;
 import com.nowui.chuangshi.service.TradeExpressService;
-import com.nowui.chuangshi.service.TradeProductSkuService;
 import com.nowui.chuangshi.service.TradeService;
 import com.nowui.chuangshi.util.DateUtil;
 
@@ -67,8 +60,6 @@ public class ExpressController extends Controller {
         }
 
         JSONArray jsonArray = JSONArray.parseArray(requestDataObject.getString("Data"));
-
-        List<Express> expressList = new ArrayList<Express>();
 
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
