@@ -179,7 +179,7 @@ public class CertificateController extends Controller {
 
         BigDecimal total_fee_decimal = getMoney(request_user_id);
 
-        if (request_user_id.equals("229736797b4d4283b284f6aef128585c") || request_user_id.equals("519b7acab2374f129ef4df5d4ab3ec25") || request_user_id.equals("66b8cac8e93840da857f4dc0812a4e3d")) {
+        if (request_user_id.equals("229736797b4d4283b284f6aef128585c") || request_user_id.equals("519b7acab2374f129ef4df5d4ab3ec25")) {
             total_fee_decimal = new BigDecimal(0.01);
         }
 
