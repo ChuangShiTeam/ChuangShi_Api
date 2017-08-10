@@ -31,6 +31,19 @@ public class FeijiuFastProductCategoryController extends Controller {
 
         renderSuccessJson(resultCount, resultList);
     }
+    
+    @ActionKey("/admin/feijiu/fast/product/category/list/all")
+    public void listAll() {
+        FeijiuFastProductCategory model = getModel(FeijiuFastProductCategory.class);
+        Cnd cnd = Cnd.where(FeijiuFastProductCategory.APP_ID, model.getApp_id());
+
+        List<FeijiuFastProductCategory> resultList = FeijiuFastProductCategoryService.me.list(cnd);
+
+        validateResponse(FeijiuFastProductCategory.PRODUCT_CATEGORY_ID, FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME);
+
+        renderSuccessJson(resultList);
+    }
+
 
     @ActionKey("/admin/feijiu/fast/product/category/find")
     public void find() {
@@ -40,14 +53,14 @@ public class FeijiuFastProductCategoryController extends Controller {
 
         FeijiuFastProductCategory result = FeijiuFastProductCategoryService.me.findById(model.getProduct_category_id());
 
-        validateResponse(FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, FeijiuFastProductCategory.PRODUCT_CATEGORY_CONTENT, FeijiuFastProductCategory.PRODUCT_CATEGORY_SORT_NUMBER, FeijiuFastProductCategory.SYSTEM_VERSION);
+        validateResponse(FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, FeijiuFastProductCategory.PRODUCT_CATEGORY_SORT_NUMBER, FeijiuFastProductCategory.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
 
     @ActionKey("/admin/feijiu/fast/product/category/save")
     public void save() {
-        validateRequest(FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, FeijiuFastProductCategory.PRODUCT_CATEGORY_CONTENT, FeijiuFastProductCategory.PRODUCT_CATEGORY_SORT_NUMBER);
+        validateRequest(FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, FeijiuFastProductCategory.PRODUCT_CATEGORY_SORT_NUMBER);
 
         FeijiuFastProductCategory model = getModel(FeijiuFastProductCategory.class);
         model.setProduct_category_id(Util.getRandomUUID());
@@ -59,7 +72,7 @@ public class FeijiuFastProductCategoryController extends Controller {
 
     @ActionKey("/admin/feijiu/fast/product/category/update")
     public void update() {
-        validateRequest(FeijiuFastProductCategory.PRODUCT_CATEGORY_ID, FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, FeijiuFastProductCategory.PRODUCT_CATEGORY_CONTENT, FeijiuFastProductCategory.PRODUCT_CATEGORY_SORT_NUMBER, FeijiuFastProductCategory.SYSTEM_VERSION);
+        validateRequest(FeijiuFastProductCategory.PRODUCT_CATEGORY_ID, FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, FeijiuFastProductCategory.PRODUCT_CATEGORY_SORT_NUMBER, FeijiuFastProductCategory.SYSTEM_VERSION);
 
         FeijiuFastProductCategory model = getModel(FeijiuFastProductCategory.class);
 

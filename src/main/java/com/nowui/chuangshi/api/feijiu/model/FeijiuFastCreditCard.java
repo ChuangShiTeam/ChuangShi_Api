@@ -47,6 +47,8 @@ public class FeijiuFastCreditCard extends Model<FeijiuFastCreditCard> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
+    
+    public static final String CREDIT_CARD_IMAGE_FILE = "credit_card_image_file";
 
     public String getCredit_card_id() {
         return getStr(CREDIT_CARD_ID);
@@ -111,7 +113,6 @@ public class FeijiuFastCreditCard extends Model<FeijiuFastCreditCard> {
     public void setSystem_create_time(Date system_create_time) {
         set(SYSTEM_CREATE_TIME, system_create_time);
     }
-
 
     public String getSystem_update_user_id() {
         return getStr(SYSTEM_UPDATE_USER_ID);

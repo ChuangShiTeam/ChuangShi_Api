@@ -21,9 +21,6 @@ public class FeijiuFastProductCategory extends Model<FeijiuFastProductCategory> 
     @Column(type = ColumnType.VARCHAR, length = 30, comment = "商品分类名称")
     public static final String PRODUCT_CATEGORY_NAME = "product_category_name";
 
-    @Column(type = ColumnType.VARCHAR, length = 200, comment = "商品分类介绍")
-    public static final String PRODUCT_CATEGORY_CONTENT = "product_category_content";
-
     @Column(type = ColumnType.INT, length = 5, comment = "商品分类排序")
     public static final String PRODUCT_CATEGORY_SORT_NUMBER = "product_category_sort_number";
 
@@ -67,14 +64,6 @@ public class FeijiuFastProductCategory extends Model<FeijiuFastProductCategory> 
 
     public void setProduct_category_name(String product_category_name) {
         set(PRODUCT_CATEGORY_NAME, product_category_name);
-    }
-
-    public String getProduct_category_content() {
-        return getStr(PRODUCT_CATEGORY_CONTENT);
-    }
-
-    public void setProduct_category_content(String product_category_content) {
-        set(PRODUCT_CATEGORY_CONTENT, product_category_content);
     }
 
     public Integer getProduct_category_sort_number() {

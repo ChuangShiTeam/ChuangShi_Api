@@ -4,19 +4,22 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.feijiu.model.FeijiuFastProduct;
 import com.nowui.chuangshi.api.feijiu.service.FeijiuFastProductService;
+import com.nowui.chuangshi.api.file.model.File;
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.List;
 
 @Before(AdminInterceptor.class)
 @ControllerKey("/admin/feijiu/fast/product")
 public class FeijiuFastProductController extends Controller {
-
+    
     @ActionKey("/admin/feijiu/fast/product/list")
     public void list() {
         validateRequest(FeijiuFastProduct.PRODUCT_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
@@ -38,11 +41,18 @@ public class FeijiuFastProductController extends Controller {
 
         FeijiuFastProduct model = getModel(FeijiuFastProduct.class);
 
-        FeijiuFastProduct result = FeijiuFastProductService.me.findById(model.getProduct_id());
+        FeijiuFastProduct feijiu_fast_product = FeijiuFastProductService.me.findById(model.getProduct_id());
 
-        validateResponse(FeijiuFastProduct.PRODUCT_CATEGORY_ID, FeijiuFastProduct.PRODUCT_NAME, FeijiuFastProduct.PRODUCT_IMAGE, FeijiuFastProduct.PRODUCT_LINK, FeijiuFastProduct.PRODUCT_CONTENT, FeijiuFastProduct.PRODUCT_APPLICANT_QUANTITY, FeijiuFastProduct.SYSTEM_VERSION);
+        if (ValidateUtil.isNullOrEmpty(feijiu_fast_product.getProduct_image())) {
+            feijiu_fast_product.put(FeijiuFastProduct.PRODUCT_IMAGE_FILE, "");
+        } else {
+            File file = FileService.me.findById(feijiu_fast_product.getProduct_image());
+            feijiu_fast_product.put(FeijiuFastProduct.PRODUCT_IMAGE_FILE, file.keep(File.FILE_ID, File.FILE_PATH));
+        }
+        
+        validateResponse(FeijiuFastProduct.PRODUCT_CATEGORY_ID, FeijiuFastProduct.PRODUCT_IMAGE_FILE, FeijiuFastProduct.PRODUCT_NAME, FeijiuFastProduct.PRODUCT_IMAGE, FeijiuFastProduct.PRODUCT_LINK, FeijiuFastProduct.PRODUCT_CONTENT, FeijiuFastProduct.PRODUCT_APPLICANT_QUANTITY, FeijiuFastProduct.SYSTEM_VERSION);
 
-        renderSuccessJson(result);
+        renderSuccessJson(feijiu_fast_product);
     }
 
     @ActionKey("/admin/feijiu/fast/product/save")

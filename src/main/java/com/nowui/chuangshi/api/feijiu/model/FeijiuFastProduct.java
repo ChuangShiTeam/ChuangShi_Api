@@ -53,6 +53,8 @@ public class FeijiuFastProduct extends Model<FeijiuFastProduct> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
+    
+    public static final String PRODUCT_IMAGE_FILE = "product_image_file";
 
     public String getProduct_id() {
         return getStr(PRODUCT_ID);
