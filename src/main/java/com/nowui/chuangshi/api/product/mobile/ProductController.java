@@ -61,9 +61,9 @@ public class ProductController extends Controller {
                     }
                 }
 
-                if (request_user_id.equals("229736797b4d4283b284f6aef128585c") || request_user_id.equals("519b7acab2374f129ef4df5d4ab3ec25")) {
-                    result.put(ProductSkuPrice.PRODUCT_SKU_PRICE, new BigDecimal(0.01));
-                }
+//                if (request_user_id.equals("229736797b4d4283b284f6aef128585c") || request_user_id.equals("519b7acab2374f129ef4df5d4ab3ec25")) {
+//                    result.put(ProductSkuPrice.PRODUCT_SKU_PRICE, new BigDecimal(0.01));
+//                }
 
                 result.put(ProductSkuPrice.PRODUCT_SKU_ID, productSku.getProduct_sku_id());
 
