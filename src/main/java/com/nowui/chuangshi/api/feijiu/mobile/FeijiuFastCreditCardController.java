@@ -9,7 +9,6 @@ import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.sql.Cnd;
-import com.nowui.chuangshi.util.ValidateUtil;
 
 @ControllerKey("/mobile/feijiu/fast/credit/card")
 public class FeijiuFastCreditCardController extends Controller {
@@ -25,7 +24,7 @@ public class FeijiuFastCreditCardController extends Controller {
             result.put(FeijiuFastCreditCard.CREDIT_CARD_IMAGE, FileService.me.getFile_path(result.getCredit_card_image()));
         }
             
-        validateResponse(FeijiuFastCreditCard.CREDIT_CARD_ID, FeijiuFastCreditCard.CREDIT_CARD_NAME, FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, FeijiuFastCreditCard.CREDIT_CARD_LINK, FeijiuFastCreditCard.CREDIT_CARD_CONTENT);
+        validateResponse(FeijiuFastCreditCard.CREDIT_CARD_ID, FeijiuFastCreditCard.CREDIT_CARD_NAME, FeijiuFastCreditCard.CREDIT_CARD_IMAGE, FeijiuFastCreditCard.CREDIT_CARD_LINK, FeijiuFastCreditCard.CREDIT_CARD_CONTENT);
         renderSuccessJson(resultList);
     }
 
