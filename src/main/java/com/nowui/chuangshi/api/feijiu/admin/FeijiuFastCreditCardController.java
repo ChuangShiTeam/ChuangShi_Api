@@ -47,8 +47,7 @@ public class FeijiuFastCreditCardController extends Controller {
         if (ValidateUtil.isNullOrEmpty(result.getCredit_card_image())) {
             result.put(FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, "");
         } else {
-            File file = FileService.me.findById(result.getCredit_card_image());
-            result.put(FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, file.keep(File.FILE_ID, File.FILE_PATH));
+            result.put(FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, FileService.me.getFile(result.getCredit_card_image()));
         }
 
         validateResponse(FeijiuFastCreditCard.CREDIT_CARD_NAME, FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, FeijiuFastCreditCard.CREDIT_CARD_LINK, FeijiuFastCreditCard.CREDIT_CARD_CONTENT, FeijiuFastCreditCard.SYSTEM_VERSION);
