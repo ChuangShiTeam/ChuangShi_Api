@@ -1,10 +1,7 @@
 package com.nowui.chuangshi.controller;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -64,6 +61,45 @@ public class MemberController extends Controller {
                 list.add(map);
             }
         }
+
+        for (int i = 0; i < list.size() - 1; i++) {
+            for (int j = 1; j < list.size() - i; j++) {
+                Map<String, Object> o1 = list.get(j - 1);
+                Map<String, Object> o2 = list.get(j);
+                Integer a = 0;
+                Integer b = 0;
+                if (o2.get(Constant.CHILDREN) != null) {
+                    a = ((List<Map<String, Object>>) o2.get(Constant.CHILDREN)).size();
+                }
+                if (o1.get(Constant.CHILDREN) != null) {
+                    b = ((List<Map<String, Object>>) o1.get(Constant.CHILDREN)).size();
+                }
+                if (a.compareTo(b) > 0) {
+                    o1 = list.get(j - 1);
+                    list.set((j - 1), list.get(j));
+                    list.set(j, o1);
+                }
+            }
+        }
+
+//        list.sort(new Comparator<Map<String, Object>>() {
+//
+//            @Override
+//            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+//                Integer a = 0;
+//                Integer b = 0;
+//                if (o1.get(Constant.CHILDREN) != null) {
+//                    a = ((List<Map<String, Object>>) o1.get(Constant.CHILDREN)).size();
+//                }
+//                if (o2.get(Constant.CHILDREN) != null) {
+//                    b = ((List<Map<String, Object>>) o2.get(Constant.CHILDREN)).size();
+//                }
+//                if (b == a) {
+//                    return 0;
+//                }
+//                return b.compareTo(a);
+//            }
+//        });
         return list;
     }
 

@@ -33,7 +33,7 @@ public class FeijiuFastController extends Controller {
         for (FeijiuFastProduct feijiuFastProduct : productList) {
             feijiuFastProduct.put(FeijiuFastProduct.PRODUCT_IMAGE, FileService.me.getFile_path(feijiuFastProduct.getProduct_image()));
 
-            feijiuFastProduct.keep(FeijiuFastProduct.PRODUCT_ID, FeijiuFastProduct.PRODUCT_CATEGORY_ID, FeijiuFastProduct.PRODUCT_NAME, FeijiuFastProduct.PRODUCT_IMAGE_FILE, FeijiuFastProduct.PRODUCT_CONTENT, FeijiuFastProduct.PRODUCT_LINK, FeijiuFastProduct.PRODUCT_APPLICANT_QUANTITY);
+            feijiuFastProduct.keep(FeijiuFastProduct.PRODUCT_ID, FeijiuFastProduct.PRODUCT_CATEGORY_ID, FeijiuFastProduct.PRODUCT_NAME, FeijiuFastProduct.PRODUCT_IMAGE, FeijiuFastProduct.PRODUCT_CONTENT, FeijiuFastProduct.PRODUCT_LINK, FeijiuFastProduct.PRODUCT_APPLICANT_QUANTITY);
         }
         result.put("product_list", productList);
 
