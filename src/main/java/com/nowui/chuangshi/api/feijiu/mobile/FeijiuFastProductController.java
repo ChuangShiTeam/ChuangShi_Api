@@ -42,12 +42,7 @@ public class FeijiuFastProductController extends Controller {
         List<FeijiuFastProduct> product_list = FeijiuFastProductService.me.list(cnd);
         
         for (FeijiuFastProduct feijiu_fast_product : product_list) {
-            if (ValidateUtil.isNullOrEmpty(feijiu_fast_product.getProduct_image())) {
-                feijiu_fast_product.put(FeijiuFastProduct.PRODUCT_IMAGE_FILE, "");
-            } else {
-                File file = FileService.me.getFile(feijiu_fast_product.getProduct_image());
-                feijiu_fast_product.put(FeijiuFastProduct.PRODUCT_IMAGE_FILE, file);
-            }
+            feijiu_fast_product.put(FeijiuFastProduct.PRODUCT_IMAGE_FILE, FileService.me.getFile_path(feijiu_fast_product.getProduct_image()));
         }
         
         validateResponse(FeijiuFastProduct.PRODUCT_ID, FeijiuFastProduct.PRODUCT_NAME, FeijiuFastProduct.PRODUCT_IMAGE_FILE, FeijiuFastProduct.PRODUCT_CONTENT, FeijiuFastProduct.PRODUCT_LINK, FeijiuFastProduct.PRODUCT_APPLICANT_QUANTITY, FeijiuFastProduct.SYSTEM_VERSION);

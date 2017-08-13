@@ -22,11 +22,7 @@ public class FeijiuFastCreditCardController extends Controller {
         List<FeijiuFastCreditCard> resultList = FeijiuFastCreditCardService.me.list(cnd);
         
         for (FeijiuFastCreditCard result : resultList) {
-            if (ValidateUtil.isNullOrEmpty(result.getCredit_card_image())) {
-                result.put(FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, "");
-            } else {
-                result.put(FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, FileService.me.getFile_path(result.getCredit_card_image()));
-            }
+            result.put(FeijiuFastCreditCard.CREDIT_CARD_IMAGE, FileService.me.getFile_path(result.getCredit_card_image()));
         }
             
         validateResponse(FeijiuFastCreditCard.CREDIT_CARD_ID, FeijiuFastCreditCard.CREDIT_CARD_NAME, FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, FeijiuFastCreditCard.CREDIT_CARD_LINK, FeijiuFastCreditCard.CREDIT_CARD_CONTENT);
