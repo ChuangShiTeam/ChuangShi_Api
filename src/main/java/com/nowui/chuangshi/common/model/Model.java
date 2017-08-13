@@ -289,6 +289,18 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return stringBuilder.toString();
     }
 
+    public String buildOrderBySql() {
+        if (criteria == null) {
+            throw new RuntimeException("sql without condition");
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+
+
+        return stringBuilder.toString();
+    }
+
     public String buildCountSql() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("SELECT \n");

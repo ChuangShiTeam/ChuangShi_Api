@@ -9,6 +9,7 @@ public class Criteria {
 
     private List<Set> setList;
     private List<Condition> conditionList;
+    private List<OrderBy> orderByList;
 
     private Boolean isPaginate;
     private Integer m;
@@ -19,6 +20,7 @@ public class Criteria {
     public Criteria() {
         setList = new ArrayList<Set>();
         conditionList = new ArrayList<Condition>();
+        orderByList = new ArrayList<OrderBy>();
         isPaginate = false;
         isSystemVersion = true;
         isSystemStatus = true;
@@ -53,6 +55,21 @@ public class Criteria {
                 Condition condition = new Condition(ConditionType.WHERE, expression, false);
                 list.add(condition);
             }
+        }
+
+        return list;
+    }
+
+    public void addOrderBy(OrderBy orderBy) {
+        orderByList.add(orderBy);
+    }
+
+    public List<OrderBy> getOrderByList() {
+        List<OrderBy> list = new ArrayList<OrderBy>();
+        list.addAll(orderByList);
+
+        if (list.size() == 0) {
+            list.add(new OrderBy(Constant.SYSTEM_CREATE_TIME, OrderByType.DESC));
         }
 
         return list;

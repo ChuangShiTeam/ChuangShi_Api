@@ -159,4 +159,9 @@ public class Cnd {
         return this;
     }
 
+    public Cnd asc(String key) {
+
+        return this;
+    }
+
 }
