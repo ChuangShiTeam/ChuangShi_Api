@@ -12,10 +12,6 @@ public class Dao {
 
     private Model model;
 
-    public Model getModel() {
-        return model;
-    }
-
     public void setModel(Model model) {
         this.model = model;
     }
@@ -57,10 +53,13 @@ public class Dao {
     }
 
     public <M> M findById(String id) {
-        getModel().setPrimaryKeyCriteria(id);
+        model.setPrimaryKeyCriteria(id);
 
-        String sql = getModel().buildFindSql();
-        List<M> list = getModel().find(sql);
+        String sql = model.buildFindSql();
+
+        System.out.println(sql);
+
+        List<M> list = model.find(sql);
 
         if (list.size() == 0) {
             return null;

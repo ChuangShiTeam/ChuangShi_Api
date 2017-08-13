@@ -20,7 +20,13 @@ public class FileService extends Service {
 
         File file = findById(file_id);
 
-        return file.keep(File.FILE_ID, File.FILE_PATH);
+        if (file == null) {
+            file = new File();
+        }
+
+        return file;
+
+//        return file.keep(File.FILE_ID, File.FILE_PATH);
     }
 
     public String getFile_path(String file_id) {
@@ -29,6 +35,10 @@ public class FileService extends Service {
         }
 
         File file = findById(file_id);
+
+        if (file == null) {
+            return "";
+        }
 
         return file.getFile_original_path();
     }

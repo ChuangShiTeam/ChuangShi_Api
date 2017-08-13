@@ -46,8 +46,7 @@ public class FeijiuFastProductController extends Controller {
         if (ValidateUtil.isNullOrEmpty(feijiu_fast_product.getProduct_image())) {
             feijiu_fast_product.put(FeijiuFastProduct.PRODUCT_IMAGE_FILE, "");
         } else {
-            File file = FileService.me.findById(feijiu_fast_product.getProduct_image());
-            feijiu_fast_product.put(FeijiuFastProduct.PRODUCT_IMAGE_FILE, file.keep(File.FILE_ID, File.FILE_PATH));
+            feijiu_fast_product.put(FileService.me.getFile(feijiu_fast_product.getProduct_image()));
         }
         
         validateResponse(FeijiuFastProduct.PRODUCT_CATEGORY_ID, FeijiuFastProduct.PRODUCT_IMAGE_FILE, FeijiuFastProduct.PRODUCT_NAME, FeijiuFastProduct.PRODUCT_IMAGE, FeijiuFastProduct.PRODUCT_LINK, FeijiuFastProduct.PRODUCT_CONTENT, FeijiuFastProduct.PRODUCT_APPLICANT_QUANTITY, FeijiuFastProduct.SYSTEM_VERSION);

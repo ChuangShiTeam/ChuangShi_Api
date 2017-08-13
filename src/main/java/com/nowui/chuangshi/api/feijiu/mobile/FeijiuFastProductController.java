@@ -1,11 +1,13 @@
 package com.nowui.chuangshi.api.feijiu.mobile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.feijiu.model.FeijiuFastProduct;
 import com.nowui.chuangshi.api.feijiu.model.FeijiuFastProductCategory;
+import com.nowui.chuangshi.api.feijiu.service.FeijiuFastProductCategoryService;
 import com.nowui.chuangshi.api.feijiu.service.FeijiuFastProductService;
 import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.file.service.FileService;
@@ -16,8 +18,6 @@ import com.nowui.chuangshi.util.ValidateUtil;
 
 @ControllerKey("/mobile/feijiu/fast/product")
 public class FeijiuFastProductController extends Controller {
-
-    private final FeijiuFastProductService feijiuFastProductService = new FeijiuFastProductService();
 
     @ActionKey("/mobile/feijiu/fast/product/list")
     public void list() {
@@ -39,14 +39,14 @@ public class FeijiuFastProductController extends Controller {
         
         Cnd cnd = Cnd.where(FeijiuFastProductCategory.APP_ID, model.getApp_id()).and(FeijiuFastProductCategory.PRODUCT_CATEGORY_ID, model.getProduct_category_id());
 
-        List<FeijiuFastProduct> product_list = feijiuFastProductService.list(cnd);
+        List<FeijiuFastProduct> product_list = FeijiuFastProductService.me.list(cnd);
         
         for (FeijiuFastProduct feijiu_fast_product : product_list) {
             if (ValidateUtil.isNullOrEmpty(feijiu_fast_product.getProduct_image())) {
                 feijiu_fast_product.put(FeijiuFastProduct.PRODUCT_IMAGE_FILE, "");
             } else {
-                File file = FileService.me.findById(feijiu_fast_product.getProduct_image());
-                feijiu_fast_product.put(FeijiuFastProduct.PRODUCT_IMAGE_FILE, file.keep(File.FILE_ID, File.FILE_PATH));
+                File file = FileService.me.getFile(feijiu_fast_product.getProduct_image());
+                feijiu_fast_product.put(FeijiuFastProduct.PRODUCT_IMAGE_FILE, file);
             }
         }
         
