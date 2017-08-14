@@ -170,27 +170,26 @@ public class WeChatController extends Controller {
 
     @ActionKey(Url.WECHAT_MENU)
     public void menu() {
-        App app = appService.findByApp_id("c1af3f1ae00e4e0da9b20f5bd41b4279");
+//        App app = appService.findByApp_id("c1af3f1ae00e4e0da9b20f5bd41b4279");
+//
+//        String wechat_app_id = ApiConfigKit.getAppId();
+//        if (!wechat_app_id.equals(app.getWechat_app_id())) {
+//            ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+//        }
+//
+//        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"星创会\",\"url\":\"http://h5."
+//                + "xingxiao.nowui.com" + "/?#/launch\"}]}");
+
+        App app =
+                appService.findByApp_id("df2078d6c9eb46babb0df957127273ab");
 
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
         }
 
-        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"星创会\",\"url\":\"http://h5."
-                + "xingxiao.nowui.com" + "/?#/launch\"}]}");
-
-        // App app =
-        // appService.findByApp_id("df2078d6c9eb46babb0df957127273ab");
-        //
-        // String wechat_app_id = ApiConfigKit.getAppId();
-        // if (!wechat_app_id.equals(app.getWechat_app_id())) {
-        // ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
-        // }
-        //
-        // ApiResult apiResult =
-        // MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"健康推荐\",\"url\":\"http://h5."
-        // + "jiyiguan.nowui.com" + "/?#/index\"}]}");
+        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"健康推荐\",\"url\":\"http://h5.jiyiguan.nowui.com" + "/?#/index\"}]}");
+        apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"健康推荐\",\"url\":\"http://h5.jiyiguan.nowui.com/?#/index/\"},{\"type\":\"view\",\"name\":\"睡前故事\",\"url\":\"http://h5.jiyiguan.nowui.com/?#/story/index/\"},{\"type\":\"view\",\"name\":\"医学科普\",\"url\":\"http://h5.jiyiguan.nowui.com/?#/science/index/\"}]}");
 
         renderText(apiResult.getJson());
     }
@@ -209,7 +208,7 @@ public class WeChatController extends Controller {
             this.createMemberDeliveryOrder(member_purchase_order_id);
             renderSuccessJson("支付成功");
         }
-       
+
     }
 
     private void payChange(String trade_id) {
@@ -404,7 +403,7 @@ public class WeChatController extends Controller {
         parameter.put("total_fee", total_fee);
         parameter.put("trade_type", trade_type);
         parameter.put("transaction_id", transaction_id);
-        
+
         if (Constant.WX_ATTACH_TRADE.equals(attach)) { // 订单支付
             // 根据订单号查询订单
             Trade trade = tradeService.findByTrade_id(out_trade_no);
@@ -439,7 +438,7 @@ public class WeChatController extends Controller {
                 if (is_update) {
                     // TODO 消息队列通知计算账单和分成
                     this.payChange(trade.getTrade_id());
-                    
+
                     renderText(Constant.WX_SUCCESS_MSG);
                 } else {
                     renderText(Constant.WX_FAIL_MSG);
@@ -461,7 +460,7 @@ public class WeChatController extends Controller {
             if (!appid.equals(wx_app_id)) {
                 renderText(Constant.WX_FAIL_MSG);
             }
-            
+
             String mch_key = app.getWechat_mch_key();
 
             String endsign = PaymentKit.createSign(parameter, mch_key);
@@ -476,7 +475,7 @@ public class WeChatController extends Controller {
                 if (is_update) {
                     // 生成会员发货单
                     this.createMemberDeliveryOrder(memberPurchaseOrder.getMember_purchase_order_id());
-                    
+
                     renderText(Constant.WX_SUCCESS_MSG);
                 } else {
                     renderText(Constant.WX_FAIL_MSG);
@@ -484,8 +483,8 @@ public class WeChatController extends Controller {
             } else {
                 renderText(Constant.WX_FAIL_MSG);
             }
-            
-        } else if (Constant.WX_ATTACH_MEMBER_DELIVERY_ORDER.equals(attach)){  //会员发货单支付
+
+        } else if (Constant.WX_ATTACH_MEMBER_DELIVERY_ORDER.equals(attach)) {  //会员发货单支付
             MemberDeliveryOrder memberDeliveryOrder = memberDeliveryOrderService.findByMember_delivery_order_id(out_trade_no);
             if (memberDeliveryOrder == null) {
                 renderText(Constant.WX_FAIL_MSG);
@@ -527,7 +526,7 @@ public class WeChatController extends Controller {
 
     // 授权证书支付回调
     private void certificatePayNotify(String out_trade_no, String total_fee, String appid, String sign,
-            SortedMap<String, String> parameter, String openid, String result) {
+                                      SortedMap<String, String> parameter, String openid, String result) {
         // 授权证书支付
         Certificate certificate = certificateService.findByCertificate_id(out_trade_no);
         if (certificate == null) {
@@ -592,8 +591,9 @@ public class WeChatController extends Controller {
         Member parent = memberService.findByMember_id(member.getMember_parent_id());
         String parent_user_id = parent.getUser_id();
 
-        List<MemberPurchaseOrderProductSku> memberPurchaseOrderProductSkuList = memberPurchaseOrderProductSkuService.listByMember_purchase_order_id(member_purchase_order_id);;
-        
+        List<MemberPurchaseOrderProductSku> memberPurchaseOrderProductSkuList = memberPurchaseOrderProductSkuService.listByMember_purchase_order_id(member_purchase_order_id);
+        ;
+
         String member_delivery_order_id = Util.getRandomUUID();
         List<MemberDeliveryOrderProductSku> memberDeliveryOrderProductSkuList = new ArrayList<MemberDeliveryOrderProductSku>();
         for (MemberPurchaseOrderProductSku memberPurchaseOrderProductSku : memberPurchaseOrderProductSkuList) {
@@ -625,15 +625,15 @@ public class WeChatController extends Controller {
         Integer member_delivery_order_total_quantity = memberPurchaseOrder.getMember_purchase_order_total_quantity();
         String member_delivery_order_flow = MemberDeliveryOrderFlow.WAIT_SEND.getKey();
         Boolean member_delivery_order_is_complete = false;
-        
-        Boolean flag = memberDeliveryOrderService.save(member_delivery_order_id, memberPurchaseOrder.getApp_id(), 
-                member_purchase_order_id, parent_user_id, member_delivery_order_amount, 
-                member_delivery_order_total_quantity, memberPurchaseOrder.getMember_purchase_order_receiver_name(), 
+
+        Boolean flag = memberDeliveryOrderService.save(member_delivery_order_id, memberPurchaseOrder.getApp_id(),
+                member_purchase_order_id, parent_user_id, member_delivery_order_amount,
+                member_delivery_order_total_quantity, memberPurchaseOrder.getMember_purchase_order_receiver_name(),
                 memberPurchaseOrder.getMember_purchase_order_receiver_mobile(), memberPurchaseOrder.getMember_purchase_order_receiver_province(),
-                memberPurchaseOrder.getMember_purchase_order_receiver_city(), memberPurchaseOrder.getMember_purchase_order_receiver_area(), 
-                memberPurchaseOrder.getMember_purchase_order_receiver_address(), member_delivery_order_express_pay_way, 
-                member_delivery_order_express_shipper_code, member_delivery_order_is_pay, 
-                member_delivery_order_is_warehouse_deliver, member_delivery_order_flow, 
+                memberPurchaseOrder.getMember_purchase_order_receiver_city(), memberPurchaseOrder.getMember_purchase_order_receiver_area(),
+                memberPurchaseOrder.getMember_purchase_order_receiver_address(), member_delivery_order_express_pay_way,
+                member_delivery_order_express_shipper_code, member_delivery_order_is_pay,
+                member_delivery_order_is_warehouse_deliver, member_delivery_order_flow,
                 member_delivery_order_is_complete, user_id);
 
         //保存会员发货单明细

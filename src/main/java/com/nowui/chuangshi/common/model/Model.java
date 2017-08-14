@@ -71,6 +71,21 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return columnList;
     }
 
+    private Boolean isColumn(String key) {
+        Boolean result = false;
+
+        List<Map<String, Object>> columnList = getColumnList();
+        for (Map<String, Object> map : columnList) {
+            if (key.equals(map.get(Constant.NAME))) {
+                result = true;
+
+                break;
+            }
+        }
+
+        return result;
+    }
+
     private String regexVariable(ColumnType columnType, Object value) {
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -272,6 +287,40 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return stringBuilder.toString();
     }
 
+    public String buildOrderBySql() {
+        if (criteria == null) {
+            throw new RuntimeException("sql without condition");
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        List<OrderBy> orderByList = criteria.getOrderByList();
+
+        Iterator<OrderBy> iterator = orderByList.iterator();
+        while (iterator.hasNext()) {
+            OrderBy orderBy = iterator.next();
+
+            if (!isColumn(orderBy.getKey())) {
+                iterator.remove();
+            }
+        }
+
+        for (int i = 0; i < orderByList.size(); i++) {
+            OrderBy orderBy = orderByList.get(i);
+
+            stringBuilder.append("ORDER BY ");
+            stringBuilder.append(orderBy.getKey());
+            stringBuilder.append(" ");
+            stringBuilder.append(orderBy.getOrderByType().getKey());
+            if (i + 1 < orderByList.size()) {
+                stringBuilder.append(", ");
+            } else {
+                stringBuilder.append("\n");
+            }
+        }
+
+        return stringBuilder.toString();
+    }
+
     public String buildPaginateSql() {
         if (criteria == null) {
             throw new RuntimeException("sql without condition");
@@ -285,18 +334,6 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
             stringBuilder.append(criteria.getN());
             stringBuilder.append("\n");
         }
-
-        return stringBuilder.toString();
-    }
-
-    public String buildOrderBySql() {
-        if (criteria == null) {
-            throw new RuntimeException("sql without condition");
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-
 
         return stringBuilder.toString();
     }
@@ -322,6 +359,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         stringBuilder.append(getTable().getName());
         stringBuilder.append(" \n");
         stringBuilder.append(buildConditionSql());
+        stringBuilder.append(buildOrderBySql());
         stringBuilder.append(buildPaginateSql());
 
         return stringBuilder.toString();
