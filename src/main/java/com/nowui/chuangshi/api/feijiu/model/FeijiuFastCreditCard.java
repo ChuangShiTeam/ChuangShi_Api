@@ -12,23 +12,26 @@ import java.util.Date;
 @Primary("credit_card_id")
 public class FeijiuFastCreditCard extends Model<FeijiuFastCreditCard> {
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "商品编号", updatable = false)
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "信用卡编号", updatable = false)
     public static final String CREDIT_CARD_ID = "credit_card_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 30, comment = "商品名称")
+    @Column(type = ColumnType.VARCHAR, length = 30, comment = "信用卡名称")
     public static final String CREDIT_CARD_NAME = "credit_card_name";
 
-    @Column(type = ColumnType.VARCHAR, length = 100, comment = "商品图片")
+    @Column(type = ColumnType.VARCHAR, length = 100, comment = "信用卡图片")
     public static final String CREDIT_CARD_IMAGE = "credit_card_image";
 
-    @Column(type = ColumnType.VARCHAR, length = 250, comment = "商品链接")
+    @Column(type = ColumnType.VARCHAR, length = 250, comment = "信用卡链接")
     public static final String CREDIT_CARD_LINK = "credit_card_link";
 
-    @Column(type = ColumnType.VARCHAR, length = 200, comment = "商品介绍")
+    @Column(type = ColumnType.VARCHAR, length = 200, comment = "信用卡介绍")
     public static final String CREDIT_CARD_CONTENT = "credit_card_content";
+
+    @Column(type = ColumnType.INT, length = 3, comment = "信用卡排序")
+    public static final String CREDIT_CARD_SORT = "credit_card_sort";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -47,7 +50,7 @@ public class FeijiuFastCreditCard extends Model<FeijiuFastCreditCard> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
-    
+
     public static final String CREDIT_CARD_IMAGE_FILE = "credit_card_image_file";
 
     public String getCredit_card_id() {
@@ -98,6 +101,14 @@ public class FeijiuFastCreditCard extends Model<FeijiuFastCreditCard> {
         set(CREDIT_CARD_CONTENT, credit_card_content);
     }
 
+    public Integer getCredit_card_sort() {
+        return getInt(CREDIT_CARD_SORT);
+    }
+
+    public void setCredit_card_sort(Integer credit_card_sort) {
+        set(CREDIT_CARD_SORT, credit_card_sort);
+    }
+
     public String getSystem_create_user_id() {
         return getStr(SYSTEM_CREATE_USER_ID);
     }
@@ -113,6 +124,7 @@ public class FeijiuFastCreditCard extends Model<FeijiuFastCreditCard> {
     public void setSystem_create_time(Date system_create_time) {
         set(SYSTEM_CREATE_TIME, system_create_time);
     }
+
 
     public String getSystem_update_user_id() {
         return getStr(SYSTEM_UPDATE_USER_ID);

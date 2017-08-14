@@ -24,9 +24,7 @@ public class FileService extends Service {
             file = new File();
         }
 
-        return file;
-
-//        return file.keep(File.FILE_ID, File.FILE_PATH);
+        return file.keep(File.FILE_ID, File.FILE_PATH);
     }
 
     public String getFile_path(String file_id) {

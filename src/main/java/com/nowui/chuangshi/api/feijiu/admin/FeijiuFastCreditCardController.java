@@ -29,7 +29,7 @@ public class FeijiuFastCreditCardController extends Controller {
         Cnd cnd = Cnd.where(FeijiuFastCreditCard.APP_ID, model.getApp_id()).andAllowEmpty(FeijiuFastCreditCard.CREDIT_CARD_NAME, model.getCredit_card_name());
 
         Integer resultCount = FeijiuFastCreditCardService.me.count(cnd);
-        List<FeijiuFastCreditCard> resultList = FeijiuFastCreditCardService.me.list(cnd.paginate(getM(), getN()));
+        List<FeijiuFastCreditCard> resultList = FeijiuFastCreditCardService.me.list(cnd.asc(FeijiuFastCreditCard.CREDIT_CARD_SORT).desc(FeijiuFastCreditCard.SYSTEM_CREATE_TIME).paginate(getM(), getN()));
 
         validateResponse(FeijiuFastCreditCard.CREDIT_CARD_ID, FeijiuFastCreditCard.CREDIT_CARD_NAME, FeijiuFastCreditCard.CREDIT_CARD_LINK, FeijiuFastCreditCard.SYSTEM_VERSION);
 
@@ -43,14 +43,10 @@ public class FeijiuFastCreditCardController extends Controller {
         FeijiuFastCreditCard model = getModel(FeijiuFastCreditCard.class);
 
         FeijiuFastCreditCard result = FeijiuFastCreditCardService.me.findById(model.getCredit_card_id());
-       
-        if (ValidateUtil.isNullOrEmpty(result.getCredit_card_image())) {
-            result.put(FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, "");
-        } else {
-            result.put(FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, FileService.me.getFile(result.getCredit_card_image()));
-        }
 
-        validateResponse(FeijiuFastCreditCard.CREDIT_CARD_NAME, FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, FeijiuFastCreditCard.CREDIT_CARD_LINK, FeijiuFastCreditCard.CREDIT_CARD_CONTENT, FeijiuFastCreditCard.SYSTEM_VERSION);
+        result.put(FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, FileService.me.getFile(result.getCredit_card_image()));
+
+        validateResponse(FeijiuFastCreditCard.CREDIT_CARD_NAME, FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, FeijiuFastCreditCard.CREDIT_CARD_LINK, FeijiuFastCreditCard.CREDIT_CARD_CONTENT, FeijiuFastCreditCard.CREDIT_CARD_SORT, FeijiuFastCreditCard.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }

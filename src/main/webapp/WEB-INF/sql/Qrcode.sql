@@ -123,6 +123,7 @@
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1
+    WHERE system_status = 1
     AND qrcode_id = #p(qrcode_id)
   #end
 
@@ -132,6 +133,7 @@
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1
+    WHERE system_status = 1
     AND qrcode_id = #p(qrcode_id)
   #end
 
@@ -141,6 +143,7 @@
     system_update_user_id = #p(system_update_user_id),
     system_update_time = #p(system_update_time),
     system_version = system_version + 1
+    WHERE system_status = 1
     AND qrcode_id = #p(qrcode_id)
   #end
 

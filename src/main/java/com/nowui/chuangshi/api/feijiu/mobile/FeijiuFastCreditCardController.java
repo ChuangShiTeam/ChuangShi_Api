@@ -16,7 +16,7 @@ public class FeijiuFastCreditCardController extends Controller {
     @ActionKey("/mobile/feijiu/fast/credit/card/list")
     public void list() {
         FeijiuFastCreditCard model = getModel(FeijiuFastCreditCard.class);
-        Cnd cnd = Cnd.where(FeijiuFastCreditCard.APP_ID, model.getApp_id());
+        Cnd cnd = Cnd.where(FeijiuFastCreditCard.APP_ID, model.getApp_id()).asc(FeijiuFastCreditCard.CREDIT_CARD_SORT).desc(FeijiuFastCreditCard.SYSTEM_CREATE_TIME);
 
         List<FeijiuFastCreditCard> resultList = FeijiuFastCreditCardService.me.list(cnd);
         

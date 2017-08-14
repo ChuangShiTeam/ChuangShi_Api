@@ -304,10 +304,14 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
             }
         }
 
+        if (orderByList.size() == 0) {
+            return "";
+        }
+
+        stringBuilder.append("ORDER BY ");
         for (int i = 0; i < orderByList.size(); i++) {
             OrderBy orderBy = orderByList.get(i);
 
-            stringBuilder.append("ORDER BY ");
             stringBuilder.append(orderBy.getKey());
             stringBuilder.append(" ");
             stringBuilder.append(orderBy.getOrderByType().getKey());

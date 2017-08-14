@@ -160,6 +160,15 @@ public class Cnd {
     }
 
     public Cnd asc(String key) {
+        OrderBy orderBy = new OrderBy(key, OrderByType.ASC);
+        this.criteria.addOrderBy(orderBy);
+
+        return this;
+    }
+
+    public Cnd desc(String key) {
+        OrderBy orderBy = new OrderBy(key, OrderByType.DESC);
+        this.criteria.addOrderBy(orderBy);
 
         return this;
     }
