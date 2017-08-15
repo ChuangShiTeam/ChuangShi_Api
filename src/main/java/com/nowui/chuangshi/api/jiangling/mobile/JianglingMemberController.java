@@ -22,6 +22,17 @@ import java.util.Random;
 @ControllerKey("/mobile/jiangling/member")
 public class JianglingMemberController extends Controller {
 
+    @ActionKey("/mobile/jiangling/member/find")
+    public void find() {
+        String request_user_id = getRequest_user_id();
+
+        JianglingMember jianglingMember = JianglingMemberService.me.find(Cnd.where(JianglingMember.USER_ID, request_user_id));
+
+        validateResponse(JianglingMember.MEMBER_DIFFENT_POINT, JianglingMember.MEMBER_LIKE_POINT);
+
+        renderSuccessJson(jianglingMember);
+    }
+
     @ActionKey("/mobile/jiangling/member/diffent/point/update")
     public void diffentUpdate() {
         String request_user_id = getRequest_user_id();
