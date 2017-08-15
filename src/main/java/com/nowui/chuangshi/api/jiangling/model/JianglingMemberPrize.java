@@ -8,24 +8,18 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_jiangling_member")
-@Primary("member_id")
-public class JianglingMember extends Model<JianglingMember> {
+@Table("table_jiangling_member_prize")
+@Primary("")
+public class JianglingMemberPrize extends Model<JianglingMemberPrize> {
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户编号", updatable = false)
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员编号")
     public static final String USER_ID = "user_id";
 
-    @Column(type = ColumnType.INT, length = 3, comment = "会员找不同积分")
-    public static final String MEMBER_DIFFENT_POINT = "member_diffent_point";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "奖品编号")
+    public static final String PRIZE_ID = "prize_id";
 
-    @Column(type = ColumnType.INT, length = 3, comment = "会员集攒积分")
-    public static final String MEMBER_LIKE_POINT = "member_like_point";
-
-    @Column(type = ColumnType.VARCHAR, length = 6, comment = "兑换码")
-    public static final String MEMBER_REDEEM_CODE = "member_redeem_code";
-
-    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否兑换")
-    public static final String MEMBER_REDEEM_CODE_IS_EXCHANGE = "member_redeem_code_is_exchange";
+    @Column(type = ColumnType.VARCHAR, length = 10, comment = "抽奖日期")
+    public static final String MEMBER_PRIZE_DRAW_DATE = "member_prize_draw_date";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -53,36 +47,20 @@ public class JianglingMember extends Model<JianglingMember> {
         set(USER_ID, user_id);
     }
 
-    public Integer getMember_diffent_point() {
-        return getInt(MEMBER_DIFFENT_POINT);
+    public String getPrize_id() {
+        return getStr(PRIZE_ID);
     }
 
-    public void setMember_diffent_point(Integer member_diffent_point) {
-        set(MEMBER_DIFFENT_POINT, member_diffent_point);
+    public void setPrize_id(String prize_id) {
+        set(PRIZE_ID, prize_id);
     }
 
-    public Integer getMember_like_point() {
-        return getInt(MEMBER_LIKE_POINT);
+    public String getMember_prize_draw_date() {
+        return getStr(MEMBER_PRIZE_DRAW_DATE);
     }
 
-    public void setMember_like_point(Integer member_like_point) {
-        set(MEMBER_LIKE_POINT, member_like_point);
-    }
-
-    public String getMember_redeem_code() {
-        return getStr(MEMBER_REDEEM_CODE);
-    }
-
-    public void setMember_redeem_code(String member_redeem_code) {
-        set(MEMBER_REDEEM_CODE, member_redeem_code);
-    }
-
-    public Boolean getMember_redeem_code_is_exchange() {
-        return getBoolean(MEMBER_REDEEM_CODE_IS_EXCHANGE);
-    }
-
-    public void setMember_redeem_code_is_exchange(Boolean member_redeem_code_is_exchange) {
-        set(MEMBER_REDEEM_CODE_IS_EXCHANGE, member_redeem_code_is_exchange);
+    public void setMember_prize_draw_date(String member_prize_draw_date) {
+        set(MEMBER_PRIZE_DRAW_DATE, member_prize_draw_date);
     }
 
     public String getSystem_create_user_id() {

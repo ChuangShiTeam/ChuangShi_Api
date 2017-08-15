@@ -25,7 +25,7 @@ public class JianglingPrizeController extends Controller {
         Cnd cnd = Cnd.where(JianglingPrize.APP_ID, model.getApp_id()).andAllowEmpty(JianglingPrize.PRIZE_NAME, model.getPrize_name());
 
         Integer resultCount = JianglingPrizeService.me.count(cnd);
-        List<JianglingPrize> resultList = JianglingPrizeService.me.list(cnd.paginate(getM(), getN()));
+        List<JianglingPrize> resultList = JianglingPrizeService.me.list(cnd.asc(JianglingPrize.PRIZE_SORT).paginate(getM(), getN()));
 
         validateResponse(JianglingPrize.PRIZE_ID, JianglingPrize.PRIZE_NAME, JianglingPrize.PRIZE_PROBABILITY, JianglingPrize.PRIZE_TOTAL_QUANTITY, JianglingPrize.PRIZE_DAY_QUANTITY, JianglingPrize.PRIZE_SORT, JianglingPrize.PRIZE_IS_DEFAULT_WINNING, JianglingPrize.SYSTEM_VERSION);
 
