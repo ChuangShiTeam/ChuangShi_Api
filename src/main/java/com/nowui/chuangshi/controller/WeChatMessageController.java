@@ -137,6 +137,10 @@ public class WeChatMessageController extends MsgController {
             wechat_union_id = "";
         }
 
+        if (ValidateUtil.isNullOrEmpty(user_avatar)) {
+            user_avatar = "";
+        }
+
         Member member = memberService.saveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id,
                 from_qrcode_id, member_level_id, member_parent_path, user_name, user_avatar, member_status,
                 system_create_user_id);
