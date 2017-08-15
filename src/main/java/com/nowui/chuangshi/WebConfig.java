@@ -1,8 +1,11 @@
 package com.nowui.chuangshi;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
@@ -24,6 +27,7 @@ import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.constant.Config;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.controller.AdminController;
 import com.nowui.chuangshi.controller.ApiController;
 import com.nowui.chuangshi.controller.AppController;
@@ -126,6 +130,7 @@ import com.nowui.chuangshi.model.TradeProductSku;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.model.Warehouse;
 import com.nowui.chuangshi.service.AppService;
+import com.nowui.chuangshi.util.AesUtil;
 import com.nowui.chuangshi.util.ClassUtil;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -385,20 +390,20 @@ public class WebConfig extends JFinalConfig {
             }
         }
 
-//        try {
-//            Date date = new Date();
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.setTime(date);
-//            calendar.add(Calendar.YEAR, 1);
-//
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put(User.USER_ID, "ffb11c2d4a3043ec8eb28c8cca9d1fc8");
-//            jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
-//            System.out.println(AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));
-//        } catch (java.lang.Exception e) {
-//            e.printStackTrace();
-//            throw new RuntimeException("登录不成功");
-//        }
+        try {
+            Date date = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.YEAR, 1);
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(User.USER_ID, "000a9155379d4e7aa175ac7cff2c4364");
+            jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
+            System.out.println(AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));
+        } catch (java.lang.Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("登录不成功");
+        }
     }
 
 }

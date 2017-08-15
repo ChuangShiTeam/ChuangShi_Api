@@ -90,7 +90,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         StringBuilder stringBuilder = new StringBuilder();
 
         if (columnType.equals(ColumnType.TINYINT)) {
-            stringBuilder.append((Boolean) value ? 1 : 1);
+            stringBuilder.append((Boolean) value ? 1 : 0);
         } else if (columnType.equals(ColumnType.VARCHAR)) {
             stringBuilder.append("'");
             stringBuilder.append(value);

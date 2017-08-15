@@ -185,4 +185,16 @@ public class Util {
         // 位数 1000
         return (int) ((Math.random() * 9 + 1) * 1000);
     }
+
+    // 获取4位随机数
+    public static String getRandomNumber(int length) {
+        String result = "";
+
+        Random random = new Random();
+        for (int i = 0; i < length; i++) {
+            result += random.nextInt(10);
+        }
+
+        return result;
+    }
 }
