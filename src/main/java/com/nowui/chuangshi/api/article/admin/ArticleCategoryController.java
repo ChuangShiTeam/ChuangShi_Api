@@ -32,6 +32,18 @@ public class ArticleCategoryController extends Controller {
         renderSuccessJson(resultCount, resultList);
     }
 
+    @ActionKey("/admin/article/category/all/list")
+    public void allList() {
+        ArticleCategory model = getModel(ArticleCategory.class);
+        Cnd cnd = Cnd.where(ArticleCategory.APP_ID, model.getApp_id());
+
+        List<ArticleCategory> resultList = ArticleCategoryService.me.list(cnd);
+
+        validateResponse(ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.PRODUCT_CATEGORY_NAME);
+
+        renderSuccessJson(resultList);
+    }
+
     @ActionKey("/admin/article/category/find")
     public void find() {
         validateRequest(ArticleCategory.ARTICLE_CATEGORY_ID);

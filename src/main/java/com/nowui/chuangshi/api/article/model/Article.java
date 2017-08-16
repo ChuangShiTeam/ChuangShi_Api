@@ -19,7 +19,7 @@ public class Article extends Model<Article> {
     public static final String APP_ID = "app_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "分类编号")
-    public static final String CATEGORY_ID = "category_id";
+    public static final String ARTICLE_CATEGORY_ID = "article_category_id";
 
     @Column(type = ColumnType.VARCHAR, length = 100, comment = "文章名称")
     public static final String ARTICLE_NAME = "article_name";
@@ -69,12 +69,12 @@ public class Article extends Model<Article> {
         set(APP_ID, app_id);
     }
 
-    public String getCategory_id() {
-        return getStr(CATEGORY_ID);
+    public String getArticle_category_id() {
+        return getStr(ARTICLE_CATEGORY_ID);
     }
 
-    public void setCategory_id(String category_id) {
-        set(CATEGORY_ID, category_id);
+    public void setArticle_category_id(String article_category_id) {
+        set(ARTICLE_CATEGORY_ID, article_category_id);
     }
 
     public String getArticle_name() {

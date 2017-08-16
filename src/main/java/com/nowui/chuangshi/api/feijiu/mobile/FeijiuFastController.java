@@ -1,6 +1,10 @@
 package com.nowui.chuangshi.api.feijiu.mobile;
 
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.article.model.Article;
+import com.nowui.chuangshi.api.article.model.ArticleCategory;
+import com.nowui.chuangshi.api.article.service.ArticleCategoryService;
+import com.nowui.chuangshi.api.article.service.ArticleService;
 import com.nowui.chuangshi.api.feijiu.model.FeijiuFastProduct;
 import com.nowui.chuangshi.api.feijiu.model.FeijiuFastProductCategory;
 import com.nowui.chuangshi.api.feijiu.service.FeijiuFastProductCategoryService;
@@ -40,6 +44,32 @@ public class FeijiuFastController extends Controller {
         validateResponse("product_category_list", "product_list");
 
         renderSuccessJson(result);
+    }
+
+    @ActionKey("/mobile/feijiu/fast/article/list")
+    public void articleList() {
+        String request_app_id = getRequest_app_id();
+
+        Cnd cnd = Cnd.where(Article.APP_ID, request_app_id);
+
+        List<ArticleCategory> articleCategoryList = ArticleCategoryService.me.list(cnd);
+        List<Article> articleList = ArticleService.me.list(cnd);
+
+        for (Article article : articleList) {
+            for (ArticleCategory articleCategory : articleCategoryList) {
+                if (article.getArticle_category_id().equals(article.getArticle_category_id())) {
+                    article.put(ArticleCategory.PRODUCT_CATEGORY_NAME, article.getArticle_name());
+
+                    break;
+                }
+            }
+
+            article.setArticle_image(FileService.me.getFile_path(article.getArticle_image()));
+        }
+
+        validateResponse(Article.ARTICLE_ID, Article.ARTICLE_IMAGE, Article.ARTICLE_NAME, Article.ARTICLE_SUMMARY);
+
+        renderSuccessJson(articleList);
     }
 
 }

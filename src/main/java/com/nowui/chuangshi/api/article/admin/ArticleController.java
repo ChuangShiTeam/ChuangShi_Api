@@ -43,14 +43,14 @@ public class ArticleController extends Controller {
 
         result.put(Article.ARTICLE_IMAGE_FILE, FileService.me.getFile(result.getArticle_image()));
 
-        validateResponse(Article.CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE_FILE, Article.ARTICLE_SUMMARY, Article.ARTICLE_CONTENT, Article.SYSTEM_VERSION);
+        validateResponse(Article.ARTICLE_CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE_FILE, Article.ARTICLE_SUMMARY, Article.ARTICLE_CONTENT, Article.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
 
     @ActionKey("/admin/article/save")
     public void save() {
-        validateRequest(Article.CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_SUMMARY, Article.ARTICLE_CONTENT);
+        validateRequest(Article.ARTICLE_CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_SUMMARY, Article.ARTICLE_CONTENT);
 
         Article model = getModel(Article.class);
         model.setArticle_id(Util.getRandomUUID());
@@ -62,7 +62,7 @@ public class ArticleController extends Controller {
 
     @ActionKey("/admin/article/update")
     public void update() {
-        validateRequest(Article.ARTICLE_ID, Article.CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_SUMMARY, Article.ARTICLE_CONTENT, Article.SYSTEM_VERSION);
+        validateRequest(Article.ARTICLE_ID, Article.ARTICLE_CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_SUMMARY, Article.ARTICLE_CONTENT, Article.SYSTEM_VERSION);
 
         Article model = getModel(Article.class);
 

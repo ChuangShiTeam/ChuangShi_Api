@@ -21,7 +21,6 @@ import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.ValidateUtil;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @ControllerKey("/mobile/product")
@@ -78,7 +77,7 @@ public class ProductController extends Controller {
             member_level_value = memberLevel.getMember_level_value();
         }
 
-        Integer count = MemberPurchaseOrderService.me.count(Cnd.where(MemberPurchaseOrder.USER_ID, request_user_id));
+        Integer count = MemberPurchaseOrderService.me.count(Cnd.where(MemberPurchaseOrder.USER_ID, request_user_id).and(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_PAY, true));
 
         result.put("is_first_purchase", count == 0);
 

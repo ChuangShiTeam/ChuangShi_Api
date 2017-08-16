@@ -152,7 +152,7 @@ public class CertificateController extends Controller {
         } else if (member_level_value == 3) {
             total_fee_decimal = new BigDecimal(5000);
         } else if (member_level_value == 4) {
-            total_fee_decimal = new BigDecimal(2000);
+            total_fee_decimal = new BigDecimal(5000);
         } else if (member_level_value == 5) {
             total_fee_decimal = new BigDecimal(2000);
         } else if (member_level_value == 6) {

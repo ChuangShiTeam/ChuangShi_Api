@@ -15,7 +15,7 @@ public class ArticleController extends Controller {
 
     @ActionKey("/mobile/article/story/list")
     public void storyList() {
-        List<Article> articleList = ArticleService.me.list(Cnd.where(Article.CATEGORY_ID, "5f77073450b14c4381bd2e2e6bec5007"));
+        List<Article> articleList = ArticleService.me.list(Cnd.where(Article.ARTICLE_CATEGORY_ID, "5f77073450b14c4381bd2e2e6bec5007"));
 
         for(Article article : articleList) {
             article.setArticle_image(FileService.me.getFile_path(article.getArticle_image()));
@@ -28,7 +28,7 @@ public class ArticleController extends Controller {
 
     @ActionKey("/mobile/article/science/list")
     public void scienceList() {
-        List<Article> articleList = ArticleService.me.list(Cnd.where(Article.CATEGORY_ID, "50e29503e00946caaa021af6ce9f34d3"));
+        List<Article> articleList = ArticleService.me.list(Cnd.where(Article.ARTICLE_CATEGORY_ID, "50e29503e00946caaa021af6ce9f34d3"));
 
         for(Article article : articleList) {
             article.setArticle_image(FileService.me.getFile_path(article.getArticle_image()));
@@ -47,7 +47,7 @@ public class ArticleController extends Controller {
 
         Article result = ArticleService.me.findById(model.getArticle_id());
 
-        validateResponse(Article.CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_CONTENT);
+        validateResponse(Article.ARTICLE_CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_CONTENT);
 
         renderSuccessJson(result);
     }
