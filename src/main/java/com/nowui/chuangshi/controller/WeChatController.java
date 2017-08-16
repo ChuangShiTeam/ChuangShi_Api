@@ -366,12 +366,18 @@ public class WeChatController extends Controller {
     public void payNotify() {
         String result = HttpKit.readData(getRequest());
 
+        System.out.println(result);
+
         Map<String, String> map = PaymentKit.xmlToMap(result);
 
         String appid = (String) map.get("appid");
         String attach = (String) map.get("attach");
         String bank_type = (String) map.get("bank_type");
         String cash_fee = (String) map.get("cash_fee");
+        String coupon_count = (String) map.get("coupon_count");
+        String coupon_fee = (String) map.get("coupon_fee");
+        String coupon_fee_0 = (String) map.get("coupon_fee_0");
+        String coupon_id_0 = (String) map.get("coupon_id_0");
         String fee_type = (String) map.get("fee_type");
         String is_subscribe = (String) map.get("is_subscribe");
         String mch_id = (String) map.get("mch_id");
@@ -391,6 +397,12 @@ public class WeChatController extends Controller {
         parameter.put("attach", attach);
         parameter.put("bank_type", bank_type);
         parameter.put("cash_fee", cash_fee);
+        if (!ValidateUtil.isNullOrEmpty(coupon_count)) {
+            parameter.put("coupon_count", coupon_count);
+            parameter.put("coupon_fee", coupon_fee);
+            parameter.put("coupon_fee_0", coupon_fee_0);
+            parameter.put("coupon_id_0", coupon_id_0);
+        }
         parameter.put("fee_type", fee_type);
         parameter.put("is_subscribe", is_subscribe);
         parameter.put("mch_id", mch_id);
@@ -471,14 +483,18 @@ public class WeChatController extends Controller {
                 String member_purchase_order_pay_account = openid;
                 String member_purchase_order_pay_time = time_end;
                 String member_purchase_order_pay_result = result;
-                boolean is_update = memberPurchaseOrderService.updatePay(memberPurchaseOrder.getMember_purchase_order_id(), member_purchase_order_pay_type, member_purchase_order_pay_number, member_purchase_order_pay_account, member_purchase_order_pay_time, member_purchase_order_pay_result, memberPurchaseOrder.getUser_id(), memberPurchaseOrder.getSystem_version());
-                if (is_update) {
-                    // 生成会员发货单
-                    this.createMemberDeliveryOrder(memberPurchaseOrder.getMember_purchase_order_id());
-
+                if (out_trade_no.equals("7a57953076934a6cad7f6f20f62865fc")) {
                     renderText(Constant.WX_SUCCESS_MSG);
                 } else {
-                    renderText(Constant.WX_FAIL_MSG);
+                    boolean is_update = memberPurchaseOrderService.updatePay(memberPurchaseOrder.getMember_purchase_order_id(), member_purchase_order_pay_type, member_purchase_order_pay_number, member_purchase_order_pay_account, member_purchase_order_pay_time, member_purchase_order_pay_result, memberPurchaseOrder.getUser_id(), memberPurchaseOrder.getSystem_version());
+                    if (is_update) {
+                        // 生成会员发货单
+                        this.createMemberDeliveryOrder(memberPurchaseOrder.getMember_purchase_order_id());
+
+                        renderText(Constant.WX_SUCCESS_MSG);
+                    } else {
+                        renderText(Constant.WX_FAIL_MSG);
+                    }
                 }
             } else {
                 renderText(Constant.WX_FAIL_MSG);

@@ -79,6 +79,7 @@ public class MemberController extends Controller {
     @ActionKey("/mobile/member/purchase/find")
     public void purchaseFind() {
         String request_user_id = getRequest_user_id();
+        System.out.println(request_user_id);
         User user = UserService.me.findById(request_user_id);
         Member result = MemberService.me.findById(user.getObject_id());
 

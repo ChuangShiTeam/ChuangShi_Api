@@ -1,9 +1,7 @@
 package com.nowui.chuangshi;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.*;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.config.Constants;
@@ -15,7 +13,6 @@ import com.jfinal.config.Routes;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
-import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.cron4j.Cron4jPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
@@ -23,9 +20,11 @@ import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
 import com.jfinal.weixin.sdk.api.ApiConfig;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
+import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
+import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.controller.AdminController;
@@ -129,10 +128,15 @@ import com.nowui.chuangshi.model.TradePay;
 import com.nowui.chuangshi.model.TradeProductSku;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.model.Warehouse;
-import com.nowui.chuangshi.service.AppService;
+import com.nowui.chuangshi.service.*;
+import com.nowui.chuangshi.type.ExpressPayWay;
+import com.nowui.chuangshi.type.MemberDeliveryOrderFlow;
+import com.nowui.chuangshi.type.PayType;
 import com.nowui.chuangshi.util.AesUtil;
 import com.nowui.chuangshi.util.ClassUtil;
+import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
+import org.apache.commons.lang3.StringUtils;
 
 public class WebConfig extends JFinalConfig {
 
@@ -397,7 +401,7 @@ public class WebConfig extends JFinalConfig {
 //            calendar.add(Calendar.YEAR, 1);
 //
 //            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put(User.USER_ID, "000a9155379d4e7aa175ac7cff2c4364");
+//            jsonObject.put(User.USER_ID, "b7f46351d225445fa1666d0fb6a43ddf");
 //            jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
 //            System.out.println(AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));
 //        } catch (java.lang.Exception e) {
