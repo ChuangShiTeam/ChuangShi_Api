@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,8 +10,13 @@ import java.util.Map;
 import com.nowui.chuangshi.cache.MemberPurchaseOrderCache;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.App;
+import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
+import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
+import com.nowui.chuangshi.model.StockInProductSku;
+import com.nowui.chuangshi.model.StockOutProductSku;
 import com.nowui.chuangshi.type.MemberPurchaseOrderFlow;
+import com.nowui.chuangshi.type.StockType;
 
 public class MemberPurchaseOrderService extends Service {
 
@@ -18,12 +24,16 @@ public class MemberPurchaseOrderService extends Service {
     
     private MemberPurchaseOrderPayService memberPurchaseOrderPayService = new MemberPurchaseOrderPayService();
     
+    private MemberPurchaseOrderProductSkuService memberPurchaseOrderProductSkuService = new MemberPurchaseOrderProductSkuService();
+    
     private AppService appService = new AppService();
     
     private WeChatService wechatService = new WeChatService();
     
     private MemberPurchaseOrderExpressService memberPurchaseOrderExpressService =  new MemberPurchaseOrderExpressService();
 
+    private StockInService stockInService = new StockInService();
+    
     public Integer countByApp_idOrLikeUser_name(String app_id, String user_name) {
         return memberPurchaseOrderCache.countByApp_idOrLikeUser_name(app_id, user_name);
     }
@@ -102,13 +112,28 @@ public class MemberPurchaseOrderService extends Service {
     }
     
     //会员进货单收货确认完成
-    public Boolean updateFinish(String member_purchase_order_id) {
+    public Boolean updateFinish(String member_purchase_order_id, String warehouse_id) {
         MemberPurchaseOrder memberPurchaseOrder = findByMember_purchase_order_id(member_purchase_order_id);
         if (memberPurchaseOrder == null) {
             throw new RuntimeException("找不到进货单");
         }
-        Boolean flag = this.updateMember_purchase_order_flowByMember_purchase_order_idAndSystem_version(member_purchase_order_id, MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey(), memberPurchaseOrder.getSystem_create_user_id(), memberPurchaseOrder.getSystem_version());
-        return flag;
+        if (MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey().equals(memberPurchaseOrder.getMember_purchase_order_flow())) {
+            Boolean flag = this.updateMember_purchase_order_flowByMember_purchase_order_idAndSystem_version(member_purchase_order_id, MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey(), memberPurchaseOrder.getSystem_create_user_id(), memberPurchaseOrder.getSystem_version());
+            if (flag) {
+                //会员入库
+                List<MemberPurchaseOrderProductSku> memberPurchaseOrderProductSkuList = memberPurchaseOrderProductSkuService.listByMember_purchase_order_id(member_purchase_order_id);
+                List<StockInProductSku> stockInProductSkuList = new ArrayList<StockInProductSku>();
+                for (MemberPurchaseOrderProductSku memberPurchaseOrderProductSku : memberPurchaseOrderProductSkuList) {
+                    StockInProductSku stockInProductSku = new StockInProductSku();
+                    stockInProductSku.setProduct_sku_id(memberPurchaseOrderProductSku.getProduct_sku_id());
+                    stockInProductSku.setProduct_sku_quantity(memberPurchaseOrderProductSku.getProduct_sku_quantity());
+                    stockInProductSkuList.add(stockInProductSku);
+                }
+                stockInService.save(memberPurchaseOrder.getApp_id(), warehouse_id, memberPurchaseOrder.getMember_purchase_order_id(), memberPurchaseOrder.getUser_id(), StockType.MEMBER.getKey(), stockInProductSkuList, memberPurchaseOrder.getSystem_create_user_id());
+            }
+            return flag;
+        }
+        return false;
     }
     
     //会员进货单发货完成

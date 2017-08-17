@@ -113,4 +113,8 @@ public class StockOutCache extends Cache {
         return result;
     }
 
+    public List<StockOut> listByDelivery_order_id(String delivery_order_id) {
+        return stockOutDao.listByDelivery_order_id(delivery_order_id);
+    }
+
 }

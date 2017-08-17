@@ -14,6 +14,7 @@ import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
+import com.nowui.chuangshi.model.StockOut;
 import com.nowui.chuangshi.model.StockOutProductSku;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.type.ExpressFlow;
@@ -37,8 +38,6 @@ public class MemberDeliveryOrderService extends Service {
     private MemberPurchaseOrderService memberPurchaseOrderService = new MemberPurchaseOrderService();
     
     private StockOutService stockOutService = new StockOutService();
-    
-    private StockInService stockInService = new StockInService();
     
     private StockService stockService = new StockService();
     
@@ -276,8 +275,19 @@ public class MemberDeliveryOrderService extends Service {
 	}
 
 	public void updateFinish(String member_delivery_order_id) {
-		
-		
+	    MemberDeliveryOrder memberDeliveryOrder = findByMember_delivery_order_id(member_delivery_order_id);
+	    //只有当发货单处于待收货状态时才可以完成
+	    if (MemberDeliveryOrderFlow.WAIT_RECEIVE.getKey().equals(memberDeliveryOrder.getMember_delivery_order_flow())) {
+	        if (StringUtils.isNotBlank(memberDeliveryOrder.getMember_purchase_order_id())) {
+	            List<StockOut> stockOutList = stockOutService.listByDelivery_order_id(member_delivery_order_id);
+	            if (stockOutList != null && stockOutList.size() > 0) {
+	                String warehouse_id = stockOutList.get(0).getWarehouse_id();
+	                memberPurchaseOrderService.updateFinish(memberDeliveryOrder.getMember_purchase_order_id(), warehouse_id);
+	            }
+	        }
+	        this.updateMember_delivery_order_flowAndMember_delivery_order_is_completeByMember_delivery_order_idValidateSystem_version(member_delivery_order_id, MemberDeliveryOrderFlow.COMPLETE.getKey(), true, memberDeliveryOrder.getSystem_create_user_id(), memberDeliveryOrder.getSystem_version());
+  
+	    }
 	}
 
 }

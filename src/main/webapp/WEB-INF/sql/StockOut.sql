@@ -201,5 +201,13 @@
     AND stock_out_id = #p(stock_out_id)
     AND system_version = #p(system_version)
   #end
+  
+  #sql("listByDelivery_order_id")
+    SELECT
+    *
+    FROM table_stock_out
+    WHERE system_status = 1
+    AND delivery_order_id = #p(delivery_order_id)
+  #end
 
 #end
