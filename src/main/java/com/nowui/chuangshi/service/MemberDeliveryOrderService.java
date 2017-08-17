@@ -276,7 +276,11 @@ public class MemberDeliveryOrderService extends Service {
 	}
 
 	public void updateFinish(String member_delivery_order_id) {
-		
+	    MemberDeliveryOrder memberDeliveryOrder = findByMember_delivery_order_id(member_delivery_order_id);
+	    if (StringUtils.isNotBlank(memberDeliveryOrder.getMember_purchase_order_id())) {
+	        memberPurchaseOrderService.updateFinish(memberDeliveryOrder.getMember_purchase_order_id());
+	    }
+	    updateMember_delivery_order_flowAndMember_delivery_order_is_completeByMember_delivery_order_idValidateSystem_version(member_delivery_order_id, MemberDeliveryOrderFlow.COMPLETE.getKey(), true, memberDeliveryOrder.getSystem_create_user_id(), memberDeliveryOrder.getSystem_version());
 		
 	}
 
