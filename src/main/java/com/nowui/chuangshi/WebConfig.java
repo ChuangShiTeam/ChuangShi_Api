@@ -25,6 +25,7 @@ import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
+import com.nowui.chuangshi.common.server.RPC;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.controller.AdminController;
@@ -394,6 +395,8 @@ public class WebConfig extends JFinalConfig {
             }
         }
 
+
+
 //        try {
 //            Date date = new Date();
 //            Calendar calendar = Calendar.getInstance();
@@ -408,6 +411,10 @@ public class WebConfig extends JFinalConfig {
 //            e.printStackTrace();
 //            throw new RuntimeException("登录不成功");
 //        }
+    }
+
+    public void beforeJFinalStop() {
+
     }
 
 }

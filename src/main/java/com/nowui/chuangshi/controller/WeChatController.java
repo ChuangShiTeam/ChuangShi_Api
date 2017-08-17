@@ -123,8 +123,7 @@ public class WeChatController extends Controller {
 
             System.out.println(app_id);
 
-            SnsAccessToken snsAccessToken = SnsAccessTokenApi.getSnsAccessToken(app.getWechat_app_id(),
-                    app.getWechat_app_secret(), code);
+            SnsAccessToken snsAccessToken = SnsAccessTokenApi.getSnsAccessToken(app.getWechat_app_id(), app.getWechat_app_secret(), code);
 
             System.out.println(snsAccessToken.getJson());
 
