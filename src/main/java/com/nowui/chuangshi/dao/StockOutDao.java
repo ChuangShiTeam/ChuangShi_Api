@@ -175,4 +175,14 @@ public class StockOutDao extends Dao {
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
+    public List<StockOut> listByDelivery_order_id(String delivery_order_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(StockOut.DELIVERY_ORDER_ID, delivery_order_id);
+        SqlPara sqlPara = Db.getSqlPara("stock_out.listByDelivery_order_id", sqlMap);
+
+        logSql("stock_out", "listByDelivery_order_id", sqlPara);
+
+        return new StockOut().find(sqlPara.getSql(), sqlPara.getPara());
+    }
+
 }

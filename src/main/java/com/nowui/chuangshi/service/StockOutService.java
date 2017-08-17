@@ -94,4 +94,8 @@ public class StockOutService extends Service {
 		return result;
     }
 
+    public List<StockOut> listByDelivery_order_id(String delivery_order_id) {
+        return stockOutCache.listByDelivery_order_id(delivery_order_id);
+    }
+
 }
