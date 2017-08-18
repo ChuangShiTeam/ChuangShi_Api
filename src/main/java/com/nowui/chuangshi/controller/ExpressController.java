@@ -259,7 +259,6 @@ public class ExpressController extends Controller {
                 Boolean success = jsonObject.getBoolean("Success");
                 String express_flow = "无轨迹";
                 Boolean express_is_complete = false;
-                String express_traces = jsonObject.getString("Traces");
                 if (success) {
                     String state = jsonObject.getString("State");
                     if (state.equals("1")) {
@@ -293,6 +292,10 @@ public class ExpressController extends Controller {
                                 memberDeliveryOrderService.updateFinish(memberDeliveryOrderExpress.getMember_delivery_order_id());
                             }
                         }
+                    }
+                    String express_traces = jsonObject.getString("Traces");
+                    if (StringUtils.isBlank(express_traces) || "[]".equals(express_traces)) {
+                        express_traces = ""; 
                     }
                     expressService.updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idValidateSystem_version(express.getExpress_id(), express_flow, express_is_complete, express_traces, bean.getSystem_create_user_id(), bean.getSystem_version());
                 }
