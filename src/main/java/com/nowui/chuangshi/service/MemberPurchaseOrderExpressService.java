@@ -20,5 +20,9 @@ public class MemberPurchaseOrderExpressService extends Service {
     public Boolean deleteByMember_purchase_order_idAndSystem_update_user_id(String member_purchase_order_express_id, String system_update_user_id) {
         return memberPurchaseOrderExpressCache.deleteByMember_purchase_order_idAndSystem_update_user_id(member_purchase_order_express_id, system_update_user_id);
     }
+    
+    public Boolean deleteByMember_purchase_order_idAndExpress_idAndSystem_update_user_id(String member_purchase_order_id, String express_id, String system_update_user_id) {
+        return memberPurchaseOrderExpressCache.deleteByMember_purchase_order_idAndExpress_idAndSystem_update_user_id(member_purchase_order_id, express_id, system_update_user_id);
+    }
 
 }

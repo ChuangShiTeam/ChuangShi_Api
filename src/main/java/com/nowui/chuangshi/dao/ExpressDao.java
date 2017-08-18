@@ -82,6 +82,15 @@ public class ExpressDao extends Dao {
 
         return new Express().find(sqlPara.getSql(), sqlPara.getPara());
     }
+    
+    public List<Express> listNotComplete() {
+        Kv sqlMap = Kv.create();
+        SqlPara sqlPara = Db.getSqlPara("express.listNotComplete", sqlMap);
+
+        logSql("express", "listNotComplete", sqlPara);
+
+        return new Express().find(sqlPara.getSql(), sqlPara.getPara());
+    }
 
     public Express findByExpress_id(String express_id) {
         Kv sqlMap = Kv.create();
