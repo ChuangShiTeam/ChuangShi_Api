@@ -42,5 +42,9 @@ public class MemberPurchaseOrderExpressCache extends Cache {
 
         return result;
     }
+    
+    public Boolean deleteByMember_purchase_order_idAndExpress_idAndSystem_update_user_id(String member_purchase_order_id, String express_id, String system_update_user_id) {
+        return memberPurchaseOrderExpressDao.deleteByMember_purchase_order_idAndExpress_id(member_purchase_order_id, express_id, system_update_user_id);
+    }
 
 }

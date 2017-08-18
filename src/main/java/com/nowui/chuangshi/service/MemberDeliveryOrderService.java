@@ -12,6 +12,7 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
+import com.nowui.chuangshi.model.MemberDeliveryOrderExpress;
 import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.model.StockOut;
@@ -36,6 +37,8 @@ public class MemberDeliveryOrderService extends Service {
     private ExpressService expressService = new ExpressService();
     
     private MemberPurchaseOrderService memberPurchaseOrderService = new MemberPurchaseOrderService();
+    
+    private MemberPurchaseOrderExpressService memberPurchaseOrderExpressService = new MemberPurchaseOrderExpressService();
     
     private StockOutService stockOutService = new StockOutService();
     
@@ -138,6 +141,9 @@ public class MemberDeliveryOrderService extends Service {
         
         if (result) {
             memberDeliveryOrderExpressService.save(member_delivery_order_id, express_id, request_user_id);
+            if (StringUtils.isNotBlank(memberDeliveryOrder.getMember_purchase_order_id())) {
+                memberPurchaseOrderExpressService.save(memberDeliveryOrder.getMember_purchase_order_id(), express_id, request_user_id);
+            }
         }
         return result;
     }
@@ -153,6 +159,9 @@ public class MemberDeliveryOrderService extends Service {
         Boolean result = expressService.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(express_id, request_user_id, system_version);
         if (result) {
             memberDeliveryOrderExpressService.deleteByMember_delivery_order_idAndExpress_idAndSystem_update_user_id(member_delivery_order_id, express_id, request_user_id);
+            if (StringUtils.isNotBlank(memberDeliveryOrder.getMember_purchase_order_id())) {
+                memberPurchaseOrderExpressService.deleteByMember_purchase_order_idAndExpress_idAndSystem_update_user_id(memberDeliveryOrder.getMember_purchase_order_id(), express_id, request_user_id);
+            }
         }
         return result;
     }
