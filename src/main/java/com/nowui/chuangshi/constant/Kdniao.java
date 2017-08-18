@@ -7,6 +7,7 @@ public class Kdniao {
     public static String EBusinessID = "";
     public static String AppKey = "";
     public static String ReqURL = "";
+    public static String PullReqURL = "";
 
     static {
         PropKit.clear();
@@ -15,6 +16,7 @@ public class Kdniao {
         EBusinessID = PropKit.get("EBusinessID");
         AppKey = PropKit.get("AppKey");
         ReqURL = PropKit.get("ReqURL");
+        PullReqURL = PropKit.get("PullReqURL");
     }
 
 }

@@ -73,20 +73,24 @@ public class StockInService extends Service {
 
     		if (stock == null || StringUtils.isBlank(stock.getStock_id())) {
     			ProductSku productSku = productSkuService.findByProduct_sku_id(stockInProductSku.getProduct_sku_id());
-    			Product product = productService.findByProduct_id(productSku.getProduct_sku_id());
-    			stock = new Stock();
-    			
-    			stock.setProduct_sku_id(productSku.getProduct_sku_id());
-    			stock.setProduct_id(product.getProduct_id());
-    			stock.setProduct_category_id(product.getProduct_category_id());
-    			stock.setStock_quantity(stockInProductSku.getProduct_sku_quantity());
-    			stock.setSystem_create_user_id(system_create_user_id);
-        		stock.setSystem_create_time(new Date());
-        		stock.setSystem_update_user_id(system_create_user_id);
-        		stock.setSystem_update_time(new Date());
-        		stock.setSystem_version(0);
-        		stock.setSystem_status(true);
-        		stockSaveList.add(stock);
+    			Product product = productService.findByProduct_id(productSku.getProduct_id());
+    			Stock bean = new Stock();
+    			bean.setStock_id(Util.getRandomUUID());
+    			bean.setApp_id(app_id);
+    			bean.setStock_type(stock_in_type);
+    			bean.setObject_id(object_id);
+    			bean.setWarehouse_id(warehouse_id);
+    			bean.setProduct_sku_id(productSku.getProduct_sku_id());
+    			bean.setProduct_id(product.getProduct_id());
+    			bean.setProduct_category_id(product.getProduct_category_id());
+    			bean.setStock_quantity(stockInProductSku.getProduct_sku_quantity());
+    			bean.setSystem_create_user_id(system_create_user_id);
+    			bean.setSystem_create_time(new Date());
+    			bean.setSystem_update_user_id(system_create_user_id);
+    			bean.setSystem_update_time(new Date());
+    			bean.setSystem_version(0);
+    			bean.setSystem_status(true);
+        		stockSaveList.add(bean);
     		} else {
     			stock.setStock_quantity(stock.getStock_quantity() + stockInProductSku.getProduct_sku_quantity());
         		stock.setSystem_create_user_id(system_create_user_id);

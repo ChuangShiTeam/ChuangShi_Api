@@ -56,6 +56,10 @@ public class ExpressCache extends Cache {
 
         return expressList;
     }
+    
+    public List<Express> listNotComplete() {
+        return expressDao.listNotComplete(); 
+    }
 
     public Express findByExpress_id(String express_id) {
         Express express = CacheUtil.get(EXPRESS_BY_EXPRESS_ID_CACHE, express_id);

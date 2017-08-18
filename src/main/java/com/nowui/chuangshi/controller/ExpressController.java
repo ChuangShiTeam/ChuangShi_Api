@@ -22,6 +22,7 @@ import com.nowui.chuangshi.service.MemberDeliveryOrderService;
 import com.nowui.chuangshi.service.TradeExpressService;
 import com.nowui.chuangshi.service.TradeService;
 import com.nowui.chuangshi.util.DateUtil;
+import com.nowui.chuangshi.util.ExpressUtil;
 
 public class ExpressController extends Controller {
 
@@ -232,27 +233,74 @@ public class ExpressController extends Controller {
         renderSuccessJson(express);
     }
     
-    @ActionKey(Url.EXPRESS_SYSTEM_LIST)
-    public void systemList() {
-        validateRequest_app_id();
-        validate(Express.APP_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+    /**
+     * 接收物流信息
+     */
+    @ActionKey(Url.EXPRESS_ADMIN_PULL)
+    public void pull() {
+        List<Express> express_list = expressService.listNotComplete();
+        for (Express express : express_list) {
+            String eBusinessID = Kdniao.EBusinessID;
+            String appKey = Kdniao.AppKey;
+            String reqURL = Kdniao.PullReqURL;
+            
+            String requestData= "{'OrderCode':'','ShipperCode':'" + express.getExpress_shipper_code() + "','LogisticCode':'" + express.getExpress_no() + "'}";
+            try {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("RequestData", ExpressUtil.urlEncoder(requestData, "UTF-8"));
+                params.put("EBusinessID", eBusinessID);
+                params.put("RequestType", "1002");
+                String dataSign = ExpressUtil.encrypt(requestData, appKey, "UTF-8");
+                params.put("DataSign", ExpressUtil.urlEncoder(dataSign, "UTF-8"));
+                params.put("DataType", "2");
+                String result = ExpressUtil.sendPost(reqURL, params); 
+                System.out.println(result);
+                JSONObject jsonObject = JSONObject.parseObject(result);
+                Boolean success = jsonObject.getBoolean("Success");
+                String express_flow = "无轨迹";
+                Boolean express_is_complete = false;
+                String express_traces = jsonObject.getString("Traces");
+                if (success) {
+                    String state = jsonObject.getString("State");
+                    if (state.equals("1")) {
+                        express_flow = "已揽收";
+                    } else if (state.equals("2")) {
+                        express_flow = "在途中";
+                    } else if (state.equals("201")) {
+                        express_flow = "到达派件城市";
+                    } else if (state.equals("3")) {
+                        express_flow = "签收";
 
-        Express model = getModel(Express.class);
+                        express_is_complete = true;
+                    } else if (state.equals("4")) {
+                        express_flow = "问题件";
+                    }
 
-        Integer total = expressService
-                .countByOrApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_name(model.getApp_id(),
-                        model.getExpress_no(), model.getExpress_receiver_name(), model.getExpress_sender_name());
-        List<Express> resultList = expressService
-                .listByOrApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_nameAndLimit(
-                        model.getApp_id(), model.getExpress_no(), model.getExpress_receiver_name(),
-                        model.getExpress_sender_name(), getM(), getN());
-
-        for (Express result : resultList) {
-            result.keep(Express.EXPRESS_ID, Express.EXPRESS_NO, Express.EXPRESS_IS_PAY, Express.EXPRESS_RECEIVER_NAME,
-                    Express.EXPRESS_SENDER_NAME, Express.EXPRESS_FLOW, Express.SYSTEM_VERSION);
+                    Express bean = expressService.findByExpress_id(express.getExpress_id());
+                    if (!bean.getExpress_is_complete() && express_is_complete) {
+                        MemberDeliveryOrderExpress memberDeliveryOrderExpress = memberDeliveryOrderExpressService.findByExpress_id(bean.getExpress_id());
+                        if (memberDeliveryOrderExpress != null && StringUtils.isNotBlank(memberDeliveryOrderExpress.getMember_delivery_order_id())) {
+                            List<Express> expressList = memberDeliveryOrderExpressService.listByMember_delivery_order_id(memberDeliveryOrderExpress.getMember_delivery_order_id());
+                            Boolean flag = true;
+                            for (Express e : expressList) {
+                                if (e.getExpress_is_complete() || e.getExpress_id().equals(bean.getExpress_id())) {
+                                    continue;
+                                }
+                                flag = false;
+                                break;
+                            }
+                            if (flag) {
+                                memberDeliveryOrderService.updateFinish(memberDeliveryOrderExpress.getMember_delivery_order_id());
+                            }
+                        }
+                    }
+                    expressService.updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idValidateSystem_version(express.getExpress_id(), express_flow, express_is_complete, express_traces, bean.getSystem_create_user_id(), bean.getSystem_version());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
-        renderSuccessJson(total, resultList);
+        renderSuccessJson("success");
     }
 
     @ActionKey(Url.EXPRESS_SYSTEM_FIND)

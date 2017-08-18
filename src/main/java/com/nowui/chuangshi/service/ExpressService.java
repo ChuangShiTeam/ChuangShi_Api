@@ -85,6 +85,10 @@ public class ExpressService extends Service {
         return expressCache.listByOrApp_idOrLikeExpress_noOrLikeExpress_receiver_nameOrLikeExpress_sender_nameAndLimit(
                 app_id, express_no, express_receiver_name, express_sender_name, m, n);
     }
+    
+    public List<Express> listNotComplete() {
+        return expressCache.listNotComplete(); 
+    }
 
     public Express findByExpress_id(String express_id) {
         return expressCache.findByExpress_id(express_id);

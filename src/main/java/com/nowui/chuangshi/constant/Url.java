@@ -426,6 +426,7 @@ public class Url {
     public static final String EXPRESS_ADMIN_UPDATE = "/express/admin/update";
     public static final String EXPRESS_ADMIN_COMPLETE = "/express/admin/complete";
     public static final String EXPRESS_ADMIN_DELETE = "/express/admin/delete";
+    public static final String EXPRESS_ADMIN_PULL = "/express/admin/pull";
     public static final String EXPRESS_SYSTEM_LIST = "/express/system/list";
     public static final String EXPRESS_SYSTEM_FIND = "/express/system/find";
     public static final String EXPRESS_SYSTEM_SAVE = "/express/system/save";

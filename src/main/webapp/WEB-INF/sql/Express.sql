@@ -94,6 +94,15 @@
     ORDER BY system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
+  
+  #sql("listNotComplete")
+    SELECT
+    *
+    FROM table_express
+    WHERE system_status = 1
+   	AND express_is_complete = 0
+    ORDER BY system_create_time DESC
+  #end
 
   #sql("findByExpress_id")
     SELECT
