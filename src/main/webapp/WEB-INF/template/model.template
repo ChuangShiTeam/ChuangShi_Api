@@ -1,16 +1,35 @@
-package com.nowui.chuangshi.model;
+#set(is_decimal = false)
+#set(is_date = false)
+#for(column : columnList)
+#if(column.data_type == "DECIMAL")
+#set(is_decimal = true)
+#elseif(column.data_type == "DATE")
+#set(is_date = true)
+#elseif(column.data_type == "DATETIME")
+#set(is_date = true)
+#end
+#end
+package com.nowui.chuangshi.api.#(package_name).model;
 
-import com.nowui.chuangshi.constant.Column;
+import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Primary;
+import com.nowui.chuangshi.common.annotation.Table;
+import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.type.ColumnType;
 
+#if(is_decimal == true)
+import java.math.BigDecimal;
+#end
+#if(is_date == true)
+import java.util.Date;
+#end
+
+@Table("#(table_name)")
+@Primary("#(primary_key)")
 public class #(first_upper_model_name_without_underline) extends Model<#(first_upper_model_name_without_underline)> {
 
     #for(column : columnList)
-    #if(column.data_type == "TEXT")
-    @Column(type = ColumnType.VARCHAR, length = #(column.character_maximum_length), comment = "#(column.column_comment)")
-    #else
-    @Column(type = ColumnType.#(column.data_type), length = #(column.character_maximum_length), comment = "#(column.column_comment)")
-    #end
+    @Column(type = ColumnType.#(column.data_type), length = #(column.character_maximum_length), comment = "#(column.column_comment)"#if(column.is_updatable == false), updatable = false#end)
     public static final String #(column.upper_column_name) = "#(column.column_name)";
 
     #end
@@ -39,6 +58,25 @@ public class #(first_upper_model_name_without_underline) extends Model<#(first_u
     }
 
     public void set#(column.first_column_name)(BigDecimal #(column.column_name)) {
+        set(#(column.upper_column_name), #(column.column_name));
+    }
+
+    #elseif(column.data_type == "DATETIME")
+    public Date get#(column.first_column_name)() {
+        return getDate(#(column.upper_column_name));
+    }
+
+    public void set#(column.first_column_name)(Date #(column.column_name)) {
+        set(#(column.upper_column_name), #(column.column_name));
+    }
+
+
+    #elseif(column.data_type == "DATE")
+    public Date get#(column.first_column_name)() {
+        return getDate(#(column.upper_column_name));
+    }
+
+    public void set#(column.first_column_name)(Date #(column.column_name)) {
         set(#(column.upper_column_name), #(column.column_name));
     }
 

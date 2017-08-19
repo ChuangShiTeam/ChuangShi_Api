@@ -29,6 +29,7 @@ public class JianglingMemberController extends Controller {
         JianglingMember jianglingMember = JianglingMemberService.me.find(Cnd.where(JianglingMember.USER_ID, request_user_id));
 
         if (jianglingMember == null) {
+            jianglingMember = new JianglingMember();
             jianglingMember.setMember_diffent_point(0);
             jianglingMember.setMember_like_point(0);
         }

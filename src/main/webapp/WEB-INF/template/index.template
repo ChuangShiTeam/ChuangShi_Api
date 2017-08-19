@@ -28,7 +28,9 @@ class #(first_upper_model_name_without_underline)Index extends Component {
         }
 
         this.props.form.setFieldsValue({
-            #(lower_model_name)_name: this.props.#(lower_model_name).#(lower_model_name)_name
+            #for(column : searchColumnList)
+            #(column.column_name): this.props.#(lower_model_name).#(column.column_name),
+            #end
         });
 
         this.handleLoad();
@@ -44,7 +46,7 @@ class #(first_upper_model_name_without_underline)Index extends Component {
 
     handleLoadApp() {
         http.request({
-            url: '/app/' + constant.action + '/all/list',
+            url: '/' + constant.action + '/app/all/list',
             data: {},
             success: function (data) {
                 this.props.dispatch({
@@ -67,13 +69,17 @@ class #(first_upper_model_name_without_underline)Index extends Component {
                 app_id = '';
             }
 
-            let #(lower_model_name)_name = this.props.form.getFieldValue('#(lower_model_name)_name');
+            #for(column : searchColumnList)
+            let #(column.column_name) = this.props.form.getFieldValue('#(column.column_name)');
+            #end
 
             this.props.dispatch({
                 type: '#(lower_model_name)/fetch',
                 data: {
                     app_id: app_id,
-                    #(lower_model_name)_name: #(lower_model_name)_name,
+                    #for(column : searchColumnList)
+                    #(column.column_name): #(column.column_name),
+                    #end
                     page_index: 1
                 }
             });
@@ -90,10 +96,12 @@ class #(first_upper_model_name_without_underline)Index extends Component {
         });
 
         http.request({
-            url: '/#(url_model_name)/' + constant.action + '/list',
+            url: '/' + constant.action + '/#(url_model_name)/list',
             data: {
                 app_id: this.props.#(lower_model_name).app_id,
-                #(lower_model_name)_name: this.props.#(lower_model_name).#(lower_model_name)_name,
+                #for(column : searchColumnList)
+                #(column.column_name): this.props.#(lower_model_name).#(column.column_name),
+                #end
                 page_index: this.props.#(lower_model_name).page_index,
                 page_size: this.props.#(lower_model_name).page_size
             },
@@ -149,21 +157,21 @@ class #(first_upper_model_name_without_underline)Index extends Component {
         notification.emit('notification_#(lower_model_name)_detail_add', {});
     }
 
-    handleEdit(#(column_key)) {
+    handleEdit(#(primary_key)) {
         notification.emit('notification_#(lower_model_name)_detail_edit', {
-            #(column_key): #(column_key)
+            #(primary_key): #(primary_key)
         });
     }
 
-    handleDel(#(column_key), system_version) {
+    handleDel(#(primary_key), system_version) {
         this.setState({
             is_load: true
         });
 
         http.request({
-            url: '/#(url_model_name)/' + constant.action + '/delete',
+            url: '/' + constant.action + '/#(url_model_name)/delete',
             data: {
-                #(column_key): #(column_key),
+                #(primary_key): #(primary_key),
                 system_version: system_version
             },
             success: function (data) {
@@ -185,19 +193,21 @@ class #(first_upper_model_name_without_underline)Index extends Component {
         const {getFieldDecorator} = this.props.form;
 
         const columns = [{
-            title: '名称',
-            dataIndex: '#(lower_model_name)_name'
+        #for(column : listColumnList)
+            title: '#(column.column_comment)',
+            dataIndex: '#(column.column_name)'
         }, {
+        #end
             width: 100,
             title: constant.operation,
             dataIndex: '',
             render: (text, record, index) => (
                 <span>
-                  <a onClick={this.handleEdit.bind(this, record.#(column_key))}>{constant.edit}</a>
+                  <a onClick={this.handleEdit.bind(this, record.#(primary_key))}>{constant.edit}</a>
                   <span className="divider"/>
                   <Popconfirm title={constant.popconfirm_title} okText={constant.popconfirm_ok}
                               cancelText={constant.popconfirm_cancel}
-                              onConfirm={this.handleDel.bind(this, record.#(column_key), record.system_version)}>
+                              onConfirm={this.handleDel.bind(this, record.#(primary_key), record.system_version)}>
                     <a>{constant.del}</a>
                   </Popconfirm>
                 </span>
@@ -261,26 +271,28 @@ class #(first_upper_model_name_without_underline)Index extends Component {
                                 :
                                 ''
                         }
+                        #for(column : searchColumnList)
                         <Col span={8}>
                             <FormItem hasFeedback {...{
                                 labelCol: {span: 6},
                                 wrapperCol: {span: 18}
-                            }} className="content-search-item" label="名称">
+                            }} className="content-search-item" label="#(column.column_comment)">
                                 {
-                                    getFieldDecorator('#(lower_model_name)_name', {
+                                    getFieldDecorator('#(column.column_name)', {
                                         initialValue: ''
                                     })(
-                                        <Input type="text" placeholder="请输入名称" onPressEnter={this.handleSearch.bind(this)}/>
+                                        <Input type="text" placeholder="请输入#(column.column_comment)" onPressEnter={this.handleSearch.bind(this)}/>
                                     )
                                 }
                             </FormItem>
                         </Col>
+                        #end
                         <Col span={8}>
                         </Col>
                     </Row>
                 </Form>
                 <Table key="2"
-                       rowKey="#(column_key)"
+                       rowKey="#(primary_key)"
                        className="margin-top"
                        loading={this.state.is_load} columns={columns}
                        dataSource={this.props.#(lower_model_name).list} pagination={pagination}

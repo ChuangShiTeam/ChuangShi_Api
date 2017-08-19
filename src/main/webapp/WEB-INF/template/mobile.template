@@ -1,0 +1,40 @@
+package com.nowui.chuangshi.api.#(package_name).mobile;
+
+import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.common.annotation.ControllerKey;
+import com.nowui.chuangshi.common.controller.Controller;
+
+@ControllerKey("/mobile/#(url_model_name)")
+public class #(first_upper_model_name_without_underline)Controller extends Controller {
+
+    @ActionKey("/mobile/#(url_model_name)/list")
+    public void list() {
+
+        renderSuccessJson();
+    }
+
+    @ActionKey("/mobile/#(url_model_name)/find")
+    public void find() {
+
+        renderSuccessJson();
+    }
+
+    @ActionKey("/mobile/#(url_model_name)/save")
+    public void save() {
+
+        renderSuccessJson();
+    }
+
+    @ActionKey("/mobile/#(url_model_name)/update")
+    public void update() {
+
+        renderSuccessJson();
+    }
+
+    @ActionKey("/mobile/#(url_model_name)/delete")
+    public void delete() {
+
+        renderSuccessJson();
+    }
+
+}

@@ -1,6 +1,15 @@
+#set(is_input_number = false)
+#set(is_switch = false)
+#for(column : detailColumnList)
+#if(column.data_type == "INT")
+#set(is_input_number = true)
+#elseif(column.data_type == "TINYINT")
+#set(is_switch = true)
+#end
+#end
 import React, {Component} from 'react';
 import {connect} from 'dva';
-import {Modal, Form, Row, Col, Spin, Button, Input, Select, message} from 'antd';
+import {Modal, Form, Row, Col, Spin, Button, Input, Select#if(is_input_number == true), InputNumber#end #if(is_switch == true), Switch#end, message} from 'antd';
 
 import constant from '../../util/constant';
 import notification from '../../util/notification';
@@ -14,7 +23,7 @@ class #(first_upper_model_name_without_underline)Detail extends Component {
             is_load: false,
             is_show: false,
             action: '',
-            #(column_key): '',
+            #(primary_key): '',
             system_version: ''
         }
     }
@@ -31,7 +40,7 @@ class #(first_upper_model_name_without_underline)Detail extends Component {
             this.setState({
                 is_show: true,
                 action: 'update',
-                #(column_key): data.#(column_key)
+                #(primary_key): data.#(primary_key)
             }, function () {
                 this.handleLoad();
             });
@@ -50,9 +59,9 @@ class #(first_upper_model_name_without_underline)Detail extends Component {
         });
 
         http.request({
-            url: '/#(url_model_name)/' + constant.action + '/find',
+            url: '/' + constant.action + '/#(url_model_name)/find',
             data: {
-                #(column_key): this.state.#(column_key)
+                #(primary_key): this.state.#(primary_key)
             },
             success: function (data) {
                 if (constant.action === 'system') {
@@ -62,11 +71,8 @@ class #(first_upper_model_name_without_underline)Detail extends Component {
                 }
 
                 this.props.form.setFieldsValue({
-                    #for(column : columnList)
-                    #if(column.column_name == column_key || column.column_name == "app_id")
-                    #else
+                    #for(column : detailColumnList)
                     #(column.column_name): data.#(column.column_name),
-                    #end
                     #end
                 });
 
@@ -89,7 +95,7 @@ class #(first_upper_model_name_without_underline)Detail extends Component {
                 return;
             }
 
-            values.#(column_key) = this.state.#(column_key);
+            values.#(primary_key) = this.state.#(primary_key);
             values.system_version = this.state.system_version;
 
             this.setState({
@@ -97,7 +103,7 @@ class #(first_upper_model_name_without_underline)Detail extends Component {
             });
 
             http.request({
-                url: '/#(url_model_name)/' + constant.action + '/' + this.state.action,
+                url: '/' + constant.action + '/#(url_model_name)/' + this.state.action,
                 data: values,
                 success: function (data) {
                     message.success(constant.success);
@@ -120,7 +126,7 @@ class #(first_upper_model_name_without_underline)Detail extends Component {
             is_load: false,
             is_show: false,
             action: '',
-            #(column_key): '',
+            #(primary_key): '',
             system_version: ''
         });
 
@@ -179,9 +185,7 @@ class #(first_upper_model_name_without_underline)Detail extends Component {
                                 :
                                 ''
                         }
-                        #for(column : columnList)
-                        #if(column.column_name == column_key || column.column_name == "app_id")
-                        #else
+                        #for(column : detailColumnList)
                         <Row>
                             <Col span={8}>
                                 <FormItem hasFeedback {...{
@@ -225,7 +229,6 @@ class #(first_upper_model_name_without_underline)Detail extends Component {
                                 </FormItem>
                             </Col>
                         </Row>
-                        #end
                         #end
                     </form>
                 </Spin>

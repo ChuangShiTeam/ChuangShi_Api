@@ -1,0 +1,82 @@
+package com.nowui.chuangshi.api.#(package_name).admin;
+
+import com.jfinal.aop.Before;
+import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.#(package_name).model.#(first_upper_model_name_without_underline);
+import com.nowui.chuangshi.api.#(package_name).service.#(first_upper_model_name_without_underline)Service;
+import com.nowui.chuangshi.common.annotation.ControllerKey;
+import com.nowui.chuangshi.common.controller.Controller;
+import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.constant.Constant;
+import com.nowui.chuangshi.util.Util;
+
+import java.util.List;
+
+@Before(AdminInterceptor.class)
+@ControllerKey("/admin/#(url_model_name)")
+public class #(first_upper_model_name_without_underline)Controller extends Controller {
+
+    @ActionKey("/admin/#(url_model_name)/list")
+    public void list() {
+        validateRequest(#for(column : searchColumnList)#(first_upper_model_name_without_underline).#(column.upper_column_name), #end Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
+        Cnd cnd = Cnd.where(#(first_upper_model_name_without_underline).APP_ID, model.getApp_id())#for(column : searchColumnList).andAllowEmpty(#(first_upper_model_name_without_underline).#(column.upper_column_name), model.get#(column.first_column_name)())#end;
+
+        Integer resultCount = #(first_upper_model_name_without_underline)Service.me.count(cnd);
+        List<#(first_upper_model_name_without_underline)> resultList = #(first_upper_model_name_without_underline)Service.me.list(cnd.paginate(getM(), getN()));
+
+        validateResponse(#(first_upper_model_name_without_underline).#(upper_primary_key), #for(column : listColumnList)#(first_upper_model_name_without_underline).#(column.upper_column_name), #end #(first_upper_model_name_without_underline).SYSTEM_VERSION);
+
+        renderSuccessJson(resultCount, resultList);
+    }
+
+    @ActionKey("/admin/#(url_model_name)/find")
+    public void find() {
+        validateRequest(#(first_upper_model_name_without_underline).#(upper_primary_key));
+
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
+
+        #(first_upper_model_name_without_underline) result = #(first_upper_model_name_without_underline)Service.me.findById(model.get#(first_upper_primary_key)());
+
+        validateResponse(#for(column : detailColumnList)#(first_upper_model_name_without_underline).#(column.upper_column_name), #end #(first_upper_model_name_without_underline).SYSTEM_VERSION);
+
+        renderSuccessJson(result);
+    }
+
+    @ActionKey("/admin/#(url_model_name)/save")
+    public void save() {
+        validateRequest(#for(column : detailColumnList)#(first_upper_model_name_without_underline).#(column.upper_column_name)#if(!for.last), #end #end);
+
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
+        model.set#(first_upper_primary_key)(Util.getRandomUUID());
+
+        Boolean result = #(first_upper_model_name_without_underline)Service.me.save(model);
+
+        renderSuccessJson(result);
+    }
+
+    @ActionKey("/admin/#(url_model_name)/update")
+    public void update() {
+        validateRequest(#(first_upper_model_name_without_underline).#(upper_primary_key), #for(column : detailColumnList)#(first_upper_model_name_without_underline).#(column.upper_column_name), #end #(first_upper_model_name_without_underline).SYSTEM_VERSION);
+
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
+
+        Boolean result = #(first_upper_model_name_without_underline)Service.me.update(model, Cnd.where(model.#(upper_primary_key), model.get#(first_upper_primary_key)()).and(#(first_upper_model_name_without_underline).SYSTEM_VERSION, model.getSystem_version()));
+
+        renderSuccessJson(result);
+    }
+
+    @ActionKey("/admin/#(url_model_name)/delete")
+    public void delete() {
+        validateRequest(#(first_upper_model_name_without_underline).#(upper_primary_key), #(first_upper_model_name_without_underline).SYSTEM_VERSION);
+
+        #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
+
+        Boolean result = #(first_upper_model_name_without_underline)Service.me.delete(model, Cnd.where(model.#(upper_primary_key), model.get#(first_upper_primary_key)()).and(#(first_upper_model_name_without_underline).SYSTEM_VERSION, model.getSystem_version()));
+
+        renderSuccessJson(result);
+    }
+
+}

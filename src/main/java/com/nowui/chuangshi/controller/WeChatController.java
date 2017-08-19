@@ -93,6 +93,9 @@ public class WeChatController extends Controller {
 
         App app = appService.findByApp_id(app_id);
 
+        System.out.println(app_id);
+        System.out.println(app.getWechat_app_id());
+
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());

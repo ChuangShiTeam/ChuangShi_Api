@@ -55,7 +55,8 @@ public class CodeController extends Controller {
             }
 
 
-            engine.setBaseTemplatePath(codeTemplatePath + "/resources/template/");
+//            engine.setBaseTemplatePath(codeTemplatePath + "/resources/template/");
+            engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/");
         } catch (java.lang.Exception e) {
 
         }

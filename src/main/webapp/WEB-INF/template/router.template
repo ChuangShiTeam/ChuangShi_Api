@@ -1,3 +1,4 @@
+
 import #(first_upper_model_name_without_underline)Index from './view/#(lower_model_name)/#(first_upper_model_name_without_underline)Index';
 
 

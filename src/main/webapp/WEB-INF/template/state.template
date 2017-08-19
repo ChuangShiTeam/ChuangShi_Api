@@ -7,7 +7,9 @@ export default {
     state: {
         app_id: '',
         app_list: [],
-        #(lower_model_name)_name: '',
+        #for(column : searchColumnList)
+        #(column.column_name): '',
+        #end
         total: 0,
         page_index: 1,
         page_size: constant.page_size,
