@@ -9,18 +9,13 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import com.jfinal.weixin.sdk.api.*;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.HttpKit;
-import com.jfinal.weixin.sdk.api.ApiConfigKit;
-import com.jfinal.weixin.sdk.api.ApiResult;
-import com.jfinal.weixin.sdk.api.MenuApi;
-import com.jfinal.weixin.sdk.api.SnsAccessToken;
-import com.jfinal.weixin.sdk.api.SnsAccessTokenApi;
-import com.jfinal.weixin.sdk.api.UserApi;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
@@ -138,7 +133,11 @@ public class WeChatController extends Controller {
             String from_qrcode_id = "";
             String request_user_id = "";
 
-            ApiResult apiResult = UserApi.getUserInfo(wechat_open_id);
+//            ApiResult apiResult = UserApi.getUserInfo(wechat_open_id);
+
+//            System.out.println(apiResult.getJson());
+
+            ApiResult apiResult = SnsApi.getUserInfo(snsAccessToken.getAccessToken(), wechat_open_id);
 
             System.out.println(apiResult.getJson());
 
