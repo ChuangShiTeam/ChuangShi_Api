@@ -227,24 +227,28 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
                     isWhere = true;
                     stringBuilder.append("WHERE ");
                 }
-                stringBuilder.append(expression.getKey());
+
+                String temp = "";
+                Boolean isBetween = false;
                 switch (expression.getExpressionType()) {
                     case EQUAL:
-                        stringBuilder.append(" = ");
+                        temp = " = ";
                         break;
                     case LIKE:
                         isLeftLike = true;
                         isRightike = true;
 
-                        stringBuilder.append(" LIKE ");
+                        temp = " LIKE ";
                         break;
                     case LEFT_LIKE:
                         isLeftLike = true;
 
+                        temp = " LIKE ";
                         break;
                     case RIGHT_LIKE:
                         isRightike = true;
 
+                        temp = " LIKE ";
                         break;
                     case LESS_THAN:
                         break;
@@ -252,36 +256,68 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
                         break;
                     case LESS_THAN_EQUAL:
                         break;
+                    case BETWEEN:
+                        isBetween = true;
+
+                        temp = " BETWEEN ";
+                        break;
                 }
 
-                if (expression.getValue() instanceof String) {
-                    stringBuilder.append("'");
-
-                    if (isLeftLike) {
-                        stringBuilder.append("%");
-                    }
-
-                    stringBuilder.append(expression.getValue());
-
-                    if (isRightike) {
-                        stringBuilder.append("%");
-                    }
-
-                    stringBuilder.append("'");
-                } else if (expression.getValue() instanceof Boolean) {
-                    stringBuilder.append((Boolean) expression.getValue() ? 1 : 0);
-                } else if (expression.getValue() instanceof Date) {
-                    stringBuilder.append("'");
-                    stringBuilder.append(DateUtil.getDateTimeString((Date) expression.getValue()));
-                    stringBuilder.append("'");
-                } else {
-                    stringBuilder.append(expression.getValue());
+                if (isBetween) {
+                    stringBuilder.append("(");
                 }
+                stringBuilder.append(expression.getKey());
+                stringBuilder.append(temp);
+
+                stringBuilder.append(buildConditionVariable(expression.getValue(), isLeftLike, isRightike, false));
+
+                if (isBetween) {
+                    stringBuilder.append(buildConditionVariable(expression.getValue2(), isLeftLike, isRightike, true));
+                }
+
                 stringBuilder.append("\n");
 
             } else if(condition.getExpressionGroup() != null) {
 
             }
+        }
+
+        return stringBuilder.toString();
+    }
+
+    public String buildConditionVariable(Object value, Boolean isLeftLike, Boolean isRightike, Boolean isBetween) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (isBetween) {
+            stringBuilder.append(" AND ");
+        }
+
+        if (value instanceof String) {
+            stringBuilder.append("'");
+
+            if (isLeftLike) {
+                stringBuilder.append("%");
+            }
+
+            stringBuilder.append(value);
+
+            if (isRightike) {
+                stringBuilder.append("%");
+            }
+
+            stringBuilder.append("'");
+        } else if (value instanceof Boolean) {
+            stringBuilder.append((Boolean) value ? 1 : 0);
+        } else if (value instanceof Date) {
+            stringBuilder.append("'");
+            stringBuilder.append(DateUtil.getDateTimeString((Date) value));
+            stringBuilder.append("'");
+        } else {
+            stringBuilder.append(value);
+        }
+
+        if (isBetween) {
+            stringBuilder.append(")");
         }
 
         return stringBuilder.toString();

@@ -7,7 +7,8 @@ public enum ExpressionType {
     RIGHT_LIKE("RIGHT_LIKE", "RIGHT_LIKE"),
     LESS_THAN("LESSTHAN", "LESSTHAN"),
     GREAT_THAN_EQUAL("GREAT_THAN_EQUAL", "GREAT_THAN_EQUAL"),
-    LESS_THAN_EQUAL("LESS_THAN_EQUAL", "LESS_THAN_EQUAL");
+    LESS_THAN_EQUAL("LESS_THAN_EQUAL", "LESS_THAN_EQUAL"),
+    BETWEEN("BETWEEN", "BETWEEN");
 
     private String key;
     private String value;

@@ -128,6 +128,12 @@ public class Cnd {
         }
     }
 
+    public Cnd andBetween(String key, Object value, Object value2) {
+        Expression expression = new Expression(key, ExpressionType.BETWEEN, value, value2);
+        this.criteria.addCondition(new Condition(ConditionType.WHERE, expression, false));
+        return this;
+    }
+
     public Cnd andNotSystemStatus() {
         this.criteria.setSystemStatus(false);
 

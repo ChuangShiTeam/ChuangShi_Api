@@ -1,14 +1,14 @@
-package com.nowui.chuangshi.common.sql;
+package com.nowui.chuangshi.type;
 
-public enum ConditionType {
-    WHERE("WHERE", "WHERE"),
-    AND("AND", "AND"),
-    OR("OR", "OR");
+public enum CaptchaType {
+
+    REGISTER("REGISTER", "REGISTER"),
+    PASSWORD("PASSWORD", "PASSWORD");
 
     private String key;
     private String value;
 
-    private ConditionType(String key, String value) {
+    private CaptchaType(String key, String value) {
         this.key = key;
         this.value = value;
     }
@@ -20,4 +20,5 @@ public enum ConditionType {
     public String getValue() {
         return value;
     }
+
 }
