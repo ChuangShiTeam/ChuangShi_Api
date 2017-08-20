@@ -3,7 +3,6 @@ package com.nowui.chuangshi.model;
 import com.nowui.chuangshi.constant.Column;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.ColumnType;
-import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.io.Serializable;
