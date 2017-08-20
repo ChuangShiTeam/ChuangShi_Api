@@ -507,7 +507,9 @@ public class MemberDeliveryOrderController extends Controller {
                     MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_RECEIVER_NAME,
                     MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER,
                     MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY,
-                    MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE, MemberDeliveryOrder.SYSTEM_VERSION);
+                    MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_COMPLETE,
+                    MemberDeliveryOrder.SYSTEM_CREATE_TIME,
+                    MemberDeliveryOrder.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
