@@ -10,8 +10,6 @@ import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.type.CaptchaType;
-import com.nowui.chuangshi.util.Util;
-import com.nowui.chuangshi.util.ValidateUtil;
 
 @ControllerKey("/mobile/jiangling/customer")
 public class JianglingCustomerController extends Controller {
@@ -33,6 +31,8 @@ public class JianglingCustomerController extends Controller {
 
     @ActionKey("/mobile/jiangling/customer/captcha/send")
     public void captchaSend() {
+        validateRequest(JianglingCustomer.CUSTOMER_MOBILE);
+
         String request_app_id = getRequest_app_id();
 
         JSONObject jsonObject = getParameterJSONObject();
