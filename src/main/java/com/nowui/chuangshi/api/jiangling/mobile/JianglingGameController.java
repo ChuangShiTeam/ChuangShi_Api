@@ -3,14 +3,41 @@ package com.nowui.chuangshi.api.jiangling.mobile;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.jiangling.model.JianglingGame;
+import com.nowui.chuangshi.api.jiangling.model.JianglingGameMember;
+import com.nowui.chuangshi.api.jiangling.service.JianglingGameMemberService;
+import com.nowui.chuangshi.api.jiangling.service.JianglingGameService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
+import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.util.Util;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ControllerKey("/mobile/jiangling/game")
 public class JianglingGameController extends Controller {
 
     @ActionKey("/mobile/jiangling/game/list")
     public void list() {
+        String request_app_id = getRequest_app_id();
+
+        List<JianglingGame> jianglingGameList = JianglingGameService.me.list(Cnd.where(JianglingGame.APP_ID, request_app_id).desc(JianglingGame.SYSTEM_CREATE_TIME));
+        List<JianglingGameMember> jianglingGameMemberList = JianglingGameMemberService.me.list(Cnd.where("1", 1));
+
+        for (JianglingGame jianglingGame : jianglingGameList) {
+            List<JianglingGameMember> memberList = new ArrayList<JianglingGameMember>();
+
+            for (JianglingGameMember jianglingGameMember : jianglingGameMemberList) {
+                if (jianglingGameMember.getGame_id().equals(jianglingGame.getGame_id())) {
+                    memberList.add(jianglingGameMember);
+                }
+            }
+
+            jianglingGame.put("member_list", memberList);
+        }
+
+        validateResponse(JianglingGame.SYSTEM_CREATE_TIME, "member_list");
 
         renderSuccessJson();
     }
@@ -23,14 +50,39 @@ public class JianglingGameController extends Controller {
 
     @ActionKey("/mobile/jiangling/game/save")
     public void save() {
-        validateRequest("token_list");
+        validateRequest("member_list");
 
         JSONObject jsonObject = getParameterJSONObject();
-        JSONArray jsonArray = jsonObject.getJSONArray("token_list");
+        JSONArray jsonArray = jsonObject.getJSONArray("member_list");
+
+        String game_id = Util.getRandomUUID();
+        String request_app_id = getRequest_app_id();
+
+        JianglingGame jianglingGame = new JianglingGame();
+        jianglingGame.setGame_id(game_id);
+        jianglingGame.setApp_id(request_app_id);
+        Boolean result = JianglingGameService.me.save(jianglingGame);
+
+        if (!result) {
+            throw new RuntimeException("保存不成功");
+        }
 
         for (int i = 0; i < jsonArray.size(); i++) {
-            JSONObject tokenJsonObject = jsonArray.getJSONObject(i);
+            JSONObject memberJsonObject = jsonArray.getJSONObject(i);
 
+            JianglingGameMember jianglingGameMember = new JianglingGameMember();
+            jianglingGameMember.setGame_id(game_id);
+            jianglingGameMember.setGame_member_token(memberJsonObject.getString("token"));
+            jianglingGameMember.setGame_member_name(memberJsonObject.getString("name"));
+            jianglingGameMember.setGame_member_avatar(memberJsonObject.getString("avatar"));
+            jianglingGameMember.setGame_member_score(memberJsonObject.getString("score"));
+            jianglingGameMember.setGame_member_rank(memberJsonObject.getInteger("rank"));
+
+            result = JianglingGameMemberService.me.save(jianglingGameMember);
+
+            if (!result) {
+                throw new RuntimeException("保存不成功");
+            }
         }
 
         renderSuccessJson();
