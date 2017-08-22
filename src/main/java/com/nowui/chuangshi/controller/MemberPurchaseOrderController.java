@@ -256,6 +256,8 @@ public class MemberPurchaseOrderController extends Controller {
         if (StringUtils.isBlank(member.getMember_parent_id())) {
             throw new RuntimeException("没有上级，不能进货");
         }
+        Member parent = memberService.findByMember_id(member.getMember_parent_id());
+        String parent_user_id = parent.getUser_id();
         int member_purchase_order_total_quantity = 0;
         BigDecimal member_purchase_order_product_amount = new BigDecimal(0);
         for (int i = 0; i < jsonArray.size(); i++) {
@@ -272,6 +274,7 @@ public class MemberPurchaseOrderController extends Controller {
             member_purchase_order_product_amount = member_purchase_order_product_amount.add(product_sku_amount);
         }
 
+        String member_purchase_order_number = memberPurchaseOrderService.generateMember_purchase_order_number();
         String member_purchase_order_flow = MemberPurchaseOrderFlow.WAIT_PAY.getKey();
         BigDecimal member_purchase_order_express_amount = new BigDecimal(0);
         BigDecimal member_purchase_order_discount_amount = new BigDecimal(0);
@@ -295,6 +298,7 @@ public class MemberPurchaseOrderController extends Controller {
         }
 
         Boolean flag = memberPurchaseOrderService.save(member_purchase_order_id, request_app_id, request_user_id,
+                parent_user_id, member_purchase_order_number,
                 member_purchase_order_product_amount, member_purchase_order_express_amount,
                 member_purchase_order_discount_amount, member_purchase_order_product_amount,
                 member_purchase_order_total_quantity, member_purchase_order_receiver_name,

@@ -598,18 +598,8 @@ public class WeChatController extends Controller {
         MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService.findByMember_purchase_order_id(member_purchase_order_id);
 
         String user_id = memberPurchaseOrder.getUser_id();
-        //找到该会员的上级
-        User user = userService.findByUser_id(user_id);
-        Member member = memberService.findByMember_id(user.getObject_Id());
-        //会员有上级的情况下才可以生成上级发货单
-        if (StringUtils.isBlank(member.getMember_parent_id()) || member.getMember_parent_id().equals(Constant.PARENT_ID)) {
-            return;
-        }
-        Member parent = memberService.findByMember_id(member.getMember_parent_id());
-        String parent_user_id = parent.getUser_id();
-
+       
         List<MemberPurchaseOrderProductSku> memberPurchaseOrderProductSkuList = memberPurchaseOrderProductSkuService.listByMember_purchase_order_id(member_purchase_order_id);
-        ;
 
         String member_delivery_order_id = Util.getRandomUUID();
         List<MemberDeliveryOrderProductSku> memberDeliveryOrderProductSkuList = new ArrayList<MemberDeliveryOrderProductSku>();
@@ -642,9 +632,10 @@ public class WeChatController extends Controller {
         Integer member_delivery_order_total_quantity = memberPurchaseOrder.getMember_purchase_order_total_quantity();
         String member_delivery_order_flow = MemberDeliveryOrderFlow.WAIT_SEND.getKey();
         Boolean member_delivery_order_is_complete = false;
+        String member_delivery_order_number = memberDeliveryOrderService.generateMember_delivery_order_number();
 
         Boolean flag = memberDeliveryOrderService.save(member_delivery_order_id, memberPurchaseOrder.getApp_id(),
-                member_purchase_order_id, parent_user_id, member_delivery_order_amount,
+                member_purchase_order_id, memberPurchaseOrder.getMember_deliver_user_id(), member_delivery_order_number, member_delivery_order_amount,
                 member_delivery_order_total_quantity, memberPurchaseOrder.getMember_purchase_order_receiver_name(),
                 memberPurchaseOrder.getMember_purchase_order_receiver_mobile(), memberPurchaseOrder.getMember_purchase_order_receiver_province(),
                 memberPurchaseOrder.getMember_purchase_order_receiver_city(), memberPurchaseOrder.getMember_purchase_order_receiver_area(),

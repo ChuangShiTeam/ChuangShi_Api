@@ -1,8 +1,11 @@
 package com.nowui.chuangshi.cache;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.dao.MemberPurchaseOrderDao;
@@ -12,6 +15,8 @@ import com.nowui.chuangshi.util.CacheUtil;
 public class MemberPurchaseOrderCache extends Cache {
 
     public static final String MEMBER_PURCHASE_ORDER_BY_MEMBER_PURCHASE_ORDER_ID_CACHE = "member_purchase_order_by_member_purchase_order_id_cache";
+   
+    public static final String MEMBER_PURCHASE_ORDER_NUMBER_LIST_CACHE = "member_purchase_order_number_list_cache";
 
     private MemberPurchaseOrderDao memberPurchaseOrderDao = new MemberPurchaseOrderDao();
 
@@ -69,8 +74,8 @@ public class MemberPurchaseOrderCache extends Cache {
         return member_purchase_order;
     }
 
-    public Boolean save(String member_purchase_order_id, String app_id, String user_id, BigDecimal member_purchase_order_product_amount, BigDecimal member_purchase_order_express_amount, BigDecimal member_purchase_order_discount_amount, BigDecimal member_purchase_order_amount, Integer member_purchase_order_total_quantity, String member_purchase_order_receiver_name, String member_purchase_order_receiver_mobile, String member_purchase_order_receiver_province, String member_purchase_order_receiver_city, String member_purchase_order_receiver_area, String member_purchase_order_receiver_address, String member_purchase_order_express_pay_way, String member_purchase_order_express_shipper_code, Boolean member_purchase_order_is_warehouse_receive, Boolean member_purchase_order_is_pay, String member_purchase_order_flow, Boolean member_purchase_order_is_complete, String member_purchase_order_message, String system_create_user_id) {
-        return memberPurchaseOrderDao.save(member_purchase_order_id, app_id, user_id, member_purchase_order_product_amount, member_purchase_order_express_amount, member_purchase_order_discount_amount, member_purchase_order_amount, member_purchase_order_total_quantity, member_purchase_order_receiver_name, member_purchase_order_receiver_mobile, member_purchase_order_receiver_province, member_purchase_order_receiver_city, member_purchase_order_receiver_area, member_purchase_order_receiver_address, member_purchase_order_express_pay_way, member_purchase_order_express_shipper_code, member_purchase_order_is_warehouse_receive, member_purchase_order_is_pay, member_purchase_order_flow, member_purchase_order_is_complete, member_purchase_order_message, system_create_user_id);
+    public Boolean save(String member_purchase_order_id, String app_id, String user_id, String member_deliver_user_id, String member_purchase_order_number, BigDecimal member_purchase_order_product_amount, BigDecimal member_purchase_order_express_amount, BigDecimal member_purchase_order_discount_amount, BigDecimal member_purchase_order_amount, Integer member_purchase_order_total_quantity, String member_purchase_order_receiver_name, String member_purchase_order_receiver_mobile, String member_purchase_order_receiver_province, String member_purchase_order_receiver_city, String member_purchase_order_receiver_area, String member_purchase_order_receiver_address, String member_purchase_order_express_pay_way, String member_purchase_order_express_shipper_code, Boolean member_purchase_order_is_warehouse_receive, Boolean member_purchase_order_is_pay, String member_purchase_order_flow, Boolean member_purchase_order_is_complete, String member_purchase_order_message, String system_create_user_id) {
+        return memberPurchaseOrderDao.save(member_purchase_order_id, app_id, user_id, member_deliver_user_id, member_purchase_order_number, member_purchase_order_product_amount, member_purchase_order_express_amount, member_purchase_order_discount_amount, member_purchase_order_amount, member_purchase_order_total_quantity, member_purchase_order_receiver_name, member_purchase_order_receiver_mobile, member_purchase_order_receiver_province, member_purchase_order_receiver_city, member_purchase_order_receiver_area, member_purchase_order_receiver_address, member_purchase_order_express_pay_way, member_purchase_order_express_shipper_code, member_purchase_order_is_warehouse_receive, member_purchase_order_is_pay, member_purchase_order_flow, member_purchase_order_is_complete, member_purchase_order_message, system_create_user_id);
     }
 
     public Boolean updateValidateSystem_version(String member_purchase_order_id, BigDecimal member_purchase_order_product_amount, BigDecimal member_purchase_order_express_amount, BigDecimal member_purchase_order_discount_amount, BigDecimal member_purchase_order_amount, Integer member_purchase_order_total_quantity, String member_purchase_order_receiver_name, String member_purchase_order_receiver_mobile, String member_purchase_order_receiver_province, String member_purchase_order_receiver_city, String member_purchase_order_receiver_area, String member_purchase_order_receiver_address, String member_purchase_order_express_pay_way, String member_purchase_order_express_shipper_code, Boolean member_purchase_order_is_warehouse_receive, Boolean member_purchase_order_is_pay, String member_purchase_order_flow, Boolean member_purchase_order_is_complete, String member_purchase_order_message, String system_update_user_id, Integer system_version) {
@@ -155,6 +160,28 @@ public class MemberPurchaseOrderCache extends Cache {
         }
         
         return result;
+    }
+    
+    /**
+     * 生成进货单号
+     * 
+     * @return
+     */
+    public String generateMember_purchase_order_number() {
+        String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        List<String> member_purchase_order_numberList = CacheUtil.get(MEMBER_PURCHASE_ORDER_NUMBER_LIST_CACHE, date);
+        String member_purchase_order_number = new StringBuilder(date).append((new Random().nextInt(899999) + 10)).toString();
+        if (member_purchase_order_numberList == null) {
+            CacheUtil.removeAll(MEMBER_PURCHASE_ORDER_NUMBER_LIST_CACHE);
+            member_purchase_order_numberList = new ArrayList<String>();
+        } else {
+            while (member_purchase_order_numberList.contains(member_purchase_order_number)) {
+                member_purchase_order_number = new StringBuilder(date).append((new Random().nextInt(899999) + 10)).toString();
+            }
+        }
+        member_purchase_order_numberList.add(member_purchase_order_number);
+        CacheUtil.put(MEMBER_PURCHASE_ORDER_NUMBER_LIST_CACHE, date, member_purchase_order_numberList);
+        return member_purchase_order_number;
     }
 
 }

@@ -12,7 +12,6 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
-import com.nowui.chuangshi.model.MemberDeliveryOrderExpress;
 import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.model.StockOut;
@@ -94,8 +93,8 @@ public class MemberDeliveryOrderService extends Service {
         return memberDeliveryOrderCache.findByMember_delivery_order_id(member_delivery_order_id);
     }
 
-    public Boolean save(String member_delivery_order_id, String app_id, String member_purchase_order_id, String user_id, BigDecimal member_delivery_order_amount, Integer member_delivery_order_total_quantity, String member_delivery_order_receiver_name, String member_delivery_order_receiver_mobile, String member_delivery_order_receiver_province, String member_delivery_order_receiver_city, String member_delivery_order_receiver_area, String member_delivery_order_receiver_address, String member_delivery_order_express_pay_way, String member_delivery_order_express_shipper_code, Boolean member_delivery_order_is_pay, Boolean member_delivery_order_is_warehouse_deliver, String member_delivery_order_flow, Boolean member_delivery_order_is_complete, String system_create_user_id) {
-        return memberDeliveryOrderCache.save(member_delivery_order_id, app_id, member_purchase_order_id, user_id, member_delivery_order_amount, member_delivery_order_total_quantity, member_delivery_order_receiver_name, member_delivery_order_receiver_mobile, member_delivery_order_receiver_province, member_delivery_order_receiver_city, member_delivery_order_receiver_area, member_delivery_order_receiver_address, member_delivery_order_express_pay_way, member_delivery_order_express_shipper_code, member_delivery_order_is_pay, member_delivery_order_is_warehouse_deliver, member_delivery_order_flow, member_delivery_order_is_complete, system_create_user_id);
+    public Boolean save(String member_delivery_order_id, String app_id, String member_purchase_order_id, String user_id, String member_delivery_order_number, BigDecimal member_delivery_order_amount, Integer member_delivery_order_total_quantity, String member_delivery_order_receiver_name, String member_delivery_order_receiver_mobile, String member_delivery_order_receiver_province, String member_delivery_order_receiver_city, String member_delivery_order_receiver_area, String member_delivery_order_receiver_address, String member_delivery_order_express_pay_way, String member_delivery_order_express_shipper_code, Boolean member_delivery_order_is_pay, Boolean member_delivery_order_is_warehouse_deliver, String member_delivery_order_flow, Boolean member_delivery_order_is_complete, String system_create_user_id) {
+        return memberDeliveryOrderCache.save(member_delivery_order_id, app_id, member_purchase_order_id, user_id, member_delivery_order_number, member_delivery_order_amount, member_delivery_order_total_quantity, member_delivery_order_receiver_name, member_delivery_order_receiver_mobile, member_delivery_order_receiver_province, member_delivery_order_receiver_city, member_delivery_order_receiver_area, member_delivery_order_receiver_address, member_delivery_order_express_pay_way, member_delivery_order_express_shipper_code, member_delivery_order_is_pay, member_delivery_order_is_warehouse_deliver, member_delivery_order_flow, member_delivery_order_is_complete, system_create_user_id);
     }
 
     public Boolean updateValidateSystem_version(String member_delivery_order_id, String member_purchase_order_id, BigDecimal member_delivery_order_amount, Integer member_delivery_order_total_quantity, String member_delivery_order_receiver_name, String member_delivery_order_receiver_mobile, String member_delivery_order_receiver_province, String member_delivery_order_receiver_city, String member_delivery_order_receiver_area, String member_delivery_order_receiver_address, String member_delivery_order_express_pay_way, String member_delivery_order_express_shipper_code, Boolean member_delivery_order_is_pay, Boolean member_delivery_order_is_warehouse_deliver, String member_delivery_order_flow, Boolean member_delivery_order_is_complete, String system_update_user_id, Integer system_version) {
@@ -255,7 +254,9 @@ public class MemberDeliveryOrderService extends Service {
         Boolean member_delivery_order_is_complete = false;
         String member_delivery_order_flow = MemberDeliveryOrderFlow.WAIT_WAREHOUSE_SEND.getKey();
         Boolean member_delivery_order_is_warehouse_deliver = true;
+        String member_delivery_order_number = this.generateMember_delivery_order_number();
         Boolean result = memberDeliveryOrderCache.save(member_delivery_order_id, app_id, "", user_id, 
+                member_delivery_order_number,
         		member_delivery_order_amount, member_delivery_order_total_quantity, 
         		member_delivery_order_receiver_name, member_delivery_order_receiver_mobile, 
         		member_delivery_order_receiver_province, member_delivery_order_receiver_city, 
@@ -297,6 +298,10 @@ public class MemberDeliveryOrderService extends Service {
 	        this.updateMember_delivery_order_flowAndMember_delivery_order_is_completeByMember_delivery_order_idValidateSystem_version(member_delivery_order_id, MemberDeliveryOrderFlow.COMPLETE.getKey(), true, memberDeliveryOrder.getSystem_create_user_id(), memberDeliveryOrder.getSystem_version());
   
 	    }
+	}
+	
+	public String generateMember_delivery_order_number() {
+	    return memberDeliveryOrderCache.generateMember_delivery_order_number();
 	}
 
 }

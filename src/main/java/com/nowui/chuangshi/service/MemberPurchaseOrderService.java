@@ -62,8 +62,8 @@ public class MemberPurchaseOrderService extends Service {
         return memberPurchaseOrderCache.findByMember_purchase_order_id(member_purchase_order_id);
     }
 
-    public Boolean save(String member_purchase_order_id, String app_id, String user_id, BigDecimal member_purchase_order_product_amount, BigDecimal member_purchase_order_express_amount, BigDecimal member_purchase_order_discount_amount, BigDecimal member_purchase_order_amount, Integer member_purchase_order_total_quantity, String member_purchase_order_receiver_name, String member_purchase_order_receiver_mobile, String member_purchase_order_receiver_province, String member_purchase_order_receiver_city, String member_purchase_order_receiver_area, String member_purchase_order_receiver_address, String member_purchase_order_express_pay_way, String member_purchase_order_express_shipper_code, Boolean member_purchase_order_is_warehouse_receive, Boolean member_purchase_order_is_pay, String member_purchase_order_flow, Boolean member_purchase_order_is_complete, String member_purchase_order_message, String system_create_user_id) {
-        return memberPurchaseOrderCache.save(member_purchase_order_id, app_id, user_id, member_purchase_order_product_amount, member_purchase_order_express_amount, member_purchase_order_discount_amount, member_purchase_order_amount, member_purchase_order_total_quantity, member_purchase_order_receiver_name, member_purchase_order_receiver_mobile, member_purchase_order_receiver_province, member_purchase_order_receiver_city, member_purchase_order_receiver_area, member_purchase_order_receiver_address, member_purchase_order_express_pay_way, member_purchase_order_express_shipper_code, member_purchase_order_is_warehouse_receive, member_purchase_order_is_pay, member_purchase_order_flow, member_purchase_order_is_complete, member_purchase_order_message, system_create_user_id);
+    public Boolean save(String member_purchase_order_id, String app_id, String user_id, String member_deliver_user_id, String member_purchase_order_number, BigDecimal member_purchase_order_product_amount, BigDecimal member_purchase_order_express_amount, BigDecimal member_purchase_order_discount_amount, BigDecimal member_purchase_order_amount, Integer member_purchase_order_total_quantity, String member_purchase_order_receiver_name, String member_purchase_order_receiver_mobile, String member_purchase_order_receiver_province, String member_purchase_order_receiver_city, String member_purchase_order_receiver_area, String member_purchase_order_receiver_address, String member_purchase_order_express_pay_way, String member_purchase_order_express_shipper_code, Boolean member_purchase_order_is_warehouse_receive, Boolean member_purchase_order_is_pay, String member_purchase_order_flow, Boolean member_purchase_order_is_complete, String member_purchase_order_message, String system_create_user_id) {
+        return memberPurchaseOrderCache.save(member_purchase_order_id, app_id, user_id, member_deliver_user_id, member_purchase_order_number, member_purchase_order_product_amount, member_purchase_order_express_amount, member_purchase_order_discount_amount, member_purchase_order_amount, member_purchase_order_total_quantity, member_purchase_order_receiver_name, member_purchase_order_receiver_mobile, member_purchase_order_receiver_province, member_purchase_order_receiver_city, member_purchase_order_receiver_area, member_purchase_order_receiver_address, member_purchase_order_express_pay_way, member_purchase_order_express_shipper_code, member_purchase_order_is_warehouse_receive, member_purchase_order_is_pay, member_purchase_order_flow, member_purchase_order_is_complete, member_purchase_order_message, system_create_user_id);
     }
 
     public Boolean updateValidateSystem_version(String member_purchase_order_id, BigDecimal member_purchase_order_product_amount, BigDecimal member_purchase_order_express_amount, BigDecimal member_purchase_order_discount_amount, BigDecimal member_purchase_order_amount, Integer member_purchase_order_total_quantity, String member_purchase_order_receiver_name, String member_purchase_order_receiver_mobile, String member_purchase_order_receiver_province, String member_purchase_order_receiver_city, String member_purchase_order_receiver_area, String member_purchase_order_receiver_address, String member_purchase_order_express_pay_way, String member_purchase_order_express_shipper_code, Boolean member_purchase_order_is_warehouse_receive, Boolean member_purchase_order_is_pay, String member_purchase_order_flow, Boolean member_purchase_order_is_complete, String member_purchase_order_message, String system_update_user_id, Integer system_version) {
@@ -118,8 +118,8 @@ public class MemberPurchaseOrderService extends Service {
             throw new RuntimeException("找不到进货单");
         }
         if (MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey().equals(memberPurchaseOrder.getMember_purchase_order_flow())) {
-            Boolean flag = this.updateMember_purchase_order_flowByMember_purchase_order_idAndSystem_version(member_purchase_order_id, MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey(), memberPurchaseOrder.getSystem_create_user_id(), memberPurchaseOrder.getSystem_version());
-            if (flag) {
+            Boolean flag = this.updateMember_purchase_order_flowAndMember_purchase_order_is_completeByMember_purchase_order_idValidateSystem_version(member_purchase_order_id, MemberPurchaseOrderFlow.COMPLETE.getKey(), true, memberPurchaseOrder.getSystem_create_user_id(), memberPurchaseOrder.getSystem_version());
+            if (flag && memberPurchaseOrder.getMember_purchase_order_is_warehouse_receive()) { //仓库代收才可以入库
                 //会员入库
                 List<MemberPurchaseOrderProductSku> memberPurchaseOrderProductSkuList = memberPurchaseOrderProductSkuService.listByMember_purchase_order_id(member_purchase_order_id);
                 List<StockInProductSku> stockInProductSkuList = new ArrayList<StockInProductSku>();
@@ -166,6 +166,10 @@ public class MemberPurchaseOrderService extends Service {
     
     public Boolean expressSave(String member_purchase_order_id, String express_id, String system_create_user_id) {
         return memberPurchaseOrderExpressService.save(member_purchase_order_id, express_id, system_create_user_id);
+    }
+    
+    public String generateMember_purchase_order_number() {
+        return memberPurchaseOrderCache.generateMember_purchase_order_number();
     }
 
 }

@@ -1,8 +1,11 @@
 package com.nowui.chuangshi.cache;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.dao.MemberDeliveryOrderDao;
@@ -12,6 +15,8 @@ import com.nowui.chuangshi.util.CacheUtil;
 public class MemberDeliveryOrderCache extends Cache {
 
     public static final String MEMBER_DELIVERY_ORDER_BY_MEMBER_DELIVERY_ORDER_ID_CACHE = "member_delivery_order_by_member_delivery_order_id_cache";
+    
+    public static final String MEMBER_DELIVERY_ORDER_NUMBER_LIST_CACHE = "member_delivery_order_number_list_cache";
 
     private MemberDeliveryOrderDao memberDeliveryOrderDao = new MemberDeliveryOrderDao();
 
@@ -97,8 +102,8 @@ public class MemberDeliveryOrderCache extends Cache {
         return member_delivery_order;
     }
 
-    public Boolean save(String member_delivery_order_id, String app_id, String member_purchase_order_id, String user_id, BigDecimal member_delivery_order_amount, Integer member_delivery_order_total_quantity, String member_delivery_order_receiver_name, String member_delivery_order_receiver_mobile, String member_delivery_order_receiver_province, String member_delivery_order_receiver_city, String member_delivery_order_receiver_area, String member_delivery_order_receiver_address, String member_delivery_order_express_pay_way, String member_delivery_order_express_shipper_code, Boolean member_delivery_order_is_pay, Boolean member_delivery_order_is_warehouse_deliver, String member_delivery_order_flow, Boolean member_delivery_order_is_complete, String system_create_user_id) {
-        return memberDeliveryOrderDao.save(member_delivery_order_id, app_id, member_purchase_order_id, user_id, member_delivery_order_amount, member_delivery_order_total_quantity, member_delivery_order_receiver_name, member_delivery_order_receiver_mobile, member_delivery_order_receiver_province, member_delivery_order_receiver_city, member_delivery_order_receiver_area, member_delivery_order_receiver_address, member_delivery_order_express_pay_way, member_delivery_order_express_shipper_code, member_delivery_order_is_pay, member_delivery_order_is_warehouse_deliver, member_delivery_order_flow, member_delivery_order_is_complete, system_create_user_id);
+    public Boolean save(String member_delivery_order_id, String app_id, String member_purchase_order_id, String user_id, String member_delivery_order_number, BigDecimal member_delivery_order_amount, Integer member_delivery_order_total_quantity, String member_delivery_order_receiver_name, String member_delivery_order_receiver_mobile, String member_delivery_order_receiver_province, String member_delivery_order_receiver_city, String member_delivery_order_receiver_area, String member_delivery_order_receiver_address, String member_delivery_order_express_pay_way, String member_delivery_order_express_shipper_code, Boolean member_delivery_order_is_pay, Boolean member_delivery_order_is_warehouse_deliver, String member_delivery_order_flow, Boolean member_delivery_order_is_complete, String system_create_user_id) {
+        return memberDeliveryOrderDao.save(member_delivery_order_id, app_id, member_purchase_order_id, user_id, member_delivery_order_number, member_delivery_order_amount, member_delivery_order_total_quantity, member_delivery_order_receiver_name, member_delivery_order_receiver_mobile, member_delivery_order_receiver_province, member_delivery_order_receiver_city, member_delivery_order_receiver_area, member_delivery_order_receiver_address, member_delivery_order_express_pay_way, member_delivery_order_express_shipper_code, member_delivery_order_is_pay, member_delivery_order_is_warehouse_deliver, member_delivery_order_flow, member_delivery_order_is_complete, system_create_user_id);
     }
 
     public Boolean updateValidateSystem_version(String member_delivery_order_id, String member_purchase_order_id, BigDecimal member_delivery_order_amount, Integer member_delivery_order_total_quantity, String member_delivery_order_receiver_name, String member_delivery_order_receiver_mobile, String member_delivery_order_receiver_province, String member_delivery_order_receiver_city, String member_delivery_order_receiver_area, String member_delivery_order_receiver_address, String member_delivery_order_express_pay_way, String member_delivery_order_express_shipper_code, Boolean member_delivery_order_is_pay, Boolean member_delivery_order_is_warehouse_deliver, String member_delivery_order_flow, Boolean member_delivery_order_is_complete, String system_update_user_id, Integer system_version) {
@@ -187,6 +192,37 @@ public class MemberDeliveryOrderCache extends Cache {
         }
 
         return result;
+    }
+    
+    /**
+     * 生成发货单号
+     * 
+     * @return
+     */
+    public String generateMember_delivery_order_number() {
+        String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        List<String> member_delivery_order_numberList = CacheUtil.get(MEMBER_DELIVERY_ORDER_NUMBER_LIST_CACHE, date);
+        String member_delivery_order_number = new StringBuilder(date).append((new Random().nextInt(899999) + 10)).toString();
+        if (member_delivery_order_numberList == null) {
+            CacheUtil.removeAll(MEMBER_DELIVERY_ORDER_NUMBER_LIST_CACHE);
+            member_delivery_order_numberList = new ArrayList<String>();
+        } else {
+            while (member_delivery_order_numberList.contains(member_delivery_order_number)) {
+                member_delivery_order_number = new StringBuilder(date).append((new Random().nextInt(899999) + 10)).toString();
+            }
+        }
+        member_delivery_order_numberList.add(member_delivery_order_number);
+        CacheUtil.put(MEMBER_DELIVERY_ORDER_NUMBER_LIST_CACHE, date, member_delivery_order_numberList);
+        return member_delivery_order_number;
+    }
+    
+    public static void main(String args[]) {
+        String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        int j = 20;
+        for (int i = 0; i < j; i++) {
+            System.out.println(new StringBuilder(date).append((new Random().nextInt(899999) + 10)).toString());
+        }
+        
     }
 
 }
