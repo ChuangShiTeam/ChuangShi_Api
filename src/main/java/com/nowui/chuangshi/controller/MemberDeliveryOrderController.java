@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.nowui.chuangshi.service.*;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
@@ -25,6 +24,18 @@ import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.model.Warehouse;
+import com.nowui.chuangshi.service.ExpressService;
+import com.nowui.chuangshi.service.FileService;
+import com.nowui.chuangshi.service.MemberDeliveryOrderExpressService;
+import com.nowui.chuangshi.service.MemberDeliveryOrderProductSkuService;
+import com.nowui.chuangshi.service.MemberDeliveryOrderService;
+import com.nowui.chuangshi.service.MemberPurchaseOrderExpressService;
+import com.nowui.chuangshi.service.MemberPurchaseOrderProductSkuService;
+import com.nowui.chuangshi.service.MemberPurchaseOrderService;
+import com.nowui.chuangshi.service.ProductService;
+import com.nowui.chuangshi.service.ProductSkuService;
+import com.nowui.chuangshi.service.StockService;
+import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.MemberDeliveryOrderFlow;
 import com.nowui.chuangshi.type.MemberPurchaseOrderFlow;
 import com.nowui.chuangshi.util.Util;
@@ -817,9 +828,10 @@ public class MemberDeliveryOrderController extends Controller {
         MemberDeliveryOrder model = getModel(MemberDeliveryOrder.class);
         String member_delivery_order_id = Util.getRandomUUID();
         String request_user_id = getRequest_user_id();
+        String member_delivery_order_number = memberDeliveryOrderService.generateMember_delivery_order_number();
 
         Boolean result = memberDeliveryOrderService.save(member_delivery_order_id, model.getApp_id(),
-                model.getMember_purchase_order_id(), model.getUser_id(), model.getMember_delivery_order_amount(),
+                model.getMember_purchase_order_id(), model.getUser_id(), member_delivery_order_number, model.getMember_delivery_order_amount(),
                 model.getMember_delivery_order_total_quantity(), model.getMember_delivery_order_receiver_name(),
                 model.getMember_delivery_order_receiver_mobile(), model.getMember_delivery_order_receiver_province(),
                 model.getMember_delivery_order_receiver_city(), model.getMember_delivery_order_receiver_area(),

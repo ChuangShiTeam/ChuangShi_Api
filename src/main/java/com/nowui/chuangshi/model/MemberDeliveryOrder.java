@@ -18,6 +18,9 @@ public class MemberDeliveryOrder extends Model<MemberDeliveryOrder> {
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户id")
     public static final String USER_ID = "user_id";
+    
+    @Column(type = ColumnType.VARCHAR, length = 15, comment = "发货单号")
+    public static final String MEMBER_DELIVERY_ORDER_NUMBER = "member_delivery_order_number";
 
     @Column(type = ColumnType.DECIMAL, length = 0, comment = "发货总金额")
     public static final String MEMBER_DELIVERY_ORDER_AMOUNT = "member_delivery_order_amount";
@@ -99,6 +102,14 @@ public class MemberDeliveryOrder extends Model<MemberDeliveryOrder> {
 
     public void setUser_id(String user_id) {
         set(USER_ID, user_id);
+    }
+    
+    public String getMember_delivery_order_number() {
+        return getStr(MEMBER_DELIVERY_ORDER_NUMBER);
+    }
+    
+    public void setMember_delivery_order_number(String member_delivery_order_number) {
+        set(MEMBER_DELIVERY_ORDER_NUMBER, member_delivery_order_number);
     }
 
     public BigDecimal getMember_delivery_order_amount() {

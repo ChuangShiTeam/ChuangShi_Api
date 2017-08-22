@@ -15,6 +15,12 @@ public class MemberPurchaseOrder extends Model<MemberPurchaseOrder> {
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户id")
     public static final String USER_ID = "user_id";
+    
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "发货用户id")
+    public static final String MEMBER_DELIVER_USER_ID = "member_deliver_user_id";
+    
+    @Column(type = ColumnType.VARCHAR, length = 15, comment = "进货单号")
+    public static final String MEMBER_PURCHASE_ORDER_NUMBER = "member_purchase_order_number";
 
     @Column(type = ColumnType.DECIMAL, length = 0, comment = "商品总金额")
     public static final String MEMBER_PURCHASE_ORDER_PRODUCT_AMOUNT = "member_purchase_order_product_amount";
@@ -96,6 +102,22 @@ public class MemberPurchaseOrder extends Model<MemberPurchaseOrder> {
 
     public void setUser_id(String user_id) {
         set(USER_ID, user_id);
+    }
+    
+    public String getMember_deliver_user_id() {
+        return getStr(MEMBER_DELIVER_USER_ID);
+    }
+    
+    public void setMember_deliver_user_id(String member_deliver_user_id) {
+        set(MEMBER_DELIVER_USER_ID, member_deliver_user_id);
+    }
+    
+    public String getMember_purchase_order_number() {
+        return getStr(MEMBER_PURCHASE_ORDER_NUMBER);
+    }
+    
+    public void setMember_purchase_order_number(String member_purchase_order_number) {
+        set(MEMBER_PURCHASE_ORDER_NUMBER, member_purchase_order_number);
     }
 
     public BigDecimal getMember_purchase_order_product_amount() {

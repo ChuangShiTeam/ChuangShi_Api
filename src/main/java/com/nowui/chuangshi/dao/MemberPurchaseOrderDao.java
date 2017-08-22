@@ -101,11 +101,13 @@ public class MemberPurchaseOrderDao extends Dao {
         }
     }
 
-    public Boolean save(String member_purchase_order_id, String app_id, String user_id, BigDecimal member_purchase_order_product_amount, BigDecimal member_purchase_order_express_amount, BigDecimal member_purchase_order_discount_amount, BigDecimal member_purchase_order_amount, Integer member_purchase_order_total_quantity, String member_purchase_order_receiver_name, String member_purchase_order_receiver_mobile, String member_purchase_order_receiver_province, String member_purchase_order_receiver_city, String member_purchase_order_receiver_area, String member_purchase_order_receiver_address, String member_purchase_order_express_pay_way, String member_purchase_order_express_shipper_code, Boolean member_purchase_order_is_warehouse_receive, Boolean member_purchase_order_is_pay, String member_purchase_order_flow, Boolean member_purchase_order_is_complete, String member_purchase_order_message, String system_create_user_id) {
+    public Boolean save(String member_purchase_order_id, String app_id, String user_id, String member_deliver_user_id, String member_purchase_order_number, BigDecimal member_purchase_order_product_amount, BigDecimal member_purchase_order_express_amount, BigDecimal member_purchase_order_discount_amount, BigDecimal member_purchase_order_amount, Integer member_purchase_order_total_quantity, String member_purchase_order_receiver_name, String member_purchase_order_receiver_mobile, String member_purchase_order_receiver_province, String member_purchase_order_receiver_city, String member_purchase_order_receiver_area, String member_purchase_order_receiver_address, String member_purchase_order_express_pay_way, String member_purchase_order_express_shipper_code, Boolean member_purchase_order_is_warehouse_receive, Boolean member_purchase_order_is_pay, String member_purchase_order_flow, Boolean member_purchase_order_is_complete, String member_purchase_order_message, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_ID, member_purchase_order_id);
         sqlMap.put(MemberPurchaseOrder.APP_ID, app_id);
         sqlMap.put(MemberPurchaseOrder.USER_ID, user_id);
+        sqlMap.put(MemberPurchaseOrder.MEMBER_DELIVER_USER_ID, member_deliver_user_id);
+        sqlMap.put(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_NUMBER, member_purchase_order_number);
         sqlMap.put(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_PRODUCT_AMOUNT, member_purchase_order_product_amount);
         sqlMap.put(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_EXPRESS_AMOUNT, member_purchase_order_express_amount);
         sqlMap.put(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_DISCOUNT_AMOUNT, member_purchase_order_discount_amount);
