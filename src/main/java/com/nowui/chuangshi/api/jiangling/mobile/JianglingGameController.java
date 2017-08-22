@@ -22,8 +22,13 @@ public class JianglingGameController extends Controller {
     public void list() {
         String request_app_id = getRequest_app_id();
 
+        List<JianglingGame> resultList = new ArrayList<JianglingGame>();
         List<JianglingGame> jianglingGameList = JianglingGameService.me.list(Cnd.where(JianglingGame.APP_ID, request_app_id).desc(JianglingGame.SYSTEM_CREATE_TIME));
         List<JianglingGameMember> jianglingGameMemberList = JianglingGameMemberService.me.list(Cnd.where("1", 1));
+
+        for (JianglingGameMember jianglingGameMember : jianglingGameMemberList) {
+            jianglingGameMember.keep(JianglingGameMember.GAME_ID, JianglingGameMember.GAME_MEMBER_NAME, JianglingGameMember.GAME_MEMBER_AVATAR, JianglingGameMember.GAME_MEMBER_SCORE, JianglingGameMember.GAME_MEMBER_RANK);
+        }
 
         for (JianglingGame jianglingGame : jianglingGameList) {
             List<JianglingGameMember> memberList = new ArrayList<JianglingGameMember>();
@@ -35,11 +40,13 @@ public class JianglingGameController extends Controller {
             }
 
             jianglingGame.put("member_list", memberList);
+
+            resultList.add(jianglingGame);
         }
 
         validateResponse(JianglingGame.SYSTEM_CREATE_TIME, "member_list");
 
-        renderSuccessJson();
+        renderSuccessJson(resultList);
     }
 
     @ActionKey("/mobile/jiangling/game/find")

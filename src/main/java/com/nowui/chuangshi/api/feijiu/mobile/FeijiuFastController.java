@@ -91,11 +91,11 @@ public class FeijiuFastController extends Controller {
         String captcha_type = CaptchaType.REGISTER.getKey();
         String captcha_mobile = jsonObject.getString(Captcha.CAPTCHA_MOBILE);
         String captcha_ip_address = getIp_address();
-        String access_id = "LTAIENw7el5fDsZv";
-        String access_key = "XowMkKu4zjxGBIpPJqDXXK7wfWO7i9";
+        String access_id = "LTAIhCq5kicoklR1";
+        String access_key = "Chr002BuHEQozE7cleDSJf7IofBQcY";
         String endpoint = "https://1202946.mns.cn-hangzhou.aliyuncs.com/";
-        String sign_name = "创石";
-        String template_code = "SMS_86675110";
+        String sign_name = "久飞";
+        String template_code = "SMS_87765001";
 
         CaptchaService.me.send(request_app_id, captcha_type, captcha_mobile, captcha_ip_address, 1, access_id, access_key, endpoint, sign_name, template_code);
 
