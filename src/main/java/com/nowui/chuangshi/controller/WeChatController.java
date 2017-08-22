@@ -165,7 +165,7 @@ public class WeChatController extends Controller {
 
             // System.out.println("url : " + url);
 
-            redirect(url + "?&open_id=" + wechat_open_id + "&token=" + token);
+            redirect(url + "?&open_id=" + wechat_open_id + "&token=" + token + "&user_name=" + user_name + "&user_avatar=" + user_avatar);
         }
     }
 
