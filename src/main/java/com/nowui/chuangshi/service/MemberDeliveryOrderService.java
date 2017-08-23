@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.nowui.chuangshi.cache.MemberDeliveryOrderCache;
-import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
@@ -17,6 +16,8 @@ import com.nowui.chuangshi.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.model.StockOut;
 import com.nowui.chuangshi.model.StockOutProductSku;
 import com.nowui.chuangshi.model.User;
+import com.nowui.chuangshi.model.Warehouse;
+import com.nowui.chuangshi.type.ExpressBelong;
 import com.nowui.chuangshi.type.ExpressFlow;
 import com.nowui.chuangshi.type.MemberDeliveryOrderFlow;
 import com.nowui.chuangshi.type.MemberPurchaseOrderFlow;
@@ -48,6 +49,8 @@ public class MemberDeliveryOrderService extends Service {
     private MemberService memberService = new MemberService();
     
     private ProductSkuPriceService productSkuPriceService = new ProductSkuPriceService();
+    
+    private WarehouseService warehouseService = new WarehouseService();
 
     public Integer countByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name(String app_id, String user_name, String member_delivery_order_receiver_name) {
         return memberDeliveryOrderCache.countByApp_idOrLikeUser_nameOrLikeMember_delivery_order_receiver_name(app_id, user_name, member_delivery_order_receiver_name);
@@ -131,7 +134,7 @@ public class MemberDeliveryOrderService extends Service {
 //        }
         
         //保存快递单信息
-        Boolean result = expressService.save(express_id, memberDeliveryOrder.getApp_id(), express_shipper_code,
+        Boolean result = expressService.save(express_id, memberDeliveryOrder.getApp_id(), ExpressBelong.MEMBER_DELIVERY_ORDER.getKey(), express_shipper_code,
                 express_no, "", memberDeliveryOrder.getMember_delivery_order_receiver_name(), "", memberDeliveryOrder.getMember_delivery_order_receiver_mobile(), "",
                 memberDeliveryOrder.getMember_delivery_order_receiver_province(), memberDeliveryOrder.getMember_delivery_order_receiver_city(), memberDeliveryOrder.getMember_delivery_order_receiver_area(),
                 memberDeliveryOrder.getMember_delivery_order_receiver_address(), "", "", "", "", "", "", "", "", "", express_cost,
@@ -183,20 +186,28 @@ public class MemberDeliveryOrderService extends Service {
         Boolean result = stockOutService.save(member_delivery_order.getApp_id(), warehouse_id, member_delivery_order_id, member_delivery_order.getUser_id(), StockType.MEMBER.getKey(), stockOutProductSkuList, request_user_id);
 
         if (result) {
-            // 更新发货单流程为待收货
-            this.updateMember_delivery_order_flowByMember_delivery_order_idValidateSystem_version(member_delivery_order_id, MemberDeliveryOrderFlow.WAIT_RECEIVE.getKey(), request_user_id, member_delivery_order.getSystem_version());
             Boolean is_direct_deliver = false;
             //根据进货单是否仓库代收来判断是否直接则增减库存
             if (StringUtils.isNotBlank(member_delivery_order.getMember_purchase_order_id())) {
                 MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService.findByMember_purchase_order_id(member_delivery_order.getMember_purchase_order_id());
                 if (memberPurchaseOrder.getMember_purchase_order_is_warehouse_receive()) {
                     is_direct_deliver = true;
+                    //更新进货单流程为完成
+                    memberPurchaseOrderService.updateFinish(memberPurchaseOrder.getMember_purchase_order_id(), warehouse_id);
+                } else { //非仓库代收
+                    // 更新进货单流程为待收货
+                    memberPurchaseOrderService.updateMember_purchase_order_flowByMember_purchase_order_idAndSystem_version(memberPurchaseOrder.getMember_purchase_order_id(), MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey(), request_user_id, memberPurchaseOrder.getSystem_version());
+
                 }
-                // 更新进货单流程为待收货
-                memberPurchaseOrderService.updateMember_purchase_order_flowByMember_purchase_order_idAndSystem_version(memberPurchaseOrder.getMember_purchase_order_id(), MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey(), request_user_id, memberPurchaseOrder.getSystem_version());
             }
             
-            if (!is_direct_deliver) {
+            if (is_direct_deliver) {
+                //更新发货单流程为完成
+                this.updateMember_delivery_order_flowAndMember_delivery_order_is_completeByMember_delivery_order_idValidateSystem_version(member_delivery_order_id, MemberDeliveryOrderFlow.COMPLETE.getKey(), true, request_user_id, member_delivery_order.getSystem_version());
+            } else {
+                //不是直接发货更新发货单流程为待收货
+                this.updateMember_delivery_order_flowByMember_delivery_order_idValidateSystem_version(member_delivery_order_id, MemberDeliveryOrderFlow.WAIT_RECEIVE.getKey(), request_user_id, member_delivery_order.getSystem_version());
+
                 //不是直接发货，需填写快递单, 订阅快递
                 List<Express> express_list = memberDeliveryOrderExpressService.listByMember_delivery_order_id(member_delivery_order_id);
                 if (express_list == null || express_list.size() == 0) {
@@ -204,9 +215,9 @@ public class MemberDeliveryOrderService extends Service {
                 }
                 //快递订阅
                 for (Express express : express_list) {
-                    expressService.subscription(express.getExpress_id(), Constant.EXPRESS_ORDER_CODE_MEMBER_DELIVERY_ORDER, express.getExpress_shipper_code(), express.getExpress_no());
-                }
-            } 
+                    expressService.subscription(express.getExpress_id(), express.getExpress_shipper_code(), express.getExpress_no());
+                } 
+            }
         }
         
         return result;
@@ -289,11 +300,24 @@ public class MemberDeliveryOrderService extends Service {
 	    //只有当发货单处于待收货状态时才可以完成
 	    if (MemberDeliveryOrderFlow.WAIT_RECEIVE.getKey().equals(memberDeliveryOrder.getMember_delivery_order_flow())) {
 	        if (StringUtils.isNotBlank(memberDeliveryOrder.getMember_purchase_order_id())) {
-	            List<StockOut> stockOutList = stockOutService.listByDelivery_order_id(member_delivery_order_id);
-	            if (stockOutList != null && stockOutList.size() > 0) {
-	                String warehouse_id = stockOutList.get(0).getWarehouse_id();
-	                memberPurchaseOrderService.updateFinish(memberDeliveryOrder.getMember_purchase_order_id(), warehouse_id);
+	            String warehouse_id = "";   
+	            //仓库代发找到对应的发货仓库
+	            if (memberDeliveryOrder.getMember_delivery_order_is_warehouse_deliver()) {
+	                List<StockOut> stockOutList = stockOutService.listByDelivery_order_id(member_delivery_order_id);
+	                if (stockOutList != null && stockOutList.size() > 0) {
+	                    warehouse_id = stockOutList.get(0).getWarehouse_id();
+	                }
+	            } 
+	            //默认仓库
+	            if (StringUtils.isBlank(warehouse_id)) {
+	                  List<Warehouse> warehouse_list = warehouseService.listByApp_id(memberDeliveryOrder.getApp_id());
+	                  if (warehouse_list != null && warehouse_list.size() > 0) {
+	                      Warehouse warehouse = warehouse_list.get(0);
+	                      warehouse_id = warehouse.getWarehouse_id();
+	                  }
 	            }
+	            memberPurchaseOrderService.updateFinish(memberDeliveryOrder.getMember_purchase_order_id(), warehouse_id);
+
 	        }
 	        this.updateMember_delivery_order_flowAndMember_delivery_order_is_completeByMember_delivery_order_idValidateSystem_version(member_delivery_order_id, MemberDeliveryOrderFlow.COMPLETE.getKey(), true, memberDeliveryOrder.getSystem_create_user_id(), memberDeliveryOrder.getSystem_version());
   

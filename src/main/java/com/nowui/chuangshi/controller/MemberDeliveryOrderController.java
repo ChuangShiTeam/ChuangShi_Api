@@ -29,7 +29,6 @@ import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderExpressService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderProductSkuService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderService;
-import com.nowui.chuangshi.service.MemberPurchaseOrderExpressService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderProductSkuService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderService;
 import com.nowui.chuangshi.service.ProductService;
@@ -51,7 +50,6 @@ public class MemberDeliveryOrderController extends Controller {
     private final FileService fileService = new FileService();
     private final StockService stockService = new StockService();
     private final MemberPurchaseOrderService memberPurchaseOrderService = new MemberPurchaseOrderService();
-    private final MemberPurchaseOrderExpressService memberPurchaseOrderExpressService = new MemberPurchaseOrderExpressService();
     private final MemberPurchaseOrderProductSkuService memberPurchaseOrderProductSkuService = new MemberPurchaseOrderProductSkuService();
     private final ExpressService expressService = new ExpressService();
 
@@ -423,7 +421,7 @@ public class MemberDeliveryOrderController extends Controller {
             }
 
 
-            expressService.subscription(express_id, Constant.EXPRESS_ORDER_CODE_MEMBER_DELIVERY_ORDER, express_shipper_code, express_no);
+            expressService.subscription(express_id, express_shipper_code, express_no);
         }
 
         renderSuccessJson(result);

@@ -28,7 +28,6 @@ import com.nowui.chuangshi.model.ProductSkuPrice;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberAddressService;
-import com.nowui.chuangshi.service.MemberLevelService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderExpressService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderProductSkuService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderService;
@@ -47,7 +46,6 @@ public class MemberPurchaseOrderController extends Controller {
     private final MemberPurchaseOrderExpressService memberPurchaseOrderExpressService = new MemberPurchaseOrderExpressService();
     private final UserService userService = new UserService();
     private final MemberService memberService = new MemberService();
-    private final MemberLevelService memberLevelService = new MemberLevelService();
     private final MemberAddressService memberAddressService = new MemberAddressService();
     private final ProductService productService = new ProductService();
     private final ProductSkuService productSkuService = new ProductSkuService();

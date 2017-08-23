@@ -117,7 +117,8 @@ public class MemberPurchaseOrderService extends Service {
         if (memberPurchaseOrder == null) {
             throw new RuntimeException("找不到进货单");
         }
-        if (MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey().equals(memberPurchaseOrder.getMember_purchase_order_flow())) {
+        if (MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey().equals(memberPurchaseOrder.getMember_purchase_order_flow())
+                || MemberPurchaseOrderFlow.WAIT_SEND.getKey().equals(memberPurchaseOrder.getMember_purchase_order_flow())) {
             Boolean flag = this.updateMember_purchase_order_flowAndMember_purchase_order_is_completeByMember_purchase_order_idValidateSystem_version(member_purchase_order_id, MemberPurchaseOrderFlow.COMPLETE.getKey(), true, memberPurchaseOrder.getSystem_create_user_id(), memberPurchaseOrder.getSystem_version());
             if (flag && memberPurchaseOrder.getMember_purchase_order_is_warehouse_receive()) { //仓库代收才可以入库
                 //会员入库

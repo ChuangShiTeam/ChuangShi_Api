@@ -16,6 +16,7 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Trade;
+import com.nowui.chuangshi.type.ExpressBelong;
 import com.nowui.chuangshi.type.ExpressFlow;
 import com.nowui.chuangshi.type.TradeFlow;
 import com.nowui.chuangshi.util.Util;
@@ -228,7 +229,7 @@ public class TradeService extends Service {
         }
         //保存快递单信息
         String express_id = Util.getRandomUUID();
-        Boolean result = expressService.save(express_id, trade.getApp_id(), express_shipper_code,
+        Boolean result = expressService.save(express_id, trade.getApp_id(), ExpressBelong.TRADE.getKey(), express_shipper_code,
                 express_no, "", trade.getTrade_receiver_name(), "", trade.getTrade_receiver_mobile(), "",
                 trade.getTrade_receiver_province(), trade.getTrade_receiver_city(), trade.getTrade_receiver_area(),
                 trade.getTrade_receiver_address(), "", "", "", "", "", "", "", "", "", express_cost,

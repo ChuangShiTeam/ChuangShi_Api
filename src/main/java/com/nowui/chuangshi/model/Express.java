@@ -13,6 +13,9 @@ public class Express extends Model<Express> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用id")
     public static final String APP_ID = "app_id";
 
+    @Column(type = ColumnType.VARCHAR, length = 25, comment = "快递所属")
+    public static final String EXPRESS_BELONG = "express_belong";
+    
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "快递公司编码")
     public static final String EXPRESS_SHIPPER_CODE = "express_shipper_code";
 
@@ -114,10 +117,18 @@ public class Express extends Model<Express> {
         set(APP_ID, app_id);
     }
 
+    public String getExpress_belong() {
+        return getStr(EXPRESS_BELONG);
+    }
+
+    public void setExpress_belong(String express_belong) {
+        set(EXPRESS_BELONG, express_belong);
+    }
+    
     public String getExpress_shipper_code() {
         return getStr(EXPRESS_SHIPPER_CODE);
     }
-
+    
     public void setExpress_shipper_code(String express_shipper_code) {
         set(EXPRESS_SHIPPER_CODE, express_shipper_code);
     }
@@ -129,7 +140,7 @@ public class Express extends Model<Express> {
     public void setExpress_no(String express_no) {
         set(EXPRESS_NO, express_no);
     }
-
+    
     public String getExpress_receiver_company() {
         return getStr(EXPRESS_RECEIVER_COMPANY);
     }

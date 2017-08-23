@@ -7,7 +7,6 @@ import java.util.Map;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.StockIn;
 import com.nowui.chuangshi.model.StockOut;
 import com.nowui.chuangshi.model.StockOutProductSku;
 import com.nowui.chuangshi.service.StockOutProductSkuService;
