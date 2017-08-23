@@ -56,7 +56,17 @@ public class GlobalActionInterceptor implements Interceptor {
                 request_app_id = "";
             }
 
-            if (!ValidateUtil.isNullOrEmpty(http_token)) {
+            if (ValidateUtil.isNullOrEmpty(http_platform)) {
+                http_platform = "";
+            }
+
+            if (ValidateUtil.isNullOrEmpty(http_version)) {
+                http_version = "";
+            }
+
+            if (ValidateUtil.isNullOrEmpty(http_token)) {
+                http_token = "";
+            } else {
                 JSONObject jsonObject = JSONObject.parseObject(AesUtil.aesDecrypt(http_token, Config.private_key));
                 request_user_id = jsonObject.getString(User.USER_ID);
             }
