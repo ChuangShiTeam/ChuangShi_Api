@@ -187,9 +187,11 @@ public class MemberController extends Controller {
 
         if (ValidateUtil.isNullOrEmpty(member.getMember_level_id())) {
             result.put(MemberLevel.MEMBER_LEVEL_NAME, "");
+            result.put(MemberLevel.MEMBER_LEVEL_SORT, 999);
         } else {
             MemberLevel memberLevel = memberLevelService.findByMember_level_id(member.getMember_level_id());
             result.put(MemberLevel.MEMBER_LEVEL_NAME, memberLevel.getMember_level_name());
+            result.put(MemberLevel.MEMBER_LEVEL_SORT, memberLevel.getMember_level_sort());
         }
 
         // 返回授权保证金
