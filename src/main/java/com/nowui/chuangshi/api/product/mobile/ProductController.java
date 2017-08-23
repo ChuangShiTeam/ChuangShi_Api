@@ -77,7 +77,7 @@ public class ProductController extends Controller {
             member_level_value = memberLevel.getMember_level_value();
         }
 
-        Integer count = MemberPurchaseOrderService.me.count(Cnd.where(MemberPurchaseOrder.USER_ID, request_user_id).and(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_PAY, true));
+        Integer count = MemberPurchaseOrderService.me.count(Cnd.where(MemberPurchaseOrder.USER_ID, request_user_id).and(MemberPurchaseOrder.MEMBER_LEVEL_ID, member_level_id).and(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_PAY, true));
 
         result.put("is_first_purchase", count == 0);
 
