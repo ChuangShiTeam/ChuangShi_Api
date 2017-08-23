@@ -183,7 +183,6 @@ public class GlobalActionInterceptor implements Interceptor {
                 System.out.println("response: " + http.getHttp_response());
                 System.out.println("----------------------------------------------------------------------------------------------------------------");
 
-
                 ThreadPool.me.execute(new HttpRunnable(http));
             }
         }
