@@ -7,6 +7,8 @@ import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.plugin.activerecord.DbKit;
+import com.nowui.chuangshi.common.runnable.HttpRunnable;
+import com.nowui.chuangshi.common.runnable.ThreadPool;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
@@ -49,6 +51,10 @@ public class GlobalActionInterceptor implements Interceptor {
             http_platform = controller.getRequest().getHeader(Constant.PLATFORM);
             http_version = controller.getRequest().getHeader(Constant.VERSION);
             http_token = controller.getRequest().getHeader(Constant.TOKEN);
+
+            if (ValidateUtil.isNullOrEmpty(request_app_id)) {
+                request_app_id = "";
+            }
 
             if (!ValidateUtil.isNullOrEmpty(http_token)) {
                 JSONObject jsonObject = JSONObject.parseObject(AesUtil.aesDecrypt(http_token, Config.private_key));
@@ -134,6 +140,10 @@ public class GlobalActionInterceptor implements Interceptor {
 
             Date end = new Date();
             String http_run_time = String.valueOf((end.getTime() - start.getTime()));
+            String http_response = controller.getAttrForStr(Constant.RESPONSE_PARAMETER);
+            if (ValidateUtil.isNullOrEmpty(http_response)) {
+                http_response = "";
+            }
 
             Http http = new Http();
             http.setHttp_id(request_http_id);
@@ -141,7 +151,7 @@ public class GlobalActionInterceptor implements Interceptor {
             http.setHttp_url(http_url);
             http.setHttp_code(String.valueOf(http_code));
             http.setHttp_request(http_request.toJSONString());
-            http.setHttp_response(controller.getAttrForStr(Constant.RESPONSE_PARAMETER));
+            http.setHttp_response(http_response);
             http.setHttp_token(http_token);
             http.setHttp_platform(http_platform);
             http.setHttp_version(http_version);
@@ -163,7 +173,8 @@ public class GlobalActionInterceptor implements Interceptor {
                 System.out.println("response: " + http.getHttp_response());
                 System.out.println("----------------------------------------------------------------------------------------------------------------");
 
-                MQUtil.sendSync("http", JSON.toJSONString(http));
+
+                ThreadPool.me.execute(new HttpRunnable(http));
             }
         }
 
