@@ -291,6 +291,22 @@ public class ExpressController extends Controller {
                             if (flag) {
                                 memberDeliveryOrderService.updateFinish(memberDeliveryOrderExpress.getMember_delivery_order_id());
                             }
+                        } else {
+                            TradeExpress tradeExpress = tradeExpressService.findByExpress_id(bean.getExpress_id());
+                            if (tradeExpress != null && StringUtils.isNotBlank(tradeExpress.getTrade_id())) {
+                                List<Express> expressList = tradeExpressService.listByTrade_id(tradeExpress.getTrade_id());
+                                Boolean flag = true;
+                                for (Express e : expressList) {
+                                    if (e.getExpress_is_complete() || e.getExpress_id().equals(bean.getExpress_id())) {
+                                        continue;
+                                    }
+                                    flag = false;
+                                    break;
+                                }
+                                if (flag) {
+                                    tradeService.updateFinish(tradeExpress.getTrade_id());
+                                }
+                            }
                         }
                     }
                     String express_traces = jsonObject.getString("Traces");

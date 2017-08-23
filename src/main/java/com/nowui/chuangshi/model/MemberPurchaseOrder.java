@@ -16,6 +16,9 @@ public class MemberPurchaseOrder extends Model<MemberPurchaseOrder> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户id")
     public static final String USER_ID = "user_id";
     
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员等级id")
+    public static final String MEMBER_LEVEL_ID = "member_level_id";
+    
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "发货用户id")
     public static final String MEMBER_DELIVER_USER_ID = "member_deliver_user_id";
     
@@ -102,6 +105,14 @@ public class MemberPurchaseOrder extends Model<MemberPurchaseOrder> {
 
     public void setUser_id(String user_id) {
         set(USER_ID, user_id);
+    }
+    
+    public String getMember_level_id() {
+        return getStr(MEMBER_LEVEL_ID);
+    }
+    
+    public void setMember_level_id(String member_level_id) {
+        set(MEMBER_LEVEL_ID, member_level_id);
     }
     
     public String getMember_deliver_user_id() {

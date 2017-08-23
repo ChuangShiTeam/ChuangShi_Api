@@ -1,25 +1,34 @@
 package com.nowui.chuangshi.controller;
 
-import java.lang.Exception;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.nowui.chuangshi.api.trade.model.MemberDeliveryOrder;
-import com.nowui.chuangshi.api.trade.service.MemberDeliveryOrderService;
-import com.nowui.chuangshi.common.sql.Cnd;
-import com.nowui.chuangshi.model.*;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.trade.model.MemberDeliveryOrder;
+import com.nowui.chuangshi.api.trade.service.MemberDeliveryOrderService;
+import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
+import com.nowui.chuangshi.model.Express;
+import com.nowui.chuangshi.model.File;
+import com.nowui.chuangshi.model.Member;
+import com.nowui.chuangshi.model.MemberAddress;
+import com.nowui.chuangshi.model.MemberPurchaseOrder;
+import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
+import com.nowui.chuangshi.model.Product;
+import com.nowui.chuangshi.model.ProductSku;
+import com.nowui.chuangshi.model.ProductSkuPrice;
+import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberAddressService;
+import com.nowui.chuangshi.service.MemberLevelService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderExpressService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderProductSkuService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderService;
@@ -38,6 +47,7 @@ public class MemberPurchaseOrderController extends Controller {
     private final MemberPurchaseOrderExpressService memberPurchaseOrderExpressService = new MemberPurchaseOrderExpressService();
     private final UserService userService = new UserService();
     private final MemberService memberService = new MemberService();
+    private final MemberLevelService memberLevelService = new MemberLevelService();
     private final MemberAddressService memberAddressService = new MemberAddressService();
     private final ProductService productService = new ProductService();
     private final ProductSkuService productSkuService = new ProductSkuService();
@@ -258,6 +268,7 @@ public class MemberPurchaseOrderController extends Controller {
         }
         Member parent = memberService.findByMember_id(member.getMember_parent_id());
         String parent_user_id = parent.getUser_id();
+        
         int member_purchase_order_total_quantity = 0;
         BigDecimal member_purchase_order_product_amount = new BigDecimal(0);
         for (int i = 0; i < jsonArray.size(); i++) {
@@ -298,7 +309,7 @@ public class MemberPurchaseOrderController extends Controller {
         }
 
         Boolean flag = memberPurchaseOrderService.save(member_purchase_order_id, request_app_id, request_user_id,
-                parent_user_id, member_purchase_order_number,
+                member.getMember_level_id(), parent_user_id, member_purchase_order_number,
                 member_purchase_order_product_amount, member_purchase_order_express_amount,
                 member_purchase_order_discount_amount, member_purchase_order_product_amount,
                 member_purchase_order_total_quantity, member_purchase_order_receiver_name,
