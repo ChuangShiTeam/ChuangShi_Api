@@ -106,10 +106,4 @@ public class Constant {
     
     public static final String WX_ATTACH_CERTIFICATE_ORDER = "CERTIFICATE_ORDER";// 授权证书支付
     
-    public static final String EXPRESS_ORDER_CODE_MEMBER_PURCHASE_ORDER = "EXPRESS_ORDER_CODE_MEMBER_PURCHASE_ORDER";
-    
-    public static final String EXPRESS_ORDER_CODE_MEMBER_DELIVERY_ORDER = "EXPRESS_ORDER_CODE_MEMBER_DELIVERY_ORDER";
-    
-    public static final String EXPRESS_ORDER_CODE_TRADE = "EXPRESS_ORDER_CODE_TRADE";
-
 }

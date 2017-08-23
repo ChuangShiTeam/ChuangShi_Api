@@ -21,6 +21,7 @@ import com.nowui.chuangshi.service.MemberDeliveryOrderExpressService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderService;
 import com.nowui.chuangshi.service.TradeExpressService;
 import com.nowui.chuangshi.service.TradeService;
+import com.nowui.chuangshi.type.ExpressBelong;
 import com.nowui.chuangshi.util.DateUtil;
 import com.nowui.chuangshi.util.ExpressUtil;
 
@@ -69,7 +70,6 @@ public class ExpressController extends Controller {
             // String express_shipper_code =
             // jsonObject.getString("ShipperCode");
             // String express_no = jsonObject.getString("LogisticCode");
-            String orderCode = jsonObject.getString("OrderCode");
             Boolean success = jsonObject.getBoolean("Success");
 
             String express_flow = "无轨迹";
@@ -96,7 +96,7 @@ public class ExpressController extends Controller {
 
             Express bean = expressService.findByExpress_id(express_id);
             if (!bean.getExpress_is_complete() && express_is_complete) {
-            	if (Constant.EXPRESS_ORDER_CODE_MEMBER_DELIVERY_ORDER.equals(orderCode)) {
+            	if (ExpressBelong.MEMBER_DELIVERY_ORDER.getKey().equals(bean.getExpress_belong())) {
             		MemberDeliveryOrderExpress memberDeliveryOrderExpress = memberDeliveryOrderExpressService.findByExpress_id(bean.getExpress_id());
             		List<Express> express_list = memberDeliveryOrderExpressService.listByMember_delivery_order_id(memberDeliveryOrderExpress.getMember_delivery_order_id());
                     Boolean flag = true;
@@ -110,7 +110,7 @@ public class ExpressController extends Controller {
                     if (flag) {
                         memberDeliveryOrderService.updateFinish(memberDeliveryOrderExpress.getMember_delivery_order_id());
                     }
-            	} else if (Constant.EXPRESS_ORDER_CODE_TRADE.equals(orderCode)) {
+            	} else if (ExpressBelong.TRADE.getKey().equals(bean.getExpress_belong())) {
             		TradeExpress tradeExpress = tradeExpressService.findByExpress_id(express_id);
             		List<Express> express_list = tradeExpressService.listByTrade_id(tradeExpress.getTrade_id());
 				    Boolean flag = true;
@@ -254,7 +254,6 @@ public class ExpressController extends Controller {
                 params.put("DataSign", ExpressUtil.urlEncoder(dataSign, "UTF-8"));
                 params.put("DataType", "2");
                 String result = ExpressUtil.sendPost(reqURL, params); 
-                System.out.println(result);
                 JSONObject jsonObject = JSONObject.parseObject(result);
                 Boolean success = jsonObject.getBoolean("Success");
                 String express_flow = "无轨迹";

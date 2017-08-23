@@ -324,7 +324,7 @@ public class TradeController extends Controller {
         if (result) {
             //快递订阅
             for (Express express : express_list) {
-                expressService.subscription(express.getExpress_id(), Constant.EXPRESS_ORDER_CODE_TRADE, express.getExpress_shipper_code(), express.getExpress_no());
+                expressService.subscription(express.getExpress_id(), express.getExpress_shipper_code(), express.getExpress_no());
             }
         }
         renderSuccessJson(result);
@@ -481,51 +481,51 @@ public class TradeController extends Controller {
 
         Trade model = getModel(Trade.class);
         String request_app_id = getRequest_app_id();
+        String request_user_id = getRequest_user_id();
 
         authenticateRequest_app_idAndRequest_user_id();
-
-        // 获取订单列表
-        List<Trade> resultAllList = tradeService.listByApp_idOrLikeTrade_numberAndLimit(request_app_id,
-                model.getTrade_number(), getM(), getN());
-
+        
+        User request_user = userService.findByUser_id(request_user_id);
+        if (request_user == null || StringUtils.isEmpty(request_user.getObject_Id())) {
+            throw new RuntimeException("找不到供应商信息");
+        }
+        List<SupplierProduct> supplierProductList = supplierProductService
+                .listBySupplier_id(request_user.getObject_Id());
+        
         List<Trade> resultList = new ArrayList<>();
+        if (supplierProductList != null && supplierProductList.size() > 0) {
+            // 获取订单列表
+            List<Trade> resultAllList = tradeService.listByApp_idOrLikeTrade_numberAndLimit(request_app_id,
+                    model.getTrade_number(), getM(), getN());
 
-        for (Trade result : resultAllList) {
-            // 根据订单获取供应商商品列表
-            List<TradeProductSku> tradeProductSkuAllList = tradeProductSkuService.listByTrade_id(result.getTrade_id());
+            for (Trade result : resultAllList) {
+                // 根据订单获取供应商商品列表
+                List<TradeProductSku> tradeProductSkuAllList = tradeProductSkuService.listByTrade_id(result.getTrade_id());
 
-            User request_user = userService.findByUser_id(getRequest_user_id());
-            if (request_user == null || StringUtils.isEmpty(request_user.getObject_Id())) {
-                throw new RuntimeException("找不到供应商信息");
-            }
-            List<SupplierProduct> supplierProductList = supplierProductService
-                    .listBySupplier_id(request_user.getObject_Id());
-
-            for (TradeProductSku tradeProductSku : tradeProductSkuAllList) {
-                for (SupplierProduct supplierProduct : supplierProductList) {
-                    String product_id = supplierProduct.getProduct_id();
-
+                one:for (TradeProductSku tradeProductSku : tradeProductSkuAllList) {
                     ProductSku productSku = productSkuService.findByProduct_sku_id(tradeProductSku.getProduct_sku_id());
-
-                    if (product_id.equals(productSku.getProduct_id())) {
-                        User user = userService.findByUser_id(result.getUser_id());
-                        if (user != null) {
-                            result.put(User.USER_NAME, user.getUser_name());
+                    
+                    for (SupplierProduct supplierProduct : supplierProductList) {
+                        if (supplierProduct.getProduct_id().equals(productSku.getProduct_id())) {
+                            User user = userService.findByUser_id(result.getUser_id());
+                            if (user != null) {
+                                result.put(User.USER_NAME, user.getUser_name());
+                            }
+                            result.keep(Trade.TRADE_ID, Trade.APP_ID, Trade.USER_ID, User.USER_NAME, Trade.TRADE_NUMBER,
+                                    Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE,
+                                    Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS,
+                                    Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT,
+                                    Trade.TRADE_EXPRESS_AMOUNT, Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT,
+                                    Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW,
+                                    Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
+                            resultList.add(result);
+                            break one;
                         }
-                        result.keep(Trade.TRADE_ID, Trade.APP_ID, Trade.USER_ID, User.USER_NAME, Trade.TRADE_NUMBER,
-                                Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE,
-                                Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS,
-                                Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT,
-                                Trade.TRADE_EXPRESS_AMOUNT, Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT,
-                                Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW,
-                                Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
-                        resultList.add(result);
-                        break;
                     }
                 }
-            }
 
-        }
+            }
+        } 
 
         renderSuccessJson(resultList.size(), resultList);
     }

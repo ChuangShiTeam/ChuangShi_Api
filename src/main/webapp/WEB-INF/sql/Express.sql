@@ -116,6 +116,7 @@
     INSERT INTO table_express (
       express_id,
       app_id,
+      express_belong,
       express_shipper_code,
       express_no,
       express_receiver_company,
@@ -152,6 +153,7 @@
     ) VALUES (
       #p(express_id),
       #p(app_id),
+      #p(express_belong),
       #p(express_shipper_code),
       #p(express_no),
       #p(express_receiver_company),
