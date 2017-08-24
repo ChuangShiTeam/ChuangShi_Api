@@ -56,13 +56,6 @@ public class MemberDeliveryOrderController extends Controller {
     @ActionKey(Url.MEMBER_DELIVERY_ORDER_LIST)
     public void list() {
         validateRequest_app_id();
-        /*
-         * validate(Constant.PAGE_SIZE, Constant.FIRST_CREATE_TIME,
-         * Constant.LAST_CREATE_TIME);
-         * 
-         * String request_app_id = getRequest_app_id(); JSONObject jsonObject =
-         * getParameterJSONObject();
-         */
 
         authenticateRequest_app_idAndRequest_user_id();
 
@@ -71,17 +64,19 @@ public class MemberDeliveryOrderController extends Controller {
         List<MemberDeliveryOrder> resultList = memberDeliveryOrderService.listByUser_id(request_user_id);
 
         for (MemberDeliveryOrder result : resultList) {
-            // 获取进货单用户
-            MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService
-                    .findByMember_purchase_order_id(result.getMember_purchase_order_id());
-            User user = userService.findByUser_id(memberPurchaseOrder.getUser_id());
-            if (user != null) {
-                result.put(User.USER_NAME, user.getUser_name());
-                File file = fileService.findByFile_id(user.getUser_avatar());
-                result.put(User.USER_AVATAR, file.getFile_original_path());
+            if (StringUtils.isNotBlank(result.getMember_purchase_order_id())) {
+                // 获取进货单用户
+                MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService
+                        .findByMember_purchase_order_id(result.getMember_purchase_order_id());
+                User user = userService.findByUser_id(memberPurchaseOrder.getUser_id());
+                if (user != null) {
+                    result.put(User.USER_NAME, user.getUser_name());
+                    File file = fileService.findByFile_id(user.getUser_avatar());
+                    result.put(User.USER_AVATAR, file.getFile_original_path());
+                }
             }
 
-            // 根据进货单获取商品列表
+            // 根据发货单获取商品列表
             List<MemberDeliveryOrderProductSku> memberDeliveryOrderProductSkuList = memberDeliveryOrderProductSkuService
                     .listByMember_delivery_order_id(result.getMember_delivery_order_id());
             for (MemberDeliveryOrderProductSku memberDeliveryOrderProductSku : memberDeliveryOrderProductSkuList) {
@@ -290,16 +285,20 @@ public class MemberDeliveryOrderController extends Controller {
         }
         // 仓库代发货
         if (model.getMember_delivery_order_is_warehouse_deliver()) {
-            BigDecimal member_delivery_order_amount = new BigDecimal(0);
+            
+            BigDecimal member_delivery_order_amount = model.getMember_delivery_order_amount();
+            if (member_delivery_order_amount ==  null) {
+                member_delivery_order_amount = new BigDecimal(0);
+            }
             Boolean result = memberDeliveryOrderService.warehouseDeliverSave(request_app_id, request_user_id,
                     model.getMember_delivery_order_receiver_name(), model.getMember_delivery_order_receiver_mobile(),
                     model.getMember_delivery_order_receiver_province(), model.getMember_delivery_order_receiver_city(),
                     model.getMember_delivery_order_receiver_area(), model.getMember_delivery_order_receiver_address(),
                     member_delivery_order_express_pay_way, member_delivery_order_express_shipper_code,
-                    member_delivery_order_amount, false, memberDeliveryOrderProductSkuList, request_user_id);
+                    member_delivery_order_amount, true, memberDeliveryOrderProductSkuList, request_user_id);
             renderSuccessJson(result);
         } else { // TODO 自己发货
-
+            
         }
     }
 

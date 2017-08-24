@@ -274,29 +274,30 @@ public class ExpressController extends Controller {
                         express_flow = "问题件";
                     }
 
-                    Express bean = expressService.findByExpress_id(express.getExpress_id());
-                    if (!bean.getExpress_is_complete() && express_is_complete) {
-                        MemberDeliveryOrderExpress memberDeliveryOrderExpress = memberDeliveryOrderExpressService.findByExpress_id(bean.getExpress_id());
-                        if (memberDeliveryOrderExpress != null && StringUtils.isNotBlank(memberDeliveryOrderExpress.getMember_delivery_order_id())) {
-                            List<Express> expressList = memberDeliveryOrderExpressService.listByMember_delivery_order_id(memberDeliveryOrderExpress.getMember_delivery_order_id());
-                            Boolean flag = true;
-                            for (Express e : expressList) {
-                                if (e.getExpress_is_complete() || e.getExpress_id().equals(bean.getExpress_id())) {
-                                    continue;
+                    if (express_is_complete) {
+                        if (ExpressBelong.MEMBER_DELIVERY_ORDER.getKey().equals(express.getExpress_belong())) {
+                            MemberDeliveryOrderExpress memberDeliveryOrderExpress = memberDeliveryOrderExpressService.findByExpress_id(express.getExpress_id());
+                            if (memberDeliveryOrderExpress != null && StringUtils.isNotBlank(memberDeliveryOrderExpress.getMember_delivery_order_id())) {
+                                List<Express> expressList = memberDeliveryOrderExpressService.listByMember_delivery_order_id(memberDeliveryOrderExpress.getMember_delivery_order_id());
+                                Boolean flag = true;
+                                for (Express e : expressList) {
+                                    if (e.getExpress_is_complete() || e.getExpress_id().equals(express.getExpress_id())) {
+                                        continue;
+                                    }
+                                    flag = false;
+                                    break;
                                 }
-                                flag = false;
-                                break;
-                            }
-                            if (flag) {
-                                memberDeliveryOrderService.updateFinish(memberDeliveryOrderExpress.getMember_delivery_order_id());
-                            }
-                        } else {
-                            TradeExpress tradeExpress = tradeExpressService.findByExpress_id(bean.getExpress_id());
+                                if (flag) {
+                                    memberDeliveryOrderService.updateFinish(memberDeliveryOrderExpress.getMember_delivery_order_id());
+                                }
+                            }  
+                        } else if (ExpressBelong.TRADE.getKey().equals(express.getExpress_belong())){
+                            TradeExpress tradeExpress = tradeExpressService.findByExpress_id(express.getExpress_id());
                             if (tradeExpress != null && StringUtils.isNotBlank(tradeExpress.getTrade_id())) {
                                 List<Express> expressList = tradeExpressService.listByTrade_id(tradeExpress.getTrade_id());
                                 Boolean flag = true;
                                 for (Express e : expressList) {
-                                    if (e.getExpress_is_complete() || e.getExpress_id().equals(bean.getExpress_id())) {
+                                    if (e.getExpress_is_complete() || e.getExpress_id().equals(express.getExpress_id())) {
                                         continue;
                                     }
                                     flag = false;
@@ -312,7 +313,7 @@ public class ExpressController extends Controller {
                     if (StringUtils.isBlank(express_traces) || "[]".equals(express_traces)) {
                         express_traces = ""; 
                     }
-                    expressService.updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idValidateSystem_version(express.getExpress_id(), express_flow, express_is_complete, express_traces, bean.getSystem_create_user_id(), bean.getSystem_version());
+                    expressService.updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idValidateSystem_version(express.getExpress_id(), express_flow, express_is_complete, express_traces, express.getSystem_create_user_id(), express.getSystem_version());
                 }
             } catch (Exception e) {
                 e.printStackTrace();

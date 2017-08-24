@@ -297,7 +297,7 @@ public class MemberPurchaseOrderController extends Controller {
         String member_purchase_order_receiver_city = "";
         String member_purchase_order_receiver_area = "";
         String member_purchase_order_receiver_address = "";
-        if (!member_purchase_order_is_warehouse_receive) {//TODO 检查逻辑
+        if (!member_purchase_order_is_warehouse_receive) {
             member_purchase_order_receiver_name = model.getMember_purchase_order_receiver_name();
             member_purchase_order_receiver_mobile = model.getMember_purchase_order_receiver_mobile();
             member_purchase_order_receiver_province = model.getMember_purchase_order_receiver_province();
