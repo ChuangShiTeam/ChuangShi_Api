@@ -77,10 +77,12 @@ public class JianglingGameController extends Controller {
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject memberJsonObject = jsonArray.getJSONObject(i);
 
+            String name = Util.getEmoji(memberJsonObject.getString("name"));
+
             JianglingGameMember jianglingGameMember = new JianglingGameMember();
             jianglingGameMember.setGame_id(game_id);
             jianglingGameMember.setGame_member_token(memberJsonObject.getString("token"));
-            jianglingGameMember.setGame_member_name(memberJsonObject.getString("name"));
+            jianglingGameMember.setGame_member_name(name);
             jianglingGameMember.setGame_member_avatar(memberJsonObject.getString("avatar"));
             jianglingGameMember.setGame_member_score(memberJsonObject.getString("score"));
             jianglingGameMember.setGame_member_rank(memberJsonObject.getInteger("rank"));
