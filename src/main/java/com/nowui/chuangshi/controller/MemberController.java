@@ -315,10 +315,17 @@ public class MemberController extends Controller {
             member_level_name = memberLevel.getMember_level_name();
         }
         member.put(MemberLevel.MEMBER_LEVEL_NAME, member_level_name);
+        
+        String app_pattern = "";
+        if ("c1af3f1ae00e4e0da9b20f5bd41b4279".equals(member.getApp_id())) {
+            app_pattern = "MEMBER_PURCHASE_ORDER";
+        } else if ("df2078d6c9eb46babb0df957127273ab".equals(member.getApp_id())) {
+            app_pattern = "TRADE"; 
+        }
 
         member.keep(Member.MEMBER_ID, Member.MEMBER_PARENT_ID, User.USER_NAME, User.USER_AVATAR,
                 MemberLevel.MEMBER_LEVEL_NAME, Member.MEMBER_STATUS);
-
+        member.put(Constant.APP_PATTERN, app_pattern);
         member.put(Constant.IS_CHILDREN, member.getMember_parent_id().equals(parentMember.getMember_id()));
 
         renderSuccessJson(member);

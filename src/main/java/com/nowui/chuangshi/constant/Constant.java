@@ -83,6 +83,8 @@ public class Constant {
     public static final String IS_SELECT = "is_select";
 
     public static final String IS_CHILDREN = "is_children";
+    
+    public static final String APP_PATTERN = "app_pattern";
 
     public static final String ZERO = "0";
 
