@@ -90,45 +90,46 @@ public class ExpressController extends Controller {
                 } else if (state.equals("4")) {
                     express_flow = "问题件";
                 }
-
-                express_traces = jsonObject.getString("Traces");
-            }
-
-            Express bean = expressService.findByExpress_id(express_id);
-            if (!bean.getExpress_is_complete() && express_is_complete) {
-            	if (ExpressBelong.MEMBER_DELIVERY_ORDER.getKey().equals(bean.getExpress_belong())) {
-            		MemberDeliveryOrderExpress memberDeliveryOrderExpress = memberDeliveryOrderExpressService.findByExpress_id(bean.getExpress_id());
-            		List<Express> express_list = memberDeliveryOrderExpressService.listByMember_delivery_order_id(memberDeliveryOrderExpress.getMember_delivery_order_id());
-                    Boolean flag = true;
-                    for (Express e : express_list) {
-                        if (e.getExpress_is_complete() || e.getExpress_id().equals(bean.getExpress_id())) {
-                            continue;
+                
+                if (StringUtils.isBlank(express_traces) || "[]".equals(express_traces)) {
+                    express_traces = ""; 
+                }
+                Express bean = expressService.findByExpress_id(express_id);
+                if (!bean.getExpress_is_complete() && express_is_complete) {
+                    if (ExpressBelong.MEMBER_DELIVERY_ORDER.getKey().equals(bean.getExpress_belong())) {
+                        MemberDeliveryOrderExpress memberDeliveryOrderExpress = memberDeliveryOrderExpressService.findByExpress_id(bean.getExpress_id());
+                        List<Express> express_list = memberDeliveryOrderExpressService.listByMember_delivery_order_id(memberDeliveryOrderExpress.getMember_delivery_order_id());
+                        Boolean flag = true;
+                        for (Express e : express_list) {
+                            if (e.getExpress_is_complete() || e.getExpress_id().equals(bean.getExpress_id())) {
+                                continue;
+                            }
+                            flag = false;
+                            break;
                         }
-                        flag = false;
-                        break;
+                        if (flag) {
+                            memberDeliveryOrderService.updateFinish(memberDeliveryOrderExpress.getMember_delivery_order_id());
+                        }
+                    } else if (ExpressBelong.TRADE.getKey().equals(bean.getExpress_belong())) {
+                        TradeExpress tradeExpress = tradeExpressService.findByExpress_id(express_id);
+                        List<Express> express_list = tradeExpressService.listByTrade_id(tradeExpress.getTrade_id());
+                        Boolean flag = true;
+                        for (Express e : express_list) {
+                            if (e.getExpress_is_complete() || e.getExpress_id().equals(bean.getExpress_id())) {
+                                continue;
+                            }
+                            flag = false;
+                            break;
+                        }
+                        if (flag) {
+                            tradeService.updateFinish(tradeExpress.getTrade_id());
+                        }
                     }
-                    if (flag) {
-                        memberDeliveryOrderService.updateFinish(memberDeliveryOrderExpress.getMember_delivery_order_id());
-                    }
-            	} else if (ExpressBelong.TRADE.getKey().equals(bean.getExpress_belong())) {
-            		TradeExpress tradeExpress = tradeExpressService.findByExpress_id(express_id);
-            		List<Express> express_list = tradeExpressService.listByTrade_id(tradeExpress.getTrade_id());
-				    Boolean flag = true;
-				    for (Express e : express_list) {
-				        if (e.getExpress_is_complete() || e.getExpress_id().equals(bean.getExpress_id())) {
-				            continue;
-				        }
-				        flag = false;
-				        break;
-				    }
-				    if (flag) {
-				        tradeService.updateFinish(tradeExpress.getTrade_id());
-				    }
-            	}
-				
+                    
+                }
+                
+                expressService.updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idValidateSystem_version(express_id, express_flow, express_is_complete, express_traces, bean.getSystem_create_user_id(), bean.getSystem_version());
             }
-            
-            expressService.updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idValidateSystem_version(express_id, express_flow, express_is_complete, express_traces, bean.getSystem_create_user_id(), bean.getSystem_version());
 
         }
 
