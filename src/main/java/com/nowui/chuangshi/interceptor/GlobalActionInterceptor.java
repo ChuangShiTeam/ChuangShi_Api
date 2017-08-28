@@ -182,6 +182,8 @@ public class GlobalActionInterceptor implements Interceptor {
             } else {
                 System.out.println("----------------------------------------------------------------------------------------------------------------");
                 System.out.println("url: " + http.getHttp_url());
+                System.out.println("app_id: " + request_app_id);
+                System.out.println("user_id: " + request_user_id);
                 System.out.println("http_token: " + http.getHttp_token());
                 System.out.println("time: " + DateUtil.getDateTimeString(http.getSystem_create_time()));
                 System.out.println("request: " + http.getHttp_request());
