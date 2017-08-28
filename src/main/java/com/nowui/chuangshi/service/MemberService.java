@@ -161,6 +161,24 @@ public class MemberService extends Service {
             throw new RuntimeException("登录不成功");
         }
     }
+    
+    public static void main(String args[]) {
+        try {
+            Date date = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.YEAR, 1);
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(User.USER_ID, "5bf710533d47421ab2efc5ec51160de5");
+            jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
+
+            System.out.println(AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("登录不成功");
+        }
+    }
 
     public Boolean updateValidateSystem_version(String member_id, String user_id, String member_parent_id,
             String from_qrcode_id, String qrcode_id, String member_level_id, JSONArray member_parent_path,

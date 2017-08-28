@@ -445,6 +445,7 @@ public class Url {
     public static final String TRADE_EXPRESS_SAVE = "/trade/express/save";
     public static final String TRADE_EXPRESS_DELETE = "/trade/express/delete";
     public static final String TRADE_DELIVERY = "/trade/delivery";
+    public static final String TRADE_CHILDREN_LIST = "/trade/children/list";
     public static final String TRADE_ADMIN_LIST = "/trade/admin/list";
     public static final String TRADE_ADMIN_FIND = "/trade/admin/find";
     public static final String TRADE_ADMIN_SAVE = "/trade/admin/save";

@@ -383,6 +383,44 @@ public class TradeController extends Controller {
 
         renderSuccessJson(result);
     }
+    
+    @ActionKey(Url.TRADE_CHILDREN_LIST)
+    public void childrenList() {
+        validateRequest_app_id();
+        authenticateRequest_app_idAndRequest_user_id();
+
+        JSONObject jsonObject = getParameterJSONObject();
+        String member_id = jsonObject.getString("member_id");
+        Member member = memberService.findByMember_id(member_id);
+        if (member == null) {
+            throw new RuntimeException("会员不存在");
+        }
+        List<Trade> resultList = tradeService.listByUser_id(member.getUser_id());
+
+        for (Trade result : resultList) {
+            User user = userService.findByUser_id(result.getUser_id());
+            if (user != null) {
+                result.put(User.USER_NAME, user.getUser_name());
+            }
+
+            // 根据订单获取商品列表
+            List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(result.getTrade_id());
+            for (TradeProductSku tradeProductSku : tradeProductSkuList) {
+                ProductSku productSku = productSkuService.findByProduct_sku_id(tradeProductSku.getProduct_sku_id());
+                Product product = productService.findByProduct_id(productSku.getProduct_id());
+                tradeProductSku.put(Product.PRODUCT_NAME, product.getProduct_name());
+                tradeProductSku.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+                tradeProductSku.keep(TradeProductSku.PRODUCT_SKU_ID, TradeProductSku.PRODUCT_SKU_AMOUNT,
+                        TradeProductSku.PRODUCT_SKU_QUANTITY, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE);
+            }
+            result.put(Trade.TRADE_PRODUCT_SKU_LIST, tradeProductSkuList);
+
+            result.keep(Trade.TRADE_ID, Trade.TRADE_FLOW, Trade.TRADE_NUMBER, Trade.TRADE_PRODUCT_QUANTITY,
+                    Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_PRODUCT_SKU_LIST);
+        }
+
+        renderSuccessJson(resultList);
+    }
 
     @ActionKey(Url.TRADE_ADMIN_LIST)
     public void adminList() {
