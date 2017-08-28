@@ -22,13 +22,10 @@ public class ArticleCategory extends Model<ArticleCategory> {
     public static final String ARTICLE_CATEGORY_PARENT_ID = "article_category_parent_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "分类名称")
-    public static final String PRODUCT_CATEGORY_NAME = "product_category_name";
+    public static final String ARTICLE_CATEGORY_NAME = "article_category_name";
 
     @Column(type = ColumnType.INT, length = 3, comment = "分类排序")
-    public static final String PRODUCT_CATEGORY_SORT = "product_category_sort";
-
-    @Column(type = ColumnType.VARCHAR, length = 1000, comment = "分类路径")
-    public static final String PRODUCT_CATEGORY_PATH = "product_category_path";
+    public static final String ARTICLE_CATEGORY_SORT = "article_category_sort";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -72,28 +69,20 @@ public class ArticleCategory extends Model<ArticleCategory> {
         set(ARTICLE_CATEGORY_PARENT_ID, article_category_parent_id);
     }
 
-    public String getProduct_category_name() {
-        return getStr(PRODUCT_CATEGORY_NAME);
+    public String getArticle_category_name() {
+        return getStr(ARTICLE_CATEGORY_NAME);
     }
 
-    public void setProduct_category_name(String product_category_name) {
-        set(PRODUCT_CATEGORY_NAME, product_category_name);
+    public void setArticle_category_name(String article_category_name) {
+        set(ARTICLE_CATEGORY_NAME, article_category_name);
     }
 
-    public Integer getProduct_category_sort() {
-        return getInt(PRODUCT_CATEGORY_SORT);
+    public Integer getArticle_category_sort() {
+        return getInt(ARTICLE_CATEGORY_SORT);
     }
 
-    public void setProduct_category_sort(Integer product_category_sort) {
-        set(PRODUCT_CATEGORY_SORT, product_category_sort);
-    }
-
-    public String getProduct_category_path() {
-        return getStr(PRODUCT_CATEGORY_PATH);
-    }
-
-    public void setProduct_category_path(String product_category_path) {
-        set(PRODUCT_CATEGORY_PATH, product_category_path);
+    public void setArticle_category_sort(Integer article_category_sort) {
+        set(ARTICLE_CATEGORY_SORT, article_category_sort);
     }
 
     public String getSystem_create_user_id() {

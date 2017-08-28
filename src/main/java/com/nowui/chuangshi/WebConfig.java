@@ -389,20 +389,20 @@ public class WebConfig extends JFinalConfig {
 
 
 
-//        try {
-//            Date date = new Date();
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.setTime(date);
-//            calendar.add(Calendar.YEAR, 1);
-//
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put(User.USER_ID, "cb7e35613a1a4d24aa3cac7f132ac611");
-//            jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
-//            System.out.println(AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));
-//        } catch (java.lang.Exception e) {
-//            e.printStackTrace();
-//            throw new RuntimeException("登录不成功");
-//        }
+        try {
+            Date date = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.YEAR, 1);
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(User.USER_ID, "5986c17a13a44c06a4beb48b766c72a8");
+            jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
+            System.out.println(AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));
+        } catch (java.lang.Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("登录不成功");
+        }
     }
 
     public void beforeJFinalStop() {

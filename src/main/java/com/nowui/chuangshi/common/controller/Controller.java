@@ -229,6 +229,14 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(map);
     }
 
+    public void renderSuccessMapListJson(List<Map<String, Object>> resultList) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(Constant.CODE, HttpStatus.SC_OK);
+        map.put(Constant.DATA, resultList);
+
+        renderJson(map);
+    }
+
     public void renderSuccessJson(List<? extends Model> resultList) {
         for (Model result : resultList) {
             result.keep(validateResponseKey);

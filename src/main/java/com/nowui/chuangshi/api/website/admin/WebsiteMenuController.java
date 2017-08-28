@@ -11,7 +11,10 @@ import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Before(AdminInterceptor.class)
 @ControllerKey("/admin/website/menu")
@@ -19,17 +22,11 @@ public class WebsiteMenuController extends Controller {
 
     @ActionKey("/admin/website/menu/list")
     public void list() {
-        validateRequest(WebsiteMenu.WEBSITE_MENU_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        String request_app_id = getRequest_app_id();
 
-        WebsiteMenu model = getModel(WebsiteMenu.class);
-        Cnd cnd = Cnd.where(WebsiteMenu.APP_ID, model.getApp_id()).andAllowEmpty(WebsiteMenu.WEBSITE_MENU_NAME, model.getWebsite_menu_name());
+        List<Map<String, Object>> resultList = WebsiteMenuService.me.tree(request_app_id);
 
-        Integer resultCount = WebsiteMenuService.me.count(cnd);
-        List<WebsiteMenu> resultList = WebsiteMenuService.me.list(cnd.paginate(getM(), getN()));
-
-        validateResponse(WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_URL, WebsiteMenu.WEBSITE_MENU_SORT, WebsiteMenu.SYSTEM_VERSION);
-
-        renderSuccessJson(resultCount, resultList);
+        renderSuccessMapListJson(resultList);
     }
 
     @ActionKey("/admin/website/menu/find")

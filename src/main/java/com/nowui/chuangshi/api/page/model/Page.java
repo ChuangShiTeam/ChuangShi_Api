@@ -21,8 +21,17 @@ public class Page extends Model<Page> {
     @Column(type = ColumnType.VARCHAR, length = 30, comment = "单页名称")
     public static final String PAGE_NAME = "page_name";
 
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "单页模板")
+    public static final String PAGE_TEMPLATE = "page_template";
+
+    @Column(type = ColumnType.VARCHAR, length = 50, comment = "单页地址")
+    public static final String PAGE_URL = "page_url";
+
     @Column(type = ColumnType.LONGTEXT, length = 0, comment = "单页内容")
     public static final String PAGE_CONTENT = "page_content";
+
+    @Column(type = ColumnType.INT, length = 3, comment = "单页排序")
+    public static final String PAGE_SORT = "page_sort";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -66,12 +75,36 @@ public class Page extends Model<Page> {
         set(PAGE_NAME, page_name);
     }
 
+    public String getPage_template() {
+        return getStr(PAGE_TEMPLATE);
+    }
+
+    public void setPage_template(String page_template) {
+        set(PAGE_TEMPLATE, page_template);
+    }
+
+    public String getPage_url() {
+        return getStr(PAGE_URL);
+    }
+
+    public void setPage_url(String page_url) {
+        set(PAGE_URL, page_url);
+    }
+
     public String getPage_content() {
         return getStr(PAGE_CONTENT);
     }
 
     public void setPage_content(String page_content) {
         set(PAGE_CONTENT, page_content);
+    }
+
+    public Integer getPage_sort() {
+        return getInt(PAGE_SORT);
+    }
+
+    public void setPage_sort(Integer page_sort) {
+        set(PAGE_SORT, page_sort);
     }
 
     public String getSystem_create_user_id() {

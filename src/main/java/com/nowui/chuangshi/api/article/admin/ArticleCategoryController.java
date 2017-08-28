@@ -19,15 +19,15 @@ public class ArticleCategoryController extends Controller {
 
     @ActionKey("/admin/article/category/list")
     public void list() {
-        validateRequest(ArticleCategory.PRODUCT_CATEGORY_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(ArticleCategory.ARTICLE_CATEGORY_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         ArticleCategory model = getModel(ArticleCategory.class);
-        Cnd cnd = Cnd.where(ArticleCategory.APP_ID, model.getApp_id()).andAllowEmpty(ArticleCategory.PRODUCT_CATEGORY_NAME, model.getProduct_category_name());
+        Cnd cnd = Cnd.where(ArticleCategory.APP_ID, model.getApp_id()).andAllowEmpty(ArticleCategory.ARTICLE_CATEGORY_NAME, model.getArticle_category_name());
 
         Integer resultCount = ArticleCategoryService.me.count(cnd);
         List<ArticleCategory> resultList = ArticleCategoryService.me.list(cnd.paginate(getM(), getN()));
 
-        validateResponse(ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.PRODUCT_CATEGORY_NAME, ArticleCategory.PRODUCT_CATEGORY_SORT, ArticleCategory.SYSTEM_VERSION);
+        validateResponse(ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.ARTICLE_CATEGORY_NAME, ArticleCategory.ARTICLE_CATEGORY_SORT, ArticleCategory.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -39,7 +39,7 @@ public class ArticleCategoryController extends Controller {
 
         List<ArticleCategory> resultList = ArticleCategoryService.me.list(cnd);
 
-        validateResponse(ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.PRODUCT_CATEGORY_NAME);
+        validateResponse(ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.ARTICLE_CATEGORY_NAME);
 
         renderSuccessJson(resultList);
     }
@@ -52,14 +52,14 @@ public class ArticleCategoryController extends Controller {
 
         ArticleCategory result = ArticleCategoryService.me.findById(model.getArticle_category_id());
 
-        validateResponse(ArticleCategory.ARTICLE_CATEGORY_PARENT_ID, ArticleCategory.PRODUCT_CATEGORY_NAME, ArticleCategory.PRODUCT_CATEGORY_SORT, ArticleCategory.PRODUCT_CATEGORY_PATH, ArticleCategory.SYSTEM_VERSION);
+        validateResponse(ArticleCategory.ARTICLE_CATEGORY_PARENT_ID, ArticleCategory.ARTICLE_CATEGORY_NAME, ArticleCategory.ARTICLE_CATEGORY_SORT, ArticleCategory.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
 
     @ActionKey("/admin/article/category/save")
     public void save() {
-        validateRequest(ArticleCategory.ARTICLE_CATEGORY_PARENT_ID, ArticleCategory.PRODUCT_CATEGORY_NAME, ArticleCategory.PRODUCT_CATEGORY_SORT, ArticleCategory.PRODUCT_CATEGORY_PATH);
+        validateRequest(ArticleCategory.ARTICLE_CATEGORY_PARENT_ID, ArticleCategory.ARTICLE_CATEGORY_NAME, ArticleCategory.ARTICLE_CATEGORY_SORT);
 
         ArticleCategory model = getModel(ArticleCategory.class);
         model.setArticle_category_id(Util.getRandomUUID());
@@ -71,7 +71,7 @@ public class ArticleCategoryController extends Controller {
 
     @ActionKey("/admin/article/category/update")
     public void update() {
-        validateRequest(ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.ARTICLE_CATEGORY_PARENT_ID, ArticleCategory.PRODUCT_CATEGORY_NAME, ArticleCategory.PRODUCT_CATEGORY_SORT, ArticleCategory.PRODUCT_CATEGORY_PATH, ArticleCategory.SYSTEM_VERSION);
+        validateRequest(ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.ARTICLE_CATEGORY_PARENT_ID, ArticleCategory.ARTICLE_CATEGORY_NAME, ArticleCategory.ARTICLE_CATEGORY_SORT, ArticleCategory.SYSTEM_VERSION);
 
         ArticleCategory model = getModel(ArticleCategory.class);
 

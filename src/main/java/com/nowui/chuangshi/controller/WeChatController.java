@@ -172,6 +172,11 @@ public class WeChatController extends Controller {
                 e.printStackTrace();
             }
 
+            System.out.println("open_id:" + wechat_open_id);
+            System.out.println("token:" + token);
+            System.out.println("user_name:" + user_name);
+            System.out.println("user_avatar:" + user_avatar);
+
             redirect(url + "?&open_id=" + wechat_open_id + "&token=" + token + "&user_name=" + user_name + "&user_avatar=" + user_avatar);
         }
     }

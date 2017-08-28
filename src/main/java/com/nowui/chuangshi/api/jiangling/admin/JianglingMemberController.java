@@ -48,6 +48,7 @@ public class JianglingMemberController extends Controller {
         if (!ValidateUtil.isNullOrEmpty(jsonObject.getString(JianglingMember.MEMBER_REDEEM_CODE))) {
             stringBuffer.append("and table_jiangling_member.member_redeem_code = '" + jsonObject.getString(JianglingMember.MEMBER_REDEEM_CODE) + "' \n");
         }
+        stringBuffer.append("limit " + getM() + ", " + getN() + " \n");
         stringBuffer.append(" \n");
 
         System.out.println(stringBuffer.toString());

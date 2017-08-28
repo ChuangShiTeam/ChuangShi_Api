@@ -69,7 +69,7 @@ public class FeijiuFastController extends Controller {
         for (Article article : articleList) {
             for (ArticleCategory articleCategory : articleCategoryList) {
                 if (article.getArticle_category_id().equals(article.getArticle_category_id())) {
-                    article.put(ArticleCategory.PRODUCT_CATEGORY_NAME, article.getArticle_name());
+                    article.put(ArticleCategory.ARTICLE_CATEGORY_NAME, article.getArticle_name());
 
                     break;
                 }
