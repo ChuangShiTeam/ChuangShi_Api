@@ -106,7 +106,7 @@ public class CertificateImageService extends Service {
                 300, 1, new Font("Microsoft YaHei", Font.BOLD, 18));
 
         String[] statementDateArray = new String[1];
-        statementDateArray[0] = "2017年4月19日";
+        statementDateArray[0] = start_date;
         certificateBufferedImage = ImageUtil.modifyImage(certificateBufferedImage, statementDateArray, 645, 987 + 50,
                 300, 1, new Font("Microsoft YaHei", Font.BOLD, 18));
 

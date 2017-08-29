@@ -6,6 +6,9 @@ import com.jfinal.kit.Kv;
 import com.jfinal.kit.PathKit;
 import com.jfinal.template.Engine;
 import com.jfinal.template.Template;
+import com.nowui.chuangshi.api.article.model.Article;
+import com.nowui.chuangshi.api.article.model.ArticleCategory;
+import com.nowui.chuangshi.api.article.service.ArticleCategoryService;
 import com.nowui.chuangshi.api.page.model.Page;
 import com.nowui.chuangshi.api.page.service.PageService;
 import com.nowui.chuangshi.api.website.service.WebsiteMenuService;
@@ -58,16 +61,37 @@ public class PageController extends Controller {
     public void allWrite() {
         String request_app_id = getRequest_app_id();
 
+        List<ArticleCategory> articleCategoryList = ArticleCategoryService.me.list(Cnd.where(ArticleCategory.APP_ID, request_app_id).asc(ArticleCategory.ARTICLE_CATEGORY_SORT));
+
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i = 0; i < articleCategoryList.size(); i++) {
+            ArticleCategory articleCategory = articleCategoryList.get(i);
+
+            stringBuffer.append("select \n");
+            stringBuffer.append("table_article.*, table_file.file_path \n");
+            stringBuffer.append("from table_article \n");
+            stringBuffer.append("left join table_file on table_article.article_image = table_file.file_id \n");
+            stringBuffer.append("where table_article.article_category_id = '" + articleCategory.getArticle_category_id() + "' \n");
+            stringBuffer.append("limit 0, 7 \n");
+            if (i + 1 < articleCategoryList.size()) {
+                stringBuffer.append("union all \n");
+            }
+        }
+        System.out.println(stringBuffer.toString());
+        List<Article> articleList = new Article().find(stringBuffer.toString());
+
         List<Page> pageList = PageService.me.list(Cnd.where(Page.APP_ID, request_app_id));
+
+        List<Map<String, Object>> websiteMenuList = WebsiteMenuService.me.tree(request_app_id);
 
         engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong/");
 
         for (Page page : pageList) {
             Template template = engine.getTemplate(page.getPage_template());
 
-            List<Map<String, Object>> websiteMenuList = WebsiteMenuService.me.tree(request_app_id);
-
             Kv templateMap = Kv.create();
+            templateMap.put("articleCategoryList", articleCategoryList);
+            templateMap.put("articleList", articleList);
             templateMap.put("websiteMenuList", websiteMenuList);
             templateMap.put("page_name", page.getPage_name());
             templateMap.put("page_content", page.getPage_content());
@@ -75,7 +99,8 @@ public class PageController extends Controller {
 
             String content = template.renderToString(templateMap);
 
-            FileUtil.writeFile(content, "/usr/local/www/xietong/website/" + page.getPage_url());
+//            FileUtil.writeFile(content, "/usr/local/www/xietong/website/" + page.getPage_url());
+            FileUtil.writeFile(content, "/Users/yongqiangzhong/Documents/Publish/XieTong_Website/" + page.getPage_url());
         }
 
         renderSuccessJson();
@@ -88,6 +113,25 @@ public class PageController extends Controller {
         Page model = getModel(Page.class);
         String request_app_id = getRequest_app_id();
 
+        List<ArticleCategory> articleCategoryList = ArticleCategoryService.me.list(Cnd.where(ArticleCategory.APP_ID, request_app_id).asc(ArticleCategory.ARTICLE_CATEGORY_SORT));
+
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i = 0; i < articleCategoryList.size(); i++) {
+            ArticleCategory articleCategory = articleCategoryList.get(i);
+
+            stringBuffer.append("select \n");
+            stringBuffer.append("table_article.*, table_file.file_path \n");
+            stringBuffer.append("from table_article \n");
+            stringBuffer.append("left join table_file on table_article.article_image = table_file.file_id \n");
+            stringBuffer.append("where table_article.article_category_id = '" + articleCategory.getArticle_category_id() + "' \n");
+            stringBuffer.append("limit 0, 7 \n");
+            if (i + 1 < articleCategoryList.size()) {
+                stringBuffer.append("union all \n");
+            }
+        }
+        System.out.println(stringBuffer.toString());
+        List<Article> articleList = new Article().find(stringBuffer.toString());
+
         Page page = PageService.me.findById(model.getPage_id());
 
         engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong/");
@@ -97,6 +141,8 @@ public class PageController extends Controller {
         List<Map<String, Object>> websiteMenuList = WebsiteMenuService.me.tree(request_app_id);
 
         Kv templateMap = Kv.create();
+        templateMap.put("articleCategoryList", articleCategoryList);
+        templateMap.put("articleList", articleList);
         templateMap.put("websiteMenuList", websiteMenuList);
         templateMap.put("page_name", page.getPage_name());
         templateMap.put("page_content", page.getPage_content());
@@ -104,6 +150,7 @@ public class PageController extends Controller {
 
         String content = template.renderToString(templateMap);
 
+//        FileUtil.writeFile(content, "/usr/local/www/xietong/website/" + page.getPage_url());
         FileUtil.writeFile(content, "/Users/yongqiangzhong/Documents/Publish/XieTong_Website/" + page.getPage_url());
 
 

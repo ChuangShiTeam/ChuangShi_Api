@@ -25,7 +25,7 @@ public class ArticleCategoryController extends Controller {
         Cnd cnd = Cnd.where(ArticleCategory.APP_ID, model.getApp_id()).andAllowEmpty(ArticleCategory.ARTICLE_CATEGORY_NAME, model.getArticle_category_name());
 
         Integer resultCount = ArticleCategoryService.me.count(cnd);
-        List<ArticleCategory> resultList = ArticleCategoryService.me.list(cnd.paginate(getM(), getN()));
+        List<ArticleCategory> resultList = ArticleCategoryService.me.list(cnd.asc(ArticleCategory.ARTICLE_CATEGORY_SORT).paginate(getM(), getN()));
 
         validateResponse(ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.ARTICLE_CATEGORY_NAME, ArticleCategory.ARTICLE_CATEGORY_SORT, ArticleCategory.SYSTEM_VERSION);
 

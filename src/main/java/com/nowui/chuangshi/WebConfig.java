@@ -396,7 +396,7 @@ public class WebConfig extends JFinalConfig {
             calendar.add(Calendar.YEAR, 1);
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(User.USER_ID, "5986c17a13a44c06a4beb48b766c72a8");
+            jsonObject.put(User.USER_ID, "327c445ab670444b9431f6150c202e36");
             jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
             System.out.println(AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));
         } catch (java.lang.Exception e) {
