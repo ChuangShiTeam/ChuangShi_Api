@@ -99,8 +99,8 @@ public class PageController extends Controller {
 
             String content = template.renderToString(templateMap);
 
-//            FileUtil.writeFile(content, "/usr/local/www/xietong/website/" + page.getPage_url());
-            FileUtil.writeFile(content, "/Users/yongqiangzhong/Documents/Publish/XieTong_Website/" + page.getPage_url());
+            FileUtil.writeFile(content, "/usr/local/www/xietong/website/" + page.getPage_url());
+//            FileUtil.writeFile(content, "/Users/yongqiangzhong/Documents/Publish/XieTong_Website/" + page.getPage_url());
         }
 
         renderSuccessJson();
@@ -150,8 +150,8 @@ public class PageController extends Controller {
 
         String content = template.renderToString(templateMap);
 
-//        FileUtil.writeFile(content, "/usr/local/www/xietong/website/" + page.getPage_url());
-        FileUtil.writeFile(content, "/Users/yongqiangzhong/Documents/Publish/XieTong_Website/" + page.getPage_url());
+        FileUtil.writeFile(content, "/usr/local/www/xietong/website/" + page.getPage_url());
+//        FileUtil.writeFile(content, "/Users/yongqiangzhong/Documents/Publish/XieTong_Website/" + page.getPage_url());
 
 
         renderSuccessJson();
