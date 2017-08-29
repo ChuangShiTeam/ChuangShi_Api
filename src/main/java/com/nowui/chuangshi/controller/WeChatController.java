@@ -95,6 +95,7 @@ public class WeChatController extends Controller {
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+            AccessTokenApi.refreshAccessToken();
         }
 
         Map<String, Object> result = WeChatUtil.sign(url);
@@ -118,6 +119,7 @@ public class WeChatController extends Controller {
             String wechat_app_id = ApiConfigKit.getAppId();
             if (!wechat_app_id.equals(app.getWechat_app_id())) {
                 ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+                AccessTokenApi.refreshAccessToken();
             }
 
             System.out.println(app_id);
@@ -199,6 +201,7 @@ public class WeChatController extends Controller {
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+            AccessTokenApi.refreshAccessToken();
         }
 
         ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"健康推荐\",\"url\":\"http://h5.jiyiguan.nowui.com" + "/?#/index\"}]}");

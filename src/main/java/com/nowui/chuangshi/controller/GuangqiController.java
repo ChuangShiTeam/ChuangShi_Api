@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.controller;
 
 import com.jfinal.core.ActionKey;
+import com.jfinal.weixin.sdk.api.AccessTokenApi;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.App;
@@ -42,6 +43,7 @@ public class GuangqiController extends Controller {
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+            AccessTokenApi.refreshAccessToken();
         }
 
         String url = getPara("url");

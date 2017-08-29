@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.jfinal.weixin.iot.msg.InEquDataMsg;
 import com.jfinal.weixin.iot.msg.InEqubindEvent;
+import com.jfinal.weixin.sdk.api.AccessTokenApi;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.jfinal.weixin.sdk.api.ApiResult;
 import com.jfinal.weixin.sdk.api.UserApi;
@@ -125,6 +126,7 @@ public class WeChatMessageController extends MsgController {
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+            AccessTokenApi.refreshAccessToken();
         }
 
         ApiResult apiResult = UserApi.getUserInfo(wechat_open_id);
@@ -189,6 +191,7 @@ public class WeChatMessageController extends MsgController {
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+            AccessTokenApi.refreshAccessToken();
         }
 
         Qrcode qrcode = qrcodeService.findByQrcode_id(from_qrcode_id);
@@ -319,6 +322,7 @@ public class WeChatMessageController extends MsgController {
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+            AccessTokenApi.refreshAccessToken();
         }
 
         String wechat_open_id = inMenuEvent.getFromUserName();
