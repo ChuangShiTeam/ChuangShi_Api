@@ -214,8 +214,10 @@ public class TradeService extends Service {
     
     public Boolean updateFinish(String trade_id) {
     	Trade trade = findByTrade_id(trade_id);
-    	
-    	return updateTrade_flowByTrade_idValidateSystem_version(trade_id, TradeFlow.COMPLETE.getKey(), trade.getSystem_update_user_id(), trade.getSystem_version());
+    	if (TradeFlow.WAIT_RECEIVE.getKey().equals(trade.getTrade_flow())) {  //订单处于待收货状态才可以完成订单
+    	    return updateTrade_flowByTrade_idValidateSystem_version(trade_id, TradeFlow.COMPLETE.getKey(), trade.getSystem_update_user_id(), trade.getSystem_version());
+    	}
+    	return false;
     }
     
     public Boolean expressSave(String trade_id, String express_no, BigDecimal express_cost, String express_shipper_code,
