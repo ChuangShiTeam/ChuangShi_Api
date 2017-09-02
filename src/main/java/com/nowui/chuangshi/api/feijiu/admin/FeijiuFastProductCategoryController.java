@@ -7,7 +7,6 @@ import com.nowui.chuangshi.api.feijiu.service.FeijiuFastProductCategoryService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
-import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
@@ -22,10 +21,10 @@ public class FeijiuFastProductCategoryController extends Controller {
         validateRequest(FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         FeijiuFastProductCategory model = getModel(FeijiuFastProductCategory.class);
-        Cnd cnd = Cnd.where(FeijiuFastProductCategory.APP_ID, model.getApp_id()).andAllowEmpty(FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, model.getProduct_category_name());
+        String request_app_id = getRequest_app_id();
 
-        Integer resultCount = FeijiuFastProductCategoryService.me.count(cnd);
-        List<FeijiuFastProductCategory> resultList = FeijiuFastProductCategoryService.me.list(cnd.paginate(getM(), getN()));
+        Integer resultCount = FeijiuFastProductCategoryService.instance.adminCount(request_app_id, model.getProduct_category_name());
+        List<FeijiuFastProductCategory> resultList = FeijiuFastProductCategoryService.instance.adminList(request_app_id, model.getProduct_category_name(), getM(), getN());
 
         validateResponse(FeijiuFastProductCategory.PRODUCT_CATEGORY_ID, FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, FeijiuFastProductCategory.PRODUCT_CATEGORY_SORT_NUMBER, FeijiuFastProductCategory.SYSTEM_VERSION);
 
@@ -35,9 +34,9 @@ public class FeijiuFastProductCategoryController extends Controller {
     @ActionKey("/admin/feijiu/fast/product/category/list/all")
     public void listAll() {
         FeijiuFastProductCategory model = getModel(FeijiuFastProductCategory.class);
-        Cnd cnd = Cnd.where(FeijiuFastProductCategory.APP_ID, model.getApp_id());
+        String request_app_id = getRequest_app_id();
 
-        List<FeijiuFastProductCategory> resultList = FeijiuFastProductCategoryService.me.list(cnd);
+        List<FeijiuFastProductCategory> resultList = FeijiuFastProductCategoryService.instance.appList(request_app_id);
 
         validateResponse(FeijiuFastProductCategory.PRODUCT_CATEGORY_ID, FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME);
 
@@ -51,7 +50,7 @@ public class FeijiuFastProductCategoryController extends Controller {
 
         FeijiuFastProductCategory model = getModel(FeijiuFastProductCategory.class);
 
-        FeijiuFastProductCategory result = FeijiuFastProductCategoryService.me.findById(model.getProduct_category_id());
+        FeijiuFastProductCategory result = FeijiuFastProductCategoryService.instance.find(model.getProduct_category_id());
 
         validateResponse(FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, FeijiuFastProductCategory.PRODUCT_CATEGORY_SORT_NUMBER, FeijiuFastProductCategory.SYSTEM_VERSION);
 
@@ -65,7 +64,7 @@ public class FeijiuFastProductCategoryController extends Controller {
         FeijiuFastProductCategory model = getModel(FeijiuFastProductCategory.class);
         model.setProduct_category_id(Util.getRandomUUID());
 
-        Boolean result = FeijiuFastProductCategoryService.me.save(model);
+        Boolean result = FeijiuFastProductCategoryService.instance.save(model);
 
         renderSuccessJson(result);
     }
@@ -76,7 +75,7 @@ public class FeijiuFastProductCategoryController extends Controller {
 
         FeijiuFastProductCategory model = getModel(FeijiuFastProductCategory.class);
 
-        Boolean result = FeijiuFastProductCategoryService.me.update(model, Cnd.where(model.PRODUCT_CATEGORY_ID, model.getProduct_category_id()).and(FeijiuFastProductCategory.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = FeijiuFastProductCategoryService.instance.update(model, model.getProduct_category_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -87,7 +86,7 @@ public class FeijiuFastProductCategoryController extends Controller {
 
         FeijiuFastProductCategory model = getModel(FeijiuFastProductCategory.class);
 
-        Boolean result = FeijiuFastProductCategoryService.me.delete(model, Cnd.where(model.PRODUCT_CATEGORY_ID, model.getProduct_category_id()).and(FeijiuFastProductCategory.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = FeijiuFastProductCategoryService.instance.delete(model.getProduct_category_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }

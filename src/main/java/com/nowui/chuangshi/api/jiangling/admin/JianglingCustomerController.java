@@ -7,7 +7,6 @@ import com.nowui.chuangshi.api.jiangling.service.JianglingCustomerService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
-import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
@@ -22,10 +21,10 @@ public class JianglingCustomerController extends Controller {
         validateRequest(JianglingCustomer.CUSTOMER_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         JianglingCustomer model = getModel(JianglingCustomer.class);
-        Cnd cnd = Cnd.where(JianglingCustomer.APP_ID, model.getApp_id()).andAllowEmpty(JianglingCustomer.CUSTOMER_NAME, model.getCustomer_name());
+        String request_app_id = getRequest_app_id();
 
-        Integer resultCount = JianglingCustomerService.me.count(cnd);
-        List<JianglingCustomer> resultList = JianglingCustomerService.me.list(cnd.paginate(getM(), getN()));
+        Integer resultCount = JianglingCustomerService.instance.adminCount(request_app_id, model.getCustomer_name());
+        List<JianglingCustomer> resultList = JianglingCustomerService.instance.adminList(request_app_id, model.getCustomer_name(), getM(), getN());
 
         validateResponse(JianglingCustomer.USER_ID, JianglingCustomer.CUSTOMER_NAME, JianglingCustomer.CUSTOMER_MOBILE, JianglingCustomer.CUSTOMER_DISTRIBUTOR, JianglingCustomer.CUSTOMER_CAR, JianglingCustomer.SYSTEM_VERSION);
 
@@ -38,7 +37,7 @@ public class JianglingCustomerController extends Controller {
 
         JianglingCustomer model = getModel(JianglingCustomer.class);
 
-        JianglingCustomer result = JianglingCustomerService.me.findById(model.getUser_id());
+        JianglingCustomer result = JianglingCustomerService.instance.find(model.getUser_id());
 
         validateResponse(JianglingCustomer.CUSTOMER_NAME, JianglingCustomer.CUSTOMER_MOBILE, JianglingCustomer.CUSTOMER_DISTRIBUTOR, JianglingCustomer.CUSTOMER_CAR, JianglingCustomer.SYSTEM_VERSION);
 
@@ -52,7 +51,7 @@ public class JianglingCustomerController extends Controller {
         JianglingCustomer model = getModel(JianglingCustomer.class);
         model.setUser_id(Util.getRandomUUID());
 
-        Boolean result = JianglingCustomerService.me.save(model);
+        Boolean result = JianglingCustomerService.instance.save(model);
 
         renderSuccessJson(result);
     }
@@ -63,7 +62,7 @@ public class JianglingCustomerController extends Controller {
 
         JianglingCustomer model = getModel(JianglingCustomer.class);
 
-        Boolean result = JianglingCustomerService.me.update(model, Cnd.where(model.USER_ID, model.getUser_id()).and(JianglingCustomer.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = JianglingCustomerService.instance.update(model, model.getUser_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -74,7 +73,7 @@ public class JianglingCustomerController extends Controller {
 
         JianglingCustomer model = getModel(JianglingCustomer.class);
 
-        Boolean result = JianglingCustomerService.me.delete(model, Cnd.where(model.USER_ID, model.getUser_id()).and(JianglingCustomer.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = JianglingCustomerService.instance.delete(model.getUser_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }

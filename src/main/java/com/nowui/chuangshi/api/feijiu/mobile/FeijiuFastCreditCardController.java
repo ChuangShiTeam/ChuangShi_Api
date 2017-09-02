@@ -8,20 +8,18 @@ import com.nowui.chuangshi.api.feijiu.service.FeijiuFastCreditCardService;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.sql.Cnd;
 
 @ControllerKey("/mobile/feijiu/fast/credit/card")
 public class FeijiuFastCreditCardController extends Controller {
 
     @ActionKey("/mobile/feijiu/fast/credit/card/list")
     public void list() {
-        FeijiuFastCreditCard model = getModel(FeijiuFastCreditCard.class);
-        Cnd cnd = Cnd.where(FeijiuFastCreditCard.APP_ID, model.getApp_id()).asc(FeijiuFastCreditCard.CREDIT_CARD_SORT).desc(FeijiuFastCreditCard.SYSTEM_CREATE_TIME);
+        String request_app_id = getRequest_app_id();
 
-        List<FeijiuFastCreditCard> resultList = FeijiuFastCreditCardService.me.list(cnd);
+        List<FeijiuFastCreditCard> resultList = FeijiuFastCreditCardService.instance.appList(request_app_id);
         
         for (FeijiuFastCreditCard result : resultList) {
-            result.put(FeijiuFastCreditCard.CREDIT_CARD_IMAGE, FileService.me.getFile_path(result.getCredit_card_image()));
+            result.put(FeijiuFastCreditCard.CREDIT_CARD_IMAGE, FileService.instance.getFile_path(result.getCredit_card_image()));
         }
             
         validateResponse(FeijiuFastCreditCard.CREDIT_CARD_ID, FeijiuFastCreditCard.CREDIT_CARD_NAME, FeijiuFastCreditCard.CREDIT_CARD_IMAGE, FeijiuFastCreditCard.CREDIT_CARD_LINK, FeijiuFastCreditCard.CREDIT_CARD_CONTENT);

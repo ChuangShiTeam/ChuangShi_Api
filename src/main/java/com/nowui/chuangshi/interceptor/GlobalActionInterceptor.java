@@ -1,6 +1,5 @@
 package com.nowui.chuangshi.interceptor;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
@@ -133,12 +132,12 @@ public class GlobalActionInterceptor implements Interceptor {
             controller.renderJson(map);
 
             if (!http_url.startsWith("/http/")) {
-                Map<String, Object> exceptionMap = new HashMap<String, Object>();
-                exceptionMap.put(com.nowui.chuangshi.model.Exception.APP_ID, request_app_id);
-                exceptionMap.put(com.nowui.chuangshi.model.Exception.HTTP_ID, request_http_id);
-                exceptionMap.put(com.nowui.chuangshi.model.Exception.EXCEPTION_CONTENT, e.toString());
-                exceptionMap.put(com.nowui.chuangshi.model.Exception.SYSTEM_CREATE_USER_ID, request_user_id);
-                MQUtil.sendSync("exception", JSON.toJSONString(exceptionMap));
+//                Map<String, Object> exceptionMap = new HashMap<String, Object>();
+//                exceptionMap.put(com.nowui.chuangshi.model.Exception.APP_ID, request_app_id);
+//                exceptionMap.put(com.nowui.chuangshi.model.Exception.HTTP_ID, request_http_id);
+//                exceptionMap.put(com.nowui.chuangshi.model.Exception.EXCEPTION_CONTENT, e.toString());
+//                exceptionMap.put(com.nowui.chuangshi.model.Exception.SYSTEM_CREATE_USER_ID, request_user_id);
+//                MQUtil.sendSync("exception", JSON.toJSONString(exceptionMap));
             }
 
             e.printStackTrace();

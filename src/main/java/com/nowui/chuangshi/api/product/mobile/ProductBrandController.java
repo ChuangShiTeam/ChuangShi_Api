@@ -27,11 +27,12 @@ public class ProductBrandController extends Controller {
     @ActionKey("/mobile/product/brand/list")
     public void list() {
         ProductBrand model = getModel(ProductBrand.class);
+        String request_app_id = getRequest_app_id();
 
-        List<ProductBrand> resultList = ProductBrandService.me.list(Cnd.where(ProductBrand.APP_ID, model.getApp_id()));
+        List<ProductBrand> resultList = ProductBrandService.instance.mobileList(request_app_id);
 
         for (ProductBrand productBrand : resultList) {
-            productBrand.put(ProductBrand.PRODUCT_BRAND_IMAGE, FileService.me.getFile_path(productBrand.getProduct_brand_image()));
+            productBrand.put(ProductBrand.PRODUCT_BRAND_IMAGE, FileService.instance.getFile_path(productBrand.getProduct_brand_image()));
         }
 
         validateResponse(ProductBrand.PRODUCT_BRAND_ID, ProductBrand.PRODUCT_BRAND_NAME, ProductBrand.PRODUCT_BRAND_IMAGE);
@@ -44,18 +45,18 @@ public class ProductBrandController extends Controller {
         Product model = getModel(Product.class);
 
         String request_user_id = getRequest_user_id();
-        User user = UserService.me.findById(request_user_id);
-        Member member = MemberService.me.findById(user.getObject_id());
+        User user = UserService.instance.find(request_user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
 
-        List<Product> resultList = ProductService.me.list(Cnd.where(ProductBrand.APP_ID, model.getApp_id()).and(ProductBrand.PRODUCT_BRAND_ID, model.getProduct_brand_id()));
+        List<Product> resultList = ProductService.instance.productBrandList(model.getProduct_brand_id());
 
         for (Product product : resultList) {
-            product.put(Product.PRODUCT_IMAGE, FileService.me.getFile_path(product.getProduct_image()));
+            product.put(Product.PRODUCT_IMAGE, FileService.instance.getFile_path(product.getProduct_image()));
 
-            List<ProductSku> productSkuList = ProductSkuService.me.list(Cnd.where(ProductSku.PRODUCT_ID, product.getProduct_id()));
+            List<ProductSku> productSkuList = ProductSkuService.instance.productList(product.getProduct_id());
             for (ProductSku productSku : productSkuList) {
                 if (productSku.getProduct_sku_is_default()) {
-                    List<ProductSkuPrice> productSkuPriceList = ProductSkuPriceService.me.list(Cnd.where(ProductSkuPrice.PRODUCT_SKU_ID, productSku.getProduct_sku_id()));
+                    List<ProductSkuPrice> productSkuPriceList = ProductSkuPriceService.instance.productSkuList(productSku.getProduct_sku_id());
                     for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
                         if (ValidateUtil.isNullOrEmpty(member.getMember_level_id())) {
                             if (productSkuPrice.getMember_level_id().equals("")) {

@@ -21,7 +21,7 @@ public class PageController extends Controller {
 
         Page model = getModel(Page.class);
 
-        Page result = PageService.me.findById(model.getPage_id());
+        Page result = PageService.instance.find(model.getPage_id());
 
         validateResponse(Page.PAGE_NAME, Page.PAGE_CONTENT);
 

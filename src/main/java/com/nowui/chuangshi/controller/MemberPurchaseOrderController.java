@@ -6,14 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.trade.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.api.trade.service.MemberDeliveryOrderService;
-import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Express;
@@ -74,7 +73,7 @@ public class MemberPurchaseOrderController extends Controller {
 
             ProductSku productSku = productSkuService
                     .findByProduct_sku_id(productSkuObject.getString(ProductSku.PRODUCT_SKU_ID));
-            if (productSku == null || StringUtils.isEmpty(productSku.getProduct_id())) {
+            if (productSku == null || ValidateUtil.isNullOrEmpty(productSku.getProduct_id())) {
                 throw new RuntimeException("找不到商品sku");
             }
             Product product = productService.findByProduct_id(productSku.getProduct_id());
@@ -115,7 +114,7 @@ public class MemberPurchaseOrderController extends Controller {
         List<MemberPurchaseOrder> resultList = memberPurchaseOrderService.listByUser_id(request_user_id);
 
         for (MemberPurchaseOrder result : resultList) {
-            MemberDeliveryOrder memberDeliveryOrder = MemberDeliveryOrderService.me.find(Cnd.where(MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, result.getMember_purchase_order_id()));
+            MemberDeliveryOrder memberDeliveryOrder = MemberDeliveryOrderService.instance.purchaseOrderFind(result.getMember_purchase_order_id());
             if (memberDeliveryOrder != null) {
                 User user = userService.findByUser_id(memberDeliveryOrder.getUser_id());
                 if (user != null) {
@@ -199,7 +198,7 @@ public class MemberPurchaseOrderController extends Controller {
                 Map<String, Object> traces = new HashMap<>();
 
                 if (express != null) {
-                    if (StringUtils.isNotBlank(express.getExpress_traces())) {
+                    if (ValidateUtil.isNullOrEmpty(express.getExpress_traces())) {
                         JSONArray express_traces = JSONObject.parseArray(express.getExpress_traces());
                         traces = Util.Obj2Map(express_traces.get(express_traces.size() - 1));
                     }
@@ -261,7 +260,7 @@ public class MemberPurchaseOrderController extends Controller {
         User user = userService.findByUser_id(request_user_id);
         Member member = memberService.findByMember_id(user.getObject_Id());
         // 判断会员是否有上级，无上级不能进货
-        if (StringUtils.isBlank(member.getMember_parent_id())) {
+        if (ValidateUtil.isNullOrEmpty(member.getMember_parent_id())) {
             throw new RuntimeException("没有上级，不能进货");
         }
         Member parent = memberService.findByMember_id(member.getMember_parent_id());

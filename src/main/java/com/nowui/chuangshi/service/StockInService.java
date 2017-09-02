@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.nowui.chuangshi.cache.StockInCache;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
@@ -13,6 +11,7 @@ import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.StockIn;
 import com.nowui.chuangshi.model.StockInProductSku;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 public class StockInService extends Service {
 
@@ -71,7 +70,7 @@ public class StockInService extends Service {
     	for (StockInProductSku stockInProductSku : stockInProductSkuList) {
     		Stock stock = stockService.findByWarehouse_idAndObject_idAndProduct_sku_id(warehouse_id, object_id, stockInProductSku.getProduct_sku_id());
 
-    		if (stock == null || StringUtils.isBlank(stock.getStock_id())) {
+    		if (stock == null || ValidateUtil.isNullOrEmpty(stock.getStock_id())) {
     			ProductSku productSku = productSkuService.findByProduct_sku_id(stockInProductSku.getProduct_sku_id());
     			Product product = productService.findByProduct_id(productSku.getProduct_id());
     			Stock bean = new Stock();

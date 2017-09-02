@@ -8,7 +8,6 @@ import com.nowui.chuangshi.api.jiangling.model.JianglingCustomer;
 import com.nowui.chuangshi.api.jiangling.service.JianglingCustomerService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.type.CaptchaType;
 
 @ControllerKey("/mobile/jiangling/customer")
@@ -24,7 +23,7 @@ public class JianglingCustomerController extends Controller {
     public void find() {
         String request_user_id = getRequest_user_id();
 
-        JianglingCustomer result = JianglingCustomerService.me.findById(request_user_id);
+        JianglingCustomer result = JianglingCustomerService.instance.find(request_user_id);
 
         renderSuccessJson(result != null);
     }
@@ -45,7 +44,7 @@ public class JianglingCustomerController extends Controller {
         String sign_name = "江铃";
         String template_code = "SMS_87685005";
 
-        CaptchaService.me.send(request_app_id, captcha_type, captcha_mobile, captcha_ip_address, 1, access_id, access_key, endpoint, sign_name, template_code);
+        CaptchaService.instance.send(request_app_id, captcha_type, captcha_mobile, captcha_ip_address, 1, access_id, access_key, endpoint, sign_name, template_code);
 
         renderSuccessJson();
     }
@@ -64,13 +63,13 @@ public class JianglingCustomerController extends Controller {
         String customer_mobile = jsonObject.getString(JianglingCustomer.CUSTOMER_MOBILE);
         String captcha_code = jsonObject.getString(Captcha.CAPTCHA_CODE);
 
-        Integer count = CaptchaService.me.count(Cnd.where(Captcha.APP_ID, request_app_id).and(Captcha.CAPTCHA_MOBILE, customer_mobile).and(Captcha.CAPTCHA_CODE, captcha_code));
+        Integer count = CaptchaService.instance.count(request_app_id, customer_mobile, captcha_code);
 
         if (count == 0) {
             throw new RuntimeException("验证码不正确");
         }
 
-        Boolean result = JianglingCustomerService.me.save(model);
+        Boolean result = JianglingCustomerService.instance.save(model);
 
         renderSuccessJson(result);
     }

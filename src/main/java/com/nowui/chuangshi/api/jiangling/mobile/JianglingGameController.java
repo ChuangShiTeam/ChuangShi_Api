@@ -9,7 +9,6 @@ import com.nowui.chuangshi.api.jiangling.service.JianglingGameMemberService;
 import com.nowui.chuangshi.api.jiangling.service.JianglingGameService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.ArrayList;
@@ -23,8 +22,8 @@ public class JianglingGameController extends Controller {
         String request_app_id = getRequest_app_id();
 
         List<JianglingGame> resultList = new ArrayList<JianglingGame>();
-        List<JianglingGame> jianglingGameList = JianglingGameService.me.list(Cnd.where(JianglingGame.APP_ID, request_app_id).desc(JianglingGame.SYSTEM_CREATE_TIME));
-        List<JianglingGameMember> jianglingGameMemberList = JianglingGameMemberService.me.list(Cnd.where("1", 1));
+        List<JianglingGame> jianglingGameList = JianglingGameService.instance.appList(request_app_id);
+        List<JianglingGameMember> jianglingGameMemberList = JianglingGameMemberService.instance.allList();
 
         for (JianglingGameMember jianglingGameMember : jianglingGameMemberList) {
             jianglingGameMember.keep(JianglingGameMember.GAME_ID, JianglingGameMember.GAME_MEMBER_NAME, JianglingGameMember.GAME_MEMBER_AVATAR, JianglingGameMember.GAME_MEMBER_SCORE, JianglingGameMember.GAME_MEMBER_RANK);
@@ -68,7 +67,7 @@ public class JianglingGameController extends Controller {
         JianglingGame jianglingGame = new JianglingGame();
         jianglingGame.setGame_id(game_id);
         jianglingGame.setApp_id(request_app_id);
-        Boolean result = JianglingGameService.me.save(jianglingGame);
+        Boolean result = JianglingGameService.instance.save(jianglingGame);
 
         if (!result) {
             throw new RuntimeException("保存不成功");
@@ -87,7 +86,7 @@ public class JianglingGameController extends Controller {
             jianglingGameMember.setGame_member_score(memberJsonObject.getString("score"));
             jianglingGameMember.setGame_member_rank(memberJsonObject.getInteger("rank"));
 
-            result = JianglingGameMemberService.me.save(jianglingGameMember);
+            result = JianglingGameMemberService.instance.save(jianglingGameMember);
 
             if (!result) {
                 throw new RuntimeException("保存不成功");

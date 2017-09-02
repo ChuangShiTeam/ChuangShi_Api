@@ -3,7 +3,7 @@ package com.nowui.chuangshi.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -144,7 +144,7 @@ public class CustomerAttributeController extends Controller {
         String customer_id = jsonObject.getString(CustomerAttributeValue.CUSTOMER_ID);
 
         List<CustomerAttributeValue> list = new ArrayList<>();
-        if (!StringUtils.isEmpty(customer_id)) {
+        if (!ValidateUtil.isNullOrEmpty(customer_id)) {
             list = customerAttributeValueService.listByCustomer_id(customer_id);
         }
         List<CustomerAttribute> resultList = customerAttributeService.listByApp_id(request_app_id);

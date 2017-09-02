@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import com.nowui.chuangshi.cache.StockReplenishCache;
 import com.nowui.chuangshi.model.Stock;
@@ -67,7 +67,7 @@ public class StockReplenishService extends Service {
             Stock stock = stockService.findByWarehouse_idAndObject_idAndProduct_sku_id(warehouse_id, object_id, stockReplenishProductSku.getProduct_sku_id());
             //判断库存是否足够报损
             if (StockReplenishAction.BREAKAGE.getKey().equals(stock_replenish_action)) {
-                if (stock == null || StringUtils.isBlank(stock.getStock_id())) {
+                if (stock == null || ValidateUtil.isNullOrEmpty(stock.getStock_id())) {
                     throw new RuntimeException("不能报损库存中不存在的商品");
                 }
                 if (stock.getStock_quantity() < stockReplenishProductSku.getProduct_sku_quantity()) {
@@ -79,7 +79,7 @@ public class StockReplenishService extends Service {
                 stock.setSystem_version(stock.getSystem_version() + 1);
                 stockList.add(stock);
             } else if (StockReplenishAction.OVERFLOW.getKey().equals(stock_replenish_action)) {
-                if (stock == null || StringUtils.isBlank(stock.getStock_id())) {
+                if (stock == null || ValidateUtil.isNullOrEmpty(stock.getStock_id())) {
                     throw new RuntimeException("不能报溢库存中不存在的商品");
                 }
                 stock.setStock_quantity(stock.getStock_quantity() + stockReplenishProductSku.getProduct_sku_quantity());

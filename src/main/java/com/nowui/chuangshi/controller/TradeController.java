@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -41,6 +39,7 @@ import com.nowui.chuangshi.service.TradeService;
 import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.TradeFlow;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 public class TradeController extends Controller {
 
@@ -81,7 +80,7 @@ public class TradeController extends Controller {
 
             ProductSku productSku = productSkuService
                     .findByProduct_sku_id(productSkuObject.getString(ProductSku.PRODUCT_SKU_ID));
-            if (productSku == null || StringUtils.isEmpty(productSku.getProduct_id())) {
+            if (productSku == null || ValidateUtil.isNullOrEmpty(productSku.getProduct_id())) {
                 throw new RuntimeException("找不到商品sku");
             }
             Product product = productService.findByProduct_id(productSku.getProduct_id());
@@ -182,7 +181,7 @@ public class TradeController extends Controller {
                 Map<String, Object> traces = new HashMap<>();
 
                 if (express != null) {
-                    if (StringUtils.isNotBlank(express.getExpress_traces())) {
+                    if (ValidateUtil.isNullOrEmpty(express.getExpress_traces())) {
                         JSONArray express_traces = JSONObject.parseArray(express.getExpress_traces());
                         traces = Util.Obj2Map(express_traces.get(express_traces.size() - 1));
                     }
@@ -524,7 +523,7 @@ public class TradeController extends Controller {
         authenticateRequest_app_idAndRequest_user_id();
         
         User request_user = userService.findByUser_id(request_user_id);
-        if (request_user == null || StringUtils.isEmpty(request_user.getObject_Id())) {
+        if (request_user == null || ValidateUtil.isNullOrEmpty(request_user.getObject_Id())) {
             throw new RuntimeException("找不到供应商信息");
         }
         List<SupplierProduct> supplierProductList = supplierProductService
@@ -604,7 +603,7 @@ public class TradeController extends Controller {
         List<TradeProductSku> tradeProductSkuAllList = tradeProductSkuService.listByTrade_id(trade.getTrade_id());
 
         User request_user = userService.findByUser_id(getRequest_user_id());
-        if (request_user == null || StringUtils.isEmpty(request_user.getObject_Id())) {
+        if (request_user == null || ValidateUtil.isNullOrEmpty(request_user.getObject_Id())) {
             throw new RuntimeException("找不到供应商信息");
         }
         List<SupplierProduct> supplierProductList = supplierProductService

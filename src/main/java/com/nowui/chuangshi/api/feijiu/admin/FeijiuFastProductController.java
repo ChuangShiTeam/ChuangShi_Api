@@ -4,12 +4,10 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.feijiu.model.FeijiuFastProduct;
 import com.nowui.chuangshi.api.feijiu.service.FeijiuFastProductService;
-import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
-import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
@@ -25,12 +23,12 @@ public class FeijiuFastProductController extends Controller {
         validateRequest(FeijiuFastProduct.PRODUCT_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         FeijiuFastProduct model = getModel(FeijiuFastProduct.class);
-        Cnd cnd = Cnd.where(FeijiuFastProduct.APP_ID, model.getApp_id()).andAllowEmpty(FeijiuFastProduct.PRODUCT_NAME, model.getProduct_name());
+        String request_app_id = getRequest_app_id();
 
-        Integer resultCount = FeijiuFastProductService.me.count(cnd);
-        List<FeijiuFastProduct> resultList = FeijiuFastProductService.me.list(cnd.paginate(getM(), getN()));
+        Integer resultCount = FeijiuFastProductService.instance.adminCount(request_app_id, model.getProduct_name());
+        List<FeijiuFastProduct> resultList = FeijiuFastProductService.instance.adminList(request_app_id, model.getProduct_name(), getM(), getN());
 
-        validateResponse(FeijiuFastProduct.PRODUCT_ID, FeijiuFastProduct.PRODUCT_NAME, FeijiuFastProduct.PRODUCT_LINK, FeijiuFastProduct.PRODUCT_APPLICANT_QUANTITY, FeijiuFastProduct.SYSTEM_VERSION);
+        validateResponse(FeijiuFastProduct.PRODUCT_ID, FeijiuFastProduct.PRODUCT_NAME, FeijiuFastProduct.PRODUCT_LINK, FeijiuFastProduct.PRODUCT_APPLICANT_QUANTITY, FeijiuFastProduct.PRODUCT_SORT, FeijiuFastProduct.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -41,15 +39,15 @@ public class FeijiuFastProductController extends Controller {
 
         FeijiuFastProduct model = getModel(FeijiuFastProduct.class);
 
-        FeijiuFastProduct feijiu_fast_product = FeijiuFastProductService.me.findById(model.getProduct_id());
+        FeijiuFastProduct feijiu_fast_product = FeijiuFastProductService.instance.find(model.getProduct_id());
 
         if (ValidateUtil.isNullOrEmpty(feijiu_fast_product.getProduct_image())) {
             feijiu_fast_product.put(FeijiuFastProduct.PRODUCT_IMAGE_FILE, "");
         } else {
-            feijiu_fast_product.put(FileService.me.getFile(feijiu_fast_product.getProduct_image()));
+            feijiu_fast_product.put(FileService.instance.getFile(feijiu_fast_product.getProduct_image()));
         }
         
-        validateResponse(FeijiuFastProduct.PRODUCT_CATEGORY_ID, FeijiuFastProduct.PRODUCT_IMAGE_FILE, FeijiuFastProduct.PRODUCT_NAME, FeijiuFastProduct.PRODUCT_IMAGE, FeijiuFastProduct.PRODUCT_LINK, FeijiuFastProduct.PRODUCT_CONTENT, FeijiuFastProduct.PRODUCT_APPLICANT_QUANTITY, FeijiuFastProduct.SYSTEM_VERSION);
+        validateResponse(FeijiuFastProduct.PRODUCT_CATEGORY_ID, FeijiuFastProduct.PRODUCT_IMAGE_FILE, FeijiuFastProduct.PRODUCT_NAME, FeijiuFastProduct.PRODUCT_IMAGE, FeijiuFastProduct.PRODUCT_LINK, FeijiuFastProduct.PRODUCT_CONTENT, FeijiuFastProduct.PRODUCT_APPLICANT_QUANTITY, FeijiuFastProduct.PRODUCT_SORT, FeijiuFastProduct.SYSTEM_VERSION);
 
         renderSuccessJson(feijiu_fast_product);
     }
@@ -61,7 +59,7 @@ public class FeijiuFastProductController extends Controller {
         FeijiuFastProduct model = getModel(FeijiuFastProduct.class);
         model.setProduct_id(Util.getRandomUUID());
 
-        Boolean result = FeijiuFastProductService.me.save(model);
+        Boolean result = FeijiuFastProductService.instance.save(model);
 
         renderSuccessJson(result);
     }
@@ -72,7 +70,7 @@ public class FeijiuFastProductController extends Controller {
 
         FeijiuFastProduct model = getModel(FeijiuFastProduct.class);
 
-        Boolean result = FeijiuFastProductService.me.update(model, Cnd.where(model.PRODUCT_ID, model.getProduct_id()).and(FeijiuFastProduct.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = FeijiuFastProductService.instance.update(model, model.getProduct_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -83,7 +81,7 @@ public class FeijiuFastProductController extends Controller {
 
         FeijiuFastProduct model = getModel(FeijiuFastProduct.class);
 
-        Boolean result = FeijiuFastProductService.me.delete(model, Cnd.where(model.PRODUCT_ID, model.getProduct_id()).and(FeijiuFastProduct.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = FeijiuFastProductService.instance.delete(model.getProduct_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }

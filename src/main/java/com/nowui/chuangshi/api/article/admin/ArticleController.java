@@ -23,10 +23,10 @@ public class ArticleController extends Controller {
         validateRequest(Article.ARTICLE_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         Article model = getModel(Article.class);
-        Cnd cnd = Cnd.where(Article.APP_ID, model.getApp_id()).andAllowEmpty(Article.ARTICLE_NAME, model.getArticle_name());
+        String request_app_id = getRequest_app_id();
 
-        Integer resultCount = ArticleService.me.count(cnd);
-        List<Article> resultList = ArticleService.me.list(cnd.paginate(getM(), getN()));
+        Integer resultCount = ArticleService.instance.adminCount(request_app_id, model.getArticle_name());
+        List<Article> resultList = ArticleService.instance.adminList(request_app_id, model.getArticle_name(), getM(), getN());
 
         validateResponse(Article.ARTICLE_ID, Article.ARTICLE_NAME, Article.SYSTEM_VERSION);
 
@@ -39,9 +39,9 @@ public class ArticleController extends Controller {
 
         Article model = getModel(Article.class);
 
-        Article result = ArticleService.me.findById(model.getArticle_id());
+        Article result = ArticleService.instance.find(model.getArticle_id());
 
-        result.put(Article.ARTICLE_IMAGE_FILE, FileService.me.getFile(result.getArticle_image()));
+        result.put(Article.ARTICLE_IMAGE_FILE, FileService.instance.getFile(result.getArticle_image()));
 
         validateResponse(Article.ARTICLE_CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE_FILE, Article.ARTICLE_SUMMARY, Article.ARTICLE_CONTENT, Article.SYSTEM_VERSION);
 
@@ -55,7 +55,7 @@ public class ArticleController extends Controller {
         Article model = getModel(Article.class);
         model.setArticle_id(Util.getRandomUUID());
 
-        Boolean result = ArticleService.me.save(model);
+        Boolean result = ArticleService.instance.save(model);
 
         renderSuccessJson(result);
     }
@@ -66,7 +66,7 @@ public class ArticleController extends Controller {
 
         Article model = getModel(Article.class);
 
-        Boolean result = ArticleService.me.update(model, Cnd.where(model.ARTICLE_ID, model.getArticle_id()).and(Article.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = ArticleService.instance.update(model, model.getArticle_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -77,7 +77,7 @@ public class ArticleController extends Controller {
 
         Article model = getModel(Article.class);
 
-        Boolean result = ArticleService.me.delete(model, Cnd.where(model.ARTICLE_ID, model.getArticle_id()).and(Article.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = ArticleService.instance.delete(model.getArticle_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }

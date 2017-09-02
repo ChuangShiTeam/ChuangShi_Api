@@ -3,17 +3,13 @@ package com.nowui.chuangshi.api.feijiu.admin;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.feijiu.model.FeijiuFastCreditCard;
-import com.nowui.chuangshi.api.feijiu.model.FeijiuFastProduct;
 import com.nowui.chuangshi.api.feijiu.service.FeijiuFastCreditCardService;
-import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
-import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
-import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.List;
 
@@ -26,10 +22,10 @@ public class FeijiuFastCreditCardController extends Controller {
         validateRequest(FeijiuFastCreditCard.CREDIT_CARD_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         FeijiuFastCreditCard model = getModel(FeijiuFastCreditCard.class);
-        Cnd cnd = Cnd.where(FeijiuFastCreditCard.APP_ID, model.getApp_id()).andAllowEmpty(FeijiuFastCreditCard.CREDIT_CARD_NAME, model.getCredit_card_name());
+        String request_app_id = getRequest_app_id();
 
-        Integer resultCount = FeijiuFastCreditCardService.me.count(cnd);
-        List<FeijiuFastCreditCard> resultList = FeijiuFastCreditCardService.me.list(cnd.asc(FeijiuFastCreditCard.CREDIT_CARD_SORT).desc(FeijiuFastCreditCard.SYSTEM_CREATE_TIME).paginate(getM(), getN()));
+        Integer resultCount = FeijiuFastCreditCardService.instance.adminCount(request_app_id, model.getCredit_card_name());
+        List<FeijiuFastCreditCard> resultList = FeijiuFastCreditCardService.instance.adminList(request_app_id, model.getCredit_card_name(), getM(), getN());
 
         validateResponse(FeijiuFastCreditCard.CREDIT_CARD_ID, FeijiuFastCreditCard.CREDIT_CARD_NAME, FeijiuFastCreditCard.CREDIT_CARD_LINK, FeijiuFastCreditCard.SYSTEM_VERSION);
 
@@ -42,9 +38,9 @@ public class FeijiuFastCreditCardController extends Controller {
 
         FeijiuFastCreditCard model = getModel(FeijiuFastCreditCard.class);
 
-        FeijiuFastCreditCard result = FeijiuFastCreditCardService.me.findById(model.getCredit_card_id());
+        FeijiuFastCreditCard result = FeijiuFastCreditCardService.instance.find(model.getCredit_card_id());
 
-        result.put(FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, FileService.me.getFile(result.getCredit_card_image()));
+        result.put(FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, FileService.instance.getFile(result.getCredit_card_image()));
 
         validateResponse(FeijiuFastCreditCard.CREDIT_CARD_NAME, FeijiuFastCreditCard.CREDIT_CARD_IMAGE_FILE, FeijiuFastCreditCard.CREDIT_CARD_LINK, FeijiuFastCreditCard.CREDIT_CARD_CONTENT, FeijiuFastCreditCard.CREDIT_CARD_SORT, FeijiuFastCreditCard.SYSTEM_VERSION);
 
@@ -58,7 +54,7 @@ public class FeijiuFastCreditCardController extends Controller {
         FeijiuFastCreditCard model = getModel(FeijiuFastCreditCard.class);
         model.setCredit_card_id(Util.getRandomUUID());
 
-        Boolean result = FeijiuFastCreditCardService.me.save(model);
+        Boolean result = FeijiuFastCreditCardService.instance.save(model);
 
         renderSuccessJson(result);
     }
@@ -69,7 +65,7 @@ public class FeijiuFastCreditCardController extends Controller {
 
         FeijiuFastCreditCard model = getModel(FeijiuFastCreditCard.class);
 
-        Boolean result = FeijiuFastCreditCardService.me.update(model, Cnd.where(model.CREDIT_CARD_ID, model.getCredit_card_id()).and(FeijiuFastCreditCard.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = FeijiuFastCreditCardService.instance.update(model, model.getCredit_card_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -80,7 +76,7 @@ public class FeijiuFastCreditCardController extends Controller {
 
         FeijiuFastCreditCard model = getModel(FeijiuFastCreditCard.class);
 
-        Boolean result = FeijiuFastCreditCardService.me.delete(model, Cnd.where(model.CREDIT_CARD_ID, model.getCredit_card_id()).and(FeijiuFastCreditCard.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = FeijiuFastCreditCardService.instance.delete(model.getCredit_card_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }

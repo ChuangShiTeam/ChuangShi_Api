@@ -7,12 +7,8 @@ import com.nowui.chuangshi.api.website.service.WebsiteMenuService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
-import com.nowui.chuangshi.common.sql.Cnd;
-import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +20,7 @@ public class WebsiteMenuController extends Controller {
     public void list() {
         String request_app_id = getRequest_app_id();
 
-        List<Map<String, Object>> resultList = WebsiteMenuService.me.tree(request_app_id);
+        List<Map<String, Object>> resultList = WebsiteMenuService.instance.tree(request_app_id);
 
         renderSuccessMapListJson(resultList);
     }
@@ -35,7 +31,7 @@ public class WebsiteMenuController extends Controller {
 
         WebsiteMenu model = getModel(WebsiteMenu.class);
 
-        WebsiteMenu result = WebsiteMenuService.me.findById(model.getWebsite_menu_id());
+        WebsiteMenu result = WebsiteMenuService.instance.find(model.getWebsite_menu_id());
 
         validateResponse(WebsiteMenu.WEBSITE_MENU_PARENT_ID, WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_URL, WebsiteMenu.WEBSITE_MENU_SORT, WebsiteMenu.SYSTEM_VERSION);
 
@@ -49,7 +45,7 @@ public class WebsiteMenuController extends Controller {
         WebsiteMenu model = getModel(WebsiteMenu.class);
         model.setWebsite_menu_id(Util.getRandomUUID());
 
-        Boolean result = WebsiteMenuService.me.save(model);
+        Boolean result = WebsiteMenuService.instance.save(model);
 
         renderSuccessJson(result);
     }
@@ -60,7 +56,7 @@ public class WebsiteMenuController extends Controller {
 
         WebsiteMenu model = getModel(WebsiteMenu.class);
 
-        Boolean result = WebsiteMenuService.me.update(model, Cnd.where(model.WEBSITE_MENU_ID, model.getWebsite_menu_id()).and(WebsiteMenu.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = WebsiteMenuService.instance.update(model, model.getWebsite_menu_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -71,7 +67,7 @@ public class WebsiteMenuController extends Controller {
 
         WebsiteMenu model = getModel(WebsiteMenu.class);
 
-        Boolean result = WebsiteMenuService.me.delete(model, Cnd.where(model.WEBSITE_MENU_ID, model.getWebsite_menu_id()).and(WebsiteMenu.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = WebsiteMenuService.instance.delete(model.getWebsite_menu_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }

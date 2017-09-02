@@ -36,6 +36,9 @@ public class FeijiuFastProduct extends Model<FeijiuFastProduct> {
     @Column(type = ColumnType.INT, length = 11, comment = "申请人数")
     public static final String PRODUCT_APPLICANT_QUANTITY = "product_applicant_quantity";
 
+    @Column(type = ColumnType.INT, length = 3, comment = "商品排序")
+    public static final String PRODUCT_SORT = "product_sort";
+
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
 
@@ -118,6 +121,14 @@ public class FeijiuFastProduct extends Model<FeijiuFastProduct> {
 
     public void setProduct_applicant_quantity(Integer product_applicant_quantity) {
         set(PRODUCT_APPLICANT_QUANTITY, product_applicant_quantity);
+    }
+
+    public Integer getProduct_sort() {
+        return getInt(PRODUCT_SORT);
+    }
+
+    public void setProduct_sort(Integer product_sort) {
+        set(PRODUCT_SORT, product_sort);
     }
 
     public String getSystem_create_user_id() {

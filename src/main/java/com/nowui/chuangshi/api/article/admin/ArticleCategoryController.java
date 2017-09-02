@@ -7,7 +7,6 @@ import com.nowui.chuangshi.api.article.service.ArticleCategoryService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
-import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
@@ -22,10 +21,10 @@ public class ArticleCategoryController extends Controller {
         validateRequest(ArticleCategory.ARTICLE_CATEGORY_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         ArticleCategory model = getModel(ArticleCategory.class);
-        Cnd cnd = Cnd.where(ArticleCategory.APP_ID, model.getApp_id()).andAllowEmpty(ArticleCategory.ARTICLE_CATEGORY_NAME, model.getArticle_category_name());
+        String request_app_id = getRequest_app_id();
 
-        Integer resultCount = ArticleCategoryService.me.count(cnd);
-        List<ArticleCategory> resultList = ArticleCategoryService.me.list(cnd.asc(ArticleCategory.ARTICLE_CATEGORY_SORT).paginate(getM(), getN()));
+        Integer resultCount = ArticleCategoryService.instance.adminCount(request_app_id, model.getArticle_category_name());
+        List<ArticleCategory> resultList = ArticleCategoryService.instance.adminList(request_app_id, model.getArticle_category_name(), getM(), getN());
 
         validateResponse(ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.ARTICLE_CATEGORY_NAME, ArticleCategory.ARTICLE_CATEGORY_SORT, ArticleCategory.SYSTEM_VERSION);
 
@@ -35,9 +34,9 @@ public class ArticleCategoryController extends Controller {
     @ActionKey("/admin/article/category/all/list")
     public void allList() {
         ArticleCategory model = getModel(ArticleCategory.class);
-        Cnd cnd = Cnd.where(ArticleCategory.APP_ID, model.getApp_id());
+        String request_app_id = getRequest_app_id();
 
-        List<ArticleCategory> resultList = ArticleCategoryService.me.list(cnd);
+        List<ArticleCategory> resultList = ArticleCategoryService.instance.appList(request_app_id);
 
         validateResponse(ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.ARTICLE_CATEGORY_NAME);
 
@@ -50,7 +49,7 @@ public class ArticleCategoryController extends Controller {
 
         ArticleCategory model = getModel(ArticleCategory.class);
 
-        ArticleCategory result = ArticleCategoryService.me.findById(model.getArticle_category_id());
+        ArticleCategory result = ArticleCategoryService.instance.find(model.getArticle_category_id());
 
         validateResponse(ArticleCategory.ARTICLE_CATEGORY_PARENT_ID, ArticleCategory.ARTICLE_CATEGORY_NAME, ArticleCategory.ARTICLE_CATEGORY_SORT, ArticleCategory.SYSTEM_VERSION);
 
@@ -64,7 +63,7 @@ public class ArticleCategoryController extends Controller {
         ArticleCategory model = getModel(ArticleCategory.class);
         model.setArticle_category_id(Util.getRandomUUID());
 
-        Boolean result = ArticleCategoryService.me.save(model);
+        Boolean result = ArticleCategoryService.instance.save(model);
 
         renderSuccessJson(result);
     }
@@ -75,7 +74,7 @@ public class ArticleCategoryController extends Controller {
 
         ArticleCategory model = getModel(ArticleCategory.class);
 
-        Boolean result = ArticleCategoryService.me.update(model, Cnd.where(model.ARTICLE_CATEGORY_ID, model.getArticle_category_id()).and(ArticleCategory.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = ArticleCategoryService.instance.update(model, model.getArticle_category_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -86,7 +85,7 @@ public class ArticleCategoryController extends Controller {
 
         ArticleCategory model = getModel(ArticleCategory.class);
 
-        Boolean result = ArticleCategoryService.me.delete(model, Cnd.where(model.ARTICLE_CATEGORY_ID, model.getArticle_category_id()).and(ArticleCategory.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = ArticleCategoryService.instance.delete(model.getArticle_category_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }

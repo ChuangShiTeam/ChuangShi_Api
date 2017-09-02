@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -69,7 +69,7 @@ public class StockReplenishController extends Controller {
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
         String object_id = model.getObject_id();
-        if (StringUtils.isBlank(object_id)) {
+        if (ValidateUtil.isNullOrEmpty(object_id)) {
             object_id = request_app_id;
         }
         JSONObject jsonObject = getParameterJSONObject();
@@ -257,7 +257,7 @@ public class StockReplenishController extends Controller {
         String request_user_id = getRequest_user_id();
         
         String object_id = model.getObject_id();
-        if (StringUtils.isBlank(object_id)) {
+        if (ValidateUtil.isNullOrEmpty(object_id)) {
             object_id = model.getApp_id();
         }
         JSONObject jsonObject = getParameterJSONObject();

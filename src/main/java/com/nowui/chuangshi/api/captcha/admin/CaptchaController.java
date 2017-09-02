@@ -7,7 +7,6 @@ import com.nowui.chuangshi.api.captcha.service.CaptchaService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
-import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
@@ -22,10 +21,10 @@ public class CaptchaController extends Controller {
         validateRequest(Captcha.CAPTCHA_TYPE, Captcha.CAPTCHA_MOBILE, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         Captcha model = getModel(Captcha.class);
-        Cnd cnd = Cnd.where(Captcha.APP_ID, model.getApp_id()).andAllowEmpty(Captcha.CAPTCHA_TYPE, model.getCaptcha_type()).andAllowEmpty(Captcha.CAPTCHA_MOBILE, model.getCaptcha_mobile());
+        String request_app_id = getRequest_app_id();
 
-        Integer resultCount = CaptchaService.me.count(cnd);
-        List<Captcha> resultList = CaptchaService.me.list(cnd.paginate(getM(), getN()));
+        Integer resultCount = CaptchaService.instance.adminCount(request_app_id, model.getCaptcha_type(), model.getCaptcha_mobile());
+        List<Captcha> resultList = CaptchaService.instance.adminList(request_app_id, model.getCaptcha_type(), model.getCaptcha_mobile(), getM(), getN());
 
         validateResponse(Captcha.CAPTCHA_ID, Captcha.CAPTCHA_MOBILE, Captcha.CAPTCHA_CODE, Captcha.CAPTCHA_IP_ADDRESS, Captcha.SYSTEM_VERSION);
 
@@ -38,7 +37,7 @@ public class CaptchaController extends Controller {
 
         Captcha model = getModel(Captcha.class);
 
-        Captcha result = CaptchaService.me.findById(model.getCaptcha_id());
+        Captcha result = CaptchaService.instance.find(model.getCaptcha_id());
 
         validateResponse(Captcha.CAPTCHA_TYPE, Captcha.CAPTCHA_MOBILE, Captcha.CAPTCHA_CODE, Captcha.CAPTCHA_IP_ADDRESS, Captcha.SYSTEM_VERSION);
 
@@ -52,7 +51,7 @@ public class CaptchaController extends Controller {
         Captcha model = getModel(Captcha.class);
         model.setCaptcha_id(Util.getRandomUUID());
 
-        Boolean result = CaptchaService.me.save(model);
+        Boolean result = CaptchaService.instance.save(model);
 
         renderSuccessJson(result);
     }
@@ -63,7 +62,7 @@ public class CaptchaController extends Controller {
 
         Captcha model = getModel(Captcha.class);
 
-        Boolean result = CaptchaService.me.update(model, Cnd.where(model.CAPTCHA_ID, model.getCaptcha_id()).and(Captcha.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = CaptchaService.instance.update(model, model.getCaptcha_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -74,7 +73,7 @@ public class CaptchaController extends Controller {
 
         Captcha model = getModel(Captcha.class);
 
-        Boolean result = CaptchaService.me.delete(model, Cnd.where(model.CAPTCHA_ID, model.getCaptcha_id()).and(Captcha.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = CaptchaService.instance.delete(model.getCaptcha_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }

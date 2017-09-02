@@ -39,16 +39,16 @@ public class ProductController extends Controller {
         Product model = getModel(Product.class);
 
         String request_user_id = getRequest_user_id();
-        User user = UserService.me.findById(request_user_id);
-        Member member = MemberService.me.findById(user.getObject_id());
+        User user = UserService.instance.find(request_user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
 
-        Product result = ProductService.me.findById(model.getProduct_id());
-        result.put(Product.PRODUCT_IMAGE, FileService.me.getFile_path(result.getProduct_image()));
+        Product result = ProductService.instance.find(model.getProduct_id());
+        result.put(Product.PRODUCT_IMAGE, FileService.instance.getFile_path(result.getProduct_image()));
 
-        List<ProductSku> productSkuList = ProductSkuService.me.list(Cnd.where(ProductSku.PRODUCT_ID, result.getProduct_id()));
+        List<ProductSku> productSkuList = ProductSkuService.instance.productList(result.getProduct_id());
         for (ProductSku productSku : productSkuList) {
             if (productSku.getProduct_sku_is_default()) {
-                List<ProductSkuPrice> productSkuPriceList = ProductSkuPriceService.me.list(Cnd.where(ProductSkuPrice.PRODUCT_SKU_ID, productSku.getProduct_sku_id()));
+                List<ProductSkuPrice> productSkuPriceList = ProductSkuPriceService.instance.productSkuList(productSku.getProduct_sku_id());
                 for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
                     if (productSkuPrice.getMember_level_id().equals("")) {
                         result.put(ProductSkuPrice.PRODUCT_SKU_PRICE, productSkuPrice.getProduct_sku_price());
@@ -73,11 +73,11 @@ public class ProductController extends Controller {
         Integer member_level_value = 0;
         String member_level_id = member.getMember_level_id();
         if (!ValidateUtil.isNullOrEmpty(member_level_id)) {
-            MemberLevel memberLevel = MemberLevelService.me.findById(member_level_id);
+            MemberLevel memberLevel = MemberLevelService.instance.find(member_level_id);
             member_level_value = memberLevel.getMember_level_value();
         }
 
-        Integer count = MemberPurchaseOrderService.me.count(Cnd.where(MemberPurchaseOrder.USER_ID, request_user_id).and(MemberPurchaseOrder.MEMBER_LEVEL_ID, member_level_id).and(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_PAY, true));
+        Integer count = MemberPurchaseOrderService.instance.userIsFirstCount(request_user_id, member_level_id);
 
         result.put("is_first_purchase", count == 0);
 

@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -27,6 +25,7 @@ import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.AesUtil;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 public class SupplierController extends Controller {
 
@@ -207,7 +206,7 @@ public class SupplierController extends Controller {
         List<Product> productList = new ArrayList<>();
         List<Integer> selectedRowKeys = new ArrayList<>();
 
-        if (!StringUtils.isEmpty(model.getSupplier_id())) {
+        if (!ValidateUtil.isNullOrEmpty(model.getSupplier_id())) {
             supplier = supplierService.findBySupplier_id(model.getSupplier_id());
 
             authenticateApp_id(supplier.getApp_id());
@@ -282,7 +281,7 @@ public class SupplierController extends Controller {
             SupplierProduct supplierProduct = new SupplierProduct();
             String product_id = product_list.getJSONObject(j).getString("product_id");
 
-            if (StringUtils.isBlank(product_id)) {
+            if (ValidateUtil.isNullOrEmpty(product_id)) {
                 throw new RuntimeException("商品id不能为空");
             }
             if (productService.findByProduct_id(product_id) == null) {
@@ -341,7 +340,7 @@ public class SupplierController extends Controller {
             SupplierProduct supplierProduct = new SupplierProduct();
             String product_id = product_list.getJSONObject(j).getString("product_id");
 
-            if (StringUtils.isBlank(product_id)) {
+            if (ValidateUtil.isNullOrEmpty(product_id)) {
                 throw new RuntimeException("商品id不能为空");
             }
             if (productService.findByProduct_id(product_id) == null) {

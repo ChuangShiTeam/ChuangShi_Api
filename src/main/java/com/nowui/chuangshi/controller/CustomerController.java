@@ -2,7 +2,7 @@ package com.nowui.chuangshi.controller;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -205,7 +205,7 @@ public class CustomerController extends Controller {
             for (CustomerAttribute customerAttribute : resultList) {
                 String customer_attribute_value = jsonObject.getString(customerAttribute.getCustomer_attribute_key());
 
-                if (!StringUtils.isEmpty(customer_attribute_value)) {
+                if (!ValidateUtil.isNullOrEmpty(customer_attribute_value)) {
                     String customer_attribute_id = customerAttribute.getCustomer_attribute_id();
                     customerAttributeValueService.save(customer_attribute_id, customer_id, customer_attribute_value,
                             request_user_id);
@@ -250,7 +250,7 @@ public class CustomerController extends Controller {
             for (CustomerAttribute customerAttribute : resultList) {
                 String customer_attribute_value = jsonObject.getString(customerAttribute.getCustomer_attribute_key());
 
-                if (!StringUtils.isEmpty(customer_attribute_value)) {
+                if (!ValidateUtil.isNullOrEmpty(customer_attribute_value)) {
                     String customer_attribute_id = customerAttribute.getCustomer_attribute_id();
                     customerAttributeValueService.save(customer_attribute_id, model.getCustomer_id(),
                             customer_attribute_value, request_user_id);

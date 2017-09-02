@@ -43,7 +43,7 @@ public class MemberController extends Controller {
         validateRequest(MemberAddress.MEMBER_ID);
         MemberAddress model = getModel(MemberAddress.class);
 
-        List<MemberAddress> memberAddressList = MemberAddressService.me.list(Cnd.where(MemberAddress.MEMBER_ID, model.getMember_id()));
+        List<MemberAddress> memberAddressList = MemberAddressService.instance.memberList(model.getMember_id());
 
         validateResponse(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_POSTCODE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA, MemberAddress.MEMBER_ADDRESS_ADDRESS);
 
@@ -55,15 +55,9 @@ public class MemberController extends Controller {
         validateRequest(MemberAddress.MEMBER_ID);
         Member model = getModel(Member.class);
 
-        Member member = MemberService.me.findById(model.getMember_id());
+        Member member = MemberService.instance.find(model.getMember_id());
 
-        BigDecimal member_purchase_order_product_amount = BigDecimal.ZERO;
-
-        List<MemberPurchaseOrder> memberPurchaseOrderList = MemberPurchaseOrderService.me.list(Cnd.where(MemberPurchaseOrder.USER_ID, member.getUser_id()));
-
-        for (MemberPurchaseOrder memberPurchaseOrder : memberPurchaseOrderList) {
-
-        }
+        List<MemberPurchaseOrder> memberPurchaseOrderList = MemberPurchaseOrderService.instance.userList(member.getUser_id());
 
         validateResponse(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ADDRESS_NAME, MemberAddress.MEMBER_ADDRESS_MOBILE, MemberAddress.MEMBER_ADDRESS_POSTCODE, MemberAddress.MEMBER_ADDRESS_PROVINCE, MemberAddress.MEMBER_ADDRESS_CITY, MemberAddress.MEMBER_ADDRESS_AREA, MemberAddress.MEMBER_ADDRESS_ADDRESS);
 
@@ -79,35 +73,35 @@ public class MemberController extends Controller {
     @ActionKey("/mobile/member/purchase/find")
     public void purchaseFind() {
         String request_user_id = getRequest_user_id();
-        System.out.println(request_user_id);
-        User user = UserService.me.findById(request_user_id);
-        Member result = MemberService.me.findById(user.getObject_id());
+
+        User user = UserService.instance.find(request_user_id);
+        Member result = MemberService.instance.find(user.getObject_id());
 
         result.put(User.USER_NAME, user.getUser_name());
-        result.put(User.USER_AVATAR, FileService.me.getFile_path(user.getUser_avatar()));
+        result.put(User.USER_AVATAR, FileService.instance.getFile_path(user.getUser_avatar()));
 
         if (ValidateUtil.isNullOrEmpty(result.getMember_level_id())) {
             result.put(MemberLevel.MEMBER_LEVEL_NAME, "");
         } else {
-            MemberLevel memberLevel = MemberLevelService.me.findById(result.getMember_level_id());
+            MemberLevel memberLevel = MemberLevelService.instance.find(result.getMember_level_id());
             result.put(MemberLevel.MEMBER_LEVEL_NAME, memberLevel.getMember_level_name());
         }
 
         BigDecimal bill_amount = BigDecimal.ZERO;
-        List<MemberDeliveryOrder> memberPurchaseOrderList = MemberDeliveryOrderService.me.list(Cnd.where(MemberDeliveryOrder.USER_ID, request_user_id).and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, true));
+        List<MemberDeliveryOrder> memberPurchaseOrderList = MemberDeliveryOrderService.instance.userIsPayList(request_user_id);
         for (MemberDeliveryOrder memberDeliveryOrder : memberPurchaseOrderList) {
             bill_amount = bill_amount.add(memberDeliveryOrder.getMember_delivery_order_amount());
         }
-        List<Enchashment> enchashmentList = EnchashmentService.me.list(Cnd.where(Enchashment.USER_ID, request_user_id));
+        List<Enchashment> enchashmentList = EnchashmentService.instance.userList(request_user_id);
         for (Enchashment enchashment : enchashmentList) {
             bill_amount = bill_amount.subtract(enchashment.getEnchashment_amount());
         }
         result.put(Bill.BILL_AMOUNT, bill_amount);
 
         BigDecimal certificate_amount = BigDecimal.ZERO;
-        Certificate certificate = CertificateService.me.find(Cnd.where(Certificate.USER_ID, request_user_id));
+        Certificate certificate = CertificateService.instance.userFind(request_user_id);
         if (certificate != null) {
-            CertificatePay certificatePay = CertificatePayService.me.find(Cnd.where(CertificatePay.CERTIFICATE_ID, certificate.getCertificate_id()));
+            CertificatePay certificatePay = CertificatePayService.instance.find(certificate.getCertificate_id());
             if (certificatePay != null && certificatePay.getCertificate_amount() != null) {
                 certificate_amount = certificatePay.getCertificate_amount();
             }

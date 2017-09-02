@@ -21,11 +21,10 @@ public class JianglingGameController extends Controller {
     public void list() {
         validateRequest(JianglingGame.SYSTEM_CREATE_TIME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
-        JianglingGame model = getModel(JianglingGame.class);
-        Cnd cnd = Cnd.where(JianglingGame.APP_ID, model.getApp_id());
+        String request_app_id = getRequest_app_id();
 
-        Integer resultCount = JianglingGameService.me.count(cnd);
-        List<JianglingGame> resultList = JianglingGameService.me.list(cnd.paginate(getM(), getN()));
+        Integer resultCount = JianglingGameService.instance.adminCount(request_app_id);
+        List<JianglingGame> resultList = JianglingGameService.instance.adminList(request_app_id, getM(), getN());
 
         validateResponse(JianglingGame.GAME_ID, JianglingGame.SYSTEM_CREATE_TIME, JianglingGame.SYSTEM_VERSION);
 
@@ -38,7 +37,7 @@ public class JianglingGameController extends Controller {
 
         JianglingGame model = getModel(JianglingGame.class);
 
-        JianglingGame result = JianglingGameService.me.findById(model.getGame_id());
+        JianglingGame result = JianglingGameService.instance.find(model.getGame_id());
 
         validateResponse(JianglingGame.SYSTEM_VERSION);
 
@@ -52,7 +51,7 @@ public class JianglingGameController extends Controller {
         JianglingGame model = getModel(JianglingGame.class);
         model.setGame_id(Util.getRandomUUID());
 
-        Boolean result = JianglingGameService.me.save(model);
+        Boolean result = JianglingGameService.instance.save(model);
 
         renderSuccessJson(result);
     }
@@ -63,7 +62,7 @@ public class JianglingGameController extends Controller {
 
         JianglingGame model = getModel(JianglingGame.class);
 
-        Boolean result = JianglingGameService.me.update(model, Cnd.where(model.GAME_ID, model.getGame_id()).and(JianglingGame.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = JianglingGameService.instance.update(model, model.getGame_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -74,7 +73,7 @@ public class JianglingGameController extends Controller {
 
         JianglingGame model = getModel(JianglingGame.class);
 
-        Boolean result = JianglingGameService.me.delete(model, Cnd.where(model.GAME_ID, model.getGame_id()).and(JianglingGame.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = JianglingGameService.instance.delete(model.getGame_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }

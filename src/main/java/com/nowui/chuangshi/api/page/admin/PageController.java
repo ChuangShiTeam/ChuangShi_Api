@@ -9,6 +9,7 @@ import com.jfinal.template.Template;
 import com.nowui.chuangshi.api.article.model.Article;
 import com.nowui.chuangshi.api.article.model.ArticleCategory;
 import com.nowui.chuangshi.api.article.service.ArticleCategoryService;
+import com.nowui.chuangshi.api.article.service.ArticleService;
 import com.nowui.chuangshi.api.page.model.Page;
 import com.nowui.chuangshi.api.page.service.PageService;
 import com.nowui.chuangshi.api.website.service.WebsiteMenuService;
@@ -34,10 +35,11 @@ public class PageController extends Controller {
         validateRequest(Page.PAGE_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         Page model = getModel(Page.class);
+        String request_app_id = getRequest_app_id();
         Cnd cnd = Cnd.where(Page.APP_ID, model.getApp_id()).andAllowEmpty(Page.PAGE_NAME, model.getPage_name());
 
-        Integer resultCount = PageService.me.count(cnd);
-        List<Page> resultList = PageService.me.list(cnd.asc(Page.PAGE_SORT).paginate(getM(), getN()));
+        Integer resultCount = PageService.instance.adminCount(request_app_id, model.getPage_name());
+        List<Page> resultList = PageService.instance.adminList(request_app_id, model.getPage_name(), getM(), getN());
 
         validateResponse(Page.PAGE_ID, Page.PAGE_NAME, Page.PAGE_TEMPLATE, Page.PAGE_URL, Page.PAGE_SORT, Page.SYSTEM_VERSION);
 
@@ -50,7 +52,7 @@ public class PageController extends Controller {
 
         Page model = getModel(Page.class);
 
-        Page result = PageService.me.findById(model.getPage_id());
+        Page result = PageService.instance.find(model.getPage_id());
 
         validateResponse(Page.PAGE_NAME, Page.PAGE_TEMPLATE, Page.PAGE_URL, Page.PAGE_CONTENT, Page.PAGE_SORT, Page.SYSTEM_VERSION);
 
@@ -61,46 +63,19 @@ public class PageController extends Controller {
     public void allWrite() {
         String request_app_id = getRequest_app_id();
 
-        List<ArticleCategory> articleCategoryList = ArticleCategoryService.me.list(Cnd.where(ArticleCategory.APP_ID, request_app_id).asc(ArticleCategory.ARTICLE_CATEGORY_SORT));
+        List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
 
-        StringBuffer stringBuffer = new StringBuffer();
-        for (int i = 0; i < articleCategoryList.size(); i++) {
-            ArticleCategory articleCategory = articleCategoryList.get(i);
+        List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryList, 7);
 
-            stringBuffer.append("select \n");
-            stringBuffer.append("table_article.*, table_file.file_path \n");
-            stringBuffer.append("from table_article \n");
-            stringBuffer.append("left join table_file on table_article.article_image = table_file.file_id \n");
-            stringBuffer.append("where table_article.article_category_id = '" + articleCategory.getArticle_category_id() + "' \n");
-            stringBuffer.append("limit 0, 7 \n");
-            if (i + 1 < articleCategoryList.size()) {
-                stringBuffer.append("union all \n");
-            }
-        }
-        System.out.println(stringBuffer.toString());
-        List<Article> articleList = new Article().find(stringBuffer.toString());
+        List<Page> pageList = PageService.instance.appList(request_app_id);
 
-        List<Page> pageList = PageService.me.list(Cnd.where(Page.APP_ID, request_app_id));
+        List<Map<String, Object>> websiteMenuList = WebsiteMenuService.instance.tree(request_app_id);
 
-        List<Map<String, Object>> websiteMenuList = WebsiteMenuService.me.tree(request_app_id);
-
+        Engine engine = Engine.create("code_engine");
         engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong/");
 
         for (Page page : pageList) {
-            Template template = engine.getTemplate(page.getPage_template());
-
-            Kv templateMap = Kv.create();
-            templateMap.put("articleCategoryList", articleCategoryList);
-            templateMap.put("articleList", articleList);
-            templateMap.put("websiteMenuList", websiteMenuList);
-            templateMap.put("page_name", page.getPage_name());
-            templateMap.put("page_content", page.getPage_content());
-            templateMap.put("page_url", page.getPage_url());
-
-            String content = template.renderToString(templateMap);
-
-            FileUtil.writeFile(content, "/usr/local/www/xietong/website/" + page.getPage_url());
-//            FileUtil.writeFile(content, "/Users/yongqiangzhong/Documents/Publish/XieTong_Website/" + page.getPage_url());
+            write(request_app_id, page, websiteMenuList, articleCategoryList, articleList);
         }
 
         renderSuccessJson();
@@ -113,32 +88,23 @@ public class PageController extends Controller {
         Page model = getModel(Page.class);
         String request_app_id = getRequest_app_id();
 
-        List<ArticleCategory> articleCategoryList = ArticleCategoryService.me.list(Cnd.where(ArticleCategory.APP_ID, request_app_id).asc(ArticleCategory.ARTICLE_CATEGORY_SORT));
+        List<Map<String, Object>> websiteMenuList = WebsiteMenuService.instance.tree(request_app_id);
 
-        StringBuffer stringBuffer = new StringBuffer();
-        for (int i = 0; i < articleCategoryList.size(); i++) {
-            ArticleCategory articleCategory = articleCategoryList.get(i);
+        List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
 
-            stringBuffer.append("select \n");
-            stringBuffer.append("table_article.*, table_file.file_path \n");
-            stringBuffer.append("from table_article \n");
-            stringBuffer.append("left join table_file on table_article.article_image = table_file.file_id \n");
-            stringBuffer.append("where table_article.article_category_id = '" + articleCategory.getArticle_category_id() + "' \n");
-            stringBuffer.append("limit 0, 7 \n");
-            if (i + 1 < articleCategoryList.size()) {
-                stringBuffer.append("union all \n");
-            }
-        }
-        System.out.println(stringBuffer.toString());
-        List<Article> articleList = new Article().find(stringBuffer.toString());
+        List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryList, 7);
 
-        Page page = PageService.me.findById(model.getPage_id());
+        Page page = PageService.instance.find(model.getPage_id());
 
+        write(request_app_id, page, websiteMenuList, articleCategoryList, articleList);
+
+        renderSuccessJson();
+    }
+
+    private void write(String request_app_id, Page page, List<Map<String, Object>> websiteMenuList, List<ArticleCategory> articleCategoryList, List<Article> articleList) {
         engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong/");
 
         Template template = engine.getTemplate(page.getPage_template());
-
-        List<Map<String, Object>> websiteMenuList = WebsiteMenuService.me.tree(request_app_id);
 
         Kv templateMap = Kv.create();
         templateMap.put("articleCategoryList", articleCategoryList);
@@ -150,11 +116,8 @@ public class PageController extends Controller {
 
         String content = template.renderToString(templateMap);
 
-        FileUtil.writeFile(content, "/usr/local/www/xietong/website/" + page.getPage_url());
-//        FileUtil.writeFile(content, "/Users/yongqiangzhong/Documents/Publish/XieTong_Website/" + page.getPage_url());
-
-
-        renderSuccessJson();
+//        FileUtil.writeFile(content, "/usr/local/www/xietong/website/" + page.getPage_url());
+        FileUtil.writeFile(content, "/Users/yongqiangzhong/Documents/Publish/XieTong_Website/" + page.getPage_url());
     }
 
     @ActionKey("/admin/page/save")
@@ -164,7 +127,7 @@ public class PageController extends Controller {
         Page model = getModel(Page.class);
         model.setPage_id(Util.getRandomUUID());
 
-        Boolean result = PageService.me.save(model);
+        Boolean result = PageService.instance.save(model);
 
         renderSuccessJson(result);
     }
@@ -175,7 +138,7 @@ public class PageController extends Controller {
 
         Page model = getModel(Page.class);
 
-        Boolean result = PageService.me.update(model, Cnd.where(model.PAGE_ID, model.getPage_id()).and(Page.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = PageService.instance.update(model, model.getPage_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -186,7 +149,7 @@ public class PageController extends Controller {
 
         Page model = getModel(Page.class);
 
-        Boolean result = PageService.me.delete(model, Cnd.where(model.PAGE_ID, model.getPage_id()).and(Page.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = PageService.instance.delete(model.getPage_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }

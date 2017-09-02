@@ -54,7 +54,7 @@ public class JianglingMember extends Model<JianglingMember> {
     }
 
     public Integer getMember_diffent_point() {
-        return getInt(MEMBER_DIFFENT_POINT);
+        return getNumber(MEMBER_DIFFENT_POINT).intValue();
     }
 
     public void setMember_diffent_point(Integer member_diffent_point) {
@@ -62,7 +62,7 @@ public class JianglingMember extends Model<JianglingMember> {
     }
 
     public Integer getMember_like_point() {
-        return getInt(MEMBER_LIKE_POINT);
+        return getNumber(MEMBER_LIKE_POINT).intValue();
     }
 
     public void setMember_like_point(Integer member_like_point) {
@@ -78,7 +78,7 @@ public class JianglingMember extends Model<JianglingMember> {
     }
 
     public Boolean getMember_redeem_code_is_exchange() {
-        return getBoolean(MEMBER_REDEEM_CODE_IS_EXCHANGE);
+        return getNumber(MEMBER_REDEEM_CODE_IS_EXCHANGE).intValue() == 1;
     }
 
     public void setMember_redeem_code_is_exchange(Boolean member_redeem_code_is_exchange) {

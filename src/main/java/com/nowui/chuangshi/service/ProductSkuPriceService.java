@@ -3,7 +3,7 @@ package com.nowui.chuangshi.service;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import com.nowui.chuangshi.cache.ProductSkuPriceCache;
 import com.nowui.chuangshi.model.ProductSkuPrice;
@@ -29,7 +29,7 @@ public class ProductSkuPriceService extends Service {
 
         BigDecimal product_sku_price = BigDecimal.ZERO;
         for (int j = 0; j < productSkuPriceList.size(); j++) {
-            if (StringUtils.isEmpty(productSkuPriceList.get(j).getMember_level_id())) {
+            if (ValidateUtil.isNullOrEmpty(productSkuPriceList.get(j).getMember_level_id())) {
                 product_sku_price = productSkuPriceList.get(j).getProduct_sku_price();
             } else if (productSkuPriceList.get(j).getMember_level_id().equals(member_level_id)) {
                 return productSkuPriceList.get(j).getProduct_sku_price();

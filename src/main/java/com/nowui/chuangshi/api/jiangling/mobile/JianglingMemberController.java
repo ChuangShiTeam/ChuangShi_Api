@@ -26,7 +26,7 @@ public class JianglingMemberController extends Controller {
     public void find() {
         String request_user_id = getRequest_user_id();
 
-        JianglingMember jianglingMember = JianglingMemberService.me.find(Cnd.where(JianglingMember.USER_ID, request_user_id));
+        JianglingMember jianglingMember = JianglingMemberService.instance.find(request_user_id);
 
         if (jianglingMember == null) {
             jianglingMember = new JianglingMember();
@@ -43,22 +43,22 @@ public class JianglingMemberController extends Controller {
     public void diffentUpdate() {
         String request_user_id = getRequest_user_id();
 
-        User user = UserService.me.findById(request_user_id);
+        User user = UserService.instance.find(request_user_id);
         if (user == null) {
             throw new RuntimeException("没有权限");
         }
 
-        Integer count = JianglingMemberService.me.count(Cnd.where(JianglingMember.USER_ID, request_user_id));
+        Integer count = JianglingMemberService.instance.userCount(request_user_id);
         Boolean result;
         if (count == 0) {
-            String redeem_code = Util.getRandomNumber(6);
+            String member_redeem_code = Util.getRandomNumber(6);
             Boolean is_exit = true;
 
             while (is_exit) {
-                count = JianglingMemberService.me.count(Cnd.where(JianglingMember.MEMBER_REDEEM_CODE, redeem_code));
+                count = JianglingMemberService.instance.redeemCodeCount(member_redeem_code);
 
                 if (count > 0) {
-                    redeem_code = Util.getRandomStringByLength(6);
+                    member_redeem_code = Util.getRandomStringByLength(6);
                 } else {
                     is_exit = false;
                 }
@@ -69,15 +69,15 @@ public class JianglingMemberController extends Controller {
             jianglingMember.setUser_id(request_user_id);
             jianglingMember.setMember_diffent_point(50);
             jianglingMember.setMember_like_point(0);
-            jianglingMember.setMember_redeem_code(redeem_code);
+            jianglingMember.setMember_redeem_code(member_redeem_code);
             jianglingMember.setMember_redeem_code_is_exchange(false);
 
-            result = JianglingMemberService.me.save(jianglingMember);
+            result = JianglingMemberService.instance.save(jianglingMember);
         } else {
             JianglingMember jianglingMember = new JianglingMember();
             jianglingMember.setMember_diffent_point(50);
 
-            result = JianglingMemberService.me.update(jianglingMember, Cnd.where(JianglingMember.USER_ID, request_user_id));
+            result = JianglingMemberService.instance.update(jianglingMember, request_user_id);
         }
 
 
@@ -88,22 +88,22 @@ public class JianglingMemberController extends Controller {
     public void likeUpdate() {
         String request_user_id = getRequest_user_id();
 
-        User user = UserService.me.findById(request_user_id);
+        User user = UserService.instance.find(request_user_id);
         if (user == null) {
             throw new RuntimeException("没有权限");
         }
 
-        JianglingMember jianglingMember = JianglingMemberService.me.find(Cnd.where(JianglingMember.USER_ID, request_user_id));
-        String redeem_code;
+        JianglingMember jianglingMember = JianglingMemberService.instance.find(request_user_id);
+        String member_redeem_code;
         if (jianglingMember == null) {
-            redeem_code = Util.getRandomNumber(6);
+            member_redeem_code = Util.getRandomNumber(6);
             Boolean is_exit = true;
 
             while (is_exit) {
-                Integer count = JianglingMemberService.me.count(Cnd.where(JianglingMember.MEMBER_REDEEM_CODE, redeem_code));
+                Integer count = JianglingMemberService.instance.redeemCodeCount(member_redeem_code);
 
                 if (count > 0) {
-                    redeem_code = Util.getRandomStringByLength(6);
+                    member_redeem_code = Util.getRandomStringByLength(6);
                 } else {
                     is_exit = false;
                 }
@@ -114,19 +114,19 @@ public class JianglingMemberController extends Controller {
             jianglingMember.setUser_id(request_user_id);
             jianglingMember.setMember_diffent_point(0);
             jianglingMember.setMember_like_point(0);
-            jianglingMember.setMember_redeem_code(redeem_code);
+            jianglingMember.setMember_redeem_code(member_redeem_code);
             jianglingMember.setMember_redeem_code_is_exchange(false);
 
-            Boolean result = JianglingMemberService.me.save(jianglingMember);
+            Boolean result = JianglingMemberService.instance.save(jianglingMember);
 
             if (!result) {
                 throw new RuntimeException("新增不成功");
             }
         } else {
-            redeem_code = jianglingMember.getMember_redeem_code();
+            member_redeem_code = jianglingMember.getMember_redeem_code();
         }
 
-        renderSuccessJson(redeem_code);
+        renderSuccessJson(member_redeem_code);
     }
 
     @ActionKey("/mobile/jiangling/member/draw")
@@ -137,7 +137,7 @@ public class JianglingMemberController extends Controller {
         if (request_user_id.equals("7a2d8b71f3a3469f82ce10b543f4ffce")) {
 
         } else {
-            JianglingMember jianglingMember = JianglingMemberService.me.find(Cnd.where(JianglingMember.USER_ID, request_user_id));
+            JianglingMember jianglingMember = JianglingMemberService.instance.find(request_user_id);
             if (jianglingMember == null) {
                 throw new RuntimeException("没有权限");
             }
@@ -148,7 +148,7 @@ public class JianglingMemberController extends Controller {
                 throw new RuntimeException("集赞的积分不够");
             }
 
-            Integer count = JianglingMemberPrizeService.me.count(Cnd.where(JianglingMemberPrize.USER_ID, request_user_id));
+            Integer count = JianglingMemberPrizeService.instance.userCount(request_user_id);
             if (count > 0) {
                 throw new RuntimeException("每人只能抽一次奖品");
             }
@@ -157,7 +157,7 @@ public class JianglingMemberController extends Controller {
 
         Integer total_probability = 0;
         JianglingPrize defaultJianglingPrize = null;
-        List<JianglingPrize> jianglingPrizeList = JianglingPrizeService.me.list(Cnd.where(JianglingPrize.APP_ID, request_app_id));
+        List<JianglingPrize> jianglingPrizeList = JianglingPrizeService.instance.appList(request_app_id);
         for (JianglingPrize jianglingPrize : jianglingPrizeList) {
             if (jianglingPrize.getPrize_is_default_winning()) {
                 defaultJianglingPrize = jianglingPrize;
@@ -183,7 +183,7 @@ public class JianglingMemberController extends Controller {
             start += jianglingPrize.getPrize_probability();
         }
         Boolean is_save = true;
-        Integer total_count = JianglingMemberPrizeService.me.count(Cnd.where(JianglingMemberPrize.PRIZE_ID, prize.getPrize_id()));
+        Integer total_count = JianglingMemberPrizeService.instance.prizeCount(prize.getPrize_id());
         if (total_count >= prize.getPrize_total_quantity()) {
             is_save = false;
         }
@@ -196,7 +196,7 @@ public class JianglingMemberController extends Controller {
         jianglingMemberPrize.setUser_id(request_user_id);
         jianglingMemberPrize.setPrize_id(prize.getPrize_id());
         jianglingMemberPrize.setMember_prize_draw_date(DateUtil.getDateString(new Date()));
-        Boolean result = JianglingMemberPrizeService.me.save(jianglingMemberPrize);
+        Boolean result = JianglingMemberPrizeService.instance.save(jianglingMemberPrize);
 
         if (!result) {
             throw new RuntimeException("抽奖不成功");

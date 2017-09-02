@@ -8,23 +8,23 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
-import com.nowui.chuangshi.api.captcha.cache.CaptchaCache;
+import com.nowui.chuangshi.api.captcha.dao.CaptchaDao;
 import com.nowui.chuangshi.api.captcha.model.Captcha;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.util.CacheUtil;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class CaptchaService extends Service {
 
-    public static final CaptchaService me = new CaptchaService();
-
-    public CaptchaService() {
-        setCache(new CaptchaCache());
-    }
+    public static final CaptchaService instance = new CaptchaService();
+    private final String CAPTCHA_ITEM_CACHE = "captcha_item_cache";
+    private final CaptchaDao captchaDao = new CaptchaDao();
 
     public void send(String request_app_id, String captcha_type, String captcha_mobile, String captcha_ip_address, int captcha_minute, String access_id, String access_key, String endpoint, String sign_name, String template_code) {
         Calendar calendar = Calendar.getInstance();
@@ -34,13 +34,13 @@ public class CaptchaService extends Service {
             throw new RuntimeException(captcha_minute + "手机号码格式不正确");
         }
 
-        Integer count = CaptchaService.me.count(Cnd.where(Captcha.APP_ID, request_app_id).and(Captcha.CAPTCHA_TYPE, captcha_type).and(Captcha.CAPTCHA_MOBILE, captcha_mobile).andBetween(Captcha.SYSTEM_CREATE_TIME, calendar.getTime(), new Date()).and(Captcha.SYSTEM_STATUS, true));
+        Integer count = captchaDao.count(Cnd.where(Captcha.APP_ID, request_app_id).and(Captcha.CAPTCHA_TYPE, captcha_type).and(Captcha.CAPTCHA_MOBILE, captcha_mobile).andBetween(Captcha.SYSTEM_CREATE_TIME, calendar.getTime(), new Date()).and(Captcha.SYSTEM_STATUS, true));
 
         if (count > 0) {
             throw new RuntimeException(captcha_minute + "分钟内不能重复申请");
         }
 
-        count = CaptchaService.me.count(Cnd.where(Captcha.APP_ID, request_app_id).and(Captcha.CAPTCHA_TYPE, captcha_type).and(Captcha.CAPTCHA_IP_ADDRESS, captcha_ip_address).andBetween(Captcha.SYSTEM_CREATE_TIME, calendar.getTime(), new Date()).and(Captcha.SYSTEM_STATUS, true));
+        count = captchaDao.count(Cnd.where(Captcha.APP_ID, request_app_id).and(Captcha.CAPTCHA_TYPE, captcha_type).and(Captcha.CAPTCHA_IP_ADDRESS, captcha_ip_address).andBetween(Captcha.SYSTEM_CREATE_TIME, calendar.getTime(), new Date()).and(Captcha.SYSTEM_STATUS, true));
 
         if (count > 0) {
             throw new RuntimeException(captcha_minute + "分钟内不能重复申请");
@@ -107,6 +107,58 @@ public class CaptchaService extends Service {
         if(sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {
 //请求成功
         }
+    }
+
+    public Integer count(String app_id, String captcha_mobile, String captcha_code) {
+        Integer count = captchaDao.count(Cnd.where(Captcha.APP_ID, app_id).andAllowEmpty(Captcha.CAPTCHA_MOBILE, captcha_mobile).andAllowEmpty(Captcha.CAPTCHA_CODE, captcha_code));
+        return count;
+    }
+
+    public Integer adminCount(String app_id, String captcha_type, String captcha_mobile) {
+        Integer count = captchaDao.count(Cnd.where(Captcha.APP_ID, app_id).andAllowEmpty(Captcha.CAPTCHA_TYPE, captcha_type).andAllowEmpty(Captcha.CAPTCHA_MOBILE, captcha_mobile));
+        return count;
+    }
+
+    public List<Captcha> adminList(String app_id, String captcha_type, String captcha_mobile, Integer m, Integer n) {
+        List<Captcha> captchaList = captchaDao.list(Cnd.where(Captcha.APP_ID, app_id).andAllowEmpty(Captcha.CAPTCHA_TYPE, captcha_type).andAllowEmpty(Captcha.CAPTCHA_MOBILE, captcha_mobile).paginate(m, n));
+        return captchaList;
+    }
+
+    public Captcha find(String captcha_id) {
+        Captcha captcha = CacheUtil.get(CAPTCHA_ITEM_CACHE, captcha_id);
+
+        if (captcha == null) {
+            captcha = captchaDao.find(captcha_id);
+
+            CacheUtil.put(CAPTCHA_ITEM_CACHE, captcha_id, captcha);
+        }
+
+        return captcha;
+    }
+
+    public Boolean save(Captcha captcha) {
+        Boolean result = captchaDao.save(captcha);
+        return result;
+    }
+
+    public Boolean update(Captcha captcha, String captcha_id, Integer system_version) {
+        Boolean result = captchaDao.update(captcha, Cnd.where(Captcha.CAPTCHA_ID, captcha_id).and(Captcha.SYSTEM_VERSION, system_version));
+
+        if (result) {
+            CacheUtil.remove(CAPTCHA_ITEM_CACHE, captcha_id);
+        }
+
+        return result;
+    }
+
+    public Boolean delete(String captcha_id, Integer system_version) {
+        Boolean result = captchaDao.delete(Cnd.where(Captcha.CAPTCHA_ID, captcha_id).and(Captcha.SYSTEM_VERSION, system_version));
+
+        if (result) {
+            CacheUtil.remove(CAPTCHA_ITEM_CACHE, captcha_id);
+        }
+
+        return result;
     }
 
 }

@@ -29,12 +29,12 @@ public class EnchashmentController extends Controller {
         Map<String, Object> result = new HashMap<String, Object>();
 
         BigDecimal bill_amount = BigDecimal.ZERO;
-        List<MemberPurchaseOrder> memberPurchaseOrderList = MemberPurchaseOrderService.me.list(Cnd.where(MemberPurchaseOrder.USER_ID, request_user_id).and(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_PAY, true));
+        List<MemberPurchaseOrder> memberPurchaseOrderList = MemberPurchaseOrderService.instance.userIsPayList(request_user_id);
         for (MemberPurchaseOrder memberPurchaseOrder : memberPurchaseOrderList) {
             bill_amount = bill_amount.add(memberPurchaseOrder.getMember_purchase_order_amount());
         }
 
-        List<Enchashment> enchashmentList = EnchashmentService.me.list(Cnd.where(Enchashment.USER_ID, request_user_id));
+        List<Enchashment> enchashmentList = EnchashmentService.instance.userList(request_user_id);
         for (Enchashment enchashment : enchashmentList) {
             bill_amount = bill_amount.subtract(enchashment.getEnchashment_amount());
 
@@ -55,12 +55,12 @@ public class EnchashmentController extends Controller {
 
         Map<String, Object> result = new HashMap<String, Object>();
         BigDecimal bill_amount = BigDecimal.ZERO;
-        List<MemberDeliveryOrder> memberPurchaseOrderList = MemberDeliveryOrderService.me.list(Cnd.where(MemberDeliveryOrder.USER_ID, request_user_id).and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, true));
+        List<MemberDeliveryOrder> memberPurchaseOrderList = MemberDeliveryOrderService.instance.userIsPayList(request_user_id);
         for (MemberDeliveryOrder memberDeliveryOrder : memberPurchaseOrderList) {
             bill_amount = bill_amount.add(memberDeliveryOrder.getMember_delivery_order_amount());
         }
 
-        List<Enchashment> enchashmentList = EnchashmentService.me.list(Cnd.where(Enchashment.USER_ID, request_user_id));
+        List<Enchashment> enchashmentList = EnchashmentService.instance.userList(request_user_id);
         for (Enchashment enchashment : enchashmentList) {
             bill_amount = bill_amount.subtract(enchashment.getEnchashment_amount());
         }
@@ -82,7 +82,7 @@ public class EnchashmentController extends Controller {
         model.setUser_id(request_user_id);
         model.setEnchashment_status(false);
 
-        Boolean result = EnchashmentService.me.save(model);
+        Boolean result = EnchashmentService.instance.save(model);
 
         renderSuccessJson(result);
     }

@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -55,7 +53,7 @@ public class ProductController extends Controller {
         String request_user_id = getRequest_user_id();
         User user = userService.findByUser_id(request_user_id);
         Member member = memberService.findByMember_id(user.getObject_Id());
-        boolean isEmpty = StringUtils.isEmpty(member.getMember_level_id());
+        boolean isEmpty = ValidateUtil.isNullOrEmpty(member.getMember_level_id());
 
         authenticateRequest_app_idAndRequest_user_id();
 

@@ -22,10 +22,11 @@ public class EnchashmentController extends Controller {
         validateRequest(Enchashment.USER_ID, Enchashment.ENCHASHMENT_STATUS, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         Enchashment model = getModel(Enchashment.class);
+        String request_app_id = getRequest_app_id();
         Cnd cnd = Cnd.where(Enchashment.APP_ID, model.getApp_id()).andAllowEmpty(Enchashment.USER_ID, model.getUser_id()).andAllowEmpty(Enchashment.ENCHASHMENT_STATUS, model.getEnchashment_status());
 
-        Integer resultCount = EnchashmentService.me.count(cnd);
-        List<Enchashment> resultList = EnchashmentService.me.list(cnd.paginate(getM(), getN()));
+        Integer resultCount = EnchashmentService.instance.adminCount(request_app_id, model.getUser_id(), model.getEnchashment_status());
+        List<Enchashment> resultList = EnchashmentService.instance.adminList(request_app_id, model.getUser_id(), model.getEnchashment_status(), getM(), getN());
 
         validateResponse(Enchashment.ENCHASHMENT_ID, Enchashment.USER_ID, Enchashment.ENCHASHMENT_AMOUNT, Enchashment.ENCHASHMENT_STATUS, Enchashment.SYSTEM_VERSION);
 
@@ -38,7 +39,7 @@ public class EnchashmentController extends Controller {
 
         Enchashment model = getModel(Enchashment.class);
 
-        Enchashment result = EnchashmentService.me.findById(model.getEnchashment_id());
+        Enchashment result = EnchashmentService.instance.find(model.getEnchashment_id());
 
         validateResponse(Enchashment.USER_ID, Enchashment.ENCHASHMENT_AMOUNT, Enchashment.ENCHASHMENT_STATUS, Enchashment.SYSTEM_VERSION);
 
@@ -52,7 +53,7 @@ public class EnchashmentController extends Controller {
         Enchashment model = getModel(Enchashment.class);
         model.setEnchashment_id(Util.getRandomUUID());
 
-        Boolean result = EnchashmentService.me.save(model);
+        Boolean result = EnchashmentService.instance.save(model);
 
         renderSuccessJson(result);
     }
@@ -63,7 +64,7 @@ public class EnchashmentController extends Controller {
 
         Enchashment model = getModel(Enchashment.class);
 
-        Boolean result = EnchashmentService.me.update(model, Cnd.where(model.ENCHASHMENT_ID, model.getEnchashment_id()).and(Enchashment.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = EnchashmentService.instance.update(model, model.getEnchashment_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -74,7 +75,7 @@ public class EnchashmentController extends Controller {
 
         Enchashment model = getModel(Enchashment.class);
 
-        Boolean result = EnchashmentService.me.delete(model, Cnd.where(model.ENCHASHMENT_ID, model.getEnchashment_id()).and(Enchashment.SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = EnchashmentService.instance.delete(model.getEnchashment_id(), model.getSystem_version());
 
         renderSuccessJson(result);
     }

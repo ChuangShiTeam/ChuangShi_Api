@@ -2,7 +2,7 @@ package com.nowui.chuangshi.controller;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
@@ -63,12 +63,12 @@ public class StockController extends Controller {
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
         String object_id = model.getObject_id();
-        if (StringUtils.isBlank(object_id)) {
+        if (ValidateUtil.isNullOrEmpty(object_id)) {
             object_id = request_app_id;
         }
         Stock stock = stockService.findByWarehouse_idAndObject_idAndProduct_sku_id(model.getWarehouse_id(), object_id, model.getProduct_sku_id());
 
-        if (stock != null && StringUtils.isNotBlank(stock.getStock_id())) {
+        if (stock != null && ValidateUtil.isNullOrEmpty(stock.getStock_id())) {
             throw new RuntimeException("库存已初始化过");
         }
         authenticateRequest_app_idAndRequest_user_id();

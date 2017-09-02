@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import com.nowui.chuangshi.cache.MemberDeliveryOrderCache;
 import com.nowui.chuangshi.model.Express;
@@ -143,7 +143,7 @@ public class MemberDeliveryOrderService extends Service {
         
         if (result) {
             memberDeliveryOrderExpressService.save(member_delivery_order_id, express_id, request_user_id);
-            if (StringUtils.isNotBlank(memberDeliveryOrder.getMember_purchase_order_id())) {
+            if (ValidateUtil.isNullOrEmpty(memberDeliveryOrder.getMember_purchase_order_id())) {
                 memberPurchaseOrderExpressService.save(memberDeliveryOrder.getMember_purchase_order_id(), express_id, request_user_id);
             }
         }
@@ -161,7 +161,7 @@ public class MemberDeliveryOrderService extends Service {
         Boolean result = expressService.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(express_id, request_user_id, system_version);
         if (result) {
             memberDeliveryOrderExpressService.deleteByMember_delivery_order_idAndExpress_idAndSystem_update_user_id(member_delivery_order_id, express_id, request_user_id);
-            if (StringUtils.isNotBlank(memberDeliveryOrder.getMember_purchase_order_id())) {
+            if (ValidateUtil.isNullOrEmpty(memberDeliveryOrder.getMember_purchase_order_id())) {
                 memberPurchaseOrderExpressService.deleteByMember_purchase_order_idAndExpress_idAndSystem_update_user_id(memberDeliveryOrder.getMember_purchase_order_id(), express_id, request_user_id);
             }
         }
@@ -188,7 +188,7 @@ public class MemberDeliveryOrderService extends Service {
         if (result) {
             Boolean is_direct_deliver = false;
             //根据进货单是否仓库代收来判断是否直接则增减库存
-            if (StringUtils.isNotBlank(member_delivery_order.getMember_purchase_order_id())) {
+            if (ValidateUtil.isNullOrEmpty(member_delivery_order.getMember_purchase_order_id())) {
                 MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService.findByMember_purchase_order_id(member_delivery_order.getMember_purchase_order_id());
                 if (memberPurchaseOrder.getMember_purchase_order_is_warehouse_receive()) {
                     is_direct_deliver = true;
@@ -230,7 +230,7 @@ public class MemberDeliveryOrderService extends Service {
         User user = userService.findByUser_id(user_id);
         Member member = memberService.findByMember_id(user.getObject_Id());
         for (MemberDeliveryOrderProductSku memberDeliveryOrderProductSku : memberDeliveryOrderProductSkuList) {
-            if (StringUtils.isBlank(memberDeliveryOrderProductSku.getProduct_sku_id())) {
+            if (ValidateUtil.isNullOrEmpty(memberDeliveryOrderProductSku.getProduct_sku_id())) {
                 throw new RuntimeException("商品skuid不能为空");
             }
             if (memberDeliveryOrderProductSku.getProduct_sku_quantity() == null) {
@@ -299,7 +299,7 @@ public class MemberDeliveryOrderService extends Service {
 	    MemberDeliveryOrder memberDeliveryOrder = findByMember_delivery_order_id(member_delivery_order_id);
 	    //只有当发货单处于待收货状态时才可以完成
 	    if (MemberDeliveryOrderFlow.WAIT_RECEIVE.getKey().equals(memberDeliveryOrder.getMember_delivery_order_flow())) {
-	        if (StringUtils.isNotBlank(memberDeliveryOrder.getMember_purchase_order_id())) {
+	        if (ValidateUtil.isNullOrEmpty(memberDeliveryOrder.getMember_purchase_order_id())) {
 	            String warehouse_id = "";   
 	            //仓库代发找到对应的发货仓库
 	            if (memberDeliveryOrder.getMember_delivery_order_is_warehouse_deliver()) {
@@ -309,7 +309,7 @@ public class MemberDeliveryOrderService extends Service {
 	                }
 	            } 
 	            //默认仓库
-	            if (StringUtils.isBlank(warehouse_id)) {
+	            if (ValidateUtil.isNullOrEmpty(warehouse_id)) {
 	                  List<Warehouse> warehouse_list = warehouseService.listByApp_id(memberDeliveryOrder.getApp_id());
 	                  if (warehouse_list != null && warehouse_list.size() > 0) {
 	                      Warehouse warehouse = warehouse_list.get(0);

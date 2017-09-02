@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -24,6 +22,7 @@ import com.nowui.chuangshi.service.TradeService;
 import com.nowui.chuangshi.type.ExpressBelong;
 import com.nowui.chuangshi.util.DateUtil;
 import com.nowui.chuangshi.util.ExpressUtil;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 public class ExpressController extends Controller {
 
@@ -91,7 +90,7 @@ public class ExpressController extends Controller {
                     express_flow = "问题件";
                 }
                 
-                if (StringUtils.isBlank(express_traces) || "[]".equals(express_traces)) {
+                if (ValidateUtil.isNullOrEmpty(express_traces) || "[]".equals(express_traces)) {
                     express_traces = ""; 
                 }
                 Express bean = expressService.findByExpress_id(express_id);
@@ -170,7 +169,7 @@ public class ExpressController extends Controller {
         authenticateApp_id(express.getApp_id());
         JSONArray express_traces = new JSONArray();
         if (express != null) {
-            if (StringUtils.isNotBlank(express.getExpress_traces())) {
+            if (ValidateUtil.isNullOrEmpty(express.getExpress_traces())) {
                 express_traces = JSONObject.parseArray(express.getExpress_traces());
                 express.put(Express.EXPRESS_TRACES_LIST, express_traces);
             }
@@ -278,7 +277,7 @@ public class ExpressController extends Controller {
                     if (express_is_complete) {
                         if (ExpressBelong.MEMBER_DELIVERY_ORDER.getKey().equals(express.getExpress_belong())) {
                             MemberDeliveryOrderExpress memberDeliveryOrderExpress = memberDeliveryOrderExpressService.findByExpress_id(express.getExpress_id());
-                            if (memberDeliveryOrderExpress != null && StringUtils.isNotBlank(memberDeliveryOrderExpress.getMember_delivery_order_id())) {
+                            if (memberDeliveryOrderExpress != null && ValidateUtil.isNullOrEmpty(memberDeliveryOrderExpress.getMember_delivery_order_id())) {
                                 List<Express> expressList = memberDeliveryOrderExpressService.listByMember_delivery_order_id(memberDeliveryOrderExpress.getMember_delivery_order_id());
                                 Boolean flag = true;
                                 for (Express e : expressList) {
@@ -294,7 +293,7 @@ public class ExpressController extends Controller {
                             }  
                         } else if (ExpressBelong.TRADE.getKey().equals(express.getExpress_belong())){
                             TradeExpress tradeExpress = tradeExpressService.findByExpress_id(express.getExpress_id());
-                            if (tradeExpress != null && StringUtils.isNotBlank(tradeExpress.getTrade_id())) {
+                            if (tradeExpress != null && ValidateUtil.isNullOrEmpty(tradeExpress.getTrade_id())) {
                                 List<Express> expressList = tradeExpressService.listByTrade_id(tradeExpress.getTrade_id());
                                 Boolean flag = true;
                                 for (Express e : expressList) {
@@ -311,7 +310,7 @@ public class ExpressController extends Controller {
                         }
                     }
                     String express_traces = jsonObject.getString("Traces");
-                    if (StringUtils.isBlank(express_traces) || "[]".equals(express_traces)) {
+                    if (ValidateUtil.isNullOrEmpty(express_traces) || "[]".equals(express_traces)) {
                         express_traces = ""; 
                     }
                     expressService.updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idValidateSystem_version(express.getExpress_id(), express_flow, express_is_complete, express_traces, express.getSystem_create_user_id(), express.getSystem_version());

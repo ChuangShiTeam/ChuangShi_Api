@@ -1,14 +1,9 @@
 package com.nowui.chuangshi.dao;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
-import com.alibaba.fastjson.JSON;
 import com.jfinal.plugin.activerecord.SqlPara;
-import com.nowui.chuangshi.model.Sql;
 import com.nowui.chuangshi.util.DateUtil;
-import com.nowui.chuangshi.util.MQUtil;
 
 public class Dao {
     protected void logSql(String sql_table, String sql_action, SqlPara sqlPara) {

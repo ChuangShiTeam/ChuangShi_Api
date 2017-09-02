@@ -140,12 +140,12 @@ public class Cache {
             item = CacheUtil.get(item_cache_name, item_cache_key);
 
             if (item == null) {
-                item = dao.findById(id);
+                item = dao.find(id);
 
                 CacheUtil.put(item_cache_name, item_cache_key, item);
             }
         } else {
-            item = dao.findById(id);
+            item = dao.find(id);
         }
 
         return item;
@@ -181,8 +181,8 @@ public class Cache {
         return result;
     }
 
-    public Boolean delete(Model model, Cnd cnd) {
-        Boolean result = dao.delete(model, cnd);
+    public Boolean delete(Cnd cnd) {
+        Boolean result = dao.delete(cnd);
 
         if (is_item_cache && result) {
             CacheUtil.remove(item_cache_name, item_cache_key);
