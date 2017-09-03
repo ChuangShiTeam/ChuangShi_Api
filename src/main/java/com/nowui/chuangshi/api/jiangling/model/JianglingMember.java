@@ -78,7 +78,11 @@ public class JianglingMember extends Model<JianglingMember> {
     }
 
     public Boolean getMember_redeem_code_is_exchange() {
-        return getNumber(MEMBER_REDEEM_CODE_IS_EXCHANGE).intValue() == 1;
+        try {
+            return getNumber(MEMBER_REDEEM_CODE_IS_EXCHANGE).intValue() == 1;
+        } catch (Exception e) {
+            return getBoolean(MEMBER_REDEEM_CODE_IS_EXCHANGE);
+        }
     }
 
     public void setMember_redeem_code_is_exchange(Boolean member_redeem_code_is_exchange) {

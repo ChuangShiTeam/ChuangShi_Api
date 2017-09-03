@@ -25,7 +25,7 @@ public class FeijiuFastProductService extends Service {
     }
 
     public List<FeijiuFastProduct> appList(String app_id) {
-        List<FeijiuFastProduct> feijiuFastProductList = feijiuFastProductDao.list(Cnd.where(FeijiuFastProduct.APP_ID, app_id));
+        List<FeijiuFastProduct> feijiuFastProductList = feijiuFastProductDao.list(Cnd.where(FeijiuFastProduct.APP_ID, app_id).asc(FeijiuFastProduct.PRODUCT_SORT));
         return feijiuFastProductList;
     }
 
