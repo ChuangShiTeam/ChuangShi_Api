@@ -9,7 +9,7 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.util.Date;
 
 @Table("table_jiangling_member")
-@Primary("member_id")
+@Primary("user_id")
 public class JianglingMember extends Model<JianglingMember> {
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户编号", updatable = false)
