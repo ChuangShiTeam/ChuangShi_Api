@@ -15,12 +15,24 @@ public class BillService extends Service {
     private final BillDao billDao = new BillDao();
 
     public Integer adminCount(String app_id, String bill_name) {
-        Integer count = billDao.count(Cnd.where(Bill.APP_ID, app_id).andAllowEmpty(Bill.BILL_NAME, bill_name));
+        Cnd cnd = Cnd.where(Bill.SYSTEM_STATUS, true);
+        cnd.and(Bill.APP_ID, app_id);
+        cnd.andAllowEmpty(Bill.BILL_NAME, bill_name);
+
+        Integer count = billDao.count(cnd);
         return count;
     }
 
     public List<Bill> adminList(String app_id, String bill_name, Integer m, Integer n) {
-        List<Bill> billList = billDao.list(Cnd.where(Bill.APP_ID, app_id).andAllowEmpty(Bill.BILL_NAME, bill_name).paginate(m, n));
+        Cnd cnd = Cnd.where(Bill.SYSTEM_STATUS, true);
+        cnd.and(Bill.APP_ID, app_id);
+        cnd.andAllowEmpty(Bill.BILL_NAME, bill_name);
+        cnd.paginate(m, n);
+
+        List<Bill> billList = billDao.primaryKeyList(cnd);
+        for (Bill bill : billList) {
+            bill.put(find(bill.getBill_id()));
+        }
         return billList;
     }
 
@@ -42,23 +54,31 @@ public class BillService extends Service {
     }
 
     public Boolean update(Bill bill, String bill_id, Integer system_version) {
-        Boolean result = billDao.update(bill, Cnd.where(Bill.BILL_ID, bill_id).and(Bill.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(Bill.SYSTEM_STATUS, true);
+        cnd.and(Bill.BILL_ID, bill_id);
+        cnd.and(Bill.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = billDao.update(bill, cnd);
+
+        if (success) {
             CacheUtil.remove(BILL_ITEM_CACHE, bill_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String bill_id, Integer system_version) {
-        Boolean result = billDao.delete(Cnd.where(Bill.BILL_ID, bill_id).and(Bill.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(Bill.SYSTEM_STATUS, true);
+        cnd.and(Bill.BILL_ID, bill_id);
+        cnd.and(Bill.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = billDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(BILL_ITEM_CACHE, bill_id);
         }
 
-        return result;
+        return success;
     }
 
 }

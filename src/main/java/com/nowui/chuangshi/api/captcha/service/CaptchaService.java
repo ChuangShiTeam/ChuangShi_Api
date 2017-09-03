@@ -26,6 +26,85 @@ public class CaptchaService extends Service {
     private final String CAPTCHA_ITEM_CACHE = "captcha_item_cache";
     private final CaptchaDao captchaDao = new CaptchaDao();
 
+    public Integer count(String app_id, String captcha_mobile, String captcha_code) {
+        Cnd cnd = Cnd.where(Captcha.SYSTEM_STATUS, true);
+        cnd.and(Captcha.APP_ID, app_id);
+        cnd.andAllowEmpty(Captcha.CAPTCHA_MOBILE, captcha_mobile);
+        cnd.andAllowEmpty(Captcha.CAPTCHA_CODE, captcha_code);
+
+        Integer count = captchaDao.count(cnd);
+        return count;
+    }
+
+    public Integer adminCount(String app_id, String captcha_type, String captcha_mobile) {
+        Cnd cnd = Cnd.where(Captcha.SYSTEM_STATUS, true);
+        cnd.and(Captcha.APP_ID, app_id);
+        cnd.andAllowEmpty(Captcha.CAPTCHA_TYPE, captcha_type);
+        cnd.andAllowEmpty(Captcha.CAPTCHA_MOBILE, captcha_mobile);
+
+        Integer count = captchaDao.count(cnd);
+        return count;
+    }
+
+    public List<Captcha> adminList(String app_id, String captcha_type, String captcha_mobile, Integer m, Integer n) {
+        Cnd cnd = Cnd.where(Captcha.SYSTEM_STATUS, true);
+        cnd.and(Captcha.APP_ID, app_id);
+        cnd.andAllowEmpty(Captcha.CAPTCHA_TYPE, captcha_type);
+        cnd.andAllowEmpty(Captcha.CAPTCHA_MOBILE, captcha_mobile);
+        cnd.paginate(m, n);
+
+        List<Captcha> captchaList = captchaDao.primaryKeyList(cnd);
+        for (Captcha captcha : captchaList) {
+            captcha.put(find(captcha.getCaptcha_id()));
+        }
+        return captchaList;
+    }
+
+    public Captcha find(String captcha_id) {
+        Captcha captcha = CacheUtil.get(CAPTCHA_ITEM_CACHE, captcha_id);
+
+        if (captcha == null) {
+            captcha = captchaDao.find(captcha_id);
+
+            CacheUtil.put(CAPTCHA_ITEM_CACHE, captcha_id, captcha);
+        }
+
+        return captcha;
+    }
+
+    public Boolean save(Captcha captcha) {
+        Boolean success = captchaDao.save(captcha);
+        return success;
+    }
+
+    public Boolean update(Captcha captcha, String captcha_id, Integer system_version) {
+        Cnd cnd = Cnd.where(Captcha.SYSTEM_STATUS, true);
+        cnd.and(Captcha.CAPTCHA_ID, captcha_id);
+        cnd.and(Captcha.SYSTEM_VERSION, system_version);
+
+        Boolean success = captchaDao.update(captcha, cnd);
+
+        if (success) {
+            CacheUtil.remove(CAPTCHA_ITEM_CACHE, captcha_id);
+        }
+
+        return success;
+    }
+
+    public Boolean delete(String captcha_id, Integer system_version) {
+        Cnd cnd = Cnd.where(Captcha.SYSTEM_STATUS, true);
+        cnd.and(Captcha.CAPTCHA_ID, captcha_id);
+        cnd.and(Captcha.SYSTEM_VERSION, system_version);
+
+        Boolean success = captchaDao.delete(cnd);
+
+        if (success) {
+            CacheUtil.remove(CAPTCHA_ITEM_CACHE, captcha_id);
+        }
+
+        return success;
+    }
+
     public void send(String request_app_id, String captcha_type, String captcha_mobile, String captcha_ip_address, int captcha_minute, String access_id, String access_key, String endpoint, String sign_name, String template_code) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, -captcha_minute);
@@ -107,58 +186,6 @@ public class CaptchaService extends Service {
         if(sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {
 //请求成功
         }
-    }
-
-    public Integer count(String app_id, String captcha_mobile, String captcha_code) {
-        Integer count = captchaDao.count(Cnd.where(Captcha.APP_ID, app_id).andAllowEmpty(Captcha.CAPTCHA_MOBILE, captcha_mobile).andAllowEmpty(Captcha.CAPTCHA_CODE, captcha_code));
-        return count;
-    }
-
-    public Integer adminCount(String app_id, String captcha_type, String captcha_mobile) {
-        Integer count = captchaDao.count(Cnd.where(Captcha.APP_ID, app_id).andAllowEmpty(Captcha.CAPTCHA_TYPE, captcha_type).andAllowEmpty(Captcha.CAPTCHA_MOBILE, captcha_mobile));
-        return count;
-    }
-
-    public List<Captcha> adminList(String app_id, String captcha_type, String captcha_mobile, Integer m, Integer n) {
-        List<Captcha> captchaList = captchaDao.list(Cnd.where(Captcha.APP_ID, app_id).andAllowEmpty(Captcha.CAPTCHA_TYPE, captcha_type).andAllowEmpty(Captcha.CAPTCHA_MOBILE, captcha_mobile).paginate(m, n));
-        return captchaList;
-    }
-
-    public Captcha find(String captcha_id) {
-        Captcha captcha = CacheUtil.get(CAPTCHA_ITEM_CACHE, captcha_id);
-
-        if (captcha == null) {
-            captcha = captchaDao.find(captcha_id);
-
-            CacheUtil.put(CAPTCHA_ITEM_CACHE, captcha_id, captcha);
-        }
-
-        return captcha;
-    }
-
-    public Boolean save(Captcha captcha) {
-        Boolean result = captchaDao.save(captcha);
-        return result;
-    }
-
-    public Boolean update(Captcha captcha, String captcha_id, Integer system_version) {
-        Boolean result = captchaDao.update(captcha, Cnd.where(Captcha.CAPTCHA_ID, captcha_id).and(Captcha.SYSTEM_VERSION, system_version));
-
-        if (result) {
-            CacheUtil.remove(CAPTCHA_ITEM_CACHE, captcha_id);
-        }
-
-        return result;
-    }
-
-    public Boolean delete(String captcha_id, Integer system_version) {
-        Boolean result = captchaDao.delete(Cnd.where(Captcha.CAPTCHA_ID, captcha_id).and(Captcha.SYSTEM_VERSION, system_version));
-
-        if (result) {
-            CacheUtil.remove(CAPTCHA_ITEM_CACHE, captcha_id);
-        }
-
-        return result;
     }
 
 }

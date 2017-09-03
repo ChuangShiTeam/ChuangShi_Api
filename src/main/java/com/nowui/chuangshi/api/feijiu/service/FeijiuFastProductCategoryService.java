@@ -15,17 +15,35 @@ public class FeijiuFastProductCategoryService extends Service {
     private final FeijiuFastProductCategoryDao feijiuFastProductCategoryDao = new FeijiuFastProductCategoryDao();
 
     public Integer adminCount(String app_id, String product_category_name) {
-        Integer count = feijiuFastProductCategoryDao.count(Cnd.where(FeijiuFastProductCategory.APP_ID, app_id).andAllowEmpty(FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, product_category_name));
+        Cnd cnd = Cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
+        cnd.and(FeijiuFastProductCategory.APP_ID, app_id);
+        cnd.andAllowEmpty(FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, product_category_name);
+
+        Integer count = feijiuFastProductCategoryDao.count(cnd);
         return count;
     }
 
     public List<FeijiuFastProductCategory> adminList(String app_id, String product_category_name, Integer m, Integer n) {
-        List<FeijiuFastProductCategory> feijiuFastProductCategoryList = feijiuFastProductCategoryDao.list(Cnd.where(FeijiuFastProductCategory.APP_ID, app_id).andAllowEmpty(FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, product_category_name).paginate(m, n));
+        Cnd cnd = Cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
+        cnd.and(FeijiuFastProductCategory.APP_ID, app_id);
+        cnd.andAllowEmpty(FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, product_category_name);
+        cnd.paginate(m, n);
+
+        List<FeijiuFastProductCategory> feijiuFastProductCategoryList = feijiuFastProductCategoryDao.primaryKeyList(cnd);
+        for (FeijiuFastProductCategory feijiuFastProductCategory : feijiuFastProductCategoryList) {
+            feijiuFastProductCategory.put(find(feijiuFastProductCategory.getProduct_category_id()));
+        }
         return feijiuFastProductCategoryList;
     }
 
     public List<FeijiuFastProductCategory> appList(String app_id) {
-        List<FeijiuFastProductCategory> feijiuFastProductCategoryList = feijiuFastProductCategoryDao.list(Cnd.where(FeijiuFastProductCategory.APP_ID, app_id));
+        Cnd cnd = Cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
+        cnd.and(FeijiuFastProductCategory.APP_ID, app_id);
+
+        List<FeijiuFastProductCategory> feijiuFastProductCategoryList = feijiuFastProductCategoryDao.primaryKeyList(cnd);
+        for (FeijiuFastProductCategory feijiuFastProductCategory : feijiuFastProductCategoryList) {
+            feijiuFastProductCategory.put(find(feijiuFastProductCategory.getProduct_category_id()));
+        }
         return feijiuFastProductCategoryList;
     }
 
@@ -42,28 +60,36 @@ public class FeijiuFastProductCategoryService extends Service {
     }
 
     public Boolean save(FeijiuFastProductCategory feijiuFastProductCategory) {
-        Boolean result = feijiuFastProductCategoryDao.save(feijiuFastProductCategory);
-        return result;
+        Boolean success = feijiuFastProductCategoryDao.save(feijiuFastProductCategory);
+        return success;
     }
 
     public Boolean update(FeijiuFastProductCategory feijiuFastProductCategory, String product_category_id, Integer system_version) {
-        Boolean result = feijiuFastProductCategoryDao.update(feijiuFastProductCategory, Cnd.where(FeijiuFastProductCategory.PRODUCT_CATEGORY_ID, product_category_id).and(FeijiuFastProductCategory.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
+        cnd.and(FeijiuFastProductCategory.PRODUCT_CATEGORY_ID, product_category_id);
+        cnd.and(FeijiuFastProductCategory.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = feijiuFastProductCategoryDao.update(feijiuFastProductCategory, cnd);
+
+        if (success) {
             CacheUtil.remove(FEIJIU_FAST_PRODUCT_CATEGORY_ITEM_CACHE, product_category_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String product_category_id, Integer system_version) {
-        Boolean result = feijiuFastProductCategoryDao.delete(Cnd.where(FeijiuFastProductCategory.PRODUCT_CATEGORY_ID, product_category_id).and(FeijiuFastProductCategory.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
+        cnd.and(FeijiuFastProductCategory.PRODUCT_CATEGORY_ID, product_category_id);
+        cnd.and(FeijiuFastProductCategory.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = feijiuFastProductCategoryDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(FEIJIU_FAST_PRODUCT_CATEGORY_ITEM_CACHE, product_category_id);
         }
 
-        return result;
+        return success;
     }
 
 }

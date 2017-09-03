@@ -15,17 +15,36 @@ public class FeijiuFastProductService extends Service {
     private final FeijiuFastProductDao feijiuFastProductDao = new FeijiuFastProductDao();
 
     public Integer adminCount(String app_id, String product_name) {
-        Integer count = feijiuFastProductDao.count(Cnd.where(FeijiuFastProduct.APP_ID, app_id).andAllowEmpty(FeijiuFastProduct.PRODUCT_NAME, product_name));
+        Cnd cnd = Cnd.where(FeijiuFastProduct.SYSTEM_STATUS, true);
+        cnd.and(FeijiuFastProduct.APP_ID, app_id);
+        cnd.andAllowEmpty(FeijiuFastProduct.PRODUCT_NAME, product_name);
+
+        Integer count = feijiuFastProductDao.count(cnd);
         return count;
     }
 
     public List<FeijiuFastProduct> adminList(String app_id, String product_name, Integer m, Integer n) {
-        List<FeijiuFastProduct> feijiuFastProductList = feijiuFastProductDao.list(Cnd.where(FeijiuFastProduct.APP_ID, app_id).andAllowEmpty(FeijiuFastProduct.PRODUCT_NAME, product_name).asc(FeijiuFastProduct.PRODUCT_SORT).paginate(m, n));
+        Cnd cnd = Cnd.where(FeijiuFastProduct.SYSTEM_STATUS, true);
+        cnd.and(FeijiuFastProduct.APP_ID, app_id);
+        cnd.andAllowEmpty(FeijiuFastProduct.PRODUCT_NAME, product_name);
+        cnd.asc(FeijiuFastProduct.PRODUCT_SORT).paginate(m, n);
+
+        List<FeijiuFastProduct> feijiuFastProductList = feijiuFastProductDao.primaryKeyList(cnd);
+        for (FeijiuFastProduct feijiuFastProduct : feijiuFastProductList) {
+            feijiuFastProduct.put(find(feijiuFastProduct.getProduct_id()));
+        }
         return feijiuFastProductList;
     }
 
     public List<FeijiuFastProduct> appList(String app_id) {
-        List<FeijiuFastProduct> feijiuFastProductList = feijiuFastProductDao.list(Cnd.where(FeijiuFastProduct.APP_ID, app_id).asc(FeijiuFastProduct.PRODUCT_SORT));
+        Cnd cnd = Cnd.where(FeijiuFastProduct.SYSTEM_STATUS, true);
+        cnd.and(FeijiuFastProduct.APP_ID, app_id);
+        cnd.asc(FeijiuFastProduct.PRODUCT_SORT);
+
+        List<FeijiuFastProduct> feijiuFastProductList = feijiuFastProductDao.primaryKeyList(cnd);
+        for (FeijiuFastProduct feijiuFastProduct : feijiuFastProductList) {
+            feijiuFastProduct.put(find(feijiuFastProduct.getProduct_id()));
+        }
         return feijiuFastProductList;
     }
 
@@ -42,28 +61,36 @@ public class FeijiuFastProductService extends Service {
     }
 
     public Boolean save(FeijiuFastProduct feijiuFastProduct) {
-        Boolean result = feijiuFastProductDao.save(feijiuFastProduct);
-        return result;
+        Boolean success = feijiuFastProductDao.save(feijiuFastProduct);
+        return success;
     }
 
     public Boolean update(FeijiuFastProduct feijiuFastProduct, String product_id, Integer system_version) {
-        Boolean result = feijiuFastProductDao.update(feijiuFastProduct, Cnd.where(FeijiuFastProduct.PRODUCT_ID, product_id).and(FeijiuFastProduct.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(FeijiuFastProduct.SYSTEM_STATUS, true);
+        cnd.and(FeijiuFastProduct.PRODUCT_ID, product_id);
+        cnd.and(FeijiuFastProduct.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = feijiuFastProductDao.update(feijiuFastProduct, cnd);
+
+        if (success) {
             CacheUtil.remove(FEIJIU_FAST_PRODUCT_ITEM_CACHE, product_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String product_id, Integer system_version) {
-        Boolean result = feijiuFastProductDao.delete(Cnd.where(FeijiuFastProduct.PRODUCT_ID, product_id).and(FeijiuFastProduct.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(FeijiuFastProduct.SYSTEM_STATUS, true);
+        cnd.and(FeijiuFastProduct.PRODUCT_ID, product_id);
+        cnd.and(FeijiuFastProduct.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = feijiuFastProductDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(FEIJIU_FAST_PRODUCT_ITEM_CACHE, product_id);
         }
 
-        return result;
+        return success;
     }
 
 }

@@ -249,13 +249,6 @@ public class WebConfig extends JFinalConfig {
         }
 
         activeRecordPlugin.setBaseSqlTemplatePath(baseSqlTemplatePath);
-        // java.io.File[] files = new
-        // java.io.File(baseSqlTemplatePath).listFiles();
-        // for (java.io.File file : files) {
-        // if (file.isFile() && file.getName().endsWith(".sql")) {
-        // activeRecordPlugin.addSqlTemplate(file.getName());
-        // }
-        // }
         getSql(activeRecordPlugin, baseSqlTemplatePath, baseSqlTemplatePath);
 
         activeRecordPlugin.addMapping("table_http", "http_id", Http.class);
@@ -353,12 +346,6 @@ public class WebConfig extends JFinalConfig {
 
         Cron4jPlugin cron4jPlugin = new Cron4jPlugin();
         plugins.add(cron4jPlugin);
-
-        // JFinal-event事件驱动插件()
-//        EventPlugin eventPlugin = new EventPlugin(false, "com.nowui.chuangshi", true);
-//        eventPlugin.setRmiServer(15555);
-//        eventPlugin.setRmiClient("127.0.0.1", 15555);
-//        plugins.add(eventPlugin);
 
     }
 

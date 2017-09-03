@@ -15,17 +15,37 @@ public class EnchashmentService extends Service {
     private final EnchashmentDao certificateDao = new EnchashmentDao();
 
     public Integer adminCount(String app_id, String user_id, Boolean enchashment_status) {
-        Integer count = certificateDao.count(Cnd.where(Enchashment.APP_ID, app_id).andAllowEmpty(Enchashment.USER_ID, user_id).andAllowEmpty(Enchashment.ENCHASHMENT_STATUS, enchashment_status));
+        Cnd cnd = Cnd.where(Enchashment.SYSTEM_STATUS, true);
+        cnd.and(Enchashment.APP_ID, app_id);
+        cnd.andAllowEmpty(Enchashment.USER_ID, user_id);
+        cnd.andAllowEmpty(Enchashment.ENCHASHMENT_STATUS, enchashment_status);
+
+        Integer count = certificateDao.count(cnd);
         return count;
     }
 
     public List<Enchashment> adminList(String app_id, String user_id, Boolean enchashment_status, Integer m, Integer n) {
-        List<Enchashment> enchashmentList = certificateDao.list(Cnd.where(Enchashment.APP_ID, app_id).andAllowEmpty(Enchashment.USER_ID, user_id).andAllowEmpty(Enchashment.ENCHASHMENT_STATUS, enchashment_status).paginate(m, n));
+        Cnd cnd = Cnd.where(Enchashment.SYSTEM_STATUS, true);
+        cnd.and(Enchashment.APP_ID, app_id);
+        cnd.andAllowEmpty(Enchashment.USER_ID, user_id);
+        cnd.andAllowEmpty(Enchashment.ENCHASHMENT_STATUS, enchashment_status);
+        cnd.paginate(m, n);
+
+        List<Enchashment> enchashmentList = certificateDao.primaryKeyList(cnd);
+        for (Enchashment enchashment : enchashmentList) {
+            enchashment.put(find(enchashment.getEnchashment_id()));
+        }
         return enchashmentList;
     }
 
     public List<Enchashment> userList(String user_id) {
-        List<Enchashment> enchashmentList = certificateDao.list(Cnd.where(Enchashment.USER_ID, user_id));
+        Cnd cnd = Cnd.where(Enchashment.SYSTEM_STATUS, true);
+        cnd.and(Enchashment.USER_ID, user_id);
+
+        List<Enchashment> enchashmentList = certificateDao.primaryKeyList(cnd);
+        for (Enchashment enchashment : enchashmentList) {
+            enchashment.put(find(enchashment.getEnchashment_id()));
+        }
         return enchashmentList;
     }
 
@@ -42,28 +62,36 @@ public class EnchashmentService extends Service {
     }
 
     public Boolean save(Enchashment certificate) {
-        Boolean result = certificateDao.save(certificate);
-        return result;
+        Boolean success = certificateDao.save(certificate);
+        return success;
     }
 
     public Boolean update(Enchashment certificate, String certificate_id, Integer system_version) {
-        Boolean result = certificateDao.update(certificate, Cnd.where(Enchashment.ENCHASHMENT_ID, certificate_id).and(Enchashment.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(Enchashment.SYSTEM_STATUS, true);
+        cnd.and(Enchashment.ENCHASHMENT_ID, certificate_id);
+        cnd.and(Enchashment.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = certificateDao.update(certificate, cnd);
+
+        if (success) {
             CacheUtil.remove(ENCHASHMENT_ITEM_CACHE, certificate_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String certificate_id, Integer system_version) {
-        Boolean result = certificateDao.delete(Cnd.where(Enchashment.ENCHASHMENT_ID, certificate_id).and(Enchashment.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(Enchashment.SYSTEM_STATUS, true);
+        cnd.and(Enchashment.ENCHASHMENT_ID, certificate_id);
+        cnd.and(Enchashment.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = certificateDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(ENCHASHMENT_ITEM_CACHE, certificate_id);
         }
 
-        return result;
+        return success;
     }
 
 }

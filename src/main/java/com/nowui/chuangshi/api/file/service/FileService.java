@@ -16,12 +16,24 @@ public class FileService extends Service {
     private final FileDao fileDao = new FileDao();
 
     public Integer adminCount(String app_id, String file_name) {
-        Integer count = fileDao.count(Cnd.where(File.APP_ID, app_id).andAllowEmpty(File.FILE_NAME, file_name));
+        Cnd cnd = Cnd.where(File.SYSTEM_STATUS, true);
+        cnd.and(File.APP_ID, app_id);
+        cnd.andAllowEmpty(File.FILE_NAME, file_name);
+
+        Integer count = fileDao.count(cnd);
         return count;
     }
 
     public List<File> adminList(String app_id, String file_name, Integer m, Integer n) {
-        List<File> fileList = fileDao.list(Cnd.where(File.APP_ID, app_id).andAllowEmpty(File.FILE_NAME, file_name).paginate(m, n));
+        Cnd cnd = Cnd.where(File.SYSTEM_STATUS, true);
+        cnd.and(File.APP_ID, app_id);
+        cnd.andAllowEmpty(File.FILE_NAME, file_name);
+        cnd.paginate(m, n);
+
+        List<File> fileList = fileDao.primaryKeyList(cnd);
+        for (File file : fileList) {
+            file.put(find(file.getFile_id()));
+        }
         return fileList;
     }
 
@@ -35,6 +47,39 @@ public class FileService extends Service {
         }
 
         return file;
+    }
+
+    public Boolean save(File file) {
+        Boolean success = fileDao.save(file);
+        return success;
+    }
+
+    public Boolean update(File file, String file_id, Integer system_version) {
+        Cnd cnd = Cnd.where(File.SYSTEM_STATUS, true);
+        cnd.and(File.FILE_ID, file_id);
+        cnd.and(File.SYSTEM_VERSION, system_version);
+
+        Boolean success = fileDao.update(file, cnd);
+
+        if (success) {
+            CacheUtil.remove(FILE_ITEM_CACHE, file_id);
+        }
+
+        return success;
+    }
+
+    public Boolean delete(String file_id, Integer system_version) {
+        Cnd cnd = Cnd.where(File.SYSTEM_STATUS, true);
+        cnd.and(File.FILE_ID, file_id);
+        cnd.and(File.SYSTEM_VERSION, system_version);
+
+        Boolean success = fileDao.delete(cnd);
+
+        if (success) {
+            CacheUtil.remove(FILE_ITEM_CACHE, file_id);
+        }
+
+        return success;
     }
 
     public File getFile(String file_id) {
@@ -63,31 +108,6 @@ public class FileService extends Service {
         }
 
         return file.getFile_original_path();
-    }
-
-    public Boolean save(File file) {
-        Boolean result = fileDao.save(file);
-        return result;
-    }
-
-    public Boolean update(File file, String file_id, Integer system_version) {
-        Boolean result = fileDao.update(file, Cnd.where(File.FILE_ID, file_id).and(File.SYSTEM_VERSION, system_version));
-
-        if (result) {
-            CacheUtil.remove(FILE_ITEM_CACHE, file_id);
-        }
-
-        return result;
-    }
-
-    public Boolean delete(String file_id, Integer system_version) {
-        Boolean result = fileDao.delete(Cnd.where(File.FILE_ID, file_id).and(File.SYSTEM_VERSION, system_version));
-
-        if (result) {
-            CacheUtil.remove(FILE_ITEM_CACHE, file_id);
-        }
-
-        return result;
     }
 
 }

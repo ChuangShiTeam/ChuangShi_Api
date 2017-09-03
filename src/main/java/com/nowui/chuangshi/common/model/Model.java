@@ -390,10 +390,14 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return stringBuilder.toString();
     }
 
-    public String buildListSql() {
+    public String buildListSql(Boolean isPrimaryKey) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("SELECT \n");
-        stringBuilder.append("*");
+        if (isPrimaryKey) {
+            stringBuilder.append(getTable().getPrimaryKey()[0]);
+        } else {
+            stringBuilder.append("*");
+        }
         stringBuilder.append("\n");
         stringBuilder.append("FROM ");
         stringBuilder.append(getTable().getName());

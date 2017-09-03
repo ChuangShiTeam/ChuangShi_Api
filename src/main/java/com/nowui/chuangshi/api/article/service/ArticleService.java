@@ -5,6 +5,7 @@ import com.nowui.chuangshi.api.article.model.Article;
 import com.nowui.chuangshi.api.article.model.ArticleCategory;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.util.CacheUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,26 +13,51 @@ import java.util.List;
 public class ArticleService extends Service {
 
     public static final ArticleService instance = new ArticleService();
+    private final String ARTICLE_ITEM_CACHE = "article_item_cache";
     private final ArticleDao articleDao = new ArticleDao();
 
     public Integer adminCount(String app_id, String article_name) {
-        Integer result = articleDao.count(Cnd.where(Article.APP_ID, app_id).andAllowEmpty(Article.ARTICLE_NAME, article_name));
-        return result;
+        Cnd cnd = Cnd.where(Article.SYSTEM_STATUS, true);
+        cnd.and(Article.APP_ID, app_id);
+        cnd.andAllowEmpty(Article.ARTICLE_NAME, article_name);
+
+        Integer count = articleDao.count(cnd);
+        return count;
     }
 
     public List<Article> adminList(String app_id, String article_name, Integer m, Integer n) {
-        List<Article> resultList = articleDao.list(Cnd.where(Article.APP_ID, app_id).andAllowEmpty(Article.ARTICLE_NAME, article_name).paginate(m, n));
-        return resultList;
+        Cnd cnd = Cnd.where(Article.SYSTEM_STATUS, true);
+        cnd.and(Article.APP_ID, app_id);
+        cnd.andAllowEmpty(Article.ARTICLE_NAME, article_name);
+        cnd.paginate(m, n);
+
+        List<Article> articleList = articleDao.primaryKeyList(cnd);
+        for (Article article : articleList) {
+            article.put(find(article.getArticle_id()));
+        }
+        return articleList;
     }
 
     public List<Article> appList(String app_id) {
-        List<Article> resultList = articleDao.list(Cnd.where(Article.APP_ID, app_id));
-        return resultList;
+        Cnd cnd = Cnd.where(Article.SYSTEM_STATUS, true);
+        cnd.and(Article.APP_ID, app_id);
+
+        List<Article> articleList = articleDao.primaryKeyList(cnd);
+        for (Article article : articleList) {
+            article.put(find(article.getArticle_id()));
+        }
+        return articleList;
     }
 
     public List<Article> categoryList(String article_category_id) {
-        List<Article> resultList = articleDao.list(Cnd.where(Article.ARTICLE_CATEGORY_ID, article_category_id));
-        return resultList;
+        Cnd cnd = Cnd.where(Article.SYSTEM_STATUS, true);
+        cnd.and(Article.ARTICLE_CATEGORY_ID, article_category_id);
+
+        List<Article> articleList = articleDao.primaryKeyList(cnd);
+        for (Article article : articleList) {
+            article.put(find(article.getArticle_id()));
+        }
+        return articleList;
     }
 
     public List<Article> topCategoryList(List<ArticleCategory> articleCategoryList, Integer n) {
@@ -45,23 +71,48 @@ public class ArticleService extends Service {
     }
 
     public Article find(String article_id) {
-        Article result = articleDao.find(article_id);
-        return result;
+        Article article = CacheUtil.get(ARTICLE_ITEM_CACHE, article_id);
+
+        if (article == null) {
+            article = articleDao.find(article_id);
+
+            CacheUtil.put(ARTICLE_ITEM_CACHE, article_id, article);
+        }
+
+        return article;
     }
 
     public Boolean save(Article article) {
-        Boolean result = articleDao.save(article);
-        return result;
+        Boolean success = articleDao.save(article);
+        return success;
     }
 
     public Boolean update(Article article, String article_id, Integer system_version) {
-        Boolean result = articleDao.update(article, Cnd.where(Article.ARTICLE_ID, article_id).and(Article.SYSTEM_VERSION, system_version));
-        return result;
+        Cnd cnd = Cnd.where(Article.SYSTEM_STATUS, true);
+        cnd.and(Article.ARTICLE_ID, article_id);
+        cnd.and(Article.SYSTEM_VERSION, system_version);
+
+        Boolean success = articleDao.update(article, cnd);
+
+        if (success) {
+            CacheUtil.remove(ARTICLE_ITEM_CACHE, article_id);
+        }
+
+        return success;
     }
 
     public Boolean delete(String article_id, Integer system_version) {
-        Boolean result = articleDao.delete(Cnd.where(Article.ARTICLE_ID, article_id).and(Article.SYSTEM_VERSION, system_version));
-        return result;
+        Cnd cnd = Cnd.where(Article.SYSTEM_STATUS, true);
+        cnd.and(Article.ARTICLE_ID, article_id);
+        cnd.and(Article.SYSTEM_VERSION, system_version);
+
+        Boolean success = articleDao.delete(cnd);
+
+        if (success) {
+            CacheUtil.remove(ARTICLE_ITEM_CACHE, article_id);
+        }
+
+        return success;
     }
 
 }

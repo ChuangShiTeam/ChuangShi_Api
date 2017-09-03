@@ -25,28 +25,36 @@ public class CertificatePayService extends Service {
     }
 
     public Boolean save(CertificatePay certificatePay) {
-        Boolean result = certificatePayDao.save(certificatePay);
-        return result;
+        Boolean success = certificatePayDao.save(certificatePay);
+        return success;
     }
 
     public Boolean update(CertificatePay certificatePay, String certificate_id, Integer system_version) {
-        Boolean result = certificatePayDao.update(certificatePay, Cnd.where(CertificatePay.CERTIFICATE_ID, certificate_id).and(CertificatePay.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(CertificatePay.SYSTEM_STATUS, true);
+        cnd.and(CertificatePay.CERTIFICATE_ID, certificate_id);
+        cnd.and(CertificatePay.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = certificatePayDao.update(certificatePay, cnd);
+
+        if (success) {
             CacheUtil.remove(CERTIFICATE_PAY_ITEM_CACHE, certificate_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String certificate_id, Integer system_version) {
-        Boolean result = certificatePayDao.delete(Cnd.where(CertificatePay.CERTIFICATE_ID, certificate_id).and(CertificatePay.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(CertificatePay.SYSTEM_STATUS, true);
+        cnd.and(CertificatePay.CERTIFICATE_ID, certificate_id);
+        cnd.and(CertificatePay.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = certificatePayDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(CERTIFICATE_PAY_ITEM_CACHE, certificate_id);
         }
 
-        return result;
+        return success;
     }
 
 }

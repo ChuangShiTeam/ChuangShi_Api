@@ -1,6 +1,5 @@
 package com.nowui.chuangshi.common.sql;
 
-import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 public class Cnd {
@@ -134,11 +133,11 @@ public class Cnd {
         return this;
     }
 
-    public Cnd andNotSystemStatus() {
-        this.criteria.setSystemStatus(false);
-
-        return this;
-    }
+//    public Cnd andNotSystemStatus() {
+//        this.criteria.setSystemStatus(false);
+//
+//        return this;
+//    }
 
     public Cnd andNotSystemVersion() {
         this.criteria.setSystemVersion(false);
@@ -156,14 +155,14 @@ public class Cnd {
         return this;
     }
 
-    public Cnd addSystemStatus() {
-        if (this.criteria.getSystemStatus()) {
-            Expression expression = new Expression(Constant.SYSTEM_STATUS, ExpressionType.EQUAL, true);
-            this.criteria.addCondition(new Condition(ConditionType.WHERE, expression, false));
-        }
-
-        return this;
-    }
+//    public Cnd addSystemStatus() {
+//        if (this.criteria.getSystemStatus()) {
+//            Expression expression = new Expression(Constant.SYSTEM_STATUS, ExpressionType.EQUAL, true);
+//            this.criteria.addCondition(new Condition(ConditionType.WHERE, expression, false));
+//        }
+//
+//        return this;
+//    }
 
     public Cnd asc(String key) {
         OrderBy orderBy = new OrderBy(key, OrderByType.ASC);

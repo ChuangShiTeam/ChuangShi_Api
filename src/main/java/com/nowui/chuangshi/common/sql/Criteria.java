@@ -15,7 +15,7 @@ public class Criteria {
     private Integer m;
     private Integer n;
     private Boolean isSystemVersion;
-    private Boolean isSystemStatus;
+//    private Boolean isSystemStatus;
 
     public Criteria() {
         setList = new ArrayList<Set>();
@@ -23,7 +23,7 @@ public class Criteria {
         orderByList = new ArrayList<OrderBy>();
         isPaginate = false;
         isSystemVersion = true;
-        isSystemStatus = true;
+//        isSystemStatus = true;
     }
 
     public void addSet(String key, Object value) {
@@ -49,13 +49,13 @@ public class Criteria {
         List<Condition> list = new ArrayList<Condition>();
         list.addAll(conditionList);
 
-        if (isSystemStatus) {
-            if (!isOnlyCondition(Constant.SYSTEM_STATUS)) {
-                Expression expression = new Expression(Constant.SYSTEM_STATUS, ExpressionType.EQUAL, true);
-                Condition condition = new Condition(ConditionType.WHERE, expression, false);
-                list.add(condition);
-            }
-        }
+//        if (isSystemStatus) {
+//            if (!isOnlyCondition(Constant.SYSTEM_STATUS)) {
+//                Expression expression = new Expression(Constant.SYSTEM_STATUS, ExpressionType.EQUAL, true);
+//                Condition condition = new Condition(ConditionType.WHERE, expression, false);
+//                list.add(condition);
+//            }
+//        }
 
         return list;
     }
@@ -97,13 +97,13 @@ public class Criteria {
         isSystemVersion = systemVersion;
     }
 
-    public Boolean getSystemStatus() {
-        return isSystemStatus;
-    }
-
-    public void setSystemStatus(Boolean systemStatus) {
-        isSystemStatus = systemStatus;
-    }
+//    public Boolean getSystemStatus() {
+//        return isSystemStatus;
+//    }
+//
+//    public void setSystemStatus(Boolean systemStatus) {
+//        isSystemStatus = systemStatus;
+//    }
 
     public void setPaginate(Integer m, Integer n) {
         this.isPaginate = true;

@@ -29,10 +29,22 @@ public class Dao {
         return count.intValue();
     }
 
+    public <M> List<M> primaryKeyList(Cnd cnd) {
+        this.model.setCriteria(cnd.getCriteria());
+
+        Boolean isPrimaryKey = true;
+        String sql = this.model.buildListSql(isPrimaryKey);
+
+        System.out.println(sql);
+
+        return this.model.find(sql);
+    }
+
     public <M> List<M> list(Cnd cnd) {
         this.model.setCriteria(cnd.getCriteria());
 
-        String sql = this.model.buildListSql();
+        Boolean isPrimaryKey = false;
+        String sql = this.model.buildListSql(isPrimaryKey);
 
         System.out.println(sql);
 

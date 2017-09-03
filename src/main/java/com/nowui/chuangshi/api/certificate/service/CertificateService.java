@@ -15,12 +15,21 @@ public class CertificateService extends Service {
     private final CertificateDao certificateDao = new CertificateDao();
 
     public Integer adminCount(String app_id, String certificate_number) {
-        Integer count = certificateDao.count(Cnd.where(Certificate.APP_ID, app_id).andAllowEmpty(Certificate.CERTIFICATE_NUMBER, certificate_number));
+        Cnd cnd = Cnd.where(Certificate.SYSTEM_STATUS, true);
+        cnd.and(Certificate.APP_ID, app_id);
+        cnd.andAllowEmpty(Certificate.CERTIFICATE_NUMBER, certificate_number);
+
+        Integer count = certificateDao.count(cnd);
         return count;
     }
 
     public List<Certificate> adminList(String app_id, String certificate_number, Integer m, Integer n) {
-        List<Certificate> pageList = certificateDao.list(Cnd.where(Certificate.APP_ID, app_id).andAllowEmpty(Certificate.CERTIFICATE_NUMBER, certificate_number).paginate(m, n));
+        Cnd cnd = Cnd.where(Certificate.SYSTEM_STATUS, true);
+        cnd.and(Certificate.APP_ID, app_id);
+        cnd.andAllowEmpty(Certificate.CERTIFICATE_NUMBER, certificate_number);
+        cnd.paginate(m, n);
+
+        List<Certificate> pageList = certificateDao.list(cnd);
         return pageList;
     }
 
@@ -37,33 +46,44 @@ public class CertificateService extends Service {
     }
 
     public Certificate userFind(String user_id) {
-        Certificate certificate = certificateDao.find(Cnd.where(Certificate.USER_ID, user_id));
+        Cnd cnd = Cnd.where(Certificate.SYSTEM_STATUS, true);
+        cnd.and(Certificate.USER_ID, user_id);
+
+        Certificate certificate = certificateDao.find(cnd);
         return certificate;
     }
 
     public Boolean save(Certificate certificate) {
-        Boolean result = certificateDao.save(certificate);
-        return result;
+        Boolean success = certificateDao.save(certificate);
+        return success;
     }
 
     public Boolean update(Certificate certificate, String certificate_id, Integer system_version) {
-        Boolean result = certificateDao.update(certificate, Cnd.where(Certificate.CERTIFICATE_ID, certificate_id).and(Certificate.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(Certificate.SYSTEM_STATUS, true);
+        cnd.and(Certificate.CERTIFICATE_ID, certificate_id);
+        cnd.and(Certificate.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = certificateDao.update(certificate, cnd);
+
+        if (success) {
             CacheUtil.remove(CERTIFICATE_ITEM_CACHE, certificate_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String certificate_id, Integer system_version) {
-        Boolean result = certificateDao.delete(Cnd.where(Certificate.CERTIFICATE_ID, certificate_id).and(Certificate.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(Certificate.SYSTEM_STATUS, true);
+        cnd.and(Certificate.CERTIFICATE_ID, certificate_id);
+        cnd.and(Certificate.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = certificateDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(CERTIFICATE_ITEM_CACHE, certificate_id);
         }
 
-        return result;
+        return success;
     }
 
 }

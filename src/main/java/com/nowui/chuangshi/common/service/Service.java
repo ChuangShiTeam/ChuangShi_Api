@@ -1,47 +1,33 @@
 package com.nowui.chuangshi.common.service;
-import com.nowui.chuangshi.common.cache.Cache;
 import com.nowui.chuangshi.common.model.Model;
-import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.constant.Constant;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Service {
 
-//    protected Cache cache;
-//
-//    public Cache getCache() {
-//        return cache;
-//    }
-//
-//    public void setCache(Cache cache) {
-//        this.cache = cache;
-//    }
-//
-//    public Integer count(Cnd cnd) {
-//        return getCache().count(cnd);
-//    }
-//
-//    public <M> List<M> list(Cnd cnd) {
-//        return getCache().list(cnd);
-//    }
-//
-//    public <M> M findById(String id) {
-//        return getCache().findById(id);
-//    }
-//
-//    public <M> M find(Cnd cnd) {
-//        return getCache().find(cnd);
-//    }
-//
-//    public Boolean save(Model model) {
-//        return getCache().save(model);
-//    }
-//
-//    public Boolean update(Model model, Cnd cnd) {
-//        return getCache().update(model, cnd);
-//    }
-//
-//    public Boolean delete(Model model, Cnd cnd) {
-//        return getCache().delete(model, cnd);
-//    }
+    protected List<Map<String, Object>> getChildren(List<? extends Model> list, String parent_id, String parent_id_column_name, String id_column_name, String name_column_name, String... keys) {
+        List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+        for (Model model : list) {
+            if (model.getStr(parent_id_column_name).equals(parent_id)) {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put(id_column_name, model.getStr(id_column_name));
+                map.put(name_column_name, model.getStr(name_column_name));
+
+                for (String key : keys) {
+                    map.put(key, model.get(key));
+                }
+
+                List<Map<String, Object>> childrenList = getChildren(list, model.getStr(id_column_name), parent_id_column_name, id_column_name, name_column_name, keys);
+                map.put(Constant.CHILDREN, childrenList);
+
+                resultList.add(map);
+            }
+        }
+        return resultList;
+    }
+
 }

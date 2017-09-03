@@ -4,11 +4,8 @@ import com.nowui.chuangshi.api.article.dao.ArticleCategoryDao;
 import com.nowui.chuangshi.api.article.model.ArticleCategory;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
-import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.CacheUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,53 +16,52 @@ public class ArticleCategoryService extends Service {
     private final ArticleCategoryDao articleCategoryDao = new ArticleCategoryDao();
 
     public Integer adminCount(String app_id, String article_category_name) {
-        Integer count = articleCategoryDao.count(Cnd.where(ArticleCategory.APP_ID, app_id).andAllowEmpty(ArticleCategory.ARTICLE_CATEGORY_NAME, article_category_name));
+        Cnd cnd = Cnd.where(ArticleCategory.SYSTEM_STATUS, true);
+        cnd.and(ArticleCategory.APP_ID, app_id);
+        cnd.andAllowEmpty(ArticleCategory.ARTICLE_CATEGORY_NAME, article_category_name);
+
+        Integer count = articleCategoryDao.count(cnd);
         return count;
     }
 
     public List<ArticleCategory> adminList(String app_id, String article_category_name, Integer m, Integer n) {
-        List<ArticleCategory> pageList = articleCategoryDao.list(Cnd.where(ArticleCategory.APP_ID, app_id).andAllowEmpty(ArticleCategory.ARTICLE_CATEGORY_NAME, article_category_name).paginate(m, n));
-        return pageList;
+        Cnd cnd = Cnd.where(ArticleCategory.SYSTEM_STATUS, true);
+        cnd.and(ArticleCategory.APP_ID, app_id);
+        cnd.andAllowEmpty(ArticleCategory.ARTICLE_CATEGORY_NAME, article_category_name);
+        cnd.paginate(m, n);
+
+        List<ArticleCategory> articleCategoryList = articleCategoryDao.primaryKeyList(cnd);
+        for (ArticleCategory articleCategory : articleCategoryList) {
+            articleCategory.put(find(articleCategory.getArticle_category_id()));
+        }
+        return articleCategoryList;
     }
 
     public List<ArticleCategory> appList(String app_id) {
-        List<ArticleCategory> resultList = articleCategoryDao.list(Cnd.where(ArticleCategory.APP_ID, app_id).asc(ArticleCategory.ARTICLE_CATEGORY_SORT));
+        Cnd cnd = Cnd.where(ArticleCategory.SYSTEM_STATUS, true);
+        cnd.and(ArticleCategory.APP_ID, app_id);
+        cnd.asc(ArticleCategory.ARTICLE_CATEGORY_SORT);
 
-        return resultList;
+        List<ArticleCategory> articleCategoryList = articleCategoryDao.primaryKeyList(cnd);
+        for (ArticleCategory articleCategory : articleCategoryList) {
+            articleCategory.put(find(articleCategory.getArticle_category_id()));
+        }
+        return articleCategoryList;
     }
 
     public List<Map<String, Object>> appTreeList(String app_id) {
-        List<ArticleCategory> articleCategoryList = articleCategoryDao.list(Cnd.where(ArticleCategory.APP_ID, app_id).asc(ArticleCategory.ARTICLE_CATEGORY_SORT));
+        Cnd cnd = Cnd.where(ArticleCategory.SYSTEM_STATUS, true);
+        cnd.and(ArticleCategory.APP_ID, app_id);
+        cnd.asc(ArticleCategory.ARTICLE_CATEGORY_SORT);
 
-        List<Map<String, Object>> resultList = getChildren(articleCategoryList, "");
-
-        return resultList;
-    }
-
-    private List<Map<String, Object>> getChildren(List<ArticleCategory> articleCategoryList, String article_category_parent_id, String... keys) {
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        List<ArticleCategory> articleCategoryList = articleCategoryDao.primaryKeyList(cnd);
         for (ArticleCategory articleCategory : articleCategoryList) {
-            if (articleCategory.getArticle_category_parent_id().equals(article_category_parent_id)) {
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put(articleCategory.getArticle_category_id(), articleCategory.getArticle_category_id());
-                map.put(articleCategory.ARTICLE_CATEGORY_NAME, articleCategory.getArticle_category_name());
-
-                for (String key : keys) {
-                    map.put(key, articleCategory.get(key));
-                }
-
-                List<Map<String, Object>> childrenList = getChildren(articleCategoryList, articleCategory.getArticle_category_id(), keys);
-                // 没有下级返回空数组
-                map.put(Constant.CHILDREN, childrenList);
-                /*
-                 * if (childrenList.size() > 0) { map.put(Constant.CHILDREN,
-                 * childrenList); }
-                 */
-
-                list.add(map);
-            }
+            articleCategory.put(find(articleCategory.getArticle_category_id()));
         }
-        return list;
+
+        String parent_id = "";
+        List<Map<String, Object>> resultList = getChildren(articleCategoryList, parent_id, ArticleCategory.ARTICLE_CATEGORY_PARENT_ID, ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.ARTICLE_CATEGORY_NAME);
+        return resultList;
     }
 
     public ArticleCategory find(String article_category_id) {
@@ -81,28 +77,36 @@ public class ArticleCategoryService extends Service {
     }
 
     public Boolean save(ArticleCategory articleCategory) {
-        Boolean result = articleCategoryDao.save(articleCategory);
-        return result;
+        Boolean success = articleCategoryDao.save(articleCategory);
+        return success;
     }
 
     public Boolean update(ArticleCategory articleCategory, String article_category_id, Integer system_version) {
-        Boolean result = articleCategoryDao.update(articleCategory, Cnd.where(ArticleCategory.ARTICLE_CATEGORY_ID, article_category_id).and(ArticleCategory.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(ArticleCategory.SYSTEM_STATUS, true);
+        cnd.and(ArticleCategory.ARTICLE_CATEGORY_ID, article_category_id);
+        cnd.and(ArticleCategory.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = articleCategoryDao.update(articleCategory, cnd);
+
+        if (success) {
             CacheUtil.remove(ARTICLE_CATEGORY_ITEM_CACHE, article_category_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String article_category_id, Integer system_version) {
-        Boolean result = articleCategoryDao.delete(Cnd.where(ArticleCategory.ARTICLE_CATEGORY_ID, article_category_id).and(ArticleCategory.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(ArticleCategory.SYSTEM_STATUS, true);
+        cnd.and(ArticleCategory.ARTICLE_CATEGORY_ID, article_category_id);
+        cnd.and(ArticleCategory.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = articleCategoryDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(ARTICLE_CATEGORY_ITEM_CACHE, article_category_id);
         }
 
-        return result;
+        return success;
     }
 
 }

@@ -15,17 +15,38 @@ public class FeijiuFastCreditCardService extends Service {
     private final FeijiuFastCreditCardDao feijiuFastCreditCardDao = new FeijiuFastCreditCardDao();
 
     public Integer adminCount(String app_id, String credit_card_name) {
-        Integer count = feijiuFastCreditCardDao.count(Cnd.where(FeijiuFastCreditCard.APP_ID, app_id).andAllowEmpty(FeijiuFastCreditCard.CREDIT_CARD_NAME, credit_card_name));
+        Cnd cnd = Cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
+        cnd.and(FeijiuFastCreditCard.APP_ID, app_id);
+        cnd.andAllowEmpty(FeijiuFastCreditCard.CREDIT_CARD_NAME, credit_card_name);
+
+        Integer count = feijiuFastCreditCardDao.count(cnd);
         return count;
     }
 
     public List<FeijiuFastCreditCard> adminList(String app_id, String credit_card_name, Integer m, Integer n) {
-        List<FeijiuFastCreditCard> feijiuFastCreditCardList = feijiuFastCreditCardDao.list(Cnd.where(FeijiuFastCreditCard.APP_ID, app_id).andAllowEmpty(FeijiuFastCreditCard.CREDIT_CARD_NAME, credit_card_name).asc(FeijiuFastCreditCard.CREDIT_CARD_SORT).desc(FeijiuFastCreditCard.SYSTEM_CREATE_TIME).paginate(m, n));
+        Cnd cnd = Cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
+        cnd.and(FeijiuFastCreditCard.APP_ID, app_id);
+        cnd.andAllowEmpty(FeijiuFastCreditCard.CREDIT_CARD_NAME, credit_card_name);
+        cnd.asc(FeijiuFastCreditCard.CREDIT_CARD_SORT);
+        cnd.desc(FeijiuFastCreditCard.SYSTEM_CREATE_TIME).paginate(m, n);
+
+        List<FeijiuFastCreditCard> feijiuFastCreditCardList = feijiuFastCreditCardDao.primaryKeyList(cnd);
+        for (FeijiuFastCreditCard feijiuFastCreditCard : feijiuFastCreditCardList) {
+            feijiuFastCreditCard.put(find(feijiuFastCreditCard.getCredit_card_id()));
+        }
         return feijiuFastCreditCardList;
     }
 
     public List<FeijiuFastCreditCard> appList(String app_id) {
-        List<FeijiuFastCreditCard> feijiuFastCreditCardList = feijiuFastCreditCardDao.list(Cnd.where(FeijiuFastCreditCard.APP_ID, app_id).asc(FeijiuFastCreditCard.CREDIT_CARD_SORT).desc(FeijiuFastCreditCard.SYSTEM_CREATE_TIME));
+        Cnd cnd = Cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
+        cnd.and(FeijiuFastCreditCard.APP_ID, app_id);
+        cnd.asc(FeijiuFastCreditCard.CREDIT_CARD_SORT);
+        cnd.desc(FeijiuFastCreditCard.SYSTEM_CREATE_TIME);
+
+        List<FeijiuFastCreditCard> feijiuFastCreditCardList = feijiuFastCreditCardDao.primaryKeyList(cnd);
+        for (FeijiuFastCreditCard feijiuFastCreditCard : feijiuFastCreditCardList) {
+            feijiuFastCreditCard.put(find(feijiuFastCreditCard.getCredit_card_id()));
+        }
         return feijiuFastCreditCardList;
     }
 
@@ -42,28 +63,36 @@ public class FeijiuFastCreditCardService extends Service {
     }
 
     public Boolean save(FeijiuFastCreditCard certificate) {
-        Boolean result = feijiuFastCreditCardDao.save(certificate);
-        return result;
+        Boolean success = feijiuFastCreditCardDao.save(certificate);
+        return success;
     }
 
     public Boolean update(FeijiuFastCreditCard certificate, String credit_card_id, Integer system_version) {
-        Boolean result = feijiuFastCreditCardDao.update(certificate, Cnd.where(FeijiuFastCreditCard.CREDIT_CARD_ID, credit_card_id).and(FeijiuFastCreditCard.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
+        cnd.and(FeijiuFastCreditCard.CREDIT_CARD_ID, credit_card_id);
+        cnd.and(FeijiuFastCreditCard.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = feijiuFastCreditCardDao.update(certificate, cnd);
+
+        if (success) {
             CacheUtil.remove(FEIJIU_FAST_CREDIT_CARD_ITEM_CACHE, credit_card_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String credit_card_id, Integer system_version) {
-        Boolean result = feijiuFastCreditCardDao.delete(Cnd.where(FeijiuFastCreditCard.CREDIT_CARD_ID, credit_card_id).and(FeijiuFastCreditCard.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
+        cnd.and(FeijiuFastCreditCard.CREDIT_CARD_ID, credit_card_id);
+        cnd.and(FeijiuFastCreditCard.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = feijiuFastCreditCardDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(FEIJIU_FAST_CREDIT_CARD_ITEM_CACHE, credit_card_id);
         }
 
-        return result;
+        return success;
     }
 
 }

@@ -150,7 +150,6 @@ public class CodeController extends Controller {
         write(templateMap,"sql.template", package_name + "/sql/" + first_upper_model_name_without_underline + ".sql");
         write(templateMap,"model.template", package_name + "/model/" + first_upper_model_name_without_underline + ".java");
         write(templateMap,"dao.template", package_name + "/dao/" + first_upper_model_name_without_underline + "Dao.java");
-        write(templateMap,"cache.template", package_name + "/cache/" + first_upper_model_name_without_underline + "Cache.java");
         write(templateMap,"service.template", package_name + "/service/" + first_upper_model_name_without_underline + "Service.java");
         write(templateMap,"mobile.template", package_name + "/mobile/" + first_upper_model_name_without_underline + "Controller.java");
         write(templateMap,"admin.template", package_name + "/admin/" + first_upper_model_name_without_underline + "Controller.java");
