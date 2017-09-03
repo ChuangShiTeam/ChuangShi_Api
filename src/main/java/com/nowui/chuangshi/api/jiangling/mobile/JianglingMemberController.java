@@ -183,6 +183,10 @@ public class JianglingMemberController extends Controller {
         }
         Boolean is_save = true;
         Integer total_count = JianglingMemberPrizeService.instance.prizeCount(prize.getPrize_id());
+
+        if (prize == null) {
+            prize = defaultJianglingPrize;
+        }
         if (total_count >= prize.getPrize_total_quantity()) {
             is_save = false;
         }
