@@ -15,18 +15,35 @@ public class JianglingPrizeService extends Service {
     private final JianglingPrizeDao jianglingMemberDao = new JianglingPrizeDao();
 
     public Integer adminCount(String app_id, String prize_name) {
-        Integer count = jianglingMemberDao.count(Cnd.where(JianglingPrize.APP_ID, app_id).andAllowEmpty(JianglingPrize.PRIZE_NAME, prize_name));
+        Cnd cnd = Cnd.where(JianglingPrize.SYSTEM_STATUS, true);
+        cnd.and(JianglingPrize.APP_ID, app_id);
+        cnd.andAllowEmpty(JianglingPrize.PRIZE_NAME, prize_name);
+
+        Integer count = jianglingMemberDao.count(cnd);
         return count;
     }
 
     public List<JianglingPrize> adminList(String app_id, String prize_name, Integer m, Integer n) {
-        List<JianglingPrize> jianglingGameList = jianglingMemberDao.list(Cnd.where(JianglingPrize.APP_ID, app_id).andAllowEmpty(JianglingPrize.PRIZE_NAME, prize_name).paginate(m, n));
-        return jianglingGameList;
+        Cnd cnd = Cnd.where(JianglingPrize.SYSTEM_STATUS, true);
+        cnd.and(JianglingPrize.APP_ID, app_id);
+        cnd.andAllowEmpty(JianglingPrize.PRIZE_NAME, prize_name).paginate(m, n);
+
+        List<JianglingPrize> jianglingPrizeList = jianglingMemberDao.primaryKeyList(cnd);
+        for (JianglingPrize jianglingPrize : jianglingPrizeList) {
+            jianglingPrize.put(find(jianglingPrize.getPrize_id()));
+        }
+        return jianglingPrizeList;
     }
 
     public List<JianglingPrize> appList(String app_id) {
-        List<JianglingPrize> jianglingGameList = jianglingMemberDao.list(Cnd.where(JianglingPrize.APP_ID, app_id));
-        return jianglingGameList;
+        Cnd cnd = Cnd.where(JianglingPrize.SYSTEM_STATUS, true);
+        cnd.and(JianglingPrize.APP_ID, app_id);
+
+        List<JianglingPrize> jianglingPrizeList = jianglingMemberDao.primaryKeyList(cnd);
+        for (JianglingPrize jianglingPrize : jianglingPrizeList) {
+            jianglingPrize.put(find(jianglingPrize.getPrize_id()));
+        }
+        return jianglingPrizeList;
     }
 
     public JianglingPrize find(String prize_id) {
@@ -42,28 +59,36 @@ public class JianglingPrizeService extends Service {
     }
 
     public Boolean save(JianglingPrize jianglingMember) {
-        Boolean result = jianglingMemberDao.save(jianglingMember);
-        return result;
+        Boolean success = jianglingMemberDao.save(jianglingMember);
+        return success;
     }
 
     public Boolean update(JianglingPrize jianglingMember, String prize_id, Integer system_version) {
-        Boolean result = jianglingMemberDao.update(jianglingMember, Cnd.where(JianglingPrize.PRIZE_ID, prize_id).and(JianglingPrize.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(JianglingPrize.SYSTEM_STATUS, true);
+        cnd.and(JianglingPrize.PRIZE_ID, prize_id);
+        cnd.and(JianglingPrize.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = jianglingMemberDao.update(jianglingMember, cnd);
+
+        if (success) {
             CacheUtil.remove(JIANGLING_PRIZE_ITEM_CACHE, prize_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String prize_id, Integer system_version) {
-        Boolean result = jianglingMemberDao.delete(Cnd.where(JianglingPrize.PRIZE_ID, prize_id).and(JianglingPrize.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(JianglingPrize.SYSTEM_STATUS, true);
+        cnd.and(JianglingPrize.PRIZE_ID, prize_id);
+        cnd.and(JianglingPrize.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = jianglingMemberDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(JIANGLING_PRIZE_ITEM_CACHE, prize_id);
         }
 
-        return result;
+        return success;
     }
 
 }

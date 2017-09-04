@@ -13,12 +13,18 @@ public class JianglingMemberPrizeService extends Service {
     private final JianglingMemberPrizeDao jianglingMemberPrizeDao = new JianglingMemberPrizeDao();
 
     public Integer userCount(String user_id) {
-        Integer count = jianglingMemberPrizeDao.count(Cnd.where(JianglingMemberPrize.USER_ID, user_id));
+        Cnd cnd = Cnd.where(JianglingMemberPrize.SYSTEM_STATUS, true);
+        cnd.and(JianglingMemberPrize.USER_ID, user_id);
+
+        Integer count = jianglingMemberPrizeDao.count(cnd);
         return count;
     }
 
     public Integer prizeCount(String prize_id) {
-        Integer count = jianglingMemberPrizeDao.count(Cnd.where(JianglingMemberPrize.PRIZE_ID, prize_id));
+        Cnd cnd = Cnd.where(JianglingMemberPrize.SYSTEM_STATUS, true);
+        cnd.and(JianglingMemberPrize.PRIZE_ID, prize_id);
+
+        Integer count = jianglingMemberPrizeDao.count(cnd);
         return count;
     }
 
@@ -35,8 +41,8 @@ public class JianglingMemberPrizeService extends Service {
     }
 
     public Boolean save(JianglingMemberPrize jianglingMemberPrize) {
-        Boolean result = jianglingMemberPrizeDao.save(jianglingMemberPrize);
-        return result;
+        Boolean success = jianglingMemberPrizeDao.save(jianglingMemberPrize);
+        return success;
     }
 
 }

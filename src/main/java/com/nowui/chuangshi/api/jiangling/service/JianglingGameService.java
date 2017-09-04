@@ -15,17 +15,34 @@ public class JianglingGameService extends Service {
     private final JianglingGameDao jianglingGameDao = new JianglingGameDao();
 
     public Integer adminCount(String app_id) {
-        Integer count = jianglingGameDao.count(Cnd.where(JianglingGame.APP_ID, app_id));
+        Cnd cnd = Cnd.where(JianglingGame.SYSTEM_STATUS, true);
+        cnd.and(JianglingGame.APP_ID, app_id);
+
+        Integer count = jianglingGameDao.count(cnd);
         return count;
     }
 
     public List<JianglingGame> adminList(String app_id, Integer m, Integer n) {
-        List<JianglingGame> jianglingGameList = jianglingGameDao.list(Cnd.where(JianglingGame.APP_ID, app_id).paginate(m, n));
+        Cnd cnd = Cnd.where(JianglingGame.SYSTEM_STATUS, true);
+        cnd.and(JianglingGame.APP_ID, app_id);
+        cnd.paginate(m, n);
+
+        List<JianglingGame> jianglingGameList = jianglingGameDao.primaryKeyList(cnd);
+        for (JianglingGame jianglingGame : jianglingGameList) {
+            jianglingGame.put(find(jianglingGame.getGame_id()));
+        }
         return jianglingGameList;
     }
 
     public List<JianglingGame> appList(String app_id) {
-        List<JianglingGame> jianglingGameList = jianglingGameDao.list(Cnd.where(JianglingGame.APP_ID, app_id).desc(JianglingGame.SYSTEM_CREATE_TIME));
+        Cnd cnd = Cnd.where(JianglingGame.SYSTEM_STATUS, true);
+        cnd.and(JianglingGame.APP_ID, app_id);
+        cnd.desc(JianglingGame.SYSTEM_CREATE_TIME);
+
+        List<JianglingGame> jianglingGameList = jianglingGameDao.primaryKeyList(cnd);
+        for (JianglingGame jianglingGame : jianglingGameList) {
+            jianglingGame.put(find(jianglingGame.getGame_id()));
+        }
         return jianglingGameList;
     }
 
@@ -42,28 +59,36 @@ public class JianglingGameService extends Service {
     }
 
     public Boolean save(JianglingGame jianglingGame) {
-        Boolean result = jianglingGameDao.save(jianglingGame);
-        return result;
+        Boolean success = jianglingGameDao.save(jianglingGame);
+        return success;
     }
 
     public Boolean update(JianglingGame jianglingGame, String game_id, Integer system_version) {
-        Boolean result = jianglingGameDao.update(jianglingGame, Cnd.where(JianglingGame.GAME_ID, game_id).and(JianglingGame.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(JianglingGame.SYSTEM_STATUS, true);
+        cnd.and(JianglingGame.GAME_ID, game_id);
+        cnd.and(JianglingGame.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = jianglingGameDao.update(jianglingGame, cnd);
+
+        if (success) {
             CacheUtil.remove(JIANGLING_GAME_ITEM_CACHE, game_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String game_id, Integer system_version) {
-        Boolean result = jianglingGameDao.delete(Cnd.where(JianglingGame.GAME_ID, game_id).and(JianglingGame.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(JianglingGame.SYSTEM_STATUS, true);
+        cnd.and(JianglingGame.GAME_ID, game_id);
+        cnd.and(JianglingGame.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = jianglingGameDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(JIANGLING_GAME_ITEM_CACHE, game_id);
         }
 
-        return result;
+        return success;
     }
 
 }

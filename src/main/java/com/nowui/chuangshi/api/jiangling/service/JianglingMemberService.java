@@ -16,12 +16,18 @@ public class JianglingMemberService extends Service {
     private final JianglingMemberDao jianglingMemberDao = new JianglingMemberDao();
 
     public Integer userCount(String user_id) {
-        Integer count = jianglingMemberDao.count(Cnd.where(JianglingMember.USER_ID, user_id));
+        Cnd cnd = Cnd.where(JianglingMember.SYSTEM_STATUS, true);
+        cnd.and(JianglingMember.USER_ID, user_id);
+
+        Integer count = jianglingMemberDao.count(cnd);
         return count;
     }
 
     public Integer redeemCodeCount(String member_redeem_code) {
-        Integer count = jianglingMemberDao.count(Cnd.where(JianglingMember.MEMBER_REDEEM_CODE, member_redeem_code));
+        Cnd cnd = Cnd.where(JianglingMember.SYSTEM_STATUS, true);
+        cnd.and(JianglingMember.MEMBER_REDEEM_CODE, member_redeem_code);
+
+        Integer count = jianglingMemberDao.count(cnd);
         return count;
     }
 
@@ -53,23 +59,23 @@ public class JianglingMemberService extends Service {
     }
 
     public Boolean update(JianglingMember jianglingMember, String user_id) {
-        Boolean result = jianglingMemberDao.update(jianglingMember, Cnd.where(JianglingMember.USER_ID, user_id));
+        Boolean success = jianglingMemberDao.update(jianglingMember, Cnd.where(JianglingMember.USER_ID, user_id));
 
-        if (result) {
+        if (success) {
             CacheUtil.remove(JIANGLING_MEMBER__ITEM_CACHE, user_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String user_id, Integer system_version) {
-        Boolean result = jianglingMemberDao.delete(Cnd.where(JianglingMember.USER_ID, user_id).and(JianglingMember.SYSTEM_VERSION, system_version));
+        Boolean success = jianglingMemberDao.delete(Cnd.where(JianglingMember.USER_ID, user_id).and(JianglingMember.SYSTEM_VERSION, system_version));
 
-        if (result) {
+        if (success) {
             CacheUtil.remove(JIANGLING_MEMBER__ITEM_CACHE, user_id);
         }
 
-        return result;
+        return success;
     }
 
 }
