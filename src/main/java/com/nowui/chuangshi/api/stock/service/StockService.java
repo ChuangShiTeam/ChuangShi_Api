@@ -16,17 +16,33 @@ public class StockService extends Service {
     private final StockDao stockDao = new StockDao();
 
     public Integer adminCount(String app_id) {
-        Integer count = stockDao.count(Cnd.where(Stock.APP_ID, app_id));
+        Cnd cnd = Cnd.where(Stock.SYSTEM_STATUS, true);
+        cnd.and(Stock.APP_ID, app_id);
+
+        Integer count = stockDao.count(cnd);
         return count;
     }
 
     public List<Stock> adminList(String app_id, Integer m, Integer n) {
-        List<Stock> stockList = stockDao.list(Cnd.where(Stock.APP_ID, app_id).paginate(m, n));
+        Cnd cnd = Cnd.where(Stock.SYSTEM_STATUS, true);
+        cnd.and(Stock.APP_ID, app_id).paginate(m, n);
+
+        List<Stock> stockList = stockDao.primaryKeyList(cnd);
+        for (Stock stock : stockList) {
+            stock.put(find(stock.getStock_id()));
+        }
         return stockList;
     }
 
     public List<Stock> userList(String user_id) {
-        List<Stock> stockList = stockDao.list(Cnd.where(Stock.OBJECT_ID, user_id).and(Stock.STOCK_TYPE, StockType.MEMBER.getKey()));
+        Cnd cnd = Cnd.where(Stock.SYSTEM_STATUS, true);
+        cnd.and(Stock.OBJECT_ID, user_id);
+        cnd.and(Stock.STOCK_TYPE, StockType.MEMBER.getKey());
+
+        List<Stock> stockList = stockDao.primaryKeyList(cnd);
+        for (Stock stock : stockList) {
+            stock.put(find(stock.getStock_id()));
+        }
         return stockList;
     }
 
@@ -43,28 +59,36 @@ public class StockService extends Service {
     }
 
     public Boolean save(Stock stock) {
-        Boolean result = stockDao.save(stock);
-        return result;
+        Boolean success = stockDao.save(stock);
+        return success;
     }
 
     public Boolean update(Stock stock, String stock_id, Integer system_version) {
-        Boolean result = stockDao.update(stock, Cnd.where(Stock.STOCK_ID, stock_id).and(Stock.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(Stock.SYSTEM_STATUS, true);
+        cnd.and(Stock.STOCK_ID, stock_id);
+        cnd.and(Stock.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = stockDao.update(stock, cnd);
+
+        if (success) {
             CacheUtil.remove(STOCK_ITEM_CACHE, stock_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String stock_id, Integer system_version) {
-        Boolean result = stockDao.delete(Cnd.where(Stock.STOCK_ID, stock_id).and(Stock.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(Stock.SYSTEM_STATUS, true);
+        cnd.and(Stock.STOCK_ID, stock_id);
+        cnd.and(Stock.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = stockDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(STOCK_ITEM_CACHE, stock_id);
         }
 
-        return result;
+        return success;
     }
 
 }

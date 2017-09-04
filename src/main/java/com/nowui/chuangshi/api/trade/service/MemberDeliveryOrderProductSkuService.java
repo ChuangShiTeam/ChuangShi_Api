@@ -24,8 +24,8 @@ public class MemberDeliveryOrderProductSkuService extends Service {
     }
 
     public Boolean save(MemberDeliveryOrderProductSku memberDeliveryOrderProductSku) {
-        Boolean result = memberDeliveryOrderProductSkuDao.save(memberDeliveryOrderProductSku);
-        return result;
+        Boolean success = memberDeliveryOrderProductSkuDao.save(memberDeliveryOrderProductSku);
+        return success;
     }
 
 }

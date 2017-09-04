@@ -14,17 +14,29 @@ public class MemberPurchaseOrderService extends Service {
     private final MemberPurchaseOrderDao memberPurchaseOrderDao = new MemberPurchaseOrderDao();
 
     public Integer userIsFirstCount(String user_id, String member_level_id) {
-        Integer count = memberPurchaseOrderDao.count(Cnd.where(MemberPurchaseOrder.USER_ID, user_id).and(MemberPurchaseOrder.MEMBER_LEVEL_ID, member_level_id).and(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_PAY, true));
+        Cnd cnd = Cnd.where(MemberPurchaseOrder.SYSTEM_STATUS, true);
+        cnd.and(MemberPurchaseOrder.USER_ID, user_id);
+        cnd.and(MemberPurchaseOrder.MEMBER_LEVEL_ID, member_level_id);
+        cnd.and(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_PAY, true);
+
+        Integer count = memberPurchaseOrderDao.count(cnd);
         return count;
     }
 
     public List<MemberPurchaseOrder> userList(String user_id) {
-        List<MemberPurchaseOrder> memberPurchaseOrderList = memberPurchaseOrderDao.list(Cnd.where(MemberPurchaseOrder.USER_ID, user_id));
+        Cnd cnd = Cnd.where(MemberPurchaseOrder.SYSTEM_STATUS, true);
+        cnd.and(MemberPurchaseOrder.USER_ID, user_id);
+
+        List<MemberPurchaseOrder> memberPurchaseOrderList = memberPurchaseOrderDao.list(cnd);
         return memberPurchaseOrderList;
     }
 
     public List<MemberPurchaseOrder> userIsPayList(String user_id) {
-        List<MemberPurchaseOrder> memberPurchaseOrderList = memberPurchaseOrderDao.list(Cnd.where(MemberPurchaseOrder.USER_ID, user_id).and(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_PAY, true));
+        Cnd cnd = Cnd.where(MemberPurchaseOrder.SYSTEM_STATUS, true);
+        cnd.and(MemberPurchaseOrder.USER_ID, user_id);
+        cnd.and(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_PAY, true);
+
+        List<MemberPurchaseOrder> memberPurchaseOrderList = memberPurchaseOrderDao.list(cnd);
         return memberPurchaseOrderList;
     }
 

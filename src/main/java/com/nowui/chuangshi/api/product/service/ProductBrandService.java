@@ -15,17 +15,35 @@ public class ProductBrandService extends Service {
     private final ProductBrandDao productBrandDao = new ProductBrandDao();
 
     public Integer adminCount(String app_id, String product_brand_name) {
-        Integer count = productBrandDao.count(Cnd.where(ProductBrand.APP_ID, app_id).andAllowEmpty(ProductBrand.PRODUCT_BRAND_NAME, product_brand_name));
+        Cnd cnd = Cnd.where(ProductBrand.SYSTEM_STATUS, true);
+        cnd.and(ProductBrand.APP_ID, app_id);
+        cnd.andAllowEmpty(ProductBrand.PRODUCT_BRAND_NAME, product_brand_name);
+
+        Integer count = productBrandDao.count(cnd);
         return count;
     }
 
     public List<ProductBrand> adminList(String app_id, String product_brand_name, Integer m, Integer n) {
-        List<ProductBrand> productBrandList = productBrandDao.list(Cnd.where(ProductBrand.APP_ID, app_id).andAllowEmpty(ProductBrand.PRODUCT_BRAND_NAME, product_brand_name).paginate(m, n));
+        Cnd cnd = Cnd.where(ProductBrand.SYSTEM_STATUS, true);
+        cnd.and(ProductBrand.APP_ID, app_id);
+        cnd.andAllowEmpty(ProductBrand.PRODUCT_BRAND_NAME, product_brand_name);
+        cnd.paginate(m, n);
+
+        List<ProductBrand> productBrandList = productBrandDao.primaryKeyList(cnd);
+        for (ProductBrand productBrand : productBrandList) {
+            productBrand.put(find(productBrand.getProduct_brand_id()));
+        }
         return productBrandList;
     }
 
     public List<ProductBrand> mobileList(String app_id) {
-        List<ProductBrand> productBrandList = productBrandDao.list(Cnd.where(ProductBrand.APP_ID, app_id));
+        Cnd cnd = Cnd.where(ProductBrand.SYSTEM_STATUS, true);
+        cnd.and(ProductBrand.APP_ID, app_id);
+
+        List<ProductBrand> productBrandList = productBrandDao.primaryKeyList(cnd);
+        for (ProductBrand productBrand : productBrandList) {
+            productBrand.put(find(productBrand.getProduct_brand_id()));
+        }
         return productBrandList;
     }
 
@@ -42,28 +60,36 @@ public class ProductBrandService extends Service {
     }
 
     public Boolean save(ProductBrand productBrand) {
-        Boolean result = productBrandDao.save(productBrand);
-        return result;
+        Boolean success = productBrandDao.save(productBrand);
+        return success;
     }
 
     public Boolean update(ProductBrand productBrand, String product_brand_id, Integer system_version) {
-        Boolean result = productBrandDao.update(productBrand, Cnd.where(ProductBrand.PRODUCT_BRAND_ID, product_brand_id).and(ProductBrand.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(ProductBrand.SYSTEM_STATUS, true);
+        cnd.and(ProductBrand.PRODUCT_BRAND_ID, product_brand_id);
+        cnd.and(ProductBrand.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = productBrandDao.update(productBrand, cnd);
+
+        if (success) {
             CacheUtil.remove(PRODUCT_BRAND_ITEM_CACHE, product_brand_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String product_brand_id, Integer system_version) {
-        Boolean result = productBrandDao.delete(Cnd.where(ProductBrand.PRODUCT_BRAND_ID, product_brand_id).and(ProductBrand.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(ProductBrand.SYSTEM_STATUS, true);
+        cnd.and(ProductBrand.PRODUCT_BRAND_ID, product_brand_id);
+        cnd.and(ProductBrand.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = productBrandDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(PRODUCT_BRAND_ITEM_CACHE, product_brand_id);
         }
 
-        return result;
+        return success;
     }
 
 }

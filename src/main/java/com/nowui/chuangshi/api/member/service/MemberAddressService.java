@@ -15,17 +15,35 @@ public class MemberAddressService extends Service {
     private final MemberAddressDao memberAddressDao = new MemberAddressDao();
 
     public Integer adminCount(String app_id, String member_address_name) {
-        Integer count = memberAddressDao.count(Cnd.where(MemberAddress.APP_ID, app_id).andAllowEmpty(MemberAddress.MEMBER_ADDRESS_NAME, member_address_name));
+        Cnd cnd = Cnd.where(MemberAddress.SYSTEM_STATUS, true);
+        cnd.and(MemberAddress.APP_ID, app_id);
+        cnd.andAllowEmpty(MemberAddress.MEMBER_ADDRESS_NAME, member_address_name);
+
+        Integer count = memberAddressDao.count(cnd);
         return count;
     }
 
     public List<MemberAddress> adminList(String app_id, String member_address_name, Integer m, Integer n) {
-        List<MemberAddress> memberAddressList = memberAddressDao.list(Cnd.where(MemberAddress.APP_ID, app_id).andAllowEmpty(MemberAddress.MEMBER_ADDRESS_NAME, member_address_name).paginate(m, n));
+        Cnd cnd = Cnd.where(MemberAddress.SYSTEM_STATUS, true);
+        cnd.and(MemberAddress.APP_ID, app_id);
+        cnd.andAllowEmpty(MemberAddress.MEMBER_ADDRESS_NAME, member_address_name);
+        cnd.paginate(m, n);
+
+        List<MemberAddress> memberAddressList = memberAddressDao.primaryKeyList(cnd);
+        for (MemberAddress memberAddress : memberAddressList) {
+            memberAddress.put(find(memberAddress.getMember_address_id()));
+        }
         return memberAddressList;
     }
 
     public List<MemberAddress> memberList(String member_id) {
-        List<MemberAddress> memberAddressList = memberAddressDao.list(Cnd.where(MemberAddress.MEMBER_ID, member_id));
+        Cnd cnd = Cnd.where(MemberAddress.SYSTEM_STATUS, true);
+        cnd.and(MemberAddress.MEMBER_ID, member_id);
+
+        List<MemberAddress> memberAddressList = memberAddressDao.primaryKeyList(cnd);
+        for (MemberAddress memberAddress : memberAddressList) {
+            memberAddress.put(find(memberAddress.getMember_address_id()));
+        }
         return memberAddressList;
     }
 
@@ -42,28 +60,36 @@ public class MemberAddressService extends Service {
     }
 
     public Boolean save(MemberAddress memberAddress) {
-        Boolean result = memberAddressDao.save(memberAddress);
-        return result;
+        Boolean success = memberAddressDao.save(memberAddress);
+        return success;
     }
 
     public Boolean update(MemberAddress memberAddress, String member_address_id, Integer system_version) {
-        Boolean result = memberAddressDao.update(memberAddress, Cnd.where(MemberAddress.MEMBER_ADDRESS_ID, member_address_id).and(MemberAddress.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(MemberAddress.SYSTEM_STATUS, true);
+        cnd.and(MemberAddress.MEMBER_ADDRESS_ID, member_address_id);
+        cnd.and(MemberAddress.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = memberAddressDao.update(memberAddress, cnd);
+
+        if (success) {
             CacheUtil.remove(MEMBER_ADDRESS_ITEM_CACHE, member_address_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String member_address_id, Integer system_version) {
-        Boolean result = memberAddressDao.delete(Cnd.where(MemberAddress.MEMBER_ADDRESS_ID, member_address_id).and(MemberAddress.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(MemberAddress.SYSTEM_STATUS, true);
+        cnd.and(MemberAddress.MEMBER_ADDRESS_ID, member_address_id);
+        cnd.and(MemberAddress.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = memberAddressDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(MEMBER_ADDRESS_ITEM_CACHE, member_address_id);
         }
 
-        return result;
+        return success;
     }
 
 }

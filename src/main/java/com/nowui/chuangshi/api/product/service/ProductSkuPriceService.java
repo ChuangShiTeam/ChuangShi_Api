@@ -15,7 +15,13 @@ public class ProductSkuPriceService extends Service {
     private final ProductSkuPriceDao productSkuPriceDao = new ProductSkuPriceDao();
 
     public List<ProductSkuPrice> productSkuList(String product_sku_id) {
-        List<ProductSkuPrice> productSkuPriceList = productSkuPriceDao.list(Cnd.where(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id));
+        Cnd cnd = Cnd.where(ProductSkuPrice.SYSTEM_STATUS, true);
+        cnd.and(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id);
+
+        List<ProductSkuPrice> productSkuPriceList = productSkuPriceDao.primaryKeyList(cnd);
+        for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
+            productSkuPrice.put(find(productSkuPrice.getProduct_sku_id()));
+        }
         return productSkuPriceList;
     }
 
@@ -32,28 +38,36 @@ public class ProductSkuPriceService extends Service {
     }
 
     public Boolean save(ProductSkuPrice product) {
-        Boolean result = productSkuPriceDao.save(product);
-        return result;
+        Boolean success = productSkuPriceDao.save(product);
+        return success;
     }
 
     public Boolean update(ProductSkuPrice product, String product_sku_id, Integer system_version) {
-        Boolean result = productSkuPriceDao.update(product, Cnd.where(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id).and(ProductSkuPrice.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(ProductSkuPrice.SYSTEM_STATUS, true);
+        cnd.and(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id);
+        cnd.and(ProductSkuPrice.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = productSkuPriceDao.update(product, cnd);
+
+        if (success) {
             CacheUtil.remove(PRODUCT_SKU_PRIZE_ITEM_CACHE, product_sku_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String product_sku_id, Integer system_version) {
-        Boolean result = productSkuPriceDao.delete(Cnd.where(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id).and(ProductSkuPrice.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(ProductSkuPrice.SYSTEM_STATUS, true);
+        cnd.and(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id);
+        cnd.and(ProductSkuPrice.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = productSkuPriceDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(PRODUCT_SKU_PRIZE_ITEM_CACHE, product_sku_id);
         }
 
-        return result;
+        return success;
     }
 
 }

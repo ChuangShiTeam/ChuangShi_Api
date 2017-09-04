@@ -15,7 +15,13 @@ public class ProductSkuService extends Service {
     private final ProductSkuDao productSkuDao = new ProductSkuDao();
 
     public List<ProductSku> productList(String product_id) {
-        List<ProductSku> productSkuList = productSkuDao.list(Cnd.where(ProductSku.PRODUCT_ID, product_id));
+        Cnd cnd = Cnd.where(ProductSku.SYSTEM_STATUS, true);
+        cnd.and(ProductSku.PRODUCT_ID, product_id);
+
+        List<ProductSku> productSkuList = productSkuDao.primaryKeyList(cnd);
+        for (ProductSku productSku : productSkuList) {
+            productSku.put(find(productSku.getProduct_sku_id()));
+        }
         return productSkuList;
     }
 
@@ -32,28 +38,36 @@ public class ProductSkuService extends Service {
     }
 
     public Boolean save(ProductSku product) {
-        Boolean result = productSkuDao.save(product);
-        return result;
+        Boolean success = productSkuDao.save(product);
+        return success;
     }
 
     public Boolean update(ProductSku product, String product_sku_id, Integer system_version) {
-        Boolean result = productSkuDao.update(product, Cnd.where(ProductSku.PRODUCT_SKU_ID, product_sku_id).and(ProductSku.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(ProductSku.SYSTEM_STATUS, true);
+        cnd.and(ProductSku.PRODUCT_SKU_ID, product_sku_id);
+        cnd.and(ProductSku.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = productSkuDao.update(product, cnd);
+
+        if (success) {
             CacheUtil.remove(PRODUCT_SKU_ITEM_CACHE, product_sku_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String product_sku_id, Integer system_version) {
-        Boolean result = productSkuDao.delete(Cnd.where(ProductSku.PRODUCT_SKU_ID, product_sku_id).and(ProductSku.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(ProductSku.SYSTEM_STATUS, true);
+        cnd.and(ProductSku.PRODUCT_SKU_ID, product_sku_id);
+        cnd.and(ProductSku.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = productSkuDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(PRODUCT_SKU_ITEM_CACHE, product_sku_id);
         }
 
-        return result;
+        return success;
     }
 
 }

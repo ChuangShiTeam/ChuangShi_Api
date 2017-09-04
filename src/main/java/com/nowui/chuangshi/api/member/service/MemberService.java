@@ -15,12 +15,19 @@ public class MemberService extends Service {
     private final MemberDao memberDao = new MemberDao();
 
     public Integer adminCount(String app_id) {
-        Integer count = memberDao.count(Cnd.where(Member.APP_ID, app_id));
+        Cnd cnd = Cnd.where(Member.SYSTEM_STATUS, true);
+        cnd.and(Member.APP_ID, app_id);
+
+        Integer count = memberDao.count(cnd);
         return count;
     }
 
     public List<Member> adminList(String app_id, Integer m, Integer n) {
-        List<Member> memberList = memberDao.list(Cnd.where(Member.APP_ID, app_id).paginate(m, n));
+        Cnd cnd = Cnd.where(Member.SYSTEM_STATUS, true);
+        cnd.and(Member.APP_ID, app_id);
+        cnd.paginate(m, n);
+
+        List<Member> memberList = memberDao.list(cnd);
         return memberList;
     }
 
@@ -42,23 +49,31 @@ public class MemberService extends Service {
     }
 
     public Boolean update(Member member, String member_id, Integer system_version) {
-        Boolean result = memberDao.update(member, Cnd.where(Member.MEMBER_ID, member_id).and(Member.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(Member.SYSTEM_STATUS, true);
+        cnd.and(Member.MEMBER_ID, member_id);
+        cnd.and(Member.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = memberDao.update(member, cnd);
+
+        if (success) {
             CacheUtil.remove(MEMBER_ITEM_CACHE, member_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String member_id, Integer system_version) {
-        Boolean result = memberDao.delete(Cnd.where(Member.MEMBER_ID, member_id).and(Member.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(Member.SYSTEM_STATUS, true);
+        cnd.and(Member.MEMBER_ID, member_id);
+        cnd.and(Member.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = memberDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(MEMBER_ITEM_CACHE, member_id);
         }
 
-        return result;
+        return success;
     }
 
 }

@@ -15,17 +15,35 @@ public class PageService extends Service {
     private final PageDao pageDao = new PageDao();
 
     public Integer adminCount(String app_id, String page_name) {
-        Integer count = pageDao.count(Cnd.where(Page.APP_ID, app_id).andAllowEmpty(Page.PAGE_NAME, page_name));
+        Cnd cnd = Cnd.where(Page.SYSTEM_STATUS, true);
+        cnd.and(Page.APP_ID, app_id);
+        cnd.andAllowEmpty(Page.PAGE_NAME, page_name);
+
+        Integer count = pageDao.count(cnd);
         return count;
     }
 
     public List<Page> adminList(String app_id, String page_name, Integer m, Integer n) {
-        List<Page> pageList = pageDao.list(Cnd.where(Page.APP_ID, app_id).andAllowEmpty(Page.PAGE_NAME, page_name).paginate(m, n));
+        Cnd cnd = Cnd.where(Page.SYSTEM_STATUS, true);
+        cnd.and(Page.APP_ID, app_id);
+        cnd.andAllowEmpty(Page.PAGE_NAME, page_name);
+        cnd.paginate(m, n);
+
+        List<Page> pageList = pageDao.primaryKeyList(cnd);
+        for (Page page : pageList) {
+            page.put(find(page.getPage_id()));
+        }
         return pageList;
     }
 
     public List<Page> appList(String app_id) {
-        List<Page> pageList = pageDao.list(Cnd.where(Page.APP_ID, app_id));
+        Cnd cnd = Cnd.where(Page.SYSTEM_STATUS, true);
+        cnd.and(Page.APP_ID, app_id);
+
+        List<Page> pageList = pageDao.list(cnd);
+        for (Page page : pageList) {
+            page.put(find(page.getPage_id()));
+        }
         return pageList;
     }
 
@@ -42,28 +60,36 @@ public class PageService extends Service {
     }
 
     public Boolean save(Page page) {
-        Boolean result = pageDao.save(page);
-        return result;
+        Boolean success = pageDao.save(page);
+        return success;
     }
 
     public Boolean update(Page page, String page_id, Integer system_version) {
-        Boolean result = pageDao.update(page, Cnd.where(Page.PAGE_ID, page_id).and(Page.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(Page.SYSTEM_STATUS, true);
+        cnd.and(Page.PAGE_ID, page_id);
+        cnd.and(Page.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = pageDao.update(page, cnd);
+
+        if (success) {
             CacheUtil.remove(PAGE_ITEM_CACHE, page_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String page_id, Integer system_version) {
-        Boolean result = pageDao.delete(Cnd.where(Page.PAGE_ID, page_id).and(Page.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(Page.SYSTEM_STATUS, true);
+        cnd.and(Page.PAGE_ID, page_id);
+        cnd.and(Page.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = pageDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(PAGE_ITEM_CACHE, page_id);
         }
 
-        return result;
+        return success;
     }
 
 }

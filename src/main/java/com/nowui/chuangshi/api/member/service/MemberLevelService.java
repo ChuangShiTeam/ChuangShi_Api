@@ -15,12 +15,24 @@ public class MemberLevelService extends Service {
     private final MemberLevelDao memberLevelDao = new MemberLevelDao();
 
     public Integer adminCount(String app_id, String member_level_name) {
-        Integer count = memberLevelDao.count(Cnd.where(MemberLevel.APP_ID, app_id).andAllowEmpty(MemberLevel.MEMBER_LEVEL_NAME, member_level_name));
+        Cnd cnd = Cnd.where(MemberLevel.SYSTEM_STATUS, true);
+        cnd.and(MemberLevel.APP_ID, app_id);
+        cnd.andAllowEmpty(MemberLevel.MEMBER_LEVEL_NAME, member_level_name);
+
+        Integer count = memberLevelDao.count(cnd);
         return count;
     }
 
     public List<MemberLevel> adminList(String app_id, String member_level_name, Integer m, Integer n) {
-        List<MemberLevel> memberLevelList = memberLevelDao.list(Cnd.where(MemberLevel.APP_ID, app_id).andAllowEmpty(MemberLevel.MEMBER_LEVEL_NAME, member_level_name).paginate(m, n));
+        Cnd cnd = Cnd.where(MemberLevel.SYSTEM_STATUS, true);
+        cnd.and(MemberLevel.APP_ID, app_id);
+        cnd.andAllowEmpty(MemberLevel.MEMBER_LEVEL_NAME, member_level_name);
+        cnd.paginate(m, n);
+
+        List<MemberLevel> memberLevelList = memberLevelDao.primaryKeyList(cnd);
+        for (MemberLevel memberLevel : memberLevelList) {
+            memberLevel.put(find(memberLevel.getMember_level_id()));
+        }
         return memberLevelList;
     }
 
@@ -37,28 +49,36 @@ public class MemberLevelService extends Service {
     }
 
     public Boolean save(MemberLevel memberLevel) {
-        Boolean result = memberLevelDao.save(memberLevel);
-        return result;
+        Boolean success = memberLevelDao.save(memberLevel);
+        return success;
     }
 
     public Boolean update(MemberLevel memberLevel, String member_level_id, Integer system_version) {
-        Boolean result = memberLevelDao.update(memberLevel, Cnd.where(MemberLevel.MEMBER_LEVEL_ID, member_level_id).and(MemberLevel.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(MemberLevel.SYSTEM_STATUS, true);
+        cnd.and(MemberLevel.MEMBER_LEVEL_ID, member_level_id);
+        cnd.and(MemberLevel.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = memberLevelDao.update(memberLevel, cnd);
+
+        if (success) {
             CacheUtil.remove(MEMBER_LEVEL_ITEM_CACHE, member_level_id);
         }
 
-        return result;
+        return success;
     }
 
     public Boolean delete(String member_level_id, Integer system_version) {
-        Boolean result = memberLevelDao.delete(Cnd.where(MemberLevel.MEMBER_LEVEL_ID, member_level_id).and(MemberLevel.SYSTEM_VERSION, system_version));
+        Cnd cnd = Cnd.where(MemberLevel.SYSTEM_STATUS, true);
+        cnd.and(MemberLevel.MEMBER_LEVEL_ID, member_level_id);
+        cnd.and(MemberLevel.SYSTEM_VERSION, system_version);
 
-        if (result) {
+        Boolean success = memberLevelDao.delete(cnd);
+
+        if (success) {
             CacheUtil.remove(MEMBER_LEVEL_ITEM_CACHE, member_level_id);
         }
 
-        return result;
+        return success;
     }
 
 }
