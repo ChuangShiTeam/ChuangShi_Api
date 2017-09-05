@@ -9,9 +9,10 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.app.model.App;
+import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberAddress;
@@ -23,7 +24,6 @@ import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.model.TradeCommossion;
 import com.nowui.chuangshi.model.TradeProductSku;
 import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.service.ExpressService;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberAddressService;
@@ -54,7 +54,6 @@ public class TradeController extends Controller {
     private final MemberService memberService = new MemberService();
     private final MemberAddressService memberAddressService = new MemberAddressService();
     private final FileService fileService = new FileService();
-    private final AppService appService = new AppService();
     private final ExpressService expressService = new ExpressService();
     private final SupplierProductService supplierProductService = new SupplierProductService();
 
@@ -236,7 +235,7 @@ public class TradeController extends Controller {
             trade_product_quantity += tradeProductSku.getProduct_sku_quantity();
             trade_product_amount = trade_product_amount.add(product_sku_amount);
         }
-        App app = appService.findByApp_id(member.getApp_id());
+        App app = AppService.instance.find(member.getApp_id());
 
         String trade_number = tradeService.generateTrade_number();
         String trade_flow = TradeFlow.WAIT_PAY.getKey();

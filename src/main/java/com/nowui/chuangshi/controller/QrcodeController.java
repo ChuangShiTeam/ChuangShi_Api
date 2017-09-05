@@ -1,7 +1,6 @@
 package com.nowui.chuangshi.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -9,26 +8,24 @@ import com.jfinal.weixin.sdk.api.AccessTokenApi;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.jfinal.weixin.sdk.api.ApiResult;
 import com.jfinal.weixin.sdk.api.QrcodeApi;
+import com.nowui.chuangshi.api.app.model.App;
+import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.Qrcode;
 import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.QrcodeService;
 import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.SceneType;
 import com.nowui.chuangshi.util.Util;
-import com.nowui.chuangshi.util.WeChatUtil;
 
 public class QrcodeController extends Controller {
 
     private final QrcodeService qrcodeService = new QrcodeService();
     private final UserService userService = new UserService();
     private final MemberService memberService = new MemberService();
-    private final AppService appService = new AppService();
 
     @ActionKey(Url.QRCODE_LIST)
     public void list() {
@@ -194,7 +191,7 @@ public class QrcodeController extends Controller {
         String app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
 
-        App app = appService.findByApp_id(app_id);
+        App app = AppService.instance.find(app_id);
 
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {

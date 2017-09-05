@@ -27,6 +27,7 @@ public class PageService extends Service {
         Cnd cnd = Cnd.where(Page.SYSTEM_STATUS, true);
         cnd.and(Page.APP_ID, app_id);
         cnd.andAllowEmpty(Page.PAGE_NAME, page_name);
+        cnd.asc(Page.PAGE_SORT);
         cnd.paginate(m, n);
 
         List<Page> pageList = pageDao.primaryKeyList(cnd);

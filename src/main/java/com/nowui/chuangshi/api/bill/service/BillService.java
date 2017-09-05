@@ -49,8 +49,8 @@ public class BillService extends Service {
     }
 
     public Boolean save(Bill bill) {
-        Boolean result = billDao.save(bill);
-        return result;
+        Boolean success = billDao.save(bill);
+        return success;
     }
 
     public Boolean update(Bill bill, String bill_id, Integer system_version) {

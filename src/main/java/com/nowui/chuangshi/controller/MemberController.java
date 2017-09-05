@@ -9,16 +9,16 @@ import com.jfinal.weixin.sdk.api.AccessTokenApi;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.jfinal.weixin.sdk.api.ApiResult;
 import com.jfinal.weixin.sdk.api.QrcodeApi;
+import com.nowui.chuangshi.api.app.model.App;
+import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Certificate;
 import com.nowui.chuangshi.model.CertificatePay;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberLevel;
 import com.nowui.chuangshi.model.Qrcode;
 import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.service.CertificatePayService;
 import com.nowui.chuangshi.service.CertificateService;
 import com.nowui.chuangshi.service.FileService;
@@ -37,7 +37,6 @@ public class MemberController extends Controller {
     private final MemberLevelService memberLevelService = new MemberLevelService();
     private final FileService fileService = new FileService();
     private final QrcodeService qrcodeService = new QrcodeService();
-    private final AppService appService = new AppService();
     private final CertificateService certificateService = new CertificateService();
     private final CertificatePayService certificatePayService = new CertificatePayService();
 
@@ -231,7 +230,7 @@ public class MemberController extends Controller {
             qrcode_id = Util.getRandomUUID();
             String member_id = member.getMember_id();
 
-            App app = appService.findByApp_id(member.getApp_id());
+            App app = AppService.instance.find(member.getApp_id());
 
             String wechat_app_id = ApiConfigKit.getAppId();
             if (!wechat_app_id.equals(app.getWechat_app_id())) {

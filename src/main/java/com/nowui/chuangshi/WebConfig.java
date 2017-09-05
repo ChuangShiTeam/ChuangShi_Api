@@ -18,6 +18,8 @@ import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
 import com.jfinal.weixin.sdk.api.ApiConfig;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
+import com.nowui.chuangshi.api.app.model.App;
+import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
@@ -25,7 +27,6 @@ import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.controller.AdminController;
 import com.nowui.chuangshi.controller.ApiController;
-import com.nowui.chuangshi.controller.AppController;
 import com.nowui.chuangshi.controller.BillController;
 import com.nowui.chuangshi.controller.CacheController;
 import com.nowui.chuangshi.controller.CertificateController;
@@ -68,7 +69,6 @@ import com.nowui.chuangshi.controller.WeChatMessageController;
 import com.nowui.chuangshi.interceptor.GlobalActionInterceptor;
 import com.nowui.chuangshi.model.Admin;
 import com.nowui.chuangshi.model.Api;
-import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Bill;
 import com.nowui.chuangshi.model.BillCommission;
 import com.nowui.chuangshi.model.Certificate;
@@ -124,13 +124,10 @@ import com.nowui.chuangshi.model.TradePay;
 import com.nowui.chuangshi.model.TradeProductSku;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.model.Warehouse;
-import com.nowui.chuangshi.service.*;
 import com.nowui.chuangshi.util.ClassUtil;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 public class WebConfig extends JFinalConfig {
-
-    private final AppService appService = new AppService();
 
     public void configConstant(Constants constants) {
         constants.setDevMode(false);
@@ -147,7 +144,6 @@ public class WebConfig extends JFinalConfig {
         routes.add("/http", HttpController.class);
         routes.add("/sql", SqlController.class);
         routes.add("/exception", ExceptionController.class);
-        routes.add("/app", AppController.class);
         routes.add("/menu", MenuController.class);
         routes.add("/api", ApiController.class);
         routes.add("/user", UserController.class);
@@ -254,7 +250,6 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_http", "http_id", Http.class);
         activeRecordPlugin.addMapping("table_sql", "sql_id", Sql.class);
         activeRecordPlugin.addMapping("table_exception", "exception_id", Exception.class);
-        activeRecordPlugin.addMapping("table_app", "app_id", App.class);
         activeRecordPlugin.addMapping("table_menu", "menu_id", Menu.class);
         activeRecordPlugin.addMapping("table_api", "api_id", Api.class);
         activeRecordPlugin.addMapping("table_menu_api", "menu_api_id", MenuApi.class);
@@ -358,7 +353,7 @@ public class WebConfig extends JFinalConfig {
     }
 
     public void afterJFinalStart() {
-        List<App> appList = appService.list();
+        List<App> appList = AppService.instance.allList();
         for (App app : appList) {
             if (!ValidateUtil.isNullOrEmpty(app.getWechat_app_id())) {
                 ApiConfig apiConfig = new ApiConfig();

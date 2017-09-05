@@ -1,14 +1,88 @@
 package com.nowui.chuangshi.api.#(package_name).service;
 
-import com.nowui.chuangshi.api.#(package_name).cache.#(first_upper_model_name_without_underline)Cache;
+import com.nowui.chuangshi.api.#(package_name).dao.#(first_upper_model_name_without_underline)Dao;
+import com.nowui.chuangshi.api.#(package_name).model.#(first_upper_model_name_without_underline);
 import com.nowui.chuangshi.common.service.Service;
+import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.util.CacheUtil;
+
+import java.util.List;
 
 public class #(first_upper_model_name_without_underline)Service extends Service {
 
-    public static final #(first_upper_model_name_without_underline)Service me = new #(first_upper_model_name_without_underline)Service();
+    public static final #(first_upper_model_name_without_underline)Service instance = new #(first_upper_model_name_without_underline)Service();
+    private final String #(upper_model_name)_ITEM_CACHE = "#(lower_model_name)_item_cache";
+    private final #(first_upper_model_name_without_underline)Dao #(first_lower_model_name_without_underline)Dao = new #(first_upper_model_name_without_underline)Dao();
 
-    public #(first_upper_model_name_without_underline)Service() {
-        setCache(new #(first_upper_model_name_without_underline)Cache());
+    public Integer adminCount(String app_id#for(column : searchColumnList), String #(column.column_name)#end) {
+        Cnd cnd = Cnd.where(#(first_upper_model_name_without_underline).SYSTEM_STATUS, true);
+        cnd.and(#(first_upper_model_name_without_underline).APP_ID, app_id);
+        #for(column : searchColumnList)
+        cnd.andAllowEmpty(#(first_upper_model_name_without_underline).#(column.upper_column_name), #(column.column_name));
+        #end
+
+        Integer count = #(first_lower_model_name_without_underline)Dao.count(cnd);
+        return count;
+    }
+
+    public List<#(first_upper_model_name_without_underline)> adminList(String app_id#for(column : searchColumnList), String #(column.column_name)#end, Integer m, Integer n) {
+        Cnd cnd = Cnd.where(#(first_upper_model_name_without_underline).SYSTEM_STATUS, true);
+        cnd.and(#(first_upper_model_name_without_underline).APP_ID, app_id);
+        #for(column : searchColumnList)
+        cnd.andAllowEmpty(#(first_upper_model_name_without_underline).#(column.upper_column_name), #(column.column_name));
+        #end
+        cnd.paginate(m, n);
+
+        List<#(first_upper_model_name_without_underline)> #(lower_model_name)List = #(first_lower_model_name_without_underline)Dao.primaryKeyList(cnd);
+        for (#(first_upper_model_name_without_underline) #(lower_model_name) : #(lower_model_name)List) {
+            #(lower_model_name).put(find(#(lower_model_name).get#(first_upper_primary_key)()));
+        }
+        return #(lower_model_name)List;
+    }
+
+    public #(first_upper_model_name_without_underline) find(String #(primary_key)) {
+        #(first_upper_model_name_without_underline) #(lower_model_name) = CacheUtil.get(#(upper_model_name)_ITEM_CACHE, #(primary_key));
+
+        if (#(lower_model_name) == null) {
+            #(lower_model_name) = #(first_lower_model_name_without_underline)Dao.find(#(primary_key));
+
+            CacheUtil.put(#(upper_model_name)_ITEM_CACHE, #(primary_key), #(lower_model_name));
+        }
+
+        return #(lower_model_name);
+    }
+
+    public Boolean save(#(first_upper_model_name_without_underline) #(lower_model_name)) {
+        Boolean success = #(first_lower_model_name_without_underline)Dao.save(#(lower_model_name));
+        return success;
+    }
+
+    public Boolean update(#(first_upper_model_name_without_underline) #(lower_model_name), String #(primary_key), Integer system_version) {
+        Cnd cnd = Cnd.where(#(first_upper_model_name_without_underline).SYSTEM_STATUS, true);
+        cnd.and(#(first_upper_model_name_without_underline).#(upper_primary_key), #(primary_key));
+        cnd.and(#(first_upper_model_name_without_underline).SYSTEM_VERSION, system_version);
+
+        Boolean success = #(first_lower_model_name_without_underline)Dao.update(#(lower_model_name), cnd);
+
+        if (success) {
+            CacheUtil.remove(#(upper_model_name)_ITEM_CACHE, #(primary_key));
+        }
+
+        return success;
+    }
+
+    public Boolean delete(String #(primary_key), Integer system_version) {
+        Cnd cnd = Cnd.where(#(first_upper_model_name_without_underline).SYSTEM_STATUS, true);
+        cnd.and(#(first_upper_model_name_without_underline).#(upper_primary_key), #(primary_key));
+        cnd.and(#(first_upper_model_name_without_underline).SYSTEM_VERSION, system_version);
+
+        Boolean success = #(first_lower_model_name_without_underline)Dao.delete(cnd);
+
+        if (success) {
+            CacheUtil.remove(#(upper_model_name)_ITEM_CACHE, #(primary_key));
+        }
+
+        return success;
     }
 
 }

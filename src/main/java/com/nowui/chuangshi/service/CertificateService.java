@@ -11,18 +11,17 @@ import java.util.TreeMap;
 
 import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
+import com.nowui.chuangshi.api.app.model.App;
+import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.cache.CertificateCache;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Certificate;
 import com.nowui.chuangshi.util.Util;
 
 public class CertificateService extends Service {
 
     private CertificateCache certificateCache = new CertificateCache();
-
-    private AppService appService = new AppService();
 
     public Integer countByApp_idOrLikeCertificate_number(String app_id, String certificate_number) {
         return certificateCache.countByApp_idOrLikeCertificate_number(app_id, certificate_number);
@@ -85,7 +84,7 @@ public class CertificateService extends Service {
         // 微信支付
         if (pay_type.equals("WX")) {
             // 查询app对应微信支付所需信息 wechat_app_id, wechat_mch_id, wechat_mch_key
-            App app = appService.findByApp_id(certificate.getApp_id());
+            App app = AppService.instance.find(certificate.getApp_id());
             if (app == null) {
                 throw new RuntimeException("应用不存在");
             }

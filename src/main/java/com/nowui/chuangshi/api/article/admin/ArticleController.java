@@ -8,7 +8,6 @@ import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
-import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 

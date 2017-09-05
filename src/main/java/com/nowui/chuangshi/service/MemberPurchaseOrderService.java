@@ -7,14 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nowui.chuangshi.api.app.model.App;
+import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.cache.MemberPurchaseOrderCache;
 import com.nowui.chuangshi.constant.Constant;
-import com.nowui.chuangshi.model.App;
-import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
 import com.nowui.chuangshi.model.StockInProductSku;
-import com.nowui.chuangshi.model.StockOutProductSku;
 import com.nowui.chuangshi.type.MemberPurchaseOrderFlow;
 import com.nowui.chuangshi.type.StockType;
 
@@ -25,8 +24,6 @@ public class MemberPurchaseOrderService extends Service {
     private MemberPurchaseOrderPayService memberPurchaseOrderPayService = new MemberPurchaseOrderPayService();
     
     private MemberPurchaseOrderProductSkuService memberPurchaseOrderProductSkuService = new MemberPurchaseOrderProductSkuService();
-    
-    private AppService appService = new AppService();
     
     private WeChatService wechatService = new WeChatService();
     
@@ -85,7 +82,7 @@ public class MemberPurchaseOrderService extends Service {
         // 微信支付
         if (pay_type.equals("WX")) {
             // 查询app对应微信支付所需信息 wechat_app_id, wechat_mch_id, wechat_mch_key
-            App app = appService.findByApp_id(memberPurchaseOrder.getApp_id());
+            App app = AppService.instance.find(memberPurchaseOrder.getApp_id());
             if (app == null) {
                 throw new RuntimeException("应用不存在");
             }

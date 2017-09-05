@@ -7,7 +7,6 @@ import com.nowui.chuangshi.api.#(package_name).service.#(first_upper_model_name_
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
-import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
@@ -22,10 +21,10 @@ public class #(first_upper_model_name_without_underline)Controller extends Contr
         validateRequest(#for(column : searchColumnList)#(first_upper_model_name_without_underline).#(column.upper_column_name), #end Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
-        Cnd cnd = Cnd.where(#(first_upper_model_name_without_underline).APP_ID, model.getApp_id())#for(column : searchColumnList).andAllowEmpty(#(first_upper_model_name_without_underline).#(column.upper_column_name), model.get#(column.first_column_name)())#end;
+        String request_app_id = getRequest_app_id();
 
-        Integer resultCount = #(first_upper_model_name_without_underline)Service.me.count(cnd);
-        List<#(first_upper_model_name_without_underline)> resultList = #(first_upper_model_name_without_underline)Service.me.list(cnd.paginate(getM(), getN()));
+        Integer resultCount = #(first_upper_model_name_without_underline)Service.instance.adminCount(request_app_id#for(column : searchColumnList), model.get#(column.first_column_name)()#end);
+        List<#(first_upper_model_name_without_underline)> resultList = #(first_upper_model_name_without_underline)Service.instance.adminList(request_app_id#for(column : searchColumnList), model.get#(column.first_column_name)()#end, getM(), getN());
 
         validateResponse(#(first_upper_model_name_without_underline).#(upper_primary_key), #for(column : listColumnList)#(first_upper_model_name_without_underline).#(column.upper_column_name), #end #(first_upper_model_name_without_underline).SYSTEM_VERSION);
 
@@ -38,7 +37,7 @@ public class #(first_upper_model_name_without_underline)Controller extends Contr
 
         #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
 
-        #(first_upper_model_name_without_underline) result = #(first_upper_model_name_without_underline)Service.me.findById(model.get#(first_upper_primary_key)());
+        #(first_upper_model_name_without_underline) result = #(first_upper_model_name_without_underline)Service.instance.find(model.get#(first_upper_primary_key)());
 
         validateResponse(#for(column : detailColumnList)#(first_upper_model_name_without_underline).#(column.upper_column_name), #end #(first_upper_model_name_without_underline).SYSTEM_VERSION);
 
@@ -52,7 +51,7 @@ public class #(first_upper_model_name_without_underline)Controller extends Contr
         #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
         model.set#(first_upper_primary_key)(Util.getRandomUUID());
 
-        Boolean result = #(first_upper_model_name_without_underline)Service.me.save(model);
+        Boolean result = #(first_upper_model_name_without_underline)Service.instance.save(model);
 
         renderSuccessJson(result);
     }
@@ -63,7 +62,7 @@ public class #(first_upper_model_name_without_underline)Controller extends Contr
 
         #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
 
-        Boolean result = #(first_upper_model_name_without_underline)Service.me.update(model, Cnd.where(model.#(upper_primary_key), model.get#(first_upper_primary_key)()).and(#(first_upper_model_name_without_underline).SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = #(first_upper_model_name_without_underline)Service.instance.update(model, model.get#(first_upper_primary_key)(), model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -74,7 +73,7 @@ public class #(first_upper_model_name_without_underline)Controller extends Contr
 
         #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
 
-        Boolean result = #(first_upper_model_name_without_underline)Service.me.delete(model, Cnd.where(model.#(upper_primary_key), model.get#(first_upper_primary_key)()).and(#(first_upper_model_name_without_underline).SYSTEM_VERSION, model.getSystem_version()));
+        Boolean result = #(first_upper_model_name_without_underline)Service.instance.delete(model.get#(first_upper_primary_key)(), model.getSystem_version());
 
         renderSuccessJson(result);
     }

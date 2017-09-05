@@ -66,13 +66,8 @@ public class GlobalActionInterceptor implements Interceptor {
             if (ValidateUtil.isNullOrEmpty(http_token)) {
                 http_token = "";
             } else {
-                if (http_token == null) {
-                    http_token = "";
-                } else {
-                    System.out.println(http_token);
-                    JSONObject jsonObject = JSONObject.parseObject(AesUtil.aesDecrypt(http_token, Config.private_key));
-                    request_user_id = jsonObject.getString(User.USER_ID);
-                }
+                JSONObject jsonObject = JSONObject.parseObject(AesUtil.aesDecrypt(http_token, Config.private_key));
+                request_user_id = jsonObject.getString(User.USER_ID);
             }
 
             if (http_url.equals(Url.FILE_UPLOAD) || http_url.equals(Url.FILE_ADMIN_UPLOAD) || http_url.contains("/wechat/") || http_url.contains(Url.EXPRESS_PUSH)) {

@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.*;

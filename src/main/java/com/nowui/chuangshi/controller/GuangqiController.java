@@ -3,8 +3,9 @@ package com.nowui.chuangshi.controller;
 import com.jfinal.core.ActionKey;
 import com.jfinal.weixin.sdk.api.AccessTokenApi;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
+import com.nowui.chuangshi.api.app.model.App;
+import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.GuangqiCustomer;
 import com.nowui.chuangshi.model.GuangqiCustomerPrize;
 import com.nowui.chuangshi.model.GuangqiPrize;
@@ -26,7 +27,6 @@ public class GuangqiController extends Controller {
 
     public static final String GUANGQI_PRIZE_VISIT_COUNT_BY_APP_ID_CACHE = "guangqi_prize_visit_count_by_app_id_cache";
 
-    private final AppService appService = new AppService();
     private final HttpService httpService = new HttpService();
     private final GuangqiCustomerService guangqiCustomerService = new GuangqiCustomerService();
     private final GuangqiPrizeService guangqiPrizeService = new GuangqiPrizeService();
@@ -38,7 +38,7 @@ public class GuangqiController extends Controller {
 
         String request_app_id = getRequest_app_id();
 
-        App app = appService.findByApp_id(request_app_id);
+        App app = AppService.instance.find(request_app_id);
 
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {

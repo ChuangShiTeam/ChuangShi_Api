@@ -18,9 +18,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
+import com.nowui.chuangshi.api.app.model.App;
+import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Bill;
 import com.nowui.chuangshi.model.BillCommission;
 import com.nowui.chuangshi.model.Certificate;
@@ -34,7 +35,6 @@ import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.model.TradeCommossion;
 import com.nowui.chuangshi.model.TradeProductSku;
 import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.service.BillCommissionService;
 import com.nowui.chuangshi.service.BillService;
 import com.nowui.chuangshi.service.CertificatePayService;
@@ -63,7 +63,6 @@ import com.nowui.chuangshi.util.WeChatUtil;
 public class WeChatController extends Controller {
 
     private final TradeService tradeService = new TradeService();
-    private final AppService appService = new AppService();
     private final MemberService memberService = new MemberService();
 
     private final TradeProductSkuService tradeProductSkuService = new TradeProductSkuService();
@@ -87,7 +86,7 @@ public class WeChatController extends Controller {
         String url = getPara("url");
         String app_id = getPara("app_id");
 
-        App app = appService.findByApp_id(app_id);
+        App app = AppService.instance.find(app_id);
 
         System.out.println(app_id);
         System.out.println(app.getWechat_app_id());
@@ -114,7 +113,7 @@ public class WeChatController extends Controller {
         if (ValidateUtil.isNullOrEmpty(code)) {
 
         } else {
-            App app = appService.findByApp_id(app_id);
+            App app = AppService.instance.find(app_id);
 
             String wechat_app_id = ApiConfigKit.getAppId();
             if (!wechat_app_id.equals(app.getWechat_app_id())) {
@@ -185,7 +184,7 @@ public class WeChatController extends Controller {
 
     @ActionKey(Url.WECHAT_MENU)
     public void menu() {
-//        App app = appService.findByApp_id("c1af3f1ae00e4e0da9b20f5bd41b4279");
+//        App app = AppService.instance.find("c1af3f1ae00e4e0da9b20f5bd41b4279");
 //
 //        String wechat_app_id = ApiConfigKit.getAppId();
 //        if (!wechat_app_id.equals(app.getWechat_app_id())) {
@@ -196,7 +195,7 @@ public class WeChatController extends Controller {
 //                + "xingxiao.nowui.com" + "/?#/launch\"}]}");
 
         App app =
-                appService.findByApp_id("df2078d6c9eb46babb0df957127273ab");
+                AppService.instance.find("df2078d6c9eb46babb0df957127273ab");
 
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
@@ -235,7 +234,7 @@ public class WeChatController extends Controller {
         Member member = memberService.findByMember_id(user.getObject_Id());
 
         // 根据应用信息 获取是否分成 和分成级数
-        App app = appService.findByApp_id(trade.getApp_id());
+        App app = AppService.instance.find(trade.getApp_id());
         Boolean app_is_commission = app.getApp_is_commission();
         Integer app_commission_level = app.getApp_commission_level();
 
@@ -438,7 +437,7 @@ public class WeChatController extends Controller {
             if (trade == null) {
                 renderText(Constant.WX_FAIL_MSG);
             }
-            App app = appService.findByApp_id(trade.getApp_id());
+            App app = AppService.instance.find(trade.getApp_id());
             if (app == null) {
                 renderText(Constant.WX_FAIL_MSG);
             }
@@ -480,7 +479,7 @@ public class WeChatController extends Controller {
             if (memberPurchaseOrder == null) {
                 renderText(Constant.WX_FAIL_MSG);
             }
-            App app = appService.findByApp_id(memberPurchaseOrder.getApp_id());
+            App app = AppService.instance.find(memberPurchaseOrder.getApp_id());
             if (app == null) {
                 renderText(Constant.WX_FAIL_MSG);
             }
@@ -521,7 +520,7 @@ public class WeChatController extends Controller {
             if (memberDeliveryOrder == null) {
                 renderText(Constant.WX_FAIL_MSG);
             }
-            App app = appService.findByApp_id(memberDeliveryOrder.getApp_id());
+            App app = AppService.instance.find(memberDeliveryOrder.getApp_id());
             if (app == null) {
                 renderText(Constant.WX_FAIL_MSG);
             }
@@ -564,7 +563,7 @@ public class WeChatController extends Controller {
         if (certificate == null) {
             renderText(Constant.WX_FAIL_MSG);
         }
-        App app = appService.findByApp_id(certificate.getApp_id());
+        App app = AppService.instance.find(certificate.getApp_id());
         if (app == null) {
             renderText(Constant.WX_FAIL_MSG);
         }

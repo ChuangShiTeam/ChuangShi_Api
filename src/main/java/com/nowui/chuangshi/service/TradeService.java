@@ -11,10 +11,11 @@ import java.util.TreeMap;
 
 import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
+import com.nowui.chuangshi.api.app.model.App;
+import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.cache.TradeCache;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.type.ExpressBelong;
 import com.nowui.chuangshi.type.ExpressFlow;
@@ -26,8 +27,6 @@ public class TradeService extends Service {
     private TradeCache tradeCache = new TradeCache();
 
     private TradePayService tradePayService = new TradePayService();
-
-    private AppService appService = new AppService();
     
     private ExpressService expressService = new ExpressService();
     
@@ -120,7 +119,7 @@ public class TradeService extends Service {
         // 微信支付
         if (pay_type.equals("WX")) {
             // 查询app对应微信支付所需信息 wechat_app_id, wechat_mch_id, wechat_mch_key
-            App app = appService.findByApp_id(trade.getApp_id());
+            App app = AppService.instance.find(trade.getApp_id());
             if (app == null) {
                 throw new RuntimeException("应用不存在");
             }

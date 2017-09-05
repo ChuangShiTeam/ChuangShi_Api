@@ -36,30 +36,7 @@ public class CodeController extends Controller {
         List<JSONObject> listColumnList = new ArrayList<JSONObject>();
         List<JSONObject> detailColumnList = new ArrayList<JSONObject>();
 
-        try {
-            String codeTemplatePath = CodeController.class.getResource("/").toURI().getPath();
-            java.io.File parentFile = new java.io.File(codeTemplatePath).getParentFile();
-            java.io.File[] files = parentFile.listFiles();
-            Boolean isLocal = true;
-            for (java.io.File file : files) {
-                if (file.isDirectory() && file.getName().equals("sql")) {
-                    isLocal = false;
-                }
-            }
-
-            if (isLocal) {
-                parentFile = new java.io.File(PathKit.getWebRootPath()).getParentFile();
-                codeTemplatePath = parentFile.getPath();
-            } else {
-                codeTemplatePath = parentFile.getPath();
-            }
-
-
-//            engine.setBaseTemplatePath(codeTemplatePath + "/resources/template/");
-            engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/");
-        } catch (java.lang.Exception e) {
-
-        }
+        engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/");
 
         String lower_model_name = table_name.replace("table_", "").toLowerCase();
         String upper_model_name = lower_model_name.toUpperCase();
@@ -141,7 +118,6 @@ public class CodeController extends Controller {
         FileUtil.createPath(Config.code_generate_url + package_name + "/sql");
         FileUtil.createPath(Config.code_generate_url + package_name + "/model");
         FileUtil.createPath(Config.code_generate_url + package_name + "/dao");
-        FileUtil.createPath(Config.code_generate_url + package_name + "/cache");
         FileUtil.createPath(Config.code_generate_url + package_name + "/service");
         FileUtil.createPath(Config.code_generate_url + package_name + "/mobile");
         FileUtil.createPath(Config.code_generate_url + package_name + "/admin");

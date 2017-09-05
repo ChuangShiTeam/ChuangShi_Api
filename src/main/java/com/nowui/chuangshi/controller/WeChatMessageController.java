@@ -43,14 +43,14 @@ import com.jfinal.weixin.sdk.msg.in.event.InWifiEvent;
 import com.jfinal.weixin.sdk.msg.in.speech_recognition.InSpeechRecognitionResults;
 import com.jfinal.weixin.sdk.msg.out.OutNewsMsg;
 import com.jfinal.weixin.sdk.msg.out.OutTextMsg;
+import com.nowui.chuangshi.api.app.model.App;
+import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.constant.Constant;
-import com.nowui.chuangshi.model.App;
 import com.nowui.chuangshi.model.File;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberLevel;
 import com.nowui.chuangshi.model.Qrcode;
 import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.service.AppService;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberLevelService;
 import com.nowui.chuangshi.service.MemberService;
@@ -65,7 +65,6 @@ public class WeChatMessageController extends MsgController {
     private final MemberService memberService = new MemberService();
     private final MemberLevelService memberLevelService = new MemberLevelService();
     private final QrcodeService qrcodeService = new QrcodeService();
-    private final AppService appService = new AppService();
     private final UserService userService = new UserService();
     private final FileService fileService = new FileService();
 
@@ -121,7 +120,7 @@ public class WeChatMessageController extends MsgController {
         String event = inFollowEvent.getEvent();
         Boolean member_status = false;
 
-        App app = appService.findByApp_id(app_id);
+        App app = AppService.instance.find(app_id);
 
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
@@ -157,9 +156,9 @@ public class WeChatMessageController extends MsgController {
 
         if (app_id.equals("df2078d6c9eb46babb0df957127273ab")) {
             OutNewsMsg outNewsMsg = new OutNewsMsg(inFollowEvent);
-            outNewsMsg.addNews("欢迎使用济颐馆健康管理平台！", "广州市济颐馆贸易有限公司",
-                    "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg",
-                    "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg");
+            outNewsMsg.addNews("欢迎使用济颐馆健康管理平台！", "济颐馆欢迎您",
+                    "http://api.chuangshi.nowui.com/upload/df2078d6c9eb46babb0df957127273ab/6a4dbae2ac824d2fb170638d55139666/original/887c0dc8adf142169d50aac84c2d6dab.jpg",
+                    "http://h5.jiyiguan.nowui.com/?#/index");
             render(outNewsMsg);
         } else {
             OutTextMsg outMsg = new OutTextMsg(inFollowEvent);
@@ -186,7 +185,7 @@ public class WeChatMessageController extends MsgController {
 
         System.out.println(app_id);
 
-        App app = appService.findByApp_id(app_id);
+        App app = AppService.instance.find(app_id);
 
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
@@ -292,9 +291,9 @@ public class WeChatMessageController extends MsgController {
 
         if (app_id.equals("df2078d6c9eb46babb0df957127273ab")) {
             OutNewsMsg outNewsMsg = new OutNewsMsg(inQrCodeEvent);
-            outNewsMsg.addNews("欢迎使用济颐馆健康管理平台！", "广州市济颐馆贸易有限公司",
-                    "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg",
-                    "https://mmbiz.qlogo.cn/mmbiz_jpg/nuPqkdDZjJxu2hqfzf4icmib3UaqAick43icOz1aT4AzI9dXALrZmIqy09mXiaroIXoS3LkNOxibZogl7ZhFSFHBarNQ/0?wx_fmt=jpeg");
+            outNewsMsg.addNews("欢迎使用济颐馆健康管理平台！", "济颐馆欢迎您",
+                    "http://api.chuangshi.nowui.com/upload/df2078d6c9eb46babb0df957127273ab/6a4dbae2ac824d2fb170638d55139666/original/887c0dc8adf142169d50aac84c2d6dab.jpg",
+                    "http://h5.jiyiguan.nowui.com/?#/index");
             render(outNewsMsg);
         } else {
             OutTextMsg outMsg = new OutTextMsg(inQrCodeEvent);
@@ -317,7 +316,7 @@ public class WeChatMessageController extends MsgController {
     protected void processInMenuEvent(InMenuEvent inMenuEvent) {
         String app_id = getPara(Constant.APP_ID);
 
-        App app = appService.findByApp_id(app_id);
+        App app = AppService.instance.find(app_id);
 
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {

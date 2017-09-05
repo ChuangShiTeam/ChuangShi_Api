@@ -6,6 +6,8 @@ import com.jfinal.kit.Kv;
 import com.jfinal.kit.PathKit;
 import com.jfinal.template.Engine;
 import com.jfinal.template.Template;
+import com.nowui.chuangshi.api.app.model.App;
+import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.api.article.model.Article;
 import com.nowui.chuangshi.api.article.model.ArticleCategory;
 import com.nowui.chuangshi.api.article.service.ArticleCategoryService;
@@ -16,10 +18,10 @@ import com.nowui.chuangshi.api.website.service.WebsiteMenuService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
-import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.FileUtil;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +30,7 @@ import java.util.Map;
 @ControllerKey("/admin/page")
 public class PageController extends Controller {
 
-    private static Engine engine = Engine.create("code_engine");
+    private static Engine engine = Engine.create("page_engine");
 
     @ActionKey("/admin/page/list")
     public void list() {
@@ -36,7 +38,6 @@ public class PageController extends Controller {
 
         Page model = getModel(Page.class);
         String request_app_id = getRequest_app_id();
-        Cnd cnd = Cnd.where(Page.APP_ID, model.getApp_id()).andAllowEmpty(Page.PAGE_NAME, model.getPage_name());
 
         Integer resultCount = PageService.instance.adminCount(request_app_id, model.getPage_name());
         List<Page> resultList = PageService.instance.adminList(request_app_id, model.getPage_name(), getM(), getN());
@@ -71,11 +72,17 @@ public class PageController extends Controller {
 
         List<Map<String, Object>> websiteMenuList = WebsiteMenuService.instance.tree(request_app_id);
 
-        Engine engine = Engine.create("code_engine");
-        engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong/");
+        Kv templateMap = Kv.create();
+        templateMap.put("articleCategoryList", articleCategoryList);
+        templateMap.put("articleList", articleList);
+        templateMap.put("websiteMenuList", websiteMenuList);
 
         for (Page page : pageList) {
-            write(request_app_id, page, websiteMenuList, articleCategoryList, articleList);
+            templateMap.put("page_name", page.getPage_name());
+            templateMap.put("page_content", page.getPage_content());
+            templateMap.put("page_url", page.getPage_url());
+
+            write(request_app_id, page, templateMap);
         }
 
         renderSuccessJson();
@@ -88,36 +95,43 @@ public class PageController extends Controller {
         Page model = getModel(Page.class);
         String request_app_id = getRequest_app_id();
 
-        List<Map<String, Object>> websiteMenuList = WebsiteMenuService.instance.tree(request_app_id);
-
-        List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
-
-        List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryList, 7);
-
         Page page = PageService.instance.find(model.getPage_id());
 
-        write(request_app_id, page, websiteMenuList, articleCategoryList, articleList);
-
-        renderSuccessJson();
-    }
-
-    private void write(String request_app_id, Page page, List<Map<String, Object>> websiteMenuList, List<ArticleCategory> articleCategoryList, List<Article> articleList) {
-        engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong/");
-
-        Template template = engine.getTemplate(page.getPage_template());
+        List<Map<String, Object>> websiteMenuList = WebsiteMenuService.instance.tree(request_app_id);
 
         Kv templateMap = Kv.create();
-        templateMap.put("articleCategoryList", articleCategoryList);
-        templateMap.put("articleList", articleList);
         templateMap.put("websiteMenuList", websiteMenuList);
         templateMap.put("page_name", page.getPage_name());
         templateMap.put("page_content", page.getPage_content());
         templateMap.put("page_url", page.getPage_url());
 
+        if (page.getPage_url().equals("index.html")) {
+            List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
+            templateMap.put("articleCategoryList", articleCategoryList);
+
+            List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryList, 7);
+            templateMap.put("articleList", articleList);
+        }
+
+        write(request_app_id, page, templateMap);
+
+        renderSuccessJson();
+    }
+
+    private void write(String app_id, Page page, Kv templateMap) {
+        engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong/");
+
+        Template template = engine.getTemplate(page.getPage_template());
+
         String content = template.renderToString(templateMap);
 
-//        FileUtil.writeFile(content, "/usr/local/www/xietong/website/" + page.getPage_url());
-        FileUtil.writeFile(content, "/Users/yongqiangzhong/Documents/Publish/XieTong_Website/" + page.getPage_url());
+        App app = AppService.instance.find(app_id);
+
+        if (ValidateUtil.isNullOrEmpty(app.getApp_website_path())) {
+            throw new RuntimeException("路径不能为空");
+        }
+
+        FileUtil.writeFile(content, app.getApp_website_path() + page.getPage_url());
     }
 
     @ActionKey("/admin/page/save")
