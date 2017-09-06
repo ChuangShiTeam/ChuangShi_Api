@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -241,10 +239,7 @@ public class ExpressController extends Controller {
      */
     @ActionKey(Url.EXPRESS_ADMIN_PULL)
     public void pull() {
-        // List<Express> express_list = expressService.listNotComplete();
-        List<Express> express_list = new ArrayList<Express>();
-        express_list.add(expressService.findByExpress_id("cc73a9c789c1404badd1d4315b8b0337"));
-        express_list.add(expressService.findByExpress_id("652a539932154d9f92620d0af9698ad9"));
+        List<Express> express_list = expressService.listNotComplete();
         for (Express express : express_list) {
             String eBusinessID = Kdniao.EBusinessID;
             String appKey = Kdniao.AppKey;
@@ -277,8 +272,7 @@ public class ExpressController extends Controller {
 
                         express_is_complete = true;
                     } else if (state.equals("4")) {
-                        express_flow = "签收";
-                        express_is_complete = true;
+                        express_flow = "问题件";
                     }
 
                     if (express_is_complete) {
