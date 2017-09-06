@@ -50,8 +50,9 @@ public class #(first_upper_model_name_without_underline)Controller extends Contr
 
         #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
         model.set#(first_upper_primary_key)(Util.getRandomUUID());
+        String request_app_id = getRequest_app_id();
 
-        Boolean result = #(first_upper_model_name_without_underline)Service.instance.save(model);
+        Boolean result = #(first_upper_model_name_without_underline)Service.instance.save(model, request_app_id);
 
         renderSuccessJson(result);
     }
@@ -61,8 +62,9 @@ public class #(first_upper_model_name_without_underline)Controller extends Contr
         validateRequest(#(first_upper_model_name_without_underline).#(upper_primary_key), #for(column : detailColumnList)#(first_upper_model_name_without_underline).#(column.upper_column_name), #end #(first_upper_model_name_without_underline).SYSTEM_VERSION);
 
         #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
+        String request_app_id = getRequest_app_id();
 
-        Boolean result = #(first_upper_model_name_without_underline)Service.instance.update(model, model.get#(first_upper_primary_key)(), model.getSystem_version());
+        Boolean result = #(first_upper_model_name_without_underline)Service.instance.update(model, model.get#(first_upper_primary_key)(), request_app_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -72,8 +74,9 @@ public class #(first_upper_model_name_without_underline)Controller extends Contr
         validateRequest(#(first_upper_model_name_without_underline).#(upper_primary_key), #(first_upper_model_name_without_underline).SYSTEM_VERSION);
 
         #(first_upper_model_name_without_underline) model = getModel(#(first_upper_model_name_without_underline).class);
+        String request_app_id = getRequest_app_id();
 
-        Boolean result = #(first_upper_model_name_without_underline)Service.instance.delete(model.get#(first_upper_primary_key)(), model.getSystem_version());
+        Boolean result = #(first_upper_model_name_without_underline)Service.instance.delete(model.get#(first_upper_primary_key)(), request_app_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
