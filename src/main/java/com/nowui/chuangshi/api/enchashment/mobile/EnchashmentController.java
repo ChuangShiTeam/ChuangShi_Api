@@ -10,7 +10,6 @@ import com.nowui.chuangshi.api.trade.service.MemberDeliveryOrderService;
 import com.nowui.chuangshi.api.trade.service.MemberPurchaseOrderService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 

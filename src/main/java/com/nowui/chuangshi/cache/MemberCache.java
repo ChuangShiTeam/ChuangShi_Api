@@ -130,6 +130,7 @@ public class MemberCache extends Cache {
 
         if (result) {
             CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
+            CacheUtil.remove("member_item_cache", member_id);
 
             for (int i = 0; i < member_parent_path.size(); i++) {
                 String member_parent_path_member_id = member_parent_path.getString(i);
@@ -152,6 +153,7 @@ public class MemberCache extends Cache {
 
         if (result) {
             CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
+            CacheUtil.remove("member_item_cache", member_id);
 
             for (int i = 0; i < member_parent_path.size(); i++) {
                 String member_parent_path_member_id = member_parent_path.getString(i);
@@ -171,6 +173,7 @@ public class MemberCache extends Cache {
 
         if (result) {
             CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
+            CacheUtil.remove("member_item_cache", member_id);
 
             Member member = findByMember_id(member_id);
             JSONArray jsonArray = JSONArray.parseArray(member.getMember_parent_path());
@@ -190,6 +193,7 @@ public class MemberCache extends Cache {
 
         if (result) {
             CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
+            CacheUtil.remove("member_item_cache", member_id);
 
             Member member = findByMember_id(member_id);
             JSONArray jsonArray = JSONArray.parseArray(member.getMember_parent_path());
@@ -215,6 +219,7 @@ public class MemberCache extends Cache {
 
         if (result) {
             CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
+            CacheUtil.remove("member_item_cache", member_id);
 
             JSONArray jsonArray = JSONArray.parseArray(member.getMember_parent_path());
             for (int i = 0; i < jsonArray.size(); i++) {
@@ -232,6 +237,7 @@ public class MemberCache extends Cache {
         Member member = findByMember_id(member_id);
 
         CacheUtil.remove(MEMBER_BY_MEMBER_ID_CACHE, member_id);
+        CacheUtil.remove("member_item_cache", member_id);
 
         JSONArray jsonArray = JSONArray.parseArray(member.getMember_parent_path());
         for (int i = 0; i < jsonArray.size(); i++) {
