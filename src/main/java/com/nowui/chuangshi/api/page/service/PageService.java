@@ -60,17 +60,17 @@ public class PageService extends Service {
         return page;
     }
 
-    public Boolean save(Page page) {
-        Boolean success = pageDao.save(page);
+    public Boolean save(Page page, String system_create_user_id) {
+        Boolean success = pageDao.save(page, system_create_user_id);
         return success;
     }
 
-    public Boolean update(Page page, String page_id, Integer system_version) {
+    public Boolean update(Page page, String page_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Page.SYSTEM_STATUS, true);
         cnd.and(Page.PAGE_ID, page_id);
         cnd.and(Page.SYSTEM_VERSION, system_version);
 
-        Boolean success = pageDao.update(page, cnd);
+        Boolean success = pageDao.update(page, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(PAGE_ITEM_CACHE, page_id);
@@ -79,12 +79,12 @@ public class PageService extends Service {
         return success;
     }
 
-    public Boolean delete(String page_id, Integer system_version) {
+    public Boolean delete(String page_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Page.SYSTEM_STATUS, true);
         cnd.and(Page.PAGE_ID, page_id);
         cnd.and(Page.SYSTEM_VERSION, system_version);
 
-        Boolean success = pageDao.delete(cnd);
+        Boolean success = pageDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(PAGE_ITEM_CACHE, page_id);

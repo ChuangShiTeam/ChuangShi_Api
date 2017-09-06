@@ -40,8 +40,8 @@ public class JianglingMemberPrizeService extends Service {
         return jianglingMemberPrize;
     }
 
-    public Boolean save(JianglingMemberPrize jianglingMemberPrize) {
-        Boolean success = jianglingMemberPrizeDao.save(jianglingMemberPrize);
+    public Boolean save(JianglingMemberPrize jianglingMemberPrize, String system_create_user_id) {
+        Boolean success = jianglingMemberPrizeDao.save(jianglingMemberPrize, system_create_user_id);
         return success;
     }
 

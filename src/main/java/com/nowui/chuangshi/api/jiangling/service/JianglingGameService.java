@@ -58,17 +58,17 @@ public class JianglingGameService extends Service {
         return jianglingGame;
     }
 
-    public Boolean save(JianglingGame jianglingGame) {
-        Boolean success = jianglingGameDao.save(jianglingGame);
+    public Boolean save(JianglingGame jianglingGame, String system_create_user_id) {
+        Boolean success = jianglingGameDao.save(jianglingGame, system_create_user_id);
         return success;
     }
 
-    public Boolean update(JianglingGame jianglingGame, String game_id, Integer system_version) {
+    public Boolean update(JianglingGame jianglingGame, String game_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(JianglingGame.SYSTEM_STATUS, true);
         cnd.and(JianglingGame.GAME_ID, game_id);
         cnd.and(JianglingGame.SYSTEM_VERSION, system_version);
 
-        Boolean success = jianglingGameDao.update(jianglingGame, cnd);
+        Boolean success = jianglingGameDao.update(jianglingGame, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(JIANGLING_GAME_ITEM_CACHE, game_id);
@@ -77,12 +77,12 @@ public class JianglingGameService extends Service {
         return success;
     }
 
-    public Boolean delete(String game_id, Integer system_version) {
+    public Boolean delete(String game_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(JianglingGame.SYSTEM_STATUS, true);
         cnd.and(JianglingGame.GAME_ID, game_id);
         cnd.and(JianglingGame.SYSTEM_VERSION, system_version);
 
-        Boolean success = jianglingGameDao.delete(cnd);
+        Boolean success = jianglingGameDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(JIANGLING_GAME_ITEM_CACHE, game_id);

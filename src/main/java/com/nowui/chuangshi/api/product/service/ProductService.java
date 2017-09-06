@@ -59,17 +59,17 @@ public class ProductService extends Service {
         return product;
     }
 
-    public Boolean save(Product product) {
-        Boolean success = productDao.save(product);
+    public Boolean save(Product product, String system_create_user_id) {
+        Boolean success = productDao.save(product, system_create_user_id);
         return success;
     }
 
-    public Boolean update(Product product, String product_id, Integer system_version) {
+    public Boolean update(Product product, String product_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Product.SYSTEM_STATUS, true);
         cnd.and(Product.PRODUCT_ID, product_id);
         cnd.and(Product.SYSTEM_VERSION, system_version);
 
-        Boolean success = productDao.update(product, cnd);
+        Boolean success = productDao.update(product, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(PRODUCT_ITEM_CACHE, product_id);
@@ -78,12 +78,12 @@ public class ProductService extends Service {
         return success;
     }
 
-    public Boolean delete(String product_id, Integer system_version) {
+    public Boolean delete(String product_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Product.SYSTEM_STATUS, true);
         cnd.and(Product.PRODUCT_ID, product_id);
         cnd.and(Product.SYSTEM_VERSION, system_version);
 
-        Boolean success = productDao.delete(cnd);
+        Boolean success = productDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(PRODUCT_ITEM_CACHE, product_id);

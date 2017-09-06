@@ -140,8 +140,9 @@ public class PageController extends Controller {
 
         Page model = getModel(Page.class);
         model.setPage_id(Util.getRandomUUID());
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = PageService.instance.save(model);
+        Boolean result = PageService.instance.save(model, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -151,8 +152,9 @@ public class PageController extends Controller {
         validateRequest(Page.PAGE_ID, Page.PAGE_NAME, Page.PAGE_TEMPLATE, Page.PAGE_URL, Page.PAGE_CONTENT, Page.PAGE_SORT, Page.SYSTEM_VERSION);
 
         Page model = getModel(Page.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = PageService.instance.update(model, model.getPage_id(), model.getSystem_version());
+        Boolean result = PageService.instance.update(model, model.getPage_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -162,8 +164,9 @@ public class PageController extends Controller {
         validateRequest(Page.PAGE_ID, Page.SYSTEM_VERSION);
 
         Page model = getModel(Page.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = PageService.instance.delete(model.getPage_id(), model.getSystem_version());
+        Boolean result = PageService.instance.delete(model.getPage_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

@@ -53,17 +53,17 @@ public class CertificateService extends Service {
         return certificate;
     }
 
-    public Boolean save(Certificate certificate) {
-        Boolean success = certificateDao.save(certificate);
+    public Boolean save(Certificate certificate, String system_create_user_id) {
+        Boolean success = certificateDao.save(certificate, system_create_user_id);
         return success;
     }
 
-    public Boolean update(Certificate certificate, String certificate_id, Integer system_version) {
+    public Boolean update(Certificate certificate, String certificate_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Certificate.SYSTEM_STATUS, true);
         cnd.and(Certificate.CERTIFICATE_ID, certificate_id);
         cnd.and(Certificate.SYSTEM_VERSION, system_version);
 
-        Boolean success = certificateDao.update(certificate, cnd);
+        Boolean success = certificateDao.update(certificate, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(CERTIFICATE_ITEM_CACHE, certificate_id);
@@ -72,12 +72,12 @@ public class CertificateService extends Service {
         return success;
     }
 
-    public Boolean delete(String certificate_id, Integer system_version) {
+    public Boolean delete(String certificate_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Certificate.SYSTEM_STATUS, true);
         cnd.and(Certificate.CERTIFICATE_ID, certificate_id);
         cnd.and(Certificate.SYSTEM_VERSION, system_version);
 
-        Boolean success = certificateDao.delete(cnd);
+        Boolean success = certificateDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(CERTIFICATE_ITEM_CACHE, certificate_id);

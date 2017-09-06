@@ -48,17 +48,17 @@ public class BillService extends Service {
         return bill;
     }
 
-    public Boolean save(Bill bill) {
-        Boolean success = billDao.save(bill);
+    public Boolean save(Bill bill, String system_create_user_id) {
+        Boolean success = billDao.save(bill, system_create_user_id);
         return success;
     }
 
-    public Boolean update(Bill bill, String bill_id, Integer system_version) {
+    public Boolean update(Bill bill, String bill_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Bill.SYSTEM_STATUS, true);
         cnd.and(Bill.BILL_ID, bill_id);
         cnd.and(Bill.SYSTEM_VERSION, system_version);
 
-        Boolean success = billDao.update(bill, cnd);
+        Boolean success = billDao.update(bill, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(BILL_ITEM_CACHE, bill_id);
@@ -67,12 +67,12 @@ public class BillService extends Service {
         return success;
     }
 
-    public Boolean delete(String bill_id, Integer system_version) {
+    public Boolean delete(String bill_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Bill.SYSTEM_STATUS, true);
         cnd.and(Bill.BILL_ID, bill_id);
         cnd.and(Bill.SYSTEM_VERSION, system_version);
 
-        Boolean success = billDao.delete(cnd);
+        Boolean success = billDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(BILL_ITEM_CACHE, bill_id);

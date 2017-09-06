@@ -82,7 +82,7 @@ public class EnchashmentController extends Controller {
         model.setUser_id(request_user_id);
         model.setEnchashment_status(false);
 
-        Boolean result = EnchashmentService.instance.save(model);
+        Boolean result = EnchashmentService.instance.save(model, request_user_id);
 
         renderSuccessJson(result);
     }

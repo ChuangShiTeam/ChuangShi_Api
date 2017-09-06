@@ -52,8 +52,9 @@ public class EnchashmentController extends Controller {
 
         Enchashment model = getModel(Enchashment.class);
         model.setEnchashment_id(Util.getRandomUUID());
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = EnchashmentService.instance.save(model);
+        Boolean result = EnchashmentService.instance.save(model, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -63,8 +64,9 @@ public class EnchashmentController extends Controller {
         validateRequest(Enchashment.ENCHASHMENT_ID, Enchashment.USER_ID, Enchashment.ENCHASHMENT_AMOUNT, Enchashment.ENCHASHMENT_STATUS, Enchashment.SYSTEM_VERSION);
 
         Enchashment model = getModel(Enchashment.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = EnchashmentService.instance.update(model, model.getEnchashment_id(), model.getSystem_version());
+        Boolean result = EnchashmentService.instance.update(model, model.getEnchashment_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -74,8 +76,9 @@ public class EnchashmentController extends Controller {
         validateRequest(Enchashment.ENCHASHMENT_ID, Enchashment.SYSTEM_VERSION);
 
         Enchashment model = getModel(Enchashment.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = EnchashmentService.instance.delete(model.getEnchashment_id(), model.getSystem_version());
+        Boolean result = EnchashmentService.instance.delete(model.getEnchashment_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

@@ -60,17 +60,17 @@ public class FeijiuFastProductService extends Service {
         return feijiuFastProduct;
     }
 
-    public Boolean save(FeijiuFastProduct feijiuFastProduct) {
-        Boolean success = feijiuFastProductDao.save(feijiuFastProduct);
+    public Boolean save(FeijiuFastProduct feijiuFastProduct, String system_create_user_id) {
+        Boolean success = feijiuFastProductDao.save(feijiuFastProduct, system_create_user_id);
         return success;
     }
 
-    public Boolean update(FeijiuFastProduct feijiuFastProduct, String product_id, Integer system_version) {
+    public Boolean update(FeijiuFastProduct feijiuFastProduct, String product_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(FeijiuFastProduct.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastProduct.PRODUCT_ID, product_id);
         cnd.and(FeijiuFastProduct.SYSTEM_VERSION, system_version);
 
-        Boolean success = feijiuFastProductDao.update(feijiuFastProduct, cnd);
+        Boolean success = feijiuFastProductDao.update(feijiuFastProduct, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(FEIJIU_FAST_PRODUCT_ITEM_CACHE, product_id);
@@ -79,12 +79,12 @@ public class FeijiuFastProductService extends Service {
         return success;
     }
 
-    public Boolean delete(String product_id, Integer system_version) {
+    public Boolean delete(String product_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(FeijiuFastProduct.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastProduct.PRODUCT_ID, product_id);
         cnd.and(FeijiuFastProduct.SYSTEM_VERSION, system_version);
 
-        Boolean success = feijiuFastProductDao.delete(cnd);
+        Boolean success = feijiuFastProductDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(FEIJIU_FAST_PRODUCT_ITEM_CACHE, product_id);

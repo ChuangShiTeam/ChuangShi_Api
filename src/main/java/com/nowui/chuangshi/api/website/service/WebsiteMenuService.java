@@ -39,17 +39,17 @@ public class WebsiteMenuService extends Service {
         return websiteMenu;
     }
 
-    public Boolean save(WebsiteMenu websiteMenu) {
-        Boolean success = websiteMenuDao.save(websiteMenu);
+    public Boolean save(WebsiteMenu websiteMenu, String system_create_user_id) {
+        Boolean success = websiteMenuDao.save(websiteMenu, system_create_user_id);
         return success;
     }
 
-    public Boolean update(WebsiteMenu websiteMenu, String website_menu_id, Integer system_version) {
+    public Boolean update(WebsiteMenu websiteMenu, String website_menu_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(WebsiteMenu.SYSTEM_STATUS, true);
         cnd.and(WebsiteMenu.WEBSITE_MENU_ID, website_menu_id);
         cnd.and(WebsiteMenu.SYSTEM_VERSION, system_version);
 
-        Boolean success = websiteMenuDao.update(websiteMenu, cnd);
+        Boolean success = websiteMenuDao.update(websiteMenu, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(WEB_SITE_ITEM_CACHE, website_menu_id);
@@ -58,12 +58,12 @@ public class WebsiteMenuService extends Service {
         return success;
     }
 
-    public Boolean delete(String website_menu_id, Integer system_version) {
+    public Boolean delete(String website_menu_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(WebsiteMenu.SYSTEM_STATUS, true);
         cnd.and(WebsiteMenu.WEBSITE_MENU_ID, website_menu_id);
         cnd.and(WebsiteMenu.SYSTEM_VERSION, system_version);
 
-        Boolean success = websiteMenuDao.delete(cnd);
+        Boolean success = websiteMenuDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(WEB_SITE_ITEM_CACHE, website_menu_id);

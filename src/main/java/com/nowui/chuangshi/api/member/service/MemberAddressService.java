@@ -59,17 +59,17 @@ public class MemberAddressService extends Service {
         return memberAddress;
     }
 
-    public Boolean save(MemberAddress memberAddress) {
-        Boolean success = memberAddressDao.save(memberAddress);
+    public Boolean save(MemberAddress memberAddress, String system_create_user_id) {
+        Boolean success = memberAddressDao.save(memberAddress, system_create_user_id);
         return success;
     }
 
-    public Boolean update(MemberAddress memberAddress, String member_address_id, Integer system_version) {
+    public Boolean update(MemberAddress memberAddress, String member_address_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(MemberAddress.SYSTEM_STATUS, true);
         cnd.and(MemberAddress.MEMBER_ADDRESS_ID, member_address_id);
         cnd.and(MemberAddress.SYSTEM_VERSION, system_version);
 
-        Boolean success = memberAddressDao.update(memberAddress, cnd);
+        Boolean success = memberAddressDao.update(memberAddress, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(MEMBER_ADDRESS_ITEM_CACHE, member_address_id);
@@ -78,12 +78,12 @@ public class MemberAddressService extends Service {
         return success;
     }
 
-    public Boolean delete(String member_address_id, Integer system_version) {
+    public Boolean delete(String member_address_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(MemberAddress.SYSTEM_STATUS, true);
         cnd.and(MemberAddress.MEMBER_ADDRESS_ID, member_address_id);
         cnd.and(MemberAddress.SYSTEM_VERSION, system_version);
 
-        Boolean success = memberAddressDao.delete(cnd);
+        Boolean success = memberAddressDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(MEMBER_ADDRESS_ITEM_CACHE, member_address_id);

@@ -50,8 +50,9 @@ public class JianglingCustomerController extends Controller {
 
         JianglingCustomer model = getModel(JianglingCustomer.class);
         model.setUser_id(Util.getRandomUUID());
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = JianglingCustomerService.instance.save(model);
+        Boolean result = JianglingCustomerService.instance.save(model, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -61,8 +62,9 @@ public class JianglingCustomerController extends Controller {
         validateRequest(JianglingCustomer.USER_ID, JianglingCustomer.CUSTOMER_NAME, JianglingCustomer.CUSTOMER_MOBILE, JianglingCustomer.CUSTOMER_DISTRIBUTOR, JianglingCustomer.CUSTOMER_CAR, JianglingCustomer.SYSTEM_VERSION);
 
         JianglingCustomer model = getModel(JianglingCustomer.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = JianglingCustomerService.instance.update(model, model.getUser_id(), model.getSystem_version());
+        Boolean result = JianglingCustomerService.instance.update(model, model.getUser_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -72,8 +74,9 @@ public class JianglingCustomerController extends Controller {
         validateRequest(JianglingCustomer.USER_ID, JianglingCustomer.SYSTEM_VERSION);
 
         JianglingCustomer model = getModel(JianglingCustomer.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = JianglingCustomerService.instance.delete(model.getUser_id(), model.getSystem_version());
+        Boolean result = JianglingCustomerService.instance.delete(model.getUser_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

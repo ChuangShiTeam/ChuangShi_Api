@@ -40,12 +40,13 @@ public class JianglingMemberController extends Controller {
 
         JSONObject jsonObject = getParameterJSONObject();
         String user_id = jsonObject.getString(User.USER_ID);
+        String request_user_id = getRequest_user_id();
 
         JianglingMember jianglingMember = new JianglingMember();
         jianglingMember.setMember_like_point(50);
         jianglingMember.setMember_redeem_code_is_exchange(true);
 
-        Boolean result = JianglingMemberService.instance.update(jianglingMember, user_id);
+        Boolean result = JianglingMemberService.instance.update(jianglingMember, user_id, request_user_id);
 
         renderSuccessJson(result);
     }

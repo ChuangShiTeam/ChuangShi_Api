@@ -58,8 +58,9 @@ public class FeijiuFastProductController extends Controller {
 
         FeijiuFastProduct model = getModel(FeijiuFastProduct.class);
         model.setProduct_id(Util.getRandomUUID());
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = FeijiuFastProductService.instance.save(model);
+        Boolean result = FeijiuFastProductService.instance.save(model, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -69,8 +70,9 @@ public class FeijiuFastProductController extends Controller {
         validateRequest(FeijiuFastProduct.PRODUCT_ID, FeijiuFastProduct.PRODUCT_CATEGORY_ID, FeijiuFastProduct.PRODUCT_NAME, FeijiuFastProduct.PRODUCT_IMAGE, FeijiuFastProduct.PRODUCT_LINK, FeijiuFastProduct.PRODUCT_CONTENT, FeijiuFastProduct.PRODUCT_APPLICANT_QUANTITY, FeijiuFastProduct.SYSTEM_VERSION);
 
         FeijiuFastProduct model = getModel(FeijiuFastProduct.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = FeijiuFastProductService.instance.update(model, model.getProduct_id(), model.getSystem_version());
+        Boolean result = FeijiuFastProductService.instance.update(model, model.getProduct_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -80,8 +82,9 @@ public class FeijiuFastProductController extends Controller {
         validateRequest(FeijiuFastProduct.PRODUCT_ID, FeijiuFastProduct.SYSTEM_VERSION);
 
         FeijiuFastProduct model = getModel(FeijiuFastProduct.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = FeijiuFastProductService.instance.delete(model.getProduct_id(), model.getSystem_version());
+        Boolean result = FeijiuFastProductService.instance.delete(model.getProduct_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

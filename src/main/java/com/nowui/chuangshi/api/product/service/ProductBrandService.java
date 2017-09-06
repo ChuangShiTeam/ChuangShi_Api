@@ -59,17 +59,17 @@ public class ProductBrandService extends Service {
         return productBrand;
     }
 
-    public Boolean save(ProductBrand productBrand) {
-        Boolean success = productBrandDao.save(productBrand);
+    public Boolean save(ProductBrand productBrand, String system_create_user_id) {
+        Boolean success = productBrandDao.save(productBrand, system_create_user_id);
         return success;
     }
 
-    public Boolean update(ProductBrand productBrand, String product_brand_id, Integer system_version) {
+    public Boolean update(ProductBrand productBrand, String product_brand_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(ProductBrand.SYSTEM_STATUS, true);
         cnd.and(ProductBrand.PRODUCT_BRAND_ID, product_brand_id);
         cnd.and(ProductBrand.SYSTEM_VERSION, system_version);
 
-        Boolean success = productBrandDao.update(productBrand, cnd);
+        Boolean success = productBrandDao.update(productBrand, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(PRODUCT_BRAND_ITEM_CACHE, product_brand_id);
@@ -78,12 +78,12 @@ public class ProductBrandService extends Service {
         return success;
     }
 
-    public Boolean delete(String product_brand_id, Integer system_version) {
+    public Boolean delete(String product_brand_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(ProductBrand.SYSTEM_STATUS, true);
         cnd.and(ProductBrand.PRODUCT_BRAND_ID, product_brand_id);
         cnd.and(ProductBrand.SYSTEM_VERSION, system_version);
 
-        Boolean success = productBrandDao.delete(cnd);
+        Boolean success = productBrandDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(PRODUCT_BRAND_ITEM_CACHE, product_brand_id);

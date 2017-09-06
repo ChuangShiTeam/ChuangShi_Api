@@ -59,17 +59,17 @@ public class FeijiuFastProductCategoryService extends Service {
         return feijiuFastProductCategory;
     }
 
-    public Boolean save(FeijiuFastProductCategory feijiuFastProductCategory) {
-        Boolean success = feijiuFastProductCategoryDao.save(feijiuFastProductCategory);
+    public Boolean save(FeijiuFastProductCategory feijiuFastProductCategory, String system_create_user_id) {
+        Boolean success = feijiuFastProductCategoryDao.save(feijiuFastProductCategory, system_create_user_id);
         return success;
     }
 
-    public Boolean update(FeijiuFastProductCategory feijiuFastProductCategory, String product_category_id, Integer system_version) {
+    public Boolean update(FeijiuFastProductCategory feijiuFastProductCategory, String product_category_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastProductCategory.PRODUCT_CATEGORY_ID, product_category_id);
         cnd.and(FeijiuFastProductCategory.SYSTEM_VERSION, system_version);
 
-        Boolean success = feijiuFastProductCategoryDao.update(feijiuFastProductCategory, cnd);
+        Boolean success = feijiuFastProductCategoryDao.update(feijiuFastProductCategory, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(FEIJIU_FAST_PRODUCT_CATEGORY_ITEM_CACHE, product_category_id);
@@ -78,12 +78,12 @@ public class FeijiuFastProductCategoryService extends Service {
         return success;
     }
 
-    public Boolean delete(String product_category_id, Integer system_version) {
+    public Boolean delete(String product_category_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastProductCategory.PRODUCT_CATEGORY_ID, product_category_id);
         cnd.and(FeijiuFastProductCategory.SYSTEM_VERSION, system_version);
 
-        Boolean success = feijiuFastProductCategoryDao.delete(cnd);
+        Boolean success = feijiuFastProductCategoryDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(FEIJIU_FAST_PRODUCT_CATEGORY_ITEM_CACHE, product_category_id);

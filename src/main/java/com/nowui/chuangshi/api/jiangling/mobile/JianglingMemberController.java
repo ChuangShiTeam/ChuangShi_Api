@@ -71,12 +71,12 @@ public class JianglingMemberController extends Controller {
             jianglingMember.setMember_redeem_code(member_redeem_code);
             jianglingMember.setMember_redeem_code_is_exchange(false);
 
-            result = JianglingMemberService.instance.save(jianglingMember);
+            result = JianglingMemberService.instance.save(jianglingMember, request_user_id);
         } else {
             JianglingMember jianglingMember = new JianglingMember();
             jianglingMember.setMember_diffent_point(50);
 
-            result = JianglingMemberService.instance.update(jianglingMember, request_user_id);
+            result = JianglingMemberService.instance.update(jianglingMember, request_user_id, request_user_id);
         }
 
 
@@ -116,7 +116,7 @@ public class JianglingMemberController extends Controller {
             jianglingMember.setMember_redeem_code(member_redeem_code);
             jianglingMember.setMember_redeem_code_is_exchange(false);
 
-            Boolean result = JianglingMemberService.instance.save(jianglingMember);
+            Boolean result = JianglingMemberService.instance.save(jianglingMember, request_user_id);
 
             if (!result) {
                 throw new RuntimeException("新增不成功");
@@ -199,7 +199,7 @@ public class JianglingMemberController extends Controller {
         jianglingMemberPrize.setUser_id(request_user_id);
         jianglingMemberPrize.setPrize_id(prize.getPrize_id());
         jianglingMemberPrize.setMember_prize_draw_date(DateUtil.getDateString(new Date()));
-        Boolean result = JianglingMemberPrizeService.instance.save(jianglingMemberPrize);
+        Boolean result = JianglingMemberPrizeService.instance.save(jianglingMemberPrize, request_user_id);
 
         if (!result) {
             throw new RuntimeException("抽奖不成功");

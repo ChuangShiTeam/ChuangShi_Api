@@ -48,17 +48,17 @@ public class JianglingCustomerService extends Service {
         return page;
     }
 
-    public Boolean save(JianglingCustomer page) {
-        Boolean success = jianglingCustomerDao.save(page);
+    public Boolean save(JianglingCustomer page, String system_create_user_id) {
+        Boolean success = jianglingCustomerDao.save(page, system_create_user_id);
         return success;
     }
 
-    public Boolean update(JianglingCustomer page, String user_id, Integer system_version) {
+    public Boolean update(JianglingCustomer page, String user_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(JianglingCustomer.SYSTEM_STATUS, true);
         cnd.and(JianglingCustomer.USER_ID, user_id);
         cnd.and(JianglingCustomer.SYSTEM_VERSION, system_version);
 
-        Boolean success = jianglingCustomerDao.update(page, cnd);
+        Boolean success = jianglingCustomerDao.update(page, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(JIANGLING_CUSTOMER_ITEM_CACHE, user_id);
@@ -67,12 +67,12 @@ public class JianglingCustomerService extends Service {
         return success;
     }
 
-    public Boolean delete(String user_id, Integer system_version) {
+    public Boolean delete(String user_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(JianglingCustomer.SYSTEM_STATUS, true);
         cnd.and(JianglingCustomer.USER_ID, user_id);
         cnd.and(JianglingCustomer.SYSTEM_VERSION, system_version);
 
-        Boolean success = jianglingCustomerDao.delete(cnd);
+        Boolean success = jianglingCustomerDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(JIANGLING_CUSTOMER_ITEM_CACHE, user_id);

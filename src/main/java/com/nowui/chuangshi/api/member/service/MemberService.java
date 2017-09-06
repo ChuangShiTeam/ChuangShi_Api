@@ -56,28 +56,18 @@ public class MemberService extends Service {
         member.setMember_level_id(member_level_id);
         member.setMember_parent_path(member_parent_path.toJSONString());
         member.setMember_status(member_status);
-        member.setSystem_create_user_id(system_create_user_id);
-        member.setSystem_create_time(new Date());
-        member.setSystem_update_user_id(system_create_user_id);
-        member.setSystem_update_time(new Date());
-        member.setSystem_version(0);
-        member.setSystem_status(true);
 
-        Boolean success = memberDao.save(member);
+        Boolean success = memberDao.save(member, system_create_user_id);
         return success;
     }
 
     public Boolean update(Member member, String member_id, String system_update_user_id, Integer system_version) {
-        member.setSystem_update_user_id(system_update_user_id);
-        member.setSystem_update_time(new Date());
-        member.setSystem_version(system_version + 1);
-
         Cnd cnd = Cnd.where(Member.SYSTEM_STATUS, true);
         cnd.and(Member.MEMBER_ID, member_id);
         cnd.and(Member.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         cnd.and(Member.SYSTEM_VERSION, system_version);
 
-        Boolean success = memberDao.update(member, cnd);
+        Boolean success = memberDao.update(member, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(MEMBER_ITEM_CACHE, member_id);
@@ -87,17 +77,11 @@ public class MemberService extends Service {
     }
 
     public Boolean delete(String member_id, String system_update_user_id, Integer system_version) {
-        Member member = new Member();
-        member.setSystem_update_user_id(system_update_user_id);
-        member.setSystem_update_time(new Date());
-        member.setSystem_version(system_version + 1);
-        member.setSystem_status(false);
-
         Cnd cnd = Cnd.where(Member.SYSTEM_STATUS, true);
         cnd.and(Member.MEMBER_ID, member_id);
         cnd.and(Member.SYSTEM_VERSION, system_version);
 
-        Boolean success = memberDao.update(member, cnd);
+        Boolean success = memberDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(MEMBER_ITEM_CACHE, member_id);

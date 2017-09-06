@@ -32,6 +32,7 @@ public class JianglingCustomerController extends Controller {
     public void captchaSend() {
         validateRequest(JianglingCustomer.CUSTOMER_MOBILE);
 
+        String request_user_id = getRequest_user_id();
         String request_app_id = getRequest_app_id();
 
         JSONObject jsonObject = getParameterJSONObject();
@@ -44,7 +45,7 @@ public class JianglingCustomerController extends Controller {
         String sign_name = "江铃";
         String template_code = "SMS_87685005";
 
-        CaptchaService.instance.send(request_app_id, captcha_type, captcha_mobile, captcha_ip_address, 1, access_id, access_key, endpoint, sign_name, template_code);
+        CaptchaService.instance.send(request_app_id, captcha_type, captcha_mobile, captcha_ip_address, 1, access_id, access_key, endpoint, sign_name, template_code, request_user_id);
 
         renderSuccessJson();
     }
@@ -69,7 +70,7 @@ public class JianglingCustomerController extends Controller {
             throw new RuntimeException("验证码不正确");
         }
 
-        Boolean result = JianglingCustomerService.instance.save(model);
+        Boolean result = JianglingCustomerService.instance.save(model, request_user_id);
 
         renderSuccessJson(result);
     }

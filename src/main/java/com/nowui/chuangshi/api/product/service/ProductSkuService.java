@@ -37,17 +37,17 @@ public class ProductSkuService extends Service {
         return productSku;
     }
 
-    public Boolean save(ProductSku product) {
-        Boolean success = productSkuDao.save(product);
+    public Boolean save(ProductSku product, String system_create_user_id) {
+        Boolean success = productSkuDao.save(product, system_create_user_id);
         return success;
     }
 
-    public Boolean update(ProductSku product, String product_sku_id, Integer system_version) {
+    public Boolean update(ProductSku product, String product_sku_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(ProductSku.SYSTEM_STATUS, true);
         cnd.and(ProductSku.PRODUCT_SKU_ID, product_sku_id);
         cnd.and(ProductSku.SYSTEM_VERSION, system_version);
 
-        Boolean success = productSkuDao.update(product, cnd);
+        Boolean success = productSkuDao.update(product, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(PRODUCT_SKU_ITEM_CACHE, product_sku_id);
@@ -56,12 +56,12 @@ public class ProductSkuService extends Service {
         return success;
     }
 
-    public Boolean delete(String product_sku_id, Integer system_version) {
+    public Boolean delete(String product_sku_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(ProductSku.SYSTEM_STATUS, true);
         cnd.and(ProductSku.PRODUCT_SKU_ID, product_sku_id);
         cnd.and(ProductSku.SYSTEM_VERSION, system_version);
 
-        Boolean success = productSkuDao.delete(cnd);
+        Boolean success = productSkuDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(PRODUCT_SKU_ITEM_CACHE, product_sku_id);

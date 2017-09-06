@@ -58,17 +58,17 @@ public class StockService extends Service {
         return stock;
     }
 
-    public Boolean save(Stock stock) {
-        Boolean success = stockDao.save(stock);
+    public Boolean save(Stock stock, String system_create_user_id) {
+        Boolean success = stockDao.save(stock, system_create_user_id);
         return success;
     }
 
-    public Boolean update(Stock stock, String stock_id, Integer system_version) {
+    public Boolean update(Stock stock, String stock_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Stock.SYSTEM_STATUS, true);
         cnd.and(Stock.STOCK_ID, stock_id);
         cnd.and(Stock.SYSTEM_VERSION, system_version);
 
-        Boolean success = stockDao.update(stock, cnd);
+        Boolean success = stockDao.update(stock, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(STOCK_ITEM_CACHE, stock_id);
@@ -77,12 +77,12 @@ public class StockService extends Service {
         return success;
     }
 
-    public Boolean delete(String stock_id, Integer system_version) {
+    public Boolean delete(String stock_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Stock.SYSTEM_STATUS, true);
         cnd.and(Stock.STOCK_ID, stock_id);
         cnd.and(Stock.SYSTEM_VERSION, system_version);
 
-        Boolean success = stockDao.delete(cnd);
+        Boolean success = stockDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(STOCK_ITEM_CACHE, stock_id);

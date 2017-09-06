@@ -23,8 +23,8 @@ public class MemberDeliveryOrderProductSkuService extends Service {
         return stock;
     }
 
-    public Boolean save(MemberDeliveryOrderProductSku memberDeliveryOrderProductSku) {
-        Boolean success = memberDeliveryOrderProductSkuDao.save(memberDeliveryOrderProductSku);
+    public Boolean save(MemberDeliveryOrderProductSku memberDeliveryOrderProductSku, String system_create_user_id) {
+        Boolean success = memberDeliveryOrderProductSkuDao.save(memberDeliveryOrderProductSku, system_create_user_id);
         return success;
     }
 

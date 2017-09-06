@@ -50,8 +50,9 @@ public class JianglingPrizeController extends Controller {
 
         JianglingPrize model = getModel(JianglingPrize.class);
         model.setPrize_id(Util.getRandomUUID());
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = JianglingPrizeService.instance.save(model);
+        Boolean result = JianglingPrizeService.instance.save(model, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -61,8 +62,9 @@ public class JianglingPrizeController extends Controller {
         validateRequest(JianglingPrize.PRIZE_ID, JianglingPrize.PRIZE_NAME, JianglingPrize.PRIZE_PROBABILITY, JianglingPrize.PRIZE_TOTAL_QUANTITY, JianglingPrize.PRIZE_DAY_QUANTITY, JianglingPrize.PRIZE_SORT, JianglingPrize.PRIZE_IS_DEFAULT_WINNING, JianglingPrize.SYSTEM_VERSION);
 
         JianglingPrize model = getModel(JianglingPrize.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = JianglingPrizeService.instance.update(model, model.getPrize_id(), model.getSystem_version());
+        Boolean result = JianglingPrizeService.instance.update(model, model.getPrize_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -72,8 +74,9 @@ public class JianglingPrizeController extends Controller {
         validateRequest(JianglingPrize.PRIZE_ID, JianglingPrize.SYSTEM_VERSION);
 
         JianglingPrize model = getModel(JianglingPrize.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = JianglingPrizeService.instance.delete(model.getPrize_id(), model.getSystem_version());
+        Boolean result = JianglingPrizeService.instance.delete(model.getPrize_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

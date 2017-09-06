@@ -72,17 +72,17 @@ public class CaptchaService extends Service {
         return captcha;
     }
 
-    public Boolean save(Captcha captcha) {
-        Boolean success = captchaDao.save(captcha);
+    public Boolean save(Captcha captcha, String system_create_user_id) {
+        Boolean success = captchaDao.save(captcha, system_create_user_id);
         return success;
     }
 
-    public Boolean update(Captcha captcha, String captcha_id, Integer system_version) {
+    public Boolean update(Captcha captcha, String captcha_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Captcha.SYSTEM_STATUS, true);
         cnd.and(Captcha.CAPTCHA_ID, captcha_id);
         cnd.and(Captcha.SYSTEM_VERSION, system_version);
 
-        Boolean success = captchaDao.update(captcha, cnd);
+        Boolean success = captchaDao.update(captcha, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(CAPTCHA_ITEM_CACHE, captcha_id);
@@ -91,12 +91,12 @@ public class CaptchaService extends Service {
         return success;
     }
 
-    public Boolean delete(String captcha_id, Integer system_version) {
+    public Boolean delete(String captcha_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Captcha.SYSTEM_STATUS, true);
         cnd.and(Captcha.CAPTCHA_ID, captcha_id);
         cnd.and(Captcha.SYSTEM_VERSION, system_version);
 
-        Boolean success = captchaDao.delete(cnd);
+        Boolean success = captchaDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(CAPTCHA_ITEM_CACHE, captcha_id);
@@ -105,7 +105,7 @@ public class CaptchaService extends Service {
         return success;
     }
 
-    public void send(String request_app_id, String captcha_type, String captcha_mobile, String captcha_ip_address, int captcha_minute, String access_id, String access_key, String endpoint, String sign_name, String template_code) {
+    public void send(String request_app_id, String captcha_type, String captcha_mobile, String captcha_ip_address, int captcha_minute, String access_id, String access_key, String endpoint, String sign_name, String template_code, String system_create_user_id) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, -captcha_minute);
 
@@ -134,7 +134,7 @@ public class CaptchaService extends Service {
         captcha.setCaptcha_mobile(captcha_mobile);
         captcha.setCaptcha_code(captcha_code);
         captcha.setCaptcha_ip_address(captcha_ip_address);
-        Boolean result = save(captcha);
+        Boolean result = save(captcha, system_create_user_id);
 
         if (!result) {
             throw new RuntimeException("验证码发送不成功");

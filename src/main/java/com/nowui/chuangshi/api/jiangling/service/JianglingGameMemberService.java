@@ -56,17 +56,17 @@ public class JianglingGameMemberService extends Service {
         return jianglingGameMember;
     }
 
-    public Boolean save(JianglingGameMember jianglingGameMember) {
-        Boolean success = jianglingCustomerDao.save(jianglingGameMember);
+    public Boolean save(JianglingGameMember jianglingGameMember, String system_create_user_id) {
+        Boolean success = jianglingCustomerDao.save(jianglingGameMember, system_create_user_id);
         return success;
     }
 
-    public Boolean update(JianglingGameMember jianglingGameMember, String game_id, Integer system_version) {
+    public Boolean update(JianglingGameMember jianglingGameMember, String game_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(JianglingGameMember.SYSTEM_STATUS, true);
         cnd.and(JianglingGameMember.GAME_ID, game_id);
         cnd.and(JianglingGameMember.SYSTEM_VERSION, system_version);
 
-        Boolean success = jianglingCustomerDao.update(jianglingGameMember, cnd);
+        Boolean success = jianglingCustomerDao.update(jianglingGameMember, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(JIANGLING_GAME_MEMBER_ITEM_CACHE, game_id);
@@ -75,12 +75,12 @@ public class JianglingGameMemberService extends Service {
         return success;
     }
 
-    public Boolean delete(String game_id, Integer system_version) {
+    public Boolean delete(String game_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(JianglingGameMember.SYSTEM_STATUS, true);
         cnd.and(JianglingGameMember.GAME_ID, game_id);
         cnd.and(JianglingGameMember.SYSTEM_VERSION, system_version);
 
-        Boolean success = jianglingCustomerDao.delete(cnd);
+        Boolean success = jianglingCustomerDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(JIANGLING_GAME_MEMBER_ITEM_CACHE, game_id);

@@ -84,14 +84,7 @@ public class ArticleService extends Service {
     }
 
     public Boolean save(Article article, String system_create_user_id) {
-        article.setSystem_create_user_id(system_create_user_id);
-        article.setSystem_create_time(new Date());
-        article.setSystem_update_user_id(system_create_user_id);
-        article.setSystem_update_time(new Date());
-        article.setSystem_version(0);
-        article.setSystem_status(true);
-
-        Boolean success = articleDao.save(article);
+        Boolean success = articleDao.save(article, system_create_user_id);
         return success;
     }
 

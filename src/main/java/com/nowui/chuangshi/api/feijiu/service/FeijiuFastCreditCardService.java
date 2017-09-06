@@ -62,17 +62,17 @@ public class FeijiuFastCreditCardService extends Service {
         return certificate;
     }
 
-    public Boolean save(FeijiuFastCreditCard certificate) {
-        Boolean success = feijiuFastCreditCardDao.save(certificate);
+    public Boolean save(FeijiuFastCreditCard certificate, String system_create_user_id) {
+        Boolean success = feijiuFastCreditCardDao.save(certificate, system_create_user_id);
         return success;
     }
 
-    public Boolean update(FeijiuFastCreditCard certificate, String credit_card_id, Integer system_version) {
+    public Boolean update(FeijiuFastCreditCard certificate, String credit_card_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastCreditCard.CREDIT_CARD_ID, credit_card_id);
         cnd.and(FeijiuFastCreditCard.SYSTEM_VERSION, system_version);
 
-        Boolean success = feijiuFastCreditCardDao.update(certificate, cnd);
+        Boolean success = feijiuFastCreditCardDao.update(certificate, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(FEIJIU_FAST_CREDIT_CARD_ITEM_CACHE, credit_card_id);
@@ -81,12 +81,12 @@ public class FeijiuFastCreditCardService extends Service {
         return success;
     }
 
-    public Boolean delete(String credit_card_id, Integer system_version) {
+    public Boolean delete(String credit_card_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastCreditCard.CREDIT_CARD_ID, credit_card_id);
         cnd.and(FeijiuFastCreditCard.SYSTEM_VERSION, system_version);
 
-        Boolean success = feijiuFastCreditCardDao.delete(cnd);
+        Boolean success = feijiuFastCreditCardDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(FEIJIU_FAST_CREDIT_CARD_ITEM_CACHE, credit_card_id);

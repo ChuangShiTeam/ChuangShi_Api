@@ -48,17 +48,17 @@ public class MemberLevelService extends Service {
         return memberLevel;
     }
 
-    public Boolean save(MemberLevel memberLevel) {
-        Boolean success = memberLevelDao.save(memberLevel);
+    public Boolean save(MemberLevel memberLevel, String system_create_user_id) {
+        Boolean success = memberLevelDao.save(memberLevel, system_create_user_id);
         return success;
     }
 
-    public Boolean update(MemberLevel memberLevel, String member_level_id, Integer system_version) {
+    public Boolean update(MemberLevel memberLevel, String member_level_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(MemberLevel.SYSTEM_STATUS, true);
         cnd.and(MemberLevel.MEMBER_LEVEL_ID, member_level_id);
         cnd.and(MemberLevel.SYSTEM_VERSION, system_version);
 
-        Boolean success = memberLevelDao.update(memberLevel, cnd);
+        Boolean success = memberLevelDao.update(memberLevel, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(MEMBER_LEVEL_ITEM_CACHE, member_level_id);
@@ -67,12 +67,12 @@ public class MemberLevelService extends Service {
         return success;
     }
 
-    public Boolean delete(String member_level_id, Integer system_version) {
+    public Boolean delete(String member_level_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(MemberLevel.SYSTEM_STATUS, true);
         cnd.and(MemberLevel.MEMBER_LEVEL_ID, member_level_id);
         cnd.and(MemberLevel.SYSTEM_VERSION, system_version);
 
-        Boolean success = memberLevelDao.delete(cnd);
+        Boolean success = memberLevelDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(MEMBER_LEVEL_ITEM_CACHE, member_level_id);

@@ -33,26 +33,26 @@ public class ProductSkuPriceService extends Service {
         return product;
     }
 
-    public Boolean save(ProductSkuPrice product) {
-        Boolean success = productSkuPriceDao.save(product);
+    public Boolean save(ProductSkuPrice product, String system_create_user_id) {
+        Boolean success = productSkuPriceDao.save(product, system_create_user_id);
         return success;
     }
 
-    public Boolean update(ProductSkuPrice product, String product_sku_id, Integer system_version) {
+    public Boolean update(ProductSkuPrice product, String product_sku_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(ProductSkuPrice.SYSTEM_STATUS, true);
         cnd.and(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id);
         cnd.and(ProductSkuPrice.SYSTEM_VERSION, system_version);
 
-        Boolean success = productSkuPriceDao.update(product, cnd);
+        Boolean success = productSkuPriceDao.update(product, system_update_user_id, system_version, cnd);
         return success;
     }
 
-    public Boolean delete(String product_sku_id, Integer system_version) {
+    public Boolean delete(String product_sku_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(ProductSkuPrice.SYSTEM_STATUS, true);
         cnd.and(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id);
         cnd.and(ProductSkuPrice.SYSTEM_VERSION, system_version);
 
-        Boolean success = productSkuPriceDao.delete(cnd);
+        Boolean success = productSkuPriceDao.delete(system_update_user_id, system_version, cnd);
         return success;
     }
 

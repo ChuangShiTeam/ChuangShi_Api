@@ -53,13 +53,15 @@ public class JianglingMemberService extends Service {
         return jianglingMember;
     }
 
-    public Boolean save(JianglingMember jianglingMember) {
-        Boolean result = jianglingMemberDao.save(jianglingMember);
+    public Boolean save(JianglingMember jianglingMember, String system_create_user_id) {
+        Boolean result = jianglingMemberDao.save(jianglingMember, system_create_user_id);
         return result;
     }
 
-    public Boolean update(JianglingMember jianglingMember, String user_id) {
-        Boolean success = jianglingMemberDao.update(jianglingMember, Cnd.where(JianglingMember.USER_ID, user_id));
+    public Boolean update(JianglingMember jianglingMember, String user_id, String system_update_user_id) {
+        Cnd cnd = Cnd.where(JianglingMember.USER_ID, user_id);
+
+        Boolean success = jianglingMemberDao.update(jianglingMember, system_update_user_id, 0, cnd);
 
         if (success) {
             CacheUtil.remove(JIANGLING_MEMBER__ITEM_CACHE, user_id);
@@ -68,8 +70,10 @@ public class JianglingMemberService extends Service {
         return success;
     }
 
-    public Boolean delete(String user_id, Integer system_version) {
-        Boolean success = jianglingMemberDao.delete(Cnd.where(JianglingMember.USER_ID, user_id).and(JianglingMember.SYSTEM_VERSION, system_version));
+    public Boolean delete(String user_id, String system_update_user_id, Integer system_version) {
+        Cnd cnd = Cnd.where(JianglingMember.USER_ID, user_id).and(JianglingMember.SYSTEM_VERSION, system_version);
+
+        Boolean success = jianglingMemberDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(JIANGLING_MEMBER__ITEM_CACHE, user_id);

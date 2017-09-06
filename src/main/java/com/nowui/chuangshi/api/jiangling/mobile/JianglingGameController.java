@@ -67,7 +67,7 @@ public class JianglingGameController extends Controller {
         JianglingGame jianglingGame = new JianglingGame();
         jianglingGame.setGame_id(game_id);
         jianglingGame.setApp_id(request_app_id);
-        Boolean result = JianglingGameService.instance.save(jianglingGame);
+        Boolean result = JianglingGameService.instance.save(jianglingGame, request_app_id);
 
         if (!result) {
             throw new RuntimeException("保存不成功");
@@ -86,7 +86,7 @@ public class JianglingGameController extends Controller {
             jianglingGameMember.setGame_member_score(memberJsonObject.getString("score"));
             jianglingGameMember.setGame_member_rank(memberJsonObject.getInteger("rank"));
 
-            result = JianglingGameMemberService.instance.save(jianglingGameMember);
+            result = JianglingGameMemberService.instance.save(jianglingGameMember, request_app_id);
 
             if (!result) {
                 throw new RuntimeException("保存不成功");

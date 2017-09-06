@@ -53,8 +53,9 @@ public class FeijiuFastCreditCardController extends Controller {
 
         FeijiuFastCreditCard model = getModel(FeijiuFastCreditCard.class);
         model.setCredit_card_id(Util.getRandomUUID());
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = FeijiuFastCreditCardService.instance.save(model);
+        Boolean result = FeijiuFastCreditCardService.instance.save(model, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -64,8 +65,9 @@ public class FeijiuFastCreditCardController extends Controller {
         validateRequest(FeijiuFastCreditCard.CREDIT_CARD_ID, FeijiuFastCreditCard.CREDIT_CARD_NAME, FeijiuFastCreditCard.CREDIT_CARD_IMAGE, FeijiuFastCreditCard.CREDIT_CARD_LINK, FeijiuFastCreditCard.CREDIT_CARD_CONTENT, FeijiuFastCreditCard.SYSTEM_VERSION);
 
         FeijiuFastCreditCard model = getModel(FeijiuFastCreditCard.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = FeijiuFastCreditCardService.instance.update(model, model.getCredit_card_id(), model.getSystem_version());
+        Boolean result = FeijiuFastCreditCardService.instance.update(model, model.getCredit_card_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -75,8 +77,9 @@ public class FeijiuFastCreditCardController extends Controller {
         validateRequest(FeijiuFastCreditCard.CREDIT_CARD_ID, FeijiuFastCreditCard.SYSTEM_VERSION);
 
         FeijiuFastCreditCard model = getModel(FeijiuFastCreditCard.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = FeijiuFastCreditCardService.instance.delete(model.getCredit_card_id(), model.getSystem_version());
+        Boolean result = FeijiuFastCreditCardService.instance.delete(model.getCredit_card_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

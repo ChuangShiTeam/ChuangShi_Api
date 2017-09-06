@@ -44,8 +44,9 @@ public class WebsiteMenuController extends Controller {
 
         WebsiteMenu model = getModel(WebsiteMenu.class);
         model.setWebsite_menu_id(Util.getRandomUUID());
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = WebsiteMenuService.instance.save(model);
+        Boolean result = WebsiteMenuService.instance.save(model, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -55,8 +56,9 @@ public class WebsiteMenuController extends Controller {
         validateRequest(WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_PARENT_ID, WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_URL, WebsiteMenu.WEBSITE_MENU_SORT, WebsiteMenu.SYSTEM_VERSION);
 
         WebsiteMenu model = getModel(WebsiteMenu.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = WebsiteMenuService.instance.update(model, model.getWebsite_menu_id(), model.getSystem_version());
+        Boolean result = WebsiteMenuService.instance.update(model, model.getWebsite_menu_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -66,8 +68,9 @@ public class WebsiteMenuController extends Controller {
         validateRequest(WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.SYSTEM_VERSION);
 
         WebsiteMenu model = getModel(WebsiteMenu.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = WebsiteMenuService.instance.delete(model.getWebsite_menu_id(), model.getSystem_version());
+        Boolean result = WebsiteMenuService.instance.delete(model.getWebsite_menu_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

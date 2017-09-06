@@ -50,8 +50,9 @@ public class JianglingGameController extends Controller {
 
         JianglingGame model = getModel(JianglingGame.class);
         model.setGame_id(Util.getRandomUUID());
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = JianglingGameService.instance.save(model);
+        Boolean result = JianglingGameService.instance.save(model, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -61,8 +62,9 @@ public class JianglingGameController extends Controller {
         validateRequest(JianglingGame.GAME_ID, JianglingGame.SYSTEM_VERSION);
 
         JianglingGame model = getModel(JianglingGame.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = JianglingGameService.instance.update(model, model.getGame_id(), model.getSystem_version());
+        Boolean result = JianglingGameService.instance.update(model, model.getGame_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -72,8 +74,9 @@ public class JianglingGameController extends Controller {
         validateRequest(JianglingGame.GAME_ID, JianglingGame.SYSTEM_VERSION);
 
         JianglingGame model = getModel(JianglingGame.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = JianglingGameService.instance.delete(model.getGame_id(), model.getSystem_version());
+        Boolean result = JianglingGameService.instance.delete(model.getGame_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

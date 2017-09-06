@@ -49,17 +49,17 @@ public class FileService extends Service {
         return file;
     }
 
-    public Boolean save(File file) {
-        Boolean success = fileDao.save(file);
+    public Boolean save(File file, String system_create_user_id) {
+        Boolean success = fileDao.save(file, system_create_user_id);
         return success;
     }
 
-    public Boolean update(File file, String file_id, Integer system_version) {
+    public Boolean update(File file, String file_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(File.SYSTEM_STATUS, true);
         cnd.and(File.FILE_ID, file_id);
         cnd.and(File.SYSTEM_VERSION, system_version);
 
-        Boolean success = fileDao.update(file, cnd);
+        Boolean success = fileDao.update(file, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(FILE_ITEM_CACHE, file_id);
@@ -68,12 +68,12 @@ public class FileService extends Service {
         return success;
     }
 
-    public Boolean delete(String file_id, Integer system_version) {
+    public Boolean delete(String file_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(File.SYSTEM_STATUS, true);
         cnd.and(File.FILE_ID, file_id);
         cnd.and(File.SYSTEM_VERSION, system_version);
 
-        Boolean success = fileDao.delete(cnd);
+        Boolean success = fileDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(FILE_ITEM_CACHE, file_id);

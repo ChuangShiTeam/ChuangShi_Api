@@ -50,8 +50,9 @@ public class CaptchaController extends Controller {
 
         Captcha model = getModel(Captcha.class);
         model.setCaptcha_id(Util.getRandomUUID());
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = CaptchaService.instance.save(model);
+        Boolean result = CaptchaService.instance.save(model, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -61,8 +62,9 @@ public class CaptchaController extends Controller {
         validateRequest(Captcha.CAPTCHA_ID, Captcha.CAPTCHA_TYPE, Captcha.CAPTCHA_MOBILE, Captcha.CAPTCHA_CODE, Captcha.CAPTCHA_IP_ADDRESS, Captcha.SYSTEM_VERSION);
 
         Captcha model = getModel(Captcha.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = CaptchaService.instance.update(model, model.getCaptcha_id(), model.getSystem_version());
+        Boolean result = CaptchaService.instance.update(model, model.getCaptcha_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -72,8 +74,9 @@ public class CaptchaController extends Controller {
         validateRequest(Captcha.CAPTCHA_ID, Captcha.SYSTEM_VERSION);
 
         Captcha model = getModel(Captcha.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = CaptchaService.instance.delete(model.getCaptcha_id(), model.getSystem_version());
+        Boolean result = CaptchaService.instance.delete(model.getCaptcha_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

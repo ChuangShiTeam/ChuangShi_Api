@@ -61,17 +61,17 @@ public class EnchashmentService extends Service {
         return certificate;
     }
 
-    public Boolean save(Enchashment certificate) {
-        Boolean success = certificateDao.save(certificate);
+    public Boolean save(Enchashment certificate, String system_create_user_id) {
+        Boolean success = certificateDao.save(certificate, system_create_user_id);
         return success;
     }
 
-    public Boolean update(Enchashment certificate, String certificate_id, Integer system_version) {
+    public Boolean update(Enchashment certificate, String certificate_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Enchashment.SYSTEM_STATUS, true);
         cnd.and(Enchashment.ENCHASHMENT_ID, certificate_id);
         cnd.and(Enchashment.SYSTEM_VERSION, system_version);
 
-        Boolean success = certificateDao.update(certificate, cnd);
+        Boolean success = certificateDao.update(certificate, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(ENCHASHMENT_ITEM_CACHE, certificate_id);
@@ -80,12 +80,12 @@ public class EnchashmentService extends Service {
         return success;
     }
 
-    public Boolean delete(String certificate_id, Integer system_version) {
+    public Boolean delete(String certificate_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Enchashment.SYSTEM_STATUS, true);
         cnd.and(Enchashment.ENCHASHMENT_ID, certificate_id);
         cnd.and(Enchashment.SYSTEM_VERSION, system_version);
 
-        Boolean success = certificateDao.delete(cnd);
+        Boolean success = certificateDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(ENCHASHMENT_ITEM_CACHE, certificate_id);
