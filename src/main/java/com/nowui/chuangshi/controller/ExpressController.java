@@ -1,9 +1,12 @@
 package com.nowui.chuangshi.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -169,7 +172,7 @@ public class ExpressController extends Controller {
         authenticateApp_id(express.getApp_id());
         JSONArray express_traces = new JSONArray();
         if (express != null) {
-            if (ValidateUtil.isNullOrEmpty(express.getExpress_traces())) {
+            if (!ValidateUtil.isNullOrEmpty(express.getExpress_traces())) {
                 express_traces = JSONObject.parseArray(express.getExpress_traces());
                 express.put(Express.EXPRESS_TRACES_LIST, express_traces);
             }
@@ -238,7 +241,10 @@ public class ExpressController extends Controller {
      */
     @ActionKey(Url.EXPRESS_ADMIN_PULL)
     public void pull() {
-        List<Express> express_list = expressService.listNotComplete();
+        // List<Express> express_list = expressService.listNotComplete();
+        List<Express> express_list = new ArrayList<Express>();
+        express_list.add(expressService.findByExpress_id("cc73a9c789c1404badd1d4315b8b0337"));
+        express_list.add(expressService.findByExpress_id("652a539932154d9f92620d0af9698ad9"));
         for (Express express : express_list) {
             String eBusinessID = Kdniao.EBusinessID;
             String appKey = Kdniao.AppKey;
@@ -271,13 +277,14 @@ public class ExpressController extends Controller {
 
                         express_is_complete = true;
                     } else if (state.equals("4")) {
-                        express_flow = "问题件";
+                        express_flow = "签收";
+                        express_is_complete = true;
                     }
 
                     if (express_is_complete) {
                         if (ExpressBelong.MEMBER_DELIVERY_ORDER.getKey().equals(express.getExpress_belong())) {
                             MemberDeliveryOrderExpress memberDeliveryOrderExpress = memberDeliveryOrderExpressService.findByExpress_id(express.getExpress_id());
-                            if (memberDeliveryOrderExpress != null && ValidateUtil.isNullOrEmpty(memberDeliveryOrderExpress.getMember_delivery_order_id())) {
+                            if (memberDeliveryOrderExpress != null && !ValidateUtil.isNullOrEmpty(memberDeliveryOrderExpress.getMember_delivery_order_id())) {
                                 List<Express> expressList = memberDeliveryOrderExpressService.listByMember_delivery_order_id(memberDeliveryOrderExpress.getMember_delivery_order_id());
                                 Boolean flag = true;
                                 for (Express e : expressList) {
@@ -293,7 +300,7 @@ public class ExpressController extends Controller {
                             }  
                         } else if (ExpressBelong.TRADE.getKey().equals(express.getExpress_belong())){
                             TradeExpress tradeExpress = tradeExpressService.findByExpress_id(express.getExpress_id());
-                            if (tradeExpress != null && ValidateUtil.isNullOrEmpty(tradeExpress.getTrade_id())) {
+                            if (tradeExpress != null && !ValidateUtil.isNullOrEmpty(tradeExpress.getTrade_id())) {
                                 List<Express> expressList = tradeExpressService.listByTrade_id(tradeExpress.getTrade_id());
                                 Boolean flag = true;
                                 for (Express e : expressList) {

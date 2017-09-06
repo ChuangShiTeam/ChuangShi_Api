@@ -143,7 +143,7 @@ public class MemberDeliveryOrderService extends Service {
         
         if (result) {
             memberDeliveryOrderExpressService.save(member_delivery_order_id, express_id, request_user_id);
-            if (ValidateUtil.isNullOrEmpty(memberDeliveryOrder.getMember_purchase_order_id())) {
+            if (!ValidateUtil.isNullOrEmpty(memberDeliveryOrder.getMember_purchase_order_id())) {
                 memberPurchaseOrderExpressService.save(memberDeliveryOrder.getMember_purchase_order_id(), express_id, request_user_id);
             }
         }
@@ -161,7 +161,7 @@ public class MemberDeliveryOrderService extends Service {
         Boolean result = expressService.deleteByExpress_idAndSystem_update_user_idValidateSystem_version(express_id, request_user_id, system_version);
         if (result) {
             memberDeliveryOrderExpressService.deleteByMember_delivery_order_idAndExpress_idAndSystem_update_user_id(member_delivery_order_id, express_id, request_user_id);
-            if (ValidateUtil.isNullOrEmpty(memberDeliveryOrder.getMember_purchase_order_id())) {
+            if (!ValidateUtil.isNullOrEmpty(memberDeliveryOrder.getMember_purchase_order_id())) {
                 memberPurchaseOrderExpressService.deleteByMember_purchase_order_idAndExpress_idAndSystem_update_user_id(memberDeliveryOrder.getMember_purchase_order_id(), express_id, request_user_id);
             }
         }
@@ -188,7 +188,7 @@ public class MemberDeliveryOrderService extends Service {
         if (result) {
             Boolean is_direct_deliver = false;
             //根据进货单是否仓库代收来判断是否直接则增减库存
-            if (ValidateUtil.isNullOrEmpty(member_delivery_order.getMember_purchase_order_id())) {
+            if (!ValidateUtil.isNullOrEmpty(member_delivery_order.getMember_purchase_order_id())) {
                 MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService.findByMember_purchase_order_id(member_delivery_order.getMember_purchase_order_id());
                 if (memberPurchaseOrder.getMember_purchase_order_is_warehouse_receive()) {
                     is_direct_deliver = true;
@@ -299,7 +299,7 @@ public class MemberDeliveryOrderService extends Service {
 	    MemberDeliveryOrder memberDeliveryOrder = findByMember_delivery_order_id(member_delivery_order_id);
 	    //只有当发货单处于待收货状态时才可以完成
 	    if (MemberDeliveryOrderFlow.WAIT_RECEIVE.getKey().equals(memberDeliveryOrder.getMember_delivery_order_flow())) {
-	        if (ValidateUtil.isNullOrEmpty(memberDeliveryOrder.getMember_purchase_order_id())) {
+	        if (!ValidateUtil.isNullOrEmpty(memberDeliveryOrder.getMember_purchase_order_id())) {
 	            String warehouse_id = "";   
 	            //仓库代发找到对应的发货仓库
 	            if (memberDeliveryOrder.getMember_delivery_order_is_warehouse_deliver()) {

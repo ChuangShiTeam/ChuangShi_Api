@@ -198,7 +198,7 @@ public class MemberPurchaseOrderController extends Controller {
                 Map<String, Object> traces = new HashMap<>();
 
                 if (express != null) {
-                    if (ValidateUtil.isNullOrEmpty(express.getExpress_traces())) {
+                    if (!ValidateUtil.isNullOrEmpty(express.getExpress_traces())) {
                         JSONArray express_traces = JSONObject.parseArray(express.getExpress_traces());
                         traces = Util.Obj2Map(express_traces.get(express_traces.size() - 1));
                     }
