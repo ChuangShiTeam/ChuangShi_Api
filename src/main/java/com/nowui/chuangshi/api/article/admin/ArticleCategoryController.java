@@ -62,8 +62,9 @@ public class ArticleCategoryController extends Controller {
 
         ArticleCategory model = getModel(ArticleCategory.class);
         model.setArticle_category_id(Util.getRandomUUID());
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = ArticleCategoryService.instance.save(model);
+        Boolean result = ArticleCategoryService.instance.save(model, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -73,8 +74,9 @@ public class ArticleCategoryController extends Controller {
         validateRequest(ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.ARTICLE_CATEGORY_PARENT_ID, ArticleCategory.ARTICLE_CATEGORY_NAME, ArticleCategory.ARTICLE_CATEGORY_SORT, ArticleCategory.SYSTEM_VERSION);
 
         ArticleCategory model = getModel(ArticleCategory.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = ArticleCategoryService.instance.update(model, model.getArticle_category_id(), model.getSystem_version());
+        Boolean result = ArticleCategoryService.instance.update(model, model.getArticle_category_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -84,8 +86,9 @@ public class ArticleCategoryController extends Controller {
         validateRequest(ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.SYSTEM_VERSION);
 
         ArticleCategory model = getModel(ArticleCategory.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = ArticleCategoryService.instance.delete(model.getArticle_category_id(), model.getSystem_version());
+        Boolean result = ArticleCategoryService.instance.delete(model.getArticle_category_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

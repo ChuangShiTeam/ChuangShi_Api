@@ -53,8 +53,9 @@ public class ArticleController extends Controller {
 
         Article model = getModel(Article.class);
         model.setArticle_id(Util.getRandomUUID());
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = ArticleService.instance.save(model);
+        Boolean result = ArticleService.instance.save(model, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -64,8 +65,9 @@ public class ArticleController extends Controller {
         validateRequest(Article.ARTICLE_ID, Article.ARTICLE_CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_SUMMARY, Article.ARTICLE_CONTENT, Article.SYSTEM_VERSION);
 
         Article model = getModel(Article.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = ArticleService.instance.update(model, model.getArticle_id(), model.getSystem_version());
+        Boolean result = ArticleService.instance.update(model, model.getArticle_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -75,8 +77,9 @@ public class ArticleController extends Controller {
         validateRequest(Article.ARTICLE_ID, Article.SYSTEM_VERSION);
 
         Article model = getModel(Article.class);
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = ArticleService.instance.delete(model.getArticle_id(), model.getSystem_version());
+        Boolean result = ArticleService.instance.delete(model.getArticle_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

@@ -50,9 +50,9 @@ public class AppController extends Controller {
 
         App model = getModel(App.class);
         model.setApp_id(Util.getRandomUUID());
-        String request_app_id = getRequest_app_id();
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = AppService.instance.save(model, request_app_id);
+        Boolean result = AppService.instance.save(model, request_user_id);
 
         renderSuccessJson(result);
     }
@@ -62,9 +62,9 @@ public class AppController extends Controller {
         validateRequest(App.APP_ID, App.APP_NAME, App.APP_SECRET, App.WECHAT_APP_ID, App.WECHAT_APP_SECRET, App.WECHAT_MCH_ID, App.WECHAT_MCH_KEY, App.WECHAT_TOKEN, App.WECHAT_ENCODING_AES_KEY, App.APP_IS_CREATE_WAREHOUSE, App.APP_IS_DELIVERY, App.APP_IS_AUDIT_MEMBER, App.APP_IS_COMMISSION, App.APP_COMMISSION_LEVEL, App.APP_WEBSITE_PATH, App.SYSTEM_VERSION);
 
         App model = getModel(App.class);
-        String request_app_id = getRequest_app_id();
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = AppService.instance.update(model, model.getApp_id(), request_app_id, model.getSystem_version());
+        Boolean result = AppService.instance.update(model, model.getApp_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }
@@ -74,9 +74,9 @@ public class AppController extends Controller {
         validateRequest(App.APP_ID, App.SYSTEM_VERSION);
 
         App model = getModel(App.class);
-        String request_app_id = getRequest_app_id();
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = AppService.instance.delete(model.getApp_id(), request_app_id, model.getSystem_version());
+        Boolean result = AppService.instance.delete(model.getApp_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

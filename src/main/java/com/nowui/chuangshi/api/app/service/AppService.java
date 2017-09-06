@@ -60,27 +60,16 @@ public class AppService extends Service {
     }
 
     public Boolean save(App app, String system_create_user_id) {
-        app.setSystem_create_user_id(system_create_user_id);
-        app.setSystem_create_time(new Date());
-        app.setSystem_update_user_id(system_create_user_id);
-        app.setSystem_update_time(new Date());
-        app.setSystem_version(0);
-        app.setSystem_status(true);
-
-        Boolean success = appDao.save(app);
+        Boolean success = appDao.save(app, system_create_user_id);
         return success;
     }
 
     public Boolean update(App app, String app_id, String system_update_user_id, Integer system_version) {
-        app.setSystem_update_user_id(system_update_user_id);
-        app.setSystem_update_time(new Date());
-        app.setSystem_version(system_version + 1);
-
         Cnd cnd = Cnd.where(App.SYSTEM_STATUS, true);
         cnd.and(App.APP_ID, app_id);
         cnd.and(App.SYSTEM_VERSION, system_version);
 
-        Boolean success = appDao.update(app, cnd);
+        Boolean success = appDao.update(app, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(APP_ITEM_CACHE, app_id);
@@ -90,17 +79,11 @@ public class AppService extends Service {
     }
 
     public Boolean delete(String app_id, String system_update_user_id, Integer system_version) {
-        App app = new App();
-        app.setSystem_update_user_id(system_update_user_id);
-        app.setSystem_update_time(new Date());
-        app.setSystem_version(system_version + 1);
-        app.setSystem_status(false);
-
         Cnd cnd = Cnd.where(App.SYSTEM_STATUS, true);
         cnd.and(App.APP_ID, app_id);
         cnd.and(App.SYSTEM_VERSION, system_version);
 
-        Boolean success = appDao.update(app, cnd);
+        Boolean success = appDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(APP_ITEM_CACHE, app_id);

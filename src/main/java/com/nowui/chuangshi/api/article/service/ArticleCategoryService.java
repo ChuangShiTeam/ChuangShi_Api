@@ -6,6 +6,7 @@ import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -76,17 +77,17 @@ public class ArticleCategoryService extends Service {
         return articleCategory;
     }
 
-    public Boolean save(ArticleCategory articleCategory) {
-        Boolean success = articleCategoryDao.save(articleCategory);
+    public Boolean save(ArticleCategory articleCategory, String system_create_user_id) {
+        Boolean success = articleCategoryDao.save(articleCategory, system_create_user_id);
         return success;
     }
 
-    public Boolean update(ArticleCategory articleCategory, String article_category_id, Integer system_version) {
+    public Boolean update(ArticleCategory articleCategory, String article_category_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(ArticleCategory.SYSTEM_STATUS, true);
         cnd.and(ArticleCategory.ARTICLE_CATEGORY_ID, article_category_id);
         cnd.and(ArticleCategory.SYSTEM_VERSION, system_version);
 
-        Boolean success = articleCategoryDao.update(articleCategory, cnd);
+        Boolean success = articleCategoryDao.update(articleCategory, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(ARTICLE_CATEGORY_ITEM_CACHE, article_category_id);
@@ -95,12 +96,12 @@ public class ArticleCategoryService extends Service {
         return success;
     }
 
-    public Boolean delete(String article_category_id, Integer system_version) {
+    public Boolean delete(String article_category_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(ArticleCategory.SYSTEM_STATUS, true);
         cnd.and(ArticleCategory.ARTICLE_CATEGORY_ID, article_category_id);
         cnd.and(ArticleCategory.SYSTEM_VERSION, system_version);
 
-        Boolean success = articleCategoryDao.delete(cnd);
+        Boolean success = articleCategoryDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(ARTICLE_CATEGORY_ITEM_CACHE, article_category_id);

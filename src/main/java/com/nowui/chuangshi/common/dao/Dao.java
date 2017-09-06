@@ -4,6 +4,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.common.sql.*;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.DateUtil;
 
 import java.util.Date;
@@ -81,7 +82,22 @@ public class Dao {
         }
     }
 
-    public Boolean save(Model model) {
+//    public Boolean save(Model model) {
+//        String sql = model.buildSaveSql();
+//
+//        System.out.println(sql);
+//
+//        return Db.update(sql) != 0;
+//    }
+
+    public Boolean save(Model model, String system_create_user_id) {
+        model.put(Constant.SYSTEM_CREATE_USER_ID, system_create_user_id);
+        model.put(Constant.SYSTEM_CREATE_TIME, new Date());
+        model.put(Constant.SYSTEM_UPDATE_USER_ID, system_create_user_id);
+        model.put(Constant.SYSTEM_UPDATE_TIME, new Date());
+        model.put(Constant.SYSTEM_VERSION, 0);
+        model.put(Constant.SYSTEM_STATUS, true);
+
         String sql = model.buildSaveSql();
 
         System.out.println(sql);
@@ -89,7 +105,21 @@ public class Dao {
         return Db.update(sql) != 0;
     }
 
-    public Boolean update(Model model, Cnd cnd) {
+//    public Boolean update(Model model, Cnd cnd) {
+//        model.setCriteria(cnd.getCriteria());
+//
+//        String sql = model.buildUpdateSql();
+//
+//        System.out.println(sql);
+//
+//        return Db.update(sql) != 0;
+//    }
+
+    public Boolean update(Model model, String system_update_user_id, Integer system_version, Cnd cnd) {
+        model.put(Constant.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        model.put(Constant.SYSTEM_UPDATE_TIME, new Date());
+        model.put(Constant.SYSTEM_VERSION, system_version + 1);
+
         model.setCriteria(cnd.getCriteria());
 
         String sql = model.buildUpdateSql();
@@ -99,11 +129,15 @@ public class Dao {
         return Db.update(sql) != 0;
     }
 
-    public Boolean delete(Cnd cnd) {
+    public Boolean delete(String system_update_user_id, Integer system_version, Cnd cnd) {
+        this.model.put(Constant.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        this.model.put(Constant.SYSTEM_UPDATE_TIME, new Date());
+        this.model.put(Constant.SYSTEM_VERSION, system_version + 1);
+        this.model.put(Constant.SYSTEM_STATUS, false);
 
-        model.setCriteria(cnd.getCriteria());
+        this.model.setCriteria(cnd.getCriteria());
 
-        String sql = model.buildDeleteSql();
+        String sql = model.buildUpdateSql();
 
         System.out.println(sql);
 

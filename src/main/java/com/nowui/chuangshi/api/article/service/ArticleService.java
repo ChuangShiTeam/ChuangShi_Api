@@ -8,6 +8,7 @@ import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ArticleService extends Service {
@@ -82,17 +83,24 @@ public class ArticleService extends Service {
         return article;
     }
 
-    public Boolean save(Article article) {
+    public Boolean save(Article article, String system_create_user_id) {
+        article.setSystem_create_user_id(system_create_user_id);
+        article.setSystem_create_time(new Date());
+        article.setSystem_update_user_id(system_create_user_id);
+        article.setSystem_update_time(new Date());
+        article.setSystem_version(0);
+        article.setSystem_status(true);
+
         Boolean success = articleDao.save(article);
         return success;
     }
 
-    public Boolean update(Article article, String article_id, Integer system_version) {
+    public Boolean update(Article article, String article_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Article.SYSTEM_STATUS, true);
         cnd.and(Article.ARTICLE_ID, article_id);
         cnd.and(Article.SYSTEM_VERSION, system_version);
 
-        Boolean success = articleDao.update(article, cnd);
+        Boolean success = articleDao.update(article, system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(ARTICLE_ITEM_CACHE, article_id);
@@ -101,12 +109,12 @@ public class ArticleService extends Service {
         return success;
     }
 
-    public Boolean delete(String article_id, Integer system_version) {
+    public Boolean delete(String article_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = Cnd.where(Article.SYSTEM_STATUS, true);
         cnd.and(Article.ARTICLE_ID, article_id);
         cnd.and(Article.SYSTEM_VERSION, system_version);
 
-        Boolean success = articleDao.delete(cnd);
+        Boolean success = articleDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(ARTICLE_ITEM_CACHE, article_id);
