@@ -366,16 +366,18 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
             throw new RuntimeException("sql without condition");
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
         if (criteria.getIsPaginate()) {
+            StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("LIMIT ");
             stringBuilder.append(criteria.getM());
             stringBuilder.append(", ");
             stringBuilder.append(criteria.getN());
             stringBuilder.append("\n");
-        }
 
-        return stringBuilder.toString();
+            return stringBuilder.toString();
+        } else {
+            return "";
+        }
     }
 
     public String buildCountSql() {
@@ -525,17 +527,11 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
             stringBuilder.append(column.get("name"));
             stringBuilder.append(" = ");
             stringBuilder.append(regexVariable((ColumnType) column.get("type"), column.get("value")));
-            if (i + 1 < updateColumnList.size() || criteria.getSystemVersion()) {
+            if (i + 1 < updateColumnList.size()) {
                 stringBuilder.append(",\n");
             } else {
                 stringBuilder.append("\n");
             }
-        }
-        if (criteria.getSystemVersion()) {
-            stringBuilder.append(Constant.SYSTEM_VERSION);
-            stringBuilder.append(" = ");
-            stringBuilder.append(Constant.SYSTEM_VERSION);
-            stringBuilder.append(" + 1\n");
         }
         stringBuilder.append(buildConditionSql());
 

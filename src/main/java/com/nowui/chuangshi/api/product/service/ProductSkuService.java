@@ -26,15 +26,15 @@ public class ProductSkuService extends Service {
     }
 
     public ProductSku find(String product_sku_id) {
-        ProductSku product = CacheUtil.get(PRODUCT_SKU_ITEM_CACHE, product_sku_id);
+        ProductSku productSku = CacheUtil.get(PRODUCT_SKU_ITEM_CACHE, product_sku_id);
 
-        if (product == null) {
-            product = productSkuDao.find(product_sku_id);
+        if (productSku == null) {
+            productSku = productSkuDao.find(product_sku_id);
 
-            CacheUtil.put(PRODUCT_SKU_ITEM_CACHE, product_sku_id, product);
+            CacheUtil.put(PRODUCT_SKU_ITEM_CACHE, product_sku_id, productSku);
         }
 
-        return product;
+        return productSku;
     }
 
     public Boolean save(ProductSku product) {

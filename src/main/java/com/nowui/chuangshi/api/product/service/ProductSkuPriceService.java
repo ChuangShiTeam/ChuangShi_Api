@@ -11,29 +11,25 @@ import java.util.List;
 public class ProductSkuPriceService extends Service {
 
     public static final ProductSkuPriceService instance = new ProductSkuPriceService();
-    private final String PRODUCT_SKU_PRIZE_ITEM_CACHE = "product_sku_prize_item_cache";
+    private final String PRODUCT_SKU_PRIZE_LIST_CACHE = "product_sku_prize_list_cache";
     private final ProductSkuPriceDao productSkuPriceDao = new ProductSkuPriceDao();
 
     public List<ProductSkuPrice> productSkuList(String product_sku_id) {
-        Cnd cnd = Cnd.where(ProductSkuPrice.SYSTEM_STATUS, true);
-        cnd.and(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id);
+        List<ProductSkuPrice> productSkuPriceList = CacheUtil.get(PRODUCT_SKU_PRIZE_LIST_CACHE, product_sku_id);
 
-        List<ProductSkuPrice> productSkuPriceList = productSkuPriceDao.primaryKeyList(cnd);
-        for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
-            productSkuPrice.put(find(productSkuPrice.getProduct_sku_id()));
+        if (productSkuPriceList == null) {
+            Cnd cnd = Cnd.where(ProductSkuPrice.SYSTEM_STATUS, true);
+            cnd.and(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id);
+            productSkuPriceList = productSkuPriceDao.list(cnd);
+
+            CacheUtil.put(PRODUCT_SKU_PRIZE_LIST_CACHE, product_sku_id, productSkuPriceList);
         }
+
         return productSkuPriceList;
     }
 
     public ProductSkuPrice find(String product_sku_id) {
-        ProductSkuPrice product = CacheUtil.get(PRODUCT_SKU_PRIZE_ITEM_CACHE, product_sku_id);
-
-        if (product == null) {
-            product = productSkuPriceDao.find(product_sku_id);
-
-            CacheUtil.put(PRODUCT_SKU_PRIZE_ITEM_CACHE, product_sku_id, product);
-        }
-
+        ProductSkuPrice product = productSkuPriceDao.find(product_sku_id);
         return product;
     }
 
@@ -48,11 +44,6 @@ public class ProductSkuPriceService extends Service {
         cnd.and(ProductSkuPrice.SYSTEM_VERSION, system_version);
 
         Boolean success = productSkuPriceDao.update(product, cnd);
-
-        if (success) {
-            CacheUtil.remove(PRODUCT_SKU_PRIZE_ITEM_CACHE, product_sku_id);
-        }
-
         return success;
     }
 
@@ -62,11 +53,6 @@ public class ProductSkuPriceService extends Service {
         cnd.and(ProductSkuPrice.SYSTEM_VERSION, system_version);
 
         Boolean success = productSkuPriceDao.delete(cnd);
-
-        if (success) {
-            CacheUtil.remove(PRODUCT_SKU_PRIZE_ITEM_CACHE, product_sku_id);
-        }
-
         return success;
     }
 

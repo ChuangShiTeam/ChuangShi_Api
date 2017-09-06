@@ -6,6 +6,7 @@ import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 
+import java.util.Date;
 import java.util.List;
 
 public class AppService extends Service {
@@ -58,12 +59,23 @@ public class AppService extends Service {
         return app;
     }
 
-    public Boolean save(App app) {
+    public Boolean save(App app, String system_create_user_id) {
+        app.setSystem_create_user_id(system_create_user_id);
+        app.setSystem_create_time(new Date());
+        app.setSystem_update_user_id(system_create_user_id);
+        app.setSystem_update_time(new Date());
+        app.setSystem_version(0);
+        app.setSystem_status(true);
+
         Boolean success = appDao.save(app);
         return success;
     }
 
-    public Boolean update(App app, String app_id, Integer system_version) {
+    public Boolean update(App app, String app_id, String system_update_user_id, Integer system_version) {
+        app.setSystem_update_user_id(system_update_user_id);
+        app.setSystem_update_time(new Date());
+        app.setSystem_version(system_version + 1);
+
         Cnd cnd = Cnd.where(App.SYSTEM_STATUS, true);
         cnd.and(App.APP_ID, app_id);
         cnd.and(App.SYSTEM_VERSION, system_version);
@@ -77,12 +89,18 @@ public class AppService extends Service {
         return success;
     }
 
-    public Boolean delete(String app_id, Integer system_version) {
+    public Boolean delete(String app_id, String system_update_user_id, Integer system_version) {
+        App app = new App();
+        app.setSystem_update_user_id(system_update_user_id);
+        app.setSystem_update_time(new Date());
+        app.setSystem_version(system_version + 1);
+        app.setSystem_status(false);
+
         Cnd cnd = Cnd.where(App.SYSTEM_STATUS, true);
         cnd.and(App.APP_ID, app_id);
         cnd.and(App.SYSTEM_VERSION, system_version);
 
-        Boolean success = appDao.delete(cnd);
+        Boolean success = appDao.update(app, cnd);
 
         if (success) {
             CacheUtil.remove(APP_ITEM_CACHE, app_id);

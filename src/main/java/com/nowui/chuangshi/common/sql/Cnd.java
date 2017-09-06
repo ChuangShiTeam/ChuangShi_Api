@@ -133,18 +133,6 @@ public class Cnd {
         return this;
     }
 
-//    public Cnd andNotSystemStatus() {
-//        this.criteria.setSystemStatus(false);
-//
-//        return this;
-//    }
-
-    public Cnd andNotSystemVersion() {
-        this.criteria.setSystemVersion(false);
-
-        return this;
-    }
-
     public Cnd set(String key, Object value) {
         this.criteria.addSet(key, value);
         return this;
@@ -154,15 +142,6 @@ public class Cnd {
         this.criteria.setPaginate(m, n);
         return this;
     }
-
-//    public Cnd addSystemStatus() {
-//        if (this.criteria.getSystemStatus()) {
-//            Expression expression = new Expression(Constant.SYSTEM_STATUS, ExpressionType.EQUAL, true);
-//            this.criteria.addCondition(new Condition(ConditionType.WHERE, expression, false));
-//        }
-//
-//        return this;
-//    }
 
     public Cnd asc(String key) {
         OrderBy orderBy = new OrderBy(key, OrderByType.ASC);

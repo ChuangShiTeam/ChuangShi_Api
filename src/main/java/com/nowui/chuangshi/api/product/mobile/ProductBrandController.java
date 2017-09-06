@@ -48,6 +48,10 @@ public class ProductBrandController extends Controller {
         User user = UserService.instance.find(request_user_id);
         Member member = MemberService.instance.find(user.getObject_id());
 
+        System.out.println("++++++");
+        System.out.println(member.toJson());
+        System.out.println("++++++");
+
         List<Product> resultList = ProductService.instance.productBrandList(model.getProduct_brand_id());
 
         for (Product product : resultList) {
@@ -58,6 +62,9 @@ public class ProductBrandController extends Controller {
                 if (productSku.getProduct_sku_is_default()) {
                     List<ProductSkuPrice> productSkuPriceList = ProductSkuPriceService.instance.productSkuList(productSku.getProduct_sku_id());
                     for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
+                        System.out.println("++++++");
+                        System.out.println(productSkuPrice.toJson());
+                        System.out.println("++++++");
                         if (ValidateUtil.isNullOrEmpty(member.getMember_level_id())) {
                             if (productSkuPrice.getMember_level_id().equals("")) {
                                 product.put(ProductSkuPrice.PRODUCT_SKU_PRICE, productSkuPrice.getProduct_sku_price());

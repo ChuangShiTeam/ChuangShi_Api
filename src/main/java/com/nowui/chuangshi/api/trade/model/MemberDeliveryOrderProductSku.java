@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Table("table_member_delivery_order_product_sku")
-@Primary("")
+@Primary("member_delivery_order_id")
 public class MemberDeliveryOrderProductSku extends Model<MemberDeliveryOrderProductSku> {
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
