@@ -68,7 +68,7 @@ public class StockController extends Controller {
         }
         Stock stock = stockService.findByWarehouse_idAndObject_idAndProduct_sku_id(model.getWarehouse_id(), object_id, model.getProduct_sku_id());
 
-        if (stock != null && ValidateUtil.isNullOrEmpty(stock.getStock_id())) {
+        if (stock != null && !ValidateUtil.isNullOrEmpty(stock.getStock_id())) {
             throw new RuntimeException("库存已初始化过");
         }
         authenticateRequest_app_idAndRequest_user_id();

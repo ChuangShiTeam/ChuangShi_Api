@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -169,7 +170,7 @@ public class ExpressController extends Controller {
         authenticateApp_id(express.getApp_id());
         JSONArray express_traces = new JSONArray();
         if (express != null) {
-            if (ValidateUtil.isNullOrEmpty(express.getExpress_traces())) {
+            if (!ValidateUtil.isNullOrEmpty(express.getExpress_traces())) {
                 express_traces = JSONObject.parseArray(express.getExpress_traces());
                 express.put(Express.EXPRESS_TRACES_LIST, express_traces);
             }
@@ -277,7 +278,7 @@ public class ExpressController extends Controller {
                     if (express_is_complete) {
                         if (ExpressBelong.MEMBER_DELIVERY_ORDER.getKey().equals(express.getExpress_belong())) {
                             MemberDeliveryOrderExpress memberDeliveryOrderExpress = memberDeliveryOrderExpressService.findByExpress_id(express.getExpress_id());
-                            if (memberDeliveryOrderExpress != null && ValidateUtil.isNullOrEmpty(memberDeliveryOrderExpress.getMember_delivery_order_id())) {
+                            if (memberDeliveryOrderExpress != null && !ValidateUtil.isNullOrEmpty(memberDeliveryOrderExpress.getMember_delivery_order_id())) {
                                 List<Express> expressList = memberDeliveryOrderExpressService.listByMember_delivery_order_id(memberDeliveryOrderExpress.getMember_delivery_order_id());
                                 Boolean flag = true;
                                 for (Express e : expressList) {
@@ -293,7 +294,7 @@ public class ExpressController extends Controller {
                             }  
                         } else if (ExpressBelong.TRADE.getKey().equals(express.getExpress_belong())){
                             TradeExpress tradeExpress = tradeExpressService.findByExpress_id(express.getExpress_id());
-                            if (tradeExpress != null && ValidateUtil.isNullOrEmpty(tradeExpress.getTrade_id())) {
+                            if (tradeExpress != null && !ValidateUtil.isNullOrEmpty(tradeExpress.getTrade_id())) {
                                 List<Express> expressList = tradeExpressService.listByTrade_id(tradeExpress.getTrade_id());
                                 Boolean flag = true;
                                 for (Express e : expressList) {

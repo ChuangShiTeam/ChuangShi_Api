@@ -63,7 +63,7 @@ public class MemberDeliveryOrderController extends Controller {
         List<MemberDeliveryOrder> resultList = memberDeliveryOrderService.listByUser_id(request_user_id);
 
         for (MemberDeliveryOrder result : resultList) {
-            if (ValidateUtil.isNullOrEmpty(result.getMember_purchase_order_id())) {
+            if (!ValidateUtil.isNullOrEmpty(result.getMember_purchase_order_id())) {
                 // 获取进货单用户
                 MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService
                         .findByMember_purchase_order_id(result.getMember_purchase_order_id());
@@ -149,7 +149,7 @@ public class MemberDeliveryOrderController extends Controller {
                 Map<String, Object> traces = new HashMap<>();
 
                 if (express != null) {
-                    if (ValidateUtil.isNullOrEmpty(express.getExpress_traces())) {
+                    if (!ValidateUtil.isNullOrEmpty(express.getExpress_traces())) {
                         JSONArray express_traces = JSONObject.parseArray(express.getExpress_traces());
                         traces = Util.Obj2Map(express_traces.get(express_traces.size() - 1));
                     }
@@ -225,7 +225,7 @@ public class MemberDeliveryOrderController extends Controller {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("express_flow", express.getExpress_flow());
             JSONArray express_traces = null;
-            if (ValidateUtil.isNullOrEmpty(express.getExpress_traces())) {
+            if (!ValidateUtil.isNullOrEmpty(express.getExpress_traces())) {
                 express_traces = JSONObject.parseArray(express.getExpress_traces());
             }
             map.put("express_traces", express_traces);
@@ -595,7 +595,7 @@ public class MemberDeliveryOrderController extends Controller {
         Boolean is_direct_deliver = false;
 
         // 根据进货单是否仓库代收来判断是否直接发货，仓库代收则直接发货，不代收则需填写快递单
-        if (ValidateUtil.isNullOrEmpty(member_delivery_order.getMember_purchase_order_id())) {
+        if (!ValidateUtil.isNullOrEmpty(member_delivery_order.getMember_purchase_order_id())) {
             MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService
                     .findByMember_purchase_order_id(member_delivery_order.getMember_purchase_order_id());
             if (memberPurchaseOrder.getMember_purchase_order_is_warehouse_receive()) {
