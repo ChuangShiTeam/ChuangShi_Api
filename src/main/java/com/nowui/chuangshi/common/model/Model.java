@@ -206,6 +206,34 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 //        return stringBuilder.toString();
 //    }
 
+    public String buildJoinSql() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (Join join : criteria.getJoinList()) {
+            switch (join.getJoinType()) {
+                case LEFT_JOIN:
+                    stringBuilder.append("LEFT JOIN ");
+                    break;
+            }
+
+            stringBuilder.append(join.getTable());
+            stringBuilder.append("ON ");
+            stringBuilder.append(join.getTable());
+            stringBuilder.append(".");
+            stringBuilder.append(join.getPrimary());
+            stringBuilder.append(" = ");
+            stringBuilder.append(this.getTable());
+            stringBuilder.append(" ");
+            stringBuilder.append(" ");
+            stringBuilder.append(" ");
+            stringBuilder.append(" ");
+            stringBuilder.append(" ");
+            stringBuilder.append("ON ");
+        }
+
+        return stringBuilder.toString();
+    }
+
     public String buildConditionSql() {
         if (criteria == null) {
             throw new RuntimeException("sql without condition");
@@ -217,9 +245,9 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         Boolean isLeftLike = false;
         Boolean isRightike = false;
 
-        for(Condition condition : criteria.getConditionList()) {
+        for (Condition condition : criteria.getConditionList()) {
             Expression expression = condition.getExpression();
-            if(expression != null) {
+            if (expression != null) {
                 if (isWhere) {
                     stringBuilder.append("AND ");
                 } else {
@@ -279,7 +307,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
                 stringBuilder.append("\n");
 
-            } else if(condition.getExpressionGroup() != null) {
+            } else if (condition.getExpressionGroup() != null) {
 
             }
         }

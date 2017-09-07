@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.jiangling.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -8,12 +9,13 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
+@Entity
 public class JianglingGameMember extends Model<JianglingGameMember> {
 
-    @Table()
+    @Table
     public static final String TABLE_JIANGLING_GAME_MEMBER = "table_jiangling_game_member";
 
-    @Primary()
+    @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
     public static final String GAME_ID = "game_id";
 

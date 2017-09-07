@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.trade.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -9,12 +10,13 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Entity
 public class MemberPurchaseOrder extends Model<MemberPurchaseOrder> {
 
-    @Table()
+    @Table
     public static final String TABLE_MEMBER_PURCHASE_ORDER = "table_member_purchase_order";
 
-    @Primary()
+    @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String MEMBER_PURCHASE_ORDER_ID = "member_purchase_order_id";
 

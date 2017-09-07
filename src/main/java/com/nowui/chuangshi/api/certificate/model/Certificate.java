@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.certificate.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -8,12 +9,13 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
+@Entity
 public class Certificate extends Model<Certificate> {
 
-    @Table()
+    @Table
     public static final String TABLE_CERTIFICATE = "table_certificate";
 
-    @Primary()
+    @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "授权记录编号", updatable = false)
     public static final String CERTIFICATE_ID = "certificate_id";
 

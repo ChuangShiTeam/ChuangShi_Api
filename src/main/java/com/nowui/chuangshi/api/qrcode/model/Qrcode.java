@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.qrcode.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -8,12 +9,13 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
+@Entity
 public class Qrcode extends Model<Qrcode> {
 
-    @Table()
+    @Table
     public static final String TABLE_QRCODE = "table_qrcode";
 
-    @Primary()
+    @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "二维码编号", updatable = false)
     public static final String QRCODE_ID = "qrcode_id";
 

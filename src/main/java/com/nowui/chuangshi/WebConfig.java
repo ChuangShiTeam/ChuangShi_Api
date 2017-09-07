@@ -334,22 +334,29 @@ public class WebConfig extends JFinalConfig {
             String table = "";
             String primary = "";
 
+            try {
+                Object object = clazz.newInstance();
 
-            Field[] fields = clazz.getDeclaredFields();
-            for (Field field : fields) {
-                if (table == "") {
-                    boolean isTable = field.isAnnotationPresent(Table.class);
-                    if (isTable) {
-                        table = getValue(clazz, field);
+                Field[] fields = clazz.getDeclaredFields();
+                for (Field field : fields) {
+                    if (table == "") {
+                        boolean isTable = field.isAnnotationPresent(Table.class);
+                        if (isTable) {
+                            table = getValue(clazz, field);
+                        }
+                    }
+
+                    if (primary == "") {
+                        boolean isPrimary = field.isAnnotationPresent(Primary.class);
+                        if (isPrimary) {
+                            primary = getValue(clazz, field);
+                        }
                     }
                 }
-
-                if (primary == "") {
-                    boolean isPrimary = clazz.isAnnotationPresent(Primary.class);
-                    if (isPrimary) {
-                        primary = getValue(clazz, field);
-                    }
-                }
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
 
             activeRecordPlugin.addMapping(table, primary == "" ? "id" : primary, (Class<? extends Model<?>>) clazz);
@@ -365,17 +372,9 @@ public class WebConfig extends JFinalConfig {
 
     }
 
-    private String getValue(Class<?> clazz, Field field) {
-        try {
-            Object object = clazz.newInstance();
-            return  (String) field.get(object);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+    private String getValue(Object object, Field field) throws IllegalAccessException {
 
-        return "";
+        return (String) field.get(object);
     }
 
     public void configInterceptor(Interceptors interceptors) {

@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.bill.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -9,12 +10,13 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Entity
 public class Bill extends Model<Bill> {
 
-    @Table()
+    @Table
     public static final String TABLE_BILL = "table_bill";
 
-    @Primary()
+    @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "账单编号", updatable = false)
     public static final String BILL_ID = "bill_id";
 

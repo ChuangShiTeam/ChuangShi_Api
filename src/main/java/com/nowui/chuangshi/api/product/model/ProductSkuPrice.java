@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.product.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -9,12 +10,13 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Entity
 public class ProductSkuPrice extends Model<ProductSkuPrice> {
 
-    @Table()
+    @Table
     public static final String TABLE_PRODUCT_SKU_PRICE = "table_product_sku_price";
 
-    @Primary()
+    @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "SKU编号")
     public static final String PRODUCT_SKU_ID = "product_sku_id";
 
