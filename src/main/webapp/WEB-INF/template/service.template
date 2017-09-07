@@ -6,6 +6,7 @@ import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 
+import java.util.Date;
 import java.util.List;
 
 public class #(first_upper_model_name_without_underline)Service extends Service {
@@ -53,27 +54,16 @@ public class #(first_upper_model_name_without_underline)Service extends Service 
     }
 
     public Boolean save(#(first_upper_model_name_without_underline) #(lower_model_name), String system_create_user_id) {
-        #(lower_model_name).setSystem_create_user_id(system_create_user_id);
-        #(lower_model_name).setSystem_create_time(new Date());
-        #(lower_model_name).setSystem_update_user_id(system_create_user_id);
-        #(lower_model_name).setSystem_update_time(new Date());
-        #(lower_model_name).setSystem_version(0);
-        #(lower_model_name).setSystem_status(true);
-
-        Boolean success = #(first_lower_model_name_without_underline)Dao.save(#(lower_model_name));
+        Boolean success = #(first_lower_model_name_without_underline)Dao.save(#(lower_model_name), system_create_user_id);
         return success;
     }
 
     public Boolean update(#(first_upper_model_name_without_underline) #(lower_model_name), String #(primary_key), String system_update_user_id, Integer system_version) {
-        #(lower_model_name).setSystem_update_user_id(system_update_user_id);
-        #(lower_model_name).setSystem_update_time(new Date());
-        #(lower_model_name).setSystem_version(system_version + 1);
-
         Cnd cnd = Cnd.where(#(first_upper_model_name_without_underline).SYSTEM_STATUS, true);
         cnd.and(#(first_upper_model_name_without_underline).#(upper_primary_key), #(primary_key));
         cnd.and(#(first_upper_model_name_without_underline).SYSTEM_VERSION, system_version);
 
-        Boolean success = #(first_lower_model_name_without_underline)Dao.update(#(lower_model_name), cnd);
+        Boolean success = #(first_lower_model_name_without_underline)Dao.update(#(lower_model_name), system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(#(upper_model_name)_ITEM_CACHE, #(primary_key));
@@ -83,17 +73,11 @@ public class #(first_upper_model_name_without_underline)Service extends Service 
     }
 
     public Boolean delete(String #(primary_key), String system_update_user_id, Integer system_version) {
-        #(first_upper_model_name_without_underline) #(lower_model_name) = new #(first_upper_model_name_without_underline)();
-        #(lower_model_name).setSystem_update_user_id(system_update_user_id);
-        #(lower_model_name).setSystem_update_time(new Date());
-        #(lower_model_name).setSystem_version(system_version + 1);
-        #(lower_model_name).setSystem_status(false);
-
         Cnd cnd = Cnd.where(#(first_upper_model_name_without_underline).SYSTEM_STATUS, true);
         cnd.and(#(first_upper_model_name_without_underline).#(upper_primary_key), #(primary_key));
         cnd.and(#(first_upper_model_name_without_underline).SYSTEM_VERSION, system_version);
 
-        Boolean success = #(first_lower_model_name_without_underline)Dao.update(cnd);
+        Boolean success = #(first_lower_model_name_without_underline)Dao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(#(upper_model_name)_ITEM_CACHE, #(primary_key));

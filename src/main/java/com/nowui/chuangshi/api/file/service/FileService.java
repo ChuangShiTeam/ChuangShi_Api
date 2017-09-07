@@ -49,6 +49,24 @@ public class FileService extends Service {
         return file;
     }
 
+    public Boolean save(String file_id, String app_id, String file_type, String file_name, String file_suffix, Integer file_size, String file_path, String file_thumbnail_path, String file_original_path, String file_image, Boolean file_is_external, String system_create_user_id) {
+        File file = new File();
+        file.setFile_id(file_id);
+        file.setApp_id(app_id);
+        file.setFile_type(file_type);
+        file.setFile_name(file_name);
+        file.setFile_suffix(file_suffix);
+        file.setFile_size(file_size);
+        file.setFile_path(file_path);
+        file.setFile_thumbnail_path(file_thumbnail_path);
+        file.setFile_original_path(file_original_path);
+        file.setFile_image(file_image);
+        file.setFile_is_external(file_is_external);
+
+        Boolean success = fileDao.save(file, system_create_user_id);
+        return success;
+    }
+
     public Boolean save(File file, String system_create_user_id) {
         Boolean success = fileDao.save(file, system_create_user_id);
         return success;
@@ -60,6 +78,24 @@ public class FileService extends Service {
         cnd.and(File.SYSTEM_VERSION, system_version);
 
         Boolean success = fileDao.update(file, system_update_user_id, system_version, cnd);
+
+        if (success) {
+            CacheUtil.remove(FILE_ITEM_CACHE, file_id);
+        }
+
+        return success;
+    }
+
+    public Boolean filePathUpdate(String file_id, String file_path, String system_update_user_id) {
+        File file = new File();
+        file.setFile_path(file_path);
+        file.setFile_thumbnail_path(file_path);
+        file.setFile_original_path(file_path);
+
+        Cnd cnd = Cnd.where(File.SYSTEM_STATUS, true);
+        cnd.and(File.FILE_ID, file_id);
+
+        Boolean success = fileDao.update(file, system_update_user_id, cnd);
 
         if (success) {
             CacheUtil.remove(FILE_ITEM_CACHE, file_id);

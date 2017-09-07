@@ -234,6 +234,9 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
                     case EQUAL:
                         temp = " = ";
                         break;
+                    case NOT_EQUAL:
+                        temp = " != ";
+                        break;
                     case LIKE:
                         isLeftLike = true;
                         isRightike = true;

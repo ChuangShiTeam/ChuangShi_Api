@@ -2,6 +2,7 @@ package com.nowui.chuangshi.common.sql;
 
 public enum ExpressionType {
     EQUAL("EQUAL", "EQUAL"),
+    NOT_EQUAL("NOT_EQUAL", "NOT_EQUAL"),
     LIKE("LIKE", "LIKE"),
     LEFT_LIKE("LEFT_LIKE", "LEFT_LIKE"),
     RIGHT_LIKE("RIGHT_LIKE", "RIGHT_LIKE"),

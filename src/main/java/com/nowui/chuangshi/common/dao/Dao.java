@@ -115,6 +115,19 @@ public class Dao {
 //        return Db.update(sql) != 0;
 //    }
 
+    public Boolean update(Model model, String system_update_user_id, Cnd cnd) {
+        model.put(Constant.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        model.put(Constant.SYSTEM_UPDATE_TIME, new Date());
+
+        model.setCriteria(cnd.getCriteria());
+
+        String sql = model.buildUpdateSql();
+
+        System.out.println(sql);
+
+        return Db.update(sql) != 0;
+    }
+
     public Boolean update(Model model, String system_update_user_id, Integer system_version, Cnd cnd) {
         model.put(Constant.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         model.put(Constant.SYSTEM_UPDATE_TIME, new Date());

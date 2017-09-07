@@ -45,28 +45,22 @@ import com.jfinal.weixin.sdk.msg.out.OutNewsMsg;
 import com.jfinal.weixin.sdk.msg.out.OutTextMsg;
 import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.app.service.AppService;
+import com.nowui.chuangshi.api.file.model.File;
+import com.nowui.chuangshi.api.file.service.FileService;
+import com.nowui.chuangshi.api.member.model.Member;
+import com.nowui.chuangshi.api.member.model.MemberLevel;
+import com.nowui.chuangshi.api.member.service.MemberLevelService;
+import com.nowui.chuangshi.api.member.service.MemberService;
+import com.nowui.chuangshi.api.qrcode.model.Qrcode;
+import com.nowui.chuangshi.api.qrcode.service.QrcodeService;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.constant.Constant;
-import com.nowui.chuangshi.model.File;
-import com.nowui.chuangshi.model.Member;
-import com.nowui.chuangshi.model.MemberLevel;
-import com.nowui.chuangshi.model.Qrcode;
-import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.service.FileService;
-import com.nowui.chuangshi.service.MemberLevelService;
-import com.nowui.chuangshi.service.MemberService;
-import com.nowui.chuangshi.service.QrcodeService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.QrcodeType;
 import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 public class WeChatMessageController extends MsgController {
-
-    private final MemberService memberService = new MemberService();
-    private final MemberLevelService memberLevelService = new MemberLevelService();
-    private final QrcodeService qrcodeService = new QrcodeService();
-    private final UserService userService = new UserService();
-    private final FileService fileService = new FileService();
 
     @Override
     protected void processInTextMsg(InTextMsg inTextMsg) {
@@ -146,12 +140,10 @@ public class WeChatMessageController extends MsgController {
             user_avatar = "";
         }
 
-        Member member = memberService.saveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id,
-                from_qrcode_id, member_level_id, member_parent_path, user_name, user_avatar, member_status,
-                system_create_user_id);
+        Member member = MemberService.instance.wechatSaveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, member_level_id, member_parent_path, user_name, user_avatar, member_status, system_create_user_id);
 
         if (event.equals("unsubscribe")) {
-            qrcodeService.updateQrcode_cancelByQrcode_id(member.getFrom_qrcode_id(), system_create_user_id);
+//            QrcodeService.instance.updateQrcode_cancelByQrcode_id(member.getFrom_qrcode_id(), system_create_user_id);
         }
 
         if (app_id.equals("df2078d6c9eb46babb0df957127273ab")) {
@@ -183,8 +175,6 @@ public class WeChatMessageController extends MsgController {
         Boolean member_status = false;
         String system_create_user_id = "";
 
-        System.out.println(app_id);
-
         App app = AppService.instance.find(app_id);
 
         String wechat_app_id = ApiConfigKit.getAppId();
@@ -193,7 +183,7 @@ public class WeChatMessageController extends MsgController {
             AccessTokenApi.refreshAccessToken();
         }
 
-        Qrcode qrcode = qrcodeService.findByQrcode_id(from_qrcode_id);
+        Qrcode qrcode = QrcodeService.instance.find(from_qrcode_id);
 
         if (!qrcode.getQrcode_status()) {
             content = "该二维码已经过期！";
@@ -227,9 +217,7 @@ public class WeChatMessageController extends MsgController {
             member_status = true;
         }
 
-        Member member = memberService.saveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id,
-                from_qrcode_id, member_level_id, member_parent_path, user_name, user_avatar, member_status,
-                system_create_user_id);
+        Member member = MemberService.instance.wechatSaveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, member_level_id, member_parent_path, user_name, user_avatar, member_status, system_create_user_id);
 
         if (ValidateUtil.isNullOrEmpty(member.getMember_parent_id())) {
             if (qrcode.getQrcode_type().equals(QrcodeType.PLATFORM.getKey())) {
@@ -238,47 +226,41 @@ public class WeChatMessageController extends MsgController {
                 member_parent_path.add(member_parent_id);
 
                 if (ValidateUtil.isNullOrEmpty(member.getMember_level_id())) {
-                    MemberLevel memberLevel = memberLevelService.findByMember_level_sort(app_id, 1);
+                    MemberLevel memberLevel = MemberLevelService.instance.memberLevelSortFind(app_id, 1);
                     member_level_id = memberLevel.getMember_level_id();
 
-                    memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_idAndMember_status(
-                            member.getMember_id(), member_parent_id, member_parent_path, member_level_id, member_status,
-                            system_create_user_id);
+                    MemberService.instance.wechatQrCodeUpdate(member.getMember_id(), member_parent_id, member_parent_path, member_level_id, member_status, system_create_user_id);
 
-                    qrcodeService.updateQrcode_addByQrcode_id(from_qrcode_id, request_user_id);
+//                    qrcodeService.updateQrcode_addByQrcode_id(from_qrcode_id, request_user_id);
 
                     // content = "恭喜您，成为我们的会员！您的等级是" +
                     // memberLevel.getMember_level_name() + "。";
                 } else {
-                    MemberLevel memberLevel = memberLevelService.findByMember_level_id(member.getMember_level_id());
+                    MemberLevel memberLevel = MemberLevelService.instance.find(member.getMember_level_id());
 
                     // content = "不能绑定，您的等级已经是" +
                     // memberLevel.getMember_level_name() + "。";
                 }
 
-                qrcodeService.updateQrcode_statusByQrcode_id(from_qrcode_id, request_user_id);
+                QrcodeService.instance.qrcodeStatusUpdate(from_qrcode_id, request_user_id);
             } else if (qrcode.getQrcode_type().equals(QrcodeType.MEMBER.getKey())) {
                 member_parent_id = qrcode.getObject_id();
 
-                Member parentMember = memberService.findByMember_id(member_parent_id);
+                Member parentMember = MemberService.instance.find(member_parent_id);
                 JSONArray jsonArray = JSON.parseArray(parentMember.getMember_parent_path());
                 jsonArray.add(member_parent_id);
                 member_parent_path = jsonArray;
 
                 // 是否需要审核
                 if (member_status) {
-                    MemberLevel parentMemberLevel = memberLevelService
-                            .findByMember_level_id(parentMember.getMember_level_id());
-                    MemberLevel memberLevel = memberLevelService.findByMember_level_sort(app_id,
-                            parentMemberLevel.getMember_level_sort() + 1);
+                    MemberLevel parentMemberLevel = MemberLevelService.instance.find(parentMember.getMember_level_id());
+                    MemberLevel memberLevel = MemberLevelService.instance.memberLevelSortFind(app_id, parentMemberLevel.getMember_level_sort() + 1);
                     member_level_id = memberLevel.getMember_level_id();
                 }
 
-                memberService.updateByMember_idAndMember_parent_idAndMember_parent_pathAndMember_level_idAndMember_status(
-                        member.getMember_id(), member_parent_id, member_parent_path, member_level_id, member_status,
-                        system_create_user_id);
+                MemberService.instance.wechatQrCodeUpdate(member.getMember_id(), member_parent_id, member_parent_path, member_level_id, member_status, system_create_user_id);
 
-                qrcodeService.updateQrcode_addByQrcode_id(from_qrcode_id, request_user_id);
+//                qrcodeService.updateQrcode_addByQrcode_id(from_qrcode_id, request_user_id);
 
                 // content = "恭喜您，成为我们的会员！您的推荐人是" +
                 // parentMember.getMember_name() + "。";
@@ -332,21 +314,20 @@ public class WeChatMessageController extends MsgController {
         String user_avatar = apiResult.getStr("headimgurl");
         String system_create_user_id = "";
 
-        User user = userService.findByApp_idAndUser_typeAndWechat_open_idAndWechat_union_id(app_id,
-                UserType.MEMBER.getKey(), wechat_open_id, wechat_union_id);
+        User user = UserService.instance.wechatFind(app_id, UserType.MEMBER.getKey(), wechat_open_id, wechat_union_id);
         if (user != null) {
             if (!user.getUser_name().equals(user_name)) {
-                userService.updateByUser_name(user.getUser_id(), user_name, system_create_user_id);
+                UserService.instance.userNameUpdate(user.getUser_id(), user_name, system_create_user_id);
 
-                memberService.deleteMemberParentCache(user.getObject_Id());
+                MemberService.instance.cacheDelete(user.getObject_id());
             }
 
-            File file = fileService.findByFile_id(user.getUser_avatar());
+            File file = FileService.instance.find(user.getUser_avatar());
 
             if (!user_avatar.equals(file.getFile_path())) {
-                fileService.updateByFile_path(user.getUser_avatar(), user_avatar, system_create_user_id);
+                FileService.instance.filePathUpdate(user.getUser_avatar(), user_avatar, system_create_user_id);
 
-                memberService.deleteMemberParentCache(user.getObject_Id());
+                MemberService.instance.cacheDelete(user.getObject_id());
             }
         }
     }

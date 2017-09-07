@@ -77,6 +77,12 @@ public class Cnd {
         return this;
     }
 
+    public Cnd andNot(String key, Object value) {
+        Expression expression = new Expression(key, ExpressionType.NOT_EQUAL, value);
+        this.criteria.addCondition(new Condition(ConditionType.WHERE, expression, false));
+        return this;
+    }
+
     public Cnd andAllowEmpty(String key, Object value) {
         if (ValidateUtil.isNullOrEmpty(value)) {
             return this;
