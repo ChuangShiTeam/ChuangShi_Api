@@ -352,7 +352,7 @@ public class WebConfig extends JFinalConfig {
                 }
             }
 
-            //activeRecordPlugin.addMapping(table.value(), ValidateUtil.isNullOrEmpty(primary.value()) ? "id" : primary.value(), (Class<? extends Model<?>>) clazz);
+            activeRecordPlugin.addMapping(table, primary == "" ? "id" : primary, (Class<? extends Model<?>>) clazz);
         }
 
         plugins.add(activeRecordPlugin);
