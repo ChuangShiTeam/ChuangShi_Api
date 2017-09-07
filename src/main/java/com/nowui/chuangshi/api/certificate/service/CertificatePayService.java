@@ -30,7 +30,8 @@ public class CertificatePayService extends Service {
     }
 
     public Boolean update(CertificatePay certificatePay, String certificate_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(CertificatePay.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(CertificatePay.SYSTEM_STATUS, true);
         cnd.and(CertificatePay.CERTIFICATE_ID, certificate_id);
         cnd.and(CertificatePay.SYSTEM_VERSION, system_version);
 
@@ -44,7 +45,8 @@ public class CertificatePayService extends Service {
     }
 
     public Boolean delete(String certificate_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(CertificatePay.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(CertificatePay.SYSTEM_STATUS, true);
         cnd.and(CertificatePay.CERTIFICATE_ID, certificate_id);
         cnd.and(CertificatePay.SYSTEM_VERSION, system_version);
 

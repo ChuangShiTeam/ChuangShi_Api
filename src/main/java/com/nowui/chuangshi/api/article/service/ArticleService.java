@@ -8,7 +8,6 @@ import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ArticleService extends Service {
@@ -18,7 +17,8 @@ public class ArticleService extends Service {
     private final ArticleDao articleDao = new ArticleDao();
 
     public Integer adminCount(String app_id, String article_name) {
-        Cnd cnd = Cnd.where(Article.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Article.SYSTEM_STATUS, true);
         cnd.and(Article.APP_ID, app_id);
         cnd.andAllowEmpty(Article.ARTICLE_NAME, article_name);
 
@@ -27,7 +27,8 @@ public class ArticleService extends Service {
     }
 
     public List<Article> adminList(String app_id, String article_name, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(Article.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Article.SYSTEM_STATUS, true);
         cnd.and(Article.APP_ID, app_id);
         cnd.andAllowEmpty(Article.ARTICLE_NAME, article_name);
         cnd.paginate(m, n);
@@ -40,7 +41,8 @@ public class ArticleService extends Service {
     }
 
     public List<Article> appList(String app_id) {
-        Cnd cnd = Cnd.where(Article.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Article.SYSTEM_STATUS, true);
         cnd.and(Article.APP_ID, app_id);
 
         List<Article> articleList = articleDao.primaryKeyList(cnd);
@@ -51,7 +53,8 @@ public class ArticleService extends Service {
     }
 
     public List<Article> categoryList(String article_category_id) {
-        Cnd cnd = Cnd.where(Article.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Article.SYSTEM_STATUS, true);
         cnd.and(Article.ARTICLE_CATEGORY_ID, article_category_id);
 
         List<Article> articleList = articleDao.primaryKeyList(cnd);
@@ -89,7 +92,8 @@ public class ArticleService extends Service {
     }
 
     public Boolean update(Article article, String article_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Article.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Article.SYSTEM_STATUS, true);
         cnd.and(Article.ARTICLE_ID, article_id);
         cnd.and(Article.SYSTEM_VERSION, system_version);
 
@@ -103,7 +107,8 @@ public class ArticleService extends Service {
     }
 
     public Boolean delete(String article_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Article.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Article.SYSTEM_STATUS, true);
         cnd.and(Article.ARTICLE_ID, article_id);
         cnd.and(Article.SYSTEM_VERSION, system_version);
 

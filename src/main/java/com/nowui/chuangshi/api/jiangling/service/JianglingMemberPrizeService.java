@@ -13,7 +13,8 @@ public class JianglingMemberPrizeService extends Service {
     private final JianglingMemberPrizeDao jianglingMemberPrizeDao = new JianglingMemberPrizeDao();
 
     public Integer userCount(String user_id) {
-        Cnd cnd = Cnd.where(JianglingMemberPrize.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingMemberPrize.SYSTEM_STATUS, true);
         cnd.and(JianglingMemberPrize.USER_ID, user_id);
 
         Integer count = jianglingMemberPrizeDao.count(cnd);
@@ -21,7 +22,8 @@ public class JianglingMemberPrizeService extends Service {
     }
 
     public Integer prizeCount(String prize_id) {
-        Cnd cnd = Cnd.where(JianglingMemberPrize.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingMemberPrize.SYSTEM_STATUS, true);
         cnd.and(JianglingMemberPrize.PRIZE_ID, prize_id);
 
         Integer count = jianglingMemberPrizeDao.count(cnd);

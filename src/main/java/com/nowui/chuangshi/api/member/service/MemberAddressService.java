@@ -15,7 +15,8 @@ public class MemberAddressService extends Service {
     private final MemberAddressDao memberAddressDao = new MemberAddressDao();
 
     public Integer adminCount(String app_id, String member_address_name) {
-        Cnd cnd = Cnd.where(MemberAddress.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(MemberAddress.SYSTEM_STATUS, true);
         cnd.and(MemberAddress.APP_ID, app_id);
         cnd.andAllowEmpty(MemberAddress.MEMBER_ADDRESS_NAME, member_address_name);
 
@@ -24,7 +25,8 @@ public class MemberAddressService extends Service {
     }
 
     public List<MemberAddress> adminList(String app_id, String member_address_name, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(MemberAddress.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(MemberAddress.SYSTEM_STATUS, true);
         cnd.and(MemberAddress.APP_ID, app_id);
         cnd.andAllowEmpty(MemberAddress.MEMBER_ADDRESS_NAME, member_address_name);
         cnd.paginate(m, n);
@@ -37,7 +39,8 @@ public class MemberAddressService extends Service {
     }
 
     public List<MemberAddress> memberList(String member_id) {
-        Cnd cnd = Cnd.where(MemberAddress.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(MemberAddress.SYSTEM_STATUS, true);
         cnd.and(MemberAddress.MEMBER_ID, member_id);
 
         List<MemberAddress> memberAddressList = memberAddressDao.primaryKeyList(cnd);
@@ -65,7 +68,8 @@ public class MemberAddressService extends Service {
     }
 
     public Boolean update(MemberAddress memberAddress, String member_address_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(MemberAddress.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(MemberAddress.SYSTEM_STATUS, true);
         cnd.and(MemberAddress.MEMBER_ADDRESS_ID, member_address_id);
         cnd.and(MemberAddress.SYSTEM_VERSION, system_version);
 
@@ -79,7 +83,8 @@ public class MemberAddressService extends Service {
     }
 
     public Boolean delete(String member_address_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(MemberAddress.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(MemberAddress.SYSTEM_STATUS, true);
         cnd.and(MemberAddress.MEMBER_ADDRESS_ID, member_address_id);
         cnd.and(MemberAddress.SYSTEM_VERSION, system_version);
 

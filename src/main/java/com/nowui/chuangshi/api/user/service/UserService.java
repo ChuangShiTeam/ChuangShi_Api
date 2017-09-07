@@ -13,7 +13,8 @@ public class UserService extends Service {
     private final UserDao userDao = new UserDao();
 
     public Integer userAccountCount(String user_id, String app_id, String user_account) {
-        Cnd cnd = Cnd.where(User.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(User.SYSTEM_STATUS, true);
         cnd.andNot(User.USER_ID, user_id);
         cnd.and(User.APP_ID, app_id);
         cnd.andAllowEmpty(User.USER_ACCOUNT, user_account);
@@ -35,7 +36,8 @@ public class UserService extends Service {
     }
 
     public User wechatFind(String app_id, String user_type, String wechat_open_id, String wechat_union_id) {
-        Cnd cnd = Cnd.where(User.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(User.SYSTEM_STATUS, true);
         cnd.and(User.APP_ID, app_id);
         cnd.and(User.USER_TYPE, user_type);
         cnd.and(User.WECHAT_OPEN_ID, wechat_open_id);
@@ -46,7 +48,8 @@ public class UserService extends Service {
     }
 
     public User userAccountFind(String app_id, String user_type, String user_account, String user_password) {
-        Cnd cnd = Cnd.where(User.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(User.SYSTEM_STATUS, true);
         cnd.and(User.APP_ID, app_id);
         cnd.and(User.USER_TYPE, user_type);
         cnd.and(User.USER_ACCOUNT, user_account);
@@ -100,7 +103,8 @@ public class UserService extends Service {
         User user = new User();
         user.setUser_name(user_name);
 
-        Cnd cnd = Cnd.where(User.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(User.SYSTEM_STATUS, true);
         cnd.and(User.USER_ID, user_id);
 
         Boolean success = userDao.update(user, system_update_user_id, cnd);
@@ -116,7 +120,8 @@ public class UserService extends Service {
         User user = new User();
         user.setUser_password(user_password);
 
-        Cnd cnd = Cnd.where(User.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(User.SYSTEM_STATUS, true);
         cnd.and(User.USER_ID, user_id);
 
         Boolean success = userDao.update(user, system_update_user_id, cnd);

@@ -23,7 +23,8 @@ public class EnchashmentController extends Controller {
 
         Enchashment model = getModel(Enchashment.class);
         String request_app_id = getRequest_app_id();
-        Cnd cnd = Cnd.where(Enchashment.APP_ID, model.getApp_id()).andAllowEmpty(Enchashment.USER_ID, model.getUser_id()).andAllowEmpty(Enchashment.ENCHASHMENT_STATUS, model.getEnchashment_status());
+        Cnd cnd = new Cnd();
+        cnd.where(Enchashment.APP_ID, model.getApp_id()).andAllowEmpty(Enchashment.USER_ID, model.getUser_id()).andAllowEmpty(Enchashment.ENCHASHMENT_STATUS, model.getEnchashment_status());
 
         Integer resultCount = EnchashmentService.instance.adminCount(request_app_id, model.getUser_id(), model.getEnchashment_status());
         List<Enchashment> resultList = EnchashmentService.instance.adminList(request_app_id, model.getUser_id(), model.getEnchashment_status(), getM(), getN());

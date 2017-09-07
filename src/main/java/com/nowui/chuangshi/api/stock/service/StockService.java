@@ -16,7 +16,8 @@ public class StockService extends Service {
     private final StockDao stockDao = new StockDao();
 
     public Integer adminCount(String app_id) {
-        Cnd cnd = Cnd.where(Stock.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Stock.SYSTEM_STATUS, true);
         cnd.and(Stock.APP_ID, app_id);
 
         Integer count = stockDao.count(cnd);
@@ -24,7 +25,8 @@ public class StockService extends Service {
     }
 
     public List<Stock> adminList(String app_id, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(Stock.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Stock.SYSTEM_STATUS, true);
         cnd.and(Stock.APP_ID, app_id).paginate(m, n);
 
         List<Stock> stockList = stockDao.primaryKeyList(cnd);
@@ -35,7 +37,8 @@ public class StockService extends Service {
     }
 
     public List<Stock> userList(String user_id) {
-        Cnd cnd = Cnd.where(Stock.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Stock.SYSTEM_STATUS, true);
         cnd.and(Stock.OBJECT_ID, user_id);
         cnd.and(Stock.STOCK_TYPE, StockType.MEMBER.getKey());
 
@@ -64,7 +67,8 @@ public class StockService extends Service {
     }
 
     public Boolean update(Stock stock, String stock_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Stock.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Stock.SYSTEM_STATUS, true);
         cnd.and(Stock.STOCK_ID, stock_id);
         cnd.and(Stock.SYSTEM_VERSION, system_version);
 
@@ -78,7 +82,8 @@ public class StockService extends Service {
     }
 
     public Boolean delete(String stock_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Stock.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Stock.SYSTEM_STATUS, true);
         cnd.and(Stock.STOCK_ID, stock_id);
         cnd.and(Stock.SYSTEM_VERSION, system_version);
 

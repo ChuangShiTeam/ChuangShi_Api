@@ -15,7 +15,8 @@ public class JianglingGameService extends Service {
     private final JianglingGameDao jianglingGameDao = new JianglingGameDao();
 
     public Integer adminCount(String app_id) {
-        Cnd cnd = Cnd.where(JianglingGame.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingGame.SYSTEM_STATUS, true);
         cnd.and(JianglingGame.APP_ID, app_id);
 
         Integer count = jianglingGameDao.count(cnd);
@@ -23,7 +24,8 @@ public class JianglingGameService extends Service {
     }
 
     public List<JianglingGame> adminList(String app_id, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(JianglingGame.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingGame.SYSTEM_STATUS, true);
         cnd.and(JianglingGame.APP_ID, app_id);
         cnd.paginate(m, n);
 
@@ -35,7 +37,8 @@ public class JianglingGameService extends Service {
     }
 
     public List<JianglingGame> appList(String app_id) {
-        Cnd cnd = Cnd.where(JianglingGame.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingGame.SYSTEM_STATUS, true);
         cnd.and(JianglingGame.APP_ID, app_id);
         cnd.desc(JianglingGame.SYSTEM_CREATE_TIME);
 
@@ -64,7 +67,8 @@ public class JianglingGameService extends Service {
     }
 
     public Boolean update(JianglingGame jianglingGame, String game_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(JianglingGame.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingGame.SYSTEM_STATUS, true);
         cnd.and(JianglingGame.GAME_ID, game_id);
         cnd.and(JianglingGame.SYSTEM_VERSION, system_version);
 
@@ -78,7 +82,8 @@ public class JianglingGameService extends Service {
     }
 
     public Boolean delete(String game_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(JianglingGame.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingGame.SYSTEM_STATUS, true);
         cnd.and(JianglingGame.GAME_ID, game_id);
         cnd.and(JianglingGame.SYSTEM_VERSION, system_version);
 

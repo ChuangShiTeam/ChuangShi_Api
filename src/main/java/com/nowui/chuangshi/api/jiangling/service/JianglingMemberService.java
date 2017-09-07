@@ -16,7 +16,8 @@ public class JianglingMemberService extends Service {
     private final JianglingMemberDao jianglingMemberDao = new JianglingMemberDao();
 
     public Integer userCount(String user_id) {
-        Cnd cnd = Cnd.where(JianglingMember.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingMember.SYSTEM_STATUS, true);
         cnd.and(JianglingMember.USER_ID, user_id);
 
         Integer count = jianglingMemberDao.count(cnd);
@@ -24,7 +25,8 @@ public class JianglingMemberService extends Service {
     }
 
     public Integer redeemCodeCount(String member_redeem_code) {
-        Cnd cnd = Cnd.where(JianglingMember.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingMember.SYSTEM_STATUS, true);
         cnd.and(JianglingMember.MEMBER_REDEEM_CODE, member_redeem_code);
 
         Integer count = jianglingMemberDao.count(cnd);
@@ -59,7 +61,8 @@ public class JianglingMemberService extends Service {
     }
 
     public Boolean update(JianglingMember jianglingMember, String user_id, String system_update_user_id) {
-        Cnd cnd = Cnd.where(JianglingMember.USER_ID, user_id);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingMember.USER_ID, user_id);
 
         Boolean success = jianglingMemberDao.update(jianglingMember, system_update_user_id, 0, cnd);
 
@@ -71,7 +74,8 @@ public class JianglingMemberService extends Service {
     }
 
     public Boolean delete(String user_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(JianglingMember.USER_ID, user_id).and(JianglingMember.SYSTEM_VERSION, system_version);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingMember.USER_ID, user_id).and(JianglingMember.SYSTEM_VERSION, system_version);
 
         Boolean success = jianglingMemberDao.delete(system_update_user_id, system_version, cnd);
 

@@ -16,7 +16,8 @@ public class MemberLevelService extends Service {
     private final MemberLevelDao memberLevelDao = new MemberLevelDao();
 
     public Integer adminCount(String app_id, String member_level_name) {
-        Cnd cnd = Cnd.where(MemberLevel.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(MemberLevel.SYSTEM_STATUS, true);
         cnd.and(MemberLevel.APP_ID, app_id);
         cnd.andAllowEmpty(MemberLevel.MEMBER_LEVEL_NAME, member_level_name);
 
@@ -25,7 +26,8 @@ public class MemberLevelService extends Service {
     }
 
     public List<MemberLevel> adminList(String app_id, String member_level_name, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(MemberLevel.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(MemberLevel.SYSTEM_STATUS, true);
         cnd.and(MemberLevel.APP_ID, app_id);
         cnd.andAllowEmpty(MemberLevel.MEMBER_LEVEL_NAME, member_level_name);
         cnd.paginate(m, n);
@@ -41,7 +43,8 @@ public class MemberLevelService extends Service {
         List<MemberLevel> memberLevelList = CacheUtil.get(MEMBER_LEVEL_LIST_CACHE, app_id);
 
         if (memberLevelList == null) {
-            Cnd cnd = Cnd.where(MemberLevel.SYSTEM_STATUS, true);
+            Cnd cnd = new Cnd();
+        cnd.where(MemberLevel.SYSTEM_STATUS, true);
             cnd.and(MemberLevel.APP_ID, app_id);
 
             memberLevelList = memberLevelDao.primaryKeyList(cnd);
@@ -90,7 +93,8 @@ public class MemberLevelService extends Service {
     }
 
     public Boolean update(MemberLevel memberLevel, String member_level_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(MemberLevel.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(MemberLevel.SYSTEM_STATUS, true);
         cnd.and(MemberLevel.MEMBER_LEVEL_ID, member_level_id);
         cnd.and(MemberLevel.SYSTEM_VERSION, system_version);
 
@@ -107,7 +111,8 @@ public class MemberLevelService extends Service {
     }
 
     public Boolean delete(String member_level_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(MemberLevel.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(MemberLevel.SYSTEM_STATUS, true);
         cnd.and(MemberLevel.MEMBER_LEVEL_ID, member_level_id);
         cnd.and(MemberLevel.SYSTEM_VERSION, system_version);
 

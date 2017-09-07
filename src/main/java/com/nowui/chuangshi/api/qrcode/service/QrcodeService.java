@@ -16,7 +16,8 @@ public class QrcodeService extends Service {
     private final QrcodeDao qrcodeDao = new QrcodeDao();
 
     public Integer adminCount(String app_id, String qrcode_type) {
-        Cnd cnd = Cnd.where(Qrcode.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Qrcode.SYSTEM_STATUS, true);
         cnd.and(Qrcode.APP_ID, app_id);
         cnd.andAllowEmpty(Qrcode.QRCODE_TYPE, qrcode_type);
 
@@ -25,7 +26,8 @@ public class QrcodeService extends Service {
     }
 
     public List<Qrcode> adminList(String app_id, String qrcode_type, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(Qrcode.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Qrcode.SYSTEM_STATUS, true);
         cnd.and(Qrcode.APP_ID, app_id);
         cnd.andAllowEmpty(Qrcode.QRCODE_TYPE, qrcode_type);
         cnd.paginate(m, n);
@@ -55,7 +57,8 @@ public class QrcodeService extends Service {
     }
 
     public Boolean update(Qrcode qrcode, String qrcode_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Qrcode.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Qrcode.SYSTEM_STATUS, true);
         cnd.and(Qrcode.QRCODE_ID, qrcode_id);
         cnd.and(Qrcode.SYSTEM_VERSION, system_version);
 
@@ -72,7 +75,8 @@ public class QrcodeService extends Service {
         Qrcode qrcode = new Qrcode();
         qrcode.setQrcode_status(false);
 
-        Cnd cnd = Cnd.where(Qrcode.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Qrcode.SYSTEM_STATUS, true);
         cnd.and(Qrcode.QRCODE_ID, qrcode_id);
 
         Boolean success = qrcodeDao.update(qrcode, system_update_user_id, cnd);
@@ -85,7 +89,8 @@ public class QrcodeService extends Service {
     }
 
     public Boolean delete(String qrcode_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Qrcode.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Qrcode.SYSTEM_STATUS, true);
         cnd.and(Qrcode.QRCODE_ID, qrcode_id);
         cnd.and(Qrcode.SYSTEM_VERSION, system_version);
 

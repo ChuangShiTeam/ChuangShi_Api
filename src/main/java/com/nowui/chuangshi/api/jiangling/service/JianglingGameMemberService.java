@@ -15,7 +15,8 @@ public class JianglingGameMemberService extends Service {
     private final JianglingGameMemberDao jianglingCustomerDao = new JianglingGameMemberDao();
 
     public Integer adminCount(String app_id, String game_member_name) {
-        Cnd cnd = Cnd.where(JianglingGameMember.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingGameMember.SYSTEM_STATUS, true);
         cnd.andAllowEmpty(JianglingGameMember.GAME_MEMBER_NAME, game_member_name);
 
         Integer count = jianglingCustomerDao.count(cnd);
@@ -23,7 +24,8 @@ public class JianglingGameMemberService extends Service {
     }
 
     public List<JianglingGameMember> adminList(String game_member_name, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(JianglingGameMember.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingGameMember.SYSTEM_STATUS, true);
         cnd.andAllowEmpty(JianglingGameMember.GAME_MEMBER_NAME, game_member_name);
         cnd.paginate(m, n);
 
@@ -35,7 +37,8 @@ public class JianglingGameMemberService extends Service {
     }
 
     public List<JianglingGameMember> allList() {
-        Cnd cnd = Cnd.where(JianglingGameMember.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingGameMember.SYSTEM_STATUS, true);
 
         List<JianglingGameMember> jianglingGameMemberList = jianglingCustomerDao.primaryKeyList(cnd);
         for (JianglingGameMember jianglingGameMember : jianglingGameMemberList) {
@@ -62,7 +65,8 @@ public class JianglingGameMemberService extends Service {
     }
 
     public Boolean update(JianglingGameMember jianglingGameMember, String game_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(JianglingGameMember.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingGameMember.SYSTEM_STATUS, true);
         cnd.and(JianglingGameMember.GAME_ID, game_id);
         cnd.and(JianglingGameMember.SYSTEM_VERSION, system_version);
 
@@ -76,7 +80,8 @@ public class JianglingGameMemberService extends Service {
     }
 
     public Boolean delete(String game_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(JianglingGameMember.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingGameMember.SYSTEM_STATUS, true);
         cnd.and(JianglingGameMember.GAME_ID, game_id);
         cnd.and(JianglingGameMember.SYSTEM_VERSION, system_version);
 

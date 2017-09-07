@@ -15,7 +15,8 @@ public class EnchashmentService extends Service {
     private final EnchashmentDao certificateDao = new EnchashmentDao();
 
     public Integer adminCount(String app_id, String user_id, Boolean enchashment_status) {
-        Cnd cnd = Cnd.where(Enchashment.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Enchashment.SYSTEM_STATUS, true);
         cnd.and(Enchashment.APP_ID, app_id);
         cnd.andAllowEmpty(Enchashment.USER_ID, user_id);
         cnd.andAllowEmpty(Enchashment.ENCHASHMENT_STATUS, enchashment_status);
@@ -25,7 +26,8 @@ public class EnchashmentService extends Service {
     }
 
     public List<Enchashment> adminList(String app_id, String user_id, Boolean enchashment_status, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(Enchashment.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Enchashment.SYSTEM_STATUS, true);
         cnd.and(Enchashment.APP_ID, app_id);
         cnd.andAllowEmpty(Enchashment.USER_ID, user_id);
         cnd.andAllowEmpty(Enchashment.ENCHASHMENT_STATUS, enchashment_status);
@@ -39,7 +41,8 @@ public class EnchashmentService extends Service {
     }
 
     public List<Enchashment> userList(String user_id) {
-        Cnd cnd = Cnd.where(Enchashment.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Enchashment.SYSTEM_STATUS, true);
         cnd.and(Enchashment.USER_ID, user_id);
 
         List<Enchashment> enchashmentList = certificateDao.primaryKeyList(cnd);
@@ -67,7 +70,8 @@ public class EnchashmentService extends Service {
     }
 
     public Boolean update(Enchashment certificate, String certificate_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Enchashment.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Enchashment.SYSTEM_STATUS, true);
         cnd.and(Enchashment.ENCHASHMENT_ID, certificate_id);
         cnd.and(Enchashment.SYSTEM_VERSION, system_version);
 
@@ -81,7 +85,8 @@ public class EnchashmentService extends Service {
     }
 
     public Boolean delete(String certificate_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Enchashment.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Enchashment.SYSTEM_STATUS, true);
         cnd.and(Enchashment.ENCHASHMENT_ID, certificate_id);
         cnd.and(Enchashment.SYSTEM_VERSION, system_version);
 

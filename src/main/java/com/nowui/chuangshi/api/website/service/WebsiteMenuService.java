@@ -16,7 +16,8 @@ public class WebsiteMenuService extends Service {
     private final WebsiteMenuDao websiteMenuDao = new WebsiteMenuDao();
 
     public List<Map<String, Object>> tree(String app_id) {
-        Cnd cnd = Cnd.where(WebsiteMenu.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(WebsiteMenu.SYSTEM_STATUS, true);
         cnd.and(WebsiteMenu.APP_ID, app_id);
         cnd.asc(WebsiteMenu.WEBSITE_MENU_SORT);
 
@@ -45,7 +46,8 @@ public class WebsiteMenuService extends Service {
     }
 
     public Boolean update(WebsiteMenu websiteMenu, String website_menu_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(WebsiteMenu.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(WebsiteMenu.SYSTEM_STATUS, true);
         cnd.and(WebsiteMenu.WEBSITE_MENU_ID, website_menu_id);
         cnd.and(WebsiteMenu.SYSTEM_VERSION, system_version);
 
@@ -59,7 +61,8 @@ public class WebsiteMenuService extends Service {
     }
 
     public Boolean delete(String website_menu_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(WebsiteMenu.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(WebsiteMenu.SYSTEM_STATUS, true);
         cnd.and(WebsiteMenu.WEBSITE_MENU_ID, website_menu_id);
         cnd.and(WebsiteMenu.SYSTEM_VERSION, system_version);
 

@@ -15,7 +15,8 @@ public class BillService extends Service {
     private final BillDao billDao = new BillDao();
 
     public Integer adminCount(String app_id, String bill_name) {
-        Cnd cnd = Cnd.where(Bill.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Bill.SYSTEM_STATUS, true);
         cnd.and(Bill.APP_ID, app_id);
         cnd.andAllowEmpty(Bill.BILL_NAME, bill_name);
 
@@ -24,7 +25,8 @@ public class BillService extends Service {
     }
 
     public List<Bill> adminList(String app_id, String bill_name, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(Bill.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Bill.SYSTEM_STATUS, true);
         cnd.and(Bill.APP_ID, app_id);
         cnd.andAllowEmpty(Bill.BILL_NAME, bill_name);
         cnd.paginate(m, n);
@@ -54,7 +56,8 @@ public class BillService extends Service {
     }
 
     public Boolean update(Bill bill, String bill_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Bill.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Bill.SYSTEM_STATUS, true);
         cnd.and(Bill.BILL_ID, bill_id);
         cnd.and(Bill.SYSTEM_VERSION, system_version);
 
@@ -68,7 +71,8 @@ public class BillService extends Service {
     }
 
     public Boolean delete(String bill_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Bill.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Bill.SYSTEM_STATUS, true);
         cnd.and(Bill.BILL_ID, bill_id);
         cnd.and(Bill.SYSTEM_VERSION, system_version);
 

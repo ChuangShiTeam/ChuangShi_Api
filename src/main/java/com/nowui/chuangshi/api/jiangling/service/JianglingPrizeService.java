@@ -15,7 +15,8 @@ public class JianglingPrizeService extends Service {
     private final JianglingPrizeDao jianglingMemberDao = new JianglingPrizeDao();
 
     public Integer adminCount(String app_id, String prize_name) {
-        Cnd cnd = Cnd.where(JianglingPrize.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingPrize.SYSTEM_STATUS, true);
         cnd.and(JianglingPrize.APP_ID, app_id);
         cnd.andAllowEmpty(JianglingPrize.PRIZE_NAME, prize_name);
 
@@ -24,7 +25,8 @@ public class JianglingPrizeService extends Service {
     }
 
     public List<JianglingPrize> adminList(String app_id, String prize_name, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(JianglingPrize.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingPrize.SYSTEM_STATUS, true);
         cnd.and(JianglingPrize.APP_ID, app_id);
         cnd.andAllowEmpty(JianglingPrize.PRIZE_NAME, prize_name).paginate(m, n);
 
@@ -36,7 +38,8 @@ public class JianglingPrizeService extends Service {
     }
 
     public List<JianglingPrize> appList(String app_id) {
-        Cnd cnd = Cnd.where(JianglingPrize.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingPrize.SYSTEM_STATUS, true);
         cnd.and(JianglingPrize.APP_ID, app_id);
 
         List<JianglingPrize> jianglingPrizeList = jianglingMemberDao.primaryKeyList(cnd);
@@ -64,7 +67,8 @@ public class JianglingPrizeService extends Service {
     }
 
     public Boolean update(JianglingPrize jianglingMember, String prize_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(JianglingPrize.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingPrize.SYSTEM_STATUS, true);
         cnd.and(JianglingPrize.PRIZE_ID, prize_id);
         cnd.and(JianglingPrize.SYSTEM_VERSION, system_version);
 
@@ -78,7 +82,8 @@ public class JianglingPrizeService extends Service {
     }
 
     public Boolean delete(String prize_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(JianglingPrize.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingPrize.SYSTEM_STATUS, true);
         cnd.and(JianglingPrize.PRIZE_ID, prize_id);
         cnd.and(JianglingPrize.SYSTEM_VERSION, system_version);
 

@@ -30,7 +30,8 @@ public class MemberService extends Service {
     private final MemberDao memberDao = new MemberDao();
 
     public Integer adminCount(String app_id) {
-        Cnd cnd = Cnd.where(Member.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Member.SYSTEM_STATUS, true);
         cnd.and(Member.APP_ID, app_id);
 
         Integer count = memberDao.count(cnd);
@@ -38,7 +39,8 @@ public class MemberService extends Service {
     }
 
     public List<Member> adminList(String app_id, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(Member.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Member.SYSTEM_STATUS, true);
         cnd.and(Member.APP_ID, app_id);
         cnd.paginate(m, n);
 
@@ -80,7 +82,8 @@ public class MemberService extends Service {
     }
 
     public Boolean update(Member member, String member_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Member.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Member.SYSTEM_STATUS, true);
         cnd.and(Member.MEMBER_ID, member_id);
         cnd.and(Member.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         cnd.and(Member.SYSTEM_VERSION, system_version);
@@ -155,7 +158,8 @@ public class MemberService extends Service {
         member.setMember_level_id(member_level_id);
         member.setMember_status(member_status);
 
-        Cnd cnd = Cnd.where(Member.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Member.SYSTEM_STATUS, true);
         cnd.and(Member.MEMBER_ID, member_id);
         cnd.and(Member.SYSTEM_UPDATE_USER_ID, system_update_user_id);
 
@@ -169,7 +173,8 @@ public class MemberService extends Service {
     }
 
     public Boolean delete(String member_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Member.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Member.SYSTEM_STATUS, true);
         cnd.and(Member.MEMBER_ID, member_id);
         cnd.and(Member.SYSTEM_VERSION, system_version);
 

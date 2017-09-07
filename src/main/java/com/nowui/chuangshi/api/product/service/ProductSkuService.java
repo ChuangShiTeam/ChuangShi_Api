@@ -15,7 +15,8 @@ public class ProductSkuService extends Service {
     private final ProductSkuDao productSkuDao = new ProductSkuDao();
 
     public List<ProductSku> productList(String product_id) {
-        Cnd cnd = Cnd.where(ProductSku.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ProductSku.SYSTEM_STATUS, true);
         cnd.and(ProductSku.PRODUCT_ID, product_id);
 
         List<ProductSku> productSkuList = productSkuDao.primaryKeyList(cnd);
@@ -43,7 +44,8 @@ public class ProductSkuService extends Service {
     }
 
     public Boolean update(ProductSku product, String product_sku_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(ProductSku.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ProductSku.SYSTEM_STATUS, true);
         cnd.and(ProductSku.PRODUCT_SKU_ID, product_sku_id);
         cnd.and(ProductSku.SYSTEM_VERSION, system_version);
 
@@ -57,7 +59,8 @@ public class ProductSkuService extends Service {
     }
 
     public Boolean delete(String product_sku_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(ProductSku.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ProductSku.SYSTEM_STATUS, true);
         cnd.and(ProductSku.PRODUCT_SKU_ID, product_sku_id);
         cnd.and(ProductSku.SYSTEM_VERSION, system_version);
 

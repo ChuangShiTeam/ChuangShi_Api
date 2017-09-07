@@ -14,7 +14,8 @@ public class MemberDeliveryOrderService extends Service {
     private final MemberDeliveryOrderDao memberDeliveryOrderDao = new MemberDeliveryOrderDao();
 
     public List<MemberDeliveryOrder> userIsPayList(String user_id) {
-        Cnd cnd = Cnd.where(MemberDeliveryOrder.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(MemberDeliveryOrder.SYSTEM_STATUS, true);
         cnd.and(MemberDeliveryOrder.USER_ID, user_id);
         cnd.and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, true);
 
@@ -23,7 +24,8 @@ public class MemberDeliveryOrderService extends Service {
     }
 
     public List<MemberDeliveryOrder> userIsWarehouseDeliverList(String user_id, String member_delivery_order_flow) {
-        Cnd cnd = Cnd.where(MemberDeliveryOrder.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(MemberDeliveryOrder.SYSTEM_STATUS, true);
         cnd.and(MemberDeliveryOrder.USER_ID, user_id);
         cnd.and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_WAREHOUSE_DELIVER, true);
         cnd.and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_FLOW, member_delivery_order_flow);
@@ -33,7 +35,8 @@ public class MemberDeliveryOrderService extends Service {
     }
 
     public MemberDeliveryOrder purchaseOrderFind(String member_purchase_order_id) {
-        Cnd cnd = Cnd.where(MemberDeliveryOrder.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(MemberDeliveryOrder.SYSTEM_STATUS, true);
         cnd.and(MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, member_purchase_order_id);
 
         MemberDeliveryOrder memberDeliveryOrder = memberDeliveryOrderDao.find(cnd);

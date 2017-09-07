@@ -15,7 +15,8 @@ public class PageService extends Service {
     private final PageDao pageDao = new PageDao();
 
     public Integer adminCount(String app_id, String page_name) {
-        Cnd cnd = Cnd.where(Page.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Page.SYSTEM_STATUS, true);
         cnd.and(Page.APP_ID, app_id);
         cnd.andAllowEmpty(Page.PAGE_NAME, page_name);
 
@@ -24,7 +25,8 @@ public class PageService extends Service {
     }
 
     public List<Page> adminList(String app_id, String page_name, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(Page.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Page.SYSTEM_STATUS, true);
         cnd.and(Page.APP_ID, app_id);
         cnd.andAllowEmpty(Page.PAGE_NAME, page_name);
         cnd.asc(Page.PAGE_SORT);
@@ -38,7 +40,8 @@ public class PageService extends Service {
     }
 
     public List<Page> appList(String app_id) {
-        Cnd cnd = Cnd.where(Page.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Page.SYSTEM_STATUS, true);
         cnd.and(Page.APP_ID, app_id);
 
         List<Page> pageList = pageDao.list(cnd);
@@ -66,7 +69,8 @@ public class PageService extends Service {
     }
 
     public Boolean update(Page page, String page_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Page.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Page.SYSTEM_STATUS, true);
         cnd.and(Page.PAGE_ID, page_id);
         cnd.and(Page.SYSTEM_VERSION, system_version);
 
@@ -80,7 +84,8 @@ public class PageService extends Service {
     }
 
     public Boolean delete(String page_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Page.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Page.SYSTEM_STATUS, true);
         cnd.and(Page.PAGE_ID, page_id);
         cnd.and(Page.SYSTEM_VERSION, system_version);
 

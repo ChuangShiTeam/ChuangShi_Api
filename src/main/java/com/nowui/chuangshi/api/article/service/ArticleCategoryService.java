@@ -17,7 +17,8 @@ public class ArticleCategoryService extends Service {
     private final ArticleCategoryDao articleCategoryDao = new ArticleCategoryDao();
 
     public Integer adminCount(String app_id, String article_category_name) {
-        Cnd cnd = Cnd.where(ArticleCategory.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ArticleCategory.SYSTEM_STATUS, true);
         cnd.and(ArticleCategory.APP_ID, app_id);
         cnd.andAllowEmpty(ArticleCategory.ARTICLE_CATEGORY_NAME, article_category_name);
 
@@ -26,7 +27,8 @@ public class ArticleCategoryService extends Service {
     }
 
     public List<ArticleCategory> adminList(String app_id, String article_category_name, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(ArticleCategory.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ArticleCategory.SYSTEM_STATUS, true);
         cnd.and(ArticleCategory.APP_ID, app_id);
         cnd.andAllowEmpty(ArticleCategory.ARTICLE_CATEGORY_NAME, article_category_name);
         cnd.paginate(m, n);
@@ -39,7 +41,8 @@ public class ArticleCategoryService extends Service {
     }
 
     public List<ArticleCategory> appList(String app_id) {
-        Cnd cnd = Cnd.where(ArticleCategory.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ArticleCategory.SYSTEM_STATUS, true);
         cnd.and(ArticleCategory.APP_ID, app_id);
         cnd.asc(ArticleCategory.ARTICLE_CATEGORY_SORT);
 
@@ -51,7 +54,8 @@ public class ArticleCategoryService extends Service {
     }
 
     public List<Map<String, Object>> appTreeList(String app_id) {
-        Cnd cnd = Cnd.where(ArticleCategory.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ArticleCategory.SYSTEM_STATUS, true);
         cnd.and(ArticleCategory.APP_ID, app_id);
         cnd.asc(ArticleCategory.ARTICLE_CATEGORY_SORT);
 
@@ -83,7 +87,8 @@ public class ArticleCategoryService extends Service {
     }
 
     public Boolean update(ArticleCategory articleCategory, String article_category_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(ArticleCategory.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ArticleCategory.SYSTEM_STATUS, true);
         cnd.and(ArticleCategory.ARTICLE_CATEGORY_ID, article_category_id);
         cnd.and(ArticleCategory.SYSTEM_VERSION, system_version);
 
@@ -97,7 +102,8 @@ public class ArticleCategoryService extends Service {
     }
 
     public Boolean delete(String article_category_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(ArticleCategory.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ArticleCategory.SYSTEM_STATUS, true);
         cnd.and(ArticleCategory.ARTICLE_CATEGORY_ID, article_category_id);
         cnd.and(ArticleCategory.SYSTEM_VERSION, system_version);
 

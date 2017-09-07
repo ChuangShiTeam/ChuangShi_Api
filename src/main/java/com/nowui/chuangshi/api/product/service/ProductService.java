@@ -15,7 +15,8 @@ public class ProductService extends Service {
     private final ProductDao productDao = new ProductDao();
 
     public Integer adminCount(String app_id, String product_name) {
-        Cnd cnd = Cnd.where(Product.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Product.SYSTEM_STATUS, true);
         cnd.and(Product.APP_ID, app_id);
         cnd.andAllowEmpty(Product.PRODUCT_NAME, product_name);
 
@@ -24,7 +25,8 @@ public class ProductService extends Service {
     }
 
     public List<Product> adminList(String app_id, String product_name, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(Product.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Product.SYSTEM_STATUS, true);
         cnd.and(Product.APP_ID, app_id);
         cnd.andAllowEmpty(Product.PRODUCT_NAME, product_name);
         cnd.paginate(m, n);
@@ -37,7 +39,8 @@ public class ProductService extends Service {
     }
 
     public List<Product> productBrandList(String product_brand_id) {
-        Cnd cnd = Cnd.where(Product.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Product.SYSTEM_STATUS, true);
         cnd.and(Product.PRODUCT_BRAND_ID, product_brand_id);
 
         List<Product> productList = productDao.primaryKeyList(cnd);
@@ -65,7 +68,8 @@ public class ProductService extends Service {
     }
 
     public Boolean update(Product product, String product_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Product.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Product.SYSTEM_STATUS, true);
         cnd.and(Product.PRODUCT_ID, product_id);
         cnd.and(Product.SYSTEM_VERSION, system_version);
 
@@ -79,7 +83,8 @@ public class ProductService extends Service {
     }
 
     public Boolean delete(String product_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Product.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Product.SYSTEM_STATUS, true);
         cnd.and(Product.PRODUCT_ID, product_id);
         cnd.and(Product.SYSTEM_VERSION, system_version);
 

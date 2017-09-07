@@ -15,7 +15,8 @@ public class CertificateService extends Service {
     private final CertificateDao certificateDao = new CertificateDao();
 
     public Integer adminCount(String app_id, String certificate_number) {
-        Cnd cnd = Cnd.where(Certificate.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Certificate.SYSTEM_STATUS, true);
         cnd.and(Certificate.APP_ID, app_id);
         cnd.andAllowEmpty(Certificate.CERTIFICATE_NUMBER, certificate_number);
 
@@ -24,7 +25,8 @@ public class CertificateService extends Service {
     }
 
     public List<Certificate> adminList(String app_id, String certificate_number, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(Certificate.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Certificate.SYSTEM_STATUS, true);
         cnd.and(Certificate.APP_ID, app_id);
         cnd.andAllowEmpty(Certificate.CERTIFICATE_NUMBER, certificate_number);
         cnd.paginate(m, n);
@@ -46,7 +48,8 @@ public class CertificateService extends Service {
     }
 
     public Certificate userFind(String user_id) {
-        Cnd cnd = Cnd.where(Certificate.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Certificate.SYSTEM_STATUS, true);
         cnd.and(Certificate.USER_ID, user_id);
 
         Certificate certificate = certificateDao.find(cnd);
@@ -59,7 +62,8 @@ public class CertificateService extends Service {
     }
 
     public Boolean update(Certificate certificate, String certificate_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Certificate.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Certificate.SYSTEM_STATUS, true);
         cnd.and(Certificate.CERTIFICATE_ID, certificate_id);
         cnd.and(Certificate.SYSTEM_VERSION, system_version);
 
@@ -73,7 +77,8 @@ public class CertificateService extends Service {
     }
 
     public Boolean delete(String certificate_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Certificate.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Certificate.SYSTEM_STATUS, true);
         cnd.and(Certificate.CERTIFICATE_ID, certificate_id);
         cnd.and(Certificate.SYSTEM_VERSION, system_version);
 

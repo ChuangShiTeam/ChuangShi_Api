@@ -6,7 +6,6 @@ import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 
-import java.util.Date;
 import java.util.List;
 
 public class AppService extends Service {
@@ -16,7 +15,8 @@ public class AppService extends Service {
     private final AppDao appDao = new AppDao();
 
     public Integer adminCount(String app_id, String app_name) {
-        Cnd cnd = Cnd.where(App.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(App.SYSTEM_STATUS, true);
         cnd.and(App.APP_ID, app_id);
         cnd.andAllowEmpty(App.APP_NAME, app_name);
 
@@ -25,7 +25,8 @@ public class AppService extends Service {
     }
 
     public List<App> adminList(String app_id, String app_name, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(App.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(App.SYSTEM_STATUS, true);
         cnd.and(App.APP_ID, app_id);
         cnd.andAllowEmpty(App.APP_NAME, app_name);
         cnd.paginate(m, n);
@@ -38,7 +39,8 @@ public class AppService extends Service {
     }
 
     public List<App> allList() {
-        Cnd cnd = Cnd.where(App.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(App.SYSTEM_STATUS, true);
 
         List<App> appList = appDao.primaryKeyList(cnd);
         for (App app : appList) {
@@ -65,7 +67,8 @@ public class AppService extends Service {
     }
 
     public Boolean update(App app, String app_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(App.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(App.SYSTEM_STATUS, true);
         cnd.and(App.APP_ID, app_id);
         cnd.and(App.SYSTEM_VERSION, system_version);
 
@@ -79,7 +82,8 @@ public class AppService extends Service {
     }
 
     public Boolean delete(String app_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(App.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(App.SYSTEM_STATUS, true);
         cnd.and(App.APP_ID, app_id);
         cnd.and(App.SYSTEM_VERSION, system_version);
 

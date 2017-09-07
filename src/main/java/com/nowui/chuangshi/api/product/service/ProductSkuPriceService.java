@@ -18,7 +18,8 @@ public class ProductSkuPriceService extends Service {
         List<ProductSkuPrice> productSkuPriceList = CacheUtil.get(PRODUCT_SKU_PRIZE_LIST_CACHE, product_sku_id);
 
         if (productSkuPriceList == null) {
-            Cnd cnd = Cnd.where(ProductSkuPrice.SYSTEM_STATUS, true);
+            Cnd cnd = new Cnd();
+        cnd.where(ProductSkuPrice.SYSTEM_STATUS, true);
             cnd.and(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id);
             productSkuPriceList = productSkuPriceDao.list(cnd);
 
@@ -39,7 +40,8 @@ public class ProductSkuPriceService extends Service {
     }
 
     public Boolean update(ProductSkuPrice product, String product_sku_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(ProductSkuPrice.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ProductSkuPrice.SYSTEM_STATUS, true);
         cnd.and(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id);
         cnd.and(ProductSkuPrice.SYSTEM_VERSION, system_version);
 
@@ -48,7 +50,8 @@ public class ProductSkuPriceService extends Service {
     }
 
     public Boolean delete(String product_sku_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(ProductSkuPrice.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ProductSkuPrice.SYSTEM_STATUS, true);
         cnd.and(ProductSkuPrice.PRODUCT_SKU_ID, product_sku_id);
         cnd.and(ProductSkuPrice.SYSTEM_VERSION, system_version);
 

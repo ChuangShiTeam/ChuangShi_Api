@@ -14,7 +14,8 @@ public class MemberPurchaseOrderService extends Service {
     private final MemberPurchaseOrderDao memberPurchaseOrderDao = new MemberPurchaseOrderDao();
 
     public Integer userIsFirstCount(String user_id, String member_level_id) {
-        Cnd cnd = Cnd.where(MemberPurchaseOrder.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(MemberPurchaseOrder.SYSTEM_STATUS, true);
         cnd.and(MemberPurchaseOrder.USER_ID, user_id);
         cnd.and(MemberPurchaseOrder.MEMBER_LEVEL_ID, member_level_id);
         cnd.and(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_PAY, true);
@@ -24,7 +25,8 @@ public class MemberPurchaseOrderService extends Service {
     }
 
     public List<MemberPurchaseOrder> userList(String user_id) {
-        Cnd cnd = Cnd.where(MemberPurchaseOrder.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(MemberPurchaseOrder.SYSTEM_STATUS, true);
         cnd.and(MemberPurchaseOrder.USER_ID, user_id);
 
         List<MemberPurchaseOrder> memberPurchaseOrderList = memberPurchaseOrderDao.list(cnd);
@@ -32,7 +34,8 @@ public class MemberPurchaseOrderService extends Service {
     }
 
     public List<MemberPurchaseOrder> userIsPayList(String user_id) {
-        Cnd cnd = Cnd.where(MemberPurchaseOrder.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(MemberPurchaseOrder.SYSTEM_STATUS, true);
         cnd.and(MemberPurchaseOrder.USER_ID, user_id);
         cnd.and(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_PAY, true);
 

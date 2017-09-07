@@ -15,7 +15,8 @@ public class ProductBrandService extends Service {
     private final ProductBrandDao productBrandDao = new ProductBrandDao();
 
     public Integer adminCount(String app_id, String product_brand_name) {
-        Cnd cnd = Cnd.where(ProductBrand.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ProductBrand.SYSTEM_STATUS, true);
         cnd.and(ProductBrand.APP_ID, app_id);
         cnd.andAllowEmpty(ProductBrand.PRODUCT_BRAND_NAME, product_brand_name);
 
@@ -24,7 +25,8 @@ public class ProductBrandService extends Service {
     }
 
     public List<ProductBrand> adminList(String app_id, String product_brand_name, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(ProductBrand.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ProductBrand.SYSTEM_STATUS, true);
         cnd.and(ProductBrand.APP_ID, app_id);
         cnd.andAllowEmpty(ProductBrand.PRODUCT_BRAND_NAME, product_brand_name);
         cnd.paginate(m, n);
@@ -37,7 +39,8 @@ public class ProductBrandService extends Service {
     }
 
     public List<ProductBrand> mobileList(String app_id) {
-        Cnd cnd = Cnd.where(ProductBrand.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ProductBrand.SYSTEM_STATUS, true);
         cnd.and(ProductBrand.APP_ID, app_id);
 
         List<ProductBrand> productBrandList = productBrandDao.primaryKeyList(cnd);
@@ -65,7 +68,8 @@ public class ProductBrandService extends Service {
     }
 
     public Boolean update(ProductBrand productBrand, String product_brand_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(ProductBrand.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ProductBrand.SYSTEM_STATUS, true);
         cnd.and(ProductBrand.PRODUCT_BRAND_ID, product_brand_id);
         cnd.and(ProductBrand.SYSTEM_VERSION, system_version);
 
@@ -79,7 +83,8 @@ public class ProductBrandService extends Service {
     }
 
     public Boolean delete(String product_brand_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(ProductBrand.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(ProductBrand.SYSTEM_STATUS, true);
         cnd.and(ProductBrand.PRODUCT_BRAND_ID, product_brand_id);
         cnd.and(ProductBrand.SYSTEM_VERSION, system_version);
 

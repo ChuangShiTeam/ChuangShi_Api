@@ -15,7 +15,8 @@ public class FeijiuFastCreditCardService extends Service {
     private final FeijiuFastCreditCardDao feijiuFastCreditCardDao = new FeijiuFastCreditCardDao();
 
     public Integer adminCount(String app_id, String credit_card_name) {
-        Cnd cnd = Cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastCreditCard.APP_ID, app_id);
         cnd.andAllowEmpty(FeijiuFastCreditCard.CREDIT_CARD_NAME, credit_card_name);
 
@@ -24,7 +25,8 @@ public class FeijiuFastCreditCardService extends Service {
     }
 
     public List<FeijiuFastCreditCard> adminList(String app_id, String credit_card_name, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastCreditCard.APP_ID, app_id);
         cnd.andAllowEmpty(FeijiuFastCreditCard.CREDIT_CARD_NAME, credit_card_name);
         cnd.asc(FeijiuFastCreditCard.CREDIT_CARD_SORT);
@@ -38,7 +40,8 @@ public class FeijiuFastCreditCardService extends Service {
     }
 
     public List<FeijiuFastCreditCard> appList(String app_id) {
-        Cnd cnd = Cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastCreditCard.APP_ID, app_id);
         cnd.asc(FeijiuFastCreditCard.CREDIT_CARD_SORT);
         cnd.desc(FeijiuFastCreditCard.SYSTEM_CREATE_TIME);
@@ -68,7 +71,8 @@ public class FeijiuFastCreditCardService extends Service {
     }
 
     public Boolean update(FeijiuFastCreditCard certificate, String credit_card_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastCreditCard.CREDIT_CARD_ID, credit_card_id);
         cnd.and(FeijiuFastCreditCard.SYSTEM_VERSION, system_version);
 
@@ -82,7 +86,8 @@ public class FeijiuFastCreditCardService extends Service {
     }
 
     public Boolean delete(String credit_card_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(FeijiuFastCreditCard.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastCreditCard.CREDIT_CARD_ID, credit_card_id);
         cnd.and(FeijiuFastCreditCard.SYSTEM_VERSION, system_version);
 

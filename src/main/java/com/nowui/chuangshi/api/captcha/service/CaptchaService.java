@@ -27,7 +27,8 @@ public class CaptchaService extends Service {
     private final CaptchaDao captchaDao = new CaptchaDao();
 
     public Integer count(String app_id, String captcha_mobile, String captcha_code) {
-        Cnd cnd = Cnd.where(Captcha.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Captcha.SYSTEM_STATUS, true);
         cnd.and(Captcha.APP_ID, app_id);
         cnd.andAllowEmpty(Captcha.CAPTCHA_MOBILE, captcha_mobile);
         cnd.andAllowEmpty(Captcha.CAPTCHA_CODE, captcha_code);
@@ -36,8 +37,33 @@ public class CaptchaService extends Service {
         return count;
     }
 
+    public Integer captchaMobileCount(String app_id, String captcha_type, String captcha_mobile, Calendar calendar) {
+        Cnd cnd = new Cnd();
+        cnd.where(Captcha.SYSTEM_STATUS, true);
+        cnd.and(Captcha.APP_ID, app_id);
+        cnd.and(Captcha.CAPTCHA_TYPE, captcha_type);
+        cnd.and(Captcha.CAPTCHA_MOBILE, captcha_mobile);
+        cnd.andBetween(Captcha.SYSTEM_CREATE_TIME, calendar.getTime(), new Date());
+
+        Integer count = captchaDao.count(cnd);
+        return count;
+    }
+
+    public Integer captchaIpAddressCount(String app_id, String captcha_type, String captcha_ip_address, Calendar calendar) {
+        Cnd cnd = new Cnd();
+        cnd.where(Captcha.SYSTEM_STATUS, true);
+        cnd.and(Captcha.APP_ID, app_id);
+        cnd.and(Captcha.CAPTCHA_TYPE, captcha_type);
+        cnd.and(Captcha.CAPTCHA_IP_ADDRESS, captcha_ip_address);
+        cnd.andBetween(Captcha.SYSTEM_CREATE_TIME, calendar.getTime(), new Date());
+
+        Integer count = captchaDao.count(cnd);
+        return count;
+    }
+
     public Integer adminCount(String app_id, String captcha_type, String captcha_mobile) {
-        Cnd cnd = Cnd.where(Captcha.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Captcha.SYSTEM_STATUS, true);
         cnd.and(Captcha.APP_ID, app_id);
         cnd.andAllowEmpty(Captcha.CAPTCHA_TYPE, captcha_type);
         cnd.andAllowEmpty(Captcha.CAPTCHA_MOBILE, captcha_mobile);
@@ -47,7 +73,8 @@ public class CaptchaService extends Service {
     }
 
     public List<Captcha> adminList(String app_id, String captcha_type, String captcha_mobile, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(Captcha.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Captcha.SYSTEM_STATUS, true);
         cnd.and(Captcha.APP_ID, app_id);
         cnd.andAllowEmpty(Captcha.CAPTCHA_TYPE, captcha_type);
         cnd.andAllowEmpty(Captcha.CAPTCHA_MOBILE, captcha_mobile);
@@ -78,7 +105,8 @@ public class CaptchaService extends Service {
     }
 
     public Boolean update(Captcha captcha, String captcha_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Captcha.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Captcha.SYSTEM_STATUS, true);
         cnd.and(Captcha.CAPTCHA_ID, captcha_id);
         cnd.and(Captcha.SYSTEM_VERSION, system_version);
 
@@ -92,7 +120,8 @@ public class CaptchaService extends Service {
     }
 
     public Boolean delete(String captcha_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(Captcha.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(Captcha.SYSTEM_STATUS, true);
         cnd.and(Captcha.CAPTCHA_ID, captcha_id);
         cnd.and(Captcha.SYSTEM_VERSION, system_version);
 
@@ -113,13 +142,13 @@ public class CaptchaService extends Service {
             throw new RuntimeException(captcha_minute + "手机号码格式不正确");
         }
 
-        Integer count = captchaDao.count(Cnd.where(Captcha.APP_ID, request_app_id).and(Captcha.CAPTCHA_TYPE, captcha_type).and(Captcha.CAPTCHA_MOBILE, captcha_mobile).andBetween(Captcha.SYSTEM_CREATE_TIME, calendar.getTime(), new Date()).and(Captcha.SYSTEM_STATUS, true));
+        Integer count = captchaMobileCount(request_app_id, captcha_type, captcha_mobile, calendar);
 
         if (count > 0) {
             throw new RuntimeException(captcha_minute + "分钟内不能重复申请");
         }
 
-        count = captchaDao.count(Cnd.where(Captcha.APP_ID, request_app_id).and(Captcha.CAPTCHA_TYPE, captcha_type).and(Captcha.CAPTCHA_IP_ADDRESS, captcha_ip_address).andBetween(Captcha.SYSTEM_CREATE_TIME, calendar.getTime(), new Date()).and(Captcha.SYSTEM_STATUS, true));
+        count = captchaIpAddressCount(request_app_id, captcha_type, captcha_ip_address, calendar);
 
         if (count > 0) {
             throw new RuntimeException(captcha_minute + "分钟内不能重复申请");

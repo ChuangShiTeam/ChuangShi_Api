@@ -6,66 +6,70 @@ public class Cnd {
 
     private Criteria criteria;
 
-    Cnd() {
-        criteria = new Criteria();
-    }
-
-    protected Cnd(Condition condition) {
-        this();
-        criteria.addCondition(condition);
+    public Cnd() {
+        this.criteria = new Criteria();
     }
 
     public Criteria getCriteria() {
-        return criteria;
+        return this.criteria;
     }
 
-    public static Cnd where(String key, Object value) {
+    public Cnd leftJoin() {
+
+        return this;
+    }
+
+    public Cnd where(String key, Object value) {
         Expression expression = new Expression(key, ExpressionType.EQUAL, value);
-        return new Cnd(new Condition(ConditionType.WHERE, expression, false));
+        this.criteria.addCondition(new Condition(ConditionType.WHERE, expression, false));
+        return this;
     }
 
-    public static Cnd whereAllowEmpty(String key, Object value) {
+    public Cnd whereAllowEmpty(String key, Object value) {
         if (ValidateUtil.isNullOrEmpty(value)) {
-            return new Cnd();
+            return this;
         } else {
             return where(key, value);
         }
     }
 
-    public static Cnd whereLike(String key, Object value) {
+    public Cnd whereLike(String key, Object value) {
         Expression expression = new Expression(key, ExpressionType.LIKE, value);
-        return new Cnd(new Condition(ConditionType.WHERE, expression, false));
+        this.criteria.addCondition(new Condition(ConditionType.WHERE, expression, false));
+        return this;
     }
 
-    public static Cnd whereLikeAllowEmpty(String key, Object value) {
+    public Cnd whereLikeAllowEmpty(String key, Object value) {
         if (ValidateUtil.isNullOrEmpty(value)) {
-            return new Cnd();
+            return this;
         } else {
             return whereLike(key, value);
         }
     }
 
-    public static Cnd whereLeftLike(String key, Object value) {
+    public Cnd whereLeftLike(String key, Object value) {
         Expression expression = new Expression(key, ExpressionType.LEFT_LIKE, value);
-        return new Cnd(new Condition(ConditionType.WHERE, expression, false));
+        this.criteria.addCondition(new Condition(ConditionType.WHERE, expression, false));
+        return this;
     }
 
-    public static Cnd whereLeftLikeAllowEmpty(String key, Object value) {
+    public Cnd whereLeftLikeAllowEmpty(String key, Object value) {
         if (ValidateUtil.isNullOrEmpty(value)) {
-            return new Cnd();
+            return this;
         } else {
             return whereLeftLike(key, value);
         }
     }
 
-    public static Cnd whereRightLike(String key, Object value) {
+    public Cnd whereRightLike(String key, Object value) {
         Expression expression = new Expression(key, ExpressionType.RIGHT_LIKE, value);
-        return new Cnd(new Condition(ConditionType.WHERE, expression, false));
+        this.criteria.addCondition(new Condition(ConditionType.WHERE, expression, false));
+        return this;
     }
 
-    public static Cnd whereRightLikeeAllowEmpty(String key, Object value) {
+    public Cnd whereRightLikeeAllowEmpty(String key, Object value) {
         if (ValidateUtil.isNullOrEmpty(value)) {
-            return new Cnd();
+            return this;
         } else {
             return whereRightLike(key, value);
         }

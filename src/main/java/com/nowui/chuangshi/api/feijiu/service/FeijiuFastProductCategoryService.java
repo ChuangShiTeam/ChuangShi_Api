@@ -15,7 +15,8 @@ public class FeijiuFastProductCategoryService extends Service {
     private final FeijiuFastProductCategoryDao feijiuFastProductCategoryDao = new FeijiuFastProductCategoryDao();
 
     public Integer adminCount(String app_id, String product_category_name) {
-        Cnd cnd = Cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastProductCategory.APP_ID, app_id);
         cnd.andAllowEmpty(FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, product_category_name);
 
@@ -24,7 +25,8 @@ public class FeijiuFastProductCategoryService extends Service {
     }
 
     public List<FeijiuFastProductCategory> adminList(String app_id, String product_category_name, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastProductCategory.APP_ID, app_id);
         cnd.andAllowEmpty(FeijiuFastProductCategory.PRODUCT_CATEGORY_NAME, product_category_name);
         cnd.paginate(m, n);
@@ -37,7 +39,8 @@ public class FeijiuFastProductCategoryService extends Service {
     }
 
     public List<FeijiuFastProductCategory> appList(String app_id) {
-        Cnd cnd = Cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastProductCategory.APP_ID, app_id);
 
         List<FeijiuFastProductCategory> feijiuFastProductCategoryList = feijiuFastProductCategoryDao.primaryKeyList(cnd);
@@ -65,7 +68,8 @@ public class FeijiuFastProductCategoryService extends Service {
     }
 
     public Boolean update(FeijiuFastProductCategory feijiuFastProductCategory, String product_category_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastProductCategory.PRODUCT_CATEGORY_ID, product_category_id);
         cnd.and(FeijiuFastProductCategory.SYSTEM_VERSION, system_version);
 
@@ -79,7 +83,8 @@ public class FeijiuFastProductCategoryService extends Service {
     }
 
     public Boolean delete(String product_category_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(FeijiuFastProductCategory.SYSTEM_STATUS, true);
         cnd.and(FeijiuFastProductCategory.PRODUCT_CATEGORY_ID, product_category_id);
         cnd.and(FeijiuFastProductCategory.SYSTEM_VERSION, system_version);
 

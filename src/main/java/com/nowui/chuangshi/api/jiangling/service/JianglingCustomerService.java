@@ -15,7 +15,8 @@ public class JianglingCustomerService extends Service {
     private final JianglingCustomerDao jianglingCustomerDao = new JianglingCustomerDao();
 
     public Integer adminCount(String app_id, String customer_name) {
-        Cnd cnd = Cnd.where(JianglingCustomer.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingCustomer.SYSTEM_STATUS, true);
         cnd.and(JianglingCustomer.APP_ID, app_id);
         cnd.andAllowEmpty(JianglingCustomer.CUSTOMER_NAME, customer_name);
 
@@ -24,7 +25,8 @@ public class JianglingCustomerService extends Service {
     }
 
     public List<JianglingCustomer> adminList(String app_id, String customer_name, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(JianglingCustomer.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingCustomer.SYSTEM_STATUS, true);
         cnd.and(JianglingCustomer.APP_ID, app_id);
         cnd.andAllowEmpty(JianglingCustomer.CUSTOMER_NAME, customer_name);
         cnd.paginate(m, n);
@@ -54,7 +56,8 @@ public class JianglingCustomerService extends Service {
     }
 
     public Boolean update(JianglingCustomer page, String user_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(JianglingCustomer.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingCustomer.SYSTEM_STATUS, true);
         cnd.and(JianglingCustomer.USER_ID, user_id);
         cnd.and(JianglingCustomer.SYSTEM_VERSION, system_version);
 
@@ -68,7 +71,8 @@ public class JianglingCustomerService extends Service {
     }
 
     public Boolean delete(String user_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(JianglingCustomer.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingCustomer.SYSTEM_STATUS, true);
         cnd.and(JianglingCustomer.USER_ID, user_id);
         cnd.and(JianglingCustomer.SYSTEM_VERSION, system_version);
 

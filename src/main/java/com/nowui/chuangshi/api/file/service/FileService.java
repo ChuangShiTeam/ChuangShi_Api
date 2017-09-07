@@ -16,7 +16,8 @@ public class FileService extends Service {
     private final FileDao fileDao = new FileDao();
 
     public Integer adminCount(String app_id, String file_name) {
-        Cnd cnd = Cnd.where(File.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(File.SYSTEM_STATUS, true);
         cnd.and(File.APP_ID, app_id);
         cnd.andAllowEmpty(File.FILE_NAME, file_name);
 
@@ -25,7 +26,8 @@ public class FileService extends Service {
     }
 
     public List<File> adminList(String app_id, String file_name, Integer m, Integer n) {
-        Cnd cnd = Cnd.where(File.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(File.SYSTEM_STATUS, true);
         cnd.and(File.APP_ID, app_id);
         cnd.andAllowEmpty(File.FILE_NAME, file_name);
         cnd.paginate(m, n);
@@ -73,7 +75,8 @@ public class FileService extends Service {
     }
 
     public Boolean update(File file, String file_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(File.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(File.SYSTEM_STATUS, true);
         cnd.and(File.FILE_ID, file_id);
         cnd.and(File.SYSTEM_VERSION, system_version);
 
@@ -92,7 +95,8 @@ public class FileService extends Service {
         file.setFile_thumbnail_path(file_path);
         file.setFile_original_path(file_path);
 
-        Cnd cnd = Cnd.where(File.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(File.SYSTEM_STATUS, true);
         cnd.and(File.FILE_ID, file_id);
 
         Boolean success = fileDao.update(file, system_update_user_id, cnd);
@@ -105,7 +109,8 @@ public class FileService extends Service {
     }
 
     public Boolean delete(String file_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = Cnd.where(File.SYSTEM_STATUS, true);
+        Cnd cnd = new Cnd();
+        cnd.where(File.SYSTEM_STATUS, true);
         cnd.and(File.FILE_ID, file_id);
         cnd.and(File.SYSTEM_VERSION, system_version);
 
