@@ -8,11 +8,12 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-
-@Table("table_member_level")
-@Primary("member_level_id")
 public class MemberLevel extends Model<MemberLevel> {
 
+    @Table()
+    public static final String TABLE_MEMBER_LEVEL = "table_member_level";
+
+    @Primary()
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "等级编号", updatable = false)
     public static final String MEMBER_LEVEL_ID = "member_level_id";
 

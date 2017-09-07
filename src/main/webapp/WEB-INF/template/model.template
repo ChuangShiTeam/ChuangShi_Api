@@ -25,10 +25,16 @@ import java.util.Date;
 #end
 
 @Table("#(table_name)")
-@Primary("#(primary_key)")
+
 public class #(first_upper_model_name_without_underline) extends Model<#(first_upper_model_name_without_underline)> {
 
+    @Table()
+    public static final String #(upper_table_name) = "#(table_name)";
+
     #for(column : columnList)
+    #if(primary_key == column.column_name)
+    @Primary()
+    #end
     @Column(type = ColumnType.#(column.data_type), length = #(column.character_maximum_length), comment = "#(column.column_comment)"#if(column.is_updatable == false), updatable = false#end)
     public static final String #(column.upper_column_name) = "#(column.column_name)";
 

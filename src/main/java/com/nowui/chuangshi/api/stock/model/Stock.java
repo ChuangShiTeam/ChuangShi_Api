@@ -8,10 +8,12 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_stock")
-@Primary("stock_id")
 public class Stock extends Model<Stock> {
 
+    @Table()
+    public static final String TABLE_STOCK = "table_stock";
+
+    @Primary()
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String STOCK_ID = "stock_id";
 

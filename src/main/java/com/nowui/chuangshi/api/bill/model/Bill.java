@@ -9,10 +9,12 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Table("table_bill")
-@Primary("bill_id")
 public class Bill extends Model<Bill> {
 
+    @Table()
+    public static final String TABLE_BILL = "table_bill";
+
+    @Primary()
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "账单编号", updatable = false)
     public static final String BILL_ID = "bill_id";
 

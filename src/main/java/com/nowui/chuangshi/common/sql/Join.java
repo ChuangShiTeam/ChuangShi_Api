@@ -2,27 +2,37 @@ package com.nowui.chuangshi.common.sql;
 
 public class Join {
 
-    private String key;
+    private String table;
+    private String primary;
     private JoinType joinType;
 
-    public Join(String key, JoinType joinType) {
-        this.key = key;
+    public Join(String table, String primary, JoinType joinType) {
+        this.table = table;
+        this.primary = primary;
         this.joinType = joinType;
     }
 
-    public String getKey() {
-        return key;
+    public String getTable() {
+        return table;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setTable(String table) {
+        this.table = table;
     }
 
-    public JoinType getOrderByType() {
+    public String getPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(String primary) {
+        primary = primary;
+    }
+
+    public JoinType getJoinType() {
         return joinType;
     }
 
-    public void setOrderByType(JoinType joinType) {
+    public void setJoinType(JoinType joinType) {
         this.joinType = joinType;
     }
 }

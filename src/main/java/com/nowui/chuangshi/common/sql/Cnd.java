@@ -14,8 +14,9 @@ public class Cnd {
         return this.criteria;
     }
 
-    public Cnd leftJoin() {
-
+    public Cnd leftJoin(String table, String primary) {
+        Join join = new Join(table, primary, JoinType.LEFT_JOIN);
+        this.criteria.addJoin(join);
         return this;
     }
 
@@ -143,10 +144,10 @@ public class Cnd {
         return this;
     }
 
-    public Cnd set(String key, Object value) {
-        this.criteria.addSet(key, value);
-        return this;
-    }
+//    public Cnd set(String key, Object value) {
+//        this.criteria.addSet(key, value);
+//        return this;
+//    }
 
     public Cnd paginate(Integer m, Integer n) {
         this.criteria.setPaginate(m, n);

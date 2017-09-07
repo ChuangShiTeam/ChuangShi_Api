@@ -8,10 +8,12 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_product_sku")
-@Primary("product_sku_id")
 public class ProductSku extends Model<ProductSku> {
 
+    @Table()
+    public static final String TABLE_PRODUCT_SKU = "table_product_sku";
+
+    @Primary()
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "SKU编号", updatable = false)
     public static final String PRODUCT_SKU_ID = "product_sku_id";
 

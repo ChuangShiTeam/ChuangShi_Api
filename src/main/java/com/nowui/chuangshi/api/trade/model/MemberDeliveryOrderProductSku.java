@@ -9,10 +9,12 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Table("table_member_delivery_order_product_sku")
-@Primary("member_delivery_order_id")
 public class MemberDeliveryOrderProductSku extends Model<MemberDeliveryOrderProductSku> {
 
+    @Table()
+    public static final String TABLE_MEMBER_DELIVERY_ORDER_PRODUCT_SKU = "table_member_delivery_order_product_sku";
+
+    @Primary()
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
     public static final String MEMBER_DELIVERY_ORDER_ID = "member_delivery_order_id";
 

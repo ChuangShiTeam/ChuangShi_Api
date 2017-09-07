@@ -8,10 +8,12 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_feijiu_fast_product_category")
-@Primary("product_category_id")
 public class FeijiuFastProductCategory extends Model<FeijiuFastProductCategory> {
 
+    @Table()
+    public static final String TABLE_FEIJIU_PRODUCT_CATEGORY = "table_feijiu_fast_product_category";
+
+    @Primary()
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "商品分类编号", updatable = false)
     public static final String PRODUCT_CATEGORY_ID = "product_category_id";
 

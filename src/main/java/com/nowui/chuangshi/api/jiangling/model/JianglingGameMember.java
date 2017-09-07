@@ -8,10 +8,12 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_jiangling_game_member")
-@Primary("game_id")
 public class JianglingGameMember extends Model<JianglingGameMember> {
 
+    @Table()
+    public static final String TABLE_JIANGLING_GAME_MEMBER = "table_jiangling_game_member";
+
+    @Primary()
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
     public static final String GAME_ID = "game_id";
 

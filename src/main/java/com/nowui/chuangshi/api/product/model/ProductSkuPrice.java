@@ -9,10 +9,12 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Table("table_product_sku_price")
-@Primary("")
 public class ProductSkuPrice extends Model<ProductSkuPrice> {
 
+    @Table()
+    public static final String TABLE_PRODUCT_SKU_PRICE = "table_product_sku_price";
+
+    @Primary()
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "SKU编号")
     public static final String PRODUCT_SKU_ID = "product_sku_id";
 

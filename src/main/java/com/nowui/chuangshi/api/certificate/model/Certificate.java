@@ -8,10 +8,12 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_certificate")
-@Primary("certificate_id")
 public class Certificate extends Model<Certificate> {
 
+    @Table()
+    public static final String TABLE_CERTIFICATE = "table_certificate";
+
+    @Primary()
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "授权记录编号", updatable = false)
     public static final String CERTIFICATE_ID = "certificate_id";
 

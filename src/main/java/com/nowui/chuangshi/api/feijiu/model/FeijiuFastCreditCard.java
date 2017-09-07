@@ -8,10 +8,12 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_feijiu_fast_credit_card")
-@Primary("credit_card_id")
 public class FeijiuFastCreditCard extends Model<FeijiuFastCreditCard> {
 
+    @Table()
+    public static final String TABLE_FEIJIU_CREDIT_CARD = "table_feijiu_fast_credit_card";
+
+    @Primary()
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "信用卡编号", updatable = false)
     public static final String CREDIT_CARD_ID = "credit_card_id";
 

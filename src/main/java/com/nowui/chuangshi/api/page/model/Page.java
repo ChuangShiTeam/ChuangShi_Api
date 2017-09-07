@@ -8,10 +8,12 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_page")
-@Primary("page_id")
 public class Page extends Model<Page> {
 
+    @Table()
+    public static final String TABLE_PAGE = "table_page";
+
+    @Primary()
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "单页编号", updatable = false)
     public static final String PAGE_ID = "page_id";
 

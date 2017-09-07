@@ -7,7 +7,8 @@ import java.util.List;
 
 public class Criteria {
 
-    private List<Set> setList;
+//    private List<Set> setList;
+    private List<Join> joinList;
     private List<Condition> conditionList;
     private List<OrderBy> orderByList;
 
@@ -16,19 +17,31 @@ public class Criteria {
     private Integer n;
 
     public Criteria() {
-        setList = new ArrayList<Set>();
+//        setList = new ArrayList<Set>();
+        joinList = new ArrayList<Join>();
         conditionList = new ArrayList<Condition>();
         orderByList = new ArrayList<OrderBy>();
         isPaginate = false;
     }
+//
+//    public void addSet(String key, Object value) {
+//        setList.add(new Set(key, value, SetType.NORMAL));
+//    }
+//
+//    public List<Set> getSetList() {
+//        List<Set> list = new ArrayList<Set>();
+//        list.addAll(setList);
+//
+//        return list;
+//    }
 
-    public void addSet(String key, Object value) {
-        setList.add(new Set(key, value, SetType.NORMAL));
+    public void addJoin(Join join) {
+        joinList.add(join);
     }
 
-    public List<Set> getSetList() {
-        List<Set> list = new ArrayList<Set>();
-        list.addAll(setList);
+    public List<Join> getJoinList() {
+        List<Join> list = new ArrayList<Join>();
+        list.addAll(joinList);
 
         return list;
     }

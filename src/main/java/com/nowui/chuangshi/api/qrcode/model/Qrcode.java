@@ -8,10 +8,12 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_qrcode")
-@Primary("qrcode_id")
 public class Qrcode extends Model<Qrcode> {
 
+    @Table()
+    public static final String TABLE_QRCODE = "table_qrcode";
+
+    @Primary()
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "二维码编号", updatable = false)
     public static final String QRCODE_ID = "qrcode_id";
 

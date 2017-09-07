@@ -8,10 +8,12 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_app")
-@Primary("app_id")
 public class App extends Model<App> {
 
+    @Table()
+    public static final String TABLE_APP = "table_app";
+
+    @Primary()
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
 

@@ -8,10 +8,12 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_jiangling_customer")
-@Primary("user_id")
 public class JianglingCustomer extends Model<JianglingCustomer> {
 
+    @Table()
+    public static final String TABLE_JIANGLING_CUSTOMER = "table_jiangling_customer";
+
+    @Primary()
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户编号", updatable = false)
     public static final String USER_ID = "user_id";
 
