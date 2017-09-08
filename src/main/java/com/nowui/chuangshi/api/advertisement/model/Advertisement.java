@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.advertisement.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -8,10 +9,13 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_advertisement")
-@Primary("advertisement_id")
+@Entity
 public class Advertisement extends Model<Advertisement> {
+    
+    @Table
+    public static final String TABLE_ADVERTISEMENT = "table_advertisement";
 
+    @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String ADVERTISEMENT_ID = "advertisement_id";
 

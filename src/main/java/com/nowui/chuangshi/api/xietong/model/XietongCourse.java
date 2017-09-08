@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.xietong.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -8,10 +9,13 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_xietong_course")
-@Primary("course_id")
+@Entity
 public class XietongCourse extends Model<XietongCourse> {
+    
+    @Table
+    public static final String TABLE_XIETONG_COURSE = "table_xietong_course";
 
+    @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "课程编号", updatable = false)
     public static final String COURSE_ID = "course_id";
 
