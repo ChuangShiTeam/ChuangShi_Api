@@ -185,5 +185,14 @@
     AND user_id = #p(user_id)
     AND system_version = #p(system_version)
   #end
+  
+  #sql("deleteByUser_type")
+    UPDATE table_user SET
+    system_update_user_id = #p(system_update_user_id),
+    system_update_time = #p(system_update_time),
+    system_status = 0
+    WHERE system_status = 1
+    AND user_type = #p(user_type)
+  #end
 
 #end

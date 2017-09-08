@@ -226,6 +226,18 @@ public class UserDao extends Dao {
 
         return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
+    
+    public Boolean deleteByUser_type(String user_type, String system_update_user_id) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(User.USER_TYPE, user_type);
+        sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        sqlMap.put(User.SYSTEM_UPDATE_TIME, new Date());
+        SqlPara sqlPara = Db.getSqlPara("user.deleteByUser_type", sqlMap);
+        
+        logSql("user", "deleteByUser_type", sqlPara);
+        
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+    }
 
     public boolean updateByUser_nameAndUser_accountAndUser_password(String user_id, String user_name,
             String user_account, String user_password, String request_user_id) {

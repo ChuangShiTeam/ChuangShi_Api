@@ -1,3 +1,4 @@
+<!-- 招生招聘模板 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -16,89 +17,11 @@
 <script type="text/javascript" src="script/jquery.SuperSlide.js"></script>
 <script type="text/javascript" src="script/silder.js"></script>
 </head>
-<body><!-- #BeginLibraryItem "/Library/top.lbi" --><div class="header">
-	<div class="toper">
-		<div class="top_1000">
-			<div class="logo left"><a href="index.html"><img src="images/logo.png" width="363" height="115" alt="协同学校" /></a></div>
-			<div class="right">
-				<div class="lang">
-					<ul>
-						<li class="email"><a href="index.html">邮箱登录</a></li>
-						<li><a href="index.html">EN</a></li>
-						<li><a href="index.html">中文</a>|</li>
-					</ul>
-				</div>
-				<div class="nav">
-					<div class="nav_up">
-						<ul>
-							#for(websiteMenu : websiteMenuList)
-                            <li class="nli">
-                                <h3><a href="#(websiteMenu.website_menu_url)">#(websiteMenu.website_menu_name)</a></h3>
-                                <ul class="sub" style="display: none; ">
-                                    #for(websiteMenuChildren : websiteMenu.children)
-                                    <li><a href="#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</a></li>
-                                    #end
-                                </ul>
-                            </li>
-                            #end
-						</ul>
-					</div>
-					<script type="text/javascript">jQuery(".nav").slide({ type:"menu", titCell:".nli", targetCell:".sub",effect:"slideDown",delayTime:100,triggerTime:0,returnDefault:true});</script> 
-				</div>
-				
-			</div>
-			<div class="clear"></div>
-		</div>
-	</div>
-	<div class="banner">
-		<div class="hd">
-			<ul>
-				<li class="on">1</li>
-				<li class="">2</li>
-				<li class="">3</li>
-				<li class="">4</li>
-				<li class="">5</li>
-			</ul>
-		</div>
-		<div class="bd">
-			<ul>
-				<li><a href="xxjj.html"><img src="images/banner01.jpg" width="1440" height="605" alt="" /></a></li>
-				<li><a href="xsst.html"><img src="images/banner02.jpg" width="1440" height="605" alt="" /></a></li>
-				<li><img src="images/banner03.jpg" width="1440" height="605" alt="" /></li>
-				<li><img src="images/banner04.jpg" width="1440" height="605" alt="" /></li>
-				<li><img src="images/banner051.jpg" width="1440" height="605" alt="" /></li>
-			</ul>
-		</div>
-		<script>jQuery(".banner").slide({mainCell:".bd ul",effect:"fold",autoPlay:true});</script> 
-	</div>
-	<div class="clear"></div>
-	<div class="column">
-		<ul>
-			<li> <a href="index.html"><img src="images/list_01.jpg" width="268" height="152" alt="小学部" /></a>
-				<div class="coln"> <b><a href="index.html">小学部</a></b>
-					<p><a href="index.html">立即进入&gt;&gt;</a></p>
-				</div>
-			</li>
-			<li> <a href="index.html"><img src="images/list_02.jpg" width="268" height="152" alt="小学部" /></a>
-				<div class="coln"> <b><a href="index.html">中学部</a></b>
-					<p><a href="index.html">立即进入&gt;&gt;</a></p>
-				</div>
-			</li>
-			<li> <a href="index.html"><img src="images/list_03.jpg" width="268" height="152" alt="小学部" /></a>
-				<div class="coln"> <b><a href="index.html">国际部</a></b>
-					<p><a href="index.html">立即进入&gt;&gt;</a></p>
-				</div>
-			</li>
-			<li class="xz_email"><img src="images/email.jpg" width="190" height="152" alt="" />
-				<div class="xz_mast">
-					<b>校长信箱</b>
-					<p>headmaster@mail.com</p>
-				</div>
-			</li>
-		</ul>
-	</div>
-	<div class="clear"></div>
-</div><!-- #EndLibraryItem --><div class="w1000px">
+<body>
+<!-- #BeginLibraryItem "/Library/top.lbi" -->
+#include("header.template")
+<!-- #EndLibraryItem -->
+<div class="w1000px">
 	<div class="leftbar left">
 		<div class="left_head"><img src="images/list_head_zszp.jpg" width="230" height="100" alt="招生招聘" /></div>
 		<div class="menu">
@@ -147,78 +70,9 @@
 		</div>
 	</div>
 	<div class="clear"></div>
-</div><!-- #BeginLibraryItem "/Library/foot.lbi" --><div class="footer">
-	<div class="foot_nav">
-		<div class="w1000px">
-			<div class="f_tools left">
-				<div class="ft_1">
-					<dl>
-						<dt><a href="yxjs.html">教师发展</a></dt>
-						<dd><a href="index.html">管理团队</a></dd>
-						<dd><a href="yxjs.html">优秀教师</a></dd>
-						<dd><a href="gjjs.html">国际教师</a></dd>
-						<dd><a href="index.html">教师培训</a></dd>
-						<dd><a href="index.html">生涯导师</a></dd>
-						<dd><a href="index.html">学术科组</a></dd>
-					</dl>
-				</div>
-				<div class="ft_1">
-					<dl>
-						<dt><a href="xsst.html">学生发展</a></dt>
-						<dd><a href="index.html">团学少</a></dd>
-						<dd><a href="xsst.html">学生社团</a></dd>
-						<dd><a href="index.html">学生领袖</a></dd>
-						<dd><a href="index.html">学习辅导</a></dd>
-						<dd><a href="gjjl.html">国际交流</a></dd>
-					</dl>
-				</div>
-				<div class="ft_1">
-					<dl>
-						<dt><a href="xyaq.html">学生服务</a></dt>
-						<dd><a href="index.html">学生手册</a></dd>
-						<dd><a href="xbfw.html">校巴服务</a></dd>
-						<dd><a href="ssfw.html">膳食服务</a></dd>
-						<dd><a href="index.html">宿舍服务</a></dd>
-						<dd><a href="index.html">校服服务</a></dd>
-						<dd><a href="xyaq.html">校园安全</a></dd>
-					</dl>
-				</div>
-				<div class="ft_1">
-					<dl>
-						<dt><a href="zsjh.html">招生招聘</a></dt>
-						<dd><a href="zsjh.html">招生简章</a></dd>
-						<dd><a href="rdhd.html">热点问答</a></dd>
-						<dd><a href="zpxx.html">招聘信息</a></dd>
-						<dd><a href="index.html">我要报名</a></dd>
-					</dl>
-				</div>
-			</div>
-			<div class="sign right"> <b>我要报名</b>
-				<p>学校地址：佛山市禅城区东鄱南路10号</p>
-				<p>联系电话：0757-66611999  66611228  18665531629</p>
-			</div>
-		</div>
-		<div class="clear"></div>
-	</div>
-	<div class="f_copyright">
-		<div class="copy_warp">
-			<div class="left">© 佛山市锦辉教育投资有限公司 版权所有<span style="display:none;"><script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?47dd3c29afd3d774bcd0eb11e2cbe297";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-</span></div>
-			<div class="right">
-				<P class="left">深圳网站建设： 沙漠风</P>
-				<div class="go_top"><a href="javascript:scroll(0,0)"><img src="images/top.jpg" width="40" height="37" alt="top" /></a></div>
-			</div>
-		</div>
-		<div class="clear"></div>
-	</div>
-</div><!-- #EndLibraryItem --></div>
+</div>
+<!-- #BeginLibraryItem "/Library/foot.lbi" -->
+#include("footer.template")
+<!-- #EndLibraryItem -->
 </body>
 </html>

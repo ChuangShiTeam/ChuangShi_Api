@@ -139,6 +139,16 @@ public class UserCache extends Cache {
 
         return result;
     }
+    
+    public Boolean deleteByUser_type(String user_type, String system_update_user_id) {
+        boolean result = userDao.deleteByUser_type(user_type, system_update_user_id);
+
+        if (result) {
+            CacheUtil.removeAll(USER_BY_USER_ID_CACHE);
+        }
+
+        return result;
+    }
 
     public boolean updateByUser_nameAndUser_accountAndUser_password(String user_id, String user_name,
             String user_account, String user_password, String request_user_id) {

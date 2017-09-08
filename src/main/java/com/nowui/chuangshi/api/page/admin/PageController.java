@@ -6,6 +6,7 @@ import com.jfinal.kit.Kv;
 import com.jfinal.kit.PathKit;
 import com.jfinal.template.Engine;
 import com.jfinal.template.Template;
+import com.nowui.chuangshi.api.advertisement.service.AdvertisementService;
 import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.api.article.model.Article;
@@ -18,6 +19,7 @@ import com.nowui.chuangshi.api.website.service.WebsiteMenuService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.FileUtil;
 import com.nowui.chuangshi.util.Util;
@@ -71,11 +73,15 @@ public class PageController extends Controller {
         List<Page> pageList = PageService.instance.appList(request_app_id);
 
         List<Map<String, Object>> websiteMenuList = WebsiteMenuService.instance.tree(request_app_id);
+        
+        List<Map<String, Object>> indexBannerList = AdvertisementService.instance.adminIndexBannerList(request_app_id);
 
         Kv templateMap = Kv.create();
+        templateMap.put("host", Config.host);
         templateMap.put("articleCategoryList", articleCategoryList);
         templateMap.put("articleList", articleList);
         templateMap.put("websiteMenuList", websiteMenuList);
+        templateMap.put("indexBannerList", indexBannerList);
 
         for (Page page : pageList) {
             templateMap.put("page_name", page.getPage_name());
@@ -98,9 +104,13 @@ public class PageController extends Controller {
         Page page = PageService.instance.find(model.getPage_id());
 
         List<Map<String, Object>> websiteMenuList = WebsiteMenuService.instance.tree(request_app_id);
+        
+        List<Map<String, Object>> indexBannerList = AdvertisementService.instance.adminIndexBannerList(request_app_id);
 
         Kv templateMap = Kv.create();
+        templateMap.put("host", Config.host);
         templateMap.put("websiteMenuList", websiteMenuList);
+        templateMap.put("indexBannerList", indexBannerList);
         templateMap.put("page_name", page.getPage_name());
         templateMap.put("page_content", page.getPage_content());
         templateMap.put("page_url", page.getPage_url());

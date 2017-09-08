@@ -1,0 +1,26 @@
+<!-- 横幅列模板 -->
+<div class="column">
+	<ul>
+		<li> <a href="index.html"><img src="images/list_01.jpg" width="268" height="152" alt="小学部" /></a>
+			<div class="coln"> <b><a href="index.html">小学部</a></b>
+				<p><a href="index.html">立即进入&gt;&gt;</a></p>
+			</div>
+		</li>
+		<li> <a href="index.html"><img src="images/list_02.jpg" width="268" height="152" alt="小学部" /></a>
+			<div class="coln"> <b><a href="index.html">中学部</a></b>
+				<p><a href="index.html">立即进入&gt;&gt;</a></p>
+			</div>
+		</li>
+		<li> <a href="index.html"><img src="images/list_03.jpg" width="268" height="152" alt="小学部" /></a>
+			<div class="coln"> <b><a href="index.html">国际部</a></b>
+				<p><a href="index.html">立即进入&gt;&gt;</a></p>
+			</div>
+		</li>
+		<li class="xz_email"><img src="images/email.jpg" width="190" height="152" alt="" />
+			<div class="xz_mast">
+				<b>校长信箱</b>
+				<p>headmaster@mail.com</p>
+			</div>
+		</li>
+	</ul>
+</div>
