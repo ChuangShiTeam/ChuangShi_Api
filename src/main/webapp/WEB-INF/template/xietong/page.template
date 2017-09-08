@@ -1,0 +1,42 @@
+<div class="listpages clear">
+	<ul>
+		#for(i = 0; i <= page_total; i++)
+			#if(for.first)
+				<li class="next">
+					#if(i==0)
+					<a title="上一页" href="javascript:;"></a>
+					#else
+					<a title="上一页" href="javascript:;" onClick="prev();"></a>
+					#end
+				</li>
+			#end
+			#if(page_index == i)
+			<li><a class="on" href="javascript:;" onClick="dispalyPage(#(i));">#(i)</a></li>
+			#else
+			<li><a href="javascript:;" onClick="dispalyPage(#(i));">#(i)</a></li>
+			end
+			#if(for.last)
+				<li class="prev">
+					#if(i==page_total)
+					<a title="下一页" href="javascript:;"></a>
+					#else
+					<a title="下一页" href="javascript:;" onClick="next;"></a>
+					#end
+				</li>
+			#end
+		#end
+	</ul>
+	<div class="clear"></div>
+</div>
+<input type="hidden" name="page_index" value="#(page_index)" id="page_index">
+<script type="text/javascript">
+function prev(){
+	var 
+}
+function next(){
+
+}
+function dispalyPage(){
+
+}
+</script>

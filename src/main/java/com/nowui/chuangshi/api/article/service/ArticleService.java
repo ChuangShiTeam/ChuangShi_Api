@@ -63,6 +63,22 @@ public class ArticleService extends Service {
         }
         return articleList;
     }
+    
+    public Article prevArticle(String article_id) {
+        Article article = find(article_id);
+        if (article == null) {
+            return null;
+        }
+        return articleDao.prevArticle(article.getArticle_category_id(), article.getSystem_create_time());
+    }
+    
+    public Article nextArticle(String article_id) {
+        Article article = find(article_id);
+        if (article == null) {
+            return null;
+        }
+        return articleDao.nextArticle(article.getArticle_category_id(), article.getSystem_create_time()); 
+    }
 
     public List<Article> topCategoryList(List<ArticleCategory> articleCategoryList, Integer n) {
         List<String> articleCategoryIdList = new ArrayList<String>();

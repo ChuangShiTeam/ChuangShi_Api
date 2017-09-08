@@ -1,3 +1,4 @@
+<!-- 首页模板 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -39,11 +40,17 @@
 				    #for(article : articleList)
 				    #if(articleCategory.article_category_id == article.article_category_id)
 				    #if(for.first)
-					<div class="bd_pic left"><img src="http://api.chuangshi.nowui.com#(article.file_path)" width="256" height="192" alt="" /></div>
+					<div class="bd_pic left">
+						#if(article.file_path)
+						<img src="#(host + article.file_path)" width="256" height="192" alt="" />
+						#else
+						<img src="" width="256" height="192" alt="" />
+						#end
+					</div>
 					<ul class="right">
 					#end
-						<li><span>#date(article.system_create_time, "yyyy-MM-dd")</span><a href="gjjszp.html">#(article.article_name)</a></li>
-					#if(for.first)
+						<li><span>#date(article.system_create_time, "yyyy-MM-dd")</span><a href="#(article.article_id).html">#(article.article_name)</a></li>
+					#if(for.last)
 					</ul>
 					#end
 					#end

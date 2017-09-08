@@ -14,5 +14,25 @@
     #end
     #end
   #end
+  
+  #sql("prevArticle")
+  	SELECT *
+  	FROM table_article
+  	WHERE system_status = 1
+    AND article_category_id = #p(article_category_id)
+    AND system_create_time > #p(system_create_time)
+    ORDER BY system_create_time
+    LIMIT 0, 1
+  #end
+  
+  #sql("nextArticle")
+  	SELECT *
+  	FROM table_article
+  	WHERE system_status = 1
+    AND article_category_id = #p(article_category_id)
+    AND system_create_time < #p(system_create_time)
+    ORDER BY system_create_time desc
+    LIMIT 0, 1
+  #end
 
 #end
