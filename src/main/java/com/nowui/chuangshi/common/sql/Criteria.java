@@ -8,6 +8,7 @@ import java.util.List;
 public class Criteria {
 
 //    private List<Set> setList;
+    private List<String> selectList;
     private List<Join> joinList;
     private List<Condition> conditionList;
     private List<OrderBy> orderByList;
@@ -18,6 +19,7 @@ public class Criteria {
 
     public Criteria() {
 //        setList = new ArrayList<Set>();
+        selectList = new ArrayList<String>();
         joinList = new ArrayList<Join>();
         conditionList = new ArrayList<Condition>();
         orderByList = new ArrayList<OrderBy>();
@@ -34,6 +36,17 @@ public class Criteria {
 //
 //        return list;
 //    }
+
+    public void addSelect(String key) {
+        selectList.add(key);
+    }
+
+    public List<String> getSelectList() {
+        List<String> list = new ArrayList<String>();
+        list.addAll(selectList);
+
+        return list;
+    }
 
     public void addJoin(Join join) {
         joinList.add(join);
@@ -64,10 +77,6 @@ public class Criteria {
     public List<OrderBy> getOrderByList() {
         List<OrderBy> list = new ArrayList<OrderBy>();
         list.addAll(orderByList);
-
-        if (list.size() == 0) {
-            list.add(new OrderBy(Constant.SYSTEM_CREATE_TIME, OrderByType.DESC));
-        }
 
         return list;
     }

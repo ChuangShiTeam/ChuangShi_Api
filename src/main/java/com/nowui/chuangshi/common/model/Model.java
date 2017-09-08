@@ -206,6 +206,31 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 //        return stringBuilder.toString();
 //    }
 
+    public String buildSelectSql() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        List<String> selectList = criteria.getSelectList();
+
+        if (selectList.size() > 0) {
+            stringBuilder.append(",\n");
+
+            for (int i = 0; i < selectList.size(); i++) {
+                stringBuilder.append(selectList.get(i));
+                if (i + 1 < selectList.size()) {
+                    if (selectList.size() > 0) {
+                        stringBuilder.append(",\n");
+                    }
+                } else {
+                    stringBuilder.append("\n");
+                }
+            }
+        } else {
+            stringBuilder.append("\n");
+        }
+
+        return stringBuilder.toString();
+    }
+
     public String buildJoinSql() {
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -422,12 +447,16 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     public String buildListSql(Boolean isPrimaryKey) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("SELECT \n");
+        if (criteria.getJoinList().size() > 0) {
+            stringBuilder.append(getTable().getName());
+            stringBuilder.append(".");
+        }
         if (isPrimaryKey) {
             stringBuilder.append(getTable().getPrimaryKey()[0]);
         } else {
             stringBuilder.append("*");
         }
-        stringBuilder.append("\n");
+        stringBuilder.append(buildSelectSql());
         stringBuilder.append("FROM ");
         stringBuilder.append(getTable().getName());
         stringBuilder.append("\n");

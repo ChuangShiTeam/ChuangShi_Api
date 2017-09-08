@@ -3,6 +3,7 @@ package com.nowui.chuangshi.api.article.service;
 import com.nowui.chuangshi.api.article.dao.ArticleDao;
 import com.nowui.chuangshi.api.article.model.Article;
 import com.nowui.chuangshi.api.article.model.ArticleCategory;
+import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
@@ -28,9 +29,11 @@ public class ArticleService extends Service {
 
     public List<Article> adminList(String app_id, String article_name, Integer m, Integer n) {
         Cnd cnd = new Cnd();
-        cnd.where(Article.SYSTEM_STATUS, true);
-        cnd.and(Article.APP_ID, app_id);
-        cnd.andAllowEmpty(Article.ARTICLE_NAME, article_name);
+        cnd.select(File.TABLE_FILE + "." + File.FILE_PATH);
+        cnd.leftJoin(File.TABLE_FILE, File.FILE_ID, Article.TABLE_ARTICLE, Article.ARTICLE_ID);
+        cnd.where(Article.TABLE_ARTICLE + "." + Article.SYSTEM_STATUS, true);
+        cnd.and(Article.TABLE_ARTICLE + "." + Article.APP_ID, app_id);
+        cnd.andAllowEmpty(Article.TABLE_ARTICLE + "." + Article.ARTICLE_NAME, article_name);
         cnd.paginate(m, n);
 
         List<Article> articleList = articleDao.primaryKeyList(cnd);

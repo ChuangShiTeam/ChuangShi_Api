@@ -14,6 +14,11 @@ public class Cnd {
         return this.criteria;
     }
 
+    public Cnd select(String key) {
+        this.criteria.addSelect(key);
+        return this;
+    }
+
     public Cnd leftJoin(String tableA, String primaryA, String tableB, String primaryB) {
         Join join = new Join(tableA, primaryA, tableB, primaryB, JoinType.LEFT_JOIN);
         this.criteria.addJoin(join);
