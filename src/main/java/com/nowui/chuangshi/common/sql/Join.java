@@ -2,26 +2,50 @@ package com.nowui.chuangshi.common.sql;
 
 public class Join {
 
-    private String table;
-    private String primary;
+    private String tableA;
+    private String primaryA;
+    private String tableB;
+    private String primaryB;
     private JoinType joinType;
 
-    public Join(String table, String primary, JoinType joinType) {
-        this.table = table;
-        this.primary = primary;
+    public Join(String tableA, String primaryA, String tableB, String primaryB, JoinType joinType) {
+        this.tableA = tableA;
+        this.primaryA = primaryA;
+        this.tableB = tableB;
+        this.primaryB = primaryB;
         this.joinType = joinType;
     }
 
-    public String getTable() {
-        return table;
+    public String getTableA() {
+        return tableA;
     }
 
-    public void setTable(String table) {
-        this.table = table;
+    public void setTableA(String tableA) {
+        this.tableA = tableA;
     }
 
-    public String getPrimary() {
-        return primary;
+    public String getPrimaryA() {
+        return primaryA;
+    }
+
+    public void setPrimaryA(String primaryA) {
+        this.primaryA = primaryA;
+    }
+
+    public String getTableB() {
+        return tableB;
+    }
+
+    public void setTableB(String tableB) {
+        this.tableB = tableB;
+    }
+
+    public String getPrimaryB() {
+        return primaryB;
+    }
+
+    public void setPrimaryB(String primaryB) {
+        this.primaryB = primaryB;
     }
 
     public void setPrimary(String primary) {

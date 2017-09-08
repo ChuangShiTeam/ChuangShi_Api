@@ -216,19 +216,16 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
                     break;
             }
 
-            stringBuilder.append(join.getTable());
-            stringBuilder.append("ON ");
-            stringBuilder.append(join.getTable());
+            stringBuilder.append(join.getTableA());
+            stringBuilder.append(" ON ");
+            stringBuilder.append(join.getTableA());
             stringBuilder.append(".");
-            stringBuilder.append(join.getPrimary());
+            stringBuilder.append(join.getPrimaryA());
             stringBuilder.append(" = ");
-            stringBuilder.append(this.getTable());
-            stringBuilder.append(" ");
-            stringBuilder.append(" ");
-            stringBuilder.append(" ");
-            stringBuilder.append(" ");
-            stringBuilder.append(" ");
-            stringBuilder.append("ON ");
+            stringBuilder.append(join.getTableB());
+            stringBuilder.append(".");
+            stringBuilder.append(join.getPrimaryB());
+            stringBuilder.append("\n");
         }
 
         return stringBuilder.toString();
@@ -416,7 +413,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         stringBuilder.append("COUNT(*) \n");
         stringBuilder.append("FROM ");
         stringBuilder.append(getTable().getName());
-        stringBuilder.append(" \n");
+        stringBuilder.append("\n");
         stringBuilder.append(buildConditionSql());
 
         return stringBuilder.toString();
@@ -433,7 +430,8 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         stringBuilder.append("\n");
         stringBuilder.append("FROM ");
         stringBuilder.append(getTable().getName());
-        stringBuilder.append(" \n");
+        stringBuilder.append("\n");
+        stringBuilder.append(buildJoinSql());
         stringBuilder.append(buildConditionSql());
         stringBuilder.append(buildOrderBySql());
         stringBuilder.append(buildPaginateSql());
