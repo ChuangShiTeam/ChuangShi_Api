@@ -4,7 +4,6 @@ import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
 import com.nowui.chuangshi.common.annotation.Column;
 import com.nowui.chuangshi.common.sql.*;
-import com.nowui.chuangshi.common.sql.Set;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.ColumnType;
 import com.nowui.chuangshi.util.DateUtil;
@@ -180,28 +179,56 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return isExit;
     }
 
-    public String buildSetSql() {
-        if (criteria == null) {
-            throw new RuntimeException("sql without set");
-        }
+//    public String buildSetSql() {
+//        if (criteria == null) {
+//            throw new RuntimeException("sql without set");
+//        }
+//
+//        StringBuilder stringBuilder = new StringBuilder();
+//
+//        for (int i = 0; i < criteria.getSetList().size(); i++) {
+//            Set set = criteria.getSetList().get(i);
+//
+//            if (set.getSetType().equals(SetType.NORMAL)) {
+//                stringBuilder.append(regexCondition(set.getKey(), "equal", set.getValue()));
+//            } else {
+//                stringBuilder.append(set.getKey());
+//                stringBuilder.append(" = ");
+//                stringBuilder.append(set.getValue());
+//            }
+//            if (i + 1 == criteria.getSetList().size()) {
+//                stringBuilder.append("\n");
+//            } else {
+//                stringBuilder.append(",\n");
+//            }
+//        }
+//
+//        return stringBuilder.toString();
+//    }
 
+    public String buildJoinSql() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        for (int i = 0; i < criteria.getSetList().size(); i++) {
-            Set set = criteria.getSetList().get(i);
+        for (Join join : criteria.getJoinList()) {
+            switch (join.getJoinType()) {
+                case LEFT_JOIN:
+                    stringBuilder.append("LEFT JOIN ");
+                    break;
+            }
 
-            if (set.getSetType().equals(SetType.NORMAL)) {
-                stringBuilder.append(regexCondition(set.getKey(), "equal", set.getValue()));
-            } else {
-                stringBuilder.append(set.getKey());
-                stringBuilder.append(" = ");
-                stringBuilder.append(set.getValue());
-            }
-            if (i + 1 == criteria.getSetList().size()) {
-                stringBuilder.append("\n");
-            } else {
-                stringBuilder.append(",\n");
-            }
+            stringBuilder.append(join.getTable());
+            stringBuilder.append("ON ");
+            stringBuilder.append(join.getTable());
+            stringBuilder.append(".");
+            stringBuilder.append(join.getPrimary());
+            stringBuilder.append(" = ");
+            stringBuilder.append(this.getTable());
+            stringBuilder.append(" ");
+            stringBuilder.append(" ");
+            stringBuilder.append(" ");
+            stringBuilder.append(" ");
+            stringBuilder.append(" ");
+            stringBuilder.append("ON ");
         }
 
         return stringBuilder.toString();
@@ -218,9 +245,9 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         Boolean isLeftLike = false;
         Boolean isRightike = false;
 
-        for(Condition condition : criteria.getConditionList()) {
+        for (Condition condition : criteria.getConditionList()) {
             Expression expression = condition.getExpression();
-            if(expression != null) {
+            if (expression != null) {
                 if (isWhere) {
                     stringBuilder.append("AND ");
                 } else {
@@ -280,7 +307,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
                 stringBuilder.append("\n");
 
-            } else if(condition.getExpressionGroup() != null) {
+            } else if (condition.getExpressionGroup() != null) {
 
             }
         }
@@ -541,24 +568,24 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return stringBuilder.toString();
     }
 
-    public String buildDeleteSql() {
-        if (criteria.getSetList().size() == 0) {
-            throw new RuntimeException("sql without set");
-        }
-
-        if (criteria.getConditionList().size() == 0) {
-            throw new RuntimeException("sql without condition");
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("UPDATE ");
-        stringBuilder.append(getTable().getName());
-        stringBuilder.append(" SET\n");
-        stringBuilder.append(buildSetSql());
-        stringBuilder.append(buildConditionSql());
-
-        return stringBuilder.toString();
-    }
+//    public String buildDeleteSql() {
+//        if (criteria.getSetList().size() == 0) {
+//            throw new RuntimeException("sql without set");
+//        }
+//
+//        if (criteria.getConditionList().size() == 0) {
+//            throw new RuntimeException("sql without condition");
+//        }
+//
+//        StringBuilder stringBuilder = new StringBuilder();
+//
+//        stringBuilder.append("UPDATE ");
+//        stringBuilder.append(getTable().getName());
+//        stringBuilder.append(" SET\n");
+//        stringBuilder.append(buildSetSql());
+//        stringBuilder.append(buildConditionSql());
+//
+//        return stringBuilder.toString();
+//    }
 
 }

@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.stock.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -8,10 +9,13 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_stock")
-@Primary("stock_id")
+@Entity
 public class Stock extends Model<Stock> {
 
+    @Table
+    public static final String TABLE_STOCK = "table_stock";
+
+    @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String STOCK_ID = "stock_id";
 

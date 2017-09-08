@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.captcha.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -8,10 +9,13 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_captcha")
-@Primary("captcha_id")
+@Entity
 public class Captcha extends Model<Captcha> {
 
+    @Table
+    public static final String TABLE_CAPTCHA = "table_captcha";
+
+    @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "验证码编号", updatable = false)
     public static final String CAPTCHA_ID = "captcha_id";
 

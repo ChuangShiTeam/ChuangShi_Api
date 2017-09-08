@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.user.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -8,11 +9,13 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-
-@Table("table_user")
-@Primary("user_id")
+@Entity
 public class User extends Model<User> {
 
+    @Table
+    public static final String TABLE_USER = "table_user";
+
+    @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户编号", updatable = false)
     public static final String USER_ID = "user_id";
 

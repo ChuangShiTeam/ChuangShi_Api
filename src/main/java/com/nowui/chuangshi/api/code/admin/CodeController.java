@@ -99,6 +99,7 @@ public class CodeController extends Controller {
         Kv templateMap = Kv.create();
         templateMap.put("package_name", package_name);
         templateMap.put("table_name", table_name);
+        templateMap.put("upper_table_name", table_name.toUpperCase());
         templateMap.put("primary_key", primary_key);
         templateMap.put("first_upper_primary_key", first_upper_primary_key);
         templateMap.put("upper_primary_key", upper_primary_key);

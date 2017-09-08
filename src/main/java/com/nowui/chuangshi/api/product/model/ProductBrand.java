@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.product.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -8,10 +9,13 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_product_brand")
-@Primary("product_brand_id")
+@Entity
 public class ProductBrand extends Model<ProductBrand> {
 
+    @Table
+    public static final String TABLE_PRODUCT_BRAND = "table_product_brand";
+
+    @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "品牌编号", updatable = false)
     public static final String PRODUCT_BRAND_ID = "product_brand_id";
 

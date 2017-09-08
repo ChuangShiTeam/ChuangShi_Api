@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.website.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -8,10 +9,13 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_website_menu")
-@Primary("website_menu_id")
+@Entity
 public class WebsiteMenu extends Model<WebsiteMenu> {
 
+    @Table
+    public static final String TABLE_WEBSITE_MENU = "table_website_menu";
+
+    @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "菜单编号", updatable = false)
     public static final String WEBSITE_MENU_ID = "website_menu_id";
 

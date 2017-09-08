@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.file.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -8,10 +9,13 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_file")
-@Primary("file_id")
+@Entity
 public class File extends Model<File> {
 
+    @Table
+    public static final String TABLE_FILE = "table_file";
+
+    @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "文件编号", updatable = false)
     public static final String FILE_ID = "file_id";
 

@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.page.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -8,10 +9,13 @@ import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
 
-@Table("table_page")
-@Primary("page_id")
+@Entity
 public class Page extends Model<Page> {
 
+    @Table
+    public static final String TABLE_PAGE = "table_page";
+
+    @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "单页编号", updatable = false)
     public static final String PAGE_ID = "page_id";
 

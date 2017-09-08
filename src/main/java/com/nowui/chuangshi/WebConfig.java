@@ -1,5 +1,6 @@
 package com.nowui.chuangshi;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 import com.jfinal.config.Constants;
@@ -21,6 +22,7 @@ import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
+import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
@@ -327,11 +329,37 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.addMapping("table_certificate_pay", "certificate_id", CertificatePay.class);
 
         // 扫码包中的Table注解类添加到ActiveRecord
-        Set<Class<?>> set = ClassUtil.scanPackageByAnnotation("com.nowui.chuangshi.api", false, Table.class);
+        Set<Class<?>> set = ClassUtil.scanPackageByAnnotation("com.nowui.chuangshi.api", false, Entity.class);
         for (Class<?> clazz : set) {
-            Table table = clazz.getAnnotation(Table.class);
-            Primary primary = clazz.getAnnotation(Primary.class);
-            activeRecordPlugin.addMapping(table.value(), ValidateUtil.isNullOrEmpty(primary.value()) ? "id" : primary.value(), (Class<? extends Model<?>>) clazz);
+            String table = "";
+            String primary = "";
+
+            try {
+                Object object = clazz.newInstance();
+
+                Field[] fields = clazz.getDeclaredFields();
+                for (Field field : fields) {
+                    if (table == "") {
+                        boolean isTable = field.isAnnotationPresent(Table.class);
+                        if (isTable) {
+                            table = getValue(clazz, field);
+                        }
+                    }
+
+                    if (primary == "") {
+                        boolean isPrimary = field.isAnnotationPresent(Primary.class);
+                        if (isPrimary) {
+                            primary = getValue(clazz, field);
+                        }
+                    }
+                }
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+            activeRecordPlugin.addMapping(table, primary == "" ? "id" : primary, (Class<? extends Model<?>>) clazz);
         }
 
         plugins.add(activeRecordPlugin);
@@ -342,6 +370,11 @@ public class WebConfig extends JFinalConfig {
         Cron4jPlugin cron4jPlugin = new Cron4jPlugin();
         plugins.add(cron4jPlugin);
 
+    }
+
+    private String getValue(Object object, Field field) throws IllegalAccessException {
+
+        return (String) field.get(object);
     }
 
     public void configInterceptor(Interceptors interceptors) {
@@ -365,7 +398,6 @@ public class WebConfig extends JFinalConfig {
                 ApiConfigKit.putApiConfig(apiConfig);
             }
         }
-
 
 
 //        try {
