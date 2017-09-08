@@ -14,8 +14,8 @@ public class Cnd {
         return this.criteria;
     }
 
-    public Cnd leftJoin(String table, String primary) {
-        Join join = new Join(table, primary, JoinType.LEFT_JOIN);
+    public Cnd leftJoin(String tableA, String primaryA, String tableB, String primaryB) {
+        Join join = new Join(tableA, primaryA, tableB, primaryB, JoinType.LEFT_JOIN);
         this.criteria.addJoin(join);
         return this;
     }
