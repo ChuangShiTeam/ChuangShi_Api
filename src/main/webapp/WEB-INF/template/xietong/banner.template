@@ -1,0 +1,27 @@
+<div class="banner">
+	<div class="hd">
+		<ul>
+			#for(advertisement : indexBannerList)
+			<li class="on">
+				#(for.count)
+			</li>
+            #end
+		</ul>
+	</div>
+	<div class="bd">
+		<ul>
+			#for(advertisement : indexBannerList)
+				<li>
+					#if(advertisement.advertisement_link)
+					<a href="#(advertisement.advertisement_link)">
+						<img src="#(host + advertisement.advertisement_image_file.file_original_path)" width="1440" height="605" alt="" />
+					</a>
+					#else
+						<img src="#(host + advertisement.advertisement_image_file.file_original_path)" width="1440" height="605" alt="" />
+					#end
+				</li>
+			#end
+		</ul>
+	</div>
+	<script>jQuery(".banner").slide({mainCell:".bd ul",effect:"fold",autoPlay:true});</script> 
+</div>

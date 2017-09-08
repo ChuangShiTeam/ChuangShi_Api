@@ -1,0 +1,7 @@
+<div class="header">
+	#include("toper.template")
+	#include("banner.template")
+	<div class="clear"></div>
+	#include("column.template")
+	<div class="clear"></div>
+</div>

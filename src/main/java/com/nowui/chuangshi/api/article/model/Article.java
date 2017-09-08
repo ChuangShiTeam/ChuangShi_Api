@@ -29,10 +29,16 @@ public class Article extends Model<Article> {
 
     @Column(type = ColumnType.VARCHAR, length = 250, comment = "文章摘要")
     public static final String ARTICLE_SUMMARY = "article_summary";
-
+    
     @Column(type = ColumnType.LONGTEXT, length = 0, comment = "文章内容")
     public static final String ARTICLE_CONTENT = "article_content";
-
+    
+    @Column(type = ColumnType.VARCHAR, length = 200, comment = "文章外部链接")
+    public static final String ARTICLE_OUTER_LINK = "article_outer_link";
+    
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否外部链接")
+    public static final String ARTICLE_IS_OUTER_LINK = "article_is_outer_link";
+    
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
 
@@ -50,7 +56,7 @@ public class Article extends Model<Article> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
-
+    
     public static final String ARTICLE_IMAGE_FILE = "article_image_file";
 
     public String getArticle_id() {
@@ -108,7 +114,23 @@ public class Article extends Model<Article> {
     public void setArticle_content(String article_content) {
         set(ARTICLE_CONTENT, article_content);
     }
-
+    
+    public String getArticle_outer_link() {
+        return getStr(ARTICLE_OUTER_LINK);
+    }
+    
+    public void setArticle_outer_link(String article_outer_link) {
+        set(ARTICLE_OUTER_LINK, article_outer_link);
+    }
+    
+    public Boolean getArticle_is_outer_link() {
+        return getBoolean(ARTICLE_IS_OUTER_LINK);
+    }
+    
+    public void setArticle_is_outer_link(Boolean article_is_outer_link) {
+        set(ARTICLE_IS_OUTER_LINK, article_is_outer_link);
+    }
+    
     public String getSystem_create_user_id() {
         return getStr(SYSTEM_CREATE_USER_ID);
     }
@@ -156,5 +178,5 @@ public class Article extends Model<Article> {
     public void setSystem_status(Boolean system_status) {
         set(SYSTEM_STATUS, system_status);
     }
-
+    
 }
