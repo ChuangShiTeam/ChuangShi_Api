@@ -51,6 +51,21 @@ public class QrcodeService extends Service {
         return qrcode;
     }
 
+    public Boolean save(String qrcode_id, String app_id, String object_id, String qrcode_type, String qrcode_url, Integer qrcode_add, Integer qrcode_cancel, Boolean qrcode_status, String system_create_user_id) {
+        Qrcode qrcode = new Qrcode();
+        qrcode.setQrcode_id(qrcode_id);
+        qrcode.setApp_id(app_id);
+        qrcode.setObject_id(object_id);
+        qrcode.setQrcode_type(qrcode_type);
+        qrcode.setQrcode_url(qrcode_url);
+        qrcode.setQrcode_add(qrcode_add);
+        qrcode.setQrcode_cancel(qrcode_cancel);
+        qrcode.setQrcode_status(qrcode_status);
+
+        Boolean success = qrcodeDao.save(qrcode, system_create_user_id);
+        return success;
+    }
+
     public Boolean save(Qrcode qrcode, String system_create_user_id) {
         Boolean success = qrcodeDao.save(qrcode, system_create_user_id);
         return success;

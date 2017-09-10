@@ -177,6 +177,24 @@ public class MemberService extends Service {
         return success;
     }
 
+    public Boolean qrcodeUpdate(String member_id, String qrcode_id, String system_update_user_id) {
+        Member member = new Member();
+        member.setQrcode_id(qrcode_id);
+
+        Cnd cnd = new Cnd();
+        cnd.where(Member.SYSTEM_STATUS, true);
+        cnd.and(Member.MEMBER_ID, member_id);
+        cnd.and(Member.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+
+        Boolean success = memberDao.update(member, system_update_user_id, cnd);
+
+        if (success) {
+            cacheDelete(member_id);
+        }
+
+        return success;
+    }
+
     public Boolean delete(String member_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = new Cnd();
         cnd.where(Member.SYSTEM_STATUS, true);

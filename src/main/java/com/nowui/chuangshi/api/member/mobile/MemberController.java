@@ -1,6 +1,12 @@
 package com.nowui.chuangshi.api.member.mobile;
 
 import com.jfinal.core.ActionKey;
+import com.jfinal.weixin.sdk.api.AccessTokenApi;
+import com.jfinal.weixin.sdk.api.ApiConfigKit;
+import com.jfinal.weixin.sdk.api.ApiResult;
+import com.jfinal.weixin.sdk.api.QrcodeApi;
+import com.nowui.chuangshi.api.app.model.App;
+import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.api.bill.model.Bill;
 import com.nowui.chuangshi.api.certificate.model.Certificate;
 import com.nowui.chuangshi.api.certificate.model.CertificatePay;
@@ -15,6 +21,8 @@ import com.nowui.chuangshi.api.member.model.MemberLevel;
 import com.nowui.chuangshi.api.member.service.MemberAddressService;
 import com.nowui.chuangshi.api.member.service.MemberLevelService;
 import com.nowui.chuangshi.api.member.service.MemberService;
+import com.nowui.chuangshi.api.qrcode.model.Qrcode;
+import com.nowui.chuangshi.api.qrcode.service.QrcodeService;
 import com.nowui.chuangshi.api.trade.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.api.trade.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.api.trade.service.MemberDeliveryOrderService;
@@ -23,11 +31,14 @@ import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.type.QrcodeType;
+import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ControllerKey("/mobile/member")
 public class MemberController extends Controller {
@@ -64,10 +75,87 @@ public class MemberController extends Controller {
         renderSuccessJson(memberPurchaseOrderList);
     }
 
-    @ActionKey("/mobile/member/find")
-    public void find() {
+    @ActionKey("/mobile/member/my/find")
+    public void myFind() {
+        String request_user_id = getRequest_user_id();
 
-        renderSuccessJson();
+        User user = UserService.instance.find(request_user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
+        String user_avatar = FileService.instance.getFile_path(user.getUser_avatar());
+
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put(User.USER_NAME, user.getUser_name());
+        result.put(User.USER_AVATAR, user_avatar);
+        result.put(Member.MEMBER_COMMISSION_AMOUNT, 0);
+        result.put(Member.MEMBER_ORDER_AMOUNT, 0);
+        result.put(Member.MEMBER_WAIT_PAY, 0);
+        result.put(Member.MEMBER_WAIT_SEND, 0);
+        result.put(Member.MEMBER_WAIT_RECEIVE, 0);
+        result.put(Member.MEMBER_STATUS, member.getMember_status());
+
+        if (ValidateUtil.isNullOrEmpty(member.getMember_level_id())) {
+            result.put(MemberLevel.MEMBER_LEVEL_NAME, "");
+            result.put(MemberLevel.MEMBER_LEVEL_SORT, 999);
+        } else {
+            MemberLevel memberLevel = MemberLevelService.instance.find(member.getMember_level_id());
+            result.put(MemberLevel.MEMBER_LEVEL_NAME, memberLevel.getMember_level_name());
+            result.put(MemberLevel.MEMBER_LEVEL_SORT, memberLevel.getMember_level_sort());
+        }
+
+        // 返回授权保证金
+        BigDecimal certificate_amount = BigDecimal.ZERO;
+        Certificate certificate = CertificateService.instance.userFind(request_user_id);
+        if (certificate != null) {
+            CertificatePay certificatePay = CertificatePayService.instance.find(certificate.getCertificate_id());
+            if (certificatePay != null && certificatePay.getCertificate_amount() != null) {
+                certificate_amount = certificatePay.getCertificate_amount();
+            }
+        }
+        result.put(CertificatePay.CERTIFICATE_AMOUNT, certificate_amount);
+
+        renderSuccessJson(result);
+    }
+
+    @ActionKey("/mobile/member/qrcode/find")
+    public void qrcodeFind() {
+        String request_user_id = getRequest_user_id();
+
+        User user = UserService.instance.find(request_user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
+
+        if (!member.getMember_status()) {
+            throw new RuntimeException("您还没有通过审核");
+        }
+
+        String qrcode_id = "";
+
+        if (ValidateUtil.isNullOrEmpty(member.getQrcode_id())) {
+            qrcode_id = Util.getRandomUUID();
+            String member_id = member.getMember_id();
+
+            App app = AppService.instance.find(member.getApp_id());
+
+            String wechat_app_id = ApiConfigKit.getAppId();
+            if (!wechat_app_id.equals(app.getWechat_app_id())) {
+                ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+                AccessTokenApi.refreshAccessToken();
+            }
+
+            ApiResult apiResult = QrcodeApi.createPermanent(qrcode_id);
+            Boolean qrcode_status = true;
+            String qrcode_url = QrcodeApi.getShowQrcodeUrl(apiResult.getStr("ticket"));
+
+            QrcodeService.instance.save(qrcode_id, member.getApp_id(), member_id, QrcodeType.MEMBER.getKey(), qrcode_url, 0, 0,
+                    qrcode_status, request_user_id);
+
+            MemberService.instance.qrcodeUpdate(member_id, qrcode_id, request_user_id);
+        } else {
+            qrcode_id = member.getQrcode_id();
+        }
+
+        Qrcode qrcode = QrcodeService.instance.find(qrcode_id);
+
+        renderSuccessJson(qrcode.getQrcode_url());
     }
 
     @ActionKey("/mobile/member/purchase/find")
