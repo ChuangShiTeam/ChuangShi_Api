@@ -20,7 +20,7 @@
 					#if(i==page_total)
 					<a title="下一页" href="javascript:;"></a>
 					#else
-					<a title="下一页" href="javascript:;" onClick="next;"></a>
+					<a title="下一页" href="javascript:;" onClick="next();"></a>
 					#end
 				</li>
 			#end
@@ -29,14 +29,21 @@
 	<div class="clear"></div>
 </div>
 <input type="hidden" name="page_index" value="#(page_index)" id="page_index">
+<input type="hidden" name="article_category_id" value="#(articleCategory.article_category_id)" id="article_category_id">
 <script type="text/javascript">
 function prev(){
-	var 
+	var page_index = $("#page_index").val();
+	displayPage(page_index - 1);
 }
 function next(){
-
+	var page_index = $("#page_index").val();
+	displayPage(page_index + 1);
 }
-function dispalyPage(){
+function dispalyPage(page_index){
+	var page_size = 7;
+	var article_category_id = $("#article_category_id").val();
+	
+	
 
 }
 </script>

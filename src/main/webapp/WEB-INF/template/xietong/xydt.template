@@ -79,7 +79,7 @@
 				#end
 			</ul>
 			<div class="clear"></div>
-			
+			#include("page.template")
 		</div>
 	</div>
 	<div class="clear"></div>
