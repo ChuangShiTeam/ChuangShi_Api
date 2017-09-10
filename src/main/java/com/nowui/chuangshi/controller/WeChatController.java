@@ -20,12 +20,13 @@ import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.app.service.AppService;
+import com.nowui.chuangshi.api.member.model.Member;
+import com.nowui.chuangshi.api.member.service.MemberService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Bill;
 import com.nowui.chuangshi.model.BillCommission;
 import com.nowui.chuangshi.model.Certificate;
-import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
@@ -43,7 +44,6 @@ import com.nowui.chuangshi.service.MemberDeliveryOrderProductSkuService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderProductSkuService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderService;
-import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.ProductSkuCommissionService;
 import com.nowui.chuangshi.service.TradeCommossionService;
 import com.nowui.chuangshi.service.TradeProductSkuService;
@@ -63,7 +63,6 @@ import com.nowui.chuangshi.util.WeChatUtil;
 public class WeChatController extends Controller {
 
     private final TradeService tradeService = new TradeService();
-    private final MemberService memberService = new MemberService();
 
     private final TradeProductSkuService tradeProductSkuService = new TradeProductSkuService();
     private final TradeCommossionService tradeCommossionService = new TradeCommossionService();
@@ -160,9 +159,7 @@ public class WeChatController extends Controller {
                 user_avatar = "";
             }
 
-            String token = memberService.login(app_id, wechat_open_id, wechat_union_id, member_parent_id,
-                    from_qrcode_id, member_parent_id, member_parent_path, user_name, user_avatar, member_status,
-                    request_user_id);
+            String token = MemberService.instance.wechatLogin(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, member_parent_id, member_parent_path, user_name, user_avatar, member_status, request_user_id);
             // url = url.contains("?") ? url + "&" : url + "?";
 
             // System.out.println("url : " + url);
@@ -231,7 +228,7 @@ public class WeChatController extends Controller {
 
         String user_id = trade.getUser_id();
         User user = userService.findByUser_id(user_id);
-        Member member = memberService.findByMember_id(user.getObject_Id());
+        Member member = MemberService.instance.find(user.getObject_Id());
 
         // 根据应用信息 获取是否分成 和分成级数
         App app = AppService.instance.find(trade.getApp_id());
@@ -288,7 +285,7 @@ public class WeChatController extends Controller {
 
         if (app_is_commission && member_list.size() > 0) {
             for (String member_parent_id : member_list) {
-                Member member_parent = memberService.findByMember_id(member_parent_id);
+                Member member_parent = MemberService.instance.find(member_parent_id);
 
                 Bill bill = new Bill();
                 bill.setBill_id(Util.getRandomUUID());
@@ -585,7 +582,7 @@ public class WeChatController extends Controller {
 
             if (is_update) {
                 User user = userService.findByUser_id(certificate.getUser_id());
-                Member member = memberService.findByMember_id(user.getObject_Id());
+                Member member = MemberService.instance.find(user.getObject_Id());
 
                 // 设置小数位数，第一个变量是小数位数，第二个变量是取舍方法(四舍五入)
                 BigDecimal bd = new BigDecimal(total_fee).divide(BigDecimal.valueOf(100));

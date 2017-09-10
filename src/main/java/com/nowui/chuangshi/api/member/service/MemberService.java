@@ -29,19 +29,24 @@ public class MemberService extends Service {
     private final String MEMBER_PARENT_LIST_CACHE = "member_parent_list_cache";
     private final MemberDao memberDao = new MemberDao();
 
-    public Integer adminCount(String app_id) {
+    public Integer adminCount(String app_id, String user_name) {
         Cnd cnd = new Cnd();
-        cnd.where(Member.SYSTEM_STATUS, true);
-        cnd.and(Member.APP_ID, app_id);
+        cnd.leftJoin(User.TABLE_USER, User.USER_ID, Member.TABLE_MEMBER, Member.USER_ID);
+        cnd.where(Member.TABLE_MEMBER + "." + Member.SYSTEM_STATUS, true);
+        cnd.and(Member.TABLE_MEMBER + "." + Member.APP_ID, app_id);
 
         Integer count = memberDao.count(cnd);
         return count;
     }
 
-    public List<Member> adminList(String app_id, Integer m, Integer n) {
+    public List<Member> adminList(String app_id, String user_name, Integer m, Integer n) {
         Cnd cnd = new Cnd();
-        cnd.where(Member.SYSTEM_STATUS, true);
-        cnd.and(Member.APP_ID, app_id);
+        cnd.select(User.TABLE_USER + "." + User.USER_ID);
+        cnd.select(User.TABLE_USER + "." + User.USER_NAME);
+        cnd.leftJoin(User.TABLE_USER, User.USER_ID, Member.TABLE_MEMBER, Member.USER_ID);
+        cnd.where(Member.TABLE_MEMBER + "." + Member.SYSTEM_STATUS, true);
+        cnd.and(Member.TABLE_MEMBER + "." + Member.APP_ID, app_id);
+        cnd.desc(Member.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
         List<Member> memberList = memberDao.list(cnd);
