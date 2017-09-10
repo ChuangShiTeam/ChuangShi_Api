@@ -52,6 +52,19 @@ public class ArticleService extends Service {
         return articleList;
     }
 
+    public List<Article> categoryList(String article_category_id, Integer m, Integer n) {
+        Cnd cnd = new Cnd();
+        cnd.where(Article.SYSTEM_STATUS, true);
+        cnd.and(Article.ARTICLE_CATEGORY_ID, article_category_id);
+        cnd.paginate(m, n);
+
+        List<Article> articleList = articleDao.primaryKeyList(cnd);
+        for (Article article : articleList) {
+            article.put(find(article.getArticle_id()));
+        }
+        return articleList;
+    }
+    
     public List<Article> categoryList(String article_category_id) {
         Cnd cnd = new Cnd();
         cnd.where(Article.SYSTEM_STATUS, true);
@@ -62,6 +75,15 @@ public class ArticleService extends Service {
             article.put(find(article.getArticle_id()));
         }
         return articleList;
+    }
+    
+    public Integer categoryCount(String article_category_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(Article.SYSTEM_STATUS, true);
+        cnd.and(Article.ARTICLE_CATEGORY_ID, article_category_id);
+
+        Integer count = articleDao.count(cnd);
+        return count;
     }
 
     public Article prevArticle(String article_id) {

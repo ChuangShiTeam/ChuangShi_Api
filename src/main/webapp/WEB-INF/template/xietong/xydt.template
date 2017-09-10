@@ -31,12 +31,12 @@
 			<ul>
 				#for(bean : articleCategoryList)
 				#if(bean.article_category_id == articleCategory.article_category_id)
-				<li class="on">
-					<a href="xyhd.html">#(bean.article_category_name)</a>
+				<li class="on" id="#(bean.article_category_id)">
+					<a href="javascript:;" onclick="listByArticleCategoryId('#(bean.article_category_id)')">#(bean.article_category_name)</a>
 				</li>
 				#else
-				<li>
-					<a href="xyhd.html">#(bean.article_category_name)</a>
+				<li id="#(bean.article_category_id)">
+					<a href="javascript:;" onclick="listByArticleCategoryId('#(bean.article_category_id)')">#(bean.article_category_name)</a>
 				</li>
 				#end
 				#end
@@ -73,8 +73,8 @@
 			<div class="ways right"><a href="index.html">首页</a> &gt; <a href="xydt.html">校园动态</a> &gt; <a>#(articleCategory.article_category_name)</a> </div>
 		</div>
 		<div class="xydt">
-			<ul class="xydt_ul">
-				#for(article:articleList)
+			<ul class="xydt_ul" id="articleListHtml">
+				#for(article:articleListByCatehory)
 					<li><span class="right">#date(article.system_create_time, "yyyy-MM-dd")</span><a href="#(article.article_id).html"><strong>#(article.article_name)</strong></a></li>
 				#end
 			</ul>
@@ -88,4 +88,76 @@
 #include("footer.template")
 <!-- #EndLibraryItem -->
 </body>
+<script>
+  function listByArticleCategoryId(article_category_id) {
+   $.ajax({
+        type: "POST",
+        url: "#(host + "/mobile/article/findByArticleCategoryId")",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(
+    		{
+				article_category_id: article_category_id,
+			    page_index: 0,
+			    page_size: 1
+			}
+	    ),
+        dataType: "json",
+        success: function (data) {
+        	$("#article_category_id").val(article_category_id);
+        	$("#" + article_category_id).siblings().removeClass("on");
+        	$("#" + article_category_id).addClass("on");
+        	$("#page_index").val(1);
+            var page_total = data.data.total;
+            $("#pageHtml").empty();
+            var pageHtml = '';
+            for(i = 1; i <= page_total && i <= 5; i++) {
+            	if (i == 1) {
+            		pageHtml += '<li class="next"><a title="上一页" href="javascript:;"></a></li><li><a class="on" href="javascript:;" onClick="dispalyPage('+ i +');">'+ i +'</a></li>';
+            	} else if (i == page_total || i == 5) {
+            		pageHtml += '<li><a href="javascript:;" onClick="dispalyPage('+ i +');">'+ i +'</a></li>';
+            		if (i == page_total) {
+            			pageHtml += '<li class="prev"><a title="下一页" href="javascript:;"></a></li>';
+            		} else {
+            			pageHtml += '<li class="prev"><a title="下一页" href="javascript:;" onClick="next();"></a></li>';
+            		}
+				} else {
+					pageHtml += '<li><a href="javascript:;" onClick="dispalyPage('+ i +');">'+ i +'</a></li>';
+				}
+			}	
+			$("#pageHtml").append(pageHtml);
+			$("#articleListHtml").empty();
+			var articleList = data.data.list;
+			var articleListHtml = '';
+			for (j in articleList) {
+				var system_create_time = formatDate(new Date(articleList[j].system_create_time), 'yyyy-MM-dd');
+				articleListHtml += '<li><span class="right">'+system_create_time+'</span><a href="'+articleList[j].article_id+'.html"><strong>'+articleList[j].article_name+'</strong></a></li>';
+			}
+			$("#articleListHtml").append(articleListHtml);
+        },
+        error: function (data) {
+            
+        }
+    });
+  }
+  function formatDate(date, format){
+    var paddNum = function(num){
+      num += "";
+      return num.replace(/^(\d)$/,"0$1");
+    }
+    //指定格式字符
+    var cfg = {
+       yyyy : date.getFullYear() //年 : 4位
+      ,yy : date.getFullYear().toString().substring(2)//年 : 2位
+      ,M  : date.getMonth() + 1  //月 : 如果1位的时候不补0
+      ,MM : paddNum(date.getMonth() + 1) //月 : 如果1位的时候补0
+      ,d  : date.getDate()   //日 : 如果1位的时候不补0
+      ,dd : paddNum(date.getDate())//日 : 如果1位的时候补0
+      ,hh : date.getHours()  //时
+      ,mm : date.getMinutes() //分
+      ,ss : date.getSeconds() //秒
+    }
+    format || (format = "yyyy-MM-dd hh:mm:ss");
+    return format.replace(/([a-z])(\1)*/ig,function(m){return cfg[m];});
+  } 
+</script>
 </html>
