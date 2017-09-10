@@ -1,34 +1,26 @@
 <div class="listpages clear">
-	<ul>
-		#for(i = 0; i <= page_total; i++)
+	<ul id="pageHtml">
+		#for(i = 1; i <= page_total && i <= 5; i++)
 			#if(for.first)
 				<li class="next">
-					#if(i==0)
 					<a title="上一页" href="javascript:;"></a>
-					#else
-					<a title="上一页" href="javascript:;" onClick="prev();"></a>
-					#end
 				</li>
 			#end
-			#if(page_index == i)
+			#if(i == 1)
 			<li><a class="on" href="javascript:;" onClick="dispalyPage(#(i));">#(i)</a></li>
 			#else
 			<li><a href="javascript:;" onClick="dispalyPage(#(i));">#(i)</a></li>
-			end
-			#if(for.last)
+			#end
+			#if(i == page_total || i == 5)
 				<li class="prev">
-					#if(i==page_total)
-					<a title="下一页" href="javascript:;"></a>
-					#else
 					<a title="下一页" href="javascript:;" onClick="next();"></a>
-					#end
 				</li>
 			#end
 		#end
 	</ul>
 	<div class="clear"></div>
 </div>
-<input type="hidden" name="page_index" value="#(page_index)" id="page_index">
+<input type="hidden" name="page_index" value="1" id="page_index">
 <input type="hidden" name="article_category_id" value="#(articleCategory.article_category_id)" id="article_category_id">
 <script type="text/javascript">
 function prev(){
@@ -40,10 +32,55 @@ function next(){
 	displayPage(page_index + 1);
 }
 function dispalyPage(page_index){
-	var page_size = 7;
-	var article_category_id = $("#article_category_id").val();
-	
-	
-
+	var article_category_id = $("#article_category_id").val();	
+	$.ajax({
+        type: "POST",
+        url: "#(host + "/mobile/article/findByArticleCategoryId")",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(
+    		{
+				article_category_id: article_category_id,
+			    page_index: page_index,
+			    page_size: 1
+			}
+	    ),
+        dataType: "json",
+        success: function (data) {
+        	$("#article_category_id").val(article_category_id);
+        	$("#" + article_category_id).siblings().removeClass("on");
+        	$("#" + article_category_id).addClass("on");
+        	$("#page_index").val(1);
+            var page_total = data.data.total;
+            $("#pageHtml").empty();
+            var pageHtml = '';
+            for(i = page_index; i <= page_total && i <= page_index + 5; i++) {
+            	if (i == 1) {
+            		pageHtml += '<li class="next"><a title="上一页" href="javascript:;"></a></li><li><a class="on" href="javascript:;" onClick="dispalyPage('+ i +');">'+ i +'</a></li>';
+            	} else if (i == page_total || i == page_index + 5) {
+            		pageHtml += '<li><a href="javascript:;" onClick="dispalyPage('+ i +');">'+ i +'</a></li>';
+            		if (i == page_total) {
+            			pageHtml += '<li class="prev"><a title="下一页" href="javascript:;"></a></li>';
+            		} else {
+            			pageHtml += '<li class="prev"><a title="下一页" href="javascript:;" onClick="next();"></a></li>';
+            		}            		
+				} else {
+					pageHtml += '<li><a href="javascript:;" onClick="dispalyPage('+ i +');">'+ i +'</a></li>';
+				}
+			}	
+			$("#pageHtml").append(pageHtml);
+			$("#articleListHtml").empty();
+			var articleList = data.data.list;
+			var articleListHtml = '';
+			for (j in articleList) {
+				var system_create_time = formatDate(new Date(articleList[j].system_create_time), 'yyyy-MM-dd');
+				articleListHtml += '<li><span class="right">'+system_create_time+'</span><a href="'+articleList[j].article_id+'.html"><strong>'+articleList[j].article_name+'</strong></a></li>';
+			}
+			$("#articleListHtml").append(articleListHtml);
+        },
+        error: function (data) {
+            
+        }
+    });
+  }	
 }
 </script>

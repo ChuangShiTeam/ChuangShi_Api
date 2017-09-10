@@ -82,7 +82,21 @@ public class PageController extends Controller {
         templateMap.put("articleList", articleList);
         templateMap.put("websiteMenuList", websiteMenuList);
         templateMap.put("indexBannerList", indexBannerList);
-
+        
+        if (articleCategoryList != null && articleCategoryList.size() > 0) {
+            ArticleCategory articleCategory = articleCategoryList.get(0);
+            templateMap.put("articleCategory", articleCategory);
+            
+            List<Article> articleListByCatehory = ArticleService.instance.categoryList(articleCategory.getArticle_category_id(), 0, 7);
+            templateMap.put("articleListByCatehory", articleListByCatehory);
+            
+            Integer count = ArticleService.instance.categoryCount(articleCategory.getArticle_category_id());
+            
+            Integer page_total = (count / 7) + (count % 7 == 0 ? 0 : 1);
+            
+            templateMap.put("page_total", page_total);
+        }
+        
         for (Page page : pageList) {
             templateMap.put("page_name", page.getPage_name());
             templateMap.put("page_content", page.getPage_content());
@@ -121,13 +135,30 @@ public class PageController extends Controller {
 
             List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryList, 7);
             templateMap.put("articleList", articleList);
+        } else if (page.getPage_url().equals("xydt.html")) {
+            List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
+            templateMap.put("articleCategoryList", articleCategoryList);
+            
+            if (articleCategoryList != null && articleCategoryList.size() > 0) {
+                ArticleCategory articleCategory = articleCategoryList.get(0);
+                templateMap.put("articleCategory", articleCategory);
+                
+                List<Article> articleListByCatehory = ArticleService.instance.categoryList(articleCategory.getArticle_category_id(), 0, 1);
+                templateMap.put("articleListByCatehory", articleListByCatehory);
+                
+                Integer count = ArticleService.instance.categoryCount(articleCategory.getArticle_category_id());
+                
+                Integer page_total = (count / 1) + (count % 1 == 0 ? 0 : 1);
+                
+                templateMap.put("page_total", page_total);
+            }
         }
 
         write(request_app_id, page, templateMap);
 
         renderSuccessJson();
     }
-
+    
     private void write(String app_id, Page page, Kv templateMap) {
         engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong/");
 
