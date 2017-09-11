@@ -10,22 +10,20 @@ import com.jfinal.weixin.sdk.api.ApiResult;
 import com.jfinal.weixin.sdk.api.QrcodeApi;
 import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.app.service.AppService;
+import com.nowui.chuangshi.api.member.model.Member;
+import com.nowui.chuangshi.api.member.service.MemberService;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.Qrcode;
-import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.QrcodeService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.SceneType;
 import com.nowui.chuangshi.util.Util;
 
 public class QrcodeController extends Controller {
 
     private final QrcodeService qrcodeService = new QrcodeService();
-    private final UserService userService = new UserService();
-    private final MemberService memberService = new MemberService();
 
     @ActionKey(Url.QRCODE_LIST)
     public void list() {
@@ -147,9 +145,9 @@ public class QrcodeController extends Controller {
 
         for (Qrcode result : resultList) {
             String member_id = result.getObject_id();
-            Member member = memberService.findByMember_id(member_id);
+            Member member = MemberService.instance.find(member_id);
             if (member != null) {
-                User user = userService.findByUser_id(member.getUser_id());
+                User user = UserService.instance.find(member.getUser_id());
                 result.setObject_id(user.getUser_name());
             }
             result.keep(Qrcode.QRCODE_ID, Qrcode.OBJECT_ID, Qrcode.QRCODE_TYPE, Qrcode.QRCODE_URL, Qrcode.QRCODE_ADD,
@@ -173,9 +171,9 @@ public class QrcodeController extends Controller {
         authenticateApp_id(qrcode.getApp_id());
 
         String member_id = qrcode.getObject_id();
-        Member member = memberService.findByMember_id(member_id);
+        Member member = MemberService.instance.find(member_id);
         if (member != null) {
-            User user = userService.findByUser_id(member.getUser_id());
+            User user = UserService.instance.find(member.getUser_id());
             qrcode.setObject_id(user.getUser_name());
         }
 

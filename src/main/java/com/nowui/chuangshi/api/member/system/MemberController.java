@@ -2,7 +2,6 @@ package com.nowui.chuangshi.api.member.system;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
-import com.nowui.chuangshi.api.member.service.MemberService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.SystemInterceptor;
@@ -10,8 +9,6 @@ import com.nowui.chuangshi.common.interceptor.SystemInterceptor;
 @Before(SystemInterceptor.class)
 @ControllerKey("/system/member")
 public class MemberController extends Controller {
-
-    private final MemberService memberService = new MemberService();
 
     @ActionKey("/system/member/list")
     public void list() {

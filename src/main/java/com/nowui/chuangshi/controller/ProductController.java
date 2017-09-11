@@ -8,11 +8,15 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.file.model.File;
+import com.nowui.chuangshi.api.file.service.FileService;
+import com.nowui.chuangshi.api.member.model.Member;
+import com.nowui.chuangshi.api.member.service.MemberService;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.FeijiuRecommendProduct;
-import com.nowui.chuangshi.model.File;
-import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberLevel;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
@@ -20,16 +24,12 @@ import com.nowui.chuangshi.model.ProductSkuAttribute;
 import com.nowui.chuangshi.model.ProductSkuCommission;
 import com.nowui.chuangshi.model.ProductSkuPrice;
 import com.nowui.chuangshi.model.TradeProductSku;
-import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberLevelService;
-import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.ProductService;
 import com.nowui.chuangshi.service.ProductSkuAttributeService;
 import com.nowui.chuangshi.service.ProductSkuCommissionService;
 import com.nowui.chuangshi.service.ProductSkuPriceService;
 import com.nowui.chuangshi.service.ProductSkuService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -40,9 +40,6 @@ public class ProductController extends Controller {
     private ProductSkuPriceService productSkuPriceService = new ProductSkuPriceService();
     private ProductSkuAttributeService productSkuAttributeService = new ProductSkuAttributeService();
     private ProductSkuCommissionService productSkuCommissionService = new ProductSkuCommissionService();
-    private final FileService fileService = new FileService();
-    private final MemberService memberService = new MemberService();
-    private final UserService userService = new UserService();
     private final MemberLevelService memberLevelService = new MemberLevelService();
 
     @ActionKey(Url.PRODUCT_ALL_LIST)
@@ -51,8 +48,8 @@ public class ProductController extends Controller {
 
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
-        User user = userService.findByUser_id(request_user_id);
-        Member member = memberService.findByMember_id(user.getObject_Id());
+        User user = UserService.instance.find(request_user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
         boolean isEmpty = ValidateUtil.isNullOrEmpty(member.getMember_level_id());
 
         authenticateRequest_app_idAndRequest_user_id();
@@ -60,7 +57,7 @@ public class ProductController extends Controller {
         List<Product> productList = productService.listByApp_id(request_app_id);
 
         for (Product product : productList) {
-            product.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+            product.put(Product.PRODUCT_IMAGE, FileService.instance.getFile_path(product.getProduct_image()));
 
             List<ProductSku> productSkuList = productSkuService.listByProduct_id(product.getProduct_id());
             for (ProductSku productSku : productSkuList) {
@@ -104,11 +101,12 @@ public class ProductController extends Controller {
 
         Product product = productService.findByProduct_id(model.getProduct_id());
 
-        Member member = memberService.findByUser_id(request_user_id);
+        User user = UserService.instance.find(request_user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
 
         authenticateApp_id(product.getApp_id());
 
-        product.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+        product.put(Product.PRODUCT_IMAGE, FileService.instance.getFile_path(product.getProduct_image()));
 
         product.keep(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_CONTENT);
 
@@ -235,7 +233,7 @@ public class ProductController extends Controller {
                 Product.PRODUCT_IS_HOT, Product.PRODUCT_IS_SOLD_OUT, Product.PRODUCT_IS_VIRTUAL,
                 Product.PRODUCT_CONTENT, Product.PRODUCT_STATUS, Product.SYSTEM_VERSION);
 
-        product.put(Product.PRODUCT_IMAGE_FILE, fileService.getFile(product.getProduct_image()));
+        product.put(Product.PRODUCT_IMAGE_FILE, FileService.instance.getFile(product.getProduct_image()));
 
         List<ProductSku> productSkuList = productSkuService.listByProduct_id(model.getProduct_id());
         for (ProductSku productSku : productSkuList) {
@@ -405,7 +403,7 @@ public class ProductController extends Controller {
         if (ValidateUtil.isNullOrEmpty(product.getProduct_image())) {
             product.put(FeijiuRecommendProduct.PRODUCT_IMAGE_FILE, "");
         } else {
-            File file = fileService.findByFile_id(product.getProduct_image());
+            File file = FileService.instance.find(product.getProduct_image());
             product.put(FeijiuRecommendProduct.PRODUCT_IMAGE_FILE, file.keep(File.FILE_ID, File.FILE_PATH));
         }
 

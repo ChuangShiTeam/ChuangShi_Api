@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nowui.chuangshi.api.member.model.Member;
+import com.nowui.chuangshi.api.member.service.MemberService;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 import com.alibaba.fastjson.JSONArray;
@@ -17,24 +21,20 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.File;
-import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberAddress;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
 import com.nowui.chuangshi.model.ProductSkuPrice;
-import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberAddressService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderExpressService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderProductSkuService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderService;
-import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.ProductService;
 import com.nowui.chuangshi.service.ProductSkuPriceService;
 import com.nowui.chuangshi.service.ProductSkuService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.MemberPurchaseOrderFlow;
 import com.nowui.chuangshi.util.Util;
 
@@ -43,8 +43,6 @@ public class MemberPurchaseOrderController extends Controller {
     private final MemberPurchaseOrderService memberPurchaseOrderService = new MemberPurchaseOrderService();
     private final MemberPurchaseOrderProductSkuService memberPurchaseOrderProductSkuService = new MemberPurchaseOrderProductSkuService();
     private final MemberPurchaseOrderExpressService memberPurchaseOrderExpressService = new MemberPurchaseOrderExpressService();
-    private final UserService userService = new UserService();
-    private final MemberService memberService = new MemberService();
     private final MemberAddressService memberAddressService = new MemberAddressService();
     private final ProductService productService = new ProductService();
     private final ProductSkuService productSkuService = new ProductSkuService();
@@ -62,8 +60,8 @@ public class MemberPurchaseOrderController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        User user = userService.findByUser_id(request_user_id);
-        Member member = memberService.findByMember_id(user.getObject_Id());
+        User user = UserService.instance.find(request_user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
         MemberAddress memberAddress = memberAddressService.findByMember_id(member.getMember_id());
 
         BigDecimal member_purchase_order_product_amount = BigDecimal.ZERO;
@@ -116,7 +114,7 @@ public class MemberPurchaseOrderController extends Controller {
         for (MemberPurchaseOrder result : resultList) {
             MemberDeliveryOrder memberDeliveryOrder = MemberDeliveryOrderService.instance.purchaseOrderFind(result.getMember_purchase_order_id());
             if (memberDeliveryOrder != null) {
-                User user = userService.findByUser_id(memberDeliveryOrder.getUser_id());
+                User user = UserService.instance.find(memberDeliveryOrder.getUser_id());
                 if (user != null) {
                     result.put(User.USER_NAME, user.getUser_name());
                     File file = fileService.findByFile_id(user.getUser_avatar());
@@ -257,13 +255,13 @@ public class MemberPurchaseOrderController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        User user = userService.findByUser_id(request_user_id);
-        Member member = memberService.findByMember_id(user.getObject_Id());
+        User user = UserService.instance.find(request_user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
         // 判断会员是否有上级，无上级不能进货
         if (ValidateUtil.isNullOrEmpty(member.getMember_parent_id())) {
             throw new RuntimeException("没有上级，不能进货");
         }
-        Member parent = memberService.findByMember_id(member.getMember_parent_id());
+        Member parent = MemberService.instance.find(member.getMember_parent_id());
         String parent_user_id = parent.getUser_id();
         
         int member_purchase_order_total_quantity = 0;

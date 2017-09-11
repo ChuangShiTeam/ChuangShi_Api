@@ -11,10 +11,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.app.service.AppService;
+import com.nowui.chuangshi.api.file.service.FileService;
+import com.nowui.chuangshi.api.member.model.Member;
+import com.nowui.chuangshi.api.member.service.MemberService;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Express;
-import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberAddress;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
@@ -23,11 +27,8 @@ import com.nowui.chuangshi.model.SupplierProduct;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.model.TradeCommossion;
 import com.nowui.chuangshi.model.TradeProductSku;
-import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.ExpressService;
-import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberAddressService;
-import com.nowui.chuangshi.service.MemberService;
 import com.nowui.chuangshi.service.ProductService;
 import com.nowui.chuangshi.service.ProductSkuPriceService;
 import com.nowui.chuangshi.service.ProductSkuService;
@@ -36,7 +37,6 @@ import com.nowui.chuangshi.service.TradeCommossionService;
 import com.nowui.chuangshi.service.TradeExpressService;
 import com.nowui.chuangshi.service.TradeProductSkuService;
 import com.nowui.chuangshi.service.TradeService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.TradeFlow;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
@@ -50,10 +50,7 @@ public class TradeController extends Controller {
     private final TradeExpressService tradeExpressService = new TradeExpressService();
     private final ProductSkuPriceService productSkuPriceService = new ProductSkuPriceService();
     private final TradeCommossionService tradeCommossionService = new TradeCommossionService();
-    private final UserService userService = new UserService();
-    private final MemberService memberService = new MemberService();
     private final MemberAddressService memberAddressService = new MemberAddressService();
-    private final FileService fileService = new FileService();
     private final ExpressService expressService = new ExpressService();
     private final SupplierProductService supplierProductService = new SupplierProductService();
 
@@ -68,8 +65,8 @@ public class TradeController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        User user = userService.findByUser_id(request_user_id);
-        Member member = memberService.findByMember_id(user.getObject_Id());
+        User user = UserService.instance.find(request_user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
         MemberAddress memberAddress = memberAddressService.findByMember_id(member.getMember_id());
 
         BigDecimal trade_product_amount = BigDecimal.ZERO;
@@ -84,7 +81,7 @@ public class TradeController extends Controller {
             }
             Product product = productService.findByProduct_id(productSku.getProduct_id());
             productSkuObject.put(Product.PRODUCT_NAME, product.getProduct_name());
-            productSkuObject.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+            productSkuObject.put(Product.PRODUCT_IMAGE, FileService.instance.getFile_path(product.getProduct_image()));
 
             BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(
                     productSkuObject.getString(ProductSku.PRODUCT_SKU_ID), member.getMember_level_id());
@@ -120,7 +117,7 @@ public class TradeController extends Controller {
         List<Trade> resultList = tradeService.listByUser_id(request_user_id);
 
         for (Trade result : resultList) {
-            User user = userService.findByUser_id(result.getUser_id());
+            User user = UserService.instance.find(result.getUser_id());
             if (user != null) {
                 result.put(User.USER_NAME, user.getUser_name());
             }
@@ -131,7 +128,7 @@ public class TradeController extends Controller {
                 ProductSku productSku = productSkuService.findByProduct_sku_id(tradeProductSku.getProduct_sku_id());
                 Product product = productService.findByProduct_id(productSku.getProduct_id());
                 tradeProductSku.put(Product.PRODUCT_NAME, product.getProduct_name());
-                tradeProductSku.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+                tradeProductSku.put(Product.PRODUCT_IMAGE, FileService.instance.getFile_path(product.getProduct_image()));
                 tradeProductSku.keep(TradeProductSku.PRODUCT_SKU_ID, TradeProductSku.PRODUCT_SKU_AMOUNT,
                         TradeProductSku.PRODUCT_SKU_QUANTITY, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE);
             }
@@ -165,7 +162,7 @@ public class TradeController extends Controller {
             ProductSku productSku = productSkuService.findByProduct_sku_id(tradeProductSku.getProduct_sku_id());
             Product product = productService.findByProduct_id(productSku.getProduct_id());
             tradeProductSku.put(Product.PRODUCT_NAME, product.getProduct_name());
-            tradeProductSku.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+            tradeProductSku.put(Product.PRODUCT_IMAGE, FileService.instance.getFile_path(product.getProduct_image()));
             tradeProductSku.keep(TradeProductSku.PRODUCT_SKU_ID, TradeProductSku.PRODUCT_SKU_AMOUNT,
                     TradeProductSku.PRODUCT_SKU_QUANTITY, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE);
         }
@@ -221,8 +218,8 @@ public class TradeController extends Controller {
         authenticateRequest_app_idAndRequest_user_id();
         int trade_product_quantity = 0;
         BigDecimal trade_product_amount = new BigDecimal(0);
-        User user = userService.findByUser_id(request_user_id);
-        Member member = memberService.findByMember_id(user.getObject_Id());
+        User user = UserService.instance.find(request_user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
             TradeProductSku tradeProductSku = jsonObject1.toJavaObject(TradeProductSku.class);
@@ -389,14 +386,14 @@ public class TradeController extends Controller {
 
         JSONObject jsonObject = getParameterJSONObject();
         String member_id = jsonObject.getString("member_id");
-        Member member = memberService.findByMember_id(member_id);
+        Member member = MemberService.instance.find(member_id);
         if (member == null) {
             throw new RuntimeException("会员不存在");
         }
         List<Trade> resultList = tradeService.listByUser_id(member.getUser_id());
 
         for (Trade result : resultList) {
-            User user = userService.findByUser_id(result.getUser_id());
+            User user = UserService.instance.find(result.getUser_id());
             if (user != null) {
                 result.put(User.USER_NAME, user.getUser_name());
             }
@@ -407,7 +404,7 @@ public class TradeController extends Controller {
                 ProductSku productSku = productSkuService.findByProduct_sku_id(tradeProductSku.getProduct_sku_id());
                 Product product = productService.findByProduct_id(productSku.getProduct_id());
                 tradeProductSku.put(Product.PRODUCT_NAME, product.getProduct_name());
-                tradeProductSku.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+                tradeProductSku.put(Product.PRODUCT_IMAGE, FileService.instance.getFile_path(product.getProduct_image()));
                 tradeProductSku.keep(TradeProductSku.PRODUCT_SKU_ID, TradeProductSku.PRODUCT_SKU_AMOUNT,
                         TradeProductSku.PRODUCT_SKU_QUANTITY, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE);
             }
@@ -435,7 +432,7 @@ public class TradeController extends Controller {
                 model.getTrade_number(), getM(), getN());
 
         for (Trade result : resultList) {
-            User user = userService.findByUser_id(result.getUser_id());
+            User user = UserService.instance.find(result.getUser_id());
             if (user != null) {
                 result.put(User.USER_NAME, user.getUser_name());
             }
@@ -465,7 +462,7 @@ public class TradeController extends Controller {
 
         authenticateApp_id(trade.getApp_id());
 
-        User user = userService.findByUser_id(trade.getUser_id());
+        User user = UserService.instance.find(trade.getUser_id());
         if (user != null) {
             trade.put(User.USER_NAME, user.getUser_name());
         }
@@ -521,12 +518,12 @@ public class TradeController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
         
-        User request_user = userService.findByUser_id(request_user_id);
-        if (request_user == null || ValidateUtil.isNullOrEmpty(request_user.getObject_Id())) {
+        User request_user = UserService.instance.find(request_user_id);
+        if (request_user == null || ValidateUtil.isNullOrEmpty(request_user.getObject_id())) {
             throw new RuntimeException("找不到供应商信息");
         }
         List<SupplierProduct> supplierProductList = supplierProductService
-                .listBySupplier_id(request_user.getObject_Id());
+                .listBySupplier_id(request_user.getObject_id());
         
         List<Trade> resultList = new ArrayList<>();
         if (supplierProductList != null && supplierProductList.size() > 0) {
@@ -543,7 +540,7 @@ public class TradeController extends Controller {
                     
                     for (SupplierProduct supplierProduct : supplierProductList) {
                         if (supplierProduct.getProduct_id().equals(productSku.getProduct_id())) {
-                            User user = userService.findByUser_id(result.getUser_id());
+                            User user = UserService.instance.find(result.getUser_id());
                             if (user != null) {
                                 result.put(User.USER_NAME, user.getUser_name());
                             }
@@ -580,7 +577,7 @@ public class TradeController extends Controller {
 
         authenticateApp_id(trade.getApp_id());
 
-        User user = userService.findByUser_id(trade.getUser_id());
+        User user = UserService.instance.find(trade.getUser_id());
         if (user != null) {
             trade.put(User.USER_NAME, user.getUser_name());
         }
@@ -601,12 +598,12 @@ public class TradeController extends Controller {
 
         List<TradeProductSku> tradeProductSkuAllList = tradeProductSkuService.listByTrade_id(trade.getTrade_id());
 
-        User request_user = userService.findByUser_id(getRequest_user_id());
-        if (request_user == null || ValidateUtil.isNullOrEmpty(request_user.getObject_Id())) {
+        User request_user = UserService.instance.find(getRequest_user_id());
+        if (request_user == null || ValidateUtil.isNullOrEmpty(request_user.getObject_id())) {
             throw new RuntimeException("找不到供应商信息");
         }
         List<SupplierProduct> supplierProductList = supplierProductService
-                .listBySupplier_id(request_user.getObject_Id());
+                .listBySupplier_id(request_user.getObject_id());
 
         for (TradeProductSku tradeProductSku : tradeProductSkuAllList) {
             for (SupplierProduct supplierProduct : supplierProductList) {

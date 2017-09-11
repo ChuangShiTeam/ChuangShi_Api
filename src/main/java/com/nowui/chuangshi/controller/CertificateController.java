@@ -11,10 +11,22 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.app.model.App;
+import com.nowui.chuangshi.api.file.model.File;
+import com.nowui.chuangshi.api.file.service.FileService;
+import com.nowui.chuangshi.api.member.model.Member;
+import com.nowui.chuangshi.api.member.model.MemberLevel;
+import com.nowui.chuangshi.api.member.service.MemberLevelService;
+import com.nowui.chuangshi.api.member.service.MemberService;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.*;
-import com.nowui.chuangshi.service.*;
+import com.nowui.chuangshi.model.Certificate;
+import com.nowui.chuangshi.model.CertificateImage;
+import com.nowui.chuangshi.model.CertificatePay;
+import com.nowui.chuangshi.service.CertificateImageService;
+import com.nowui.chuangshi.service.CertificatePayService;
+import com.nowui.chuangshi.service.CertificateService;
 import com.nowui.chuangshi.type.CertificateImageType;
 import com.nowui.chuangshi.util.DateUtil;
 import com.nowui.chuangshi.util.Util;
@@ -49,7 +61,7 @@ public class CertificateController extends Controller {
                     .listByCertificate_id(certificateList.get(0).getCertificate_id());
 
             for (CertificateImage certificateImage : certificateImageList) {
-                File file = fileService.findByFile_id(certificateImage.getFile_id());
+                File file = FileService.instance.find(certificateImage.getFile_id());
                 certificateImage.put(File.FILE_ORIGINAL_PATH, file.getFile_path());
                 certificateImage.keep(CertificateImage.CERTIFICATE_TYPE, File.FILE_ORIGINAL_PATH);
 
@@ -103,14 +115,14 @@ public class CertificateController extends Controller {
         if (certificate != null) {
             authenticateApp_id(certificate.getApp_id());
 
-            User user = userService.findByUser_id(user_id);
+            User user = UserService.instance.find(user_id);
             certificate.put(User.USER_NAME, user.getUser_name());
 
             certificateImageList = certificateImageService
                     .listByCertificate_id(certificate.getCertificate_id());
 
             for (CertificateImage certificateImage : certificateImageList) {
-                File file = fileService.findByFile_id(certificateImage.getFile_id());
+                File file = FileService.instance.find(certificateImage.getFile_id());
                 certificateImage.put(File.FILE_ORIGINAL_PATH, file.getFile_original_path());
 
                 certificateImage.keep(Certificate.CERTIFICATE_ID, File.FILE_ORIGINAL_PATH, CertificateImage.CERTIFICATE_TYPE);
@@ -141,9 +153,10 @@ public class CertificateController extends Controller {
     private BigDecimal getMoney(String request_user_id) {
         Integer member_level_value = 0;
         BigDecimal total_fee_decimal;
-        Member member = memberService.findByUser_id(request_user_id);
+        User user = UserService.instance.find(request_user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
         if (!ValidateUtil.isNullOrEmpty(member.getMember_level_id())) {
-            MemberLevel memberLevel = memberLevelService.findByMember_level_id(member.getMember_level_id());
+            MemberLevel memberLevel = MemberLevelService.instance.find(member.getMember_level_id());
             member_level_value = memberLevel.getMember_level_value();
         }
         if (member_level_value == 1) {
@@ -248,8 +261,8 @@ public class CertificateController extends Controller {
                     certificate_is_pay, certificate1.getUser_id(), certificate1.getSystem_version());
 
             if (is_update) {
-                User user = userService.findByUser_id(certificate1.getUser_id());
-                Member member = memberService.findByMember_id(user.getObject_Id());
+                User user = UserService.instance.find(certificate1.getUser_id());
+                Member member = MemberService.instance.find(user.getObject_id());
 
                 // 设置小数位数，第一个变量是小数位数，第二个变量是取舍方法(四舍五入)
                 BigDecimal bd = new BigDecimal(0.01);
@@ -376,14 +389,14 @@ public class CertificateController extends Controller {
         if (certificate != null) {
             authenticateApp_id(certificate.getApp_id());
 
-            User user = userService.findByUser_id(model.getUser_id());
+            User user = UserService.instance.find(model.getUser_id());
             certificate.put(User.USER_NAME, user.getUser_name());
 
             List<CertificateImage> certificateImageList = certificateImageService
                     .listByCertificate_id(certificate.getCertificate_id());
 
             for (CertificateImage certificateImage : certificateImageList) {
-                File file = fileService.findByFile_id(certificateImage.getFile_id());
+                File file = FileService.instance.find(certificateImage.getFile_id());
                 certificateImage.put(File.FILE_ORIGINAL_PATH, file.getFile_original_path());
 
                 if (certificateImage.getCertificate_type().equals(CertificateImageType.WX.getValue())) {

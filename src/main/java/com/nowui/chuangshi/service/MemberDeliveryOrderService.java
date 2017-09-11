@@ -5,17 +5,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.nowui.chuangshi.api.member.model.Member;
+import com.nowui.chuangshi.api.member.service.MemberService;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 import com.nowui.chuangshi.cache.MemberDeliveryOrderCache;
 import com.nowui.chuangshi.model.Express;
-import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.model.StockOut;
 import com.nowui.chuangshi.model.StockOutProductSku;
-import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.model.Warehouse;
 import com.nowui.chuangshi.type.ExpressBelong;
 import com.nowui.chuangshi.type.ExpressFlow;
@@ -43,10 +45,6 @@ public class MemberDeliveryOrderService extends Service {
     private StockOutService stockOutService = new StockOutService();
     
     private StockService stockService = new StockService();
-    
-    private UserService userService = new UserService();
-    
-    private MemberService memberService = new MemberService();
     
     private ProductSkuPriceService productSkuPriceService = new ProductSkuPriceService();
     
@@ -227,8 +225,8 @@ public class MemberDeliveryOrderService extends Service {
         Integer member_delivery_order_total_quantity = 0;
         String member_delivery_order_id = Util.getRandomUUID();
         List<MemberDeliveryOrderProductSku> list = new ArrayList<MemberDeliveryOrderProductSku>();
-        User user = userService.findByUser_id(user_id);
-        Member member = memberService.findByMember_id(user.getObject_Id());
+        User user = UserService.instance.find(user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
         for (MemberDeliveryOrderProductSku memberDeliveryOrderProductSku : memberDeliveryOrderProductSkuList) {
             if (ValidateUtil.isNullOrEmpty(memberDeliveryOrderProductSku.getProduct_sku_id())) {
                 throw new RuntimeException("商品skuid不能为空");

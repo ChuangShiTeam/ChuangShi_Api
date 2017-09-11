@@ -359,10 +359,7 @@ public class WebConfig extends JFinalConfig {
                 e.printStackTrace();
             }
 
-            if (table.contains("xietong") || table.contains("table_advertisement")) {
-            } else {
-                activeRecordPlugin.addMapping(table, primary == "" ? "id" : primary, (Class<? extends Model<?>>) clazz);
-            }
+            activeRecordPlugin.addMapping(table, primary == "" ? "id" : primary, (Class<? extends Model<?>>) clazz);
         }
 
         plugins.add(activeRecordPlugin);
