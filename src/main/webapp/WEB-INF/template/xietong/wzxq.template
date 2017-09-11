@@ -33,11 +33,11 @@
 				#for(bean : articleCategoryList)
 				#if(bean.article_category_id == articleCategory.article_category_id)
 				<li class="on">
-					<a href="xyhd.html">#(bean.article_category_name)</a>
+					<a href="xydt.html?article_category_id=#(bean.article_category_id)">#(bean.article_category_name)</a>
 				</li>
 				#else
 				<li>
-					<a href="xyhd.html">#(bean.article_category_name)</a>
+					<a href="xydt.html?article_category_id=#(bean.article_category_id)">#(bean.article_category_name)</a>
 				</li>
 				#end
 				#end
@@ -71,7 +71,7 @@
 	<div class="rightbox right">
 		<div class="home_page">
 			<div class="page_t left">#(articleCategory.article_category_name)</div>
-			<div class="ways right"><a href="index.html">首页</a> &gt;<a href="xyxw.html">#(articleCategory.article_category_name)</a> &gt; <a>#(article.article_name)</a> </div>
+			<div class="ways right"><a href="index.html">首页</a> &gt;<a href="xydt.html">#(articleCategory.article_category_name)</a> &gt; <a>#(article.article_name)</a> </div>
 		</div>
 		<div class="contact">
 			<h1>#(article.article_name)</h1>

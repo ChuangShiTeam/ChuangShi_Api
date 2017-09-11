@@ -32,11 +32,11 @@
 				#for(bean : articleCategoryList)
 				#if(bean.article_category_id == articleCategory.article_category_id)
 				<li class="on" id="#(bean.article_category_id)">
-					<a href="javascript:;" onclick="listByArticleCategoryId('#(bean.article_category_id)')">#(bean.article_category_name)</a>
+					<a href="xydt.html?article_category_id=#(bean.article_category_id)">#(bean.article_category_name)</a>
 				</li>
 				#else
 				<li id="#(bean.article_category_id)">
-					<a href="javascript:;" onclick="listByArticleCategoryId('#(bean.article_category_id)')">#(bean.article_category_name)</a>
+					<a href="xydt.html?article_category_id=#(bean.article_category_id)">#(bean.article_category_name)</a>
 				</li>
 				#end
 				#end
@@ -89,6 +89,16 @@
 <!-- #EndLibraryItem -->
 </body>
 <script>
+	$(document).ready(function(){
+		console.log(window.location.href);
+   		var array = window.location.href.split("=");
+   		console.log(array);
+	   	if(array && array.length > 1) {
+     		if(array[1]) {
+	       		listByArticleCategoryId(array[1]);
+	     	}
+	   	}
+	});
   function listByArticleCategoryId(article_category_id) {
    $.ajax({
         type: "POST",
@@ -98,7 +108,7 @@
     		{
 				article_category_id: article_category_id,
 			    page_index: 0,
-			    page_size: 1
+			    page_size: 7
 			}
 	    ),
         dataType: "json",
@@ -108,21 +118,18 @@
         	$("#" + article_category_id).addClass("on");
         	$("#page_index").val(1);
             var page_total = data.data.total;
+            $("#page_total").val(page_total);
             $("#pageHtml").empty();
             var pageHtml = '';
             for(i = 1; i <= page_total && i <= 5; i++) {
             	if (i == 1) {
-            		pageHtml += '<li class="next"><a title="上一页" href="javascript:;"></a></li><li><a class="on" href="javascript:;" onClick="dispalyPage('+ i +');">'+ i +'</a></li>';
-            	} else if (i == page_total || i == 5) {
-            		pageHtml += '<li><a href="javascript:;" onClick="dispalyPage('+ i +');">'+ i +'</a></li>';
-            		if (i == page_total) {
-            			pageHtml += '<li class="prev"><a title="下一页" href="javascript:;"></a></li>';
-            		} else {
-            			pageHtml += '<li class="prev"><a title="下一页" href="javascript:;" onClick="next();"></a></li>';
-            		}
-				} else {
-					pageHtml += '<li><a href="javascript:;" onClick="dispalyPage('+ i +');">'+ i +'</a></li>';
+            		pageHtml += '<li class="next"><a title="上一页" href="javascript:;" onClick="prev();"></a></li><li><a class="on" href="javascript:;" onClick="displayPage('+ i +');">'+ i +'</a></li>';
+            	} else {
+					pageHtml += '<li><a href="javascript:;" onClick="displayPage('+ i +');">'+ i +'</a></li>';
 				}
+				if (i == page_total || i == 5) {
+            		pageHtml += '<li class="prev"><a title="下一页" href="javascript:;" onClick="next();"></a></li>';
+				} 
 			}	
 			$("#pageHtml").append(pageHtml);
 			$("#articleListHtml").empty();
@@ -135,7 +142,7 @@
 			$("#articleListHtml").append(articleListHtml);
         },
         error: function (data) {
-            
+            alert("网络异常，请联系管理员");
         }
     });
   }

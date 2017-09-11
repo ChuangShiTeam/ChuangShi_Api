@@ -2,7 +2,7 @@
 <div class="footer">
 	<div class="foot_nav">
 		<div class="w1000px">
-			<div class="f_tools left">
+			<div class="f_tools left" id="leftSide">
 				#for(websiteMenu : websiteMenuList)
 				<div class="ft_1" style="margin-bottom: 50px">
 					<dl>
@@ -14,7 +14,8 @@
 				</div>
                 #end
 			</div>
-			<div class="sign right"> <b>我要报名</b>
+			<div class="sign right" id="rightSide"> 
+				<b>我要报名</b>
 				<p>学校地址：佛山市禅城区东鄱南路10号</p>
 				<p>联系电话：0757-66611999  66611228  18665531629</p>
 			</div>
@@ -44,3 +45,13 @@
 		<div class="clear"></div>
 	</div>
 </div>
+
+<script type="text/javascript"> 
+	var left = document.getElementById('leftSide');  
+	var right = document.getElementById('rightSide');  
+	if (left.offsetHeight >= right.offsetHeight) {  
+		right.style.height = left.offsetHeight+'px';  
+	} else {  
+		left.style.height = right.offsetHeight+'px';  
+	}  
+</script> 

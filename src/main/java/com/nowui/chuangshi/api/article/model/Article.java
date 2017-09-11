@@ -1,13 +1,13 @@
 package com.nowui.chuangshi.api.article.model;
 
+import java.util.Date;
+
 import com.nowui.chuangshi.common.annotation.Column;
 import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.type.ColumnType;
-
-import java.util.Date;
 
 @Entity
 public class Article extends Model<Article> {
