@@ -7,6 +7,7 @@ import com.nowui.chuangshi.common.sql.*;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.ColumnType;
 import com.nowui.chuangshi.util.DateUtil;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -209,13 +210,32 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     public String buildSelectSql() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        List<String> selectList = criteria.getSelectList();
+        List<Select> selectList = criteria.getSelectList();
 
         if (selectList.size() > 0) {
             stringBuilder.append(",\n");
 
             for (int i = 0; i < selectList.size(); i++) {
-                stringBuilder.append(selectList.get(i));
+                Select select = selectList.get(i);
+
+                switch (select.getSelectType()) {
+                    case IFNULL:
+                        stringBuilder.append("IFNULL(");
+                        stringBuilder.append(select.getKey());
+                        stringBuilder.append(", '");
+                        stringBuilder.append(select.getValue());
+                        stringBuilder.append("') AS ");
+                        stringBuilder.append(select.getName());
+                        break;
+                    case NORMAL:
+                        stringBuilder.append(select.getKey());
+                        if (!ValidateUtil.isNullOrEmpty(select.getName())) {
+                            stringBuilder.append(" AS ");
+                            stringBuilder.append(select.getName());
+                        }
+                        break;
+                }
+
                 if (i + 1 < selectList.size()) {
                     if (selectList.size() > 0) {
                         stringBuilder.append(",\n");
@@ -383,14 +403,14 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         StringBuilder stringBuilder = new StringBuilder();
         List<OrderBy> orderByList = criteria.getOrderByList();
 
-        Iterator<OrderBy> iterator = orderByList.iterator();
-        while (iterator.hasNext()) {
-            OrderBy orderBy = iterator.next();
-
-            if (!isColumn(orderBy.getKey())) {
-                iterator.remove();
-            }
-        }
+//        Iterator<OrderBy> iterator = orderByList.iterator();
+//        while (iterator.hasNext()) {
+//            OrderBy orderBy = iterator.next();
+//
+//            if (!isColumn(orderBy.getKey())) {
+//                iterator.remove();
+//            }
+//        }
 
         if (orderByList.size() == 0) {
             return "";

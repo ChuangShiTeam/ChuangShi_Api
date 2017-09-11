@@ -107,6 +107,8 @@ public class MemberPurchaseOrder extends Model<MemberPurchaseOrder> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
+    public static final String MEMBER_PURCHASE_ORDER_PRODUCT_SKU_LIST = "member_purchase_order_product_sku_list";
+
     public String getMember_purchase_order_id() {
         return getStr(MEMBER_PURCHASE_ORDER_ID);
     }

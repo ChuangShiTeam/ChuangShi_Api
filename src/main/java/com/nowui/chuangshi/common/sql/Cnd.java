@@ -15,7 +15,20 @@ public class Cnd {
     }
 
     public Cnd select(String key) {
-        this.criteria.addSelect(key);
+        Select select = new Select(key);
+        this.criteria.addSelect(select);
+        return this;
+    }
+
+    public Cnd select(String key, String name) {
+        Select select = new Select(key, name);
+        this.criteria.addSelect(select);
+        return this;
+    }
+
+    public Cnd selectIfNull(String key, String value, String name) {
+        Select select = new Select(key, value, name, SelectType.IFNULL);
+        this.criteria.addSelect(select);
         return this;
     }
 

@@ -1,14 +1,12 @@
 package com.nowui.chuangshi.common.sql;
 
-import com.nowui.chuangshi.constant.Constant;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Criteria {
 
 //    private List<Set> setList;
-    private List<String> selectList;
+    private List<Select> selectList;
     private List<Join> joinList;
     private List<Condition> conditionList;
     private List<OrderBy> orderByList;
@@ -19,7 +17,7 @@ public class Criteria {
 
     public Criteria() {
 //        setList = new ArrayList<Set>();
-        selectList = new ArrayList<String>();
+        selectList = new ArrayList<Select>();
         joinList = new ArrayList<Join>();
         conditionList = new ArrayList<Condition>();
         orderByList = new ArrayList<OrderBy>();
@@ -37,12 +35,12 @@ public class Criteria {
 //        return list;
 //    }
 
-    public void addSelect(String key) {
-        selectList.add(key);
+    public void addSelect(Select select) {
+        selectList.add(select);
     }
 
-    public List<String> getSelectList() {
-        List<String> list = new ArrayList<String>();
+    public List<Select> getSelectList() {
+        List<Select> list = new ArrayList<Select>();
         list.addAll(selectList);
 
         return list;

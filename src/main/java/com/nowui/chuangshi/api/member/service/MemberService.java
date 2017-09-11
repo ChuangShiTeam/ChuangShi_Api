@@ -6,6 +6,7 @@ import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.member.dao.MemberDao;
 import com.nowui.chuangshi.api.member.model.Member;
+import com.nowui.chuangshi.api.member.model.MemberLevel;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.service.Service;
@@ -18,9 +19,7 @@ import com.nowui.chuangshi.util.AesUtil;
 import com.nowui.chuangshi.util.CacheUtil;
 import com.nowui.chuangshi.util.Util;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class MemberService extends Service {
 
@@ -51,6 +50,80 @@ public class MemberService extends Service {
 
         List<Member> memberList = memberDao.list(cnd);
         return memberList;
+    }
+
+    public List<Map<String, Object>> teamList(String member_id) {
+        List<Map<String, Object>> resultList = CacheUtil.get(MEMBER_PARENT_LIST_CACHE, member_id);
+
+        if (resultList == null) {
+            Cnd cnd = new Cnd();
+            cnd.select(Member.TABLE_MEMBER + "." + Member.MEMBER_PARENT_ID);
+            cnd.select(User.TABLE_USER + "." + User.USER_NAME);
+            cnd.selectIfNull(MemberLevel.TABLE_MEMBER_LEVEL + "." + MemberLevel.MEMBER_LEVEL_NAME, "", MemberLevel.MEMBER_LEVEL_NAME);
+            cnd.select(Member.TABLE_MEMBER + "." + Member.MEMBER_STATUS);
+            cnd.select(File.TABLE_FILE + "." + File.FILE_PATH, User.USER_AVATAR);
+            cnd.leftJoin(User.TABLE_USER, User.USER_ID, Member.TABLE_MEMBER, Member.USER_ID);
+            cnd.leftJoin(MemberLevel.TABLE_MEMBER_LEVEL, MemberLevel.MEMBER_LEVEL_ID, Member.TABLE_MEMBER, Member.MEMBER_LEVEL_ID);
+            cnd.leftJoin(File.TABLE_FILE, File.FILE_ID, User.TABLE_USER, User.USER_AVATAR);
+            cnd.where(Member.TABLE_MEMBER + "." + Member.SYSTEM_STATUS, true);
+            cnd.andLike(Member.TABLE_MEMBER + "." + Member.MEMBER_PARENT_PATH, member_id);
+            cnd.asc(Member.TABLE_MEMBER + "." + Member.MEMBER_STATUS);
+            cnd.asc(Member.TABLE_MEMBER + "." + Member.SYSTEM_CREATE_TIME);
+
+            List<Member> memberList = memberDao.primaryKeyList(cnd);
+
+            resultList = getChildren(memberList, member_id, Member.MEMBER_STATUS);
+
+            CacheUtil.put(MEMBER_PARENT_LIST_CACHE, member_id, resultList);
+
+        }
+
+        return resultList;
+    }
+
+    private List<Map<String, Object>> getChildren(List<Member> memberList, String member_parent_id, String... keys) {
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        for (Member member : memberList) {
+            if (member.getMember_parent_id().equals(member_parent_id)) {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put(Member.MEMBER_ID, member.getMember_id());
+                map.put(User.USER_NAME, member.getStr(User.USER_NAME));
+                map.put(User.USER_AVATAR, member.getStr(User.USER_AVATAR));
+                map.put(MemberLevel.MEMBER_LEVEL_NAME, member.getStr(MemberLevel.MEMBER_LEVEL_NAME));
+
+                for (String key : keys) {
+                    map.put(key, member.get(key));
+                }
+
+                List<Map<String, Object>> childrenList = getChildren(memberList, member.getMember_id(), keys);
+                if (childrenList.size() > 0) {
+                    map.put(Constant.CHILDREN, childrenList);
+                }
+                list.add(map);
+            }
+        }
+
+        for (int i = 0; i < list.size() - 1; i++) {
+            for (int j = 1; j < list.size() - i; j++) {
+                Map<String, Object> o1 = list.get(j - 1);
+                Map<String, Object> o2 = list.get(j);
+                Integer a = 0;
+                Integer b = 0;
+                if (o2.get(Constant.CHILDREN) != null) {
+                    a = ((List<Map<String, Object>>) o2.get(Constant.CHILDREN)).size();
+                }
+                if (o1.get(Constant.CHILDREN) != null) {
+                    b = ((List<Map<String, Object>>) o1.get(Constant.CHILDREN)).size();
+                }
+                if (a.compareTo(b) > 0) {
+                    o1 = list.get(j - 1);
+                    list.set((j - 1), list.get(j));
+                    list.set(j, o1);
+                }
+            }
+        }
+
+        return list;
     }
 
     public Member find(String member_id) {
@@ -180,6 +253,26 @@ public class MemberService extends Service {
     public Boolean qrcodeUpdate(String member_id, String qrcode_id, String system_update_user_id) {
         Member member = new Member();
         member.setQrcode_id(qrcode_id);
+
+        Cnd cnd = new Cnd();
+        cnd.where(Member.SYSTEM_STATUS, true);
+        cnd.and(Member.MEMBER_ID, member_id);
+        cnd.and(Member.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+
+        Boolean success = memberDao.update(member, system_update_user_id, cnd);
+
+        if (success) {
+            cacheDelete(member_id);
+        }
+
+        return success;
+    }
+
+    public Boolean childrenUpdate(String member_id, String member_level_id, String system_update_user_id) {
+        Member member = new Member();
+        member.setMember_id(member_id);
+        member.setMember_level_id(member_level_id);
+        member.setMember_status(true);
 
         Cnd cnd = new Cnd();
         cnd.where(Member.SYSTEM_STATUS, true);

@@ -31,6 +31,7 @@ import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.QrcodeType;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
@@ -43,10 +44,16 @@ import java.util.Map;
 @ControllerKey("/mobile/member")
 public class MemberController extends Controller {
 
-    @ActionKey("/mobile/member/list")
-    public void list() {
+    @ActionKey("/mobile/member/team/list")
+    public void teamList() {
+        String request_user_id = getRequest_user_id();
 
-        renderSuccessJson();
+        User user = UserService.instance.find(request_user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
+
+        List<Map<String, Object>> resultList = MemberService.instance.teamList(member.getMember_id());
+
+        renderSuccessMapListJson(resultList);
     }
 
     @ActionKey("/mobile/member/children/address/list")
@@ -199,6 +206,36 @@ public class MemberController extends Controller {
         validateResponse(Member.MEMBER_ID, User.USER_NAME, User.USER_AVATAR, Member.MEMBER_PARENT_ID, Member.QRCODE_ID, MemberLevel.MEMBER_LEVEL_ID, MemberLevel.MEMBER_LEVEL_NAME, Bill.BILL_AMOUNT, CertificatePay.CERTIFICATE_AMOUNT, Member.MEMBER_STATUS);
 
         renderSuccessJson(result);
+    }
+
+    @ActionKey("/mobile/member/team/find")
+    public void teamFind() {
+        validateRequest(Member.MEMBER_ID);
+
+        Member model = getModel(Member.class);
+        String request_user_id = getRequest_user_id();
+
+        Member member = MemberService.instance.find(model.getMember_id());
+
+        User parentUser = UserService.instance.find(request_user_id);
+        Member parentMember = MemberService.instance.find(parentUser.getObject_id());
+
+        User user = UserService.instance.find(member.getUser_id());
+        member.put(User.USER_NAME, user.getUser_name());
+        member.put(User.USER_AVATAR, FileService.instance.getFile_path(user.getUser_avatar()));
+
+        String member_level_name = "";
+        if (!ValidateUtil.isNullOrEmpty(member.getMember_level_id())) {
+            MemberLevel memberLevel = MemberLevelService.instance.find(member.getMember_level_id());
+            member_level_name = memberLevel.getMember_level_name();
+        }
+        member.put(MemberLevel.MEMBER_LEVEL_NAME, member_level_name);
+
+        member.put(Constant.IS_CHILDREN, member.getMember_parent_id().equals(parentMember.getMember_id()));
+
+        validateResponse(Member.MEMBER_ID, Member.MEMBER_PARENT_ID, User.USER_NAME, User.USER_AVATAR, MemberLevel.MEMBER_LEVEL_NAME, Member.MEMBER_STATUS, Constant.IS_CHILDREN);
+
+        renderSuccessJson(member);
     }
 
     @ActionKey("/mobile/member/save")

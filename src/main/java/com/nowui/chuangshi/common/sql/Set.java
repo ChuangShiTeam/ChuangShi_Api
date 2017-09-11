@@ -23,4 +23,5 @@ public class Set {
     public SetType getSetType() {
         return setType;
     }
+
 }
