@@ -1,8 +1,6 @@
 package com.nowui.chuangshi.api.article.mobile;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.article.model.Article;
@@ -57,7 +55,7 @@ public class ArticleController extends Controller {
 
         Integer count = ArticleService.instance.categoryCount(model.getArticle_category_id());
         
-        Integer page_total = (count / 1) + (count % 1 == 0 ? 0 : 1);
+        Integer page_total = (count / 7) + (count % 7 == 0 ? 0 : 1);
         
         renderSuccessJson(page_total, articleList);
     }

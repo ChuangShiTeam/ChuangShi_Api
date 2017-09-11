@@ -45,11 +45,11 @@ public class AdvertisementService extends Service {
         return advertisementList;
     }
     
-    public List<Map<String, Object>> adminIndexBannerList(String app_id) {
+    public List<Map<String, Object>> adminCategoryCodeList(String app_id, String advertisement_category_code) {
         Cnd cnd = new Cnd();        
         cnd.where(Advertisement.SYSTEM_STATUS, true);
         cnd.and(Advertisement.APP_ID, app_id);
-        cnd.andAllowEmpty(Advertisement.ADVERTISEMENT_CATEGORY_CODE, "index_banner");
+        cnd.andAllowEmpty(Advertisement.ADVERTISEMENT_CATEGORY_CODE, advertisement_category_code);
         cnd.asc(Advertisement.ADVERTISEMENT_SORT);
         
         List<Advertisement> advertisementList = advertisementDao.primaryKeyList(cnd);
@@ -67,7 +67,7 @@ public class AdvertisementService extends Service {
         }
         return resultList;
     }
-
+    
     public Advertisement find(String advertisement_id) {
         Advertisement advertisement = CacheUtil.get(ADVERTISEMENT_ITEM_CACHE, advertisement_id);
 

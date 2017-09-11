@@ -119,15 +119,18 @@
 #include("footer.template")
 <!-- #EndLibraryItem -->
 <script src="script/js.js"></script>
+#for(advertisement : indexFloatList)
+#if(advertisement.advertisement_is_float)
 <div id="moveWindow">
 	<div id="removeMW"></div>
 	<div class="movetxt">
-		<a href="bmb.html">
+		<a href="#(advertisement.advertisement_link)">
 			<b>公告</b>
-			<p>2017年小学一年级招生报名正在进行中！<span>点击进入</span>
-			</p>
+			<p>#(advertisement.advertisement_title)<span>点击进入</span></p>
 		</a>
 	</div>
 </div>
+#end
+#end
 </body>
 </html>
