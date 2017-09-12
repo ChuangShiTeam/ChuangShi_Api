@@ -5,10 +5,14 @@ import com.jfinal.plugin.IPlugin;
 public class RocketPlugin implements IPlugin {
 
     public boolean start() {
-        return false;
+        Consumer.instance.start();
+        Producer.instance.start();
+        return true;
     }
 
     public boolean stop() {
-        return false;
+        Consumer.instance.stop();
+        Producer.instance.stop();
+        return true;
     }
 }

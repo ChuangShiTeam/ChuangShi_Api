@@ -119,7 +119,7 @@ public class WeChatMessageController extends MsgController {
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
-            AccessTokenApi.refreshAccessToken();
+//            AccessTokenApi.refreshAccessToken();
         }
 
         ApiResult apiResult = UserApi.getUserInfo(wechat_open_id);
@@ -127,6 +127,8 @@ public class WeChatMessageController extends MsgController {
         String user_name = apiResult.getStr("nickname");
         String user_avatar = apiResult.getStr("headimgurl");
         String system_create_user_id = "";
+
+        System.out.println(apiResult.getJson());
 
         if (ValidateUtil.isNullOrEmpty(wechat_union_id)) {
             wechat_union_id = "";
@@ -180,7 +182,7 @@ public class WeChatMessageController extends MsgController {
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
-            AccessTokenApi.refreshAccessToken();
+//            AccessTokenApi.refreshAccessToken();
         }
 
         Qrcode qrcode = QrcodeService.instance.find(from_qrcode_id);
@@ -303,7 +305,7 @@ public class WeChatMessageController extends MsgController {
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
-            AccessTokenApi.refreshAccessToken();
+//            AccessTokenApi.refreshAccessToken();
         }
 
         String wechat_open_id = inMenuEvent.getFromUserName();
@@ -313,6 +315,8 @@ public class WeChatMessageController extends MsgController {
         String user_name = apiResult.getStr("nickname");
         String user_avatar = apiResult.getStr("headimgurl");
         String system_create_user_id = "";
+
+        System.out.println(apiResult.getJson());
 
         User user = UserService.instance.wechatFind(app_id, UserType.MEMBER.getKey(), wechat_open_id, wechat_union_id);
         if (user != null) {

@@ -6,7 +6,6 @@ import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 
-import java.util.Date;
 import java.util.List;
 
 public class #(first_upper_model_name_without_underline)Service extends Service {

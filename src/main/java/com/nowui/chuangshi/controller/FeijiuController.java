@@ -1,10 +1,10 @@
 package com.nowui.chuangshi.controller;
 
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.common.render.ExcelRender;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.FeijiuFastCustomer;
 import com.nowui.chuangshi.model.FeijiuRecommendCustomer;
-import com.nowui.chuangshi.render.ExcelRender;
 import com.nowui.chuangshi.service.FeijiuFastCustomerService;
 import com.nowui.chuangshi.service.FeijiuRecommendCustomerService;
 import com.nowui.chuangshi.util.DateUtil;

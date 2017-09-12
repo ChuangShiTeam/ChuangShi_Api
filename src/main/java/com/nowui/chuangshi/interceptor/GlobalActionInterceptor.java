@@ -6,12 +6,10 @@ import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.plugin.activerecord.DbKit;
-import com.nowui.chuangshi.common.runnable.HttpRunnable;
-import com.nowui.chuangshi.common.runnable.ThreadPool;
+import com.nowui.chuangshi.api.http.model.Http;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.Http;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.util.*;
 import org.apache.http.HttpStatus;
@@ -174,17 +172,7 @@ public class GlobalActionInterceptor implements Interceptor {
             if (http_url.startsWith("/http/") || http_url.contains("/export")) {
 
             } else {
-                System.out.println("----------------------------------------------------------------------------------------------------------------");
-                System.out.println("url: " + http.getHttp_url());
-                System.out.println("app_id: " + request_app_id);
-                System.out.println("user_id: " + request_user_id);
-                System.out.println("http_token: " + http.getHttp_token());
-                System.out.println("time: " + DateUtil.getDateTimeString(http.getSystem_create_time()));
-                System.out.println("request: " + http.getHttp_request());
-                System.out.println("response: " + http.getHttp_response());
-                System.out.println("----------------------------------------------------------------------------------------------------------------");
-
-                ThreadPool.me.execute(new HttpRunnable(http));
+                MQUtil.sendMessage("http", JSONObject.toJSONString(http));
             }
         }
 

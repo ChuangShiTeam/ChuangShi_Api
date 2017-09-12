@@ -235,7 +235,7 @@ public class MemberController extends Controller {
             String wechat_app_id = ApiConfigKit.getAppId();
             if (!wechat_app_id.equals(app.getWechat_app_id())) {
                 ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
-                AccessTokenApi.refreshAccessToken();
+//                AccessTokenApi.refreshAccessToken();
             }
 
             ApiResult apiResult = QrcodeApi.createPermanent(qrcode_id);

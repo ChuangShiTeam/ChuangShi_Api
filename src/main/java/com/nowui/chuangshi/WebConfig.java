@@ -46,7 +46,6 @@ import com.nowui.chuangshi.controller.FileController;
 import com.nowui.chuangshi.controller.GuangqiController;
 import com.nowui.chuangshi.controller.GuangqiCustomerController;
 import com.nowui.chuangshi.controller.GuangqiPrizeController;
-import com.nowui.chuangshi.controller.HttpController;
 import com.nowui.chuangshi.controller.MemberAddressController;
 import com.nowui.chuangshi.controller.MemberController;
 import com.nowui.chuangshi.controller.MemberDeliveryOrderController;
@@ -88,7 +87,6 @@ import com.nowui.chuangshi.model.File;
 import com.nowui.chuangshi.model.GuangqiCustomer;
 import com.nowui.chuangshi.model.GuangqiCustomerPrize;
 import com.nowui.chuangshi.model.GuangqiPrize;
-import com.nowui.chuangshi.model.Http;
 import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberAddress;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
@@ -126,6 +124,8 @@ import com.nowui.chuangshi.model.TradePay;
 import com.nowui.chuangshi.model.TradeProductSku;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.model.Warehouse;
+import com.nowui.chuangshi.rocket.RocketPlugin;
+import com.nowui.chuangshi.runnable.WeChatRunnable;
 import com.nowui.chuangshi.util.ClassUtil;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -143,7 +143,6 @@ public class WebConfig extends JFinalConfig {
         routes.add("/wechat/message", WeChatMessageController.class);
         routes.add("/wechat", WeChatController.class);
         routes.add("/code", CodeController.class);
-        routes.add("/http", HttpController.class);
         routes.add("/sql", SqlController.class);
         routes.add("/exception", ExceptionController.class);
         routes.add("/menu", MenuController.class);
@@ -249,7 +248,6 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.setBaseSqlTemplatePath(baseSqlTemplatePath);
         getSql(activeRecordPlugin, baseSqlTemplatePath, baseSqlTemplatePath);
 
-        activeRecordPlugin.addMapping("table_http", "http_id", Http.class);
         activeRecordPlugin.addMapping("table_sql", "sql_id", Sql.class);
         activeRecordPlugin.addMapping("table_exception", "exception_id", Exception.class);
         activeRecordPlugin.addMapping("table_menu", "menu_id", Menu.class);
@@ -368,8 +366,11 @@ public class WebConfig extends JFinalConfig {
         plugins.add(ehCachePlugin);
 
         Cron4jPlugin cron4jPlugin = new Cron4jPlugin();
+        cron4jPlugin.addTask("*/100 * * * *", new WeChatRunnable());
         plugins.add(cron4jPlugin);
 
+        RocketPlugin rocketPlugin = new RocketPlugin();
+        plugins.add(rocketPlugin);
     }
 
     private String getValue(Object object, Field field) throws IllegalAccessException {

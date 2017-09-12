@@ -170,7 +170,7 @@ public class MemberService extends Service {
             calendar.add(Calendar.YEAR, 1);
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(User.USER_ID, "5bf710533d47421ab2efc5ec51160de5");
+            jsonObject.put(User.USER_ID, "6f4ed2eae2aa4b39983148f47f6d0f85");
             jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
 
             System.out.println(AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));

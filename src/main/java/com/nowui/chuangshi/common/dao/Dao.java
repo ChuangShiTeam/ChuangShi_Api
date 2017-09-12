@@ -90,6 +90,17 @@ public class Dao {
 //        return Db.update(sql) != 0;
 //    }
 
+    public Boolean save(Model model) {
+        model.put(Constant.SYSTEM_VERSION, 0);
+        model.put(Constant.SYSTEM_STATUS, true);
+
+        String sql = model.buildSaveSql();
+
+        System.out.println(sql);
+
+        return Db.update(sql) != 0;
+    }
+
     public Boolean save(Model model, String system_create_user_id) {
         model.put(Constant.SYSTEM_CREATE_USER_ID, system_create_user_id);
         model.put(Constant.SYSTEM_CREATE_TIME, new Date());

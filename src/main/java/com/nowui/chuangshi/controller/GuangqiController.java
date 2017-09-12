@@ -1,16 +1,18 @@
 package com.nowui.chuangshi.controller;
 
 import com.jfinal.core.ActionKey;
-import com.jfinal.weixin.sdk.api.AccessTokenApi;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.app.service.AppService;
+import com.nowui.chuangshi.api.http.service.HttpService;
+import com.nowui.chuangshi.common.render.ExcelRender;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.GuangqiCustomer;
 import com.nowui.chuangshi.model.GuangqiCustomerPrize;
 import com.nowui.chuangshi.model.GuangqiPrize;
-import com.nowui.chuangshi.render.ExcelRender;
-import com.nowui.chuangshi.service.*;
+import com.nowui.chuangshi.service.GuangqiCustomerPrizeService;
+import com.nowui.chuangshi.service.GuangqiCustomerService;
+import com.nowui.chuangshi.service.GuangqiPrizeService;
 import com.nowui.chuangshi.util.CacheUtil;
 import com.nowui.chuangshi.util.DateUtil;
 import com.nowui.chuangshi.util.Util;
@@ -27,7 +29,6 @@ public class GuangqiController extends Controller {
 
     public static final String GUANGQI_PRIZE_VISIT_COUNT_BY_APP_ID_CACHE = "guangqi_prize_visit_count_by_app_id_cache";
 
-    private final HttpService httpService = new HttpService();
     private final GuangqiCustomerService guangqiCustomerService = new GuangqiCustomerService();
     private final GuangqiPrizeService guangqiPrizeService = new GuangqiPrizeService();
     private final GuangqiCustomerPrizeService guangqiCustomerPrizeService = new GuangqiCustomerPrizeService();
@@ -43,7 +44,7 @@ public class GuangqiController extends Controller {
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
-            AccessTokenApi.refreshAccessToken();
+//            AccessTokenApi.refreshAccessToken();
         }
 
         String url = getPara("url");
@@ -53,7 +54,7 @@ public class GuangqiController extends Controller {
 
         Integer visit_count = CacheUtil.get(GUANGQI_PRIZE_VISIT_COUNT_BY_APP_ID_CACHE, request_app_id);
         if (visit_count == null) {
-            visit_count = httpService.countByApp_idAndHttp_url(request_app_id, Url.GUANGQI_WECHAT_SHARE);
+            visit_count = HttpService.instance.httpUrlCount(request_app_id, Url.GUANGQI_WECHAT_SHARE);
         }
         CacheUtil.put(GUANGQI_PRIZE_VISIT_COUNT_BY_APP_ID_CACHE, request_app_id, visit_count + 1);
 

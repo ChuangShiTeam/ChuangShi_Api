@@ -194,7 +194,7 @@ public class QrcodeController extends Controller {
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
             ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
-            AccessTokenApi.refreshAccessToken();
+//            AccessTokenApi.refreshAccessToken();
         }
 
         String qrcode_id = Util.getRandomUUID();

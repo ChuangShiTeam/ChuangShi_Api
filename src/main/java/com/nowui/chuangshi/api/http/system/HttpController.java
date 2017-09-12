@@ -1,40 +1,40 @@
-package com.nowui.chuangshi.api.product.admin;
+package com.nowui.chuangshi.api.http.system;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+import com.nowui.chuangshi.common.interceptor.SystemInterceptor;
 
-@Before(AdminInterceptor.class)
-@ControllerKey("/admin/product")
-public class ProductController extends Controller {
+@Before(SystemInterceptor.class)
+@ControllerKey("/system/http")
+public class HttpController extends Controller {
 
-    @ActionKey("/admin/product/list")
+    @ActionKey("/system/http/list")
     public void list() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/admin/product/find")
+    @ActionKey("/system/http/find")
     public void find() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/admin/product/save")
+    @ActionKey("/system/http/save")
     public void save() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/admin/product/update")
+    @ActionKey("/system/http/update")
     public void update() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/admin/product/delete")
+    @ActionKey("/system/http/delete")
     public void delete() {
 
         renderSuccessJson();
