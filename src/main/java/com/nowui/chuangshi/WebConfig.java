@@ -36,7 +36,6 @@ import com.nowui.chuangshi.controller.CertificateImageController;
 import com.nowui.chuangshi.controller.CodeController;
 import com.nowui.chuangshi.controller.CustomerAttributeController;
 import com.nowui.chuangshi.controller.CustomerController;
-import com.nowui.chuangshi.controller.ExceptionController;
 import com.nowui.chuangshi.controller.ExpressController;
 import com.nowui.chuangshi.controller.FeijiuController;
 import com.nowui.chuangshi.controller.FeijiuFastCustomerController;
@@ -56,7 +55,6 @@ import com.nowui.chuangshi.controller.ProductBrandController;
 import com.nowui.chuangshi.controller.ProductCategoryController;
 import com.nowui.chuangshi.controller.ProductController;
 import com.nowui.chuangshi.controller.QrcodeController;
-import com.nowui.chuangshi.controller.SqlController;
 import com.nowui.chuangshi.controller.StockController;
 import com.nowui.chuangshi.controller.StockInController;
 import com.nowui.chuangshi.controller.StockOutController;
@@ -78,7 +76,6 @@ import com.nowui.chuangshi.model.CertificatePay;
 import com.nowui.chuangshi.model.Customer;
 import com.nowui.chuangshi.model.CustomerAttribute;
 import com.nowui.chuangshi.model.CustomerAttributeValue;
-import com.nowui.chuangshi.model.Exception;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.FeijiuFastCustomer;
 import com.nowui.chuangshi.model.FeijiuRecommendCustomer;
@@ -107,7 +104,6 @@ import com.nowui.chuangshi.model.ProductSkuAttribute;
 import com.nowui.chuangshi.model.ProductSkuCommission;
 import com.nowui.chuangshi.model.ProductSkuPrice;
 import com.nowui.chuangshi.model.Qrcode;
-import com.nowui.chuangshi.model.Sql;
 import com.nowui.chuangshi.model.Stock;
 import com.nowui.chuangshi.model.StockIn;
 import com.nowui.chuangshi.model.StockInProductSku;
@@ -143,8 +139,6 @@ public class WebConfig extends JFinalConfig {
         routes.add("/wechat/message", WeChatMessageController.class);
         routes.add("/wechat", WeChatController.class);
         routes.add("/code", CodeController.class);
-        routes.add("/sql", SqlController.class);
-        routes.add("/exception", ExceptionController.class);
         routes.add("/menu", MenuController.class);
         routes.add("/api", ApiController.class);
         routes.add("/user", UserController.class);
@@ -248,8 +242,6 @@ public class WebConfig extends JFinalConfig {
         activeRecordPlugin.setBaseSqlTemplatePath(baseSqlTemplatePath);
         getSql(activeRecordPlugin, baseSqlTemplatePath, baseSqlTemplatePath);
 
-        activeRecordPlugin.addMapping("table_sql", "sql_id", Sql.class);
-        activeRecordPlugin.addMapping("table_exception", "exception_id", Exception.class);
         activeRecordPlugin.addMapping("table_menu", "menu_id", Menu.class);
         activeRecordPlugin.addMapping("table_api", "api_id", Api.class);
         activeRecordPlugin.addMapping("table_menu_api", "menu_api_id", MenuApi.class);
@@ -399,22 +391,6 @@ public class WebConfig extends JFinalConfig {
                 ApiConfigKit.putApiConfig(apiConfig);
             }
         }
-
-
-//        try {
-//            Date date = new Date();
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.setTime(date);
-//            calendar.add(Calendar.YEAR, 1);
-//
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put(User.USER_ID, "327c445ab670444b9431f6150c202e36");
-//            jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
-//            System.out.println(AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));
-//        } catch (java.lang.Exception e) {
-//            e.printStackTrace();
-//            throw new RuntimeException("登录不成功");
-//        }
     }
 
     public void beforeJFinalStop() {

@@ -14,10 +14,9 @@ public class Config {
     public static Integer max_activee = 0;
     public static String code_generate_url = "";
     public static String table_schema = "";
-    
     public static String notify_url = "";
-    
     public static String host = "";
+    public static String rocket = "";
 
     static {
         PropKit.clear();
@@ -35,6 +34,7 @@ public class Config {
         table_schema = PropKit.get("table_schema");
         notify_url = PropKit.get("notify_url");
         host = PropKit.get("host");
+        rocket = PropKit.get("rocket");
     }
 
 }

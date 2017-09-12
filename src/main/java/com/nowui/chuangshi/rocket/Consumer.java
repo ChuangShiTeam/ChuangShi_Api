@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.rocket;
 
 import com.nowui.chuangshi.common.annotation.Handler;
+import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.util.ClassUtil;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.*;
@@ -45,8 +46,7 @@ public class Consumer {
 
         try {
             consumer = new DefaultMQPushConsumer("chuangshi");
-            consumer.setNamesrvAddr("localhost:9876");
-//            consumer.setNamesrvAddr("121.40.44.121:9876");
+            consumer.setNamesrvAddr(Config.rocket);
             consumer.setInstanceName("Consumer");
 
             consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);

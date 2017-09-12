@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.rocket;
 
+import com.nowui.chuangshi.constant.Config;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
@@ -15,8 +16,7 @@ public class Producer {
     public Producer() {
         try {
             producer = new DefaultMQProducer("chuangshi");
-            producer.setNamesrvAddr("localhost:9876");
-//            producer.setNamesrvAddr("121.40.44.121:9876");
+            producer.setNamesrvAddr(Config.rocket);
             producer.setInstanceName("Producer");
             producer.start();
             producer.setRetryTimesWhenSendAsyncFailed(0);
