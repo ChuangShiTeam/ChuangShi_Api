@@ -90,6 +90,11 @@
             <artifactId>rocketmq-client</artifactId>
             <version>4.1.0-incubating</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.16</version>
+		</dependency>
     </dependencies>
 
     <properties>

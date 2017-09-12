@@ -18,7 +18,7 @@ public class XietongClazzService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(XietongClazz.SYSTEM_STATUS, true);
         cnd.and(XietongClazz.APP_ID, app_id);
-        cnd.andAllowEmpty(XietongClazz.CLAZZ_NAME, clazz_name);
+        cnd.andLikeAllowEmpty(XietongClazz.CLAZZ_NAME, clazz_name);
 
         Integer count = xietongClazzDao.count(cnd);
         return count;
@@ -28,7 +28,9 @@ public class XietongClazzService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(XietongClazz.SYSTEM_STATUS, true);
         cnd.and(XietongClazz.APP_ID, app_id);
-        cnd.andAllowEmpty(XietongClazz.CLAZZ_NAME, clazz_name);
+        cnd.andLikeAllowEmpty(XietongClazz.CLAZZ_NAME, clazz_name);
+        cnd.asc(XietongClazz.CLAZZ_SORT);
+        cnd.desc(XietongClazz.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
         List<XietongClazz> xietong_clazzList = xietongClazzDao.primaryKeyList(cnd);
@@ -42,9 +44,25 @@ public class XietongClazzService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(XietongClazz.SYSTEM_STATUS, true);
         cnd.and(XietongClazz.APP_ID, app_id);
-        cnd.andAllowEmpty(XietongClazz.CLAZZ_NAME, clazz_name);
+        cnd.andLikeAllowEmpty(XietongClazz.CLAZZ_NAME, clazz_name);
+        cnd.asc(XietongClazz.CLAZZ_SORT);
+        cnd.desc(XietongClazz.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
+        List<XietongClazz> xietong_clazzList = xietongClazzDao.primaryKeyList(cnd);
+        for (XietongClazz xietong_clazz : xietong_clazzList) {
+            xietong_clazz.put(find(xietong_clazz.getClazz_id()));
+        }
+        return xietong_clazzList;
+    }
+    
+    public List<XietongClazz> allList(String app_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(XietongClazz.SYSTEM_STATUS, true);
+        cnd.and(XietongClazz.APP_ID, app_id);
+        cnd.asc(XietongClazz.CLAZZ_SORT);
+        cnd.desc(XietongClazz.SYSTEM_CREATE_TIME);
+        
         List<XietongClazz> xietong_clazzList = xietongClazzDao.primaryKeyList(cnd);
         for (XietongClazz xietong_clazz : xietong_clazzList) {
             xietong_clazz.put(find(xietong_clazz.getClazz_id()));

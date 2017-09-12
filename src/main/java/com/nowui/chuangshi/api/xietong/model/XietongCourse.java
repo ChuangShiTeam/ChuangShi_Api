@@ -63,6 +63,10 @@ public class XietongCourse extends Model<XietongCourse> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
+    
+    public static final String IS_APPLY = "is_apply";
+    
+    public static final String IS_LIMIT = "is_limit";
 
     public String getCourse_id() {
         return getStr(COURSE_ID);

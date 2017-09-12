@@ -33,11 +33,9 @@ public class XietongCourseConfigController extends Controller {
 
     @ActionKey("/admin/xietong/course/config/find")
     public void find() {
-        validateRequest(XietongCourseConfig.COURSE_CONFIG_ID);
+        String request_app_id = getRequest_app_id();
 
-        XietongCourseConfig model = getModel(XietongCourseConfig.class);
-
-        XietongCourseConfig result = XietongCourseConfigService.instance.find(model.getCourse_config_id());
+        XietongCourseConfig result = XietongCourseConfigService.instance.appFind(request_app_id);
 
         validateResponse(XietongCourseConfig.COURSE_CONFIG_APPLY_START_TIME, XietongCourseConfig.COURSE_CONFIG_APPLY_END_TIME, XietongCourseConfig.SYSTEM_VERSION);
 

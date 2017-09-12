@@ -8,6 +8,7 @@ import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
 import com.nowui.chuangshi.constant.Constant;
+import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class XietongTeacherController extends Controller {
 
         XietongTeacher result = XietongTeacherService.instance.find(model.getTeacher_id());
 
-        validateResponse(XietongTeacher.USER_ID, XietongTeacher.CLAZZ_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.SYSTEM_VERSION);
+        validateResponse(XietongTeacher.USER_ID, XietongTeacher.CLAZZ_ID, User.USER_ACCOUNT, XietongTeacher.TEACHER_NAME, XietongTeacher.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }

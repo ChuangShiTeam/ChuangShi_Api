@@ -2,6 +2,7 @@ package com.nowui.chuangshi.api.xietong.admin;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.xietong.model.XietongClazz;
 import com.nowui.chuangshi.api.xietong.model.XietongStudent;
 import com.nowui.chuangshi.api.xietong.service.XietongStudentService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -26,7 +27,7 @@ public class XietongStudentController extends Controller {
         Integer resultCount = XietongStudentService.instance.adminCount(request_app_id, model.getStudent_name(), model.getClazz_id());
         List<XietongStudent> resultList = XietongStudentService.instance.adminList(request_app_id, model.getStudent_name(), model.getClazz_id(), getM(), getN());
 
-        validateResponse(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX, XietongStudent.SYSTEM_VERSION);
+        validateResponse(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_NAME, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX, XietongStudent.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -39,7 +40,7 @@ public class XietongStudentController extends Controller {
 
         XietongStudent result = XietongStudentService.instance.find(model.getStudent_id());
 
-        validateResponse(XietongStudent.USER_ID, XietongStudent.CLAZZ_ID, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX, XietongStudent.SYSTEM_VERSION);
+        validateResponse(XietongStudent.USER_ID, XietongStudent.CLAZZ_ID, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX, XietongStudent.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }

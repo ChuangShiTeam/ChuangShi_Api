@@ -39,7 +39,23 @@ public class XietongCourseConfigService extends Service {
         }
         return xietong_course_configList;
     }
-
+    
+    public XietongCourseConfig appFind(String app_id) {
+        XietongCourseConfig xietong_course_config = CacheUtil.get(XIETONG_COURSE_CONFIG_ITEM_CACHE, app_id);
+        if (xietong_course_config == null) {
+            Cnd cnd = new Cnd();        
+            cnd.where(XietongCourseConfig.SYSTEM_STATUS, true);
+            cnd.and(XietongCourseConfig.APP_ID, app_id);
+            List<XietongCourseConfig> xietong_course_configList = xietongCourseConfigDao.list(cnd);
+            
+            if (xietong_course_configList != null && xietong_course_configList.size() > 0) {
+                xietong_course_config = xietong_course_configList.get(0);
+            } 
+        }
+        
+        return xietong_course_config;
+    }
+    
     public XietongCourseConfig find(String course_config_id) {
         XietongCourseConfig xietong_course_config = CacheUtil.get(XIETONG_COURSE_CONFIG_ITEM_CACHE, course_config_id);
 

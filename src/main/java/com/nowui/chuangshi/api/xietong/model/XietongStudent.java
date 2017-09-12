@@ -54,7 +54,7 @@ public class XietongStudent extends Model<XietongStudent> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
-
+    
     public String getStudent_id() {
         return getStr(STUDENT_ID);
     }

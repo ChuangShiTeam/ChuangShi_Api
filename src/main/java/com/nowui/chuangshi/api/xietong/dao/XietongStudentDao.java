@@ -1,12 +1,15 @@
 package com.nowui.chuangshi.api.xietong.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.api.xietong.model.XietongStudent;
 import com.nowui.chuangshi.common.dao.Dao;
+import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.Stock;
 
 public class XietongStudentDao extends Dao {
@@ -15,29 +18,36 @@ public class XietongStudentDao extends Dao {
         setModel(new XietongStudent());
     }
     
-    public Boolean updateUser_id(String student_id, String user_id, String system_update_user_id, Integer system_version) {
+    public List<XietongStudent> list(String app_id, String student_name, String clazz_id, int m, int n) {
         Kv sqlMap = Kv.create();
-        sqlMap.put(XietongStudent.STUDENT_ID, student_id);
-        sqlMap.put(XietongStudent.USER_ID, user_id);
-        sqlMap.put(XietongStudent.SYSTEM_UPDATE_USER_ID, system_update_user_id);
-        sqlMap.put(Stock.SYSTEM_UPDATE_TIME, new Date());
-        sqlMap.put(Stock.SYSTEM_VERSION, system_version);
-        SqlPara sqlPara = Db.getSqlPara("xietong_student.updateUser_id", sqlMap);
-
-        logSql("xietong_student", "updateUser_id", sqlPara);
-
-        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+        sqlMap.put(XietongStudent.APP_ID, app_id);
+        sqlMap.put(XietongStudent.STUDENT_NAME, student_name);
+        sqlMap.put(XietongStudent.CLAZZ_ID, clazz_id);
+        sqlMap.put(Constant.M, m);
+        sqlMap.put(Constant.N, n);
+        SqlPara sqlPara = Db.getSqlPara("xietong_student.list", sqlMap);
+        
+        logSql("xietong_student", "list", sqlPara);
+        
+        return new XietongStudent().find(sqlPara.getSql(), sqlPara.getPara());
     }
     
-    public Boolean deleteAll(String system_update_user_id) {
-        Kv sqlMap = Kv.create();
-        sqlMap.put(XietongStudent.SYSTEM_UPDATE_USER_ID, system_update_user_id);
-        sqlMap.put(Stock.SYSTEM_UPDATE_TIME, new Date());
-        SqlPara sqlPara = Db.getSqlPara("xietong_student.deleteAll", sqlMap);
+    public Boolean allDelete(String system_update_user_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(Constant.SYSTEM_STATUS, true);
+        
+        XietongStudent xietongStudent = new XietongStudent();
+        xietongStudent.put(Constant.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        xietongStudent.put(Constant.SYSTEM_UPDATE_TIME, new Date());
+        xietongStudent.put(Constant.SYSTEM_STATUS, false);
 
-        logSql("xietong_student", "deleteAll", sqlPara);
+        xietongStudent.setCriteria(cnd.getCriteria());
 
-        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
+        String sql = xietongStudent.buildUpdateSql();
+
+        System.out.println(sql);
+
+        return Db.update(sql) != 0;
     }
-
+    
 }
