@@ -166,7 +166,7 @@ public class JianglingMemberController extends Controller {
         }
 
         Random random = new Random();
-        int number = random.nextInt(total_probability) % (total_probability + 1);
+        int number = random.nextInt(total_probability) + 1;
         int start = 0;
         int end = 0;
         JianglingPrize prize = null;

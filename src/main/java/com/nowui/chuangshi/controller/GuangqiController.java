@@ -93,7 +93,7 @@ public class GuangqiController extends Controller {
         }
 
         Random random = new Random();
-        int number = random.nextInt(total) % (total + 1);
+        int number = random.nextInt(total) + 1;
         int start = 0;
         int end = 0;
         GuangqiPrize prize = null;
