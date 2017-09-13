@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.api.xietong.service;
 
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,8 +14,13 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
@@ -29,9 +35,11 @@ import com.nowui.chuangshi.api.xietong.model.XietongStudent;
 import com.nowui.chuangshi.common.render.ExcelRender;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.CourseStudentType;
 import com.nowui.chuangshi.util.CacheUtil;
 import com.nowui.chuangshi.util.DateUtil;
+import com.nowui.chuangshi.util.Util;
 
 public class XietongCourseService extends Service {
 
@@ -285,42 +293,53 @@ public class XietongCourseService extends Service {
         return new ExcelRender(wb, "选课信息");
     }
 
+    @SuppressWarnings({ "unused", "resource" })
     public void upload(UploadFile uploadFile, String request_user_id, String request_app_id) {
         String suffix = uploadFile.getFileName().substring(uploadFile.getFileName().lastIndexOf(".") + 1);
-
+        Workbook wb = null;
+        InputStream is = null;
         if (".xls.xlsx".contains(suffix)) {
             try {
-                InputStream is = new FileInputStream(uploadFile.getFile());
-                POIFSFileSystem fs = new POIFSFileSystem(is);
-                @SuppressWarnings("resource")
-                HSSFWorkbook wb = new HSSFWorkbook(fs);
-                HSSFSheet sheet = wb.getSheetAt(0);
+                is = new FileInputStream(uploadFile.getFile());
+                if (uploadFile.getFileName().endsWith(Constant.EXCEL03_EXTENSION)) {
+                    POIFSFileSystem fs = new POIFSFileSystem(new BufferedInputStream(is));
+                    wb = new HSSFWorkbook(fs);
+                } else if (uploadFile.getFileName().endsWith(Constant.EXCEL07_EXTENSION)) {
+                	wb = new XSSFWorkbook(is);
+                } else {
+                	throw new RuntimeException("上传文件格式不正确!");
+                }
+
+                if (wb == null) {
+                	throw new RuntimeException("excel文件内容为空！");
+                }
+                Sheet sheet = wb.getSheetAt(0);
                 int trLength = sheet.getLastRowNum();
 
                 List<XietongClazz> clazzList = XietongClazzService.instance.allList(request_app_id);
 
                 for (int i = 1; i <= trLength; i++) {
-                    HSSFRow row = sheet.getRow(i);
+                    Row row = sheet.getRow(i);
 
-                    HSSFCell clazzCell = row.getCell(0);
+                    Cell clazzCell = row.getCell(0);
                     clazzCell.setCellType(CellType.STRING);
 
-                    HSSFCell teacherCell = row.getCell(1);
+                    Cell teacherCell = row.getCell(1);
                     teacherCell.setCellType(CellType.STRING);
 
-                    HSSFCell nameCell = row.getCell(2);
+                    Cell nameCell = row.getCell(2);
                     nameCell.setCellType(CellType.STRING);
 
-                    HSSFCell timeCell = row.getCell(3);
+                    Cell timeCell = row.getCell(3);
                     timeCell.setCellType(CellType.STRING);
 
-                    HSSFCell limitCell = row.getCell(4);
+                    Cell limitCell = row.getCell(4);
                     limitCell.setCellType(CellType.STRING);
 
-                    HSSFCell addressCell = row.getCell(5);
+                    Cell addressCell = row.getCell(5);
                     addressCell.setCellType(CellType.STRING);
 
-                    HSSFCell contentCell = row.getCell(6);
+                    Cell contentCell = row.getCell(6);
                     contentCell.setCellType(CellType.STRING);
 
                     String clazz_id = clazzCell.getStringCellValue();
@@ -364,13 +383,15 @@ public class XietongCourseService extends Service {
 
                     if (clazz_id != "") {
                         XietongCourse course = new XietongCourse();
+                        course.setCourse_id(Util.getRandomUUID());
+                        course.setApp_id(request_app_id);
                         course.setClazz_id(clazz_id);
                         course.setCourse_teacher(course_teacher);
                         course.setCourse_name(course_name);
                         course.setCourse_time(course_time);
                         course.setCourse_apply_limit(Integer.valueOf(course_apply_limit));
                         course.setCourse_address(course_address);
-                        course.setCourse_image("[]");
+                        course.setCourse_image("");
                         course.setCourse_content(course_content);
                         save(course, request_user_id);
                     }
@@ -379,8 +400,26 @@ public class XietongCourseService extends Service {
                 throw new RuntimeException("上传文件格式不正确!");
             } catch (IOException e) {
                 throw new RuntimeException("上传文件格式不正确!");
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("excel文件不符合规格或者工作表错误");
             } finally {
                 uploadFile.getFile().delete();
+                
+                if (wb != null) {
+                    try {
+                    	wb.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         } else {
             uploadFile.getFile().delete();
