@@ -102,13 +102,13 @@ public class XietongClazzController extends Controller {
     @ActionKey("/admin/xietong/course/apply/delete")
     public void applyDelete() {
         validateRequest(XietongCourseApply.COURSE_ID);
-        
+
         XietongCourseApply model = getModel(XietongCourseApply.class);
         model.setCourse_apply_id(Util.getRandomUUID());
         String request_user_id = getRequest_user_id();
-        
+
         Boolean result = XietongCourseApplyService.instance.save(model, request_user_id);
-        
+
         renderSuccessJson(result);
     }
     

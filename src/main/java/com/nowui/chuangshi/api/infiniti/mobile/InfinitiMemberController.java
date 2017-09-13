@@ -9,7 +9,9 @@ import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.util.Util;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @ControllerKey("/mobile/infiniti/member")
@@ -23,6 +25,24 @@ public class InfinitiMemberController extends Controller {
 
     @ActionKey("/mobile/infiniti/member/find")
     public void find() {
+
+        renderSuccessJson();
+    }
+
+    @ActionKey("/mobile/infiniti/member/1/draw")
+    public void draw1() {
+        String request_app_id = getRequest_app_id();
+
+        Boolean is_prize = false;
+
+        Random random = new Random();
+        int number = random.nextInt(3);
+        if (number == 0) {
+            is_prize = true;
+        }
+
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("is_prize", is_prize);
 
         renderSuccessJson();
     }
