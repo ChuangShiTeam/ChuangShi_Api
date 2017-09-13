@@ -42,6 +42,15 @@ public class InfinitiMemberService extends Service {
         return count;
     }
 
+    public Integer memberMobileCount(String member_mobile) {
+        Cnd cnd = new Cnd();
+        cnd.where(InfinitiMember.SYSTEM_STATUS, true);
+        cnd.and(InfinitiMember.MEMBER_MOBILE, member_mobile);
+
+        Integer count = infinitiMemberDao.count(cnd);
+        return count;
+    }
+
     public List<InfinitiMember> adminList(String app_id, String member_redeem_code, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(InfinitiMember.SYSTEM_STATUS, true);
@@ -53,15 +62,24 @@ public class InfinitiMemberService extends Service {
         return infiniti_memberList;
     }
 
-    public InfinitiMember find(String user_id) {
-        InfinitiMember infiniti_member = CacheUtil.get(INFINITI_MEMBER_ITEM_CACHE, user_id);
+    public InfinitiMember find(String member_id) {
+        InfinitiMember infiniti_member = CacheUtil.get(INFINITI_MEMBER_ITEM_CACHE, member_id);
 
         if (infiniti_member == null) {
-            infiniti_member = infinitiMemberDao.find(user_id);
+            infiniti_member = infinitiMemberDao.find(member_id);
 
-            CacheUtil.put(INFINITI_MEMBER_ITEM_CACHE, user_id, infiniti_member);
+            CacheUtil.put(INFINITI_MEMBER_ITEM_CACHE, member_id, infiniti_member);
         }
 
+        return infiniti_member;
+    }
+
+    public InfinitiMember memberRedeemCodeFind(String member_redeem_code) {
+        Cnd cnd = new Cnd();
+        cnd.where(InfinitiMember.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(InfinitiMember.MEMBER_REDEEM_CODE, member_redeem_code);
+
+        InfinitiMember infiniti_member = infinitiMemberDao.find(cnd);
         return infiniti_member;
     }
 
@@ -75,39 +93,40 @@ public class InfinitiMemberService extends Service {
         infiniti_member.setPrize_id(prize_id);
         infiniti_member.setMember_redeem_code(member_redeem_code);
         infiniti_member.setMember_redeem_code_is_exchange(member_redeem_code_is_exchange);
-        String system_create_user_id = "";
+        String system_create_member_id = "";
 
-        Boolean success = save(infiniti_member, system_create_user_id);
+        Boolean success = save(infiniti_member, system_create_member_id);
         return success;
     }
 
-    public Boolean save(InfinitiMember infiniti_member, String system_create_user_id) {
-        Boolean success = infinitiMemberDao.save(infiniti_member, system_create_user_id);
+    public Boolean save(InfinitiMember infiniti_member, String system_create_member_id) {
+        Boolean success = infinitiMemberDao.save(infiniti_member, system_create_member_id);
         return success;
     }
 
-    public Boolean update(String member_name, String member_mobile, String member_address, String member_redeem_code) {
+    public Boolean update(String member_name, String member_mobile, String member_address, String member_redeem_code, Boolean member_redeem_code_is_exchange) {
         InfinitiMember infiniti_member = new InfinitiMember();
         infiniti_member.setMember_name(member_name);
         infiniti_member.setMember_mobile(member_mobile);
         infiniti_member.setMember_address(member_address);
-        String system_update_user_id = "";
+        infiniti_member.setMember_redeem_code_is_exchange(member_redeem_code_is_exchange);
+        String system_update_member_id = "";
 
         Cnd cnd = new Cnd();
         cnd.where(InfinitiMember.SYSTEM_STATUS, true);
         cnd.and(InfinitiMember.MEMBER_REDEEM_CODE, member_redeem_code);
 
-        Boolean success = infinitiMemberDao.update(infiniti_member, system_update_user_id, cnd);
+        Boolean success = infinitiMemberDao.update(infiniti_member, system_update_member_id, cnd);
         return success;
     }
 
-    public Boolean update(InfinitiMember infiniti_member, String member_id, String system_update_user_id, Integer system_version) {
+    public Boolean update(InfinitiMember infiniti_member, String member_id, String system_update_member_id, Integer system_version) {
         Cnd cnd = new Cnd();
         cnd.where(InfinitiMember.SYSTEM_STATUS, true);
         cnd.and(InfinitiMember.MEMBER_ID, member_id);
         cnd.and(InfinitiMember.SYSTEM_VERSION, system_version);
 
-        Boolean success = infinitiMemberDao.update(infiniti_member, system_update_user_id, system_version, cnd);
+        Boolean success = infinitiMemberDao.update(infiniti_member, system_update_member_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(INFINITI_MEMBER_ITEM_CACHE, member_id);
@@ -116,13 +135,13 @@ public class InfinitiMemberService extends Service {
         return success;
     }
 
-    public Boolean delete(String member_id, String system_update_user_id, Integer system_version) {
+    public Boolean delete(String member_id, String system_update_member_id, Integer system_version) {
         Cnd cnd = new Cnd();
         cnd.where(InfinitiMember.SYSTEM_STATUS, true);
         cnd.and(InfinitiMember.MEMBER_ID, member_id);
         cnd.and(InfinitiMember.SYSTEM_VERSION, system_version);
 
-        Boolean success = infinitiMemberDao.delete(system_update_user_id, system_version, cnd);
+        Boolean success = infinitiMemberDao.delete(system_update_member_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(INFINITI_MEMBER_ITEM_CACHE, member_id);

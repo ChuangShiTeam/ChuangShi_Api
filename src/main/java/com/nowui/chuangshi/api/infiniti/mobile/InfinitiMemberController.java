@@ -99,13 +99,19 @@ public class InfinitiMemberController extends Controller {
         String member_address = model.getMember_address();
         String member_redeem_code = model.getMember_redeem_code();
 
-        Integer count = InfinitiMemberService.instance.redeemCodeCount(member_redeem_code);
-
-        if (count != 1) {
+        InfinitiMember infinitiMember = InfinitiMemberService.instance.memberRedeemCodeFind(member_redeem_code);
+        if (infinitiMember.getMember_redeem_code_is_exchange()) {
             throw new RuntimeException("该兑换码无效");
         }
 
-        Boolean result = InfinitiMemberService.instance.update(member_name, member_mobile, member_address, member_redeem_code);
+        Integer count = InfinitiMemberService.instance.memberMobileCount(member_mobile);
+        if  (count > 0) {
+            throw new RuntimeException("该电话号码已经兑换过");
+        }
+
+        Boolean member_redeem_code_is_exchange = true;
+
+        Boolean result = InfinitiMemberService.instance.update(member_name, member_mobile, member_address, member_redeem_code, member_redeem_code_is_exchange);
 
         renderSuccessJson(result);
     }
