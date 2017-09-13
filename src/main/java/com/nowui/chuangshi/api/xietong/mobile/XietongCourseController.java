@@ -131,6 +131,7 @@ public class XietongCourseController extends Controller {
         
         List<XietongCourseApply> xietong_course_apply_list = XietongCourseApplyService.instance.userList(request_user_id);
         
+        validateResponse(XietongCourse.COURSE_ID, XietongCourse.COURSE_NAME, XietongCourse.COURSE_TEACHER, XietongCourse.COURSE_TIME, XietongCourse.COURSE_APPLY_LIMIT, XietongCourseApply.USER_ID);
         renderSuccessJson(xietong_course_apply_list);
     }
     
