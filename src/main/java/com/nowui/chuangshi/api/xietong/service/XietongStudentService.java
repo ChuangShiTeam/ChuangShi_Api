@@ -46,17 +46,16 @@ public class XietongStudentService extends Service {
 
     public List<XietongStudent> adminList(String app_id, String student_name, String clazz_id, Integer m, Integer n) {
         Cnd cnd = new Cnd(); 
-        cnd.select(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_ID);
         cnd.select(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_NAME);
         cnd.select(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_NUMBER);
         cnd.select(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.CLAZZ_NAME);
-        cnd.leftJoin(XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.CLAZZ_ID, XietongClazz.TABLE_XIETONG_CLAZZ, XietongClazz.CLAZZ_ID);
-        cnd.where(XietongStudent.SYSTEM_STATUS, true);
-        cnd.andLikeAllowEmpty(XietongStudent.STUDENT_NAME, student_name);
-        cnd.andAllowEmpty(XietongStudent.CLAZZ_ID, clazz_id);
-        cnd.desc(XietongStudent.SYSTEM_CREATE_TIME);
+        cnd.leftJoin(XietongClazz.TABLE_XIETONG_CLAZZ, XietongClazz.CLAZZ_ID, XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.CLAZZ_ID);
+        cnd.where(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.SYSTEM_STATUS, true);
+        cnd.andLikeAllowEmpty(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_NAME, student_name);
+        cnd.andAllowEmpty(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.CLAZZ_ID, clazz_id);
+        cnd.desc(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
-        return xietongStudentDao.list(cnd);
+        return xietongStudentDao.primaryKeyList(cnd);
     }
     
     public List<XietongStudent> mobileList(String app_id, String student_name, Integer m, Integer n) {
@@ -197,8 +196,8 @@ public class XietongStudentService extends Service {
                 for(int i = 1; i <= trLength; i++) {
                     HSSFRow row = sheet.getRow(i);
 
-                    HSSFCell gradeCell = row.getCell(0);
-                    gradeCell.setCellType(CellType.STRING);
+                    HSSFCell clazzCell = row.getCell(0);
+                    clazzCell.setCellType(CellType.STRING);
 
                     HSSFCell numberCell = row.getCell(1);
                     numberCell.setCellType(CellType.STRING);
@@ -212,8 +211,8 @@ public class XietongStudentService extends Service {
                     HSSFCell passwordCell = row.getCell(4);
                     passwordCell.setCellType(CellType.STRING);
 
-                    String student_clazz = gradeCell.getStringCellValue();
-                    String student_number = gradeCell.getStringCellValue() + (numberCell.getStringCellValue().length() == 1 ? "0" : "") + numberCell.getStringCellValue();
+                    String student_clazz = clazzCell.getStringCellValue();
+                    String student_number = clazzCell.getStringCellValue() + (numberCell.getStringCellValue().length() == 1 ? "0" : "") + numberCell.getStringCellValue();
                     String student_name = nameCell.getStringCellValue();
                     String student_sex = sexCell.getStringCellValue();
                     String user_password = passwordCell.getStringCellValue();
@@ -236,6 +235,7 @@ public class XietongStudentService extends Service {
                             user.setUser_password(user_password);
 
                             XietongStudent student = new XietongStudent();
+                            student.setApp_id(request_app_id);
                             student.setClazz_id(clazz_id);
                             student.setStudent_name(student_name);
                             student.setStudent_number(student_number);

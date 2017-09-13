@@ -33,6 +33,18 @@ public class XietongClazzController extends Controller {
 
         renderSuccessJson(resultCount, resultList);
     }
+    
+    @ActionKey("/admin/xietong/clazz/all/list")
+    public void alllist() {
+
+        String request_app_id = getRequest_app_id();
+
+        List<XietongClazz> resultList = XietongClazzService.instance.allList(request_app_id);
+
+        validateResponse(XietongClazz.CLAZZ_ID, XietongClazz.CLAZZ_NAME, XietongClazz.CLAZZ_COURSE_APPLY_LIMIT, XietongClazz.CLAZZ_COURSE_APPLY_START_TIME, XietongClazz.CLAZZ_COURSE_APPLY_END_TIME, XietongClazz.CLAZZ_SORT, XietongClazz.SYSTEM_VERSION);
+
+        renderSuccessJson(resultList);
+    }
 
     @ActionKey("/admin/xietong/clazz/find")
     public void find() {

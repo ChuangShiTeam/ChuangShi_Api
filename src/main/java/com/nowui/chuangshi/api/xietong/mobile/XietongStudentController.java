@@ -120,7 +120,7 @@ public class XietongStudentController extends Controller {
         User userModel = getModel(User.class);
         String request_app_id = getRequest_app_id();
         
-        User user = userService.findByApp_idAndUser_typeAndUser_accountAndUser_password(request_app_id, UserType.ADMIN.getKey(), userModel.getUser_account(), userModel.getUser_password());
+        User user = userService.findByApp_idAndUser_typeAndUser_accountAndUser_password(request_app_id, UserType.STUDENT.getKey(), userModel.getUser_account(), userModel.getUser_password());
 
         if (user == null) {
             throw new RuntimeException("帐号或者密码不正确");
@@ -142,6 +142,7 @@ public class XietongStudentController extends Controller {
             result.put(Constant.TOKEN, AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));
             result.put(XietongStudent.STUDENT_NAME, student.getStudent_name());
             result.put(XietongClazz.CLAZZ_NAME, student.getStr(XietongClazz.CLAZZ_NAME));
+            validateResponse(Constant.TOKEN, XietongStudent.STUDENT_NAME, XietongClazz.CLAZZ_NAME);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("登录不成功");
@@ -150,16 +151,4 @@ public class XietongStudentController extends Controller {
         renderSuccessJson(result);
     }
     
-    @ActionKey("/mobile/xietong/student/upload")
-    public void upload() {
-        String request_user_id = getRequest_user_id();
-        String request_app_id = getRequest_app_id();
-
-        UploadFile uploadFile = getFile("file", request_user_id, 1024 * 1024 * 2);
-
-        XietongStudentService.instance.upload(uploadFile, request_user_id, request_app_id);
-
-        renderSuccessJson();
-    }
-
 }
