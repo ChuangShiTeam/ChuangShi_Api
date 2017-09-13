@@ -52,32 +52,6 @@ public class XietongStudentController extends Controller {
         renderSuccessJson(result);
     }
 
-    @ActionKey("/mobile/xietong/student/save")
-    public void save() {
-        validateRequest(XietongStudent.STUDENT_NAME);
-        XietongStudent model = getModel(XietongStudent.class);
-        User userModel = getModel(User.class);
-        
-        String request_user_id = getRequest_user_id();
-        
-        Boolean result = XietongStudentService.instance.save(model, userModel, request_user_id);
-        
-        renderSuccessJson(result);
-    }
-
-    @ActionKey("/mobile/xietong/student/update")
-    public void update() {
-        validateRequest(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_NAME, XietongStudent.SYSTEM_VERSION);
-        XietongStudent model = getModel(XietongStudent.class);
-        User userModel = getModel(User.class);
-        
-        String request_user_id = getRequest_user_id();
-
-        Boolean result = XietongStudentService.instance.update(model, userModel, request_user_id, model.getSystem_version());
-        
-        renderSuccessJson(result);
-    }
-    
     @ActionKey("/mobile/xietong/student/password/update")
     public void passwordUpdate() {
         validateRequest(User.USER_PASSWORD);
@@ -99,15 +73,6 @@ public class XietongStudentController extends Controller {
         String request_user_id = getRequest_user_id();
 
         Boolean result = XietongStudentService.instance.delete(model.getStudent_id(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
-    }
-    
-    @ActionKey("/mobile/xietong/student/all/delete")
-    public void allDelete() {
-        String request_user_id = getRequest_user_id();
-
-        Boolean result = XietongStudentService.instance.allDelete(request_user_id);
 
         renderSuccessJson(result);
     }
