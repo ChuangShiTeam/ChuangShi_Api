@@ -29,11 +29,15 @@ public class InfinitiMemberController extends Controller {
         renderSuccessJson();
     }
 
-    @ActionKey("/mobile/infiniti/member/1/draw")
-    public void draw1() {
+    @ActionKey("/mobile/infiniti/member/draw")
+    public void draw() {
+        validateRequest(InfinitiMember.PRIZE_ID);
+
+        InfinitiPrize model = getModel(InfinitiPrize.class);
         String request_app_id = getRequest_app_id();
 
         Boolean is_prize = false;
+        Boolean is_over = false;
 
         Random random = new Random();
         int number = random.nextInt(3);
@@ -42,84 +46,47 @@ public class InfinitiMemberController extends Controller {
         }
 
         Map<String, Object> result = new HashMap<String, Object>();
-        result.put("is_prize", is_prize);
+        if (is_prize) {
+            InfinitiPrize infinitiPrize = InfinitiPrizeService.instance.find(model.getPrize_id());
 
-        renderSuccessJson();
-    }
-
-    @ActionKey("/mobile/infiniti/member/draw")
-    public void draw() {
-        String request_app_id = getRequest_app_id();
-
-        Integer total_probability = 0;
-        InfinitiPrize defaultInfinitiPrize = null;
-        List<InfinitiPrize> infinitiPrizeList = InfinitiPrizeService.instance.appList(request_app_id);
-        for (InfinitiPrize jianglingPrize : infinitiPrizeList) {
-            if (jianglingPrize.getPrize_is_default_winning()) {
-                defaultInfinitiPrize = jianglingPrize;
-            }
-
-            total_probability += jianglingPrize.getPrize_probability();
-        }
-
-        Random random = new Random();
-        int number = random.nextInt(total_probability) + 1;
-        int start = 0;
-        int end = 0;
-        InfinitiPrize prize = null;
-        for (InfinitiPrize jianglingPrize : infinitiPrizeList) {
-            end += jianglingPrize.getPrize_probability();
-
-            if (number >= start && number <= end) {
-                prize = jianglingPrize;
-
-                break;
-            }
-
-            start += jianglingPrize.getPrize_probability();
-        }
-        Boolean is_save = true;
-        Integer total_count = InfinitiMemberService.instance.prizeCount(prize.getPrize_id());
-
-        if (prize == null) {
-            prize = defaultInfinitiPrize;
-        }
-        if (total_count >= prize.getPrize_total_quantity()) {
-            is_save = false;
-        }
-
-        if (!is_save) {
-            prize = defaultInfinitiPrize;
-        }
-
-
-        String member_id = Util.getRandomUUID();
-        String member_name = "";
-        String member_mobile = "";
-        String member_address = "";
-        String prize_id = prize.getPrize_id();
-        String member_redeem_code = Util.getRandomNumber(6);
-        Boolean is_exit = true;
-        while (is_exit) {
-            Integer count = InfinitiMemberService.instance.redeemCodeCount(member_redeem_code);
-
-            if (count > 0) {
-                member_redeem_code = Util.getRandomStringByLength(6);
+            Integer count = InfinitiMemberService.instance.prizeCount(model.getPrize_id());
+            if (count >= infinitiPrize.getPrize_total_quantity()) {
+                is_prize = false;
+                is_over = true;
             } else {
-                is_exit = false;
+                String member_id = Util.getRandomUUID();
+                String member_name = "";
+                String member_mobile = "";
+                String member_address = "";
+                String prize_id = infinitiPrize.getPrize_id();
+                String member_redeem_code = Util.getRandomNumber(6);
+                Boolean is_exit = true;
+                while (is_exit) {
+                    count = InfinitiMemberService.instance.redeemCodeCount(member_redeem_code);
+
+                    if (count > 0) {
+                        member_redeem_code = Util.getRandomStringByLength(6);
+                    } else {
+                        is_exit = false;
+                    }
+
+                }
+                Boolean member_redeem_code_is_exchange = false;
+                Boolean success = InfinitiMemberService.instance.save(member_id, request_app_id, member_name, member_mobile, member_address, prize_id, member_redeem_code, member_redeem_code_is_exchange);
+
+                if (success) {
+                    result.put(InfinitiPrize.PRIZE_ID, infinitiPrize.getPrize_id());
+                    result.put(InfinitiPrize.PRIZE_NAME, infinitiPrize.getPrize_name());
+                    result.put(InfinitiMember.MEMBER_REDEEM_CODE, member_redeem_code);
+                } else {
+                    is_prize = false;
+                }
             }
-
         }
-        Boolean member_redeem_code_is_exchange = false;
-        Boolean result = InfinitiMemberService.instance.save(member_id, request_app_id, member_name, member_mobile, member_address, prize_id, member_redeem_code, member_redeem_code_is_exchange);
+        result.put("is_prize", is_prize);
+        result.put("is_over", is_over);
 
-        if (!result) {
-            throw new RuntimeException("抽奖不成功");
-        }
-
-        validateResponse(InfinitiPrize.PRIZE_ID, InfinitiPrize.PRIZE_NAME, member_redeem_code);
-
-        renderSuccessJson(prize);
+        renderSuccessJson(result);
     }
 
     @ActionKey("/mobile/infiniti/member/update")

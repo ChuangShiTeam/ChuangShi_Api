@@ -42,8 +42,6 @@ public class FeijiuFastController extends Controller {
         }
         result.put("product_list", productList);
 
-        validateResponse("product_category_list", "product_list");
-
         renderSuccessJson(result);
     }
 
