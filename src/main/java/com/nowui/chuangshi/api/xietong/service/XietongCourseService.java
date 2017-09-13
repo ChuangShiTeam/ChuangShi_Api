@@ -26,7 +26,6 @@ import com.nowui.chuangshi.api.xietong.model.XietongCourseApply;
 import com.nowui.chuangshi.api.xietong.model.XietongCourseConfig;
 import com.nowui.chuangshi.api.xietong.model.XietongCourseStudent;
 import com.nowui.chuangshi.api.xietong.model.XietongStudent;
-import com.nowui.chuangshi.api.xietong.model.XietongTeacher;
 import com.nowui.chuangshi.common.render.ExcelRender;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
