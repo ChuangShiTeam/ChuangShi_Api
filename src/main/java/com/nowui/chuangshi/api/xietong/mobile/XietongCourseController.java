@@ -12,7 +12,6 @@ import com.nowui.chuangshi.api.xietong.service.XietongCourseService;
 import com.nowui.chuangshi.api.xietong.service.XietongCourseStudentService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.type.CourseStudentType;
 import com.nowui.chuangshi.util.Util;
 
 @ControllerKey("/mobile/xietong/course")
