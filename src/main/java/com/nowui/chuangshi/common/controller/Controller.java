@@ -211,20 +211,9 @@ public class Controller extends com.jfinal.core.Controller {
     }
 
     public void renderSuccessJson(Map<String, Object> result) {
-        Map<String, Object> newResult = new HashMap<String, Object>();
-        for (String key : validateResponseKey) {
-            for (Map.Entry<String, Object> map : result.entrySet()) {
-                if (key.equals(map.getKey())) {
-                    newResult.put(map.getKey(), map.getValue());
-
-                    break;
-                }
-            }
-        }
-
         Map<String, Object> map = new HashMap<String, Object>();
         map.put(Constant.CODE, HttpStatus.SC_OK);
-        map.put(Constant.DATA, newResult);
+        map.put(Constant.DATA, result);
 
         renderJson(map);
     }
