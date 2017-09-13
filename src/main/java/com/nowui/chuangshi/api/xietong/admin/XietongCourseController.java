@@ -1,11 +1,11 @@
 package com.nowui.chuangshi.api.xietong.admin;
 
+import java.util.List;
+
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.xietong.model.XietongCourse;
-import com.nowui.chuangshi.api.xietong.model.XietongCourseApply;
 import com.nowui.chuangshi.api.xietong.model.XietongCourseStudent;
-import com.nowui.chuangshi.api.xietong.service.XietongCourseApplyService;
 import com.nowui.chuangshi.api.xietong.service.XietongCourseService;
 import com.nowui.chuangshi.api.xietong.service.XietongCourseStudentService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -14,8 +14,6 @@ import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.CourseStudentType;
 import com.nowui.chuangshi.util.Util;
-
-import java.util.List;
 
 @Before(AdminInterceptor.class)
 @ControllerKey("/admin/xietong/course")
@@ -149,19 +147,6 @@ public class XietongCourseController extends Controller {
         String request_app_id = getRequest_app_id();
         
         Boolean result = XietongCourseStudentService.instance.save(model, request_user_id, request_app_id);
-        
-        renderSuccessJson(result);
-    }
-    
-    @ActionKey("/admin/xietong/course/apply/delete")
-    public void applyDelete() {
-        validateRequest(XietongCourseApply.COURSE_ID);
-        
-        XietongCourseApply model = getModel(XietongCourseApply.class);
-        model.setCourse_apply_id(Util.getRandomUUID());
-        String request_user_id = getRequest_user_id();
-        
-        Boolean result = XietongCourseApplyService.instance.save(model, request_user_id);
         
         renderSuccessJson(result);
     }

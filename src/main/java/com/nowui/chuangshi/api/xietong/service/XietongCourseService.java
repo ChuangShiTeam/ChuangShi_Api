@@ -554,10 +554,13 @@ public class XietongCourseService extends Service {
         XietongClazz clazz = XietongClazzService.instance.find(student.getClazz_id());
 
         check(clazz, request_user_id, request_app_id);
-        check(clazz, request_user_id, request_app_id);
 
         boolean result = XietongCourseApplyService.instance.courseAndUserDelete(course_id, request_user_id, request_user_id, request_app_id);
 
+        if (result) {
+            //移除课程限制缓存
+            CacheUtil.remove(XIETONG_COURSE_LIMIT_CACHE, course_id);
+        }
         return result;
     }
 

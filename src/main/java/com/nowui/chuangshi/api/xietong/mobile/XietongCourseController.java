@@ -22,7 +22,9 @@ public class XietongCourseController extends Controller {
         String request_user_id = getRequest_user_id();
         
         List<XietongCourse> courseList = XietongCourseService.instance.userList(request_user_id);
-
+        
+        validateResponse(XietongCourse.IS_APPLY, XietongCourse.COURSE_ID, XietongCourse.COURSE_NAME, XietongCourse.COURSE_TEACHER, XietongCourse.COURSE_TIME, XietongCourse.COURSE_APPLY_LIMIT);
+       
         renderSuccessJson(courseList);
     }
 
@@ -142,6 +144,19 @@ public class XietongCourseController extends Controller {
         String request_app_id = getRequest_app_id();
         
         Boolean result = XietongCourseService.instance.applySave(model, request_user_id, request_app_id);
+        
+        renderSuccessJson(result);
+    }
+    
+    @ActionKey("/mobile/xietong/course/apply/delete")
+    public void applyDelete() {
+        validateRequest(XietongCourseApply.COURSE_ID);
+        
+        XietongCourseApply model = getModel(XietongCourseApply.class);
+        String request_user_id = getRequest_user_id();
+        String request_app_id = getRequest_app_id();
+        
+        Boolean result = XietongCourseService.instance.applyDelete(model.getCourse_id(), request_user_id, request_app_id);
         
         renderSuccessJson(result);
     }

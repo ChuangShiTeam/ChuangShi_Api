@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.api.xietong.service;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.nowui.chuangshi.api.xietong.dao.XietongCourseApplyDao;
@@ -163,6 +164,7 @@ public class XietongCourseApplyService extends Service {
         XietongCourseApply xietong_course_apply = new XietongCourseApply();
         xietong_course_apply.setApp_id(request_app_id);
         xietong_course_apply.setCourse_id(course_id);
+        xietong_course_apply.setUser_id(request_user_id);
         String course_apply_id = Util.getRandomUUID();
         xietong_course_apply.setCourse_apply_id(course_apply_id);
         boolean result = save(xietong_course_apply, request_user_id);
@@ -235,6 +237,19 @@ public class XietongCourseApplyService extends Service {
         boolean result = xietongCourseApplyDao.courseAndUserDelete(course_id, user_id, request_user_id);
 
         if (result) {
+            List<XietongCourseApply> courseApplyList = userList(user_id);
+
+            Iterator<XietongCourseApply> iterator = courseApplyList.iterator();
+            while (iterator.hasNext()) {
+                XietongCourseApply courseApply = iterator.next();
+                if (courseApply.getCourse_id().equals(course_id) && courseApply.getUser_id().equals(user_id)) {
+                    CacheUtil.remove(XIETONG_COURSE_APPLY_ITEM_CACHE, courseApply.getCourse_apply_id());
+                    iterator.remove();
+                }
+            }
+
+            CacheUtil.put(XIETONG_COURSE_APPLY_USER_LIST_CACHE, user_id, courseApplyList);
+            
             XietongCourseApplyHistory xietong_course_apply_history = new XietongCourseApplyHistory();
             xietong_course_apply_history.setApp_id(request_app_id);
             xietong_course_apply_history.setCourse_apply_history_id(Util.getRandomUUID());
@@ -248,7 +263,13 @@ public class XietongCourseApplyService extends Service {
     }
     
     public Boolean allDelete(String system_update_user_id) {
-        return xietongCourseApplyDao.allDelete(system_update_user_id);
+        Boolean result = xietongCourseApplyDao.allDelete(system_update_user_id);
+        
+        if (result) {
+            CacheUtil.removeAll(XIETONG_COURSE_APPLY_ITEM_CACHE);
+            CacheUtil.removeAll(XIETONG_COURSE_APPLY_USER_LIST_CACHE);
+        }
+        return result;
     }
 
 }
