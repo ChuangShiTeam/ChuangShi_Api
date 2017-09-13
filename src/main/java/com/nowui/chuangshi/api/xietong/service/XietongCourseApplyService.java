@@ -81,9 +81,9 @@ public class XietongCourseApplyService extends Service {
        cnd.select(XietongCourse.TABLE_XIETONG_COURSE + "." + XietongCourse.COURSE_TIME);
        cnd.select(XietongCourse.TABLE_XIETONG_COURSE + "." + XietongCourse.COURSE_TEACHER);
        cnd.select(XietongCourse.TABLE_XIETONG_COURSE + "." + XietongCourse.COURSE_ADDRESS);
-       cnd.leftJoin(XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.USER_ID, XietongCourse.TABLE_XIETONG_COURSE, XietongCourseApply.USER_ID);
-       cnd.leftJoin(XietongClazz.TABLE_XIETONG_CLAZZ, XietongClazz.CLAZZ_ID, XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.CLAZZ_ID);
        cnd.leftJoin(XietongCourse.TABLE_XIETONG_COURSE, XietongCourse.COURSE_ID, XietongCourseApply.TABLE_XIETONG_COURSE_APPLY, XietongCourseApply.COURSE_ID);
+       cnd.leftJoin(XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.USER_ID, XietongCourse.TABLE_XIETONG_COURSE, XietongCourseApply.USER_ID);
+       cnd.leftJoin(XietongClazz.TABLE_XIETONG_CLAZZ, XietongClazz.CLAZZ_ID, XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.CLAZZ_ID);       
        cnd.where(XietongCourseApply.TABLE_XIETONG_COURSE_APPLY + "." + XietongCourseApply.SYSTEM_STATUS, true);
        cnd.asc(XietongCourse.TABLE_XIETONG_COURSE + "." + XietongCourse.COURSE_ID);
        cnd.asc(XietongCourse.TABLE_XIETONG_COURSE + "." + XietongCourse.COURSE_TIME);
