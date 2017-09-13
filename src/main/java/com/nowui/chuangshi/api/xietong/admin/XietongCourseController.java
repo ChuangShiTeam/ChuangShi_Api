@@ -5,8 +5,12 @@ import java.util.List;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.upload.UploadFile;
+import com.nowui.chuangshi.api.article.model.Article;
+import com.nowui.chuangshi.api.file.service.FileService;
+import com.nowui.chuangshi.api.xietong.model.XietongClazz;
 import com.nowui.chuangshi.api.xietong.model.XietongCourse;
 import com.nowui.chuangshi.api.xietong.model.XietongCourseStudent;
+import com.nowui.chuangshi.api.xietong.model.XietongStudent;
 import com.nowui.chuangshi.api.xietong.service.XietongCourseService;
 import com.nowui.chuangshi.api.xietong.service.XietongCourseStudentService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -41,11 +45,11 @@ public class XietongCourseController extends Controller {
 
         XietongCourse model = getModel(XietongCourse.class);
         
-        String request_user_id = getRequest_user_id();
+        XietongCourse result = XietongCourseService.instance.find(model.getCourse_id());
+        
+        result.put(XietongCourse.COURSE_IMAGE_FILE, FileService.instance.getFile(result.getCourse_image()));
 
-        XietongCourse result = XietongCourseService.instance.find(model.getCourse_id(), request_user_id);
-
-        validateResponse(XietongCourse.CLAZZ_ID, XietongCourse.COURSE_TEACHER, XietongCourse.COURSE_NAME, XietongCourse.COURSE_TIME, XietongCourse.COURSE_APPLY_LIMIT, XietongCourse.COURSE_ADDRESS, XietongCourse.COURSE_IMAGE, XietongCourse.COURSE_CONTENT, XietongCourse.IS_APPLY, XietongCourse.IS_LIMIT, XietongCourse.SYSTEM_VERSION);
+        validateResponse(XietongCourse.CLAZZ_ID, XietongCourse.COURSE_TEACHER, XietongCourse.COURSE_NAME, XietongCourse.COURSE_TIME, XietongCourse.COURSE_APPLY_LIMIT, XietongCourse.COURSE_ADDRESS, XietongCourse.COURSE_IMAGE, XietongCourse.COURSE_IMAGE_FILE, XietongCourse.COURSE_CONTENT, XietongCourse.IS_APPLY, XietongCourse.IS_LIMIT, XietongCourse.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
@@ -98,6 +102,7 @@ public class XietongCourseController extends Controller {
         
         List<XietongCourseStudent> courseWhileList = XietongCourseStudentService.instance.list(model.getCourse_id(), CourseStudentType.WHITE.getKey());
 
+        validateResponse(XietongCourseStudent.COURSE_STUDENT_ID, XietongCourseStudent.STUDENT_ID, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER);
         renderSuccessJson(courseWhileList);
     }
     
@@ -133,6 +138,8 @@ public class XietongCourseController extends Controller {
         XietongCourse model = getModel(XietongCourse.class);
         
         List<XietongCourseStudent> courseBlackList = XietongCourseStudentService.instance.list(model.getCourse_id(), CourseStudentType.BLACK.getKey());
+        
+        validateResponse(XietongCourseStudent.COURSE_STUDENT_ID, XietongCourseStudent.STUDENT_ID, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER);
 
         renderSuccessJson(courseBlackList);
         
