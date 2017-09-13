@@ -96,7 +96,9 @@ public class Dao {
 
         String sql = model.buildSaveSql();
 
-        System.out.println(sql);
+        if (!sql.contains("INSERT INTO table_http")) {
+            System.out.println(sql);
+        }
 
         return Db.update(sql) != 0;
     }

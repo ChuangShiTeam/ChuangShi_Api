@@ -24,10 +24,32 @@ public class AppService extends Service {
         return count;
     }
 
+    public Integer systemCount(String app_name) {
+        Cnd cnd = new Cnd();
+        cnd.where(App.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(App.APP_NAME, app_name);
+
+        Integer count = appDao.count(cnd);
+        return count;
+    }
+
     public List<App> adminList(String app_id, String app_name, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(App.SYSTEM_STATUS, true);
         cnd.and(App.APP_ID, app_id);
+        cnd.andAllowEmpty(App.APP_NAME, app_name);
+        cnd.paginate(m, n);
+
+        List<App> appList = appDao.primaryKeyList(cnd);
+        for (App app : appList) {
+            app.put(find(app.getApp_id()));
+        }
+        return appList;
+    }
+
+    public List<App> systemList(String app_name, Integer m, Integer n) {
+        Cnd cnd = new Cnd();
+        cnd.where(App.SYSTEM_STATUS, true);
         cnd.andAllowEmpty(App.APP_NAME, app_name);
         cnd.paginate(m, n);
 
