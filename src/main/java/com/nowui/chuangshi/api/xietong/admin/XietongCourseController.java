@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
+import com.jfinal.upload.UploadFile;
 import com.nowui.chuangshi.api.xietong.model.XietongCourse;
 import com.nowui.chuangshi.api.xietong.model.XietongCourseStudent;
 import com.nowui.chuangshi.api.xietong.service.XietongCourseService;
@@ -159,11 +160,22 @@ public class XietongCourseController extends Controller {
 
         renderSuccessJson();
     }
+    
+    @ActionKey("/admin/xietong/course/upload")
+    public void upload() {
+        String request_user_id = getRequest_user_id();
+        String request_app_id = getRequest_app_id();
+        
+        UploadFile uploadFile = getFile("file", request_user_id, 1024 * 1024 * 2);
+
+        XietongCourseService.instance.upload(uploadFile, request_user_id, request_app_id);
+
+        renderSuccessJson();
+    }
 
     @ActionKey("/admin/xietong/course/apply/export")
     public void applyExport() {
-        String request_app_id = getRequest_app_id();
-        render(XietongCourseService.instance.applyExport(request_app_id));
+        render(XietongCourseService.instance.applyExport());
     }
 
 }

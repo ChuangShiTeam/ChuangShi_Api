@@ -99,20 +99,6 @@ public class XietongCourseController extends Controller {
         render(XietongCourseService.instance.export(request_app_id));
     }
     
-    @ActionKey("/mobile/xietong/course/upload")
-    public void upload() {
-        String request_user_id = getRequest_user_id();
-        String request_app_id = getRequest_app_id();
-        
-        UploadFile uploadFile = getFile("file", request_user_id, 1024 * 1024 * 2);
-
-        XietongCourseService.instance.upload(uploadFile, request_user_id, request_app_id);
-
-        renderSuccessJson();
-    }
-    
-    
-    
     @ActionKey("/mobile/xietong/course/student/delete")
     public void studentDelete() {
         validateRequest(XietongCourseStudent.COURSE_STUDENT_ID, XietongCourseStudent.SYSTEM_VERSION);
