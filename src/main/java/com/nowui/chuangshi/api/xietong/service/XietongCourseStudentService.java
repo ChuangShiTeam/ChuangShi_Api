@@ -81,10 +81,10 @@ public class XietongCourseStudentService extends Service {
         cnd.select(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_NUMBER);
         cnd.leftJoin(XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.STUDENT_ID, XietongCourseStudent.TABLE_XIETONG_COURSE_STUDENT, XietongCourseStudent.STUDENT_ID);
         cnd.leftJoin(XietongClazz.TABLE_XIETONG_CLAZZ, XietongClazz.CLAZZ_ID, XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.CLAZZ_ID);
-        cnd.where(XietongCourseStudent.SYSTEM_STATUS, true);
-        cnd.and(XietongCourseStudent.COURSE_ID, course_id);
-        cnd.and(XietongCourseStudent.COURSE_STUDENT_TYPE, course_student_type);
-        cnd.desc(XietongCourseStudent.SYSTEM_CREATE_TIME);
+        cnd.where(XietongCourseStudent.TABLE_XIETONG_COURSE_STUDENT + "." + XietongCourseStudent.SYSTEM_STATUS, true);
+        cnd.and(XietongCourseStudent.TABLE_XIETONG_COURSE_STUDENT + "." + XietongCourseStudent.COURSE_ID, course_id);
+        cnd.and(XietongCourseStudent.TABLE_XIETONG_COURSE_STUDENT + "." + XietongCourseStudent.COURSE_STUDENT_TYPE, course_student_type);
+        cnd.desc(XietongCourseStudent.TABLE_XIETONG_COURSE_STUDENT + "." + XietongCourseStudent.SYSTEM_CREATE_TIME);
         return xietongCourseStudentDao.list(cnd);
     }
     

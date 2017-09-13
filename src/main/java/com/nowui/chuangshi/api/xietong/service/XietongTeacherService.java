@@ -3,7 +3,6 @@ package com.nowui.chuangshi.api.xietong.service;
 import java.util.List;
 
 import com.nowui.chuangshi.api.xietong.dao.XietongTeacherDao;
-import com.nowui.chuangshi.api.xietong.model.XietongCourse;
 import com.nowui.chuangshi.api.xietong.model.XietongTeacher;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;

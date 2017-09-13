@@ -188,7 +188,7 @@ public class UserDao extends Dao {
     public Boolean updateByUser_password(String user_id, String user_password, String system_update_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(User.USER_ID, user_id);
-        sqlMap.put(User.USER_PASSWORD, user_password);
+        sqlMap.put(User.USER_PASSWORD, generatePassword(user_password));
         sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(User.SYSTEM_UPDATE_TIME, new Date());
         SqlPara sqlPara = Db.getSqlPara("user.updateByUser_password", sqlMap);

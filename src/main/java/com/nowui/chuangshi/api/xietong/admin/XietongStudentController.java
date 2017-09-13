@@ -2,6 +2,7 @@ package com.nowui.chuangshi.api.xietong.admin;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
+import com.jfinal.upload.UploadFile;
 import com.nowui.chuangshi.api.xietong.model.XietongClazz;
 import com.nowui.chuangshi.api.xietong.model.XietongStudent;
 import com.nowui.chuangshi.api.xietong.service.XietongStudentService;
@@ -83,6 +84,18 @@ public class XietongStudentController extends Controller {
         Boolean result = XietongStudentService.instance.delete(model.getStudent_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
+    }
+    
+    @ActionKey("/admin/xietong/student/upload")
+    public void upload() {
+        String request_user_id = getRequest_user_id();
+        String request_app_id = getRequest_app_id();
+
+        UploadFile uploadFile = getFile("file", request_user_id, 1024 * 1024 * 2);
+
+        XietongStudentService.instance.upload(uploadFile, request_user_id, request_app_id);
+
+        renderSuccessJson();
     }
 
 }

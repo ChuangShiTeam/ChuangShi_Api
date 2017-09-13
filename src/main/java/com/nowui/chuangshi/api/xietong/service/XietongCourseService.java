@@ -26,7 +26,6 @@ import com.nowui.chuangshi.api.xietong.model.XietongCourseApply;
 import com.nowui.chuangshi.api.xietong.model.XietongCourseConfig;
 import com.nowui.chuangshi.api.xietong.model.XietongCourseStudent;
 import com.nowui.chuangshi.api.xietong.model.XietongStudent;
-import com.nowui.chuangshi.api.xietong.model.XietongTeacher;
 import com.nowui.chuangshi.common.render.ExcelRender;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
@@ -205,9 +204,9 @@ public class XietongCourseService extends Service {
         HSSFCellStyle style = wb.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER);
 
-        List<Record> teacherList = Db.find("select teacher_id, teacher_name from xietong_teacher where teacher_status = 1");
+        List<Record> teacherList = Db.find("select teacher_id, teacher_name from xietong_teacher where system_status = 1");
 
-        List<Record> gradeList = Db.find("select grade_id, grade_name from xietong_grade where grade_status = 1");
+        List<Record> gradeList = Db.find("select clazz_id, clazz_name from xietong_clazz where system_status = 1");
 
         HSSFSheet sheet = wb.createSheet("总-按科目");
 
@@ -571,8 +570,6 @@ public class XietongCourseService extends Service {
         List<XietongCourseApply> courseApplyListOrderByGrade_idAndStudent_id = XietongCourseApplyService.instance.clazzNameAndStudentIdAndCourseTimeOrderByList();
 
         List<XietongCourse> courseList = appList(request_app_id);
-
-        List<XietongTeacher> teacherList = XietongTeacherService.instance.appList(request_app_id);
 
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFCellStyle style = wb.createCellStyle();

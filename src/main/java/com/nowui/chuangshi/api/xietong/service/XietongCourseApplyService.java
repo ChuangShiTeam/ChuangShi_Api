@@ -58,10 +58,10 @@ public class XietongCourseApplyService extends Service {
            cnd.select(XietongCourse.TABLE_XIETONG_COURSE + "." + XietongCourse.COURSE_APPLY_LIMIT);
            cnd.select(XietongCourseApply.TABLE_XIETONG_COURSE_APPLY + "." + XietongCourseApply.USER_ID);
            cnd.leftJoin(XietongCourse.TABLE_XIETONG_COURSE, XietongCourse.COURSE_ID, XietongCourseApply.TABLE_XIETONG_COURSE_APPLY, XietongCourseApply.COURSE_ID);
-           cnd.where(XietongCourseApply.SYSTEM_STATUS, true);
-           cnd.and(XietongCourseApply.USER_ID, user_id);
-           cnd.asc(XietongCourse.SYSTEM_CREATE_TIME);
-           cnd.desc(XietongCourseApply.SYSTEM_CREATE_TIME);
+           cnd.where(XietongCourseApply.TABLE_XIETONG_COURSE_APPLY + "." + XietongCourseApply.SYSTEM_STATUS, true);
+           cnd.and(XietongCourseApply.TABLE_XIETONG_COURSE_APPLY + "." + XietongCourseApply.USER_ID, user_id);
+           cnd.asc(XietongCourse.TABLE_XIETONG_COURSE + "." + XietongCourse.SYSTEM_CREATE_TIME);
+           cnd.desc(XietongCourseApply.TABLE_XIETONG_COURSE_APPLY + "." + XietongCourseApply.SYSTEM_CREATE_TIME);
            
            xietong_course_apply_list = xietongCourseApplyDao.list(cnd);
            CacheUtil.put(XIETONG_COURSE_APPLY_USER_LIST_CACHE, user_id, xietong_course_apply_list);
@@ -81,13 +81,13 @@ public class XietongCourseApplyService extends Service {
        cnd.select(XietongCourse.TABLE_XIETONG_COURSE + "." + XietongCourse.COURSE_TIME);
        cnd.select(XietongCourse.TABLE_XIETONG_COURSE + "." + XietongCourse.COURSE_TEACHER);
        cnd.select(XietongCourse.TABLE_XIETONG_COURSE + "." + XietongCourse.COURSE_ADDRESS);
-       cnd.leftJoin(XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.USER_ID, XietongCourse.TABLE_XIETONG_COURSE, XietongCourseApply.USER_ID);
-       cnd.leftJoin(XietongClazz.TABLE_XIETONG_CLAZZ, XietongClazz.CLAZZ_ID, XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.CLAZZ_ID);
        cnd.leftJoin(XietongCourse.TABLE_XIETONG_COURSE, XietongCourse.COURSE_ID, XietongCourseApply.TABLE_XIETONG_COURSE_APPLY, XietongCourseApply.COURSE_ID);
-       cnd.where(XietongCourseApply.SYSTEM_STATUS, true);
-       cnd.asc(XietongCourse.COURSE_ID);
-       cnd.asc(XietongCourse.COURSE_TIME);
-       cnd.asc(XietongStudent.STUDENT_NUMBER);
+       cnd.leftJoin(XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.USER_ID, XietongCourse.TABLE_XIETONG_COURSE, XietongCourseApply.USER_ID);
+       cnd.leftJoin(XietongClazz.TABLE_XIETONG_CLAZZ, XietongClazz.CLAZZ_ID, XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.CLAZZ_ID);       
+       cnd.where(XietongCourseApply.TABLE_XIETONG_COURSE_APPLY + "." + XietongCourseApply.SYSTEM_STATUS, true);
+       cnd.asc(XietongCourse.TABLE_XIETONG_COURSE + "." + XietongCourse.COURSE_ID);
+       cnd.asc(XietongCourse.TABLE_XIETONG_COURSE + "." + XietongCourse.COURSE_TIME);
+       cnd.asc(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_NUMBER);
        
        return xietongCourseApplyDao.list(cnd);
    }
@@ -106,10 +106,10 @@ public class XietongCourseApplyService extends Service {
        cnd.leftJoin(XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.USER_ID, XietongCourse.TABLE_XIETONG_COURSE, XietongCourseApply.USER_ID);
        cnd.leftJoin(XietongClazz.TABLE_XIETONG_CLAZZ, XietongClazz.CLAZZ_ID, XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.CLAZZ_ID);
        cnd.leftJoin(XietongCourse.TABLE_XIETONG_COURSE, XietongCourse.COURSE_ID, XietongCourseApply.TABLE_XIETONG_COURSE_APPLY, XietongCourseApply.COURSE_ID);
-       cnd.where(XietongCourseApply.SYSTEM_STATUS, true);
-       cnd.asc(XietongClazz.CLAZZ_NAME);
-       cnd.desc(XietongStudent.STUDENT_ID);
-       cnd.asc(XietongCourse.COURSE_TIME);
+       cnd.where(XietongCourseApply.TABLE_XIETONG_COURSE_APPLY + "." + XietongCourseApply.SYSTEM_STATUS, true);
+       cnd.asc(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.CLAZZ_NAME);
+       cnd.desc(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_ID);
+       cnd.asc(XietongCourse.TABLE_XIETONG_COURSE + "." + XietongCourse.COURSE_TIME);
        
        return xietongCourseApplyDao.list(cnd);
    }
