@@ -8,7 +8,6 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
-import com.jfinal.upload.UploadFile;
 import com.nowui.chuangshi.api.xietong.model.XietongClazz;
 import com.nowui.chuangshi.api.xietong.model.XietongStudent;
 import com.nowui.chuangshi.api.xietong.service.XietongStudentService;
