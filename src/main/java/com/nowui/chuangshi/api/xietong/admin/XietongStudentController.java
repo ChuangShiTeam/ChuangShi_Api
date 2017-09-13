@@ -10,6 +10,7 @@ import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
 import com.nowui.chuangshi.constant.Constant;
+import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
@@ -48,28 +49,27 @@ public class XietongStudentController extends Controller {
 
     @ActionKey("/admin/xietong/student/save")
     public void save() {
-        validateRequest(XietongStudent.USER_ID, XietongStudent.CLAZZ_ID, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX);
-
+        validateRequest(XietongStudent.STUDENT_NAME);
+        XietongStudent model = getModel(XietongStudent.class);
+        User userModel = getModel(User.class);
+        
         String request_user_id = getRequest_user_id();
         
-        XietongStudent model = getModel(XietongStudent.class);
-        model.setStudent_id(Util.getRandomUUID());
-
-        Boolean result = XietongStudentService.instance.save(model, request_user_id);
-
+        Boolean result = XietongStudentService.instance.save(model, userModel, request_user_id);
+        
         renderSuccessJson(result);
     }
 
     @ActionKey("/admin/xietong/student/update")
     public void update() {
-        validateRequest(XietongStudent.STUDENT_ID, XietongStudent.USER_ID, XietongStudent.CLAZZ_ID, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX, XietongStudent.SYSTEM_VERSION);
-
-        String request_user_id = getRequest_user_id();
-        
+        validateRequest(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_NAME, XietongStudent.SYSTEM_VERSION);
         XietongStudent model = getModel(XietongStudent.class);
+        User userModel = getModel(User.class);
+        
+        String request_user_id = getRequest_user_id();
 
-        Boolean result = XietongStudentService.instance.update(model, model.getStudent_id(), request_user_id, model.getSystem_version());
-
+        Boolean result = XietongStudentService.instance.update(model, userModel, request_user_id, model.getSystem_version());
+        
         renderSuccessJson(result);
     }
 
@@ -82,6 +82,15 @@ public class XietongStudentController extends Controller {
         XietongStudent model = getModel(XietongStudent.class);
 
         Boolean result = XietongStudentService.instance.delete(model.getStudent_id(), request_user_id, model.getSystem_version());
+
+        renderSuccessJson(result);
+    }
+    
+    @ActionKey("/admin/xietong/student/all/delete")
+    public void allDelete() {
+        String request_user_id = getRequest_user_id();
+
+        Boolean result = XietongStudentService.instance.allDelete(request_user_id);
 
         renderSuccessJson(result);
     }

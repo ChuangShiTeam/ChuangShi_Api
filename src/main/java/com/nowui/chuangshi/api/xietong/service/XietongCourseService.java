@@ -86,10 +86,9 @@ public class XietongCourseService extends Service {
         return xietongCourseList;
     }
     
-    public List<XietongCourse> appList(String app_id) {
+    public List<XietongCourse> allList() {
         Cnd cnd = new Cnd();        
         cnd.where(XietongCourse.SYSTEM_STATUS, true);
-        cnd.and(XietongCourse.APP_ID, app_id);
         cnd.asc(XietongCourse.COURSE_TIME);
         cnd.desc(XietongCourse.SYSTEM_CREATE_TIME);
         
@@ -236,7 +235,7 @@ public class XietongCourseService extends Service {
         cell.setCellValue("课程介绍");
         cell.setCellStyle(style);
 
-        List<XietongCourse> courseList = appList(request_app_id);
+        List<XietongCourse> courseList = allList();
         for (int i = 0; i < courseList.size(); i++) {
             XietongCourse course = courseList.get(i);
 
@@ -391,7 +390,7 @@ public class XietongCourseService extends Service {
     }
     
     public void studentWhiteApplySave(String request_user_id, String request_app_id) {
-        List<XietongCourse> courseList = appList(request_app_id);
+        List<XietongCourse> courseList = allList();
 
         for (XietongCourse course : courseList) {
             List<XietongCourseStudent> courseStudentList = XietongCourseStudentService.instance.list(course.getCourse_id(), CourseStudentType.WHITE.getKey());
@@ -554,10 +553,13 @@ public class XietongCourseService extends Service {
         XietongClazz clazz = XietongClazzService.instance.find(student.getClazz_id());
 
         check(clazz, request_user_id, request_app_id);
-        check(clazz, request_user_id, request_app_id);
 
         boolean result = XietongCourseApplyService.instance.courseAndUserDelete(course_id, request_user_id, request_user_id, request_app_id);
 
+        if (result) {
+            //移除课程限制缓存
+            CacheUtil.remove(XIETONG_COURSE_LIMIT_CACHE, course_id);
+        }
         return result;
     }
 
@@ -565,11 +567,11 @@ public class XietongCourseService extends Service {
         return XietongCourseApplyService.instance.allDelete(request_user_id);
     }
     
-    public ExcelRender applyExport(String request_app_id) {
+    public ExcelRender applyExport() {
         List<XietongCourseApply> courseApplyListOrderByCourse_id = XietongCourseApplyService.instance.courseIdAndCourseTimeAndStudentNumberOrderByList();
         List<XietongCourseApply> courseApplyListOrderByGrade_idAndStudent_id = XietongCourseApplyService.instance.clazzNameAndStudentIdAndCourseTimeOrderByList();
 
-        List<XietongCourse> courseList = appList(request_app_id);
+        List<XietongCourse> courseList = allList();
 
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFCellStyle style = wb.createCellStyle();
