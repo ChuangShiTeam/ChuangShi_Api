@@ -293,7 +293,7 @@ public class XietongCourseService extends Service {
         return new ExcelRender(wb, "选课信息");
     }
 
-    @SuppressWarnings({ "unused", "resource" })
+    @SuppressWarnings({ "unused" })
     public void upload(UploadFile uploadFile, String request_user_id, String request_app_id) {
         String suffix = uploadFile.getFileName().substring(uploadFile.getFileName().lastIndexOf(".") + 1);
         Workbook wb = null;
@@ -340,7 +340,11 @@ public class XietongCourseService extends Service {
                     addressCell.setCellType(CellType.STRING);
 
                     Cell contentCell = row.getCell(6);
-                    contentCell.setCellType(CellType.STRING);
+                    String course_content = "";
+                    if (contentCell != null) {
+                        course_content = contentCell.getStringCellValue();
+                         contentCell.setCellType(CellType.STRING);
+                    }
 
                     String clazz_id = clazzCell.getStringCellValue();
                     String course_teacher = teacherCell.getStringCellValue();
@@ -348,7 +352,6 @@ public class XietongCourseService extends Service {
                     String time = timeCell.getStringCellValue();
                     String course_apply_limit = limitCell.getStringCellValue();
                     String course_address = addressCell.getStringCellValue();
-                    String course_content = contentCell.getStringCellValue();
 
                     Integer course_time = 0;
                     switch (time) {
@@ -371,13 +374,17 @@ public class XietongCourseService extends Service {
                             course_time = 56;
                             break;
                     }
-
+                    
+                    if (clazz_id.endsWith(",")) {
+                        clazz_id = clazz_id.substring(0, clazz_id.length() - 1);
+                    }
+                    
                     for (XietongClazz clazz : clazzList) {
                         if (clazz_id.contains(clazz.getClazz_name())) {
                             clazz_id = clazz_id.replace(clazz.getClazz_name(), clazz.getClazz_id());
                         }
                     }
-
+                    
                     clazz_id = clazz_id.replace(",", "\",\"");
                     clazz_id = "[\"" + clazz_id + "\"]";
 
