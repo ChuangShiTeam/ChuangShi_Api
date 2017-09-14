@@ -4,10 +4,10 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.enchashment.model.Enchashment;
 import com.nowui.chuangshi.api.enchashment.service.EnchashmentService;
+import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
-import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
@@ -19,17 +19,15 @@ public class EnchashmentController extends Controller {
 
     @ActionKey("/admin/enchashment/list")
     public void list() {
-        validateRequest(Enchashment.USER_ID, Enchashment.ENCHASHMENT_STATUS, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(User.USER_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         Enchashment model = getModel(Enchashment.class);
         String request_app_id = getRequest_app_id();
-        Cnd cnd = new Cnd();
-        cnd.where(Enchashment.APP_ID, model.getApp_id()).andAllowEmpty(Enchashment.USER_ID, model.getUser_id()).andAllowEmpty(Enchashment.ENCHASHMENT_STATUS, model.getEnchashment_status());
 
-        Integer resultCount = EnchashmentService.instance.adminCount(request_app_id, model.getUser_id(), model.getEnchashment_status());
-        List<Enchashment> resultList = EnchashmentService.instance.adminList(request_app_id, model.getUser_id(), model.getEnchashment_status(), getM(), getN());
+        Integer resultCount = EnchashmentService.instance.adminCount(request_app_id, model.getStr(User.USER_NAME));
+        List<Enchashment> resultList = EnchashmentService.instance.adminList(request_app_id, model.getStr(User.USER_NAME), getM(), getN());
 
-        validateResponse(Enchashment.ENCHASHMENT_ID, Enchashment.USER_ID, Enchashment.ENCHASHMENT_AMOUNT, Enchashment.ENCHASHMENT_STATUS, Enchashment.SYSTEM_VERSION);
+        validateResponse(Enchashment.ENCHASHMENT_ID, User.USER_NAME, Enchashment.ENCHASHMENT_AMOUNT, Enchashment.SYSTEM_CREATE_TIME, Enchashment.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }

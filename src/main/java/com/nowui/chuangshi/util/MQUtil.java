@@ -1,7 +1,6 @@
 package com.nowui.chuangshi.util;
 
 import com.nowui.chuangshi.rocket.Producer;
-import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
 

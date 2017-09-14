@@ -8,6 +8,7 @@ import org.apache.rocketmq.client.consumer.listener.*;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +52,12 @@ public class Consumer {
 
             consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 
+            consumer.setMessageModel(MessageModel.BROADCASTING);
+
             consumer.subscribe("Topic", tag);
+
+            consumer.setConsumeThreadMax(5);
+            consumer.setConsumeThreadMin(3);
 
             consumer.registerMessageListener(new MessageListenerConcurrently() {
 

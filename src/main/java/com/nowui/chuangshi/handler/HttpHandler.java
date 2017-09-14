@@ -7,7 +7,7 @@ import com.nowui.chuangshi.common.annotation.Handler;
 import com.nowui.chuangshi.rocket.RocketHandler;
 import com.nowui.chuangshi.util.DateUtil;
 
-@Handler(tag = "http")
+@Handler(tag = "http", thread_max = 1, thread_min = 1)
 public class HttpHandler implements RocketHandler {
 
     @Override

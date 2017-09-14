@@ -2,6 +2,7 @@ package com.nowui.chuangshi.api.enchashment.service;
 
 import com.nowui.chuangshi.api.enchashment.dao.EnchashmentDao;
 import com.nowui.chuangshi.api.enchashment.model.Enchashment;
+import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
@@ -14,23 +15,25 @@ public class EnchashmentService extends Service {
     private final String ENCHASHMENT_ITEM_CACHE = "enchashment_item_cache";
     private final EnchashmentDao certificateDao = new EnchashmentDao();
 
-    public Integer adminCount(String app_id, String user_id, Boolean enchashment_status) {
+    public Integer adminCount(String app_id, String user_name) {
         Cnd cnd = new Cnd();
-        cnd.where(Enchashment.SYSTEM_STATUS, true);
-        cnd.and(Enchashment.APP_ID, app_id);
-        cnd.andAllowEmpty(Enchashment.USER_ID, user_id);
-        cnd.andAllowEmpty(Enchashment.ENCHASHMENT_STATUS, enchashment_status);
+        cnd.leftJoin(User.TABLE_USER, User.USER_ID, Enchashment.TABLE_ENCHASHMENT, Enchashment.USER_ID);
+        cnd.where(Enchashment.TABLE_ENCHASHMENT + "." + Enchashment.SYSTEM_STATUS, true);
+        cnd.and(Enchashment.TABLE_ENCHASHMENT + "." + Enchashment.APP_ID, app_id);
+        cnd.andLikeAllowEmpty(User.TABLE_USER + "." + User.USER_NAME, user_name);
 
         Integer count = certificateDao.count(cnd);
         return count;
     }
 
-    public List<Enchashment> adminList(String app_id, String user_id, Boolean enchashment_status, Integer m, Integer n) {
+    public List<Enchashment> adminList(String app_id, String user_name, Integer m, Integer n) {
         Cnd cnd = new Cnd();
-        cnd.where(Enchashment.SYSTEM_STATUS, true);
-        cnd.and(Enchashment.APP_ID, app_id);
-        cnd.andAllowEmpty(Enchashment.USER_ID, user_id);
-        cnd.andAllowEmpty(Enchashment.ENCHASHMENT_STATUS, enchashment_status);
+        cnd.select(User.TABLE_USER + "." + User.USER_NAME);
+        cnd.leftJoin(User.TABLE_USER, User.USER_ID, Enchashment.TABLE_ENCHASHMENT, Enchashment.USER_ID);
+        cnd.where(Enchashment.TABLE_ENCHASHMENT + "." + Enchashment.SYSTEM_STATUS, true);
+        cnd.and(Enchashment.TABLE_ENCHASHMENT + "." + Enchashment.APP_ID, app_id);
+        cnd.andLikeAllowEmpty(User.TABLE_USER + "." + User.USER_NAME, user_name);
+        cnd.desc(Enchashment.TABLE_ENCHASHMENT + "." + Enchashment.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
         List<Enchashment> enchashmentList = certificateDao.primaryKeyList(cnd);
