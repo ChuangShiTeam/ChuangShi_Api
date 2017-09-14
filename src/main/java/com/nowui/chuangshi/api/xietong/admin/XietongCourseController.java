@@ -102,7 +102,7 @@ public class XietongCourseController extends Controller {
         
         List<XietongCourseStudent> courseWhileList = XietongCourseStudentService.instance.list(model.getCourse_id(), CourseStudentType.WHITE.getKey());
 
-        validateResponse(XietongCourseStudent.COURSE_STUDENT_ID, XietongCourseStudent.STUDENT_ID, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER);
+        validateResponse(XietongCourseStudent.COURSE_STUDENT_ID, XietongCourseStudent.STUDENT_ID, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER, XietongCourseStudent.SYSTEM_VERSION);
         renderSuccessJson(courseWhileList);
     }
     
@@ -139,7 +139,7 @@ public class XietongCourseController extends Controller {
         
         List<XietongCourseStudent> courseBlackList = XietongCourseStudentService.instance.list(model.getCourse_id(), CourseStudentType.BLACK.getKey());
         
-        validateResponse(XietongCourseStudent.COURSE_STUDENT_ID, XietongCourseStudent.STUDENT_ID, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER);
+        validateResponse(XietongCourseStudent.COURSE_STUDENT_ID, XietongCourseStudent.STUDENT_ID, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER, XietongCourseStudent.SYSTEM_VERSION);
 
         renderSuccessJson(courseBlackList);
         
@@ -155,6 +155,18 @@ public class XietongCourseController extends Controller {
         String request_app_id = getRequest_app_id();
         
         Boolean result = XietongCourseStudentService.instance.save(model, request_user_id, request_app_id);
+        
+        renderSuccessJson(result);
+    }
+    
+    @ActionKey("/admin/xietong/course/student/delete")
+    public void studentDelete() {
+        validateRequest(XietongCourseStudent.COURSE_ID, XietongCourseStudent.COURSE_STUDENT_ID, XietongCourseStudent.SYSTEM_VERSION);
+        
+        XietongCourseStudent model = getModel(XietongCourseStudent.class);
+        String request_user_id = getRequest_user_id();
+        
+        Boolean result = XietongCourseStudentService.instance.delete(model.getCourse_id(), model.getCourse_student_id(), request_user_id, model.getSystem_version());
         
         renderSuccessJson(result);
     }

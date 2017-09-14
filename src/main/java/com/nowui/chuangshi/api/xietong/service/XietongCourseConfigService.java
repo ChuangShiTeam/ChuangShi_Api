@@ -14,23 +14,19 @@ public class XietongCourseConfigService extends Service {
     private final String XIETONG_COURSE_CONFIG_ITEM_CACHE = "xietong_course_config_item_cache";
     private final XietongCourseConfigDao xietongCourseConfigDao = new XietongCourseConfigDao();
 
-    public Integer adminCount(String app_id, String course_config_apply_start_time, String course_config_apply_end_time) {
+    public Integer adminCount(String app_id) {
         Cnd cnd = new Cnd();        
         cnd.where(XietongCourseConfig.SYSTEM_STATUS, true);
         cnd.and(XietongCourseConfig.APP_ID, app_id);
-        cnd.andAllowEmpty(XietongCourseConfig.COURSE_CONFIG_APPLY_START_TIME, course_config_apply_start_time);
-        cnd.andAllowEmpty(XietongCourseConfig.COURSE_CONFIG_APPLY_END_TIME, course_config_apply_end_time);
 
         Integer count = xietongCourseConfigDao.count(cnd);
         return count;
     }
 
-    public List<XietongCourseConfig> adminList(String app_id, String course_config_apply_start_time, String course_config_apply_end_time, Integer m, Integer n) {
+    public List<XietongCourseConfig> adminList(String app_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();        
         cnd.where(XietongCourseConfig.SYSTEM_STATUS, true);
         cnd.and(XietongCourseConfig.APP_ID, app_id);
-        cnd.andAllowEmpty(XietongCourseConfig.COURSE_CONFIG_APPLY_START_TIME, course_config_apply_start_time);
-        cnd.andAllowEmpty(XietongCourseConfig.COURSE_CONFIG_APPLY_END_TIME, course_config_apply_end_time);
         cnd.paginate(m, n);
 
         List<XietongCourseConfig> xietong_course_configList = xietongCourseConfigDao.primaryKeyList(cnd);
