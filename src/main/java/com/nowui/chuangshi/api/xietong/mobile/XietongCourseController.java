@@ -99,18 +99,6 @@ public class XietongCourseController extends Controller {
         render(XietongCourseService.instance.export(request_app_id));
     }
     
-    @ActionKey("/mobile/xietong/course/student/delete")
-    public void studentDelete() {
-        validateRequest(XietongCourseStudent.COURSE_STUDENT_ID, XietongCourseStudent.SYSTEM_VERSION);
-        
-        XietongCourseStudent model = getModel(XietongCourseStudent.class);
-        String request_user_id = getRequest_user_id();
-        
-        Boolean result = XietongCourseStudentService.instance.delete(model.getCourse_student_id(), request_user_id, model.getSystem_version());
-        
-        renderSuccessJson(result);
-    }
-    
     @ActionKey("/mobile/xietong/course/apply/list")
     public void applyList() {
         String request_user_id = getRequest_user_id();

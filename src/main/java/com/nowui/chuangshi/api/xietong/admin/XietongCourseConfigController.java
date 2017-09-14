@@ -18,13 +18,12 @@ public class XietongCourseConfigController extends Controller {
 
     @ActionKey("/admin/xietong/course/config/list")
     public void list() {
-        validateRequest(XietongCourseConfig.COURSE_CONFIG_APPLY_START_TIME, XietongCourseConfig.COURSE_CONFIG_APPLY_END_TIME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
-        XietongCourseConfig model = getModel(XietongCourseConfig.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = XietongCourseConfigService.instance.adminCount(request_app_id, model.getCourse_config_apply_start_time(), model.getCourse_config_apply_end_time());
-        List<XietongCourseConfig> resultList = XietongCourseConfigService.instance.adminList(request_app_id, model.getCourse_config_apply_start_time(), model.getCourse_config_apply_end_time(), getM(), getN());
+        Integer resultCount = XietongCourseConfigService.instance.adminCount(request_app_id);
+        List<XietongCourseConfig> resultList = XietongCourseConfigService.instance.adminList(request_app_id, getM(), getN());
 
         validateResponse(XietongCourseConfig.COURSE_CONFIG_ID, XietongCourseConfig.COURSE_CONFIG_APPLY_START_TIME, XietongCourseConfig.COURSE_CONFIG_APPLY_END_TIME, XietongCourseConfig.SYSTEM_VERSION);
 
@@ -33,9 +32,11 @@ public class XietongCourseConfigController extends Controller {
 
     @ActionKey("/admin/xietong/course/config/find")
     public void find() {
-        String request_app_id = getRequest_app_id();
+        validateRequest(XietongCourseConfig.COURSE_CONFIG_ID);
+        
+        XietongCourseConfig model = getModel(XietongCourseConfig.class);
 
-        XietongCourseConfig result = XietongCourseConfigService.instance.appFind(request_app_id);
+        XietongCourseConfig result = XietongCourseConfigService.instance.find(model.getCourse_config_id());
 
         validateResponse(XietongCourseConfig.COURSE_CONFIG_APPLY_START_TIME, XietongCourseConfig.COURSE_CONFIG_APPLY_END_TIME, XietongCourseConfig.SYSTEM_VERSION);
 

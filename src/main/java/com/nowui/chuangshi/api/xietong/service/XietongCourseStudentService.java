@@ -76,6 +76,7 @@ public class XietongCourseStudentService extends Service {
         Cnd cnd = new Cnd();
         cnd.select(XietongCourseStudent.TABLE_XIETONG_COURSE_STUDENT + "." + XietongCourseStudent.COURSE_STUDENT_ID);
         cnd.select(XietongCourseStudent.TABLE_XIETONG_COURSE_STUDENT + "." + XietongCourseStudent.STUDENT_ID);
+        cnd.select(XietongCourseStudent.TABLE_XIETONG_COURSE_STUDENT + "." + XietongCourseStudent.SYSTEM_VERSION);
         cnd.select(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.CLAZZ_NAME);
         cnd.select(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_NAME);
         cnd.select(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_NUMBER);
@@ -126,7 +127,7 @@ public class XietongCourseStudentService extends Service {
         return success;
     }
 
-    public Boolean delete(String course_student_id, String system_update_user_id, Integer system_version) {
+    public Boolean delete(String course_id, String course_student_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = new Cnd();       
         cnd.where(XietongCourseStudent.SYSTEM_STATUS, true);
         cnd.and(XietongCourseStudent.COURSE_STUDENT_ID, course_student_id);
@@ -136,6 +137,7 @@ public class XietongCourseStudentService extends Service {
 
         if (success) {
             CacheUtil.remove(XIETONG_COURSE_STUDENT_ITEM_CACHE, course_student_id);
+            CacheUtil.remove(XIETONG_COURSE_STUDENT_BLACK_LIST_CACHE, course_id);
         }
 
         return success;

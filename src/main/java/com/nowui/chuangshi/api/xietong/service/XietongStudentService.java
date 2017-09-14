@@ -60,7 +60,6 @@ public class XietongStudentService extends Service {
     
     public List<XietongStudent> mobileList(String app_id, String student_name, Integer m, Integer n) {
         Cnd cnd = new Cnd(); 
-        cnd.select(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_ID);
         cnd.select(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_NAME);
         cnd.select(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_NUMBER);
         cnd.select(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.CLAZZ_NAME);
@@ -69,29 +68,23 @@ public class XietongStudentService extends Service {
         cnd.andLikeAllowEmpty(XietongStudent.STUDENT_NAME, student_name);
         cnd.desc(XietongStudent.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
-        return xietongStudentDao.list(cnd);
+        return xietongStudentDao.primaryKeyList(cnd);
     }
     
     public XietongStudent userFind(String user_id) {
-        XietongStudent xietong_student = CacheUtil.get(XIETONG_STUDENT_ITEM_CACHE, user_id);
-
-        if (xietong_student == null) {
-            Cnd cnd = new Cnd();
-            cnd.where(XietongStudent.SYSTEM_STATUS, true);
-            cnd.and(XietongStudent.USER_ID, user_id);
-            
-            List<XietongStudent> xietong_student_list = xietongStudentDao.primaryKeyList(cnd);
-            
-            if (xietong_student_list == null || xietong_student_list.size() == 0) {
-                return null;
-            }
-            
-            xietong_student = xietongStudentDao.find(xietong_student_list.get(0).getStudent_id());
-            
-            CacheUtil.put(XIETONG_STUDENT_ITEM_CACHE, user_id, xietong_student);
+        
+        Cnd cnd = new Cnd();
+        cnd.where(XietongStudent.SYSTEM_STATUS, true);
+        cnd.and(XietongStudent.USER_ID, user_id);
+        
+        List<XietongStudent> xietong_student_list = xietongStudentDao.primaryKeyList(cnd);
+        
+        if (xietong_student_list == null || xietong_student_list.size() == 0) {
+            return null;
         }
+        
+        return xietongStudentDao.find(xietong_student_list.get(0).getStudent_id());
 
-        return xietong_student;
     }
     
     public XietongStudent find(String student_id) {
