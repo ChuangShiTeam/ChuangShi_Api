@@ -19,7 +19,7 @@ public class MQUtil {
             return Producer.instance.send(msg);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-        }
+        } 
 
         return null;
     }

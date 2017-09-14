@@ -1,32 +1,31 @@
 package com.nowui.chuangshi.handler;
 
+import com.alibaba.fastjson.JSONObject;
+import com.nowui.chuangshi.api.xietong.model.XietongCourseApply;
+import com.nowui.chuangshi.api.xietong.model.XietongCourseApplyHistory;
+import com.nowui.chuangshi.api.xietong.service.XietongCourseService;
 import com.nowui.chuangshi.common.annotation.Handler;
 import com.nowui.chuangshi.rocket.RocketHandler;
-import com.nowui.chuangshi.util.CacheUtil;
-
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 @Handler(tag = "course", thread_max = 5, thread_min = 3)
 public class CourseHandler implements RocketHandler {
 
     @Override
     public void handle(String message) {
-
-        Integer count = CacheUtil.get("course", "aaa");
-        if (count == null) {
-            count = 0;
-        }
-        CacheUtil.put("course", "aaa", count + 1);
-        System.out.println(message + "---" + count);
+        
+        JSONObject jsonObject = JSONObject.parseObject(message);
+        
+        String course_id = jsonObject.getString(XietongCourseApply.COURSE_ID);
+        String course_apply_history_id = jsonObject.getString(XietongCourseApplyHistory.COURSE_APPLY_HISTORY_ID);
+        String user_id = jsonObject.getString(XietongCourseApply.USER_ID);
+        String app_id = jsonObject.getString(XietongCourseApply.APP_ID);
 
         try {
-            //模拟业务逻辑处理中...
-            Random random = new Random();
-            TimeUnit.SECONDS.sleep(1);
+            XietongCourseService.instance.applySave(course_id, course_apply_history_id, user_id, app_id);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 }

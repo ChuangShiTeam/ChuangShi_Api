@@ -68,6 +68,8 @@ public class XietongCourse extends Model<XietongCourse> {
     
     public static final String IS_LIMIT = "is_limit";
     
+    public static final String COURSE_APPLY_COUNT = "course_apply_count";
+    
     public static final String COURSE_IMAGE_FILE = "course_image_file";
 
     public String getCourse_id() {
