@@ -11,6 +11,7 @@ import com.nowui.chuangshi.api.xietong.model.XietongCourseApplyHistory;
 import com.nowui.chuangshi.api.xietong.model.XietongStudent;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.type.CourseApplyHistoryStatus;
 import com.nowui.chuangshi.util.CacheUtil;
 import com.nowui.chuangshi.util.Util;
 
@@ -185,14 +186,6 @@ public class XietongCourseApplyService extends Service {
             courseApplyList.add(course_apply);
             
             CacheUtil.put(XIETONG_COURSE_APPLY_USER_LIST_CACHE, request_user_id, courseApplyList);
-            
-            XietongCourseApplyHistory xietong_course_apply_history = new XietongCourseApplyHistory();
-            xietong_course_apply_history.setApp_id(request_app_id);
-            xietong_course_apply_history.setCourse_apply_history_id(Util.getRandomUUID());
-            xietong_course_apply_history.setCourse_id(course_id);
-            xietong_course_apply_history.setUser_id(request_user_id);
-            xietong_course_apply_history.setCourse_apply_history_status(true);
-            XietongCourseApplyHistoryService.instance.save(xietong_course_apply_history, request_user_id);
         }
 
         return result;
@@ -255,7 +248,8 @@ public class XietongCourseApplyService extends Service {
             xietong_course_apply_history.setCourse_apply_history_id(Util.getRandomUUID());
             xietong_course_apply_history.setCourse_id(course_id);
             xietong_course_apply_history.setUser_id(user_id);
-            xietong_course_apply_history.setCourse_apply_history_status(false);
+            xietong_course_apply_history.setCourse_apply_history_status(CourseApplyHistoryStatus.CANCEL.getKey());
+            xietong_course_apply_history.setCourse_apply_history_result(CourseApplyHistoryStatus.CANCEL.getValue());
             XietongCourseApplyHistoryService.instance.save(xietong_course_apply_history, request_user_id);
         }
 

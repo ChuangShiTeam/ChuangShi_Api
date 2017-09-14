@@ -28,8 +28,11 @@ public class XietongCourseApplyHistory extends Model<XietongCourseApplyHistory> 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
     public static final String USER_ID = "user_id";
 
-    @Column(type = ColumnType.TINYINT, length = 1, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 25, comment = "")
     public static final String COURSE_APPLY_HISTORY_STATUS = "course_apply_history_status";
+    
+    @Column(type = ColumnType.VARCHAR, length = 200, comment = "")
+    public static final String COURSE_APPLY_HISTORY_RESULT = "course_apply_history_result";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -81,12 +84,20 @@ public class XietongCourseApplyHistory extends Model<XietongCourseApplyHistory> 
         set(USER_ID, user_id);
     }
 
-    public Boolean getCourse_apply_history_status() {
-        return getBoolean(COURSE_APPLY_HISTORY_STATUS);
+    public String getCourse_apply_history_status() {
+        return getStr(COURSE_APPLY_HISTORY_STATUS);
     }
 
-    public void setCourse_apply_history_status(Boolean course_apply_history_status) {
+    public void setCourse_apply_history_status(String course_apply_history_status) {
         set(COURSE_APPLY_HISTORY_STATUS, course_apply_history_status);
+    }
+    
+    public String getCourse_apply_history_result() {
+        return getStr(COURSE_APPLY_HISTORY_RESULT);
+    }
+
+    public void setCourse_apply_history_result(String course_apply_history_result) {
+        set(COURSE_APPLY_HISTORY_RESULT, course_apply_history_result);
     }
 
     public String getSystem_create_user_id() {

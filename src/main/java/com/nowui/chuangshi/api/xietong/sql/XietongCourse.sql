@@ -2,11 +2,7 @@
 
   #sql("userList")
     SELECT
-    course_id,
-    course_name,
-    course_teacher,
-    course_time,
-    course_apply_limit
+    course_id
     FROM table_xietong_course
     WHERE system_status = 1
     AND clazz_id LIKE (SELECT CONCAT('%', clazz_id, '%') FROM table_xietong_student WHERE user_id = #p(user_id))

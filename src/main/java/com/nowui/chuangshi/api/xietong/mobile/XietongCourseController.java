@@ -3,13 +3,10 @@ package com.nowui.chuangshi.api.xietong.mobile;
 import java.util.List;
 
 import com.jfinal.core.ActionKey;
-import com.jfinal.upload.UploadFile;
 import com.nowui.chuangshi.api.xietong.model.XietongCourse;
 import com.nowui.chuangshi.api.xietong.model.XietongCourseApply;
-import com.nowui.chuangshi.api.xietong.model.XietongCourseStudent;
 import com.nowui.chuangshi.api.xietong.service.XietongCourseApplyService;
 import com.nowui.chuangshi.api.xietong.service.XietongCourseService;
-import com.nowui.chuangshi.api.xietong.service.XietongCourseStudentService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.util.Util;
@@ -109,18 +106,17 @@ public class XietongCourseController extends Controller {
         renderSuccessJson(xietong_course_apply_list);
     }
     
-    @ActionKey("/mobile/xietong/course/apply/save")
-    public void applySave() {
+    @ActionKey("/mobile/xietong/course/apply")
+    public void apply() {
         validateRequest(XietongCourseApply.COURSE_ID);
         
         XietongCourseApply model = getModel(XietongCourseApply.class);
-        model.setCourse_apply_id(Util.getRandomUUID());
         String request_user_id = getRequest_user_id();
         String request_app_id = getRequest_app_id();
         
-        Boolean result = XietongCourseService.instance.applySave(model, request_user_id, request_app_id);
+        String course_apply_history_id = XietongCourseService.instance.apply(model.getCourse_id(), request_user_id, request_app_id);
         
-        renderSuccessJson(result);
+        renderSuccessJson(course_apply_history_id);
     }
     
     @ActionKey("/mobile/xietong/course/apply/delete")
