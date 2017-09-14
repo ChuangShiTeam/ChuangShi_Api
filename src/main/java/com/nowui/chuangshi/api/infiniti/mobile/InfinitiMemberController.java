@@ -104,10 +104,10 @@ public class InfinitiMemberController extends Controller {
             throw new RuntimeException("该兑换码无效");
         }
 
-        Integer count = InfinitiMemberService.instance.memberMobileCount(member_mobile);
-        if  (count > 0) {
-            throw new RuntimeException("该电话号码已经兑换过");
-        }
+//        Integer count = InfinitiMemberService.instance.memberMobileCount(member_mobile);
+//        if  (count > 0) {
+//            throw new RuntimeException("该电话号码已经兑换过");
+//        }
 
         Boolean member_redeem_code_is_exchange = true;
 
