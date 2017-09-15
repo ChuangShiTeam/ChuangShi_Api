@@ -12,7 +12,7 @@ public class CourseHandler implements RocketHandler {
 
     @Override
     public void handle(String message) {
-        
+
         JSONObject jsonObject = JSONObject.parseObject(message);
         
         String course_id = jsonObject.getString(XietongCourseApply.COURSE_ID);
