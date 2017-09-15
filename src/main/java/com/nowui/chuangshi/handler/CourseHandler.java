@@ -20,6 +20,8 @@ public class CourseHandler implements RocketHandler {
         String user_id = jsonObject.getString(XietongCourseApply.USER_ID);
         String app_id = jsonObject.getString(XietongCourseApply.APP_ID);
 
+        System.out.println(message);
+
         try {
             XietongCourseService.instance.applySave(course_id, course_apply_history_id, user_id, app_id);
         } catch (Exception e) {
