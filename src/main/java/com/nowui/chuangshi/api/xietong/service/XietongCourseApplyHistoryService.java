@@ -6,6 +6,7 @@ import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 
+import java.util.Date;
 import java.util.List;
 
 public class XietongCourseApplyHistoryService extends Service {
@@ -64,7 +65,20 @@ public class XietongCourseApplyHistoryService extends Service {
         Boolean success = xietongCourseApplyHistoryDao.update(xietong_course_apply_history, system_update_user_id, system_version, cnd);
 
         if (success) {
-            CacheUtil.put(XIETONG_COURSE_APPLY_HISTORY_ITEM_CACHE, course_apply_history_id, xietong_course_apply_history);
+            XietongCourseApplyHistory bean = new XietongCourseApplyHistory();
+            bean.setApp_id(xietong_course_apply_history.getApp_id());
+            bean.setCourse_apply_history_id(course_apply_history_id);
+            bean.setCourse_id(xietong_course_apply_history.getCourse_id());
+            bean.setUser_id(xietong_course_apply_history.getUser_id());
+            bean.setCourse_apply_history_status(xietong_course_apply_history.getCourse_apply_history_status());
+            bean.setCourse_apply_history_result(xietong_course_apply_history.getCourse_apply_history_result());
+            bean.setSystem_create_time(xietong_course_apply_history.getSystem_create_time());
+            bean.setSystem_create_user_id(xietong_course_apply_history.getSystem_create_user_id());
+            bean.setSystem_update_user_id(system_update_user_id);
+            bean.setSystem_update_time(new Date());
+            bean.setSystem_status(xietong_course_apply_history.getSystem_status());
+            bean.setSystem_version(system_version + 1);
+            CacheUtil.put(XIETONG_COURSE_APPLY_HISTORY_ITEM_CACHE, course_apply_history_id, bean);
         }
 
         return success;
