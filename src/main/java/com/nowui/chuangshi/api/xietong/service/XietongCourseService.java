@@ -325,11 +325,11 @@ public class XietongCourseService extends Service {
                 } else if (uploadFile.getFileName().endsWith(Constant.EXCEL07_EXTENSION)) {
                 	wb = new XSSFWorkbook(is);
                 } else {
-                	throw new RuntimeException("上传文件格式不正确!");
+                    throw new RuntimeException("上传文件格式不正确!");
                 }
 
                 if (wb == null) {
-                	throw new RuntimeException("excel文件内容为空！");
+                    throw new RuntimeException("excel文件内容为空！");
                 }
                 Sheet sheet = wb.getSheetAt(0);
                 int trLength = sheet.getLastRowNum();
@@ -433,7 +433,7 @@ public class XietongCourseService extends Service {
                 
                 if (wb != null) {
                     try {
-                    	wb.close();
+                        wb.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -506,7 +506,7 @@ public class XietongCourseService extends Service {
     private void check(XietongClazz clazz, String request_user_id, String request_app_id) {
         Date nowDate = new Date();
 
-        /*Date clazzStartDate = DateUtil.getDateTime(clazz.getClazz_course_apply_start_time());
+        Date clazzStartDate = DateUtil.getDateTime(clazz.getClazz_course_apply_start_time());
         Date clazzEndDate = DateUtil.getDateTime(clazz.getClazz_course_apply_end_time());
 
         if(nowDate.before(clazzStartDate)) {
@@ -515,7 +515,7 @@ public class XietongCourseService extends Service {
 
         if(nowDate.after(clazzEndDate)) {
             throw new RuntimeException(clazz.getClazz_name() + "班已经停止申请!");
-        }*/
+        }
 
         XietongCourseConfig config = XietongCourseConfigService.instance.appFind(request_app_id);
 
