@@ -5,6 +5,8 @@ import java.util.List;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.xietong.model.XietongCourse;
 import com.nowui.chuangshi.api.xietong.model.XietongCourseApply;
+import com.nowui.chuangshi.api.xietong.model.XietongCourseApplyHistory;
+import com.nowui.chuangshi.api.xietong.service.XietongCourseApplyHistoryService;
 import com.nowui.chuangshi.api.xietong.service.XietongCourseApplyService;
 import com.nowui.chuangshi.api.xietong.service.XietongCourseService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -128,6 +130,17 @@ public class XietongCourseController extends Controller {
         String request_app_id = getRequest_app_id();
         
         Boolean result = XietongCourseService.instance.applyDelete(model.getCourse_id(), request_user_id, request_app_id);
+        
+        renderSuccessJson(result);
+    }
+    
+    @ActionKey("/mobile/xietong/course/apply/history/find")
+    public void applyHistoryFind() {
+        validateRequest(XietongCourseApplyHistory.COURSE_APPLY_HISTORY_ID);
+        
+        XietongCourseApplyHistory model = getModel(XietongCourseApplyHistory.class);
+        
+        XietongCourseApplyHistory result = XietongCourseApplyHistoryService.instance.find(model.getCourse_apply_history_id());
         
         renderSuccessJson(result);
     }
