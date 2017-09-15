@@ -18,7 +18,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jfinal.kit.HashKit;
 import com.jfinal.kit.PathKit;
+import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 
 public class Util {
@@ -196,5 +198,13 @@ public class Util {
         }
 
         return result;
+    }
+
+    public static String generatePassword(String user_password) {
+        if (ValidateUtil.isNullOrEmpty(user_password)) {
+            return "";
+        }
+
+        return HashKit.sha512(Config.private_key + user_password);
     }
 }
