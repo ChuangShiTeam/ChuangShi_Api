@@ -7,7 +7,7 @@ import com.nowui.chuangshi.api.xietong.service.XietongCourseService;
 import com.nowui.chuangshi.common.annotation.Handler;
 import com.nowui.chuangshi.rocket.RocketHandler;
 
-@Handler(tag = "course", thread_max = 5, thread_min = 3)
+@Handler(tag = "course", thread_max = 20, thread_min = 10)
 public class CourseHandler implements RocketHandler {
 
     @Override
