@@ -94,24 +94,29 @@ public class InfinitiMemberController extends Controller {
         validateRequest(InfinitiMember.MEMBER_NAME, InfinitiMember.MEMBER_MOBILE, InfinitiMember.MEMBER_ADDRESS, InfinitiMember.MEMBER_REDEEM_CODE);
 
         InfinitiMember model = getModel(InfinitiMember.class);
+        String request_app_id = getRequest_app_id();
+
+        String member_id = Util.getRandomUUID();
         String member_name = model.getMember_name();
         String member_mobile = model.getMember_mobile();
         String member_address = model.getMember_address();
+        String prize_id = "";
         String member_redeem_code = model.getMember_redeem_code();
 
-        InfinitiMember infinitiMember = InfinitiMemberService.instance.memberRedeemCodeFind(member_redeem_code);
-        if (infinitiMember.getMember_redeem_code_is_exchange()) {
-            throw new RuntimeException("该兑换码无效");
-        }
-
-//        Integer count = InfinitiMemberService.instance.memberMobileCount(member_mobile);
-//        if  (count > 0) {
-//            throw new RuntimeException("该电话号码已经兑换过");
+//        InfinitiMember infinitiMember = InfinitiMemberService.instance.memberRedeemCodeFind(member_redeem_code);
+//        if (infinitiMember.getMember_redeem_code_is_exchange()) {
+//            throw new RuntimeException("该兑换码无效");
 //        }
+
+        Integer count = InfinitiMemberService.instance.redeemCodeCount(member_redeem_code);
+        if  (count > 0) {
+            throw new RuntimeException("该兑换码已经兑换过");
+        }
 
         Boolean member_redeem_code_is_exchange = true;
 
-        Boolean result = InfinitiMemberService.instance.update(member_name, member_mobile, member_address, member_redeem_code, member_redeem_code_is_exchange);
+//        Boolean result = InfinitiMemberService.instance.update(member_name, member_mobile, member_address, member_redeem_code, member_redeem_code_is_exchange);
+        Boolean result = InfinitiMemberService.instance.save(member_id, request_app_id, member_name, member_mobile, member_address, prize_id, member_redeem_code, member_redeem_code_is_exchange);
 
         renderSuccessJson(result);
     }

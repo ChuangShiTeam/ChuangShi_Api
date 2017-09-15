@@ -5,6 +5,7 @@ import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
+import com.nowui.chuangshi.util.Util;
 
 public class UserService extends Service {
 
@@ -53,7 +54,7 @@ public class UserService extends Service {
         cnd.and(User.APP_ID, app_id);
         cnd.and(User.USER_TYPE, user_type);
         cnd.and(User.USER_ACCOUNT, user_account);
-        cnd.and(User.USER_PASSWORD, user_password);
+        cnd.and(User.USER_PASSWORD, Util.generatePassword(user_password));
 
         User user = userDao.find(cnd);
         return user;
@@ -91,7 +92,7 @@ public class UserService extends Service {
         user.setUser_account(user_account);
         user.setUser_mobile(user_mobile);
         user.setUser_email(user_email);
-        user.setUser_password(user_password);
+        user.setUser_password(Util.generatePassword(user_password));
         user.setWechat_open_id(wechat_open_id);
         user.setWechat_union_id(wechat_union_id);
 
@@ -118,7 +119,7 @@ public class UserService extends Service {
 
     public Boolean userPasswordUpdate(String user_id, String user_password, String system_update_user_id) {
         User user = new User();
-        user.setUser_password(user_password);
+        user.setUser_password(Util.generatePassword(user_password));
 
         Cnd cnd = new Cnd();
         cnd.where(User.SYSTEM_STATUS, true);

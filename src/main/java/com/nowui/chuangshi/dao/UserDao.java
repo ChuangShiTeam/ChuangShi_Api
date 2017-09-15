@@ -3,25 +3,14 @@ package com.nowui.chuangshi.dao;
 import java.util.Date;
 import java.util.List;
 
-import com.jfinal.kit.HashKit;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
-import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.util.Util;
-import com.nowui.chuangshi.util.ValidateUtil;
 
 public class UserDao extends Dao {
-
-    private String generatePassword(String user_password) {
-        if (ValidateUtil.isNullOrEmpty(user_password)) {
-            return "";
-        }
-
-        return HashKit.sha512(Config.private_key + user_password);
-    }
 
     public Integer countByApp_idAndNotUser_idAndUser_account(String user_id, String app_id, String user_account) {
         Kv sqlMap = Kv.create();
@@ -134,7 +123,7 @@ public class UserDao extends Dao {
 
     public User findByApp_idAndUser_typeAndUser_accountAndUser_password(String app_id, String user_type,
             String user_account, String user_password) {
-        user_password = generatePassword(user_password);
+        user_password = Util.generatePassword(user_password);
 
         Kv sqlMap = Kv.create();
         sqlMap.put(User.APP_ID, app_id);
@@ -157,7 +146,7 @@ public class UserDao extends Dao {
             String user_avatar, String user_account, String user_mobile, String user_email, String user_password,
             String wechat_open_id, String wechat_union_id, String system_create_user_id) {
         user_name = Util.getEmoji(user_name);
-        user_password = generatePassword(user_password);
+        user_password = Util.generatePassword(user_password);
 
         Kv sqlMap = Kv.create();
         sqlMap.put(User.USER_ID, user_id);
@@ -188,7 +177,7 @@ public class UserDao extends Dao {
     public Boolean updateByUser_password(String user_id, String user_password, String system_update_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(User.USER_ID, user_id);
-        sqlMap.put(User.USER_PASSWORD, generatePassword(user_password));
+        sqlMap.put(User.USER_PASSWORD, Util.generatePassword(user_password));
         sqlMap.put(User.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         sqlMap.put(User.SYSTEM_UPDATE_TIME, new Date());
         SqlPara sqlPara = Db.getSqlPara("user.updateByUser_password", sqlMap);
@@ -242,7 +231,7 @@ public class UserDao extends Dao {
     public boolean updateByUser_nameAndUser_accountAndUser_password(String user_id, String user_name,
             String user_account, String user_password, String request_user_id) {
         user_name = Util.getEmoji(user_name);
-        user_password = generatePassword(user_password);
+        user_password = Util.generatePassword(user_password);
 
         Kv sqlMap = Kv.create();
         sqlMap.put(User.USER_ID, user_id);
