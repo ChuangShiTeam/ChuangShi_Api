@@ -5,6 +5,8 @@ import java.util.List;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.xietong.model.XietongCourse;
 import com.nowui.chuangshi.api.xietong.model.XietongCourseApply;
+import com.nowui.chuangshi.api.xietong.model.XietongCourseApplyHistory;
+import com.nowui.chuangshi.api.xietong.service.XietongCourseApplyHistoryService;
 import com.nowui.chuangshi.api.xietong.service.XietongCourseApplyService;
 import com.nowui.chuangshi.api.xietong.service.XietongCourseService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
