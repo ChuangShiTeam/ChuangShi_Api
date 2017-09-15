@@ -132,5 +132,16 @@ public class UserService extends Service {
 
         return success;
     }
+    
+    public Boolean userTypeDelete(String user_type, String system_update_user_id) {
+        
+        Boolean success = userDao.userTypeDelete(user_type, system_update_user_id);
+        
+        if (success) {
+            CacheUtil.removeAll(USER_ITEM_CACHE);
+        }
+        
+        return success;
+    }
 
 }

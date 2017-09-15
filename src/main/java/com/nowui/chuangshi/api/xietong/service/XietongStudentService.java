@@ -14,13 +14,13 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.CellType;
 
 import com.jfinal.upload.UploadFile;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.api.xietong.dao.XietongStudentDao;
 import com.nowui.chuangshi.api.xietong.model.XietongClazz;
 import com.nowui.chuangshi.api.xietong.model.XietongStudent;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
-import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.CacheUtil;
 import com.nowui.chuangshi.util.Util;
@@ -31,7 +31,6 @@ public class XietongStudentService extends Service {
     public static final XietongStudentService instance = new XietongStudentService();
     private final String XIETONG_STUDENT_ITEM_CACHE = "xietong_student_item_cache";
     private final XietongStudentDao xietongStudentDao = new XietongStudentDao();
-    private static final UserService userService = new UserService();
 
     public Integer adminCount(String app_id, String student_name, String clazz_id) {
         Cnd cnd = new Cnd();        
@@ -73,17 +72,9 @@ public class XietongStudentService extends Service {
     
     public XietongStudent userFind(String user_id) {
         
-        Cnd cnd = new Cnd();
-        cnd.where(XietongStudent.SYSTEM_STATUS, true);
-        cnd.and(XietongStudent.USER_ID, user_id);
+        User user = UserService.instance.find(user_id);
         
-        List<XietongStudent> xietong_student_list = xietongStudentDao.primaryKeyList(cnd);
-        
-        if (xietong_student_list == null || xietong_student_list.size() == 0) {
-            return null;
-        }
-        
-        return xietongStudentDao.find(xietong_student_list.get(0).getStudent_id());
+        return find(user.getObject_id());
 
     }
     
@@ -110,7 +101,7 @@ public class XietongStudentService extends Service {
         xietong_student.setUser_id(user_id);
         Boolean success = this.save(xietong_student, request_user_id);
         if (success) {
-            userService.saveByUser_idAndApp_idAndObject_idAndUser_typeAndUser_nameAndUser_accountAndUser_password(user_id, xietong_student.getApp_id(), xietong_student.getStudent_id(), UserType.STUDENT.getKey(), xietong_student.getStudent_name(), xietong_student.getStudent_number(), user.getUser_password(), request_user_id);
+            UserService.instance.userAccountSave(user_id, xietong_student.getApp_id(), xietong_student.getStudent_id(), UserType.STUDENT.getKey(), xietong_student.getStudent_name(), xietong_student.getStudent_number(), user.getUser_password(), request_user_id);
         }
         return success;
     }
@@ -134,14 +125,15 @@ public class XietongStudentService extends Service {
         boolean success = this.update(xietong_student, xietong_student.getStudent_id(), request_user_id, system_version);
         
         if (success) {
-            userService.updateByUser_nameAndUser_accountAndUser_password(user.getUser_id(), xietong_student.getStudent_name(), xietong_student.getStudent_number(), user.getUser_password(), request_user_id);
+            UserService.instance.userNameUpdate(user.getUser_id(), xietong_student.getStudent_name(), request_user_id);
+            UserService.instance.userPasswordUpdate(user.getUser_id(), user.getUser_password(), request_user_id);
         }
         
         return success;
     }
     
     public Boolean passwordUpdate(String user_id, String user_password, String request_user_id) {
-        return userService.updateByUser_password(user_id, user_password, request_user_id);
+        return UserService.instance.userPasswordUpdate(user_id, user_password, request_user_id);
     }
     
     public Boolean delete(String student_id, String system_update_user_id, Integer system_version) {
@@ -164,7 +156,7 @@ public class XietongStudentService extends Service {
         Boolean result = xietongStudentDao.allDelete(system_update_user_id);
 
         if(result) {
-            userService.deleteByUser_type(UserType.STUDENT.getKey(), system_update_user_id);
+            UserService.instance.userTypeDelete(UserType.STUDENT.getKey(), system_update_user_id);
             
             CacheUtil.removeAll(XIETONG_STUDENT_ITEM_CACHE);
         }

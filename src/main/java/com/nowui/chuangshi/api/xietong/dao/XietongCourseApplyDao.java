@@ -1,14 +1,12 @@
 package com.nowui.chuangshi.api.xietong.dao;
 
 import java.util.Date;
-import java.util.List;
 
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.nowui.chuangshi.api.xietong.model.XietongCourse;
 import com.nowui.chuangshi.api.xietong.model.XietongCourseApply;
-import com.nowui.chuangshi.api.xietong.model.XietongStudent;
 import com.nowui.chuangshi.common.dao.Dao;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
@@ -68,6 +66,26 @@ public class XietongCourseApplyDao extends Dao {
         System.out.println(sql);
 
         return Db.update(sql) != 0;
+    }
+    
+    public Boolean save(XietongCourseApply xietong_course_apply, String system_create_user_id) {
+        
+        Kv sqlMap = Kv.create();
+        sqlMap.put(XietongCourseApply.COURSE_APPLY_ID, xietong_course_apply.getCourse_apply_id());
+        sqlMap.put(XietongCourseApply.APP_ID, xietong_course_apply.getApp_id());
+        sqlMap.put(XietongCourseApply.COURSE_ID, xietong_course_apply.getCourse_id());
+        sqlMap.put(XietongCourseApply.USER_ID, xietong_course_apply.getUser_id());
+        sqlMap.put(Constant.SYSTEM_CREATE_USER_ID, system_create_user_id);
+        sqlMap.put(Constant.SYSTEM_CREATE_TIME, new Date());
+        sqlMap.put(Constant.SYSTEM_UPDATE_USER_ID, system_create_user_id);
+        sqlMap.put(Constant.SYSTEM_UPDATE_TIME, new Date());
+        sqlMap.put(Constant.SYSTEM_VERSION, 0);
+        sqlMap.put(Constant.SYSTEM_STATUS, true);
+        SqlPara sqlPara = Db.getSqlPara("xietong_course_apply.save", sqlMap);
+
+        logSql("xietong_course_apply", "save", sqlPara);
+
+        return Db.update(sqlPara.getSql(), sqlPara.getPara()) != 0;
     }
 
 }

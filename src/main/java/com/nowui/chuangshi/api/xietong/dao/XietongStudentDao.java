@@ -10,7 +10,6 @@ import com.nowui.chuangshi.api.xietong.model.XietongStudent;
 import com.nowui.chuangshi.common.dao.Dao;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
-import com.nowui.chuangshi.model.Stock;
 
 public class XietongStudentDao extends Dao {
 

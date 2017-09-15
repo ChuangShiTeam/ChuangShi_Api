@@ -65,7 +65,7 @@ public class XietongCourseApplyService extends Service {
            cnd.asc(XietongCourse.TABLE_XIETONG_COURSE + "." + XietongCourse.SYSTEM_CREATE_TIME);
            cnd.desc(XietongCourseApply.TABLE_XIETONG_COURSE_APPLY + "." + XietongCourseApply.SYSTEM_CREATE_TIME);
            
-           xietong_course_apply_list = xietongCourseApplyDao.list(cnd);
+           xietong_course_apply_list = xietongCourseApplyDao.primaryKeyList(cnd);
            CacheUtil.put(XIETONG_COURSE_APPLY_USER_LIST_CACHE, user_id, xietong_course_apply_list);
        }
        
@@ -179,7 +179,6 @@ public class XietongCourseApplyService extends Service {
             course_apply.put(XietongCourse.COURSE_TEACHER, course.getCourse_teacher());
             course_apply.put(XietongCourse.COURSE_TIME, course.getCourse_time());
             course_apply.put(XietongCourse.COURSE_APPLY_LIMIT, course.getCourse_apply_limit());
-            course_apply.put(XietongCourse.COURSE_ID, course.getCourse_id());
 
             course_apply.setCourse_apply_id(course_apply_id);
             course_apply.setUser_id(request_user_id);

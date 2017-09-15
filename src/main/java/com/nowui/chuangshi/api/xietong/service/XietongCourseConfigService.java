@@ -47,6 +47,7 @@ public class XietongCourseConfigService extends Service {
             if (xietong_course_configList != null && xietong_course_configList.size() > 0) {
                 xietong_course_config = xietong_course_configList.get(0);
             } 
+            CacheUtil.put(XIETONG_COURSE_CONFIG_ITEM_CACHE, app_id, xietong_course_config);
         }
         
         return xietong_course_config;

@@ -64,7 +64,7 @@ public class XietongCourseApplyHistoryService extends Service {
         Boolean success = xietongCourseApplyHistoryDao.update(xietong_course_apply_history, system_update_user_id, system_version, cnd);
 
         if (success) {
-            CacheUtil.remove(XIETONG_COURSE_APPLY_HISTORY_ITEM_CACHE, course_apply_history_id);
+            CacheUtil.put(XIETONG_COURSE_APPLY_HISTORY_ITEM_CACHE, course_apply_history_id, xietong_course_apply_history);
         }
 
         return success;

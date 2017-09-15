@@ -100,11 +100,6 @@ public class UserService extends Service {
                 system_version);
     }
     
-    public Boolean deleteByUser_type(String user_type, String system_update_user_id) {
-        // TODO 
-        return false;
-    }
-
     public boolean updateByUser_nameAndUser_accountAndUser_password(String user_id, String user_name,
             String user_account, String user_password, String request_user_id) {
         return userCache.updateByUser_nameAndUser_accountAndUser_password(user_id, user_name, user_account,
