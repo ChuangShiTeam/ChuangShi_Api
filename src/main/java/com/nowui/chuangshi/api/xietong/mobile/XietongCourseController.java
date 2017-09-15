@@ -134,15 +134,4 @@ public class XietongCourseController extends Controller {
         renderSuccessJson(result);
     }
     
-    @ActionKey("/mobile/xietong/course/apply/history/find")
-    public void applyHistoryFind() {
-        validateRequest(XietongCourseApplyHistory.COURSE_APPLY_HISTORY_ID);
-        
-        XietongCourseApplyHistory model = getModel(XietongCourseApplyHistory.class);
-        
-        XietongCourseApplyHistory result = XietongCourseApplyHistoryService.instance.find(model.getCourse_apply_history_id());
-        
-        renderSuccessJson(result);
-    }
-    
 }
