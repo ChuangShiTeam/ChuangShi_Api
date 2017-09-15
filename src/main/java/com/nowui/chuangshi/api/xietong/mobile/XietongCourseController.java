@@ -116,8 +116,6 @@ public class XietongCourseController extends Controller {
         
         String course_apply_history_id = XietongCourseService.instance.apply(model.getCourse_id(), request_user_id, request_app_id);
         
-        XietongCourseService.instance.apply(model.getCourse_id(), request_user_id, request_app_id);
-        
         renderSuccessJson(course_apply_history_id);
     }
     
