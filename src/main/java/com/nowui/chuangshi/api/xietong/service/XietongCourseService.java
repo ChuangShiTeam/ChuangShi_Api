@@ -562,32 +562,22 @@ public class XietongCourseService extends Service {
             }
         }
         
-        //保存学生选课申请记录
         String course_apply_history_id = Util.getRandomUUID();
-        XietongCourseApplyHistory xietong_course_apply_history = new XietongCourseApplyHistory();
-        xietong_course_apply_history.setApp_id(request_app_id);
-        xietong_course_apply_history.setCourse_apply_history_id(course_apply_history_id);
-        xietong_course_apply_history.setCourse_apply_history_status(CourseApplyHistoryStatus.WAITING.getKey());
-        xietong_course_apply_history.setCourse_apply_history_result(CourseApplyHistoryStatus.WAITING.getValue());
-        xietong_course_apply_history.setCourse_id(course_id);
-        xietong_course_apply_history.setUser_id(request_user_id);
-        boolean flag = XietongCourseApplyHistoryService.instance.save(xietong_course_apply_history, request_user_id);
-        if (flag) {
-            //发送选课消息
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(XietongCourseApply.COURSE_ID, course_id);
-            jsonObject.put(XietongCourseApply.USER_ID, request_user_id);
-            jsonObject.put(XietongCourseApply.APP_ID, request_app_id);
-            jsonObject.put(XietongCourseApplyHistory.COURSE_APPLY_HISTORY_ID, course_apply_history_id);
-            SendResult result = MQUtil.sendMessage("course", jsonObject.toJSONString());
-            //发送消息成功
-            if (result != null) {
-                return course_apply_history_id;
-            } else {
-                throw new RuntimeException("申请不成功，请稍后再试！");
-            }
-            
+        //发送选课消息
+        System.out.println("--------------发送选课消息--------------");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(XietongCourseApply.COURSE_ID, course_id);
+        jsonObject.put(XietongCourseApply.USER_ID, request_user_id);
+        jsonObject.put(XietongCourseApply.APP_ID, request_app_id);
+        jsonObject.put(XietongCourseApplyHistory.COURSE_APPLY_HISTORY_ID, course_apply_history_id);
+        SendResult result = MQUtil.sendMessage("course", jsonObject.toJSONString());
+        //发送消息成功
+        if (result != null) {
+            System.out.println(result.toString());
+            System.out.println("--------------发送选课消息成功--------------");
+            return course_apply_history_id;
         } else {
+            System.out.println("--------------发送选课消息失败--------------");
             throw new RuntimeException("申请不成功，请稍后再试！");
         }
     }
@@ -596,21 +586,27 @@ public class XietongCourseService extends Service {
 
         XietongCourseApplyHistory xietong_course_apply_history = XietongCourseApplyHistoryService.instance.find(course_apply_history_id);
         
-        //判断历史记录是否申请是否完成, 在等待处理中的申请
-        if (CourseApplyHistoryStatus.WAITING.getKey().equals(xietong_course_apply_history.getCourse_apply_history_status())) {
+        if (xietong_course_apply_history == null) {
+            //保存学生选课申请记录
+            XietongCourseApplyHistory bean = new XietongCourseApplyHistory();
+            bean.setApp_id(request_app_id);
+            bean.setCourse_apply_history_id(course_apply_history_id);
+            bean.setCourse_id(course_id);
+            bean.setUser_id(request_user_id);
+            
             XietongCourse xietong_course = find(course_id, request_user_id);
             
             if (xietong_course.getBoolean(XietongCourse.IS_APPLY)) {
-                xietong_course_apply_history.setCourse_apply_history_status(CourseApplyHistoryStatus.FAIL.getKey());
-                xietong_course_apply_history.setCourse_apply_history_result("已经申请过该课程,不能再申请!");
-                XietongCourseApplyHistoryService.instance.update(xietong_course_apply_history, course_apply_history_id, request_user_id, xietong_course_apply_history.getSystem_version());
+                bean.setCourse_apply_history_status(CourseApplyHistoryStatus.FAIL.getKey());
+                bean.setCourse_apply_history_result("已经申请过该课程,不能再申请!");
+                XietongCourseApplyHistoryService.instance.save(bean, request_user_id);
                 return;
             }
             
             if (xietong_course.getBoolean(XietongCourse.IS_LIMIT)) {
-                xietong_course_apply_history.setCourse_apply_history_status(CourseApplyHistoryStatus.FAIL.getKey());
-                xietong_course_apply_history.setCourse_apply_history_result("该课程已经没有名额,不能再申请!");
-                XietongCourseApplyHistoryService.instance.update(xietong_course_apply_history, course_apply_history_id, request_user_id, xietong_course_apply_history.getSystem_version());
+                bean.setCourse_apply_history_status(CourseApplyHistoryStatus.FAIL.getKey());
+                bean.setCourse_apply_history_result("该课程已经没有名额,不能再申请!");
+                XietongCourseApplyHistoryService.instance.save(bean, request_user_id);
                 return;
             }
             
@@ -620,9 +616,9 @@ public class XietongCourseService extends Service {
             for (XietongCourseApply courseApply : courseApplyList) {
                 XietongCourse course = find(courseApply.getCourse_id());
                 if (xietong_course.getCourse_name().equals(course.getCourse_name())) {
-                    xietong_course_apply_history.setCourse_apply_history_status(CourseApplyHistoryStatus.FAIL.getKey());
-                    xietong_course_apply_history.setCourse_apply_history_result("已经申请过其他时间的该课程,不能再申请!");
-                    XietongCourseApplyHistoryService.instance.update(xietong_course_apply_history, course_apply_history_id, request_user_id, xietong_course_apply_history.getSystem_version());
+                    bean.setCourse_apply_history_status(CourseApplyHistoryStatus.FAIL.getKey());
+                    bean.setCourse_apply_history_result("已经申请过其他时间的该课程,不能再申请!");
+                    XietongCourseApplyHistoryService.instance.save(bean, request_user_id);
                     return;
                 }
             }
@@ -641,22 +637,22 @@ public class XietongCourseService extends Service {
                     
                     //选课成功 更新缓存 更新历史
                     if (flag) {
-                        xietong_course_apply_history.setCourse_apply_history_status(CourseApplyHistoryStatus.SUCCESS.getKey());
-                        xietong_course_apply_history.setCourse_apply_history_result(CourseApplyHistoryStatus.SUCCESS.getValue());
-                        Boolean b = XietongCourseApplyHistoryService.instance.update(xietong_course_apply_history, course_apply_history_id, request_user_id, xietong_course_apply_history.getSystem_version());
+                        bean.setCourse_apply_history_status(CourseApplyHistoryStatus.SUCCESS.getKey());
+                        bean.setCourse_apply_history_result(CourseApplyHistoryStatus.SUCCESS.getValue());
+                        Boolean b = XietongCourseApplyHistoryService.instance.save(bean, request_user_id);
                         if (b) {
                           //更新缓存
                           this.updateCourseApplyLimitCache(course_id, 1);
                         }
                     } else {
-                        xietong_course_apply_history.setCourse_apply_history_status(CourseApplyHistoryStatus.FAIL.getKey());
-                        xietong_course_apply_history.setCourse_apply_history_result("该课程已经没有名额,不能再申请!");
-                        XietongCourseApplyHistoryService.instance.update(xietong_course_apply_history, course_apply_history_id, request_user_id, xietong_course_apply_history.getSystem_version());
+                        bean.setCourse_apply_history_status(CourseApplyHistoryStatus.FAIL.getKey());
+                        bean.setCourse_apply_history_result("该课程已经没有名额,不能再申请!");
+                        XietongCourseApplyHistoryService.instance.save(bean, request_user_id);
                     }
                 } else {
-                    xietong_course_apply_history.setCourse_apply_history_status(CourseApplyHistoryStatus.FAIL.getKey());
-                    xietong_course_apply_history.setCourse_apply_history_result("您已经申请了" + clazz.getClazz_course_apply_limit() + "门课程,不能再申请!");
-                    XietongCourseApplyHistoryService.instance.update(xietong_course_apply_history, course_apply_history_id, request_user_id, xietong_course_apply_history.getSystem_version());
+                    bean.setCourse_apply_history_status(CourseApplyHistoryStatus.FAIL.getKey());
+                    bean.setCourse_apply_history_result("您已经申请了" + clazz.getClazz_course_apply_limit() + "门课程,不能再申请!");
+                    XietongCourseApplyHistoryService.instance.save(bean, request_user_id);
                 }
             } else {
                 int day = xietong_course.getCourse_time() / 10;
@@ -685,9 +681,9 @@ public class XietongCourseService extends Service {
                         str = "星期日";
                         break;
                 }
-                xietong_course_apply_history.setCourse_apply_history_status(CourseApplyHistoryStatus.FAIL.getKey());
-                xietong_course_apply_history.setCourse_apply_history_result("在" + str + "已经申请过课程,不能再申请!");
-                XietongCourseApplyHistoryService.instance.update(xietong_course_apply_history, course_apply_history_id, request_user_id, xietong_course_apply_history.getSystem_version());
+                bean.setCourse_apply_history_status(CourseApplyHistoryStatus.FAIL.getKey());
+                bean.setCourse_apply_history_result("在" + str + "已经申请过课程,不能再申请!");
+                XietongCourseApplyHistoryService.instance.save(bean, request_user_id);
             }
         }
         
