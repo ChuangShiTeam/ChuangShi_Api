@@ -108,7 +108,7 @@ public class XietongCourseController extends Controller {
         renderSuccessJson(xietong_course_apply_list);
     }
     
-    @ActionKey("/mobile/xietong/course/apply")
+    @ActionKey("/mobile/xietong/course/apply/save")
     public void apply() {
         validateRequest(XietongCourseApply.COURSE_ID);
         
