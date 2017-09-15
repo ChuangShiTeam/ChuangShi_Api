@@ -551,37 +551,35 @@ public class XietongCourseService extends Service {
         if (xietong_course.getBoolean(XietongCourse.IS_LIMIT)) {
             throw new RuntimeException("该课程已经没有名额,不能再申请!");
         }
-
-        return "";
         
-//        //判断学生是否已经申请过其他时间的该课程
-//        List<XietongCourseApply> courseApplyList = XietongCourseApplyService.instance.userList(request_user_id);
-//
-//        for (XietongCourseApply courseApply : courseApplyList) {
-//            XietongCourse course = find(courseApply.getCourse_id());
-//            if (xietong_course.getCourse_name().equals(course.getCourse_name())) {
-//                throw new RuntimeException("已经申请过其他时间的该课程,不能再申请!");
-//            }
-//        }
-//
-//        String course_apply_history_id = Util.getRandomUUID();
-//        //发送选课消息
-//        System.out.println("--------------发送选课消息--------------");
-//        JSONObject jsonObject = new JSONObject();
-//        jsonObject.put(XietongCourseApply.COURSE_ID, course_id);
-//        jsonObject.put(XietongCourseApply.USER_ID, request_user_id);
-//        jsonObject.put(XietongCourseApply.APP_ID, request_app_id);
-//        jsonObject.put(XietongCourseApplyHistory.COURSE_APPLY_HISTORY_ID, course_apply_history_id);
-//        SendResult result = MQUtil.sendMessage("course", jsonObject.toJSONString());
-//        //发送消息成功
-//        if (result != null) {
-//            System.out.println(result.toString());
-//            System.out.println("--------------发送选课消息成功--------------");
-//            return course_apply_history_id;
-//        } else {
-//            System.out.println("--------------发送选课消息失败--------------");
-//            throw new RuntimeException("申请不成功，请稍后再试！");
-//        }
+        //判断学生是否已经申请过其他时间的该课程
+        List<XietongCourseApply> courseApplyList = XietongCourseApplyService.instance.userList(request_user_id);
+
+        for (XietongCourseApply courseApply : courseApplyList) {
+            XietongCourse course = find(courseApply.getCourse_id());
+            if (xietong_course.getCourse_name().equals(course.getCourse_name())) {
+                throw new RuntimeException("已经申请过其他时间的该课程,不能再申请!");
+            }
+        }
+
+        String course_apply_history_id = Util.getRandomUUID();
+        //发送选课消息
+        System.out.println("--------------发送选课消息--------------");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(XietongCourseApply.COURSE_ID, course_id);
+        jsonObject.put(XietongCourseApply.USER_ID, request_user_id);
+        jsonObject.put(XietongCourseApply.APP_ID, request_app_id);
+        jsonObject.put(XietongCourseApplyHistory.COURSE_APPLY_HISTORY_ID, course_apply_history_id);
+        SendResult result = MQUtil.sendMessage("course", jsonObject.toJSONString());
+        //发送消息成功
+        if (result != null) {
+            System.out.println(result.toString());
+            System.out.println("--------------发送选课消息成功--------------");
+            return course_apply_history_id;
+        } else {
+            System.out.println("--------------发送选课消息失败--------------");
+            throw new RuntimeException("申请不成功，请稍后再试！");
+        }
     }
     
     public void applySave(String course_id, String course_apply_history_id, String request_user_id, String request_app_id) {
