@@ -2,7 +2,6 @@ package com.nowui.chuangshi.type;
 
 public enum CourseApplyHistoryStatus {
     
-    WAITING("WAITING", "申请处理中"),
     SUCCESS("SUCCESS", "申请成功"),
     FAIL("FAIL", "申请失败"),
     CANCEL("CANCEL", "取消申请");

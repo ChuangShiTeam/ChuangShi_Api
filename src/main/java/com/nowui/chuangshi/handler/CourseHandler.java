@@ -12,7 +12,7 @@ public class CourseHandler implements RocketHandler {
 
     @Override
     public void handle(String message) {
-        
+        System.out.println("--------------接收选课消息成功--------------");
         JSONObject jsonObject = JSONObject.parseObject(message);
         
         String course_id = jsonObject.getString(XietongCourseApply.COURSE_ID);
@@ -24,6 +24,7 @@ public class CourseHandler implements RocketHandler {
 
         try {
             XietongCourseService.instance.applySave(course_id, course_apply_history_id, user_id, app_id);
+            System.out.println("--------------处理申请选课成功--------------");
         } catch (Exception e) {
             e.printStackTrace();
         }
