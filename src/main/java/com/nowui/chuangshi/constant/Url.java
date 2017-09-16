@@ -616,6 +616,7 @@ public class Url {
 
     // 缓存
     public static final String REMOVE_ALL_CACHE = "/remove/all/cache";
+    public static final String REFRESH_ACCESS_TOKEN = "/refresh/access/token";
 
     // 会员授权证书记录
     public static final String CERTIFICATE_WEBSITE_FIND = "/certificate/website/find";

@@ -3,6 +3,7 @@ package com.nowui.chuangshi.controller;
 import java.util.List;
 
 import com.jfinal.core.ActionKey;
+import com.jfinal.weixin.sdk.api.AccessTokenApi;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.util.CacheUtil;
 
@@ -17,6 +18,14 @@ public class CacheController extends Controller {
         for (String key : keyList) {
             CacheUtil.removeAll(key);
         }
+
+        renderSuccessJson(true);
+    }
+
+    @ActionKey(Url.REFRESH_ACCESS_TOKEN)
+    public void refreshAccessToken() {
+        validateRequest_app_id();
+        AccessTokenApi.refreshAccessToken();
 
         renderSuccessJson(true);
     }
