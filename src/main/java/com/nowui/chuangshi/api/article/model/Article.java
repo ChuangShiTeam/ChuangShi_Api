@@ -27,6 +27,9 @@ public class Article extends Model<Article> {
 
     @Column(type = ColumnType.VARCHAR, length = 100, comment = "文章名称")
     public static final String ARTICLE_NAME = "article_name";
+    
+    @Column(type = ColumnType.VARCHAR, length = 50, comment = "文章作者")
+    public static final String ARTICLE_AUTHOR = "article_author";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "文章图片")
     public static final String ARTICLE_IMAGE = "article_image";
@@ -93,6 +96,14 @@ public class Article extends Model<Article> {
 
     public void setArticle_name(String article_name) {
         set(ARTICLE_NAME, article_name);
+    }
+    
+    public String getArticle_author() {
+        return getStr(ARTICLE_AUTHOR);
+    }
+    
+    public void setArticle_author(String article_author) {
+        set(ARTICLE_AUTHOR, article_author);
     }
 
     public String getArticle_image() {

@@ -75,7 +75,16 @@
 		</div>
 		<div class="contact">
 			<h1>#(article.article_name)</h1>
-			<div class="time"> 作者：admin 点击数：1 更新时间：2015-03-26 <br></div>
+			<div class="time"> 
+				作者：#if(article.article_author)
+					#(article.article_author)
+					#else
+					admin 
+					#end
+				点击数：1 
+				更新时间：#date(article.system_update_time, "yyyy-MM-dd")
+				<br>
+			</div>
 			<div class="contxt">
 				#(article.article_content)
 			</div>
