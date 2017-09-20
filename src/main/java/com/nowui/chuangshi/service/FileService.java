@@ -105,7 +105,8 @@ public class FileService extends Service {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 
         for (UploadFile uploadFile : uploadFileList) {
-            String file_suffix = uploadFile.getFileName().substring(uploadFile.getFileName().lastIndexOf(".") + 1);
+            String original_file_name = uploadFile.getFileName();
+            String file_suffix = original_file_name.substring(original_file_name.lastIndexOf(".") + 1);
             String file_name = Util.getRandomUUID() + "." + file_suffix;
 
             path = path + "/" + file_name;
@@ -137,7 +138,7 @@ public class FileService extends Service {
             String file_image = "";
             Boolean file_is_external = false;
 
-            Boolean result = save(file_id, app_id, file_type, file_name, file_suffix, file_size, file_path, file_thumbnail_path, file_original_path, file_image, file_is_external, system_create_user_id);
+            Boolean result = save(file_id, app_id, file_type, original_file_name, file_suffix, file_size, file_path, file_thumbnail_path, file_original_path, file_image, file_is_external, system_create_user_id);
 
             if (!result) {
                 throw new RuntimeException("上传不成功");
@@ -145,7 +146,7 @@ public class FileService extends Service {
 
             Map<String, Object> map = new HashMap<String, Object>();
             map.put(File.FILE_ID, file_id);
-            map.put(File.FILE_NAME, file_name);
+            map.put(File.FILE_NAME, original_file_name);
             map.put(File.FILE_PATH, file_path);
             list.add(map);
         }

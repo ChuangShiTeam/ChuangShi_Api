@@ -33,7 +33,7 @@ function prev(){
 		var article_category_id = $("#article_category_id").val();	
 		$.ajax({
 	        type: "POST",
-	        url: "#(host + "/mobile/article/findByArticleCategoryId")",
+	        url: "#(host + "/mobile/xietong/article/findByArticleCategoryId")",
 	        contentType: "application/json; charset=utf-8",
 	        data: JSON.stringify(
 	    		{
@@ -86,7 +86,7 @@ function next(){
 		var article_category_id = $("#article_category_id").val();	
 		$.ajax({
 	        type: "POST",
-	        url: "#(host + "/mobile/article/findByArticleCategoryId")",
+	        url: "#(host + "/mobile/xietong/article/findByArticleCategoryId")",
 	        contentType: "application/json; charset=utf-8",
 	        data: JSON.stringify(
 	    		{
@@ -134,7 +134,7 @@ function displayPage(page_index){
 	var article_category_id = $("#article_category_id").val();	
 	$.ajax({
         type: "POST",
-        url: "#(host + "/mobile/article/findByArticleCategoryId")",
+        url: "#(host + "/mobile/xietong/article/findByArticleCategoryId")",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(
     		{

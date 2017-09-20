@@ -8,7 +8,6 @@ import com.nowui.chuangshi.api.article.service.ArticleService;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.constant.Constant;
 
 @ControllerKey("/mobile/article")
 public class ArticleController extends Controller {
@@ -39,27 +38,6 @@ public class ArticleController extends Controller {
         renderSuccessJson(articleList);
     }
     
-    @ActionKey("/mobile/article/findByArticleCategoryId")
-    public void findByArticleCategoryId() {
-        validateRequest(Article.ARTICLE_CATEGORY_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
-        
-        Article model = getModel(Article.class);
-        
-        List<Article> articleList = ArticleService.instance.categoryList(model.getArticle_category_id(), getM(), getN());
-
-        for(Article article : articleList) {
-            article.setArticle_image(FileService.instance.getFile_path(article.getArticle_image()));
-        }
-
-        validateResponse(Article.ARTICLE_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_SUMMARY, Article.SYSTEM_CREATE_TIME);
-
-        Integer count = ArticleService.instance.categoryCount(model.getArticle_category_id());
-        
-        Integer page_total = (count / 7) + (count % 7 == 0 ? 0 : 1);
-        
-        renderSuccessJson(page_total, articleList);
-    }
-
     @ActionKey("/mobile/article/find")
     public void find() {
         validateRequest(Article.ARTICLE_ID);

@@ -100,7 +100,7 @@ public class PageController extends Controller {
                 List<Article> allArticleList = ArticleService.instance.appList(request_app_id);
                 if (allArticleList != null && allArticleList.size() > 0) {
                     for (Article article : allArticleList) {
-                        PageService.instance.writeWzxq(request_app_id, article.getArticle_id());
+                        PageService.instance.writeWzxq(request_app_id, article.getArticle_id(), false);
                     }
                 }
             } else {
@@ -167,7 +167,7 @@ public class PageController extends Controller {
             List<Article> allArticleList = ArticleService.instance.appList(request_app_id);
             if (allArticleList != null && allArticleList.size() > 0) {
                 for (Article article : allArticleList) {
-                    PageService.instance.writeWzxq(request_app_id, article.getArticle_id());
+                    PageService.instance.writeWzxq(request_app_id, article.getArticle_id(), false);
                 }
             }
         } else {

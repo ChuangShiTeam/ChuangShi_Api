@@ -136,8 +136,9 @@ public class PageService extends Service {
      * 根据文章详情模板生成文章详情页面
      * @param app_id
      * @param article_id
+     * @param is_update_prev_and_next 是否更新文章上篇和下篇链接
      */
-    public void writeWzxq(String app_id, String article_id) {
+    public void writeWzxq(String app_id, String article_id, Boolean is_update_prev_and_next) {
         Article article = ArticleService.instance.find(article_id);
         
         //文章非外部链接生成文章详情页面
@@ -178,9 +179,17 @@ public class PageService extends Service {
             }
 
             FileUtil.writeFile(content, app.getApp_website_path() + article.getArticle_id() + ".html");
-            
+            if (is_update_prev_and_next) {
+                //生成成功后要更新一下上一篇和下一篇对应的链接
+                if (prevArticle != null && !ValidateUtil.isNullOrEmpty(prevArticle.getArticle_id())) {
+                    writeWzxq(app_id, prevArticle.getArticle_id(), false);
+                } 
+                
+                if (nextArticle != null && !ValidateUtil.isNullOrEmpty(nextArticle.getArticle_id())) {
+                    writeWzxq(app_id, nextArticle.getArticle_id(), false);
+                }  
+            }
         }
-        
     }
 
 

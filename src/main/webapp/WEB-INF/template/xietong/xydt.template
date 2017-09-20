@@ -102,7 +102,7 @@
   function listByArticleCategoryId(article_category_id) {
    $.ajax({
         type: "POST",
-        url: "#(host + "/mobile/article/findByArticleCategoryId")",
+        url: "#(host + "/mobile/xietong/article/findByArticleCategoryId")",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(
     		{
