@@ -134,7 +134,7 @@ public class FileService extends Service {
             file = new File();
         }
 
-        return file.keep(File.FILE_ID, File.FILE_PATH);
+        return file.keep(File.FILE_ID, File.FILE_NAME, File.FILE_PATH);
     }
     
     public File getOriginalFile(String file_id) {
@@ -148,7 +148,7 @@ public class FileService extends Service {
             file = new File();
         } 
 
-        return file.keep(File.FILE_ID, File.FILE_ORIGINAL_PATH);
+        return file.keep(File.FILE_ID, File.FILE_NAME, File.FILE_ORIGINAL_PATH);
     }
 
     public String getFile_path(String file_id) {

@@ -99,6 +99,8 @@ public class XietongTeacherRecruitment extends Model<XietongTeacherRecruitment> 
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
+    
+    public static final String TEACHER_RECRUITMENT_FILE_FILE = "teacher_recruitment_file_file";
 
     public String getTeacher_recruitment_id() {
         return getStr(TEACHER_RECRUITMENT_ID);

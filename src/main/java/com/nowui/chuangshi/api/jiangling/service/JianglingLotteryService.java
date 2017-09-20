@@ -68,7 +68,6 @@ public class JianglingLotteryService extends Service {
             
             CacheUtil.put(JIANGLING_LOTTERY_MAN_UNUSED_NUMBER_LIST_CACHE, app_id, numberList);
         }
-        System.out.println("manUnusedNumberList：" + numberList.toString());
         return numberList;
     }
     
@@ -95,7 +94,6 @@ public class JianglingLotteryService extends Service {
             
             CacheUtil.put(JIANGLING_LOTTERY_WOMEN_UNUSED_NUMBER_LIST_CACHE, app_id, numberList);
         }
-        System.out.println("womanUnusedNumberList：" + numberList.toString());
         return numberList;
     }
     
@@ -190,6 +188,9 @@ public class JianglingLotteryService extends Service {
             throw new RuntimeException("抽签次数已经用完");
         }
         synchronized (this) {
+            System.out.println("request_user_id: " + request_user_id);
+            long startTime = System.currentTimeMillis();
+            System.out.println("startTime: " + startTime);
             List<String> numberList = numberList(request_app_id, bean.getLottery_user_sex());
             //计算抽签概率
             if (numberList.size() == 0) {
@@ -197,21 +198,20 @@ public class JianglingLotteryService extends Service {
             }
             if (numberList.size() > 200) { //前800名抽签概率为80%
                 if (ProbabilityUtil.random(0.8)) {
-                    int index = new Random().nextInt(numberList.size());
-                    String lottery_number = numberList.get(index);
-                    bean.setLottery_number(lottery_number);
-                    boolean result = this.update(bean, request_user_id, request_user_id, bean.getSystem_version());
-                    if (result) {
-                        return getLottery_number(numberList, bean, request_user_id, request_app_id);
-                    }
+                    return getLottery_number(numberList, bean, request_user_id, request_app_id);
                 }
             } else {
                 if (ProbabilityUtil.random(0.5)) { //后200名抽签概率为50%
                     return getLottery_number(numberList, bean, request_user_id, request_app_id);
                 } 
             }
+            long endTime = System.currentTimeMillis();
+            System.out.println("endTime: " + endTime);
+            System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
         }
-        
+        //未抽中，则更新用户抽签次数，抽签次数加一
+        bean.setLottery_time(bean.getLottery_time() + 1);
+        this.update(bean, request_user_id, request_user_id, bean.getSystem_version());
         return null;
     }
     
@@ -219,6 +219,7 @@ public class JianglingLotteryService extends Service {
         int index = new Random().nextInt(numberList.size());
         String lottery_number = numberList.get(index); //随机获取一个未抽取的号码
         bean.setLottery_number(lottery_number);
+        bean.setLottery_time(bean.getLottery_time() + 1);
         boolean result = this.update(bean, request_user_id, request_user_id, bean.getSystem_version());
         if (result) {
             numberList.remove(index);
