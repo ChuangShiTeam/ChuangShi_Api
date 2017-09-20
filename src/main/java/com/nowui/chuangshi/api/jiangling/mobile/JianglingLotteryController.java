@@ -35,6 +35,9 @@ public class JianglingLotteryController extends Controller {
         
         String user_id = Util.getRandomUUID();
         model.setUser_id(user_id);
+        model.setLottery_number("");
+        model.setLottery_time(0);
+        model.setLottery_status(false);
         
         JianglingLotteryService.instance.save(model, user_id);
         renderSuccessJson(user_id);

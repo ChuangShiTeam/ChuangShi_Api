@@ -18,9 +18,8 @@ public class JianglingPvController extends Controller {
 
     @ActionKey("/admin/jiangling/pv/list")
     public void list() {
-        validateRequest(JianglingPv.PV, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
-        JianglingPv model = getModel(JianglingPv.class);
         String request_app_id = getRequest_app_id();
 
         Integer resultCount = JianglingPvService.instance.adminCount(request_app_id);

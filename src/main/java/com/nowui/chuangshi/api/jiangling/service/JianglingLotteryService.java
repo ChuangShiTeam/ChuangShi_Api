@@ -169,25 +169,6 @@ public class JianglingLotteryService extends Service {
         return success;
     }
     
-    public Boolean save(String request_app_id, String request_user_id, boolean lottery_user_sex, String lottery_user_mobile) {
-        JianglingLottery bean = find(request_user_id);
-        
-        if (bean != null) {
-            return false;
-        }
-        
-        JianglingLottery jiangling_lottery = new JianglingLottery();
-        jiangling_lottery.setUser_id(request_user_id);
-        jiangling_lottery.setApp_id(request_app_id);
-        jiangling_lottery.setLottery_user_sex(lottery_user_sex);
-        jiangling_lottery.setLottery_number("");
-        jiangling_lottery.setLottery_time(0);
-        jiangling_lottery.setLottery_user_mobile(lottery_user_mobile);
-        jiangling_lottery.setLottery_status(false);
-        
-        return save(jiangling_lottery, request_user_id);
-    }
-    
     /**
      * 抽签
      * @param request_user_id
