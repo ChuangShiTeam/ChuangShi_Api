@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.nowui.chuangshi.api.jiangling.dao.JianglingLotteryDao;
 import com.nowui.chuangshi.api.jiangling.model.JianglingLottery;
+import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
@@ -21,21 +22,27 @@ public class JianglingLotteryService extends Service {
     private final String JIANGLING_LOTTERY_WOMEN_UNUSED_NUMBER_LIST_CACHE = "jiangling_lottery_women_unused_number_list_cache";
     private final JianglingLotteryDao jianglingLotteryDao = new JianglingLotteryDao();
 
-    public Integer adminCount(String app_id, String lottery_number) {
+    public Integer adminCount(String app_id, String user_name, String lottery_number) {
         Cnd cnd = new Cnd();
-        cnd.where(JianglingLottery.SYSTEM_STATUS, true);
-        cnd.and(JianglingLottery.APP_ID, app_id);
-        cnd.andAllowEmpty(JianglingLottery.LOTTERY_NUMBER, lottery_number);
+        cnd.leftJoin(User.TABLE_USER, User.USER_ID, JianglingLottery.TABLE_JIANGLING_LOTTERY, JianglingLottery.USER_ID);
+        cnd.where(JianglingLottery.TABLE_JIANGLING_LOTTERY + "." + JianglingLottery.SYSTEM_STATUS, true);
+        cnd.and(JianglingLottery.TABLE_JIANGLING_LOTTERY + "." + JianglingLottery.APP_ID, app_id);
+        cnd.andLikeAllowEmpty(User.TABLE_USER + "." + User.USER_NAME, user_name);
+        cnd.andAllowEmpty(JianglingLottery.TABLE_JIANGLING_LOTTERY + "." + JianglingLottery.LOTTERY_NUMBER, lottery_number);
 
         Integer count = jianglingLotteryDao.count(cnd);
         return count;
     }
 
-    public List<JianglingLottery> adminList(String app_id, String lottery_number, Integer m, Integer n) {
+    public List<JianglingLottery> adminList(String app_id, String user_name, String lottery_number, Integer m, Integer n) {
         Cnd cnd = new Cnd();
-        cnd.where(JianglingLottery.SYSTEM_STATUS, true);
-        cnd.and(JianglingLottery.APP_ID, app_id);
-        cnd.andAllowEmpty(JianglingLottery.LOTTERY_NUMBER, lottery_number);
+        cnd.select(User.TABLE_USER + "." + User.USER_NAME);
+        cnd.leftJoin(User.TABLE_USER, User.USER_ID, JianglingLottery.TABLE_JIANGLING_LOTTERY, JianglingLottery.USER_ID);
+        cnd.where(JianglingLottery.TABLE_JIANGLING_LOTTERY + "." + JianglingLottery.SYSTEM_STATUS, true);
+        cnd.and(JianglingLottery.TABLE_JIANGLING_LOTTERY + "." + JianglingLottery.APP_ID, app_id);
+        cnd.andLikeAllowEmpty(User.TABLE_USER + "." + User.USER_NAME, user_name);
+        cnd.andAllowEmpty(JianglingLottery.TABLE_JIANGLING_LOTTERY + "." + JianglingLottery.LOTTERY_NUMBER, lottery_number);
+        cnd.desc(JianglingLottery.TABLE_JIANGLING_LOTTERY + "." + JianglingLottery.SYSTEM_UPDATE_TIME);
         cnd.paginate(m, n);
 
         List<JianglingLottery> jiangling_lotteryList = jianglingLotteryDao.primaryKeyList(cnd);

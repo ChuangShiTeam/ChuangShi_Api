@@ -4,6 +4,8 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.jiangling.model.JianglingLottery;
 import com.nowui.chuangshi.api.jiangling.service.JianglingLotteryService;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
@@ -18,15 +20,16 @@ public class JianglingLotteryController extends Controller {
 
     @ActionKey("/admin/jiangling/lottery/list")
     public void list() {
-        validateRequest(JianglingLottery.LOTTERY_NUMBER, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(JianglingLottery.LOTTERY_NUMBER, User.USER_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         JianglingLottery model = getModel(JianglingLottery.class);
+        User userModel = getModel(User.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = JianglingLotteryService.instance.adminCount(request_app_id, model.getLottery_number());
-        List<JianglingLottery> resultList = JianglingLotteryService.instance.adminList(request_app_id, model.getLottery_number(), getM(), getN());
+        Integer resultCount = JianglingLotteryService.instance.adminCount(request_app_id, userModel.getUser_name(), model.getLottery_number());
+        List<JianglingLottery> resultList = JianglingLotteryService.instance.adminList(request_app_id, userModel.getUser_name(), model.getLottery_number(), getM(), getN());
 
-        validateResponse(JianglingLottery.USER_ID, JianglingLottery.LOTTERY_NUMBER, JianglingLottery.LOTTERY_USER_SEX, JianglingLottery.LOTTERY_USER_MOBILE, JianglingLottery.LOTTERY_TIME, JianglingLottery.LOTTERY_STATUS, JianglingLottery.SYSTEM_VERSION);
+        validateResponse(JianglingLottery.USER_ID, User.USER_NAME, JianglingLottery.LOTTERY_NUMBER, JianglingLottery.LOTTERY_USER_SEX, JianglingLottery.LOTTERY_USER_MOBILE, JianglingLottery.LOTTERY_TIME, JianglingLottery.LOTTERY_STATUS, JianglingLottery.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -38,8 +41,10 @@ public class JianglingLotteryController extends Controller {
         JianglingLottery model = getModel(JianglingLottery.class);
 
         JianglingLottery result = JianglingLotteryService.instance.find(model.getUser_id());
+        
+        result.put(User.USER_NAME, UserService.instance.find(model.getUser_id()).getUser_name());
 
-        validateResponse(JianglingLottery.LOTTERY_NUMBER, JianglingLottery.LOTTERY_USER_SEX, JianglingLottery.LOTTERY_USER_MOBILE, JianglingLottery.LOTTERY_TIME, JianglingLottery.LOTTERY_STATUS, JianglingLottery.SYSTEM_VERSION);
+        validateResponse(JianglingLottery.LOTTERY_NUMBER, User.USER_NAME, JianglingLottery.LOTTERY_USER_SEX, JianglingLottery.LOTTERY_USER_MOBILE, JianglingLottery.LOTTERY_TIME, JianglingLottery.LOTTERY_STATUS, JianglingLottery.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
