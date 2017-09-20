@@ -4,8 +4,10 @@ import com.nowui.chuangshi.api.jiangling.dao.JianglingPvDao;
 import com.nowui.chuangshi.api.jiangling.model.JianglingPv;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.CacheUtil;
 
+import java.util.Date;
 import java.util.List;
 
 public class JianglingPvService extends Service {
@@ -62,7 +64,17 @@ public class JianglingPvService extends Service {
         Boolean success = jianglingPvDao.update(jiangling_pv, system_update_user_id, system_version, cnd);
 
         if (success) {
-            CacheUtil.remove(JIANGLING_PV_ITEM_CACHE, app_id);
+            JianglingPv bean = new JianglingPv();
+            bean.setApp_id(app_id);
+            bean.setPv(jiangling_pv.getPv());
+            bean.setSystem_create_user_id(jiangling_pv.getSystem_create_user_id());
+            bean.setSystem_create_time(jiangling_pv.getSystem_create_time());
+            bean.setSystem_update_user_id(jiangling_pv.getSystem_update_user_id());
+            bean.setSystem_update_time(jiangling_pv.getSystem_update_time());
+            bean.setSystem_version(jiangling_pv.getSystem_version());
+            bean.setSystem_status(jiangling_pv.getSystem_status());
+            
+            CacheUtil.put(JIANGLING_PV_ITEM_CACHE, app_id, bean);
         }
 
         return success;
