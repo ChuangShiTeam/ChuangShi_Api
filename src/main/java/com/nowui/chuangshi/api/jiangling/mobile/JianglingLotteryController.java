@@ -27,12 +27,17 @@ public class JianglingLotteryController extends Controller {
         validateRequest(JianglingLottery.LOTTERY_USER_SEX, JianglingLottery.LOTTERY_USER_MOBILE);
 
         JianglingLottery model = getModel(JianglingLottery.class);
-        String request_user_id = getRequest_user_id();
-
-        Boolean result = JianglingLotteryService.instance.save(model, request_user_id);
-
-        renderSuccessJson(result);
         
+        JianglingLottery bean = JianglingLotteryService.instance.mobileFind(model.getLottery_user_mobile());
+        if (bean != null) {
+            throw new RuntimeException("该手机号码已经注册过了");
+        } 
+        
+        String user_id = Util.getRandomUUID();
+        model.setUser_id(user_id);
+        
+        JianglingLotteryService.instance.save(model, user_id);
+        renderSuccessJson(user_id);
     }
 
     @ActionKey("/mobile/jiangling/lottery/update")
@@ -48,10 +53,13 @@ public class JianglingLotteryController extends Controller {
     
     @ActionKey("/mobile/jiangling/lottery/draw")
     public void draw() {
-        String request_user_id = getRequest_user_id();
+        validateRequest(JianglingLottery.USER_ID);
+        
+        JianglingLottery model = getModel(JianglingLottery.class);
         String request_app_id = getRequest_app_id();
         
-        String lottery_number = JianglingLotteryService.instance.draw(request_app_id, request_user_id);
+        String lottery_number = JianglingLotteryService.instance.draw(request_app_id, model.getUser_id());
+        
         renderSuccessJson(lottery_number);
     }
 

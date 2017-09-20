@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import com.nowui.chuangshi.api.jiangling.dao.JianglingLotteryDao;
 import com.nowui.chuangshi.api.jiangling.model.JianglingLottery;
-import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
@@ -22,27 +21,24 @@ public class JianglingLotteryService extends Service {
     private final String JIANGLING_LOTTERY_WOMEN_UNUSED_NUMBER_LIST_CACHE = "jiangling_lottery_women_unused_number_list_cache";
     private final JianglingLotteryDao jianglingLotteryDao = new JianglingLotteryDao();
 
-    public Integer adminCount(String app_id, String user_name, String lottery_number) {
+    public Integer adminCount(String app_id, String lottery_user_mobile, String lottery_number) {
         Cnd cnd = new Cnd();
-        cnd.leftJoin(User.TABLE_USER, User.USER_ID, JianglingLottery.TABLE_JIANGLING_LOTTERY, JianglingLottery.USER_ID);
-        cnd.where(JianglingLottery.TABLE_JIANGLING_LOTTERY + "." + JianglingLottery.SYSTEM_STATUS, true);
-        cnd.and(JianglingLottery.TABLE_JIANGLING_LOTTERY + "." + JianglingLottery.APP_ID, app_id);
-        cnd.andLikeAllowEmpty(User.TABLE_USER + "." + User.USER_NAME, user_name);
-        cnd.andAllowEmpty(JianglingLottery.TABLE_JIANGLING_LOTTERY + "." + JianglingLottery.LOTTERY_NUMBER, lottery_number);
+        cnd.where(JianglingLottery.SYSTEM_STATUS, true);
+        cnd.and(JianglingLottery.APP_ID, app_id);
+        cnd.andAllowEmpty(JianglingLottery.LOTTERY_NUMBER, lottery_number);
+        cnd.andAllowEmpty(JianglingLottery.LOTTERY_USER_MOBILE, lottery_user_mobile);
 
         Integer count = jianglingLotteryDao.count(cnd);
         return count;
     }
 
-    public List<JianglingLottery> adminList(String app_id, String user_name, String lottery_number, Integer m, Integer n) {
+    public List<JianglingLottery> adminList(String app_id, String lottery_user_mobile, String lottery_number, Integer m, Integer n) {
         Cnd cnd = new Cnd();
-        cnd.select(User.TABLE_USER + "." + User.USER_NAME);
-        cnd.leftJoin(User.TABLE_USER, User.USER_ID, JianglingLottery.TABLE_JIANGLING_LOTTERY, JianglingLottery.USER_ID);
-        cnd.where(JianglingLottery.TABLE_JIANGLING_LOTTERY + "." + JianglingLottery.SYSTEM_STATUS, true);
-        cnd.and(JianglingLottery.TABLE_JIANGLING_LOTTERY + "." + JianglingLottery.APP_ID, app_id);
-        cnd.andLikeAllowEmpty(User.TABLE_USER + "." + User.USER_NAME, user_name);
-        cnd.andAllowEmpty(JianglingLottery.TABLE_JIANGLING_LOTTERY + "." + JianglingLottery.LOTTERY_NUMBER, lottery_number);
-        cnd.desc(JianglingLottery.TABLE_JIANGLING_LOTTERY + "." + JianglingLottery.SYSTEM_UPDATE_TIME);
+        cnd.where(JianglingLottery.SYSTEM_STATUS, true);
+        cnd.and(JianglingLottery.APP_ID, app_id);
+        cnd.andAllowEmpty(JianglingLottery.LOTTERY_NUMBER, lottery_number);
+        cnd.andAllowEmpty(JianglingLottery.LOTTERY_USER_MOBILE, lottery_user_mobile);
+        cnd.desc(JianglingLottery.SYSTEM_UPDATE_TIME);
         cnd.paginate(m, n);
 
         List<JianglingLottery> jiangling_lotteryList = jianglingLotteryDao.primaryKeyList(cnd);
@@ -123,6 +119,20 @@ public class JianglingLotteryService extends Service {
 
         return jiangling_lottery;
     }
+    
+    public JianglingLottery mobileFind(String lottery_user_mobile) {
+        Cnd cnd = new Cnd();
+        cnd.where(JianglingLottery.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(JianglingLottery.LOTTERY_USER_MOBILE, lottery_user_mobile);
+        
+        List<JianglingLottery> jiangling_lotteryList = jianglingLotteryDao.primaryKeyList(cnd);
+        
+        if (jiangling_lotteryList == null || jiangling_lotteryList.size() == 0) {
+            return null;
+        }
+        
+        return find(jiangling_lotteryList.get(0).getUser_id());
+    }
 
     public Boolean save(JianglingLottery jiangling_lottery, String system_create_user_id) {
         Boolean success = jianglingLotteryDao.save(jiangling_lottery, system_create_user_id);
@@ -186,7 +196,7 @@ public class JianglingLotteryService extends Service {
     public String draw(String request_app_id, String request_user_id) {
         JianglingLottery bean = find(request_user_id);
         if (bean == null) {
-            throw new RuntimeException("请选择完善用户资料");
+            throw new RuntimeException("未获得抽签资格");
         }
         if (!ValidateUtil.isNullOrEmpty(bean.getLottery_number())) {
             return bean.getLottery_number();
@@ -220,6 +230,7 @@ public class JianglingLotteryService extends Service {
         }
         //未抽中，则更新用户抽签次数，抽签次数加一
         bean.setLottery_time(bean.getLottery_time() + 1);
+        bean.setLottery_status(true);
         this.update(bean, request_user_id, request_user_id, bean.getSystem_version());
         return null;
     }
@@ -229,9 +240,11 @@ public class JianglingLotteryService extends Service {
         String lottery_number = numberList.get(index); //随机获取一个未抽取的号码
         bean.setLottery_number(lottery_number);
         bean.setLottery_time(bean.getLottery_time() + 1);
+        bean.setLottery_status(true);
         boolean result = this.update(bean, request_user_id, request_user_id, bean.getSystem_version());
         if (result) {
             numberList.remove(index);
+            System.out.println(numberList.toString());
             if (bean.getLottery_user_sex()) {
                 CacheUtil.put(JIANGLING_LOTTERY_MAN_UNUSED_NUMBER_LIST_CACHE, request_app_id, numberList);
             } else {
