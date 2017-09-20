@@ -20,8 +20,8 @@ public class ProbabilityUtil {
     
     public static void main(String args[]) {
         int countTrue = 0;
-        int countFalse = 1;
-        for (int i = 0; i < 100000000; i++) {
+        int countFalse = 0;
+        for (int i = 0; i < 1000; i++) {
             if (random(0.80)) {
                 countTrue++; 
             } else {

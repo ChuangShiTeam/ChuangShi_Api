@@ -195,7 +195,7 @@ public class JianglingLotteryService extends Service {
             throw new RuntimeException("抽签次数已经用完");
         }
         synchronized (this) {
-            System.out.println("request_user_id: " + request_user_id);
+            System.out.println("request_user_id: " + request_user_id + "开始抽签");
             long startTime = System.currentTimeMillis();
             System.out.println("startTime: " + startTime);
             List<String> numberList = numberList(request_app_id, bean.getLottery_user_sex());
@@ -205,16 +205,18 @@ public class JianglingLotteryService extends Service {
             }
             if (numberList.size() > 200) { //前800名抽签概率为80%
                 if (ProbabilityUtil.random(0.8)) {
-                    return getLottery_number(numberList, bean, request_user_id, request_app_id);
+                    String lottery_number = getLottery_number(numberList, bean, request_user_id, request_app_id);
+                    System.out.println("前800名抽签成功, 花费时间：" + (System.currentTimeMillis() - startTime) + "ms");
+                    return lottery_number;
                 }
             } else {
                 if (ProbabilityUtil.random(0.5)) { //后200名抽签概率为50%
-                    return getLottery_number(numberList, bean, request_user_id, request_app_id);
+                    String lottery_number = getLottery_number(numberList, bean, request_user_id, request_app_id);
+                    System.out.println("后200名抽签成功, 花费时间：" + (System.currentTimeMillis() - startTime) + "ms");
+                    return lottery_number;
                 } 
             }
-            long endTime = System.currentTimeMillis();
-            System.out.println("endTime: " + endTime);
-            System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
+            System.out.println("未抽中号码， 抽签结束, 花费时间：" + (System.currentTimeMillis() - startTime) + "ms");
         }
         //未抽中，则更新用户抽签次数，抽签次数加一
         bean.setLottery_time(bean.getLottery_time() + 1);
