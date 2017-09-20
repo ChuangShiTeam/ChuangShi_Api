@@ -57,6 +57,17 @@ public class InfinitiMemberService extends Service {
         cnd.and(InfinitiMember.APP_ID, app_id);
         cnd.andAllowEmpty(InfinitiMember.MEMBER_REDEEM_CODE, member_redeem_code);
         cnd.paginate(m, n);
+        cnd.desc(InfinitiMember.SYSTEM_CREATE_TIME);
+
+        List<InfinitiMember> infiniti_memberList = infinitiMemberDao.list(cnd);
+        return infiniti_memberList;
+    }
+
+    public List<InfinitiMember> appList(String app_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(InfinitiMember.SYSTEM_STATUS, true);
+        cnd.and(InfinitiMember.APP_ID, app_id);
+        cnd.desc(InfinitiMember.SYSTEM_CREATE_TIME);
 
         List<InfinitiMember> infiniti_memberList = infinitiMemberDao.list(cnd);
         return infiniti_memberList;
