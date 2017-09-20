@@ -53,6 +53,8 @@ public class JianglingPvController extends Controller {
 
         JianglingPv jiangling_pv = JianglingPvService.instance.find(model.getApp_id());
         
+        jiangling_pv.setPv(jiangling_pv.getPv() + 1);
+        
         Boolean result = JianglingPvService.instance.update(jiangling_pv, model.getApp_id(), jiangling_pv.getSystem_create_user_id(), jiangling_pv.getSystem_version());
         
         renderSuccessJson(result);
