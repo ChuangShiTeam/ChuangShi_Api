@@ -49,8 +49,6 @@ public class JianglingPvController extends Controller {
     @ActionKey("/mobile/jiangling/pv/increase")
     public void increase() {
         
-        validateRequest(JianglingPv.APP_ID);
-
         JianglingPv model = getModel(JianglingPv.class);
 
         JianglingPv jiangling_pv = JianglingPvService.instance.find(model.getApp_id());
