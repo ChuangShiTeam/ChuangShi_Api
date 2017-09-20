@@ -358,7 +358,7 @@ public class WebConfig extends JFinalConfig {
         plugins.add(ehCachePlugin);
 
         Cron4jPlugin cron4jPlugin = new Cron4jPlugin();
-        cron4jPlugin.addTask("*/100 * * * *", new WeChatRunnable());
+        cron4jPlugin.addTask("*/50 * * * *", new WeChatRunnable());
         plugins.add(cron4jPlugin);
 
         RocketPlugin rocketPlugin = new RocketPlugin();
