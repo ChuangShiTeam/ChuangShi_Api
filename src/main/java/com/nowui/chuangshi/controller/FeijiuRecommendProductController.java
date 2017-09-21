@@ -1,12 +1,12 @@
 package com.nowui.chuangshi.controller;
 
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.file.model.File;
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.FeijiuRecommendProduct;
-import com.nowui.chuangshi.model.File;
 import com.nowui.chuangshi.service.FeijiuRecommendProductService;
-import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -15,7 +15,6 @@ import java.util.List;
 public class FeijiuRecommendProductController extends Controller {
 
     private final FeijiuRecommendProductService feijiuRecommendProductService = new FeijiuRecommendProductService();
-    private final FileService fileService = new FileService();
 
     @ActionKey(Url.FEIJIU_RECOMMEND_PRODUCT_LIST)
     public void list() {
@@ -29,7 +28,7 @@ public class FeijiuRecommendProductController extends Controller {
 
         for (FeijiuRecommendProduct result : resultList) {
             if (!ValidateUtil.isNullOrEmpty(result.getProduct_image())) {
-                File file = fileService.findByFile_id(result.getProduct_image());
+                File file = FileService.instance.find(result.getProduct_image());
 
                 result.setProduct_image(file.getFile_path());
             }
@@ -153,7 +152,7 @@ public class FeijiuRecommendProductController extends Controller {
         if (ValidateUtil.isNullOrEmpty(feijiu_recommend_product.getProduct_image())) {
             feijiu_recommend_product.put(FeijiuRecommendProduct.PRODUCT_IMAGE_FILE, "");
         } else {
-            File file = fileService.findByFile_id(feijiu_recommend_product.getProduct_image());
+            File file = FileService.instance.find(feijiu_recommend_product.getProduct_image());
             feijiu_recommend_product.put(FeijiuRecommendProduct.PRODUCT_IMAGE_FILE, file.keep(File.FILE_ID, File.FILE_PATH));
         }
 
@@ -233,7 +232,7 @@ public class FeijiuRecommendProductController extends Controller {
         if (ValidateUtil.isNullOrEmpty(feijiu_recommend_product.getProduct_image())) {
             feijiu_recommend_product.put(FeijiuRecommendProduct.PRODUCT_IMAGE_FILE, "");
         } else {
-            File file = fileService.findByFile_id(feijiu_recommend_product.getProduct_image());
+            File file = FileService.instance.find(feijiu_recommend_product.getProduct_image());
             feijiu_recommend_product.put(FeijiuRecommendProduct.PRODUCT_IMAGE_FILE, file.keep(File.FILE_ID, File.FILE_PATH));
         }
 

@@ -22,6 +22,8 @@ import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.api.member.model.Member;
 import com.nowui.chuangshi.api.member.service.MemberService;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Bill;
@@ -35,7 +37,6 @@ import com.nowui.chuangshi.model.ProductSkuCommission;
 import com.nowui.chuangshi.model.Trade;
 import com.nowui.chuangshi.model.TradeCommossion;
 import com.nowui.chuangshi.model.TradeProductSku;
-import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.BillCommissionService;
 import com.nowui.chuangshi.service.BillService;
 import com.nowui.chuangshi.service.CertificatePayService;
@@ -48,7 +49,6 @@ import com.nowui.chuangshi.service.ProductSkuCommissionService;
 import com.nowui.chuangshi.service.TradeCommossionService;
 import com.nowui.chuangshi.service.TradeProductSkuService;
 import com.nowui.chuangshi.service.TradeService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.BillFlow;
 import com.nowui.chuangshi.type.BillType;
 import com.nowui.chuangshi.type.ExpressPayWay;
@@ -68,7 +68,6 @@ public class WeChatController extends Controller {
     private final TradeCommossionService tradeCommossionService = new TradeCommossionService();
     private final BillService billService = new BillService();
     private final ProductSkuCommissionService productSkuCommissionService = new ProductSkuCommissionService();
-    private final UserService userService = new UserService();
     private final BillCommissionService billCommissionService = new BillCommissionService();
 
     // 授权证书
@@ -227,8 +226,8 @@ public class WeChatController extends Controller {
         Trade trade = tradeService.findByTrade_id(trade_id);
 
         String user_id = trade.getUser_id();
-        User user = userService.findByUser_id(user_id);
-        Member member = MemberService.instance.find(user.getObject_Id());
+        User user = UserService.instance.find(user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
 
         // 根据应用信息 获取是否分成 和分成级数
         App app = AppService.instance.find(trade.getApp_id());
@@ -316,7 +315,7 @@ public class WeChatController extends Controller {
                     for (ProductSkuCommission productSkuCommission : productSkuCommissionList) {
                         if (productSkuCommission.getMember_level_id().equals(member_parent.getMember_level_id())) {
 
-                            String member_name = userService.findByUser_id(member_parent.getUser_id()).getUser_name();
+                            String member_name = UserService.instance.find(member_parent.getUser_id()).getUser_name();
                             BigDecimal a = productSkuCommission.getProduct_sku_commission();
                             BigDecimal b = tradeProductSku.getProduct_sku_amount();
                             BigDecimal c = a.divide(BigDecimal.valueOf(100));
@@ -581,8 +580,8 @@ public class WeChatController extends Controller {
                     certificate.getUser_id(), certificate.getSystem_version());
 
             if (is_update) {
-                User user = userService.findByUser_id(certificate.getUser_id());
-                Member member = MemberService.instance.find(user.getObject_Id());
+                User user = UserService.instance.find(certificate.getUser_id());
+                Member member = MemberService.instance.find(user.getObject_id());
 
                 // 设置小数位数，第一个变量是小数位数，第二个变量是取舍方法(四舍五入)
                 BigDecimal bd = new BigDecimal(total_fee).divide(BigDecimal.valueOf(100));

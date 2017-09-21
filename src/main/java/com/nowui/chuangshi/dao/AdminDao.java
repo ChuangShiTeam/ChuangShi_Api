@@ -3,9 +3,9 @@ package com.nowui.chuangshi.dao;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
+import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.Admin;
-import com.nowui.chuangshi.model.User;
 
 import java.util.Date;
 import java.util.List;

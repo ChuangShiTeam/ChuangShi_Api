@@ -4,6 +4,7 @@ import com.nowui.chuangshi.api.user.dao.UserDao;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.CacheUtil;
 import com.nowui.chuangshi.util.Util;
 
@@ -133,10 +134,27 @@ public class UserService extends Service {
 
         return success;
     }
+
+    public Boolean delete(String user_id, String system_update_user_id, Integer system_version) {
+        Cnd cnd = new Cnd();
+        cnd.where(User.SYSTEM_STATUS, true);
+        cnd.and(User.USER_ID, user_id);
+        cnd.and(User.SYSTEM_VERSION, system_version);
+
+        Boolean success = userDao.delete(system_update_user_id, system_version, cnd);
+
+        if (success) {
+            CacheUtil.remove(USER_ITEM_CACHE, user_id);
+        }
+
+        return success;
+    }
     
     public Boolean userTypeDelete(String user_type, String system_update_user_id) {
-        
-        Boolean success = userDao.userTypeDelete(user_type, system_update_user_id);
+        Cnd cnd = new Cnd();
+        cnd.and(User.USER_TYPE, user_type);
+
+        Boolean success = userDao.delete(system_update_user_id, cnd);
         
         if (success) {
             CacheUtil.removeAll(USER_ITEM_CACHE);

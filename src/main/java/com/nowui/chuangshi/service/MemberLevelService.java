@@ -1,7 +1,6 @@
 package com.nowui.chuangshi.service;
 
 import com.nowui.chuangshi.cache.MemberLevelCache;
-import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberLevel;
 
 import java.util.Date;

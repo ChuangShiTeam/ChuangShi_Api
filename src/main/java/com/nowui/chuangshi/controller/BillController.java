@@ -4,18 +4,17 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Bill;
-import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.BillService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.util.Util;
 
 public class BillController extends Controller {
 
     private final BillService billService = new BillService();
-    private final UserService userService = new UserService();
 
     @ActionKey("/bill/test")
     public void test() {
@@ -142,7 +141,7 @@ public class BillController extends Controller {
                 getM(), getN());
 
         for (Bill result : resultList) {
-            User user = userService.findByUser_id(result.getUser_id());
+            User user = UserService.instance.find(result.getUser_id());
             if (user != null) {
                 result.put(User.USER_NAME, user.getUser_name());
             }
@@ -165,7 +164,7 @@ public class BillController extends Controller {
 
         Bill bill = billService.findByBill_id(model.getBill_id());
 
-        User user = userService.findByUser_id(bill.getUser_id());
+        User user = UserService.instance.find(bill.getUser_id());
         if (user != null) {
             bill.put(User.USER_NAME, user.getUser_name());
         }

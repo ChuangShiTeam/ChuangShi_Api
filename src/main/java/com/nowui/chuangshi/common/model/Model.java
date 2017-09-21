@@ -506,11 +506,17 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("SELECT \n");
+        if (criteria.getJoinList().size() > 0) {
+            stringBuilder.append(getTable().getName());
+            stringBuilder.append(".");
+        }
         stringBuilder.append("*");
+        stringBuilder.append(buildSelectSql());
         stringBuilder.append("\n");
         stringBuilder.append("FROM ");
         stringBuilder.append(getTable().getName());
         stringBuilder.append(" \n");
+        stringBuilder.append(buildJoinSql());
         stringBuilder.append(buildConditionSql());
 
         return stringBuilder.toString();

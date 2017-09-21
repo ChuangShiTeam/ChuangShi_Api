@@ -11,6 +11,7 @@ import java.util.Map;
 
 import com.jfinal.kit.FileKit;
 import com.jfinal.kit.PathKit;
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.cache.CertificateImageCache;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.CertificateImage;
@@ -22,8 +23,6 @@ import com.nowui.chuangshi.util.Util;
 public class CertificateImageService extends Service {
 
     private CertificateImageCache certificateImageCache = new CertificateImageCache();
-
-    private final FileService fileService = new FileService();
 
     public List<CertificateImage> listByCertificate_id(String certificate_id) {
         return certificateImageCache.listByCertificate_id(certificate_id);
@@ -272,14 +271,14 @@ public class CertificateImageService extends Service {
         String file_image = "";
         Boolean file_is_external = false;
 
-        Boolean result = fileService.save(file_id, app_id, file_type, file_name, file_suffix, file_size, file_path,
+        Boolean result = FileService.instance.save(file_id, app_id, file_type, file_name, file_suffix, file_size, file_path,
                 file_thumbnail_path, file_original_path, file_image, file_is_external, system_create_user_id);
 
         Map<String, Object> map = new HashMap<String, Object>();
         if (result) {
-            map.put(com.nowui.chuangshi.model.File.FILE_ID, file_id);
-            map.put(com.nowui.chuangshi.model.File.FILE_NAME, file_name);
-            map.put(com.nowui.chuangshi.model.File.FILE_PATH, file_path);
+            map.put(com.nowui.chuangshi.api.file.model.File.FILE_ID, file_id);
+            map.put(com.nowui.chuangshi.api.file.model.File.FILE_NAME, file_name);
+            map.put(com.nowui.chuangshi.api.file.model.File.FILE_PATH, file_path);
         }
 
         return map;

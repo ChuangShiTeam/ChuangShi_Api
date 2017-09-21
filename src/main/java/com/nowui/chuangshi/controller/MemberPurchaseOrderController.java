@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nowui.chuangshi.api.file.model.File;
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.member.model.Member;
 import com.nowui.chuangshi.api.member.service.MemberService;
 import com.nowui.chuangshi.api.user.model.User;
@@ -20,14 +22,12 @@ import com.nowui.chuangshi.api.trade.service.MemberDeliveryOrderService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Express;
-import com.nowui.chuangshi.model.File;
 import com.nowui.chuangshi.model.MemberAddress;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
 import com.nowui.chuangshi.model.ProductSkuPrice;
-import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberAddressService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderExpressService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderProductSkuService;
@@ -47,7 +47,6 @@ public class MemberPurchaseOrderController extends Controller {
     private final ProductService productService = new ProductService();
     private final ProductSkuService productSkuService = new ProductSkuService();
     private final ProductSkuPriceService productSkuPriceService = new ProductSkuPriceService();
-    private final FileService fileService = new FileService();
 
     @ActionKey(Url.MEMBER_PURCHASE_ORDER_CHECK)
     public void check() {
@@ -76,7 +75,7 @@ public class MemberPurchaseOrderController extends Controller {
             }
             Product product = productService.findByProduct_id(productSku.getProduct_id());
             productSkuObject.put(Product.PRODUCT_NAME, product.getProduct_name());
-            productSkuObject.put(Product.PRODUCT_IMAGE, fileService.getFile_path(product.getProduct_image()));
+            productSkuObject.put(Product.PRODUCT_IMAGE, FileService.instance.getFile_path(product.getProduct_image()));
 
             BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(
                     productSkuObject.getString(ProductSku.PRODUCT_SKU_ID), member.getMember_level_id());
@@ -117,7 +116,7 @@ public class MemberPurchaseOrderController extends Controller {
                 User user = UserService.instance.find(memberDeliveryOrder.getUser_id());
                 if (user != null) {
                     result.put(User.USER_NAME, user.getUser_name());
-                    File file = fileService.findByFile_id(user.getUser_avatar());
+                    File file = FileService.instance.find(user.getUser_avatar());
                     result.put(User.USER_AVATAR, file.getFile_original_path());
                 }
             }
@@ -131,7 +130,7 @@ public class MemberPurchaseOrderController extends Controller {
                 Product product = productService.findByProduct_id(productSku.getProduct_id());
                 memberPurchaseOrderProductSku.put(Product.PRODUCT_NAME, product.getProduct_name()); // 商品名称
                 memberPurchaseOrderProductSku.put(Product.PRODUCT_IMAGE,
-                        fileService.getFile_path(product.getProduct_image()));
+                        FileService.instance.getFile_path(product.getProduct_image()));
                 memberPurchaseOrderProductSku.keep(MemberPurchaseOrderProductSku.PRODUCT_SKU_ID,
                         MemberPurchaseOrderProductSku.PRODUCT_SKU_AMOUNT,
                         MemberPurchaseOrderProductSku.PRODUCT_SKU_QUANTITY, Product.PRODUCT_NAME,
@@ -177,7 +176,7 @@ public class MemberPurchaseOrderController extends Controller {
             Product product = productService.findByProduct_id(productSku.getProduct_id());
             memberPurchaseOrderProductSku.put(Product.PRODUCT_NAME, product.getProduct_name());
             memberPurchaseOrderProductSku.put(Product.PRODUCT_IMAGE,
-                    fileService.getFile_path(product.getProduct_image()));
+                    FileService.instance.getFile_path(product.getProduct_image()));
             memberPurchaseOrderProductSku.keep(MemberPurchaseOrderProductSku.PRODUCT_SKU_ID,
                     MemberPurchaseOrderProductSku.PRODUCT_SKU_AMOUNT,
                     MemberPurchaseOrderProductSku.PRODUCT_SKU_QUANTITY, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE);

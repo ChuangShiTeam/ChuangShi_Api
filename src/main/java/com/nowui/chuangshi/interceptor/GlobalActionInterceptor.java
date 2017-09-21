@@ -7,10 +7,10 @@ import com.jfinal.core.Controller;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.plugin.activerecord.DbKit;
 import com.nowui.chuangshi.api.http.model.Http;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.common.request.BodyReaderHttpServletRequestWrapper;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
-import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.util.*;
 import org.apache.http.HttpStatus;
 
@@ -37,17 +37,19 @@ public class GlobalActionInterceptor implements Interceptor {
         String http_token = "";
         String http_platform = "";
         String http_version = "";
-        String http_ip_address = HttpUtil.getIpAddress(controller.getRequest());
+        String http_ip_address = "";
 
         try {
             connection = DbKit.getConfig().getDataSource().getConnection();
             DbKit.getConfig().setThreadLocalConnection(connection);
             connection.setAutoCommit(false);
 
+            controller.setHttpServletRequest(new BodyReaderHttpServletRequestWrapper(controller.getRequest()));
             request_app_id = controller.getRequest().getHeader(Constant.APP_ID);
             http_platform = controller.getRequest().getHeader(Constant.PLATFORM);
             http_version = controller.getRequest().getHeader(Constant.VERSION);
             http_token = controller.getRequest().getHeader(Constant.TOKEN);
+            http_ip_address = HttpUtil.getIpAddress(controller.getRequest());
 
             if (ValidateUtil.isNullOrEmpty(request_app_id)) {
                 request_app_id = "";
@@ -68,11 +70,10 @@ public class GlobalActionInterceptor implements Interceptor {
                 request_user_id = jsonObject.getString(User.USER_ID);
             }
 
-            if (http_url.equals(Url.FILE_UPLOAD) || http_url.equals(Url.FILE_ADMIN_UPLOAD) || http_url.contains("/wechat/") || http_url.contains(Url.EXPRESS_PUSH)
-                    || http_url.contains("/admin/xietong/student/upload") || http_url.contains("/admin/xietong/course/upload")) {
-
-            } else {
+            try {
                 http_request = JSONObject.parseObject(HttpKit.readData(controller.getRequest()));
+            } catch (Exception e) {
+                http_request = new JSONObject();
             }
 
             if (ValidateUtil.isNull(http_request)) {

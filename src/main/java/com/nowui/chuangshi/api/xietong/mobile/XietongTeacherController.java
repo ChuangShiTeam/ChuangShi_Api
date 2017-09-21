@@ -3,12 +3,12 @@ package com.nowui.chuangshi.api.xietong.mobile;
 import java.util.List;
 
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.xietong.model.XietongTeacher;
 import com.nowui.chuangshi.api.xietong.service.XietongTeacherService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.constant.Constant;
-import com.nowui.chuangshi.model.User;
 
 @ControllerKey("/mobile/xietong/teacher")
 public class XietongTeacherController extends Controller {

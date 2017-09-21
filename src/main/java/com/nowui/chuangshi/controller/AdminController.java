@@ -2,14 +2,14 @@ package com.nowui.chuangshi.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Admin;
-import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.AdminService;
 import com.nowui.chuangshi.service.MenuService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.AesUtil;
 import com.nowui.chuangshi.util.Util;
@@ -19,7 +19,6 @@ import java.util.*;
 public class AdminController extends Controller {
 
     private final AdminService adminService = new AdminService();
-    private final UserService userService = new UserService();
     private final MenuService menuService = new MenuService();
 
     @ActionKey(Url.ADMIN_ADMIN_LIST)
@@ -36,7 +35,7 @@ public class AdminController extends Controller {
         List<Admin> resultList = adminService.listByApp_idOrLikeUser_nameAndLimit(request_app_id, model.getUser_name(), getM(), getN());
 
         for (Admin result : resultList) {
-            User user = userService.findByUser_id(result.getUser_id());
+            User user = UserService.instance.find(result.getUser_id());
 
             result.keep(Admin.ADMIN_ID, Admin.SYSTEM_VERSION);
             result.put(User.USER_NAME, user.getUser_name());
@@ -58,7 +57,7 @@ public class AdminController extends Controller {
 
         authenticateApp_id(admin.getApp_id());
 
-        User user = userService.findByUser_id(admin.getUser_id());
+        User user = UserService.instance.find(admin.getUser_id());
 
         admin.keep(Admin.ADMIN_ID, Admin.SYSTEM_VERSION);
         admin.put(User.USER_NAME, user.getUser_name());
@@ -83,7 +82,7 @@ public class AdminController extends Controller {
         Boolean result = adminService.save(admin_id, request_app_id, user_id, request_user_id);
 
         if (result) {
-            result = userService.saveByUser_idAndApp_idAndObject_idAndUser_typeAndUser_nameAndUser_accountAndUser_password(user_id, request_app_id, admin_id, UserType.ADMIN.getKey(), model.getUser_name(), model.getUser_account(), model.getUser_password(), request_user_id);
+            result = UserService.instance.userAccountSave(user_id, request_app_id, admin_id, UserType.ADMIN.getKey(), model.getUser_name(), model.getUser_account(), model.getUser_password(), request_user_id);
         }
 
         if (!result) {
@@ -110,9 +109,9 @@ public class AdminController extends Controller {
         Boolean result = adminService.deleteByAdmin_idAndSystem_update_user_idValidateSystem_version(model.getAdmin_id(), request_user_id, model.getSystem_version());
 
         if (result) {
-            User user = userService.findByUser_id(admin.getUser_id());
+            User user = UserService.instance.find(admin.getUser_id());
 
-            result = userService.deleteByUser_idAndSystem_update_user_idValidateSystem_version(user.getUser_id(), request_user_id, user.getSystem_version());
+            result = UserService.instance.delete(user.getUser_id(), request_user_id, user.getSystem_version());
         }
 
         if (!result) {
@@ -133,7 +132,7 @@ public class AdminController extends Controller {
         List<Admin> resultList = adminService.listByOrApp_idOrLikeUser_nameAndLimit(model.getApp_id(), model.getUser_name(), getM(), getN());
 
         for (Admin result : resultList) {
-            User user = userService.findByUser_id(result.getUser_id());
+            User user = UserService.instance.find(result.getUser_id());
 
             result.keep(Admin.ADMIN_ID, Admin.SYSTEM_VERSION);
             result.put(User.USER_NAME, user.getUser_name());
@@ -151,7 +150,7 @@ public class AdminController extends Controller {
 
         Admin admin = adminService.findByAdmin_id(model.getAdmin_id());
 
-        User user = userService.findByUser_id(admin.getUser_id());
+        User user = UserService.instance.find(admin.getUser_id());
 
         admin.keep(Admin.ADMIN_ID, Admin.SYSTEM_VERSION);
         admin.put(User.USER_NAME, user.getUser_name());
@@ -186,9 +185,9 @@ public class AdminController extends Controller {
         Boolean result = adminService.deleteByAdmin_idAndSystem_update_user_idValidateSystem_version(model.getAdmin_id(), request_user_id, model.getSystem_version());
 
         if (result) {
-            User user = userService.findByUser_id(admin.getUser_id());
+            User user = UserService.instance.find(admin.getUser_id());
 
-            result = userService.deleteByUser_idAndSystem_update_user_idValidateSystem_version(user.getUser_id(), request_user_id, user.getSystem_version());
+            result = UserService.instance.delete(user.getUser_id(), request_user_id, user.getSystem_version());
         }
 
         if (!result) {
@@ -206,7 +205,7 @@ public class AdminController extends Controller {
         User model = getModel(User.class);
         String request_app_id = getRequest_app_id();
 
-        User user = userService.findByApp_idAndUser_typeAndUser_accountAndUser_password(request_app_id, UserType.ADMIN.getKey(), model.getUser_account(), model.getUser_password());
+        User user = UserService.instance.userAccountFind(request_app_id, UserType.ADMIN.getKey(), model.getUser_account(), model.getUser_password());
 
         if (user == null) {
             throw new RuntimeException("帐号或者密码不正确");

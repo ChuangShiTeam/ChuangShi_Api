@@ -36,10 +36,6 @@ public class CertificateController extends Controller {
 
     private final CertificateService certificateService = new CertificateService();
     private final CertificateImageService certificateImageService = new CertificateImageService();
-    private final UserService userService = new UserService();
-    private final FileService fileService = new FileService();
-    private final MemberService memberService = new MemberService();
-    private final MemberLevelService memberLevelService = new MemberLevelService();
     private final CertificatePayService certificatePayService = new CertificatePayService();
 
     // 官网根据授权编号返回授权证书列表

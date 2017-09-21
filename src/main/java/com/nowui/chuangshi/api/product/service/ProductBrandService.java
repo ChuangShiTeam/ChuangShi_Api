@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.api.product.service;
 
+import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.product.dao.ProductBrandDao;
 import com.nowui.chuangshi.api.product.model.ProductBrand;
 import com.nowui.chuangshi.common.service.Service;
@@ -54,7 +55,14 @@ public class ProductBrandService extends Service {
         ProductBrand productBrand = CacheUtil.get(PRODUCT_BRAND_ITEM_CACHE, product_brand_id);
 
         if (productBrand == null) {
-            productBrand = productBrandDao.find(product_brand_id);
+            Cnd cnd = new Cnd();
+            cnd.select(File.TABLE_FILE + "." + File.FILE_ID);
+            cnd.select(File.TABLE_FILE + "." + File.FILE_PATH);
+            cnd.leftJoin(File.TABLE_FILE, File.FILE_ID, ProductBrand.TABLE_PRODUCT_BRAND, ProductBrand.PRODUCT_BRAND_IMAGE);
+            cnd.where(ProductBrand.TABLE_PRODUCT_BRAND + "." + ProductBrand.SYSTEM_STATUS, true);
+            cnd.and(ProductBrand.TABLE_PRODUCT_BRAND + "." + ProductBrand.PRODUCT_BRAND_ID, product_brand_id);
+
+            productBrand = productBrandDao.find(cnd);
 
             CacheUtil.put(PRODUCT_BRAND_ITEM_CACHE, product_brand_id, productBrand);
         }

@@ -8,6 +8,8 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.api.xietong.model.XietongClazz;
 import com.nowui.chuangshi.api.xietong.model.XietongStudent;
 import com.nowui.chuangshi.api.xietong.service.XietongStudentService;
@@ -15,15 +17,11 @@ import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
-import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.AesUtil;
 
 @ControllerKey("/mobile/xietong/student")
 public class XietongStudentController extends Controller {
-    
-    private static final UserService userService = new UserService();
 
     @ActionKey("/mobile/xietong/student/list")
     public void list() {
@@ -84,13 +82,13 @@ public class XietongStudentController extends Controller {
         User userModel = getModel(User.class);
         String request_app_id = getRequest_app_id();
         
-        User user = userService.findByApp_idAndUser_typeAndUser_accountAndUser_password(request_app_id, UserType.STUDENT.getKey(), userModel.getUser_account(), userModel.getUser_password());
+        User user = UserService.instance.userAccountFind(request_app_id, UserType.STUDENT.getKey(), userModel.getUser_account(), userModel.getUser_password());
 
         if (user == null) {
             throw new RuntimeException("帐号或者密码不正确");
         }
         
-        XietongStudent student = XietongStudentService.instance.find(user.getObject_Id());
+        XietongStudent student = XietongStudentService.instance.find(user.getObject_id());
         
         Map<String, Object> result = new HashMap<String, Object>();
         try {

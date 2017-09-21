@@ -7,9 +7,9 @@ import java.util.List;
 import com.jfinal.kit.Kv;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.SqlPara;
+import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
-import com.nowui.chuangshi.model.User;
 
 public class MemberPurchaseOrderDao extends Dao {
 

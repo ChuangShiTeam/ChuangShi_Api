@@ -9,21 +9,22 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.file.model.File;
+import com.nowui.chuangshi.api.file.service.FileService;
+import com.nowui.chuangshi.api.member.model.Member;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Express;
-import com.nowui.chuangshi.model.File;
-import com.nowui.chuangshi.model.Member;
 import com.nowui.chuangshi.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.model.MemberDeliveryOrderProductSku;
 import com.nowui.chuangshi.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.ProductSku;
-import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.model.Warehouse;
 import com.nowui.chuangshi.service.ExpressService;
-import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderExpressService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderProductSkuService;
 import com.nowui.chuangshi.service.MemberDeliveryOrderService;
@@ -32,7 +33,6 @@ import com.nowui.chuangshi.service.MemberPurchaseOrderService;
 import com.nowui.chuangshi.service.ProductService;
 import com.nowui.chuangshi.service.ProductSkuService;
 import com.nowui.chuangshi.service.StockService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.MemberDeliveryOrderFlow;
 import com.nowui.chuangshi.type.MemberPurchaseOrderFlow;
 import com.nowui.chuangshi.util.Util;
@@ -43,10 +43,8 @@ public class MemberDeliveryOrderController extends Controller {
     private final MemberDeliveryOrderService memberDeliveryOrderService = new MemberDeliveryOrderService();
     private final MemberDeliveryOrderProductSkuService memberDeliveryOrderProductSkuService = new MemberDeliveryOrderProductSkuService();
     private final MemberDeliveryOrderExpressService memberDeliveryOrderExpressService = new MemberDeliveryOrderExpressService();
-    private final UserService userService = new UserService();
     private final ProductService productService = new ProductService();
     private final ProductSkuService productSkuService = new ProductSkuService();
-    private final FileService fileService = new FileService();
     private final StockService stockService = new StockService();
     private final MemberPurchaseOrderService memberPurchaseOrderService = new MemberPurchaseOrderService();
     private final MemberPurchaseOrderProductSkuService memberPurchaseOrderProductSkuService = new MemberPurchaseOrderProductSkuService();
@@ -67,10 +65,10 @@ public class MemberDeliveryOrderController extends Controller {
                 // 获取进货单用户
                 MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService
                         .findByMember_purchase_order_id(result.getMember_purchase_order_id());
-                User user = userService.findByUser_id(memberPurchaseOrder.getUser_id());
+                User user = UserService.instance.find(memberPurchaseOrder.getUser_id());
                 if (user != null) {
                     result.put(User.USER_NAME, user.getUser_name());
-                    File file = fileService.findByFile_id(user.getUser_avatar());
+                    File file = FileService.instance.find(user.getUser_avatar());
                     result.put(User.USER_AVATAR, file.getFile_original_path());
                 }
             }
@@ -84,7 +82,7 @@ public class MemberDeliveryOrderController extends Controller {
                 Product product = productService.findByProduct_id(productSku.getProduct_id());
                 memberDeliveryOrderProductSku.put(Product.PRODUCT_NAME, product.getProduct_name()); // 商品名称
                 memberDeliveryOrderProductSku.put(Product.PRODUCT_IMAGE,
-                        fileService.getFile_path(product.getProduct_image()));
+                        FileService.instance.getFile_path(product.getProduct_image()));
                 memberDeliveryOrderProductSku.keep(MemberDeliveryOrderProductSku.PRODUCT_SKU_ID,
                         MemberDeliveryOrderProductSku.PRODUCT_SKU_AMOUNT,
                         MemberDeliveryOrderProductSku.PRODUCT_SKU_QUANTITY, Product.PRODUCT_NAME,
@@ -130,7 +128,7 @@ public class MemberDeliveryOrderController extends Controller {
             Product product = productService.findByProduct_id(productSku.getProduct_id());
             memberPurchaseOrderProductSku.put(Product.PRODUCT_NAME, product.getProduct_name());
             memberPurchaseOrderProductSku.put(Product.PRODUCT_IMAGE,
-                    fileService.getFile_path(product.getProduct_image()));
+                    FileService.instance.getFile_path(product.getProduct_image()));
             memberPurchaseOrderProductSku.keep(MemberPurchaseOrderProductSku.PRODUCT_SKU_ID,
                     MemberPurchaseOrderProductSku.PRODUCT_SKU_AMOUNT,
                     MemberPurchaseOrderProductSku.PRODUCT_SKU_QUANTITY, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE);
@@ -284,7 +282,7 @@ public class MemberDeliveryOrderController extends Controller {
         }
         // 仓库代发货
         if (model.getMember_delivery_order_is_warehouse_deliver()) {
-            
+
             BigDecimal member_delivery_order_amount = model.getMember_delivery_order_amount();
             if (member_delivery_order_amount ==  null) {
                 member_delivery_order_amount = new BigDecimal(0);
@@ -297,7 +295,7 @@ public class MemberDeliveryOrderController extends Controller {
                     member_delivery_order_amount, true, memberDeliveryOrderProductSkuList, request_user_id);
             renderSuccessJson(result);
         } else { // TODO 自己发货
-            
+
         }
     }
 
@@ -488,7 +486,7 @@ public class MemberDeliveryOrderController extends Controller {
                         model.getMember_delivery_order_receiver_name(), getM(), getN());
 
         for (MemberDeliveryOrder result : resultList) {
-            User user = userService.findByUser_id(result.getUser_id());
+            User user = UserService.instance.find(result.getUser_id());
             result.put(User.USER_NAME, user.getUser_name());
             result.put(User.USER_MOBILE, user.getUser_mobile());
 
@@ -497,7 +495,7 @@ public class MemberDeliveryOrderController extends Controller {
             if (!ValidateUtil.isNullOrEmpty(result.getMember_purchase_order_id())) {
                 MemberPurchaseOrder memberPurchaseOrder = memberPurchaseOrderService
                         .findByMember_purchase_order_id(result.getMember_purchase_order_id());
-                User orderUser = userService.findByUser_id(memberPurchaseOrder.getUser_id());
+                User orderUser = UserService.instance.find(memberPurchaseOrder.getUser_id());
                 result.put("order_user_name", orderUser.getUser_name());
                 result.put("order_user_mobile", orderUser.getUser_mobile());
             }

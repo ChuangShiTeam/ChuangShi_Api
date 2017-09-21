@@ -100,8 +100,7 @@ public class AdvertisementService extends Service {
         return success;
     }
 
-    public Boolean delete(String advertisement_id, String system_update_user_id, Integer system_version) {    
-
+    public Boolean delete(String advertisement_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = new Cnd();        
         cnd.where(Advertisement.SYSTEM_STATUS, true);
         cnd.and(Advertisement.ADVERTISEMENT_ID, advertisement_id);

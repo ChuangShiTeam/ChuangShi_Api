@@ -328,7 +328,7 @@ public class MemberService extends Service {
             calendar.add(Calendar.YEAR, 1);
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(com.nowui.chuangshi.model.User.USER_ID, member.getUser_id());
+            jsonObject.put(User.USER_ID, member.getUser_id());
             jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
 
             return AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key);

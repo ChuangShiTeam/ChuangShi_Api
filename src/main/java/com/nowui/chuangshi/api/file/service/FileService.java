@@ -1,13 +1,23 @@
 package com.nowui.chuangshi.api.file.service;
 
+import com.jfinal.kit.FileKit;
+import com.jfinal.kit.PathKit;
+import com.jfinal.upload.UploadFile;
 import com.nowui.chuangshi.api.file.dao.FileDao;
 import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.constant.Constant;
+import com.nowui.chuangshi.type.FileType;
 import com.nowui.chuangshi.util.CacheUtil;
+import com.nowui.chuangshi.util.FileUtil;
+import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FileService extends Service {
 
@@ -25,11 +35,36 @@ public class FileService extends Service {
         return count;
     }
 
+    public Integer fileTypeCount(String app_id, String file_type) {
+        Cnd cnd = new Cnd();
+        cnd.where(File.SYSTEM_STATUS, true);
+        cnd.and(File.APP_ID, app_id);
+        cnd.andAllowEmpty(File.FILE_TYPE, file_type);
+
+        Integer count = fileDao.count(cnd);
+        return count;
+    }
+
     public List<File> adminList(String app_id, String file_name, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(File.SYSTEM_STATUS, true);
         cnd.and(File.APP_ID, app_id);
         cnd.andAllowEmpty(File.FILE_NAME, file_name);
+        cnd.paginate(m, n);
+
+        List<File> fileList = fileDao.primaryKeyList(cnd);
+        for (File file : fileList) {
+            file.put(find(file.getFile_id()));
+        }
+        return fileList;
+    }
+
+    public List<File> fileTypeList(String app_id, String file_type, Integer m, Integer n) {
+        Cnd cnd = new Cnd();
+        cnd.where(File.SYSTEM_STATUS, true);
+        cnd.and(File.APP_ID, app_id);
+        cnd.andAllowEmpty(File.FILE_TYPE, file_type);
+        cnd.desc(File.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
         List<File> fileList = fileDao.primaryKeyList(cnd);
@@ -163,6 +198,67 @@ public class FileService extends Service {
         }
 
         return file.getFile_original_path();
+    }
+
+    public List<Map<String, Object>> upload(List<UploadFile> uploadFileList, String app_id, String system_create_user_id) {
+        String path = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + app_id + "/" + system_create_user_id;
+        String thumbnailPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + app_id + "/" + system_create_user_id + "/" + Constant.THUMBNAIL;
+        String originalPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + app_id + "/" + system_create_user_id + "/" + Constant.ORIGINAL;
+
+        FileUtil.createPath(path);
+        FileUtil.createPath(thumbnailPath);
+        FileUtil.createPath(originalPath);
+
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+
+        for (UploadFile uploadFile : uploadFileList) {
+            String original_file_name = uploadFile.getFileName();
+            String file_suffix = original_file_name.substring(original_file_name.lastIndexOf(".") + 1);
+            String file_name = Util.getRandomUUID() + "." + file_suffix;
+
+            path = path + "/" + file_name;
+            thumbnailPath = thumbnailPath + "/" + file_name;
+            originalPath = originalPath + "/" + file_name;
+
+            String file_type = FileType.IMAGE.getKey();
+
+            if (file_suffix.equals("png") || file_suffix.equals("jpg") || file_suffix.equals("jpeg")) {
+                FileUtil.resizeImage(uploadFile.getFile(), file_suffix, thumbnailPath, 100);
+                FileUtil.resizeImage(uploadFile.getFile(), file_suffix, path, 360);
+                FileUtil.resizeImage(uploadFile.getFile(), file_suffix, originalPath, 0);
+            } else {
+                FileUtil.copy(uploadFile.getFile(), new java.io.File(path));
+
+                thumbnailPath = path;
+                originalPath = path;
+
+                file_type = FileType.OTHER.getKey();
+            }
+
+            FileKit.delete(uploadFile.getFile());
+
+            String file_id = Util.getRandomUUID();
+            Integer file_size = (int) uploadFile.getFile().length();
+            String file_path = path.replace(PathKit.getWebRootPath(), "");
+            String file_thumbnail_path = thumbnailPath.replace(PathKit.getWebRootPath(), "");
+            String file_original_path = originalPath.replace(PathKit.getWebRootPath(), "");
+            String file_image = "";
+            Boolean file_is_external = false;
+
+            Boolean result = save(file_id, app_id, file_type, original_file_name, file_suffix, file_size, file_path, file_thumbnail_path, file_original_path, file_image, file_is_external, system_create_user_id);
+
+            if (!result) {
+                throw new RuntimeException("上传不成功");
+            }
+
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put(File.FILE_ID, file_id);
+            map.put(File.FILE_NAME, original_file_name);
+            map.put(File.FILE_PATH, file_path);
+            list.add(map);
+        }
+
+        return list;
     }
 
 }

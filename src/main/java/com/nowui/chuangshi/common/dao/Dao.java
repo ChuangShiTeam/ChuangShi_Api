@@ -155,6 +155,20 @@ public class Dao {
         return Db.update(sql) != 0;
     }
 
+    public Boolean delete(String system_update_user_id, Cnd cnd) {
+        this.model.put(Constant.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+        this.model.put(Constant.SYSTEM_UPDATE_TIME, new Date());
+        this.model.put(Constant.SYSTEM_STATUS, false);
+
+        this.model.setCriteria(cnd.getCriteria());
+
+        String sql = model.buildUpdateSql();
+
+        System.out.println(sql);
+
+        return Db.update(sql) != 0;
+    }
+
     public Boolean delete(String system_update_user_id, Integer system_version, Cnd cnd) {
         this.model.put(Constant.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         this.model.put(Constant.SYSTEM_UPDATE_TIME, new Date());

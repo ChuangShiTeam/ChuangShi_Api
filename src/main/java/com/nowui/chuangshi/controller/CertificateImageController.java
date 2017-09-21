@@ -7,13 +7,14 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.file.model.File;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Certificate;
 import com.nowui.chuangshi.model.CertificateImage;
-import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.CertificateImageService;
 import com.nowui.chuangshi.service.CertificateService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.CertificateImageType;
 import com.nowui.chuangshi.util.DateUtil;
 import com.nowui.chuangshi.util.Util;
@@ -22,7 +23,6 @@ public class CertificateImageController extends Controller {
 
     private final CertificateService certificateService = new CertificateService();
     private final CertificateImageService certificateImageService = new CertificateImageService();
-    private final UserService userService = new UserService();
 
     @ActionKey(Url.CERTIFICATE_IMAGE_LIST)
     public void list() {
@@ -73,13 +73,13 @@ public class CertificateImageController extends Controller {
             }
         }
 
-        User user = userService.findByUser_id(request_user_id);
+        User user = UserService.instance.find(request_user_id);
         Map<String, Object> retMap = certificateImageService.saveWXCertificateFile(app_id, request_user_id,
                 model.getCertificate_type(), certificate.getCertificate_number(), user.getUser_name(),
                 model.getCertificate_people_name(), model.getCertificate_people_id_card(),
                 model.getCertificate_people_mobile(), model.getCertificate_people_wx(),
                 model.getCertificate_start_date(), model.getCertificate_end_date());
-        String file_id = String.valueOf(retMap.get(com.nowui.chuangshi.model.File.FILE_ID));
+        String file_id = String.valueOf(retMap.get(File.FILE_ID));
 
         Boolean result = certificateImageService.save(certificate.getCertificate_id(), file_id,
                 model.getCertificate_type(), "", "", model.getCertificate_people_name(),
@@ -115,7 +115,7 @@ public class CertificateImageController extends Controller {
             throw new RuntimeException("授权未支付！");
         }
 
-        User user = userService.findByUser_id(request_user_id);
+        User user = UserService.instance.find(request_user_id);
         Map<String, Object> retMap = certificateImageService.saveOtherCertificateFile(app_id, request_user_id,
                 model.getCertificate_type(), certificate.getCertificate_number(), user.getUser_name(),
                 model.getCertificate_channel_name(), model.getCertificate_channel_url(),
@@ -123,7 +123,7 @@ public class CertificateImageController extends Controller {
                 model.getCertificate_people_mobile(), model.getCertificate_people_wx(),
                 model.getCertificate_shop_name(), model.getCertificate_shop_url(), model.getCertificate_start_date(),
                 model.getCertificate_end_date());
-        String file_id = String.valueOf(retMap.get(com.nowui.chuangshi.model.File.FILE_ID));
+        String file_id = String.valueOf(retMap.get(File.FILE_ID));
 
         Boolean result = certificateImageService.save(certificate.getCertificate_id(), file_id,
                 model.getCertificate_type(), model.getCertificate_channel_name(), model.getCertificate_channel_url(),
@@ -189,7 +189,7 @@ public class CertificateImageController extends Controller {
         // 判断是否支付
         // TODO
         Certificate certificate = certificateService.findByUser_id(user_id);
-        User user = userService.findByUser_id(user_id);
+        User user = UserService.instance.find(user_id);
         String certificate_number = "";
         String certificate_id = "";
         if (certificate == null) {
@@ -208,7 +208,7 @@ public class CertificateImageController extends Controller {
                 model.getCertificate_people_name(), model.getCertificate_people_id_card(),
                 model.getCertificate_people_mobile(), model.getCertificate_people_wx(),
                 model.getCertificate_start_date(), model.getCertificate_end_date());
-        String file_id = String.valueOf(retMap.get(com.nowui.chuangshi.model.File.FILE_ID));
+        String file_id = String.valueOf(retMap.get(File.FILE_ID));
 
         Boolean result = certificateImageService.save(certificate_id, file_id, model.getCertificate_type(), "", "",
                 model.getCertificate_people_name(), model.getCertificate_people_id_card(),
@@ -240,7 +240,7 @@ public class CertificateImageController extends Controller {
         // 判断是否支付
         // TODO
         Certificate certificate = certificateService.findByUser_id(user_id);
-        User user = userService.findByUser_id(user_id);
+        User user = UserService.instance.find(user_id);
         String certificate_number = "";
         String certificate_id = "";
         if (certificate == null) {
@@ -261,7 +261,7 @@ public class CertificateImageController extends Controller {
                 model.getCertificate_people_mobile(), model.getCertificate_people_wx(),
                 model.getCertificate_shop_name(), model.getCertificate_shop_url(), model.getCertificate_start_date(),
                 model.getCertificate_end_date());
-        String file_id = String.valueOf(retMap.get(com.nowui.chuangshi.model.File.FILE_ID));
+        String file_id = String.valueOf(retMap.get(File.FILE_ID));
 
         Boolean result = certificateImageService.save(certificate_id, file_id, model.getCertificate_type(),
                 model.getCertificate_channel_name(), model.getCertificate_channel_url(),

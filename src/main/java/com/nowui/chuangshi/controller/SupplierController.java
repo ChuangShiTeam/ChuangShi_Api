@@ -10,18 +10,18 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.file.service.FileService;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.Product;
 import com.nowui.chuangshi.model.Supplier;
 import com.nowui.chuangshi.model.SupplierProduct;
-import com.nowui.chuangshi.model.User;
-import com.nowui.chuangshi.service.FileService;
 import com.nowui.chuangshi.service.ProductService;
 import com.nowui.chuangshi.service.SupplierProductService;
 import com.nowui.chuangshi.service.SupplierService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.AesUtil;
 import com.nowui.chuangshi.util.Util;
@@ -30,9 +30,7 @@ import com.nowui.chuangshi.util.ValidateUtil;
 public class SupplierController extends Controller {
 
     private final SupplierService supplierService = new SupplierService();
-    private final UserService userService = new UserService();
     private final ProductService productService = new ProductService();
-    private final FileService fileService = new FileService();
     private final SupplierProductService supplierProductService = new SupplierProductService();
 
     @ActionKey(Url.SUPPLIER_LOGIN)
@@ -43,8 +41,7 @@ public class SupplierController extends Controller {
         User model = getModel(User.class);
         String request_app_id = getRequest_app_id();
 
-        User user = userService.findByApp_idAndUser_typeAndUser_accountAndUser_password(request_app_id,
-                UserType.SUPPLIER.getKey(), model.getUser_account(), model.getUser_password());
+        User user = UserService.instance.userAccountFind(request_app_id, UserType.SUPPLIER.getKey(), model.getUser_account(), model.getUser_password());
 
         if (user == null) {
             throw new RuntimeException("帐号或者密码不正确");
@@ -182,7 +179,7 @@ public class SupplierController extends Controller {
         List<Supplier> resultList = supplierService.listByApp_idAndLimit(request_app_id, getM(), getN());
 
         for (Supplier result : resultList) {
-            User user = userService.findByUser_id(result.getUser_id());
+            User user = UserService.instance.find(result.getUser_id());
             result.put(User.USER_NAME, user.getUser_name());
             result.put(User.USER_ACCOUNT, user.getUser_account());
             result.keep(Supplier.SUPPLIER_ID, Supplier.SUPPLIER_STATUS, User.USER_NAME, User.USER_ACCOUNT,
@@ -211,7 +208,7 @@ public class SupplierController extends Controller {
 
             authenticateApp_id(supplier.getApp_id());
 
-            User user = userService.findByUser_id(supplier.getUser_id());
+            User user = UserService.instance.find(supplier.getUser_id());
             user_name = user.getUser_name();
             user_account = user.getUser_account();
             productList = productService.listByApp_id(supplier.getApp_id());
@@ -227,14 +224,14 @@ public class SupplierController extends Controller {
             }
 
             for (Product product : productList) {
-                String file_path = fileService.getFile_path(product.getProduct_image());
+                String file_path = FileService.instance.getFile_path(product.getProduct_image());
                 product.put(Product.PRODUCT_IMAGE, file_path);
                 product.keep(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, "product_isCheck");
             }
         } else {
             productList = productService.listByApp_id(app_id);
             for (Product product : productList) {
-                String file_path = fileService.getFile_path(product.getProduct_image());
+                String file_path = FileService.instance.getFile_path(product.getProduct_image());
                 product.put(Product.PRODUCT_IMAGE, file_path);
                 product.keep(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE);
             }
@@ -270,7 +267,7 @@ public class SupplierController extends Controller {
         String user_id = Util.getRandomUUID();
         String supplier_id = Util.getRandomUUID();
 
-        userService.saveByUser_idAndApp_idAndObject_idAndUser_typeAndUser_nameAndUser_accountAndUser_password(user_id,
+        UserService.instance.userAccountSave(user_id,
                 app_id, supplier_id, UserType.SUPPLIER.getKey(), user_name, user_account, user_password,
                 request_user_id);
         Boolean result = supplierService.save(supplier_id, app_id, user_id, model.getSupplier_status(),
@@ -324,12 +321,12 @@ public class SupplierController extends Controller {
 
         authenticateApp_id(supplier.getApp_id());
 
-        User user = userService.findByUser_id(supplier.getUser_id());
+        User user = UserService.instance.find(supplier.getUser_id());
         if (user == null) {
             throw new RuntimeException("没找到该用户");
         }
-        userService.updateByUser_nameAndUser_accountAndUser_password(supplier.getUser_id(), user_name, user_account,
-                user_password, request_user_id);
+        UserService.instance.userNameUpdate(supplier.getUser_id(), user_name, request_user_id);
+        UserService.instance.userPasswordUpdate(supplier.getUser_id(), user_password, request_user_id);
 
         Boolean result = supplierService.updateValidateSystem_version(model.getSupplier_id(), supplier.getUser_id(),
                 model.getSupplier_status(), request_user_id, model.getSystem_version());

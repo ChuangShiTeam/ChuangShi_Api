@@ -5,18 +5,17 @@ import java.util.Date;
 import java.util.List;
 
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
 import com.nowui.chuangshi.model.MemberAddress;
-import com.nowui.chuangshi.model.User;
 import com.nowui.chuangshi.service.MemberAddressService;
-import com.nowui.chuangshi.service.UserService;
 import com.nowui.chuangshi.util.Util;
 
 public class MemberAddressController extends Controller {
 
     private final MemberAddressService memberAddressService = new MemberAddressService();
-    private final UserService userService = new UserService();
 
     @ActionKey(Url.MEMBER_ADDRESS_LIST)
     public void list() {
@@ -26,9 +25,9 @@ public class MemberAddressController extends Controller {
 
         String request_user_id = getRequest_user_id();
 
-        User user = userService.findByUser_id(request_user_id);
+        User user = UserService.instance.find(request_user_id);
 
-        List<MemberAddress> resultList = memberAddressService.listByMember_id(user.getObject_Id());
+        List<MemberAddress> resultList = memberAddressService.listByMember_id(user.getObject_id());
 
         for (MemberAddress result : resultList) {
             result.keep(MemberAddress.MEMBER_ADDRESS_ID, MemberAddress.MEMBER_ADDRESS_NAME,
@@ -77,11 +76,11 @@ public class MemberAddressController extends Controller {
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
 
-        User user = userService.findByUser_id(request_user_id);
+        User user = UserService.instance.find(request_user_id);
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<MemberAddress> memberAddressList = memberAddressService.listByMember_id(user.getObject_Id());
+        List<MemberAddress> memberAddressList = memberAddressService.listByMember_id(user.getObject_id());
         if (memberAddressList != null && memberAddressList.size() > 0) {
             if (model.getAddress_is_default()) {
                 for (MemberAddress memberAddress : memberAddressList) {
@@ -90,13 +89,13 @@ public class MemberAddressController extends Controller {
                     memberAddress.setSystem_update_user_id(request_user_id);
                     memberAddress.setSystem_version(memberAddress.getSystem_version() + 1);
                 }
-                memberAddressService.batchUpdate(memberAddressList, user.getObject_Id());
+                memberAddressService.batchUpdate(memberAddressList, user.getObject_id());
             }
         } else {
             model.setAddress_is_default(true);
         }
 
-        Boolean result = memberAddressService.save(member_address_id, request_app_id, user.getObject_Id(),
+        Boolean result = memberAddressService.save(member_address_id, request_app_id, user.getObject_id(),
                 request_user_id, model.getMember_address_name(), "", model.getMember_address_mobile(), "",
                 model.getMember_address_province(), model.getMember_address_city(), model.getMember_address_area(),
                 model.getMember_address_address(), model.getAddress_is_default(), request_user_id);
@@ -188,7 +187,7 @@ public class MemberAddressController extends Controller {
                 request_app_id, model.getMember_address_name(), getM(), getN());
 
         for (MemberAddress result : resultList) {
-            User user = userService.findByUser_id(result.getUser_id());
+            User user = UserService.instance.find(result.getUser_id());
             if (user != null) {
                 result.put(User.USER_NAME, user.getUser_name());
             }
@@ -215,7 +214,7 @@ public class MemberAddressController extends Controller {
 
         MemberAddress member_address = memberAddressService.findByMember_address_id(model.getMember_address_id());
 
-        User user = userService.findByUser_id(member_address.getUser_id());
+        User user = UserService.instance.find(member_address.getUser_id());
         if (user != null) {
             member_address.put(User.USER_NAME, user.getUser_name());
         }

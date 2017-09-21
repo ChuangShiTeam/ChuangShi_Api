@@ -2,6 +2,7 @@ package com.nowui.chuangshi.api.product.admin;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.product.model.ProductBrand;
 import com.nowui.chuangshi.api.product.service.ProductBrandService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -39,7 +40,7 @@ public class ProductBrandController extends Controller {
 
         ProductBrand result = ProductBrandService.instance.find(model.getProduct_brand_id());
 
-        validateResponse(ProductBrand.PRODUCT_BRAND_NAME, ProductBrand.PRODUCT_BRAND_IMAGE, ProductBrand.PRODUCT_BRAND_CONTENT, ProductBrand.SYSTEM_VERSION);
+        validateResponse(ProductBrand.PRODUCT_BRAND_NAME, File.FILE_ID, File.FILE_PATH, ProductBrand.PRODUCT_BRAND_CONTENT, ProductBrand.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
