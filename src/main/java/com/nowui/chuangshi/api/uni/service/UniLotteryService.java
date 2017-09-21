@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.uni.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,6 +10,7 @@ import com.nowui.chuangshi.api.uni.model.UniLottery;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
+import com.nowui.chuangshi.util.DateUtil;
 import com.nowui.chuangshi.util.ProbabilityUtil;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -185,29 +187,25 @@ public class UniLotteryService extends Service {
             throw new RuntimeException("已抽签三次，抽签次数已经用完");
         }
         synchronized (this) {
-            System.out.println("request_user_id: " + request_user_id + "开始抽签");
-            long startTime = System.currentTimeMillis();
-            System.out.println("startTime: " + startTime);
             List<String> numberList = numberList(request_app_id, bean.getLottery_user_sex());
             //计算抽签概率
             if (numberList.size() == 0) {
                 throw new RuntimeException("号码已被抽完了");
             }
-            if (numberList.size() > 200) { //前800名抽签概率为80%
+            
+            if (("21").equals(DateUtil.getDay()) || "22".equals(DateUtil.getDay())) {//21、22号抽奖概率80%
                 if (ProbabilityUtil.random(0.8)) {
-                    String lottery_number = getLottery_number(numberList, bean, request_user_id, request_app_id);
-                    System.out.println("前800名抽签成功, 花费时间：" + (System.currentTimeMillis() - startTime) + "ms");
-                    return lottery_number;
+                    return getLottery_number(numberList, bean, request_user_id, request_app_id);
                 }
-            } else {
-                if (ProbabilityUtil.random(0.5)) { //后200名抽签概率为50%
-                    String lottery_number = getLottery_number(numberList, bean, request_user_id, request_app_id);
-                    System.out.println("后200名抽签成功, 花费时间：" + (System.currentTimeMillis() - startTime) + "ms");
-                    return lottery_number;
-                } 
-            }
-            System.out.println("未抽中号码， 抽签结束, 花费时间：" + (System.currentTimeMillis() - startTime) + "ms");
+            } else if (("23").equals(DateUtil.getDay()) || "24".equals(DateUtil.getDay()) || "25".equals(DateUtil.getDay())) { //23、24、25号抽奖概率60%
+                if (ProbabilityUtil.random(0.6)) {
+                    return getLottery_number(numberList, bean, request_user_id, request_app_id);
+                }
+            } else if (("26").equals(DateUtil.getDay()) || "27".equals(DateUtil.getDay())) { //26、27号抽奖概率100%
+                return getLottery_number(numberList, bean, request_user_id, request_app_id);
+            } 
         }
+        System.out.println(bean.getLottery_user_mobile() + "未抽中号码");
         //未抽中，则更新用户抽签次数，抽签次数加一
         bean.setLottery_time(bean.getLottery_time() + 1);
         bean.setLottery_status(true);
@@ -222,8 +220,8 @@ public class UniLotteryService extends Service {
         bean.setLottery_status(true);
         boolean result = this.update(bean, request_user_id, request_user_id, bean.getSystem_version());
         if (result) {
-            numberList.remove(0);
-            System.out.println(numberList.toString());
+            String remove_number = numberList.remove(0);
+            System.out.println(bean.getLottery_user_mobile() + "抽中号码：" + remove_number + "剩余号码" + numberList.toString());
             if (bean.getLottery_user_sex()) {
                 CacheUtil.put(UNI_LOTTERY_MAN_UNUSED_NUMBER_LIST_CACHE, request_app_id, numberList);
             } else {
