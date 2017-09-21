@@ -1,4 +1,4 @@
-package com.nowui.chuangshi.api.jiangling.system;
+package com.nowui.chuangshi.api.uni.system;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
@@ -7,34 +7,34 @@ import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.SystemInterceptor;
 
 @Before(SystemInterceptor.class)
-@ControllerKey("/system/jiangling/lottery")
-public class JianglingLotteryController extends Controller {
+@ControllerKey("/system/uni/lottery")
+public class UniLotteryController extends Controller {
 
-    @ActionKey("/system/jiangling/lottery/list")
+    @ActionKey("/system/uni/lottery/list")
     public void list() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/system/jiangling/lottery/find")
+    @ActionKey("/system/uni/lottery/find")
     public void find() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/system/jiangling/lottery/save")
+    @ActionKey("/system/uni/lottery/save")
     public void save() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/system/jiangling/lottery/update")
+    @ActionKey("/system/uni/lottery/update")
     public void update() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/system/jiangling/lottery/delete")
+    @ActionKey("/system/uni/lottery/delete")
     public void delete() {
 
         renderSuccessJson();

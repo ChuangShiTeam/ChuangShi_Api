@@ -1,4 +1,4 @@
-package com.nowui.chuangshi.api.jiangling.model;
+package com.nowui.chuangshi.api.uni.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
 import com.nowui.chuangshi.common.annotation.Entity;
@@ -10,10 +10,10 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.util.Date;
 
 @Entity
-public class JianglingPv extends Model<JianglingPv> {
+public class UniPv extends Model<UniPv> {
 
     @Table
-    public static final String TABLE_JIANGLING_PV = "table_jiangling_pv";
+    public static final String TABLE_UNI_PV = "table_uni_pv";
 
     @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
