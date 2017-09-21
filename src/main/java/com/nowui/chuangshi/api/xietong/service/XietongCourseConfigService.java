@@ -79,7 +79,7 @@ public class XietongCourseConfigService extends Service {
         Boolean success = xietongCourseConfigDao.update(xietong_course_config, system_update_user_id, system_version, cnd);
 
         if (success) {
-            CacheUtil.remove(XIETONG_COURSE_CONFIG_ITEM_CACHE, course_config_id);
+            CacheUtil.removeAll(XIETONG_COURSE_CONFIG_ITEM_CACHE);
         }
 
         return success;
@@ -94,7 +94,7 @@ public class XietongCourseConfigService extends Service {
         Boolean success = xietongCourseConfigDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
-            CacheUtil.remove(XIETONG_COURSE_CONFIG_ITEM_CACHE, course_config_id);
+            CacheUtil.removeAll(XIETONG_COURSE_CONFIG_ITEM_CACHE);
         }
 
         return success;
