@@ -182,8 +182,8 @@ public class JianglingLotteryService extends Service {
         if (!ValidateUtil.isNullOrEmpty(bean.getLottery_number())) {
             return bean.getLottery_number();
         }
-        if (bean.getLottery_status() && bean.getLottery_time() > 5) {
-            throw new RuntimeException("抽签次数已经用完");
+        if (bean.getLottery_status() && bean.getLottery_time() > 3) {
+            throw new RuntimeException("已抽签三次，抽签次数已经用完");
         }
         synchronized (this) {
             System.out.println("request_user_id: " + request_user_id + "开始抽签");
@@ -217,14 +217,13 @@ public class JianglingLotteryService extends Service {
     }
     
     public String getLottery_number(List<String> numberList, JianglingLottery bean, String request_user_id, String request_app_id) {
-        int index = new Random().nextInt(numberList.size());
-        String lottery_number = numberList.get(index); //随机获取一个未抽取的号码
+        String lottery_number = numberList.get(0); //随机获取一个未抽取的号码
         bean.setLottery_number(lottery_number);
         bean.setLottery_time(bean.getLottery_time() + 1);
         bean.setLottery_status(true);
         boolean result = this.update(bean, request_user_id, request_user_id, bean.getSystem_version());
         if (result) {
-            numberList.remove(index);
+            numberList.remove(0);
             System.out.println(numberList.toString());
             if (bean.getLottery_user_sex()) {
                 CacheUtil.put(JIANGLING_LOTTERY_MAN_UNUSED_NUMBER_LIST_CACHE, request_app_id, numberList);

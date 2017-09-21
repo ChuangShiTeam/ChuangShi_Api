@@ -29,17 +29,20 @@ public class JianglingLotteryController extends Controller {
         JianglingLottery model = getModel(JianglingLottery.class);
         
         JianglingLottery bean = JianglingLotteryService.instance.mobileFind(model.getLottery_user_mobile());
+        String user_id = null;
         if (bean != null) {
-            throw new RuntimeException("该手机号码已经注册过了");
-        } 
+            user_id = bean.getUser_id();
+        } else {
+            user_id = Util.getRandomUUID();
+            model.setUser_id(user_id);
+            model.setLottery_number("");
+            model.setLottery_time(0);
+            model.setLottery_status(false);
+            
+            JianglingLotteryService.instance.save(model, user_id);
+        }
         
-        String user_id = Util.getRandomUUID();
-        model.setUser_id(user_id);
-        model.setLottery_number("");
-        model.setLottery_time(0);
-        model.setLottery_status(false);
         
-        JianglingLotteryService.instance.save(model, user_id);
         renderSuccessJson(user_id);
     }
 
