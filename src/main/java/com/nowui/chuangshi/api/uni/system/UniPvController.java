@@ -1,4 +1,4 @@
-package com.nowui.chuangshi.api.jiangling.system;
+package com.nowui.chuangshi.api.uni.system;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
@@ -7,34 +7,34 @@ import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.SystemInterceptor;
 
 @Before(SystemInterceptor.class)
-@ControllerKey("/system/jiangling/pv")
-public class JianglingPvController extends Controller {
+@ControllerKey("/system/uni/pv")
+public class UniPvController extends Controller {
 
-    @ActionKey("/system/jiangling/pv/list")
+    @ActionKey("/system/uni/pv/list")
     public void list() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/system/jiangling/pv/find")
+    @ActionKey("/system/uni/pv/find")
     public void find() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/system/jiangling/pv/save")
+    @ActionKey("/system/uni/pv/save")
     public void save() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/system/jiangling/pv/update")
+    @ActionKey("/system/uni/pv/update")
     public void update() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/system/jiangling/pv/delete")
+    @ActionKey("/system/uni/pv/delete")
     public void delete() {
 
         renderSuccessJson();

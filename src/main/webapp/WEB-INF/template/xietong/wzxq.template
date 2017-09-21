@@ -81,7 +81,6 @@
 					#else
 					admin 
 					#end
-				点击数：1 
 				更新时间：#date(article.system_update_time, "yyyy-MM-dd")
 				<br>
 			</div>
