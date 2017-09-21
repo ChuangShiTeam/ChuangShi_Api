@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -382,27 +384,34 @@ public class XietongCourseService extends Service {
                         case "星期二第八节":
                             course_time = 28;
                             break;
+                        case "星期二第九节":
+                            course_time = 29;
+                            break;
                         case "星期四第七节":
                             course_time = 47;
                             break;
                         case "星期四第八节":
                             course_time = 48;
                             break;
+                        case "星期四第九节":
+                            course_time = 49;
+                            break;
                         case "星期五第六节":
                             course_time = 56;
                             break;
                     }
                     
+                    for (XietongClazz clazz : clazzList) {
+                        if (clazz_id.contains("," + clazz.getClazz_name() + ",")) {
+                            clazz_id = clazz_id.replace("," + clazz.getClazz_name() + ",", "," + clazz.getClazz_id() + ",");
+                        }
+                    }
+                    if (clazz_id.startsWith(",")) {
+                        clazz_id = clazz_id.substring(1, clazz_id.length());
+                    }
                     if (clazz_id.endsWith(",")) {
                         clazz_id = clazz_id.substring(0, clazz_id.length() - 1);
                     }
-                    
-                    for (XietongClazz clazz : clazzList) {
-                        if (clazz_id.contains(clazz.getClazz_name() + ",") || clazz_id.contains("," + clazz.getClazz_name())) {
-                            clazz_id = clazz_id.replace(clazz.getClazz_name(), clazz.getClazz_id());
-                        }
-                    }
-                    
                     clazz_id = clazz_id.replace(",", "\",\"");
                     clazz_id = "[\"" + clazz_id + "\"]";
 
@@ -417,7 +426,7 @@ public class XietongCourseService extends Service {
                         course.setCourse_apply_limit(Integer.valueOf(course_apply_limit));
                         course.setCourse_address(course_address);
                         course.setCourse_image("");
-                        course.setCourse_content(course_content);
+                        course.setCourse_content(course_content.replaceAll("'", "''"));
                         save(course, request_user_id);
                     }
                 }
@@ -489,11 +498,17 @@ public class XietongCourseService extends Service {
             case 28:
                 course_time = "星期二第八节";
                 break;
+            case 29:
+                course_time = "星期二第九节";
+                break;
             case 47:
                 course_time = "星期四第七节";
                 break;
             case 48:
                 course_time = "星期四第八节";
+                break;
+            case 49:
+                course_time = "星期四第九节";
                 break;
             case 56:
                 course_time = "星期五第六节";
