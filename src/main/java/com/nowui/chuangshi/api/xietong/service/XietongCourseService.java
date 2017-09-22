@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -195,6 +193,8 @@ public class XietongCourseService extends Service {
 
         if (success) {
             CacheUtil.remove(XIETONG_COURSE_ITEM_CACHE, course_id);
+            CacheUtil.removeAll(XIETONG_COURSE_ID_USER_LIST_CACHE);
+            CacheUtil.remove(XIETONG_COURSE_APPLY_LIMIT_CACHE, course_id);
         }
 
         return success;
@@ -210,6 +210,8 @@ public class XietongCourseService extends Service {
 
         if (success) {
             CacheUtil.remove(XIETONG_COURSE_ITEM_CACHE, course_id);
+            CacheUtil.removeAll(XIETONG_COURSE_ID_USER_LIST_CACHE);
+            CacheUtil.remove(XIETONG_COURSE_APPLY_LIMIT_CACHE, course_id);
         }
 
         return success;
@@ -269,8 +271,8 @@ public class XietongCourseService extends Service {
 
             String course_clazz = course.getClazz_id();
             for (Record record : gradeList) {
-                if (course_clazz.contains(record.getStr("grade_id"))) {
-                    course_clazz = course_clazz.replace(record.getStr("grade_id"), record.getStr("grade_name"));
+                if (course_clazz.contains(record.getStr("clazz_id"))) {
+                    course_clazz = course_clazz.replace(record.getStr("clazz_id"), record.getStr("clazz_name"));
                 }
             }
             course_clazz = course_clazz.replace("[\"", "").replace("\"]", "").replace("\",\"", ",");
@@ -746,7 +748,7 @@ public class XietongCourseService extends Service {
     
     public ExcelRender applyExport() {
         List<XietongCourseApply> courseApplyListOrderByCourse_id = XietongCourseApplyService.instance.courseIdAndCourseTimeAndStudentNumberOrderByList();
-        List<XietongCourseApply> courseApplyListOrderByGrade_idAndStudent_id = XietongCourseApplyService.instance.clazzNameAndStudentIdAndCourseTimeOrderByList();
+        List<XietongCourseApply> courseApplyListOrderByClazz_idAndStudent_id = XietongCourseApplyService.instance.clazzNameAndStudentIdAndCourseTimeOrderByList();
 
         List<XietongCourse> courseList = allList();
 
@@ -888,8 +890,8 @@ public class XietongCourseService extends Service {
         cell.setCellValue("上课地点");
         cell.setCellStyle(style);
 
-        for(int i = 0; i < courseApplyListOrderByGrade_idAndStudent_id.size(); i++) {
-            XietongCourseApply courseApply = courseApplyListOrderByGrade_idAndStudent_id.get(i);
+        for(int i = 0; i < courseApplyListOrderByClazz_idAndStudent_id.size(); i++) {
+            XietongCourseApply courseApply = courseApplyListOrderByClazz_idAndStudent_id.get(i);
 
             String teacher_name = courseApply.getStr(XietongCourse.COURSE_TEACHER);
 
