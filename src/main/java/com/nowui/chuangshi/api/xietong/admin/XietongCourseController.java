@@ -5,7 +5,6 @@ import java.util.List;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.upload.UploadFile;
-import com.nowui.chuangshi.api.article.model.Article;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.xietong.model.XietongClazz;
 import com.nowui.chuangshi.api.xietong.model.XietongCourse;
