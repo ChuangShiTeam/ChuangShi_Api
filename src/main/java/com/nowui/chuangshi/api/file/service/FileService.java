@@ -35,11 +35,12 @@ public class FileService extends Service {
         return count;
     }
 
-    public Integer fileTypeCount(String app_id, String file_type) {
+    public Integer fileTypeCount(String app_id, String file_type, Boolean file_is_external) {
         Cnd cnd = new Cnd();
         cnd.where(File.SYSTEM_STATUS, true);
         cnd.and(File.APP_ID, app_id);
         cnd.andAllowEmpty(File.FILE_TYPE, file_type);
+        cnd.andAllowEmpty(File.FILE_IS_EXTERNAL, file_is_external);
 
         Integer count = fileDao.count(cnd);
         return count;
@@ -59,11 +60,12 @@ public class FileService extends Service {
         return fileList;
     }
 
-    public List<File> fileTypeList(String app_id, String file_type, Integer m, Integer n) {
+    public List<File> fileTypeList(String app_id, String file_type, Boolean file_is_external, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(File.SYSTEM_STATUS, true);
         cnd.and(File.APP_ID, app_id);
         cnd.andAllowEmpty(File.FILE_TYPE, file_type);
+        cnd.andAllowEmpty(File.FILE_IS_EXTERNAL, file_is_external);
         cnd.desc(File.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 

@@ -25,8 +25,8 @@ public class FileController extends Controller {
 
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = FileService.instance.fileTypeCount(request_app_id, FileType.IMAGE.getKey());
-        List<File> resultList = FileService.instance.fileTypeList(request_app_id, FileType.IMAGE.getKey(), getM(), getN());
+        Integer resultCount = FileService.instance.fileTypeCount(request_app_id, FileType.IMAGE.getKey(), false);
+        List<File> resultList = FileService.instance.fileTypeList(request_app_id, FileType.IMAGE.getKey(), false, getM(), getN());
 
         validateResponse(File.FILE_ID, File.FILE_PATH, File.SYSTEM_VERSION);
 

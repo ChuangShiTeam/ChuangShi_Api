@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.api.product.service;
 
+import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.product.dao.ProductDao;
 import com.nowui.chuangshi.api.product.model.Product;
 import com.nowui.chuangshi.common.service.Service;
@@ -54,7 +55,14 @@ public class ProductService extends Service {
         Product product = CacheUtil.get(PRODUCT_ITEM_CACHE, product_id);
 
         if (product == null) {
-            product = productDao.find(product_id);
+            Cnd cnd = new Cnd();
+            cnd.select(File.TABLE_FILE + "." + File.FILE_ID);
+            cnd.select(File.TABLE_FILE + "." + File.FILE_PATH);
+            cnd.leftJoin(File.TABLE_FILE, File.FILE_ID, Product.TABLE_PRODUCT, Product.PRODUCT_IMAGE);
+            cnd.where(Product.TABLE_PRODUCT + "." + Product.SYSTEM_STATUS, true);
+            cnd.and(Product.TABLE_PRODUCT + "." + Product.PRODUCT_BRAND_ID, product_id);
+
+            product = productDao.find(cnd);
 
             CacheUtil.put(PRODUCT_ITEM_CACHE, product_id, product);
         }
