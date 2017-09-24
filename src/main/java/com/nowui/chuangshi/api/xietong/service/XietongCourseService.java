@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -747,10 +748,17 @@ public class XietongCourseService extends Service {
     }
     
     public ExcelRender applyExport() {
-        List<XietongCourseApply> courseApplyListOrderByCourse_id = XietongCourseApplyService.instance.courseIdAndCourseTimeAndStudentNumberOrderByList();
-        List<XietongCourseApply> courseApplyListOrderByClazz_idAndStudent_id = XietongCourseApplyService.instance.clazzNameAndStudentIdAndCourseTimeOrderByList();
+        List<XietongCourseApply> courseApplyListOrderByCourse_idList = XietongCourseApplyService.instance.courseIdAndCourseTimeAndStudentNumberOrderByList();
+        
+        List<XietongCourseApply> courseApplyListOrderByCourse_id = courseApplyListOrderByCourse_idList.stream().filter(xietongCourseApply -> xietongCourseApply.getSystem_create_time().after(DateUtil.getDateTime("2017-09-23 00:00:00"))).collect(Collectors.toList());
+        
+        List<XietongCourseApply> courseApplyListOrderByClazz_idAndStudent_idList = XietongCourseApplyService.instance.clazzNameAndStudentIdAndCourseTimeOrderByList();
 
-        List<XietongCourse> courseList = allList();
+        List<XietongCourseApply> courseApplyListOrderByClazz_idAndStudent_id = courseApplyListOrderByClazz_idAndStudent_idList.stream().filter(xietongCourseApply -> xietongCourseApply.getSystem_create_time().after(DateUtil.getDateTime("2017-09-23 00:00:00"))).collect(Collectors.toList());
+        
+        List<XietongCourse> allCourseList = allList();
+        
+        List<XietongCourse> courseList = allCourseList.stream().filter(xietongCourse -> xietongCourse.getSystem_create_time().after(DateUtil.getDateTime("2017-09-21 00:00:00"))).collect(Collectors.toList());
 
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFCellStyle style = wb.createCellStyle();
