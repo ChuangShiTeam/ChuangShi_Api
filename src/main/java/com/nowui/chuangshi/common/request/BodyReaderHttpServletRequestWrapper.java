@@ -7,7 +7,6 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.*;
-import java.nio.charset.Charset;
 
 public class BodyReaderHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
@@ -16,12 +15,12 @@ public class BodyReaderHttpServletRequestWrapper extends HttpServletRequestWrapp
     public BodyReaderHttpServletRequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
 
-        body = HttpKit.readData(request).getBytes(Charset.forName("UTF-8"));
+        body = HttpKit.readData(request).getBytes();
     }
 
     @Override
     public BufferedReader getReader() throws IOException {
-        return new BufferedReader(new InputStreamReader(getInputStream(), "UTF-8"));
+        return new BufferedReader(new InputStreamReader(getInputStream()));
     }
 
     @Override
