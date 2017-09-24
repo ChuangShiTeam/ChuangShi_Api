@@ -1,7 +1,5 @@
 package com.nowui.chuangshi.common.request;
 
-import com.jfinal.kit.HttpKit;
-
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -15,12 +13,12 @@ public class BodyReaderHttpServletRequestWrapper extends HttpServletRequestWrapp
     public BodyReaderHttpServletRequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
 
-        body = HttpKit.readData(request).getBytes();
+        body = readBytes(request.getInputStream());
     }
 
     @Override
     public BufferedReader getReader() throws IOException {
-        return new BufferedReader(new InputStreamReader(getInputStream()));
+        return new BufferedReader(new InputStreamReader(getInputStream(), "UTF-8"));
     }
 
     @Override
@@ -48,6 +46,22 @@ public class BodyReaderHttpServletRequestWrapper extends HttpServletRequestWrapp
                 return bais.read();
             }
         };
+    }
+
+    private static byte[] readBytes(InputStream in) throws IOException {
+        BufferedInputStream bufin = new BufferedInputStream(in);
+        int buffSize = 1024;
+        ByteArrayOutputStream out = new ByteArrayOutputStream(buffSize);
+
+        byte[] temp = new byte[buffSize];
+        int size = 0;
+        while ((size = bufin.read(temp)) != -1) {
+            out.write(temp, 0, size);
+        }
+        bufin.close();
+
+        byte[] content = out.toByteArray();
+        return content;
     }
 
 }
