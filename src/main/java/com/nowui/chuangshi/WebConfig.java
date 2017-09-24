@@ -354,7 +354,6 @@ public class WebConfig extends JFinalConfig {
     }
 
     private String getValue(Object object, Field field) throws IllegalAccessException {
-
         return (String) field.get(object);
     }
 
