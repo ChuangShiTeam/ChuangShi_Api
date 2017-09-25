@@ -60,7 +60,7 @@ public class ProductService extends Service {
             cnd.select(File.TABLE_FILE + "." + File.FILE_PATH);
             cnd.leftJoin(File.TABLE_FILE, File.FILE_ID, Product.TABLE_PRODUCT, Product.PRODUCT_IMAGE);
             cnd.where(Product.TABLE_PRODUCT + "." + Product.SYSTEM_STATUS, true);
-            cnd.and(Product.TABLE_PRODUCT + "." + Product.PRODUCT_BRAND_ID, product_id);
+            cnd.and(Product.TABLE_PRODUCT + "." + Product.PRODUCT_ID, product_id);
 
             product = productDao.find(cnd);
 
