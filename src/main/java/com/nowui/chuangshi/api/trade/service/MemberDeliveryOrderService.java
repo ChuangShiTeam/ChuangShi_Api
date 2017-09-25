@@ -17,6 +17,7 @@ public class MemberDeliveryOrderService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(MemberDeliveryOrder.SYSTEM_STATUS, true);
         cnd.and(MemberDeliveryOrder.USER_ID, user_id);
+        cnd.andNot(MemberDeliveryOrder.MEMBER_PURCHASE_ORDER_ID, "");
         cnd.and(MemberDeliveryOrder.MEMBER_DELIVERY_ORDER_IS_PAY, true);
 
         List<MemberDeliveryOrder> memberDeliveryOrderList = memberDeliveryOrderDao.list(cnd);
