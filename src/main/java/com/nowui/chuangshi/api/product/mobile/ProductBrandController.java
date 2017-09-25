@@ -47,10 +47,6 @@ public class ProductBrandController extends Controller {
         User user = UserService.instance.find(request_user_id);
         Member member = MemberService.instance.find(user.getObject_id());
 
-        System.out.println("++++++");
-        System.out.println(member.toJson());
-        System.out.println("++++++");
-
         List<Product> resultList = ProductService.instance.productBrandList(model.getProduct_brand_id());
 
         for (Product product : resultList) {
