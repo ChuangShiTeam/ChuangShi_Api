@@ -24,12 +24,17 @@
 </head>
 <body>
 <div id="root"></div>
+#for(advertisement : indexFloatList)
+#if(advertisement.advertisement_is_float)
 <div id="advertisement" class="hidden-sm hidden-xs">
     <div class="advertisement-content">
-        <a href="bmb.html"><b>公告</b>
-            <p>2015年小学一年级招生报名正在进行中！<span>点击进入</span></p></a>
+        <a href="#(advertisement.advertisement_link)"><b>公告</b>
+            <p>#(advertisement.advertisement_title)<span>点击进入</span></p></a>
     </div>
 </div>
+#end
+#end
+
 
 </body>
 <script type="text/babel">
@@ -37,7 +42,7 @@
         constructor(props) {
             super(props);
             this.state = {
-                category_id: '0',
+                category_id: '#(article_category_id)',
                 link: 'group'
             }
         }
@@ -70,117 +75,22 @@
             const Carousel = ReactBootstrap.Carousel;
             return (
                     <div>
-                        <Navbar className="hidden-md hidden-lg mobile-header">
-                            <Navbar.Header>
-                                <Navbar.Brand>
-                                    <a href="/index.html">佛山协同国际学校</a>
-                                </Navbar.Brand>
-                                <Navbar.Toggle/>
-                            </Navbar.Header>
-                            <Navbar.Collapse>
-                                <Nav>
-                        	 		#for(websiteMenu : websiteMenuList)
-                        	 		<NavDropdown eventKey={#(websiteMenu.website_menu_id)} title="#(websiteMenu.website_menu_name)" href="#(websiteMenu.website_menu_url)" id="basic-nav-dropdown">
-                        	 			#for(websiteMenuChildren : websiteMenu.children)
-                        	 			<MenuItem eventKey={#(websiteMenuChildren.website_menu_id)} href="#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</MenuItem>
-                                        #if(!for.last)
-                                        <MenuItem divider/>
-                                        #end
-										#end
-                                    </NavDropdown>
-			                        #end
-                                </Nav>
-                            </Navbar.Collapse>
-                        </Navbar>
-                        <div className="header hidden-sm hidden-xs">
-                            <div className="container">
-                                <a className="header-logo" href="/index.html"></a>
-                                <div className="header-extra">
-                                    {
-                                        getToken() == "" ?
-                                                <li className="login" onClick={this.handleLogin.bind(this)}>学生登录</li>
-                                                :
-                                                <ul>
-                                                    <li>欢迎您：{getClazzName()}，{getStudentName()}</li>
-                                                    <li className="logout" onClick={this.handleLogout.bind(this)}>退出
-                                                    </li>
-                                                </ul>
-                                    }
-                                </div>
-                                <div className="header-menu">
-                                    <ul>
-                                    	 #for(websiteMenu : websiteMenuList)
-										<li>
-											#if(for.first)
-											<a href="#(websiteMenu.website_menu_url)" className="on">#(websiteMenu.website_menu_name)</a>
-											#else
-											<a href="#(websiteMenu.website_menu_url)">#(websiteMenu.website_menu_name)</a>
-											#end
-											<ul>
-											    #for(websiteMenuChildren : websiteMenu.children)
-												<li><a href="#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</a></li>
-												#end
-											</ul>
-										</li>
-				                        #end
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <Carousel className="banner">
-                        	#for(advertisement : indexBannerList)
-								<Carousel.Item>
-									#if(advertisement.advertisement_link)
-									<a href="#(advertisement.advertisement_link)">
-										<img src="#(host + advertisement.advertisement_image_file.file_original_path)" style={{marginLeft: "auto", marginRight: "auto"}} alt="" />
-									</a>
-									#else
-										<img src="#(host + advertisement.advertisement_image_file.file_original_path)" style={{marginLeft: "auto", marginRight: "auto"}} alt="" />
-									#end
-	                            </Carousel.Item>
-									
-							#end
-                        </Carousel>
+                        #include("header.template")
+                        #include("banner.template")
                         <div className="index-main">
                             <div className="container">
                                 <div className="margin-top-15 hidden-sm hidden-xs"></div>
                                 <div className="row">
-                                    <div className="col-md-3 col-sm-6 col-xs-12 index-main-image">
-                                        <div className="index-main-image-mask">
-                                            <img width="100%" src="image/list_01.jpg" alt=""/>
-                                            <div className="index-main-image-mask-text">
-                                       			 小学部
-                                                <p>立即进入>></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-3 col-sm-6 col-xs-12 index-main-image">
-                                        <div className="index-main-image-mask">
-                                            <img width="100%" src="image/list_02.jpg" alt=""/>
-                                            <div className="index-main-image-mask-text">
-                                    			中学部
-                                                <p>立即进入>></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-3 col-sm-6 col-xs-12 index-main-image">
-                                        <div className="index-main-image-mask">
-                                            <img width="100%" src="image/list_03.jpg" alt=""/>
-                                            <div className="index-main-image-mask-text">
-                                               	 国际部
-                                                <p>立即进入>></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-3 col-sm-6 col-xs-12 index-main-image hidden-xs">
-                                        <img className="hidden-xs hidden-sm" width="100%" src="image/email.jpg" alt=""/>
-                                        <img className="visible-xs-block visible-sm-block" width="100%"
-                                             src="image/email2.jpg" alt=""/>
-                                        <div className="index-main-email">
-                                           	 校长信箱
-                                            <p>headmaster@mail.com</p>
-                                        </div>
-                                    </div>
+                                	#include("column.template")
+	                                <div className="col-md-3 col-sm-6 col-xs-12 index-main-image hidden-xs">
+									    <img className="hidden-xs hidden-sm" width="100%" src="image/email.jpg" alt=""/>
+									    <img className="visible-xs-block visible-sm-block" width="100%"
+									         src="image/email2.jpg" alt=""/>
+									    <div className="index-main-email">
+									       	 校长信箱
+									        <p>headmaster@mail.com</p>
+									    </div>
+									</div>
                                 </div>
                                 <div className="margin-top-15 hidden-sm hidden-xs"></div>
                                 <div className="row">
@@ -209,7 +119,7 @@
                                     <div className="col-md-5 col-sm-6 col-xs-12 row-clo index-article-right">
                                         <div className="index-article index-article-menu">
                                         #for(articleCategory : articleCategoryList)
-                                        	<li className={this.state.category_id == #(articleCategory.article_category_id) ? 'active' : ''} onClick={this.handleArticle.bind(this, #(articleCategory.article_category_id))}><a>#(articleCategory.article_category_name)</a></li>
+                                        	<li className={this.state.category_id == '#(articleCategory.article_category_id)' ? 'active' : ''} onClick={this.handleArticle.bind(this, '#(articleCategory.article_category_id)')}><a>#(articleCategory.article_category_name)</a></li>
                                         #end
                                         </div>
                                         <div className="index-article-list">
@@ -287,14 +197,14 @@
                                     <div className="index-main-photo-mask">
                                         <img width="100%" src="image/index_fast01.jpg" alt=""/>
                                         <div className="index-main-photo-mask-text-01">
-                                            教师风采
+                                           	 教师风采
                                             <p>全面综合的供教师的素质</p>
                                         </div>
                                     </div>
                                     <div className="index-main-photo-mask">
                                         <img width="100%" src="image/index_fast02.jpg" alt=""/>
                                         <div className="index-main-photo-mask-text-02">
-                                            学生社团
+                                            	学生社团
                                             <p>各个学生活动中心丰富多彩</p>
                                         </div>
                                     </div>
@@ -303,7 +213,7 @@
                                     <div className="index-main-photo-mask">
                                         <img width="100%" src="image/index_fast03.jpg" alt=""/>
                                         <div className="index-main-photo-mask-text-03">
-                                            美丽校园
+                                            	美丽校园
                                             <p>学校的门户网站首页一方面需要包涵协同国际学校的...</p>
                                         </div>
                                     </div>
@@ -312,14 +222,14 @@
                                     <div className="col-md-12 col-sm-6 row-clo index-main-photo-mask">
                                         <img width="100%" src="image/index_fast04.jpg" alt=""/>
                                         <div className="index-main-photo-mask-text-01">
-                                            课程选择
+                                            	课程选择
                                             <p>全面综合的供教师的素质</p>
                                         </div>
                                     </div>
                                     <div className="col-md-12 col-sm-6 row-clo index-main-photo-mask">
                                         <img width="100%" src="image/index_fast05.jpg" alt=""/>
                                         <div className="index-main-photo-mask-text-02">
-                                            魅力课堂
+                                            	魅力课堂
                                             <p>各个学生活动中心丰富多彩</p>
                                         </div>
                                     </div>
@@ -327,106 +237,7 @@
                             </div>
                         </div>
                         <div className="margin-top-15 hidden-sm hidden-xs"></div>
-                        <div className="footer">
-                            <div className="container">
-                                <div className="row footer-row">
-                                    <div className="col-md-9 row-clo">
-                                        <div className="col-md-3 row-clo">
-                                            <div className="footer-menu">
-                                                走进协同
-                                                <ul>
-                                                    <li><a href="xzzc.html">校长致辞</a></li>
-                                                    <li><a href="xxjj.html">学校简介</a></li>
-                                                    <li><a href="fssy.html">佛山市实验学校教育集团</a></li>
-                                                    <li><a href="mgxt.html">美国协同教育集团</a></li>
-                                                    <li><a href="zzjg.html">组织架构</a></li>
-                                                    <li><a href="xxfzc.html">学校发展处</a></li>
-                                                    <li><a href="jsfzc.html">教师发展处</a></li>
-                                                    <li><a href="xsfzc.html">学生发展处</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-3 row-clo">
-                                            <div className="footer-menu">
-                                                走进协同
-                                                <ul>
-                                                    <li><a href="xzzc.html">校长致辞</a></li>
-                                                    <li><a href="xxjj.html">学校简介</a></li>
-                                                    <li><a href="fssy.html">佛山市实验学校教育集团</a></li>
-                                                    <li><a href="mgxt.html">美国协同教育集团</a></li>
-                                                    <li><a href="zzjg.html">组织架构</a></li>
-                                                    <li><a href="xxfzc.html">学校发展处</a></li>
-                                                    <li><a href="jsfzc.html">教师发展处</a></li>
-                                                    <li><a href="xsfzc.html">学生发展处</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-3 row-clo">
-                                            <div className="footer-menu">
-                                                走进协同
-                                                <ul>
-                                                    <li><a href="xzzc.html">校长致辞</a></li>
-                                                    <li><a href="xxjj.html">学校简介</a></li>
-                                                    <li><a href="fssy.html">佛山市实验学校教育集团</a></li>
-                                                    <li><a href="mgxt.html">美国协同教育集团</a></li>
-                                                    <li><a href="zzjg.html">组织架构</a></li>
-                                                    <li><a href="xxfzc.html">学校发展处</a></li>
-                                                    <li><a href="jsfzc.html">教师发展处</a></li>
-                                                    <li><a href="xsfzc.html">学生发展处</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-3 row-clo">
-                                            <div className="footer-menu">
-                                                走进协同
-                                                <ul>
-                                                    <li><a href="xzzc.html">校长致辞</a></li>
-                                                    <li><a href="xxjj.html">学校简介</a></li>
-                                                    <li><a href="fssy.html">佛山市实验学校教育集团</a></li>
-                                                    <li><a href="mgxt.html">美国协同教育集团</a></li>
-                                                    <li><a href="zzjg.html">组织架构</a></li>
-                                                    <li><a href="xxfzc.html">学校发展处</a></li>
-                                                    <li><a href="jsfzc.html">教师发展处</a></li>
-                                                    <li><a href="xsfzc.html">学生发展处</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-3 row-clo">
-                                            <div className="footer-menu">
-                                                走进协同
-                                                <ul>
-                                                    <li><a href="xzzc.html">校长致辞</a></li>
-                                                    <li><a href="xxjj.html">学校简介</a></li>
-                                                    <li><a href="fssy.html">佛山市实验学校教育集团</a></li>
-                                                    <li><a href="mgxt.html">美国协同教育集团</a></li>
-                                                    <li><a href="zzjg.html">组织架构</a></li>
-                                                    <li><a href="xxfzc.html">学校发展处</a></li>
-                                                    <li><a href="jsfzc.html">教师发展处</a></li>
-                                                    <li><a href="xsfzc.html">学生发展处</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-3 col-sm-12 col-xs-12 row-clo footer-col">
-                                        <div className="footer-address">
-                                            <b>我要报名</b>
-                                            <div>
-                                                <li>
-                                                    <p>学校地址：</p>
-                                                    <p>联系电话：</p>
-                                                </li>
-                                                <li>
-                                                    <p>佛山市禅城区东鄱南路10号</p>
-                                                    <p>0757-66611999</p>
-                                                    <p>66611228</p>
-                                                    <p>18665531629</p>
-                                                </li>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        #include("footer.template")
                     </div>
             );
         }
@@ -451,6 +262,7 @@
             return false;
         }
     }
+
     function getPageScroll() {
         var xScroll, yScroll;
         if (self.pageXOffset) {
@@ -470,6 +282,7 @@
         arrayPageScroll = new Array(xScroll, yScroll);
         return arrayPageScroll;
     }
+
     function GetPageSize() {
         var xScroll, yScroll;
         if (window.innerHeight && window.scrollMaxY) {
@@ -506,6 +319,7 @@
         arrayPageSize = new Array(pageWidth, pageHeight, windowWidth, windowHeight)
         return arrayPageSize;
     }
+
     var AdMoveConfig = new Object();
     AdMoveConfig.IsInitialized = false;
     AdMoveConfig.ScrollX = 0;
@@ -525,6 +339,7 @@
     }
     addEvent(window, "resize", AdMoveConfig.Resize);
     addEvent(window, "scroll", AdMoveConfig.Scroll);
+
     function AdMove(id) {
         if (!AdMoveConfig.IsInitialized) {
             AdMoveConfig.Resize();
@@ -594,6 +409,6 @@
     }
 </script>
 <script type="text/javascript">
-    //    var advertisement = new AdMove("advertisement");
-    //    advertisement.Run();
+        var advertisement = new AdMove("advertisement");
+        advertisement.Run();
 </script>

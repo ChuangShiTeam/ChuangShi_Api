@@ -117,7 +117,7 @@ public class PageService extends Service {
     }
     
     public void write(String app_id, Page page, Kv templateMap) {
-        PageService.engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong/");
+        PageService.engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong_new/");
 
         Template template = PageService.engine.getTemplate(page.getPage_template());
 
@@ -157,7 +157,6 @@ public class PageService extends Service {
             Article nextArticle = ArticleService.instance.nextArticle(article_id);
 
             Kv templateMap = Kv.create();
-            templateMap.put("host", Config.host);
             templateMap.put("articleCategoryList", articleCategoryList);
             templateMap.put("article", article);
             templateMap.put("articleCategory", articleCategory);
@@ -166,7 +165,7 @@ public class PageService extends Service {
             templateMap.put("prevArticle", prevArticle);
             templateMap.put("nextArticle", nextArticle);
             
-            engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong/");
+            engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong_new/");
 
             Template template = engine.getTemplate("wzxq.template");
 
@@ -178,7 +177,7 @@ public class PageService extends Service {
                 throw new RuntimeException("路径不能为空");
             }
 
-            FileUtil.writeFile(content, app.getApp_website_path() + article.getArticle_id() + ".html");
+            FileUtil.writeFile(content, app.getApp_website_path() + "wzxq/" + article.getArticle_id() + ".html");
             if (is_update_prev_and_next) {
                 //生成成功后要更新一下上一篇和下一篇对应的链接
                 if (prevArticle != null && !ValidateUtil.isNullOrEmpty(prevArticle.getArticle_id())) {

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cn">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>招生招聘-#(page_name)-佛山协同国际学校</title>
+    <meta name="Keywords" content="佛山市实验学校,协同学校,佛山市协同学校,佛山协同国际学校">
+    <meta name="Description"
+          content="佛山市协同（国际）学校，由佛山市实验学校教育集团管理运营，与美国协同教育集团战略合作，是一所国际化、特色化、精英化的学校。国内教育部为小学初中9年一贯制（将开设高中部），国际教育部为幼儿园小学初中高中15年一贯制。秉承“协性同心、和人济世”的教育理念，培养适应现代、走向世界、引领未来的精英人才。">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <script src="js/react.min.js"></script>
+    <script src="js/react-dom.min.js"></script>
+    <script src="js/browser.min.js"></script>
+    <script src="js/react-bootstrap.min.js"></script>
+    <script src="js/reqwest.min.js"></script>
+    <script src="js/util.js"></script>
+</head>
+<body id="root">
+</body>
+<script type="text/babel">
+    class Component extends React.Component {
+        constructor(props) {
+            super(props);
+
+            this.state = {}
+        }
+
+        componentDidMount() {
+
+        }
+
+        componentWillUnmount() {
+
+        }
+
+        handleLogin() {
+            login();
+        }
+
+        handleLogout() {
+            logout();
+        }
+
+        render() {
+            const Navbar = ReactBootstrap.Navbar;
+            const Nav = ReactBootstrap.Nav;
+            const NavItem = ReactBootstrap.NavItem;
+            const NavDropdown = ReactBootstrap.NavDropdown;
+            const MenuItem = ReactBootstrap.MenuItem;
+            const Carousel = ReactBootstrap.Carousel;
+
+            return (
+                    <div>
+                        #include("header.template")
+                        #include("banner.template")
+                        <div className="main">
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-md-2 row-clo hidden-sm hidden-xs">
+                                        <div className="main-left-title">
+                                        	<div className="main-left-title-1">A</div>
+                                            <div className="main-left-title-2">招生招聘</div>
+                                            <div className="main-left-title-3">DMISSION</div>
+                                        </div>
+                                        <div className="main-left-menu">
+                                        	#for(websiteMenu : websiteMenuList)
+							                #if(websiteMenu.website_menu_id == "a8398373a697416eba6847c2e42c781d")
+							                #for(websiteMenuChildren : websiteMenu.children)
+											<li #if(websiteMenuChildren.website_menu_url == page_url)className="active"#end><a href="#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</a></li>
+											#end
+											#end
+											#end
+                                        </div>
+                                        #include("left_column.template")
+                                    </div>
+                                    <div className="col-md-10 row-clo">
+                                        <div className="main-right-title">
+                                           	 #(page_name)
+                                            <div className="main-right-title-extra">
+                                                <a href="index.html">首页</a> &gt;<a href="xxbzs.html">招生招聘</a> &gt; <a>#(page_name)</a>
+                                            </div>
+                                        </div>
+                                        <div className="main-right-content">
+                                            #(page_content)                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        #include("footer.template")
+                    </div>
+            );
+        }
+    }
+
+    ReactDOM.render(<Component/>, document.getElementById("root"));
+</script>

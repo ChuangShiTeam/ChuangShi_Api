@@ -17,7 +17,6 @@ import com.nowui.chuangshi.api.website.service.WebsiteMenuService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
-import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
@@ -70,7 +69,6 @@ public class PageController extends Controller {
         List<Map<String, Object>> indexFloatList = AdvertisementService.instance.adminCategoryCodeList(request_app_id, "index_float");
         
         Kv templateMap = Kv.create();
-        templateMap.put("host", Config.host);
         templateMap.put("articleCategoryList", articleCategoryList);
         templateMap.put("articleList", articleList);
         templateMap.put("websiteMenuList", websiteMenuList);
@@ -79,16 +77,8 @@ public class PageController extends Controller {
         
         if (articleCategoryList != null && articleCategoryList.size() > 0) {
             ArticleCategory articleCategory = articleCategoryList.get(0);
-            templateMap.put("articleCategory", articleCategory);
             
-            List<Article> articleListByCatehory = ArticleService.instance.categoryList(articleCategory.getArticle_category_id(), 0, 7);
-            templateMap.put("articleListByCatehory", articleListByCatehory);
-            
-            Integer count = ArticleService.instance.categoryCount(articleCategory.getArticle_category_id());
-            
-            Integer page_total = (count / 7) + (count % 7 == 0 ? 0 : 1);
-            
-            templateMap.put("page_total", page_total);
+            templateMap.put("article_category_id", articleCategory.getArticle_category_id());
         }
         
         for (Page page : pageList) {
@@ -128,7 +118,6 @@ public class PageController extends Controller {
         List<Map<String, Object>> indexBannerList = AdvertisementService.instance.adminCategoryCodeList(request_app_id, "index_banner");
 
         Kv templateMap = Kv.create();
-        templateMap.put("host", Config.host);
         templateMap.put("websiteMenuList", websiteMenuList);
         templateMap.put("indexBannerList", indexBannerList);
         templateMap.put("page_name", page.getPage_name());
@@ -146,20 +135,17 @@ public class PageController extends Controller {
             templateMap.put("indexFloatList", indexFloatList);
         } else if (page.getPage_url().equals("xydt.html")) {
             List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
-            templateMap.put("articleCategoryList", articleCategoryList);
             
             if (articleCategoryList != null && articleCategoryList.size() > 0) {
                 ArticleCategory articleCategory = articleCategoryList.get(0);
-                templateMap.put("articleCategory", articleCategory);
+                templateMap.put("article_category_id", articleCategory.getArticle_category_id());
                 
-                List<Article> articleListByCatehory = ArticleService.instance.categoryList(articleCategory.getArticle_category_id(), 0, 7);
-                templateMap.put("articleListByCatehory", articleListByCatehory);
+                List<Article> articleListByCategory = ArticleService.instance.categoryList(articleCategory.getArticle_category_id(), 0, 7);
+                templateMap.put("articleListByCategory", articleListByCategory);
                 
                 Integer count = ArticleService.instance.categoryCount(articleCategory.getArticle_category_id());
                 
-                Integer page_total = (count / 7) + (count % 7 == 0 ? 0 : 1);
-                
-                templateMap.put("page_total", page_total);
+                templateMap.put("total", count);
             }
         }
         if (page.getPage_template().equals("wzxq.template")) {

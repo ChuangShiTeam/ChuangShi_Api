@@ -15,7 +15,6 @@ public class Config {
     public static String code_generate_url = "";
     public static String table_schema = "";
     public static String notify_url = "";
-    public static String host = "";
     public static String rocket = "";
 
     static {
@@ -33,7 +32,6 @@ public class Config {
         code_generate_url = PropKit.get("code_generate_url");
         table_schema = PropKit.get("table_schema");
         notify_url = PropKit.get("notify_url");
-        host = PropKit.get("host");
         rocket = PropKit.get("rocket");
     }
 
