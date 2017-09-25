@@ -1,0 +1,37 @@
+<div className="footer">
+    <div className="container">
+        <div className="row footer-row">
+            <div className="col-md-9 row-clo">
+            	#for(websiteMenu : websiteMenuList)
+            	<div className="col-md-3 row-clo">
+                    <div className="footer-menu">
+                        	#(websiteMenu.website_menu_name)
+                        <ul>
+                        	#for(websiteMenuChildren : websiteMenu.children)
+                            <li><a href="#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</a></li>
+                            #end
+                        </ul>
+                    </div>
+                </div>
+                #end
+            </div>
+            <div className="col-md-3 col-sm-12 col-xs-12 row-clo footer-col">
+                <div className="footer-address">
+                    <b>我要报名</b>
+                    <div>
+                        <li>
+                            <p>学校地址：</p>
+                            <p>联系电话：</p>
+                        </li>
+                        <li>
+                            <p>佛山市禅城区东鄱南路10号</p>
+                            <p>0757-66611999</p>
+                            <p>66611228</p>
+                            <p>18665531629</p>
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

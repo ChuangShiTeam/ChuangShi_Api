@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cn">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>校园动态-#(page_name)-佛山协同国际学校</title>
+    <meta name="Keywords" content="佛山市实验学校,协同学校,佛山市协同学校,佛山协同国际学校">
+    <meta name="Description"
+          content="佛山市协同（国际）学校，由佛山市实验学校教育集团管理运营，与美国协同教育集团战略合作，是一所国际化、特色化、精英化的学校。国内教育部为小学初中9年一贯制（将开设高中部），国际教育部为幼儿园小学初中高中15年一贯制。秉承“协性同心、和人济世”的教育理念，培养适应现代、走向世界、引领未来的精英人才。">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <script src="js/react.min.js"></script>
+    <script src="js/react-dom.min.js"></script>
+    <script src="js/browser.min.js"></script>
+    <script src="js/react-bootstrap.min.js"></script>
+    <script src="js/reqwest.min.js"></script>
+    <script src="js/util.js"></script>
+</head>
+<body id="root">
+</body>
+<script type="text/babel">
+    class Component extends React.Component {
+        constructor(props) {
+            super(props);
+
+            this.state = {
+            	page_index: 1,
+            	page_size: 7,
+            	article_category_id: '#(article_category_id)',
+            	articleList: [],
+            	total: 0,
+            	articleCategory: {},
+            	articleCategoryList: []
+            }
+        }
+
+        componentDidMount() {
+			this.handleLoadArticle();
+        }
+
+        componentWillUnmount() {
+			this.setState({
+				page_index: 1,
+            	page_size: 7,
+            	article_category_id: '#(article_category_id)',
+            	articleList: [],
+            	total: 0,
+            	articleCategory: {},
+            	articleCategoryList: []
+			});
+        }
+
+        handleLogin() {
+            login();
+        }
+
+        handleLogout() {
+            logout();
+        }
+        
+        handleLoadArticle() {
+        	request({
+	            url: '/mobile/xietong/article/findByArticleCategoryId',
+	            data: {
+	            	article_category_id: this.state.article_category_id,
+				    page_index: this.state.page_index,
+				    page_size: this.state.page_size
+	            },
+	            success: function (data) {
+	                this.setState({
+	                	total: data.total,
+	                	articleList: data.articleList,
+	                	articleCategory: data.articleCategory,
+	                	articleCategoryList: data.articleCategoryList
+	                });
+	            }.bind(this),
+	            error: function (data) {
+	               
+	            }.bind(this),
+	            complete: function () {
+	                
+	            }.bind(this)
+	        });
+        }
+        
+        handleActivePage(eventKey) {
+		    this.setState({
+		      	page_index: eventKey
+		    });
+		    this.handleLoadArticle();
+	  	}
+	  	
+	  	handleArticleCategory(article_category_id) {
+	  		this.setState({
+		      	article_category_id: article_category_id,
+		    	page_index: 1
+		    });
+		    this.handleLoadArticle();
+	  	}
+	  	
+        render() {
+            const Navbar = ReactBootstrap.Navbar;
+            const Nav = ReactBootstrap.Nav;
+            const NavItem = ReactBootstrap.NavItem;
+            const NavDropdown = ReactBootstrap.NavDropdown;
+            const MenuItem = ReactBootstrap.MenuItem;
+            const Carousel = ReactBootstrap.Carousel;
+            const Pagination = ReactBootstrap.Pagination;
+			console.log('this.state.articleCategoryList', this.state.articleCategoryList);
+			console.log('this.state.articleCategory', this.state.articleCategory);
+            return (
+                    <div>
+                        #include("header.template")
+                        #include("banner.template")
+                        <div className="main">
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-md-2 row-clo hidden-sm hidden-xs">
+                                        <div className="main-left-title">
+                                        	<div className="main-left-title-1">N</div>
+                                            <div className="main-left-title-2">校园动态</div>
+                                            <div className="main-left-title-3">EWS</div>
+                                        </div>
+                                        <div className="main-left-menu">
+                                        	{
+                                        		this.state.articleCategoryList.map(function (bean) {
+	                                        		return (
+	                                        			<li> 
+															<a href="javascript:;" onClick={this.handleArticleCategory.bind(this, bean.article_category_id)}>{bean.article_category_name}</a>
+														</li>)
+                                        		}.bind(this))
+                                        	}
+                                        </div>
+                                        #include("left_column.template")
+                                    </div>
+                                    <div className="col-md-10 row-clo">
+                                        <div className="main-right-title">
+                                           	{this.state.articleCategory.article_category_name}
+                                            <div className="main-right-title-extra">
+                                                <a href="index.html">首页</a> &gt;<a href="xydt.html">校园动态</a> &gt; <a>{this.state.articleCategory.article_category_name}</a>
+                                            </div>
+                                        </div>
+                                        <div className="main-right-content">
+                                        	{
+                                        		this.state.articleList.map(function(article){
+                                        			return (<div className="news_ct">
+		                                                <a href="wzxq/{article.article_id}.html">
+		                                                    <div className="col-md-3 col-sm-3 col-xs-12 news_pic">
+		                                                        <img src={host + article.article_image} alt="" />
+		                                                    </div>
+		                                                    <div className=" col-md-9 col-sm-9 col-xs-12 news_txt">
+		                                                        <h4>{article.article_name}</h4>
+		                                                        <p className="margin-top-15">{article.article_summary}</p>
+		                                                        <p>{article.system_create_time}</p>
+		                                                    </div>
+		                                                </a>
+		                                                <div className="clearfix"></div>
+		                                            </div>)     
+                                        		})
+                                        	}
+                                        	{
+                                        		this.state.articleList.length > 0 ?
+                                        		<div className="text-right">
+	                                                <Pagination
+												        prev
+												        next
+												        first
+												        last
+												        ellipsis
+												        boundaryLinks
+												        items={this.state.total}
+												        maxButtons={5}
+												        activePage={this.state.page_index}
+												        onSelect={this.handleActivePage.bind(this)} />
+	                                            </div>:null 
+                                        	}
+                                                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        #include("footer.template")
+                    </div>
+            );
+        }
+    }
+
+    ReactDOM.render(<Component/>, document.getElementById("root"));
+</script>
