@@ -153,7 +153,7 @@
                                         	{
                                         		this.state.articleList.map(function(article){
                                         			return (<div className="news_ct">
-		                                                <a href="wzxq/{article.article_id}.html">
+		                                                <a href={"wzxq/" + article.article_id + ".html"}>
 		                                                    <div className="col-md-3 col-sm-3 col-xs-12 news_pic">
 		                                                        <img src={host + article.article_image} alt="" />
 		                                                    </div>
@@ -177,7 +177,7 @@
 												        last
 												        ellipsis
 												        boundaryLinks
-												        items={this.state.total}
+												        items={parseInt(this.state.total/this.state.page_size) + 1}
 												        maxButtons={5}
 												        activePage={this.state.page_index}
 												        onSelect={this.handleActivePage.bind(this)} />
