@@ -8,9 +8,9 @@
     <Navbar.Collapse>
         <Nav>
 	 		#for(websiteMenu : websiteMenuList)
-    	 		<NavDropdown eventKey={#(for.count)} title="#(websiteMenu.website_menu_name)" href="#(websiteMenu.website_menu_url)" id="basic-nav-dropdown">
+    	 		<NavDropdown eventKey={"#(websiteMenu.website_menu_id)"} title="#(websiteMenu.website_menu_name)" href="#(websiteMenu.website_menu_url)" id="basic-nav-dropdown">
     	 			#for(websiteMenuChildren : websiteMenu.children)
-    	 				<MenuItem eventKey={#(for.count)} href="#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</MenuItem>
+    	 				<MenuItem eventKey={"#(websiteMenu.website_menu_id).#(websiteMenuChildren.website_menu_id)"} href="#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</MenuItem>
                         #if(!for.last)
                         	<MenuItem divider/>
                         #end

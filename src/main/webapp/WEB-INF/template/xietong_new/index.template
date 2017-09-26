@@ -73,6 +73,7 @@
         	let articleListByCategory = this.state.articleListByCategory;
         	if (articleListByCategory[article_category_id]) {
         		this.setState({
+        			article_category_id: article_category_id,
         			articleList: articleListByCategory[article_category_id]
         		});
         	} else {
