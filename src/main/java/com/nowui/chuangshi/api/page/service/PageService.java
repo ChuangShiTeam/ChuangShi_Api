@@ -133,12 +133,48 @@ public class PageService extends Service {
     }
     
     /**
+     * 根据校园动态模板生成校园动态分类页面
+     * @param app_id
+     * @param article_category_id
+     */
+    public void writeXydt(String app_id, String article_category_id) {
+    	
+        	ArticleCategory articleCategory = ArticleCategoryService.instance.find(article_category_id);
+            
+            List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(app_id);
+
+            List<Map<String, Object>> websiteMenuList = WebsiteMenuService.instance.tree(app_id);
+            
+            List<Map<String, Object>> indexBannerList = AdvertisementService.instance.adminCategoryCodeList(app_id, "index_banner");
+
+            Kv templateMap = Kv.create();
+            templateMap.put("articleCategoryList", articleCategoryList);
+            templateMap.put("articleCategory", articleCategory);
+            templateMap.put("websiteMenuList", websiteMenuList);
+            templateMap.put("indexBannerList", indexBannerList);
+            
+            engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong_new/");
+
+            Template template = engine.getTemplate("xydt.template");
+
+            String content = template.renderToString(templateMap);
+
+            App app = AppService.instance.find(app_id);
+
+            if (ValidateUtil.isNullOrEmpty(app.getApp_website_path())) {
+                throw new RuntimeException("路径不能为空");
+            }
+
+            FileUtil.writeFile(content, app.getApp_website_path() + "xydt/" + articleCategory.getArticle_category_id() + ".html");
+    }
+
+    
+    /**
      * 根据文章详情模板生成文章详情页面
      * @param app_id
      * @param article_id
-     * @param is_update_prev_and_next 是否更新文章上篇和下篇链接
      */
-    public void writeWzxq(String app_id, String article_id, Boolean is_update_prev_and_next) {
+    public void writeWzxq(String app_id, String article_id) {
         Article article = ArticleService.instance.find(article_id);
         
         //文章非外部链接生成文章详情页面
@@ -152,18 +188,12 @@ public class PageService extends Service {
             
             List<Map<String, Object>> indexBannerList = AdvertisementService.instance.adminCategoryCodeList(app_id, "index_banner");
             
-            Article prevArticle = ArticleService.instance.prevArticle(article_id);
-            
-            Article nextArticle = ArticleService.instance.nextArticle(article_id);
-
             Kv templateMap = Kv.create();
             templateMap.put("articleCategoryList", articleCategoryList);
             templateMap.put("article", article);
             templateMap.put("articleCategory", articleCategory);
             templateMap.put("websiteMenuList", websiteMenuList);
             templateMap.put("indexBannerList", indexBannerList);
-            templateMap.put("prevArticle", prevArticle);
-            templateMap.put("nextArticle", nextArticle);
             
             engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong_new/");
 
@@ -178,16 +208,6 @@ public class PageService extends Service {
             }
 
             FileUtil.writeFile(content, app.getApp_website_path() + "wzxq/" + article.getArticle_id() + ".html");
-            if (is_update_prev_and_next) {
-                //生成成功后要更新一下上一篇和下一篇对应的链接
-                if (prevArticle != null && !ValidateUtil.isNullOrEmpty(prevArticle.getArticle_id())) {
-                    writeWzxq(app_id, prevArticle.getArticle_id(), false);
-                } 
-                
-                if (nextArticle != null && !ValidateUtil.isNullOrEmpty(nextArticle.getArticle_id())) {
-                    writeWzxq(app_id, nextArticle.getArticle_id(), false);
-                }  
-            }
         }
     }
 

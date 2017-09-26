@@ -20,7 +20,7 @@ public class XietongArticleController extends Controller {
         Article model = getModel(Article.class);
         String request_app_id = getRequest_app_id();
 
-        PageService.instance.writeWzxq(request_app_id, model.getArticle_id(), true);
+        PageService.instance.writeWzxq(request_app_id, model.getArticle_id());
 
         renderSuccessJson();
     }

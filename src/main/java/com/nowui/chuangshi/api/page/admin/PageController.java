@@ -85,12 +85,16 @@ public class PageController extends Controller {
             templateMap.put("page_name", page.getPage_name());
             templateMap.put("page_content", page.getPage_content());
             templateMap.put("page_url", page.getPage_url());
-            if (page.getPage_template().equals("wzxq.template")) {
+            if (page.getPage_template().equals("xydt.template")) {
+                for (ArticleCategory articleCatgory : articleCategoryList) {
+                	PageService.instance.writeXydt(request_app_id, articleCatgory.getArticle_category_id());
+                }
+            } else if (page.getPage_template().equals("wzxq.template")) {
               //生成所有文章页面
                 List<Article> allArticleList = ArticleService.instance.appList(request_app_id);
                 if (allArticleList != null && allArticleList.size() > 0) {
                     for (Article article : allArticleList) {
-                        PageService.instance.writeWzxq(request_app_id, article.getArticle_id(), false);
+                        PageService.instance.writeWzxq(request_app_id, article.getArticle_id());
                     }
                 }
             } else {
@@ -127,33 +131,31 @@ public class PageController extends Controller {
         if (page.getPage_url().equals("index.html")) {
             List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
             templateMap.put("articleCategoryList", articleCategoryList);
+            
+            if (articleCategoryList != null && articleCategoryList.size() > 0) {
+                ArticleCategory articleCategory = articleCategoryList.get(0);
+                
+                templateMap.put("article_category_id", articleCategory.getArticle_category_id());
+            }
 
             List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryList, 7);
             templateMap.put("articleList", articleList);
             
             List<Map<String, Object>> indexFloatList = AdvertisementService.instance.adminCategoryCodeList(request_app_id, "index_float");
             templateMap.put("indexFloatList", indexFloatList);
-        } else if (page.getPage_url().equals("xydt.html")) {
+        } 
+        if (page.getPage_template().equals("xydt.template")) {
             List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
-            
-            if (articleCategoryList != null && articleCategoryList.size() > 0) {
-                ArticleCategory articleCategory = articleCategoryList.get(0);
-                templateMap.put("article_category_id", articleCategory.getArticle_category_id());
-                
-                List<Article> articleListByCategory = ArticleService.instance.categoryList(articleCategory.getArticle_category_id(), 0, 7);
-                templateMap.put("articleListByCategory", articleListByCategory);
-                
-                Integer count = ArticleService.instance.categoryCount(articleCategory.getArticle_category_id());
-                
-                templateMap.put("total", count);
+            for (ArticleCategory articleCatgory : articleCategoryList) {
+            	PageService.instance.writeXydt(request_app_id, articleCatgory.getArticle_category_id());
             }
-        }
-        if (page.getPage_template().equals("wzxq.template")) {
+            
+        } else if (page.getPage_template().equals("wzxq.template")) {
            //根据模板生成所有文章页面
             List<Article> allArticleList = ArticleService.instance.appList(request_app_id);
             if (allArticleList != null && allArticleList.size() > 0) {
                 for (Article article : allArticleList) {
-                    PageService.instance.writeWzxq(request_app_id, article.getArticle_id(), false);
+                    PageService.instance.writeWzxq(request_app_id, article.getArticle_id());
                 }
             }
         } else {

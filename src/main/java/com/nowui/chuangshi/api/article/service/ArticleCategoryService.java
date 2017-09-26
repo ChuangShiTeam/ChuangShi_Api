@@ -80,6 +80,19 @@ public class ArticleCategoryService extends Service {
 
         return articleCategory;
     }
+    
+    public ArticleCategory nameFind(String article_category_name) {
+    	Cnd cnd = new Cnd();
+        cnd.where(ArticleCategory.SYSTEM_STATUS, true);
+        cnd.and(ArticleCategory.ARTICLE_CATEGORY_NAME, article_category_name);
+        List<ArticleCategory> articleCategoryList = articleCategoryDao.primaryKeyList(cnd);
+        
+        if (articleCategoryList == null || articleCategoryList.size() == 0) {
+        	return null;
+        }
+        
+        return find(articleCategoryList.get(0).getArticle_category_id());
+    }
 
     public Boolean save(ArticleCategory articleCategory, String system_create_user_id) {
         Boolean success = articleCategoryDao.save(articleCategory, system_create_user_id);

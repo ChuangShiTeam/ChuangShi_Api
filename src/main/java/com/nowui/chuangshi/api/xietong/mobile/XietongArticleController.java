@@ -22,11 +22,6 @@ public class XietongArticleController extends Controller {
         validateRequest(Article.ARTICLE_CATEGORY_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
         
         Article model = getModel(Article.class);
-        String request_app_id = getRequest_app_id();
-        
-        ArticleCategory articleCategory = ArticleCategoryService.instance.find(model.getArticle_category_id());
-        
-        List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
         
         List<Article> articleList = ArticleService.instance.categoryList(model.getArticle_category_id(), getM(), getN());
 
@@ -36,15 +31,11 @@ public class XietongArticleController extends Controller {
 
         validateResponse(Article.ARTICLE_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_SUMMARY, Article.SYSTEM_CREATE_TIME);
 
-        validateResponse(ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.ARTICLE_CATEGORY_NAME);
-        
         Integer count = ArticleService.instance.categoryCount(model.getArticle_category_id());
         
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("total", count);
         resultMap.put("articleList", articleList);
-        resultMap.put("articleCategory", articleCategory);
-        resultMap.put("articleCategoryList", articleCategoryList);
         
         renderSuccessJson(resultMap);
     }
