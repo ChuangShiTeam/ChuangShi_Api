@@ -14,12 +14,12 @@
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/style.css"/>
-    <script src="js/react.min.js"></script>
-    <script src="js/react-dom.min.js"></script>
-    <script src="js/browser.min.js"></script>
-    <script src="js/react-bootstrap.min.js"></script>
-    <script src="js/reqwest.min.js"></script>
-    <script src="js/util.js"></script>
+    <script src="../js/react.min.js"></script>
+    <script src="../js/react-dom.min.js"></script>
+    <script src="../js/browser.min.js"></script>
+    <script src="../js/react-bootstrap.min.js"></script>
+    <script src="../js/reqwest.min.js"></script>
+    <script src="../js/util.js"></script>
 </head>
 <body id="root">
 </body>
@@ -29,31 +29,13 @@
             super(props);
 
             this.state = {
-            	page_index: 1,
-            	page_size: 7,
-            	article_category_id: '#(article_category_id)',
-            	articleList: [],
-            	total: 0,
-            	articleCategory: {},
-            	articleCategoryList: []
             }
         }
 
         componentDidMount() {
-        	let {article_category_id, page_index} = this.state;
-			this.handleLoadArticle(article_category_id, page_index);
         }
 
         componentWillUnmount() {
-			this.setState({
-				page_index: 1,
-            	page_size: 7,
-            	article_category_id: '#(article_category_id)',
-            	articleList: [],
-            	total: 0,
-            	articleCategory: {},
-            	articleCategoryList: []
-			});
         }
 
         handleLogin() {
@@ -64,42 +46,6 @@
             logout();
         }
         
-        handleLoadArticle(article_category_id, page_index) {
-        	request({
-	            url: '/mobile/xietong/article/findByArticleCategoryId',
-	            data: {
-	            	article_category_id: article_category_id,
-				    page_index: page_index,
-				    page_size: this.state.page_size
-	            },
-	            success: function (data) {
-	                this.setState({
-	                	page_index: page_index,
-	                	article_category_id: article_category_id,
-	                	total: data.total,
-	                	articleList: data.articleList,
-	                	articleCategory: data.articleCategory,
-	                	articleCategoryList: data.articleCategoryList
-	                });
-	            }.bind(this),
-	            error: function (data) {
-	               
-	            }.bind(this),
-	            complete: function () {
-	                
-	            }.bind(this)
-	        });
-        }
-        
-        handleActivePage(eventKey) {
-		    let {article_category_id} = this.state;
-		    this.handleLoadArticle(article_category_id, eventKey);
-	  	}
-	  	
-	  	handleArticleCategory(article_category_id) {
-		    this.handleLoadArticle(article_category_id, 1);
-	  	}
-	  	
         render() {
             const Navbar = ReactBootstrap.Navbar;
             const Nav = ReactBootstrap.Nav;
@@ -112,8 +58,77 @@
 			console.log('this.state.articleCategory', this.state.articleCategory);
             return (
                     <div>
-                        #include("header.template")
-                        #include("banner.template")
+                        <Navbar className="hidden-md hidden-lg mobile-header">
+						    <Navbar.Header>
+						        <Navbar.Brand>
+						            <a href="/index.html">佛山协同国际学校</a>
+						        </Navbar.Brand>
+						        <Navbar.Toggle/>
+						    </Navbar.Header>
+						    <Navbar.Collapse>
+						        <Nav>
+							 		#for(websiteMenu : websiteMenuList)
+						    	 		<NavDropdown eventKey={#(for.count)} title="#(websiteMenu.website_menu_name)" href="/#(websiteMenu.website_menu_url)" id="basic-nav-dropdown">
+						    	 			#for(websiteMenuChildren : websiteMenu.children)
+						    	 				<MenuItem eventKey={#(for.count)} href="/#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</MenuItem>
+						                        #if(!for.last)
+						                        	<MenuItem divider/>
+						                        #end
+											#end
+						                </NavDropdown>
+						            #end
+						        </Nav>
+						    </Navbar.Collapse>
+						</Navbar>
+						<div className="header hidden-sm hidden-xs">
+						    <div className="container">
+						        <a className="header-logo" href="/index.html"></a>
+						        <div className="header-extra">
+						            {
+						                getToken() == "" ?
+						                        <li className="login" onClick={this.handleLogin.bind(this)}>学生登录</li>
+						                        :
+						                        <ul>
+						                            <li>欢迎您：{getClazzName()}，{getStudentName()}</li>
+						                            <li className="logout" onClick={this.handleLogout.bind(this)}>退出
+						                            </li>
+						                        </ul>
+						            }
+						        </div>
+						        <div className="header-menu">
+						            <ul>
+						            	 #for(websiteMenu : websiteMenuList)
+										<li>
+											#if(for.first)
+											<a href="/#(websiteMenu.website_menu_url)" className="on">#(websiteMenu.website_menu_name)</a>
+											#else
+											<a href="/#(websiteMenu.website_menu_url)">#(websiteMenu.website_menu_name)</a>
+											#end
+											<ul>
+											    #for(websiteMenuChildren : websiteMenu.children)
+												<li><a href="/#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</a></li>
+												#end
+											</ul>
+										</li>
+						                #end
+						            </ul>
+						        </div>
+						    </div>
+						</div>
+                        <Carousel className="banner">
+							#for(advertisement : indexBannerList)
+								<Carousel.Item>
+									#if(advertisement.advertisement_link)
+									<a href="#(advertisement.advertisement_link)">
+										<img src={host + "#(advertisement.advertisement_image_file.file_original_path)"} style={{marginLeft: "auto", marginRight: "auto"}} alt="" />
+									</a>
+									#else
+										<img src={host + "#(advertisement.advertisement_image_file.file_original_path)"} style={{marginLeft: "auto", marginRight: "auto"}} alt="" />
+									#end
+						        </Carousel.Item>
+									
+							#end
+						</Carousel>
                         <div className="main">
                             <div className="container">
                                 <div className="row">
@@ -136,13 +151,39 @@
 											#end
 											#end
                                         </div>
-                                        #include("left_column.template")
+                                        <div className="margin-top-15 index-main-image-mask">
+										    <a href="/xxb.html">
+										        <img width="100%" src="../image/list_01.jpg" alt=""/>
+										        <div className="index-main-image-mask-text">
+										        		小学部
+										            <p>立即进入>></p>
+										        </div>
+										    </a>
+										</div>
+										<div className="margin-top-15 index-main-image-mask">
+										    <a href="/zxb.html">
+										        <img width="100%" src="../image/list_02.jpg" alt=""/>
+										        <div className="index-main-image-mask-text">
+										        		中学部
+										            <p>立即进入>></p>
+										        </div>
+										    </a>
+										</div>
+										<div className="margin-top-15 index-main-image-mask">
+										    <a href="/gjb.html">
+										        <img width="100%" src="../image/list_03.jpg" alt=""/>
+										        <div className="index-main-image-mask-text">
+										        		国际部
+										            <p>立即进入>></p>
+										        </div>
+										    </a>
+										</div>
                                     </div>
                                     <div className="col-md-10 row-clo">
                                         <div className="main-right-title">
-                                           	#{articleCategory.article_category_name}
+                                           	#(articleCategory.article_category_name)
                                             <div className="main-right-title-extra">
-                                                <a href="index.html">首页</a> &gt;<a href="xydt/#(articleCategory.article_category_id).html">#(articleCategory.article_category_name)</a> &gt; <a>#{article.article_name}</a>
+                                                <a href="/index.html">首页</a> &gt;<a href="/xydt/#(articleCategory.article_category_id).html">#(articleCategory.article_category_name)</a> &gt; <a>#(article.article_name)</a>
                                             </div>
                                         </div>
                                         <div className="main-right-content">
