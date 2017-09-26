@@ -54,8 +54,6 @@
             const MenuItem = ReactBootstrap.MenuItem;
             const Carousel = ReactBootstrap.Carousel;
             const Pagination = ReactBootstrap.Pagination;
-			console.log('this.state.articleCategoryList', this.state.articleCategoryList);
-			console.log('this.state.articleCategory', this.state.articleCategory);
             return (
                     <div>
                         <Navbar className="hidden-md hidden-lg mobile-header">
@@ -187,19 +185,6 @@
                                             </div>
                                         </div>
                                         <div className="main-right-content">
-                                        	<h1>#(article.article_name)</h1>
-											<div class="time"> 
-												作者：#if(article.article_author)
-													#(article.article_author)
-													#else
-													admin 
-													#end
-												更新时间：#date(article.system_update_time, "yyyy-MM-dd")
-												<br>
-											</div>
-											<div class="contxt">
-												#(article.article_content)
-											</div>
                                         </div>
                                     </div>
                                 </div>

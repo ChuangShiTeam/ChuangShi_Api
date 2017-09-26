@@ -42,12 +42,10 @@
         constructor(props) {
             super(props);
             this.state = {
-            	page_index: 1,
-            	page_size: 7,
             	article_category_id: '#(article_category_id)',
             	articleList: [],
-            	total: 0
-                link: 'group'
+            	articleListByCategory: {},
+                link: 'group',
             }
         }
         
@@ -57,11 +55,8 @@
         
         componentWillUnmount() {
         	this.setState({
-        		page_index: 1,
-            	page_size: 7,
             	article_category_id: '#(article_category_id)',
-            	articleList: [],
-            	total: 0
+            	articleListByCategory: {},
                 link: 'group'
         	});
         }
@@ -75,27 +70,35 @@
         }
         
         handleLoadArticle(article_category_id) {
-        	request({
-	            url: '/mobile/xietong/article/findByArticleCategoryId',
-	            data: {
-	            	article_category_id: article_category_id,
-				    page_index: this.state.page_index,
-				    page_size: this.state.page_size
-	            },
-	            success: function (data) {
-	                this.setState({
-	                	article_category_id: this.state.article_category_id
-	                	total: data.total,
-	                	articleList: data.articleList
-	                });
-	            }.bind(this),
-	            error: function (data) {
-	               
-	            }.bind(this),
-	            complete: function () {
-	                
-	            }.bind(this)
-	        });
+        	let articleListByCategory = this.state.articleListByCategory;
+        	if (articleListByCategory[article_category_id]) {
+        		this.setState({
+        			articleList: articleListByCategory[article_category_id]
+        		});
+        	} else {
+	        	request({
+		            url: '/mobile/xietong/article/findByArticleCategoryId',
+		            data: {
+		            	article_category_id: article_category_id,
+					    page_index: 1,
+					    page_size: 7
+		            },
+		            success: function (data) {
+		            	articleListByCategory[article_category_id] = data.articleList;
+		                this.setState({
+		                	article_category_id: article_category_id,
+		                	articleListByCategory: articleListByCategory,
+		                	articleList: data.articleList
+		                });
+		            }.bind(this),
+		            error: function (data) {
+		               
+		            }.bind(this),
+		            complete: function () {
+		                
+		            }.bind(this)
+		        });
+     		 }
         }
         
         handleLink(value) {
@@ -138,9 +141,9 @@
                                             <a href={"xydt/"+ this.state.article_category_id +".html"}>校园动态</a>
                                         </div>
                                         {
-                                        	this.state.articleList.length > 0 && this.state.articleList[0].file_path?
+                                        	this.state.articleList.length > 0 && this.state.articleList[0].article_image_file?
                                         		<img width="100%"
-			                                             src={host + this.state.articleList[0].file_path}
+			                                             src={host + this.state.articleList[0].article_image_file}
 			                                             className="index-article-image" alt=""/>
                                              	:
                                              	<img width="100%"
@@ -151,21 +154,23 @@
                                     <div className="col-md-5 col-sm-6 col-xs-12 row-clo index-article-right">
                                         <div className="index-article index-article-menu">
                                         #for(articleCategory : articleCategoryList)
-                                        	<li className={this.state.article_category_id == '#(articleCategory.article_category_id)' ? 'active' : ''} onClick={this.handleArticle.bind(this, '#(articleCategory.article_category_id)')}><a>#(articleCategory.article_category_name)</a></li>
+                                        	<li className={this.state.article_category_id == '#(articleCategory.article_category_id)' ? 'active' : ''} onClick={this.handleLoadArticle.bind(this, '#(articleCategory.article_category_id)')}><a>#(articleCategory.article_category_name)</a></li>
                                         #end
                                         </div>
                                         <div className="index-article-list">
                                         	{
                                         		this.state.articleList.map(function(article){
-                                        			return (<div className="news_ct">
-		                                                <a href={"wzxq/" + article.article_id + ".html"}>
-		                                                    <li>
-		                                                   	 {article.article_name}
-		                                                    <p>{article.system_create_time.substring(0, 10)}</p>
-		                                                	</li>
-		                                                </a>
-		                                                <div className="clearfix"></div>
-		                                            </div>)     
+                                        			return (
+	                                    				<div className="news_ct">
+			                                                <a href={"wzxq/" + article.article_id + ".html"}>
+			                                                    <li>
+			                                                   	 	{article.article_name}
+		                                                    		<p>{article.system_create_time.substring(0, 10)}</p>
+			                                                	</li>
+			                                                </a>
+			                                                <div className="clearfix"></div>
+			                                            </div>
+		                                            )     
                                         		})
                                         	}
                                         </div>
