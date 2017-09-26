@@ -12,8 +12,8 @@
           content="佛山市协同（国际）学校，由佛山市实验学校教育集团管理运营，与美国协同教育集团战略合作，是一所国际化、特色化、精英化的学校。国内教育部为小学初中9年一贯制（将开设高中部），国际教育部为幼儿园小学初中高中15年一贯制。秉承“协性同心、和人济世”的教育理念，培养适应现代、走向世界、引领未来的精英人才。">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <link rel="stylesheet" href="css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../css/style.css"/>
     <script src="../js/react.min.js"></script>
     <script src="../js/react-dom.min.js"></script>
     <script src="../js/browser.min.js"></script>
@@ -33,7 +33,7 @@
             	page_size: 7,
             	article_category_id: '#(articleCategory.article_category_id)',
             	articleList: [],
-            	total: 0,
+            	total: 0
             }
         }
 
@@ -102,16 +102,16 @@
                         <Navbar className="hidden-md hidden-lg mobile-header">
 						    <Navbar.Header>
 						        <Navbar.Brand>
-						            <a href="/index.html">佛山协同国际学校</a>
+						            <a href="../index.html">佛山协同国际学校</a>
 						        </Navbar.Brand>
 						        <Navbar.Toggle/>
 						    </Navbar.Header>
 						    <Navbar.Collapse>
 						        <Nav>
 							 		#for(websiteMenu : websiteMenuList)
-						    	 		<NavDropdown eventKey={#(for.count)} title="#(websiteMenu.website_menu_name)" href="/#(websiteMenu.website_menu_url)" id="basic-nav-dropdown">
+						    	 		<NavDropdown eventKey={#(for.count)} title="#(websiteMenu.website_menu_name)" href="../#(websiteMenu.website_menu_url)" id="basic-nav-dropdown">
 						    	 			#for(websiteMenuChildren : websiteMenu.children)
-						    	 				<MenuItem eventKey={#(for.count)} href="/#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</MenuItem>
+						    	 				<MenuItem eventKey={#(for.count)} href="../#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</MenuItem>
 						                        #if(!for.last)
 						                        	<MenuItem divider/>
 						                        #end
@@ -123,7 +123,7 @@
 						</Navbar>
 						<div className="header hidden-sm hidden-xs">
 						    <div className="container">
-						        <a className="header-logo" href="/index.html"></a>
+						        <a className="header-logo" href="../index.html"></a>
 						        <div className="header-extra">
 						            {
 						                getToken() == "" ?
@@ -141,13 +141,13 @@
 						            	 #for(websiteMenu : websiteMenuList)
 										<li>
 											#if(for.first)
-											<a href="/#(websiteMenu.website_menu_url)" className="on">#(websiteMenu.website_menu_name)</a>
+											<a href="../#(websiteMenu.website_menu_url)" className="on">#(websiteMenu.website_menu_name)</a>
 											#else
-											<a href="/#(websiteMenu.website_menu_url)">#(websiteMenu.website_menu_name)</a>
+											<a href="../#(websiteMenu.website_menu_url)">#(websiteMenu.website_menu_name)</a>
 											#end
 											<ul>
 											    #for(websiteMenuChildren : websiteMenu.children)
-												<li><a href="/#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</a></li>
+												<li><a href="../#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</a></li>
 												#end
 											</ul>
 										</li>
@@ -182,18 +182,18 @@
                                         <div className="main-left-menu">
                                         	#for(bean : articleCategoryList)
 												#if(bean.article_category_id == articleCategory.article_category_id)
-													<li class="on">
-														<a href="xydt/#(bean.article_category_id).html">#(bean.article_category_name)</a>
+													<li className="active">
+														<a href="#(bean.article_category_id).html">#(bean.article_category_name)</a>
 													</li>
 												#else
 													<li>
-														<a href="xydt/#(bean.article_category_id).html">#(bean.article_category_name)</a>
+														<a href="#(bean.article_category_id).html">#(bean.article_category_name)</a>
 													</li>
 												#end
 											#end
                                         </div>
                                         <div className="margin-top-15 index-main-image-mask">
-										    <a href="/xxb.html">
+										    <a href="../xxb.html">
 										        <img width="100%" src="../image/list_01.jpg" alt=""/>
 										        <div className="index-main-image-mask-text">
 										        		小学部
@@ -202,7 +202,7 @@
 										    </a>
 										</div>
 										<div className="margin-top-15 index-main-image-mask">
-										    <a href="/zxb.html">
+										    <a href="../zxb.html">
 										        <img width="100%" src="../image/list_02.jpg" alt=""/>
 										        <div className="index-main-image-mask-text">
 										        		中学部
@@ -211,7 +211,7 @@
 										    </a>
 										</div>
 										<div className="margin-top-15 index-main-image-mask">
-										    <a href="/gjb.html">
+										    <a href="../gjb.html">
 										        <img width="100%" src="../image/list_03.jpg" alt=""/>
 										        <div className="index-main-image-mask-text">
 										        		国际部
@@ -224,14 +224,14 @@
                                         <div className="main-right-title">
                                            	#(articleCategory.article_category_name)
                                             <div className="main-right-title-extra">
-                                                <a href="/index.html">首页</a> &gt;<a href="#(articleCategory.article_category_id).html">校园动态</a> &gt; <a>#(articleCategory.article_category_name)</a>
+                                                <a href="../index.html">首页</a> &gt;<a href="#(articleCategory.article_category_id).html">校园动态</a> &gt; <a>#(articleCategory.article_category_name)</a>
                                             </div>
                                         </div>
                                         <div className="main-right-content">
                                         	{
                                         		this.state.articleList.map(function(article){
                                         			return (<div className="news_ct">
-		                                                <a href={"/wzxq/" + article.article_id + ".html"}>
+		                                                <a href={"../wzxq/" + article.article_id + ".html"}>
 		                                                    <div className="col-md-3 col-sm-3 col-xs-12 news_pic">
 		                                                        <img src={host + article.article_image} alt="" />
 		                                                    </div>

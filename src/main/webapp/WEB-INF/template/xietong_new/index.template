@@ -42,30 +42,68 @@
         constructor(props) {
             super(props);
             this.state = {
-                category_id: '#(article_category_id)',
+            	page_index: 1,
+            	page_size: 7,
+            	article_category_id: '#(article_category_id)',
+            	articleList: [],
+            	total: 0
                 link: 'group'
             }
         }
+        
         componentDidMount() {
+        	this.handleLoadArticle(this.state.article_category_id);
         }
+        
         componentWillUnmount() {
+        	this.setState({
+        		page_index: 1,
+            	page_size: 7,
+            	article_category_id: '#(article_category_id)',
+            	articleList: [],
+            	total: 0
+                link: 'group'
+        	});
         }
+        
         handleLogin() {
             login();
         }
+        
         handleLogout() {
             logout();
         }
-        handleArticle(category_id) {
-            this.setState({
-                category_id: category_id
-            });
+        
+        handleLoadArticle(article_category_id) {
+        	request({
+	            url: '/mobile/xietong/article/findByArticleCategoryId',
+	            data: {
+	            	article_category_id: article_category_id,
+				    page_index: this.state.page_index,
+				    page_size: this.state.page_size
+	            },
+	            success: function (data) {
+	                this.setState({
+	                	article_category_id: this.state.article_category_id
+	                	total: data.total,
+	                	articleList: data.articleList
+	                });
+	            }.bind(this),
+	            error: function (data) {
+	               
+	            }.bind(this),
+	            complete: function () {
+	                
+	            }.bind(this)
+	        });
         }
+        
         handleLink(value) {
             this.setState({
                 link: value
             });
         }
+        
         render() {
             const Navbar = ReactBootstrap.Navbar;
             const Nav = ReactBootstrap.Nav;
@@ -73,6 +111,7 @@
             const NavDropdown = ReactBootstrap.NavDropdown;
             const MenuItem = ReactBootstrap.MenuItem;
             const Carousel = ReactBootstrap.Carousel;
+            
             return (
                     <div>
                         #include("header.template")
@@ -96,45 +135,39 @@
                                 <div className="row">
                                     <div className="col-md-4 col-sm-6 col-xs-12 row-clo">
                                         <div className="index-article index-article-title">
-                                            <a href="xyfg.html">校园动态</a>
+                                            <a href={"xydt/"+ this.state.article_category_id +".html"}>校园动态</a>
                                         </div>
-                                        #for(articleCategory : articleCategoryList)
-										    #for(article : articleList)
-											    #if(articleCategory.article_category_id == article.article_category_id)
-												    #if(for.first)
-														#if(article.file_path)
-														<img width="100%"
-			                                             src="#(host + article.file_path)"
+                                        {
+                                        	this.state.articleList.length > 0 && this.state.articleList[0].file_path?
+                                        		<img width="100%"
+			                                             src={host + this.state.articleList[0].file_path}
 			                                             className="index-article-image" alt=""/>
-														#else
-														<img width="100%"
+                                             	:
+                                             	<img width="100%"
 			                                             src=""
 			                                             className="index-article-image" alt=""/>
-														#end
-													#end
-												#end
-											#end
-						                #end
+                                        }
                                     </div>
                                     <div className="col-md-5 col-sm-6 col-xs-12 row-clo index-article-right">
                                         <div className="index-article index-article-menu">
                                         #for(articleCategory : articleCategoryList)
-                                        	<li className={this.state.category_id == '#(articleCategory.article_category_id)' ? 'active' : ''} onClick={this.handleArticle.bind(this, '#(articleCategory.article_category_id)')}><a>#(articleCategory.article_category_name)</a></li>
+                                        	<li className={this.state.article_category_id == '#(articleCategory.article_category_id)' ? 'active' : ''} onClick={this.handleArticle.bind(this, '#(articleCategory.article_category_id)')}><a>#(articleCategory.article_category_name)</a></li>
                                         #end
                                         </div>
                                         <div className="index-article-list">
-                                        	#for(articleCategory : articleCategoryList)
-											    #for(article : articleList)
-												    #if(articleCategory.article_category_id == article.article_category_id)
-												    	<a href="#(article.article_id).html">
-		                                                <li>
-		                                                   	 #(article.article_name)
-		                                                    <p>#date(article.system_create_time, "yyyy-MM-dd")</p>
-		                                                </li>
-		                                            	</a>
-													#end
-												#end
-						                	#end
+                                        	{
+                                        		this.state.articleList.map(function(article){
+                                        			return (<div className="news_ct">
+		                                                <a href={"wzxq/" + article.article_id + ".html"}>
+		                                                    <li>
+		                                                   	 {article.article_name}
+		                                                    <p>{article.system_create_time.substring(0, 10)}</p>
+		                                                	</li>
+		                                                </a>
+		                                                <div className="clearfix"></div>
+		                                            </div>)     
+                                        		})
+                                        	}
                                         </div>
                                     </div>
                                     <div className="col-md-3 col-sm-6 col-xs-12 row-clo hidden-sm hidden-xs">

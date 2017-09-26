@@ -1,7 +1,7 @@
 <Navbar className="hidden-md hidden-lg mobile-header">
     <Navbar.Header>
         <Navbar.Brand>
-            <a href="/index.html">佛山协同国际学校</a>
+            <a href="index.html">佛山协同国际学校</a>
         </Navbar.Brand>
         <Navbar.Toggle/>
     </Navbar.Header>
