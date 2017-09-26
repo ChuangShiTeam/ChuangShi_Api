@@ -40,7 +40,8 @@
         }
 
         componentDidMount() {
-			this.handleLoadArticle();
+        	let {article_category_id, page_index} = this.state;
+			this.handleLoadArticle(article_category_id, page_index);
         }
 
         componentWillUnmount() {
@@ -63,16 +64,18 @@
             logout();
         }
         
-        handleLoadArticle() {
+        handleLoadArticle(article_category_id, page_index) {
         	request({
 	            url: '/mobile/xietong/article/findByArticleCategoryId',
 	            data: {
-	            	article_category_id: this.state.article_category_id,
-				    page_index: this.state.page_index,
+	            	article_category_id: article_category_id,
+				    page_index: page_index,
 				    page_size: this.state.page_size
 	            },
 	            success: function (data) {
 	                this.setState({
+	                	page_index: page_index,
+	                	article_category_id: article_category_id,
 	                	total: data.total,
 	                	articleList: data.articleList,
 	                	articleCategory: data.articleCategory,
@@ -89,18 +92,12 @@
         }
         
         handleActivePage(eventKey) {
-		    this.setState({
-		      	page_index: eventKey
-		    });
-		    this.handleLoadArticle();
+		    let {article_category_id} = this.state;
+		    this.handleLoadArticle(article_category_id, eventKey);
 	  	}
 	  	
 	  	handleArticleCategory(article_category_id) {
-	  		this.setState({
-		      	article_category_id: article_category_id,
-		    	page_index: 1
-		    });
-		    this.handleLoadArticle();
+		    this.handleLoadArticle(article_category_id, 1);
 	  	}
 	  	
         render() {
@@ -129,10 +126,17 @@
                                         <div className="main-left-menu">
                                         	{
                                         		this.state.articleCategoryList.map(function (bean) {
-	                                        		return (
+                                        			if (bean.article_category_id === this.state.article_category_id) {
+                                        				return (
+	                                        			<li className="active"> 
+															<a href="javascript:;" onClick={this.handleArticleCategory.bind(this, bean.article_category_id)}>{bean.article_category_name}</a>
+														</li>)
+                                        			} else {
+                                        				return (
 	                                        			<li> 
 															<a href="javascript:;" onClick={this.handleArticleCategory.bind(this, bean.article_category_id)}>{bean.article_category_name}</a>
 														</li>)
+                                        			}
                                         		}.bind(this))
                                         	}
                                         </div>
@@ -156,7 +160,7 @@
 		                                                    <div className=" col-md-9 col-sm-9 col-xs-12 news_txt">
 		                                                        <h4>{article.article_name}</h4>
 		                                                        <p className="margin-top-15">{article.article_summary}</p>
-		                                                        <p>{article.system_create_time}</p>
+		                                                        <p>{article.system_create_time.substring(0, 10)}</p>
 		                                                    </div>
 		                                                </a>
 		                                                <div className="clearfix"></div>
