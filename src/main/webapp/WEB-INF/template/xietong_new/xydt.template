@@ -99,77 +99,8 @@
             
             return (
                     <div>
-                        <Navbar className="hidden-md hidden-lg mobile-header">
-						    <Navbar.Header>
-						        <Navbar.Brand>
-						            <a href="../index.html">佛山协同国际学校</a>
-						        </Navbar.Brand>
-						        <Navbar.Toggle/>
-						    </Navbar.Header>
-						    <Navbar.Collapse>
-						        <Nav>
-							 		#for(websiteMenu : websiteMenuList)
-						    	 		<NavDropdown eventKey={#(for.count)} title="#(websiteMenu.website_menu_name)" href="../#(websiteMenu.website_menu_url)" id="basic-nav-dropdown">
-						    	 			#for(websiteMenuChildren : websiteMenu.children)
-						    	 				<MenuItem eventKey={#(for.count)} href="../#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</MenuItem>
-						                        #if(!for.last)
-						                        	<MenuItem divider/>
-						                        #end
-											#end
-						                </NavDropdown>
-						            #end
-						        </Nav>
-						    </Navbar.Collapse>
-						</Navbar>
-						<div className="header hidden-sm hidden-xs">
-						    <div className="container">
-						        <a className="header-logo" href="../index.html"></a>
-						        <div className="header-extra">
-						            {
-						                getToken() == "" ?
-						                        <li className="login" onClick={this.handleLogin.bind(this)}>学生登录</li>
-						                        :
-						                        <ul>
-						                            <li>欢迎您：{getClazzName()}，{getStudentName()}</li>
-						                            <li className="logout" onClick={this.handleLogout.bind(this)}>退出
-						                            </li>
-						                        </ul>
-						            }
-						        </div>
-						        <div className="header-menu">
-						            <ul>
-						            	 #for(websiteMenu : websiteMenuList)
-										<li>
-											#if(for.first)
-											<a href="../#(websiteMenu.website_menu_url)" className="on">#(websiteMenu.website_menu_name)</a>
-											#else
-											<a href="../#(websiteMenu.website_menu_url)">#(websiteMenu.website_menu_name)</a>
-											#end
-											<ul>
-											    #for(websiteMenuChildren : websiteMenu.children)
-												<li><a href="../#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</a></li>
-												#end
-											</ul>
-										</li>
-						                #end
-						            </ul>
-						        </div>
-						    </div>
-						</div>
-                        <Carousel className="banner">
-							#for(advertisement : indexBannerList)
-								<Carousel.Item>
-									#if(advertisement.advertisement_link)
-									<a href="#(advertisement.advertisement_link)">
-										<img src={host + "#(advertisement.advertisement_image_file.file_original_path)"} style={{marginLeft: "auto", marginRight: "auto"}} alt="" />
-									</a>
-									#else
-										<img src={host + "#(advertisement.advertisement_image_file.file_original_path)"} style={{marginLeft: "auto", marginRight: "auto"}} alt="" />
-									#end
-						        </Carousel.Item>
-									
-							#end
-						</Carousel>
+                        #include("header.template")
+                        #include("banner.template")
                         <div className="main">
                             <div className="container">
                                 <div className="row">
@@ -192,46 +123,20 @@
 												#end
 											#end
                                         </div>
-                                        <div className="margin-top-15 index-main-image-mask">
-										    <a href="../xxb.html">
-										        <img width="100%" src="../image/list_01.jpg" alt=""/>
-										        <div className="index-main-image-mask-text">
-										        		小学部
-										            <p>立即进入>></p>
-										        </div>
-										    </a>
-										</div>
-										<div className="margin-top-15 index-main-image-mask">
-										    <a href="../zxb.html">
-										        <img width="100%" src="../image/list_02.jpg" alt=""/>
-										        <div className="index-main-image-mask-text">
-										        		中学部
-										            <p>立即进入>></p>
-										        </div>
-										    </a>
-										</div>
-										<div className="margin-top-15 index-main-image-mask">
-										    <a href="../gjb.html">
-										        <img width="100%" src="../image/list_03.jpg" alt=""/>
-										        <div className="index-main-image-mask-text">
-										        		国际部
-										            <p>立即进入>></p>
-										        </div>
-										    </a>
-										</div>
+                                        #include("left_column.template")
                                     </div>
                                     <div className="col-md-10 row-clo">
                                         <div className="main-right-title">
                                            	#(articleCategory.article_category_name)
                                             <div className="main-right-title-extra">
-                                                <a href="../index.html">首页</a> &gt;<a href="#(articleCategory.article_category_id).html">校园动态</a> &gt; <a>#(articleCategory.article_category_name)</a>
+                                                <a href="/index.html">首页</a> &gt;<a href="#(articleCategory.article_category_id).html">校园动态</a> &gt; <a>#(articleCategory.article_category_name)</a>
                                             </div>
                                         </div>
                                         <div className="main-right-content">
                                         	{
                                         		this.state.articleList.map(function(article){
                                         			return (<div className="news_ct">
-		                                                <a href={"../wzxq/" + article.article_id + ".html"}>
+		                                                <a href={"/wzxq/" + article.article_id + ".html"}>
 		                                                    <div className="col-md-3 col-sm-3 col-xs-12 news_pic">
 		                                                        <img src={host + article.article_image} alt="" />
 		                                                    </div>

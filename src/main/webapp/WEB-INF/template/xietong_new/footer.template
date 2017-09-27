@@ -8,7 +8,7 @@
                         	#(websiteMenu.website_menu_name)
                         <ul>
                         	#for(websiteMenuChildren : websiteMenu.children)
-                            <li><a href="#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</a></li>
+                            <li><a href="/#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</a></li>
                             #end
                         </ul>
                     </div>

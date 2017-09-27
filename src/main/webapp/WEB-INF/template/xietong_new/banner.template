@@ -2,7 +2,7 @@
 	#for(advertisement : indexBannerList)
 		<Carousel.Item>
 			#if(advertisement.advertisement_link)
-			<a href="#(advertisement.advertisement_link)">
+			<a href="/#(advertisement.advertisement_link)">
 				<img src={host + "#(advertisement.advertisement_image_file.file_original_path)"} style={{marginLeft: "auto", marginRight: "auto"}} alt="" />
 			</a>
 			#else
