@@ -52,7 +52,7 @@ public class JianglingCustomerController extends Controller {
 
     @ActionKey("/mobile/jiangling/customer/save")
     public void save() {
-        validateRequest(JianglingCustomer.CUSTOMER_NAME, JianglingCustomer.CUSTOMER_MOBILE, JianglingCustomer.CUSTOMER_DISTRIBUTOR, JianglingCustomer.CUSTOMER_CAR);
+        validateRequest(JianglingCustomer.CUSTOMER_NAME, JianglingCustomer.CUSTOMER_MOBILE, JianglingCustomer.CUSTOMER_CAR);
 
         JSONObject jsonObject = getParameterJSONObject();
         String request_app_id = getRequest_app_id();

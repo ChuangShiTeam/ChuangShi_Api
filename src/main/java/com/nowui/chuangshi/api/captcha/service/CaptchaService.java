@@ -212,9 +212,13 @@ public class CaptchaService extends Service {
         } catch (ClientException e) {
             e.printStackTrace();
         }
-        if(sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {
+        if (sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {
 //请求成功
         }
+
+
+        System.out.println(sendSmsResponse.getCode());
+        System.out.println(sendSmsResponse.getMessage());
     }
 
 }
