@@ -12,6 +12,7 @@ import com.nowui.chuangshi.common.request.BodyReaderHttpServletRequestWrapper;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.*;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.http.HttpStatus;
 
 import java.sql.Connection;
@@ -78,6 +79,12 @@ public class GlobalActionInterceptor implements Interceptor {
 
             if (ValidateUtil.isNull(http_request)) {
                 http_request = new JSONObject();
+            }
+
+            for (Map.Entry<String, Object> entry : http_request.entrySet()) {
+                if (entry.getValue() instanceof String) {
+                    http_request.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+                }
             }
 
             if (controller instanceof com.nowui.chuangshi.controller.Controller) {

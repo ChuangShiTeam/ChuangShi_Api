@@ -1,9 +1,6 @@
 package com.nowui.chuangshi.util;
 
-import com.jfinal.kit.Kv;
 import com.jfinal.kit.PathKit;
-import com.jfinal.template.Template;
-import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 
 import javax.imageio.ImageIO;
