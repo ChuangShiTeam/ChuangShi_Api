@@ -28,7 +28,9 @@
         constructor(props) {
             super(props);
 
-            this.state = {}
+            this.state = {
+            	menu_index: 3
+            }
         }
 
         componentDidMount() {

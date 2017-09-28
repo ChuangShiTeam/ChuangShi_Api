@@ -32,7 +32,8 @@
             this.state = {
             	is_load: false,
                 result_type: "",
-                result_message: ""
+                result_message: "",
+                menu_index: 7
             }
         }
 
@@ -107,12 +108,12 @@
         }
 
         render() {
-            const {Navbar, Nav, NavItem, NavDropdown, MenuItem, Form, FormGroup, Col, FormControl, ControlLabel, Button, Alert, Radio, HelpBlock} = ReactBootstrap;
+            const {Navbar, Nav, NavItem, NavDropdown, MenuItem, Carousel, Form, FormGroup, Col, FormControl, ControlLabel, Button, Alert, Radio, HelpBlock} = ReactBootstrap;
 
 			const {getFieldProps, getFieldError, getFieldValue} = this.props.form;
 			
 			const formInstance = (
-                    <Form horizontal className="form">
+                    <Form horizontal style={{marginTop: '20px'}}>
                         <FormGroup {...getFieldProps('teacher_recruitment_name', {
                             rules: [{
                                 required: true,
@@ -123,7 +124,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 姓名
                             </Col>
-                            <Col sm={7}>
+                            <Col sm={9}>
                                 <FormControl placeholder="请输入姓名"/>
                                 <FormControl.Feedback />
                                 <span className="error-message">{getFieldError('teacher_recruitment_name')}</span>
@@ -161,7 +162,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 出生日期
                             </Col>
-                            <Col sm={7}>
+                            <Col sm={9}>
                                 <FormControl type="date"  placeholder="请输入出生日期" />
                                 <FormControl.Feedback />
                                 <span className="error-message">{getFieldError('teacher_recruitment_birthday')}</span>
@@ -177,7 +178,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 手机号码
                             </Col>
-                            <Col sm={6}>
+                            <Col sm={9}>
                                 <FormControl type="tel" placeholder="请输入手机号码" />
                                 <FormControl.Feedback />
                                 <span className="error-message">{getFieldError('teacher_recruitment_mobile')}</span>
@@ -193,7 +194,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 邮箱地址
                             </Col>
-                            <Col sm={7}>
+                            <Col sm={9}>
                                 <FormControl type="email" placeholder="请输入邮箱地址" />
                                 <FormControl.Feedback />
                                 <span className="error-message">{getFieldError('teacher_recruitment_mobile')}</span>
@@ -231,7 +232,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 应聘学科
                             </Col>
-                            <Col sm={7}>
+                            <Col sm={9}>
                                 <FormControl type="text" placeholder="请输入应聘学科" />
                                 <FormControl.Feedback />
                                 <span className="error-message">{getFieldError('teacher_recruitment_subject')}</span>
@@ -247,7 +248,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 是否应届毕业生
                             </Col>
-                            <Col sm={7}>
+                            <Col sm={9}>
                                 <Radio name="teacher_recruitment_is_fresh_graduate" value="true">
                                     是
                                 </Radio>
@@ -263,7 +264,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 工作年限
                             </Col>
-                            <Col sm={7}>
+                            <Col sm={9}>
                                 <FormControl type="text" placeholder="请输入工作年限" />
                             </Col>
                         </FormGroup>
@@ -271,7 +272,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 原工作单位
                             </Col>
-                            <Col sm={7}>
+                            <Col sm={9}>
                                 <FormControl type="text" placeholder="请输入原工作单位" />
                             </Col>
                         </FormGroup>
@@ -285,7 +286,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 政治面貌
                             </Col>
-                            <Col sm={7}>
+                            <Col sm={9}>
                                 <FormControl type="text" placeholder="请输入政治面貌" />
                                 <FormControl.Feedback />
                                 <span className="error-message">{getFieldError('teacher_recruitment_politics_status')}</span>
@@ -295,7 +296,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 职称
                             </Col>
-                            <Col sm={6}>
+                            <Col sm={9}>
                                 <FormControl type="text" placeholder="请输入职称" />
                             </Col>
                         </FormGroup>
@@ -309,7 +310,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 学历
                             </Col>
-                            <Col sm={6}>
+                            <Col sm={9}>
                                 <FormControl type="text" placeholder="请输入学历" />
                                 <FormControl.Feedback />
                                 <span className="error-message">{getFieldError('teacher_recruitment_education')}</span>
@@ -325,7 +326,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 专业
                             </Col>
-                            <Col sm={6}>
+                            <Col sm={9}>
                                 <FormControl type="text" placeholder="请输入专业" />
                                 <FormControl.Feedback />
                                 <span className="error-message">{getFieldError('teacher_recruitment_major')}</span>
@@ -334,15 +335,15 @@
                         <FormGroup {...getFieldProps('teacher_recruitment_grad_school', {
                             rules: [{
                                 required: true,
-                                message: '毕业院校（本科、硕士）不能为空'
+                                message: '毕业院校不能为空'
                             }],
                             initialValue: ''
                         })} validationState={getFieldError('teacher_recruitment_grad_school') ? 'error' : getFieldValue('teacher_recruitment_grad_school') === '' ? null : 'success'}>
                             <Col componentClass={ControlLabel} sm={2}>
-                                毕业院校（本科、硕士）
+                                毕业院校
                             </Col>
-                            <Col sm={6}>
-                                <FormControl placeholder="请输入毕业院校（本科、硕士）" />
+                            <Col sm={9}>
+                                <FormControl placeholder="请输入毕业院校" />
                                 <FormControl.Feedback />
                                 <span className="error-message">{getFieldError('teacher_recruitment_grad_school')}</span>
                             </Col>
@@ -357,7 +358,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 教育经历
                             </Col>
-                            <Col sm={6}>
+                            <Col sm={9}>
                                 <FormControl componentClass="textarea" />
                                 <FormControl.Feedback />
                                 <span className="error-message">{getFieldError('teacher_recruitment_education_experience')}</span>
@@ -367,7 +368,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 工作经历
                             </Col>
-                            <Col sm={6}>
+                            <Col sm={9}>
                                 <FormControl componentClass="textarea"/>
                             </Col>
                         </FormGroup>
@@ -375,7 +376,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 所获代表性荣誉
                             </Col>
-                            <Col sm={6}>
+                            <Col sm={9}>
                                 <FormControl componentClass="textarea"/>
                             </Col>
                         </FormGroup>
@@ -389,7 +390,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 现住址
                             </Col>
-                            <Col sm={6}>
+                            <Col sm={9}>
                                 <FormControl componentClass="textarea"/>
                                 <FormControl.Feedback />
                                 <span className="error-message">{getFieldError('teacher_recruitment_now_address')}</span>
@@ -400,7 +401,7 @@
                             <Col componentClass={ControlLabel} sm={2}>
                                 请上传您的电子版简历
                             </Col>
-                            <Col sm={6}>
+                            <Col sm={9}>
                                 <FormControl type="file" inputRef={ref => {
                                     this.teacher_recruitment_file = ref;
                                 }}
@@ -411,14 +412,14 @@
                         </FormGroup>
 
                         <FormGroup>
-                            <Col smOffset={2} sm={6}>
+                            <Col smOffset={2} sm={9}>
                                 <Button disabled={this.state.is_load} onClick={this.handlSubmit.bind(this)}>
                                     {this.state.is_load ? "加载中.." : "提交"}
                                 </Button>
                             </Col>
                         </FormGroup>
                         <FormGroup>
-                            <Col smOffset={2} sm={7}>
+                            <Col smOffset={2} sm={9}>
                                 {
                                     this.state.result_type == "" ?
                                         ""
@@ -461,10 +462,11 @@
                                         <div className="main-right-title">
                                            	 #(page_name)
                                             <div className="main-right-title-extra">
-                                                <a href="/index.html">首页</a> &gt;<a href="xxbzs.html">招生招聘</a> &gt; <a>教师招聘</a>
+                                                <a href="/index.html">首页</a> &gt;<a href="/xxbzs.html">招生招聘</a> &gt; <a>教师招聘</a>
                                             </div>
                                         </div>
                                         <div className="main-right-content">
+                                        	<div style={{textAlign:'center'}}><h1>教师招聘</h1></div>
                                            	{formInstance}                                    
                                         </div>
                                     </div>

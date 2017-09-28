@@ -8,6 +8,7 @@ public enum UserType {
     DEALER("DEALER", "经销商"),
     SUPPLIER("SUPPLIER", "供应商"),
     STUDENT("STUDENT", "学生"),
+    ADMISSIONS("ADMISSIONS", "报名者"),
     TEACHER("TEACHER", "老师");
 
     private String key;

@@ -33,7 +33,8 @@
             	page_size: 7,
             	article_category_id: '#(articleCategory.article_category_id)',
             	articleList: [],
-            	total: 0
+            	total: 0,
+            	menu_index: 1
             }
         }
 
@@ -48,7 +49,8 @@
             	page_size: 7,
             	article_category_id: '#(articleCategory.article_category_id)',
             	articleList: [],
-            	total: 0
+            	total: 0,
+            	menu_index: 1
 			});
         }
 
@@ -136,7 +138,7 @@
                                         	{
                                         		this.state.articleList.map(function(article){
                                         			return (<div className="news_ct">
-		                                                <a href={"/wzxq/" + article.article_id + ".html"}>
+		                                                <a href={article.article_is_outer_link?article.article_outer_link:"/wzxq/" + article.article_id + ".html"} target={article.article_is_outer_link?"_blank":"_self"}>
 		                                                    <div className="col-md-3 col-sm-3 col-xs-12 news_pic">
 		                                                        <img src={host + article.article_image} alt="" />
 		                                                    </div>

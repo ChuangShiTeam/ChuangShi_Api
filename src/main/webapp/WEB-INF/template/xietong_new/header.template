@@ -37,13 +37,9 @@
         </div>
         <div className="header-menu">
             <ul>
-            	 #for(websiteMenu : websiteMenuList)
+        	 	#for(websiteMenu : websiteMenuList)
 				<li>
-					#if(for.first)
-					<a href="/#(websiteMenu.website_menu_url)" className="on">#(websiteMenu.website_menu_name)</a>
-					#else
-					<a href="/#(websiteMenu.website_menu_url)">#(websiteMenu.website_menu_name)</a>
-					#end
+					<a href="/#(websiteMenu.website_menu_url)" className={this.state.menu_index === #(for.count)?"on":""}>#(websiteMenu.website_menu_name)</a>
 					<ul>
 					    #for(websiteMenuChildren : websiteMenu.children)
 						<li><a href="/#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</a></li>

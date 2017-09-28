@@ -46,6 +46,7 @@
             	articleList: [],
             	articleListByCategory: {},
                 link: 'group',
+                menu_index: 1
             }
         }
         
@@ -163,7 +164,7 @@
                                         		this.state.articleList.map(function(article){
                                         			return (
 	                                    				<div className="news_ct">
-			                                                <a href={"wzxq/" + article.article_id + ".html"}>
+			                                                <a href={article.article_is_outer_link?article.article_outer_link:"/wzxq/" + article.article_id + ".html"} target={article.article_is_outer_link?"_blank":"_self"}>
 			                                                    <li>
 			                                                   	 	{article.article_name}
 		                                                    		<p>{article.system_create_time.substring(0, 10)}</p>
