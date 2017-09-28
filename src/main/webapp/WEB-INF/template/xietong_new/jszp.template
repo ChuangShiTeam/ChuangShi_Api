@@ -32,7 +32,8 @@
             this.state = {
             	is_load: false,
                 result_type: "",
-                result_message: ""
+                result_message: "",
+                menu_index: 7
             }
         }
 

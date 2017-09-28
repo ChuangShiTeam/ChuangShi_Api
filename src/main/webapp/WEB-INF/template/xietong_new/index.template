@@ -46,6 +46,7 @@
             	articleList: [],
             	articleListByCategory: {},
                 link: 'group',
+                menu_index: 1
             }
         }
         

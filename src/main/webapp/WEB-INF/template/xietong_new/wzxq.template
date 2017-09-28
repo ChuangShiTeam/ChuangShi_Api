@@ -29,6 +29,7 @@
             super(props);
 
             this.state = {
+            	menu_index: 1
             }
         }
 
