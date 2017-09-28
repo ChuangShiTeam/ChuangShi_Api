@@ -334,15 +334,15 @@
                         <FormGroup {...getFieldProps('teacher_recruitment_grad_school', {
                             rules: [{
                                 required: true,
-                                message: '毕业院校（本科、硕士）不能为空'
+                                message: '毕业院校不能为空'
                             }],
                             initialValue: ''
                         })} validationState={getFieldError('teacher_recruitment_grad_school') ? 'error' : getFieldValue('teacher_recruitment_grad_school') === '' ? null : 'success'}>
                             <Col componentClass={ControlLabel} sm={2}>
-                                毕业院校（本科、硕士）
+                                毕业院校
                             </Col>
                             <Col sm={9}>
-                                <FormControl placeholder="请输入毕业院校（本科、硕士）" />
+                                <FormControl placeholder="请输入毕业院校" />
                                 <FormControl.Feedback />
                                 <span className="error-message">{getFieldError('teacher_recruitment_grad_school')}</span>
                             </Col>
@@ -461,7 +461,7 @@
                                         <div className="main-right-title">
                                            	 #(page_name)
                                             <div className="main-right-title-extra">
-                                                <a href="/index.html">首页</a> &gt;<a href="xxbzs.html">招生招聘</a> &gt; <a>教师招聘</a>
+                                                <a href="/index.html">首页</a> &gt;<a href="/xxbzs.html">招生招聘</a> &gt; <a>教师招聘</a>
                                             </div>
                                         </div>
                                         <div className="main-right-content">
