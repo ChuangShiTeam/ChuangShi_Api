@@ -71,11 +71,11 @@
                                         	#for(bean : articleCategoryList)
 											#if(bean.article_category_id == articleCategory.article_category_id)
 											<li className="active">
-												<a href="../xydt/#(bean.article_category_id).html">#(bean.article_category_name)</a>
+												<a href="/xydt/#(bean.article_category_id).html">#(bean.article_category_name)</a>
 											</li>
 											#else
 											<li>
-												<a href="../xydt/#(bean.article_category_id).html">#(bean.article_category_name)</a>
+												<a href="/xydt/#(bean.article_category_id).html">#(bean.article_category_name)</a>
 											</li>
 											#end
 											#end

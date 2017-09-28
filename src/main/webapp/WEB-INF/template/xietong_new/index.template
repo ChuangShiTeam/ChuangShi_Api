@@ -234,43 +234,53 @@
                             <div className="row">
                                 <div className="col-md-4 col-sm-6 col-xs-12 index-main-photo">
                                     <div className="index-main-photo-mask">
+                                    	<a href="/gltd.html">
                                         <img width="100%" src="image/index_fast01.jpg" alt=""/>
                                         <div className="index-main-photo-mask-text-01">
                                            	 教师风采
                                             <p>全面综合的供教师的素质</p>
                                         </div>
+                                        </a>
                                     </div>
                                     <div className="index-main-photo-mask">
+                                    	<a href="/xsst.html">
                                         <img width="100%" src="image/index_fast02.jpg" alt=""/>
                                         <div className="index-main-photo-mask-text-02">
                                             	学生社团
                                             <p>各个学生活动中心丰富多彩</p>
                                         </div>
+                                        </a>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-6 col-xs-12 index-main-photo center">
                                     <div className="index-main-photo-mask">
+                                    	<a href="/xxjj.html">
                                         <img width="100%" src="image/index_fast03.jpg" alt=""/>
                                         <div className="index-main-photo-mask-text-03">
                                             	美丽校园
                                             <p>学校的门户网站首页一方面需要包涵协同国际学校的...</p>
                                         </div>
+                                        </a>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12 index-main-photo">
                                     <div className="col-md-12 col-sm-6 row-clo index-main-photo-mask">
+                                    	<a href="/xxkcb.html">
                                         <img width="100%" src="image/index_fast04.jpg" alt=""/>
                                         <div className="index-main-photo-mask-text-01">
                                             	课程选择
                                             <p>全面综合的供教师的素质</p>
                                         </div>
+                                        </a>
                                     </div>
                                     <div className="col-md-12 col-sm-6 row-clo index-main-photo-mask">
+                                    	<a href="/mlkt.html">
                                         <img width="100%" src="image/index_fast05.jpg" alt=""/>
                                         <div className="index-main-photo-mask-text-02">
                                             	魅力课堂
                                             <p>各个学生活动中心丰富多彩</p>
                                         </div>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

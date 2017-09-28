@@ -72,7 +72,7 @@
                                         	#for(websiteMenu : websiteMenuList)
 							                #if(websiteMenu.website_menu_id == "dc99f3ff1ecb4d5baf166bdbd3088f98")
 							                #for(websiteMenuChildren : websiteMenu.children)
-											<li #if(websiteMenuChildren.website_menu_url == page_url)className="active"#end><a href="#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</a></li>
+											<li #if(websiteMenuChildren.website_menu_url == page_url)className="active"#end><a href="/#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</a></li>
 											#end
 											#end
 											#end
@@ -83,7 +83,7 @@
                                         <div className="main-right-title">
                                            	 #(page_name)
                                             <div className="main-right-title-extra">
-                                                <a href="index.html">首页</a> &gt;<a href="lxyz.html">党建栏目</a> &gt; <a>#(page_name)</a>
+                                                <a href="/index.html">首页</a> &gt;<a href="/lxyz.html">党建栏目</a> &gt; <a>#(page_name)</a>
                                             </div>
                                         </div>
                                         <div className="main-right-content" dangerouslySetInnerHTML={{__html: '#(page_content)'}}>
