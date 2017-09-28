@@ -214,11 +214,12 @@ public class CaptchaService extends Service {
         }
         if (sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {
 //请求成功
+        } else {
+            System.out.println(sendSmsResponse.getCode());
+            System.out.println(sendSmsResponse.getMessage());
+
+            throw new RuntimeException("短信发送不成功");
         }
-
-
-        System.out.println(sendSmsResponse.getCode());
-        System.out.println(sendSmsResponse.getMessage());
     }
 
 }
