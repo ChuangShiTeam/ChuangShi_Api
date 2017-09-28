@@ -53,7 +53,7 @@
             const NavDropdown = ReactBootstrap.NavDropdown;
             const MenuItem = ReactBootstrap.MenuItem;
             const Carousel = ReactBootstrap.Carousel;
-            const Pagination = ReactBootstrap.Pagination;
+            const Col = ReactBootstrap.Col;
             return (
                     <div>
                         #include("header.template")
@@ -89,8 +89,24 @@
                                                 <a href="/index.html">首页</a> &gt;<a href="/xydt/#(articleCategory.article_category_id).html">#(articleCategory.article_category_name)</a> &gt; <a>#(article.article_name)</a>
                                             </div>
                                         </div>
-                                        <div className="main-right-content" dangerouslySetInnerHTML={{__html: '#(article.article_content)'}}>
-                                        	
+                                        <div className="main-right-content">
+                                        	<div style={{textAlign: 'center'}}>
+                                				<h1>#(article.article_name)</h1>
+                                			</div>
+                                			<div style={{textAlign: 'center', marginTop: '20px'}}>
+                                				<h4>
+                                					作者：#if(article.article_author)
+														#(article.article_author)
+														#else
+														admin 
+														#end
+													更新时间：#date(article.system_update_time, "yyyy-MM-dd")
+                                				</h4>
+                                			</div>
+	                                    	<div className="row">
+	                                    		<div className="col-md-12 row-clo" dangerouslySetInnerHTML={{__html: '#(article.article_content)'}}>
+	                                    		</div>
+	                                    	</div>
                                         </div>
                                     </div>
                                 </div>
