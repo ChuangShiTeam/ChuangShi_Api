@@ -2,14 +2,17 @@ package com.nowui.chuangshi.api.xietong.service;
 
 import java.util.List;
 
+import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.api.xietong.dao.XietongAdmissionsDao;
 import com.nowui.chuangshi.api.xietong.model.XietongAdmissions;
+import com.nowui.chuangshi.api.xietong.model.XietongStudent;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.CacheUtil;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 public class XietongAdmissionsService extends Service {
 
@@ -55,11 +58,6 @@ public class XietongAdmissionsService extends Service {
         return xietong_admissions;
     }
 
-    public Boolean save(XietongAdmissions xietong_admissions, String system_create_user_id) {
-        Boolean success = xietongAdmissionsDao.save(xietong_admissions, system_create_user_id);
-        return success;
-    }
-    
     public Integer allCount(String app_id) {
     	Cnd cnd = new Cnd();
         cnd.where(XietongAdmissions.SYSTEM_STATUS, true);
@@ -69,19 +67,19 @@ public class XietongAdmissionsService extends Service {
         return count;
     }
     
-    public Boolean save(XietongAdmissions xietong_admissions) {
+    public Boolean save(XietongAdmissions xietong_admissions, String system_create_user_id) {
         String user_id = Util.getRandomUUID();
         xietong_admissions.setAdmissions_id(Util.getRandomUUID());
         xietong_admissions.setAdmissions_no(allCount(xietong_admissions.getApp_id()) + 1 + "");
         xietong_admissions.setUser_id(user_id);
-        Boolean success = this.save(xietong_admissions, user_id);
+        Boolean success = xietongAdmissionsDao.save(xietong_admissions, system_create_user_id);
         if (success) {
         	String user_account = xietong_admissions.getAdmissions_certificate_number();
         	String user_password = "123456";  //默认密码123456
         	if (user_account.length() > 6) {  //长度大于6时用证件号码后6位作为密码
         		user_password = user_account.substring(user_account.length() - 6, user_account.length());
         	}
-            UserService.instance.userAccountSave(user_id, xietong_admissions.getApp_id(), xietong_admissions.getAdmissions_id(), UserType.ADMISSIONS.getKey(), xietong_admissions.getAdmissions_name(), user_account, user_password, user_id);
+            UserService.instance.userAccountSave(user_id, xietong_admissions.getApp_id(), xietong_admissions.getAdmissions_id(), UserType.ADMISSIONS.getKey(), xietong_admissions.getAdmissions_name(), user_account, user_password, system_create_user_id);
         }
         return success;
     }
@@ -98,6 +96,19 @@ public class XietongAdmissionsService extends Service {
             CacheUtil.remove(XIETONG_ADMISSIONS_ITEM_CACHE, admissions_id);
         }
 
+        return success;
+    }
+    
+    public Boolean update(XietongAdmissions xietong_admissions, User user, String request_user_id, Integer system_version) {
+        boolean success = this.update(xietong_admissions, xietong_admissions.getAdmissions_id(), request_user_id, system_version);
+        
+        if (success) {
+            UserService.instance.userNameUpdate(user.getUser_id(), xietong_admissions.getAdmissions_name(), request_user_id);
+            if (!ValidateUtil.isNullOrEmpty(user.getUser_password())) {
+            	UserService.instance.userPasswordUpdate(user.getUser_id(), user.getUser_password(), request_user_id);
+            }
+        }
+        
         return success;
     }
 

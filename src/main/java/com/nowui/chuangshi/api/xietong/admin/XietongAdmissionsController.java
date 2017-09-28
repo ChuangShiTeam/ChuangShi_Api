@@ -2,6 +2,7 @@ package com.nowui.chuangshi.api.xietong.admin;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.xietong.model.XietongAdmissions;
 import com.nowui.chuangshi.api.xietong.service.XietongAdmissionsService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -46,10 +47,9 @@ public class XietongAdmissionsController extends Controller {
 
     @ActionKey("/admin/xietong/admissions/save")
     public void save() {
-        validateRequest(XietongAdmissions.USER_ID, XietongAdmissions.ADMISSIONS_NO, XietongAdmissions.ADMISSIONS_NAME, XietongAdmissions.ADMISSIONS_CERTIFICATE_TYPE, XietongAdmissions.ADMISSIONS_CERTIFICATE_NUMBER, XietongAdmissions.ADMISSIONS_SEX, XietongAdmissions.ADMISSIONS_BIRTHDAY, XietongAdmissions.ADMISSIONS_IS_APPLY_LIVE_SCHOOL, XietongAdmissions.ADMISSIONS_OLD_SCHOOL, XietongAdmissions.ADMISSIONS_REGISTRATION_ADDRESS, XietongAdmissions.ADMISSIONS_HOME_ADDRESS, XietongAdmissions.ADMISSIONS_HOME_FIRST_NAME, XietongAdmissions.ADMISSIONS_HOME_FIRST_UNIT, XietongAdmissions.ADMISSIONS_HOME_FIRST_TEL, XietongAdmissions.ADMISSIONS_HOME_SECOND_NAME, XietongAdmissions.ADMISSIONS_HOME_SECOND_UNIT, XietongAdmissions.ADMISSIONS_HOME_SECOND_TEL, XietongAdmissions.ADMISSIONS_NOTES);
+        validateRequest(XietongAdmissions.ADMISSIONS_NAME, XietongAdmissions.ADMISSIONS_CERTIFICATE_TYPE, XietongAdmissions.ADMISSIONS_CERTIFICATE_NUMBER, XietongAdmissions.ADMISSIONS_SEX, XietongAdmissions.ADMISSIONS_BIRTHDAY, XietongAdmissions.ADMISSIONS_IS_APPLY_LIVE_SCHOOL, XietongAdmissions.ADMISSIONS_OLD_SCHOOL, XietongAdmissions.ADMISSIONS_REGISTRATION_ADDRESS, XietongAdmissions.ADMISSIONS_HOME_ADDRESS, XietongAdmissions.ADMISSIONS_HOME_FIRST_NAME, XietongAdmissions.ADMISSIONS_HOME_FIRST_UNIT, XietongAdmissions.ADMISSIONS_HOME_FIRST_TEL, XietongAdmissions.ADMISSIONS_HOME_SECOND_NAME, XietongAdmissions.ADMISSIONS_HOME_SECOND_UNIT, XietongAdmissions.ADMISSIONS_HOME_SECOND_TEL, XietongAdmissions.ADMISSIONS_NOTES);
 
         XietongAdmissions model = getModel(XietongAdmissions.class);
-        model.setAdmissions_id(Util.getRandomUUID());
         String request_user_id = getRequest_user_id();
 
         Boolean result = XietongAdmissionsService.instance.save(model, request_user_id);
@@ -59,12 +59,13 @@ public class XietongAdmissionsController extends Controller {
 
     @ActionKey("/admin/xietong/admissions/update")
     public void update() {
-        validateRequest(XietongAdmissions.ADMISSIONS_ID, XietongAdmissions.USER_ID, XietongAdmissions.ADMISSIONS_NO, XietongAdmissions.ADMISSIONS_NAME, XietongAdmissions.ADMISSIONS_CERTIFICATE_TYPE, XietongAdmissions.ADMISSIONS_CERTIFICATE_NUMBER, XietongAdmissions.ADMISSIONS_SEX, XietongAdmissions.ADMISSIONS_BIRTHDAY, XietongAdmissions.ADMISSIONS_IS_APPLY_LIVE_SCHOOL, XietongAdmissions.ADMISSIONS_OLD_SCHOOL, XietongAdmissions.ADMISSIONS_REGISTRATION_ADDRESS, XietongAdmissions.ADMISSIONS_HOME_ADDRESS, XietongAdmissions.ADMISSIONS_HOME_FIRST_NAME, XietongAdmissions.ADMISSIONS_HOME_FIRST_UNIT, XietongAdmissions.ADMISSIONS_HOME_FIRST_TEL, XietongAdmissions.ADMISSIONS_HOME_SECOND_NAME, XietongAdmissions.ADMISSIONS_HOME_SECOND_UNIT, XietongAdmissions.ADMISSIONS_HOME_SECOND_TEL, XietongAdmissions.ADMISSIONS_NOTES, XietongAdmissions.SYSTEM_VERSION);
+        validateRequest(XietongAdmissions.USER_ID, XietongAdmissions.ADMISSIONS_ID, XietongAdmissions.ADMISSIONS_NO, XietongAdmissions.ADMISSIONS_NAME, XietongAdmissions.ADMISSIONS_CERTIFICATE_TYPE, XietongAdmissions.ADMISSIONS_CERTIFICATE_NUMBER, XietongAdmissions.ADMISSIONS_SEX, XietongAdmissions.ADMISSIONS_BIRTHDAY, XietongAdmissions.ADMISSIONS_IS_APPLY_LIVE_SCHOOL, XietongAdmissions.ADMISSIONS_OLD_SCHOOL, XietongAdmissions.ADMISSIONS_REGISTRATION_ADDRESS, XietongAdmissions.ADMISSIONS_HOME_ADDRESS, XietongAdmissions.ADMISSIONS_HOME_FIRST_NAME, XietongAdmissions.ADMISSIONS_HOME_FIRST_UNIT, XietongAdmissions.ADMISSIONS_HOME_FIRST_TEL, XietongAdmissions.ADMISSIONS_HOME_SECOND_NAME, XietongAdmissions.ADMISSIONS_HOME_SECOND_UNIT, XietongAdmissions.ADMISSIONS_HOME_SECOND_TEL, XietongAdmissions.ADMISSIONS_NOTES, XietongAdmissions.SYSTEM_VERSION);
 
         XietongAdmissions model = getModel(XietongAdmissions.class);
+        User userModel = getModel(User.class);
         String request_user_id = getRequest_user_id();
 
-        Boolean result = XietongAdmissionsService.instance.update(model, model.getAdmissions_id(), request_user_id, model.getSystem_version());
+        Boolean result = XietongAdmissionsService.instance.update(model, userModel, request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
     }

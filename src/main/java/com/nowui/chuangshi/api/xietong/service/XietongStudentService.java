@@ -126,7 +126,9 @@ public class XietongStudentService extends Service {
         
         if (success) {
             UserService.instance.userNameUpdate(user.getUser_id(), xietong_student.getStudent_name(), request_user_id);
-            UserService.instance.userPasswordUpdate(user.getUser_id(), user.getUser_password(), request_user_id);
+            if (!ValidateUtil.isNullOrEmpty(user.getUser_password())) {
+            	UserService.instance.userPasswordUpdate(user.getUser_id(), user.getUser_password(), request_user_id);
+            }
         }
         
         return success;

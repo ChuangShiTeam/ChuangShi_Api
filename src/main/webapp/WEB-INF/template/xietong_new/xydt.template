@@ -64,7 +64,7 @@
         
         handleLoadArticle(page_index) {
         	request({
-	            url: '/mobile/xietong/article/findByArticleCategoryId',
+	            url: '/mobile/xietong/article/acticle/category/list',
 	            data: {
 	            	article_category_id: this.state.article_category_id,
 				    page_index: page_index,
@@ -140,7 +140,7 @@
                                         			return (<div className="news_ct">
 		                                                <a href={article.article_is_outer_link?article.article_outer_link:"/wzxq/" + article.article_id + ".html"} target={article.article_is_outer_link?"_blank":"_self"}>
 		                                                    <div className="col-md-3 col-sm-3 col-xs-12 news_pic">
-		                                                        <img src={host + article.article_image} alt="" />
+		                                                        <img src={host + article.article_image_file} alt="" />
 		                                                    </div>
 		                                                    <div className=" col-md-9 col-sm-9 col-xs-12 news_txt">
 		                                                        <h4>{article.article_name}</h4>

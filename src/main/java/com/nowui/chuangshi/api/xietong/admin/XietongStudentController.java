@@ -1,5 +1,7 @@
 package com.nowui.chuangshi.api.xietong.admin;
 
+import java.util.List;
+
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.upload.UploadFile;
@@ -11,9 +13,6 @@ import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
 import com.nowui.chuangshi.constant.Constant;
-import com.nowui.chuangshi.util.Util;
-
-import java.util.List;
 
 @Before(AdminInterceptor.class)
 @ControllerKey("/admin/xietong/student")
@@ -62,7 +61,7 @@ public class XietongStudentController extends Controller {
 
     @ActionKey("/admin/xietong/student/update")
     public void update() {
-        validateRequest(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_NAME, XietongStudent.SYSTEM_VERSION);
+        validateRequest(XietongStudent.USER_ID, XietongStudent.STUDENT_ID, XietongStudent.STUDENT_NAME, XietongStudent.SYSTEM_VERSION);
         XietongStudent model = getModel(XietongStudent.class);
         User userModel = getModel(User.class);
         
