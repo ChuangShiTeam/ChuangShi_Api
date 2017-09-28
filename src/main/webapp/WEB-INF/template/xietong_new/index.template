@@ -79,7 +79,7 @@
         		});
         	} else {
 	        	request({
-		            url: '/mobile/xietong/article/findByArticleCategoryId',
+		            url: '/mobile/xietong/article/acticle/category/list',
 		            data: {
 		            	article_category_id: article_category_id,
 					    page_index: 1,

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cn">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>小学部-佛山协同国际学校</title>
+    <meta name="Keywords" content="佛山市实验学校,协同学校,佛山市协同学校,佛山协同国际学校">
+    <meta name="Description"
+          content="佛山市协同（国际）学校，由佛山市实验学校教育集团管理运营，与美国协同教育集团战略合作，是一所国际化、特色化、精英化的学校。国内教育部为小学初中9年一贯制（将开设高中部），国际教育部为幼儿园小学初中高中15年一贯制。秉承“协性同心、和人济世”的教育理念，培养适应现代、走向世界、引领未来的精英人才。">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <script src="js/react.min.js"></script>
+    <script src="js/react-dom.min.js"></script>
+    <script src="js/browser.min.js"></script>
+    <script src="js/react-bootstrap.min.js"></script>
+    <script src="js/reqwest.min.js"></script>
+    <script src="js/util.js"></script>
+</head>
+<body id="root">
+</body>
+<script type="text/babel">
+    class Component extends React.Component {
+        constructor(props) {
+            super(props);
+
+            this.state = {
+            	menu_index: 1
+            }
+        }
+
+        componentDidMount() {
+
+        }
+
+        componentWillUnmount() {
+
+        }
+
+        handleLogin() {
+            login();
+        }
+
+        handleLogout() {
+            logout();
+        }
+
+        render() {
+            const Navbar = ReactBootstrap.Navbar;
+            const Nav = ReactBootstrap.Nav;
+            const NavItem = ReactBootstrap.NavItem;
+            const NavDropdown = ReactBootstrap.NavDropdown;
+            const MenuItem = ReactBootstrap.MenuItem;
+            const Carousel = ReactBootstrap.Carousel;
+
+            return (
+                    <div>
+                        #include("header.template")
+                        #include("banner.template")
+                        <div className="main xxb_bg">
+                            <div className="container">
+                                <div className="row">
+                                    <div className="xxb-main">
+                                        <div className="col-md-8 col-sm-12 col-xs-12">
+                                            <div className="dpar">
+                                                <div className="title">新闻速递</div>
+                                                <div className="dpar_cont">
+                                                    <div className="col-md-6 col-sm-6 col-xs-6 news_pic">
+                                                        <img src="image/xxb_02.jpg" alt=""/>
+                                                        <p className="font14a">情境式教育，以学生的学习成长为本</p>
+                                                        <ul>
+                                                            <li><a href="#">小学生八大核心品质：文明、自信...</a></li>
+                                                            <li><a href="#">小学生八大核心品质：文明、自信...</a></li>
+                                                            <li><a href="#">小学生八大核心品质：文明、自信...</a></li>
+                                                        </ul>
+                                                        <div className="xxb_yel"><a href="#">查看更多></a></div>
+                                                    </div>
+                                                    <div className="col-md-6 col-sm-6 col-xs-6 news_pic">
+                                                        <img src="image/xxb_02.jpg" alt=""/>
+                                                        <p className="font14a">情境式教育，以学生的学习成长为本</p>
+                                                        <ul>
+                                                            <li><a href="#">小学生八大核心品质：文明、自信...</a></li>
+                                                            <li><a href="#">小学生八大核心品质：文明、自信...</a></li>
+                                                            <li><a href="#">小学生八大核心品质：文明、自信...</a></li>
+                                                        </ul>
+                                                        <div className="xxb_yel"><a href="#">查看更多></a></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="dpar">
+                                                <div className="title">
+                                                  	  特色活动
+                                                    <span className="pull-right font12b"><a href="#">MORE</a></span>
+                                                </div>
+                                                <div className="dpar_cont">
+                                                    <ul className="list-inline activity">
+                                                        <li>
+                                                            <a href="#">
+                                                                <img src="image/xxb_02.jpg" alt=""/>
+                                                            </a>
+                                                            <div className="bottom_info text-center">科学人文并重，既培养学生</div>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">
+                                                                <img src="image/xxb_02.jpg" alt=""/>
+                                                            </a>
+                                                            <div className="bottom_info text-center">科学人文并重，既培养学生</div>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">
+                                                                <img src="image/xxb_02.jpg" alt=""/>
+                                                            </a>
+                                                            <div className="bottom_info text-center">科学人文并重，既培养学生</div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div className="dpar">
+                                                <div className="title">
+                                                   	 小学教程
+                                                    <span className="pull-right font12b"><a href="#">MORE</a></span>
+                                                </div>
+                                                <div className="course">
+                                                    <div className="col-md-3 col-sm-3 col-xs-3 left_img">
+                                                        <img src="image/xxb_02.jpg" alt=""/>
+                                                    </div>
+                                                    <div className="col-md-9 col-sm-9 col-xs-9 right_text">
+                                                        <p className="font12b"><a href="#">“1+X”课程超市</a></p>
+                                                        <p>“1”代表优化整合后的国家基础性课程，整合为五大板块：品格与社会，体育与健康，语言与人文，数学与科技，艺术与审美；...</p>
+                                                        <div className="xxb_yel pull-right"><a href="#">查看更多></a></div>
+                                                    </div>
+                                                    <div className="clearfix"></div>
+                                                    <div className="info">
+                                                        “X”代表实现个性发展的特色化课程：语言类、美术类、音乐类、体育类、舞蹈类、思维类、生活类...
+									                                                        开展“共生式”课堂教学。强调创设教学情境，聚焦学生兴趣和注意力，尊重个性...
+									                                                        校园八大主题节日：体育节、文化节、艺术节、读书节、科技节、英语节、公益节、地球节...
+									                                                        小学生八大核心品质：文明、自信、诚实、自律、勤奋、责任、感恩、尊重。
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4 col-sm-12 col-xs-12">
+                                            <div className="dpar">
+                                                <div className="title">
+                                                    	优秀学生
+                                                    <span className="pull-right font12b"><a href="#">MORE</a></span>
+                                                </div>
+                                                <div className="dpar_cont">
+                                                    <div className="col-md-6 col-sm-6 col-xs-6 dp_r">
+                                                        <img src="image/xxb_02.jpg" alt=""/>
+                                                        <p>国际交流活动为学生</p>
+                                                    </div>
+                                                    <div className="col-md-6 col-sm-6 col-xs-6 dp_r">
+                                                        <img src="image/xxb_02.jpg" alt=""/>
+                                                        <p>国际交流活动为学生</p>
+                                                    </div>
+                                                    <div className="col-md-6 col-sm-6 col-xs-6 dp_r">
+                                                        <img src="image/xxb_02.jpg" alt=""/>
+                                                        <p>国际交流活动为学生</p>
+                                                    </div>
+                                                    <div className="col-md-6 col-sm-6 col-xs-6 dp_r">
+                                                        <img src="image/xxb_02.jpg" alt=""/>
+                                                        <p>国际交流活动为学生</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="dpar">
+                                                <div className="title">
+                                                    	魅力课题
+                                                    <span className="pull-right font12b"><a href="#">MORE</a></span>
+                                                </div>
+                                                <div className="dpar_cont">
+                                                    <div className="dpar_cont_banner">
+                                                        <Carousel className="banner">
+                                                            <Carousel.Item>
+                                                                <img src="image/banner.jpg" style={{marginLeft: "auto", marginRight: "auto"}} alt=""/>
+                                                            </Carousel.Item>
+                                                            <Carousel.Item>
+                                                                <img src="image/banner01.jpg" style={{marginLeft: "auto", marginRight: "auto"}} alt=""/>
+                                                            </Carousel.Item>
+                                                            <Carousel.Item>
+                                                                <img src="image/banner02.jpg" style={{marginLeft: "auto", marginRight: "auto"}} alt=""/>
+                                                            </Carousel.Item>
+                                                            <Carousel.Item>
+                                                                <img src="image/banner03.jpg" style={{marginLeft: "auto", marginRight: "auto"}} alt=""/>
+                                                            </Carousel.Item>
+                                                        </Carousel>
+                                                        <div className="bottom_text text-center">国际交流活动为学生</div>
+                                                    </div>
+                                                    <ul className="jxpg_txt">
+                                                        <li>
+                                                            <a href="#">“X”代表实现个性发展的特色化课程…</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">“X”代表实现个性发展的特色化课程…</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div className="dpar">
+                                                <div className="title">
+                                                		小学教程
+                                                    <span className="pull-right font12b"><a href="#">MORE</a></span>
+                                                </div>
+                                                <div className="dpar_cont">
+                                                    <div className="col-md-6 col-sm-6 col-xs-6 dp_r">
+                                                        <img src="image/xxb_02.jpg" alt=""/>
+                                                        <p>国际交流活动为学生</p>
+                                                    </div>
+                                                    <div className="col-md-6 col-sm-6 col-xs-6 dp_r">
+                                                        <img src="image/xxb_02.jpg" alt=""/>
+                                                        <p>国际交流活动为学生</p>
+                                                    </div>
+                                                    <div className="col-md-6 col-sm-6 col-xs-6 dp_r">
+                                                        <img src="image/xxb_02.jpg" alt=""/>
+                                                        <p>国际交流活动为学生</p>
+                                                    </div>
+                                                    <div className="col-md-6 col-sm-6 col-xs-6 dp_r">
+                                                        <img src="image/xxb_02.jpg" alt=""/>
+                                                        <p>国际交流活动为学生</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        #include("footer.template")
+                    </div>
+            );
+        }
+    }
+
+    ReactDOM.render(<Component/>, document.getElementById("root"));
+</script>

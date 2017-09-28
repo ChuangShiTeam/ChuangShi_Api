@@ -6,8 +6,6 @@ import java.util.Map;
 
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.article.model.Article;
-import com.nowui.chuangshi.api.article.model.ArticleCategory;
-import com.nowui.chuangshi.api.article.service.ArticleCategoryService;
 import com.nowui.chuangshi.api.article.service.ArticleService;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -17,8 +15,8 @@ import com.nowui.chuangshi.constant.Constant;
 @ControllerKey("/mobile/xietong/article")
 public class XietongArticleController extends Controller {
     
-    @ActionKey("/mobile/xietong/article/findByArticleCategoryId")
-    public void findByArticleCategoryId() {
+    @ActionKey("/mobile/xietong/article/acticle/category/list")
+    public void articleCategoryList() {
         validateRequest(Article.ARTICLE_CATEGORY_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
         
         Article model = getModel(Article.class);
