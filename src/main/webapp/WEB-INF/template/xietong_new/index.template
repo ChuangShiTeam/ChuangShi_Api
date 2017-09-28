@@ -274,7 +274,7 @@
                                         </a>
                                     </div>
                                     <div className="col-md-12 col-sm-6 row-clo index-main-photo-mask">
-                                    	<a href="/mlkt.html">
+                                    	<a href="/mlkc.html">
                                         <img width="100%" src="image/index_fast05.jpg" alt=""/>
                                         <div className="index-main-photo-mask-text-02">
                                             	魅力课堂

@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>招生招聘-#(page_name)-佛山协同国际学校</title>
+    <title>招生招聘-我要报名-佛山协同国际学校</title>
     <meta name="Keywords" content="佛山市实验学校,协同学校,佛山市协同学校,佛山协同国际学校">
     <meta name="Description"
           content="佛山市协同（国际）学校，由佛山市实验学校教育集团管理运营，与美国协同教育集团战略合作，是一所国际化、特色化、精英化的学校。国内教育部为小学初中9年一贯制（将开设高中部），国际教育部为幼儿园小学初中高中15年一贯制。秉承“协性同心、和人济世”的教育理念，培养适应现代、走向世界、引领未来的精英人才。">
@@ -78,11 +78,11 @@
                                         <div className="main-right-title">
                                            	 #(page_name)
                                             <div className="main-right-title-extra">
-                                                <a href="/index.html">首页</a> &gt;<a href="xxbzs.html">招生招聘</a> &gt; <a>#(page_name)</a>
+                                                <a href="/index.html">首页</a> &gt;<a href="xxbzs.html">招生招聘</a> &gt; <a>我要报名</a>
                                             </div>
                                         </div>
                                         <div className="main-right-content">
-                                                                                   
+                                          	                                         
                                         </div>
                                     </div>
                                 </div>
