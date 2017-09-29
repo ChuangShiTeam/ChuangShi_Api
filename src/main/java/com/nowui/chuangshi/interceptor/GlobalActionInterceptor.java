@@ -83,7 +83,7 @@ public class GlobalActionInterceptor implements Interceptor {
 
             for (Map.Entry<String, Object> entry : http_request.entrySet()) {
                 if (entry.getValue() instanceof String) {
-                    http_request.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+                    http_request.put(entry.getKey(), StringEscapeUtils.escapeHtml4((String) entry.getValue()));
                 }
             }
 

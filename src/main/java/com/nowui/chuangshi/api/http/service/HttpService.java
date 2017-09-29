@@ -5,6 +5,7 @@ import com.nowui.chuangshi.api.http.model.Http;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.List;
 
@@ -63,6 +64,8 @@ public class HttpService extends Service {
     }
 
     public Boolean save(Http http) {
+        http.setHttp_request(StringEscapeUtils.escapeHtml4((http.getHttp_request())));
+        http.setHttp_response(StringEscapeUtils.escapeHtml4((http.getHttp_response())));
         Boolean success = httpDao.save(http);
         return success;
     }

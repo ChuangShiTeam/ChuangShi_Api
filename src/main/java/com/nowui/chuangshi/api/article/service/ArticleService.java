@@ -31,6 +31,7 @@ public class ArticleService extends Service {
         cnd.where(Article.SYSTEM_STATUS, true);
         cnd.and(Article.APP_ID, app_id);
         cnd.andAllowEmpty(Article.ARTICLE_NAME, article_name);
+        cnd.desc(Article.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
         List<Article> articleList = articleDao.primaryKeyList(cnd);
