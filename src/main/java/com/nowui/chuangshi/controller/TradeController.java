@@ -70,6 +70,7 @@ public class TradeController extends Controller {
         MemberAddress memberAddress = memberAddressService.findByMember_id(member.getMember_id());
 
         BigDecimal trade_product_amount = BigDecimal.ZERO;
+        BigDecimal trade_express_amount = BigDecimal.ZERO;
         JSONArray productSkuArray = jsonObject.getJSONArray(Product.PRODUCT_SKU_LIST);
         for (int i = 0; i < productSkuArray.size(); i++) {
             JSONObject productSkuObject = productSkuArray.getJSONObject(i);
@@ -93,10 +94,13 @@ public class TradeController extends Controller {
 //                productSkuObject.put(ProductSkuPrice.PRODUCT_SKU_PRICE, new BigDecimal(0.01));
 //            }
         }
-
+        //当商品总金额小于100, 快递费为10
+        if (trade_product_amount.compareTo(new BigDecimal(100)) == -1) {
+            trade_express_amount = new BigDecimal(10);
+        }
         Map<String, Object> result = new HashMap<String, Object>();
         result.put(MemberAddress.MEMBER_ADDRESS, memberAddress);
-        result.put(Trade.TRADE_EXPRESS_AMOUNT, BigDecimal.ZERO);
+        result.put(Trade.TRADE_EXPRESS_AMOUNT, trade_express_amount);
         result.put(Product.PRODUCT_SKU_LIST, productSkuArray);
         result.put(Trade.TRADE_PRODUCT_AMOUNT, trade_product_amount);
 
@@ -135,7 +139,7 @@ public class TradeController extends Controller {
             result.put(Trade.TRADE_PRODUCT_SKU_LIST, tradeProductSkuList);
 
             result.keep(Trade.TRADE_ID, Trade.TRADE_FLOW, Trade.TRADE_NUMBER, Trade.TRADE_PRODUCT_QUANTITY,
-                    Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_PRODUCT_SKU_LIST);
+                    Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT, Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_PRODUCT_SKU_LIST);
         }
 
         renderSuccessJson(resultList);
@@ -240,12 +244,17 @@ public class TradeController extends Controller {
         boolean trade_is_confirm = false;
         boolean trade_is_commission = app.getApp_is_commission();
         boolean trade_status = true;
-
+        BigDecimal trade_express_amount = BigDecimal.ZERO;
+        if (trade_product_amount.compareTo(new BigDecimal(100)) == -1) {
+            trade_express_amount = new BigDecimal(10);
+        }
+        BigDecimal trade_discount_amount = BigDecimal.ZERO;
+        BigDecimal trade_total_amount = trade_product_amount.add(trade_express_amount).add(trade_discount_amount);
         Boolean flag = tradeService.save(trade_id, request_app_id, request_user_id, trade_number,
                 model.getTrade_receiver_name(), model.getTrade_receiver_mobile(), model.getTrade_receiver_province(),
                 model.getTrade_receiver_city(), model.getTrade_receiver_area(), model.getTrade_receiver_address(),
-                model.getTrade_message(), trade_product_quantity, trade_product_amount, new BigDecimal(0),
-                new BigDecimal(0), trade_product_amount, trade_is_commission, trade_is_confirm, trade_is_pay,
+                model.getTrade_message(), trade_product_quantity, trade_product_amount, trade_express_amount,
+                trade_discount_amount, trade_total_amount, trade_is_commission, trade_is_confirm, trade_is_pay,
                 trade_flow, trade_status, "", request_user_id);
         Map<String, String> result = new HashMap<>();
         if (flag) {
