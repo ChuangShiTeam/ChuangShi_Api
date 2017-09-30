@@ -66,6 +66,9 @@ public class Trade extends Model<Trade> {
 
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "订单流程")
     public static final String TRADE_FLOW = "trade_flow";
+    
+    @Column(type = ColumnType.VARCHAR, length = 25, comment = "订单发货模式")
+    public static final String TRADE_DELIVER_PATTERN = "trade_deliver_pattern";
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "订单状态")
     public static final String TRADE_STATUS = "trade_status";
@@ -233,6 +236,14 @@ public class Trade extends Model<Trade> {
 
     public void setTrade_flow(String trade_flow) {
         set(TRADE_FLOW, trade_flow);
+    }
+    
+    public String getTrade_deliver_pattern() {
+        return getStr(TRADE_DELIVER_PATTERN);
+    }
+    
+    public void setTrade_deliver_pattern(String trade_deliver_pattern) {
+        set(TRADE_DELIVER_PATTERN, trade_deliver_pattern);
     }
 
     public Boolean getTrade_status() {
