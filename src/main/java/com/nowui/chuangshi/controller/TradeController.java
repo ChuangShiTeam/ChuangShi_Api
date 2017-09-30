@@ -138,7 +138,7 @@ public class TradeController extends Controller {
             }
             result.put(Trade.TRADE_PRODUCT_SKU_LIST, tradeProductSkuList);
 
-            result.keep(Trade.TRADE_ID, Trade.TRADE_FLOW, Trade.TRADE_NUMBER, Trade.TRADE_PRODUCT_QUANTITY,
+            result.keep(Trade.TRADE_ID, Trade.TRADE_FLOW, Trade.TRADE_DELIVER_PATTERN, Trade.TRADE_NUMBER, Trade.TRADE_PRODUCT_QUANTITY,
                     Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT, Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_PRODUCT_SKU_LIST);
         }
 
@@ -197,7 +197,7 @@ public class TradeController extends Controller {
                 Trade.TRADE_RECEIVER_PROVINCE, Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA,
                 Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY,
                 Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT, Trade.TRADE_DISCOUNT_AMOUNT,
-                Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_FLOW, Trade.SYSTEM_VERSION, Trade.SYSTEM_CREATE_TIME,
+                Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_FLOW, Trade.TRADE_DELIVER_PATTERN, Trade.SYSTEM_VERSION, Trade.SYSTEM_CREATE_TIME,
                 Trade.TRADE_PRODUCT_SKU_LIST, Express.EXPRESS_TRADE_ID_LIST);
 
         renderSuccessJson(trade);
@@ -208,7 +208,7 @@ public class TradeController extends Controller {
         validateRequest_app_id();
         validate(Trade.TRADE_RECEIVER_NAME, Trade.TRADE_RECEIVER_MOBILE, Trade.TRADE_RECEIVER_PROVINCE,
                 Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE,
-                Product.PRODUCT_SKU_LIST, "open_id", "pay_type");
+                Trade.TRADE_DELIVER_PATTERN, Product.PRODUCT_SKU_LIST, "open_id", "pay_type");
 
         Trade model = getModel(Trade.class);
         String trade_id = Util.getRandomUUID();
@@ -255,7 +255,7 @@ public class TradeController extends Controller {
                 model.getTrade_receiver_city(), model.getTrade_receiver_area(), model.getTrade_receiver_address(),
                 model.getTrade_message(), trade_product_quantity, trade_product_amount, trade_express_amount,
                 trade_discount_amount, trade_total_amount, trade_is_commission, trade_is_confirm, trade_is_pay,
-                trade_flow, trade_status, "", request_user_id);
+                trade_flow, model.getTrade_deliver_pattern(), trade_status, "", request_user_id);
         Map<String, String> result = new HashMap<>();
         if (flag) {
             result = tradeService.pay(trade_id, open_id, "WX", request_user_id);
@@ -342,7 +342,7 @@ public class TradeController extends Controller {
                 Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE,
                 Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
                 Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_IS_COMMISSION,
-                Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_STATUS,
+                Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_DELIVER_PATTERN, Trade.TRADE_STATUS,
                 Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
 
         Trade model = getModel(Trade.class);
@@ -361,7 +361,7 @@ public class TradeController extends Controller {
                 model.getTrade_receiver_address(), model.getTrade_message(), model.getTrade_product_quantity(),
                 model.getTrade_product_amount(), model.getTrade_express_amount(), model.getTrade_discount_amount(),
                 model.getTrade_total_amount(), model.getTrade_is_commission(), model.getTrade_is_confirm(),
-                model.getTrade_is_pay(), model.getTrade_flow(), model.getTrade_status(), model.getTrade_audit_status(),
+                model.getTrade_is_pay(), model.getTrade_flow(), model.getTrade_deliver_pattern(), model.getTrade_status(), model.getTrade_audit_status(),
                 request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
@@ -451,7 +451,7 @@ public class TradeController extends Controller {
                     Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT,
                     Trade.TRADE_EXPRESS_AMOUNT, Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT,
                     Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW,
-                    Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
+                    Trade.TRADE_DELIVER_PATTERN, Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
         }
 
         renderSuccessJson(total, resultList);
@@ -483,7 +483,7 @@ public class TradeController extends Controller {
                 Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE,
                 Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
                 Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_IS_COMMISSION,
-                Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_STATUS,
+                Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_DELIVER_PATTERN, Trade.TRADE_STATUS,
                 Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
         result.put("trade", trade);
 
@@ -559,7 +559,7 @@ public class TradeController extends Controller {
                                     Trade.TRADE_MESSAGE, Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT,
                                     Trade.TRADE_EXPRESS_AMOUNT, Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT,
                                     Trade.TRADE_IS_COMMISSION, Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW,
-                                    Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
+                                    Trade.TRADE_DELIVER_PATTERN, Trade.TRADE_STATUS, Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
                             resultList.add(result);
                             break one;
                         }
@@ -598,7 +598,7 @@ public class TradeController extends Controller {
                 Trade.TRADE_RECEIVER_CITY, Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE,
                 Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
                 Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_IS_COMMISSION,
-                Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_STATUS,
+                Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_DELIVER_PATTERN, Trade.TRADE_STATUS,
                 Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
         result.put("trade", trade);
 
@@ -653,7 +653,7 @@ public class TradeController extends Controller {
                 Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE,
                 Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
                 Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_IS_COMMISSION,
-                Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_STATUS,
+                Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_DELIVER_PATTERN, Trade.TRADE_STATUS,
                 Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
 
         Trade model = getModel(Trade.class);
@@ -671,7 +671,7 @@ public class TradeController extends Controller {
                 model.getTrade_receiver_address(), model.getTrade_message(), model.getTrade_product_quantity(),
                 model.getTrade_product_amount(), model.getTrade_express_amount(), model.getTrade_discount_amount(),
                 model.getTrade_total_amount(), model.getTrade_is_commission(), model.getTrade_is_confirm(),
-                model.getTrade_is_pay(), model.getTrade_flow(), model.getTrade_status(), model.getTrade_audit_status(),
+                model.getTrade_is_pay(), model.getTrade_flow(), model.getTrade_deliver_pattern(), model.getTrade_status(), model.getTrade_audit_status(),
                 request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
@@ -785,7 +785,7 @@ public class TradeController extends Controller {
                 Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE,
                 Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
                 Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_IS_COMMISSION,
-                Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_STATUS,
+                Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_DELIVER_PATTERN, Trade.TRADE_STATUS,
                 Trade.TRADE_AUDIT_STATUS);
 
         Trade model = getModel(Trade.class);
@@ -798,7 +798,7 @@ public class TradeController extends Controller {
                 model.getTrade_message(), model.getTrade_product_quantity(), model.getTrade_product_amount(),
                 model.getTrade_express_amount(), model.getTrade_discount_amount(), model.getTrade_total_amount(),
                 model.getTrade_is_commission(), model.getTrade_is_confirm(), model.getTrade_is_pay(),
-                model.getTrade_flow(), model.getTrade_status(), model.getTrade_audit_status(), request_user_id);
+                model.getTrade_flow(), model.getTrade_deliver_pattern(), model.getTrade_status(), model.getTrade_audit_status(), request_user_id);
 
         renderSuccessJson(result);
     }
@@ -811,7 +811,7 @@ public class TradeController extends Controller {
                 Trade.TRADE_RECEIVER_AREA, Trade.TRADE_RECEIVER_ADDRESS, Trade.TRADE_MESSAGE,
                 Trade.TRADE_PRODUCT_QUANTITY, Trade.TRADE_PRODUCT_AMOUNT, Trade.TRADE_EXPRESS_AMOUNT,
                 Trade.TRADE_DISCOUNT_AMOUNT, Trade.TRADE_TOTAL_AMOUNT, Trade.TRADE_IS_COMMISSION,
-                Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_STATUS,
+                Trade.TRADE_IS_CONFIRM, Trade.TRADE_IS_PAY, Trade.TRADE_FLOW, Trade.TRADE_DELIVER_PATTERN, Trade.TRADE_STATUS,
                 Trade.TRADE_AUDIT_STATUS, Trade.SYSTEM_VERSION);
 
         Trade model = getModel(Trade.class);
@@ -823,7 +823,7 @@ public class TradeController extends Controller {
                 model.getTrade_receiver_address(), model.getTrade_message(), model.getTrade_product_quantity(),
                 model.getTrade_product_amount(), model.getTrade_express_amount(), model.getTrade_discount_amount(),
                 model.getTrade_total_amount(), model.getTrade_is_commission(), model.getTrade_is_confirm(),
-                model.getTrade_is_pay(), model.getTrade_flow(), model.getTrade_status(), model.getTrade_audit_status(),
+                model.getTrade_is_pay(), model.getTrade_deliver_pattern(), model.getTrade_flow(), model.getTrade_status(), model.getTrade_audit_status(),
                 request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);

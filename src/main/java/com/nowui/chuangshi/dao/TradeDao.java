@@ -118,7 +118,8 @@ public class TradeDao extends Dao {
 
     public Boolean save(String trade_id, String app_id, String user_id, String trade_number, String trade_receiver_name, String trade_receiver_mobile, String trade_receiver_province,
             String trade_receiver_city, String trade_receiver_area, String trade_receiver_address, String trade_message, Integer trade_product_quantity, BigDecimal trade_product_amount,
-            BigDecimal trade_express_amount, BigDecimal trade_discount_amount, BigDecimal trade_total_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, String trade_flow, Boolean trade_status,
+            BigDecimal trade_express_amount, BigDecimal trade_discount_amount, BigDecimal trade_total_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, 
+            String trade_flow, String trade_deliver_pattern, Boolean trade_status, 
             String trade_audit_status, String system_create_user_id) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Trade.TRADE_ID, trade_id);
@@ -141,6 +142,7 @@ public class TradeDao extends Dao {
         sqlMap.put(Trade.TRADE_IS_CONFIRM, trade_is_confirm);
         sqlMap.put(Trade.TRADE_IS_PAY, trade_is_pay);
         sqlMap.put(Trade.TRADE_FLOW, trade_flow);
+        sqlMap.put(Trade.TRADE_DELIVER_PATTERN, trade_deliver_pattern);
         sqlMap.put(Trade.TRADE_STATUS, trade_status);
         sqlMap.put(Trade.TRADE_AUDIT_STATUS, trade_audit_status);
         sqlMap.put(Trade.SYSTEM_CREATE_USER_ID, system_create_user_id);
@@ -158,7 +160,7 @@ public class TradeDao extends Dao {
 
     public Boolean update(String trade_id, String user_id, String trade_number, String trade_receiver_name, String trade_receiver_mobile, String trade_receiver_province, String trade_receiver_city,
             String trade_receiver_area, String trade_receiver_address, String trade_message, Integer trade_product_quantity, BigDecimal trade_product_amount, BigDecimal trade_express_amount,
-            BigDecimal trade_discount_amount, BigDecimal trade_total_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, String trade_flow, Boolean trade_status, String trade_audit_status,
+            BigDecimal trade_discount_amount, BigDecimal trade_total_amount, Boolean trade_is_commission, Boolean trade_is_confirm, Boolean trade_is_pay, String trade_flow, String trade_deliver_pattern, Boolean trade_status, String trade_audit_status,
             String system_update_user_id, Integer system_version) {
         Kv sqlMap = Kv.create();
         sqlMap.put(Trade.TRADE_ID, trade_id);
@@ -180,6 +182,7 @@ public class TradeDao extends Dao {
         sqlMap.put(Trade.TRADE_IS_CONFIRM, trade_is_confirm);
         sqlMap.put(Trade.TRADE_IS_PAY, trade_is_pay);
         sqlMap.put(Trade.TRADE_FLOW, trade_flow);
+        sqlMap.put(Trade.TRADE_DELIVER_PATTERN, trade_deliver_pattern);
         sqlMap.put(Trade.TRADE_STATUS, trade_status);
         sqlMap.put(Trade.TRADE_AUDIT_STATUS, trade_audit_status);
         sqlMap.put(Trade.SYSTEM_UPDATE_USER_ID, system_update_user_id);
