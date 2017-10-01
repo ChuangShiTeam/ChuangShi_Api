@@ -1,6 +1,5 @@
 package com.nowui.chuangshi.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -50,8 +49,11 @@ public class ExpressController extends Controller {
         resultMap.put("Success", true);
         resultMap.put("Reason", "");
 
+        System.out.println("requestData:" + requestData);
         JSONObject requestDataObject = JSONObject.parseObject(requestData);
         String eBusinessID = requestDataObject.getString("EBusinessID");
+        System.out.println("eBusinessID:" + eBusinessID);
+        System.out.println("Kdniao.EBusinessID:" + Kdniao.EBusinessID);
         if (!eBusinessID.equals(Kdniao.EBusinessID)) {
             resultMap.put("Success", false);
             resultMap.put("Reason", "EBusinessID is error");
