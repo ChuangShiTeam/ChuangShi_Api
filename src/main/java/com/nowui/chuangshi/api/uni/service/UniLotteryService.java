@@ -48,10 +48,10 @@ public class UniLotteryService extends Service {
         }
         return uni_lotteryList;
     }
-    
+
     public List<String> manUnusedNumberList(String app_id) {
         List<String> numberList = CacheUtil.get(UNI_LOTTERY_MAN_UNUSED_NUMBER_LIST_CACHE, app_id);
-        
+
         if (numberList == null) {
             Cnd cnd = new Cnd();
             cnd.select(UniLottery.LOTTERY_NUMBER);
@@ -59,9 +59,9 @@ public class UniLotteryService extends Service {
             cnd.and(UniLottery.APP_ID, app_id);
             cnd.andNot(UniLottery.LOTTERY_NUMBER, "");
             cnd.and(UniLottery.LOTTERY_USER_SEX, true);
-            
+
             List<UniLottery> uni_lotteryList = uniLotteryDao.primaryKeyList(cnd);
-            
+
             List<String> userdNumberList = uni_lotteryList.stream().map(uniLottery -> uniLottery.getLottery_number()).collect(Collectors.toList());
             numberList = new ArrayList<String>();
             for (int i = 1; i <= 1000; i++) {
@@ -69,15 +69,15 @@ public class UniLotteryService extends Service {
                     numberList.add(String.valueOf(i));
                 }
             }
-            
+
             CacheUtil.put(UNI_LOTTERY_MAN_UNUSED_NUMBER_LIST_CACHE, app_id, numberList);
         }
         return numberList;
     }
-    
+
     public List<String> womanUnusedNumberList(String app_id) {
         List<String> numberList = CacheUtil.get(UNI_LOTTERY_WOMEN_UNUSED_NUMBER_LIST_CACHE, app_id);
-        
+
         if (numberList == null) {
             Cnd cnd = new Cnd();
             cnd.select(UniLottery.LOTTERY_NUMBER);
@@ -85,9 +85,9 @@ public class UniLotteryService extends Service {
             cnd.and(UniLottery.APP_ID, app_id);
             cnd.andNot(UniLottery.LOTTERY_NUMBER, "");
             cnd.and(UniLottery.LOTTERY_USER_SEX, false);
-            
+
             List<UniLottery> uni_lotteryList = uniLotteryDao.primaryKeyList(cnd);
-            
+
             List<String> userdNumberList = uni_lotteryList.stream().map(uniLottery -> uniLottery.getLottery_number()).collect(Collectors.toList());
             numberList = new ArrayList<String>();
             for (int i = 1; i <= 1000; i++) {
@@ -95,12 +95,12 @@ public class UniLotteryService extends Service {
                     numberList.add(String.valueOf(i));
                 }
             }
-            
+
             CacheUtil.put(UNI_LOTTERY_WOMEN_UNUSED_NUMBER_LIST_CACHE, app_id, numberList);
         }
         return numberList;
     }
-    
+
     public List<String> numberList(String app_id, Boolean lottery_user_sex) {
         if (lottery_user_sex) {
             return manUnusedNumberList(app_id);
@@ -120,18 +120,18 @@ public class UniLotteryService extends Service {
 
         return uni_lottery;
     }
-    
+
     public UniLottery mobileFind(String lottery_user_mobile) {
         Cnd cnd = new Cnd();
         cnd.where(UniLottery.SYSTEM_STATUS, true);
         cnd.andAllowEmpty(UniLottery.LOTTERY_USER_MOBILE, lottery_user_mobile);
-        
+
         List<UniLottery> uni_lotteryList = uniLotteryDao.primaryKeyList(cnd);
-        
+
         if (uni_lotteryList == null || uni_lotteryList.size() == 0) {
             return null;
         }
-        
+
         return find(uni_lotteryList.get(0).getUser_id());
     }
 
@@ -169,7 +169,7 @@ public class UniLotteryService extends Service {
 
         return success;
     }
-    
+
     /**
      * 抽签
      * @param request_user_id
@@ -192,7 +192,7 @@ public class UniLotteryService extends Service {
             if (numberList.size() == 0) {
                 throw new RuntimeException("号码已被抽完了");
             }
-            
+
             if (("21").equals(DateUtil.getDay()) || "22".equals(DateUtil.getDay())) {//21、22号抽奖概率80%
                 if (ProbabilityUtil.random(0.8)) {
                     return getLottery_number(numberList, bean, request_user_id, request_app_id);
@@ -203,7 +203,7 @@ public class UniLotteryService extends Service {
                 }
             } else if (("26").equals(DateUtil.getDay()) || "27".equals(DateUtil.getDay())) { //26、27号抽奖概率100%
                 return getLottery_number(numberList, bean, request_user_id, request_app_id);
-            } 
+            }
         }
         System.out.println(bean.getLottery_user_mobile() + "未抽中号码");
         //未抽中，则更新用户抽签次数，抽签次数加一
@@ -212,7 +212,7 @@ public class UniLotteryService extends Service {
         this.update(bean, request_user_id, request_user_id, bean.getSystem_version());
         return null;
     }
-    
+
     public String getLottery_number(List<String> numberList, UniLottery bean, String request_user_id, String request_app_id) {
         String lottery_number = numberList.get(0); //随机获取一个未抽取的号码
         bean.setLottery_number(lottery_number);
@@ -227,7 +227,7 @@ public class UniLotteryService extends Service {
             } else {
                 CacheUtil.put(UNI_LOTTERY_WOMEN_UNUSED_NUMBER_LIST_CACHE, request_app_id, numberList);
             }
-            return lottery_number; 
+            return lottery_number;
         }
         return null;
     }
