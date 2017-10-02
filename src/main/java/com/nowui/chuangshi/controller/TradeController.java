@@ -37,6 +37,7 @@ import com.nowui.chuangshi.service.TradeCommossionService;
 import com.nowui.chuangshi.service.TradeExpressService;
 import com.nowui.chuangshi.service.TradeProductSkuService;
 import com.nowui.chuangshi.service.TradeService;
+import com.nowui.chuangshi.type.TradeDeliveryPattern;
 import com.nowui.chuangshi.type.TradeFlow;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
@@ -250,6 +251,10 @@ public class TradeController extends Controller {
         }
         BigDecimal trade_discount_amount = BigDecimal.ZERO;
         BigDecimal trade_total_amount = trade_product_amount.add(trade_express_amount).add(trade_discount_amount);
+        //如果是货到付款，则状态为待发货
+        if (model.getTrade_deliver_pattern().equals(TradeDeliveryPattern.CASH_ON_DELIVERY.getKey())) {
+        	trade_flow = TradeFlow.WAIT_SEND.getKey();
+        }
         Boolean flag = tradeService.save(trade_id, request_app_id, request_user_id, trade_number,
                 model.getTrade_receiver_name(), model.getTrade_receiver_mobile(), model.getTrade_receiver_province(),
                 model.getTrade_receiver_city(), model.getTrade_receiver_area(), model.getTrade_receiver_address(),
@@ -257,7 +262,8 @@ public class TradeController extends Controller {
                 trade_discount_amount, trade_total_amount, trade_is_commission, trade_is_confirm, trade_is_pay,
                 trade_flow, model.getTrade_deliver_pattern(), trade_status, "", request_user_id);
         Map<String, String> result = new HashMap<>();
-        if (flag) {
+        //如果是先付款后发货，则要进行支付
+        if (flag && model.getTrade_deliver_pattern().equals(TradeDeliveryPattern.CASH_BEFORE_DELIVERY.getKey())) {
             result = tradeService.pay(trade_id, open_id, "WX", request_user_id);
         }
         renderSuccessJson(result);
