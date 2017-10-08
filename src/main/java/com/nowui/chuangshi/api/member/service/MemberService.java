@@ -163,7 +163,6 @@ public class MemberService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(Member.SYSTEM_STATUS, true);
         cnd.and(Member.MEMBER_ID, member_id);
-        cnd.and(Member.SYSTEM_UPDATE_USER_ID, system_update_user_id);
         cnd.and(Member.SYSTEM_VERSION, system_version);
 
         Boolean success = memberDao.update(member, system_update_user_id, system_version, cnd);
@@ -239,7 +238,6 @@ public class MemberService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(Member.SYSTEM_STATUS, true);
         cnd.and(Member.MEMBER_ID, member_id);
-        cnd.and(Member.SYSTEM_UPDATE_USER_ID, system_update_user_id);
 
         Boolean success = memberDao.update(member, system_update_user_id, cnd);
 
@@ -257,7 +255,6 @@ public class MemberService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(Member.SYSTEM_STATUS, true);
         cnd.and(Member.MEMBER_ID, member_id);
-        cnd.and(Member.SYSTEM_UPDATE_USER_ID, system_update_user_id);
 
         Boolean success = memberDao.update(member, system_update_user_id, cnd);
 
@@ -277,7 +274,6 @@ public class MemberService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(Member.SYSTEM_STATUS, true);
         cnd.and(Member.MEMBER_ID, member_id);
-        cnd.and(Member.SYSTEM_UPDATE_USER_ID, system_update_user_id);
 
         Boolean success = memberDao.update(member, system_update_user_id, cnd);
 
@@ -304,9 +300,9 @@ public class MemberService extends Service {
     }
 
     public void cacheDelete(String member_id) {
-        Member member = find(member_id);
-
         CacheUtil.remove(MEMBER_ITEM_CACHE, member_id);
+
+        Member member = find(member_id);
 
         JSONArray jsonArray = JSONArray.parseArray(member.getMember_parent_path());
         for (int i = 0; i < jsonArray.size(); i++) {

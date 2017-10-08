@@ -7,35 +7,31 @@ import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.type.ColumnType;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-public class ProductSkuPrice extends Model<ProductSkuPrice> {
+public class ProductSkuAttribute extends Model<ProductSkuAttribute> {
 
     @Table
-    public static final String TABLE_PRODUCT_SKU_PRICE = "table_product_sku_price";
+    public static final String TABLE_PRODUCT_SKU_ATTRIBUTE = "table_product_sku_attribute";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "价格编号", updatable = false)
-    public static final String PRODUCT_SKU_PRICE_ID = "product_sku_price_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "属性编号", updatable = false)
+    public static final String PRODUCT_SKU_ATTRIBUTE_ID = "product_sku_attribute_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "SKU编号")
     public static final String PRODUCT_SKU_ID = "product_sku_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "等级编号")
-    public static final String MEMBER_LEVEL_ID = "member_level_id";
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "属性名称")
+    public static final String PRODUCT_SKU_ATTRIBUTE_NAME = "product_sku_attribute_name";
 
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "等级名称")
-    public static final String MEMBER_LEVEL_NAME = "member_level_name";
-
-    @Column(type = ColumnType.DECIMAL, length = 0, comment = "SKU价格")
-    public static final String PRODUCT_SKU_PRICE_AMOUNT = "product_sku_price_amount";
+    @Column(type = ColumnType.VARCHAR, length = 30, comment = "属性数值")
+    public static final String PRODUCT_SKU_ATTRIBUTE_VALUE = "product_sku_attribute_value";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
 
-    @Column(type = ColumnType.DATETIME, length = 0, comment = "", updatable = false)
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_TIME = "system_create_time";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
@@ -50,12 +46,12 @@ public class ProductSkuPrice extends Model<ProductSkuPrice> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
-    public String getProduct_sku_price_id() {
-        return getStr(PRODUCT_SKU_PRICE_ID);
+    public String getProduct_sku_attribute_id() {
+        return getStr(PRODUCT_SKU_ATTRIBUTE_ID);
     }
 
-    public void setProduct_sku_price_id(String product_sku_price_id) {
-        set(PRODUCT_SKU_PRICE_ID, product_sku_price_id);
+    public void setProduct_sku_attribute_id(String product_sku_attribute_id) {
+        set(PRODUCT_SKU_ATTRIBUTE_ID, product_sku_attribute_id);
     }
 
     public String getProduct_sku_id() {
@@ -66,28 +62,20 @@ public class ProductSkuPrice extends Model<ProductSkuPrice> {
         set(PRODUCT_SKU_ID, product_sku_id);
     }
 
-    public String getMember_level_id() {
-        return getStr(MEMBER_LEVEL_ID);
+    public String getProduct_sku_attribute_name() {
+        return getStr(PRODUCT_SKU_ATTRIBUTE_NAME);
     }
 
-    public void setMember_level_id(String member_level_id) {
-        set(MEMBER_LEVEL_ID, member_level_id);
+    public void setProduct_sku_attribute_name(String product_sku_attribute_name) {
+        set(PRODUCT_SKU_ATTRIBUTE_NAME, product_sku_attribute_name);
     }
 
-    public String getMember_level_name() {
-        return getStr(MEMBER_LEVEL_NAME);
+    public String getProduct_sku_attribute_value() {
+        return getStr(PRODUCT_SKU_ATTRIBUTE_VALUE);
     }
 
-    public void setMember_level_name(String member_level_name) {
-        set(MEMBER_LEVEL_NAME, member_level_name);
-    }
-
-    public BigDecimal getProduct_sku_price_amount() {
-        return getBigDecimal(PRODUCT_SKU_PRICE_AMOUNT);
-    }
-
-    public void setProduct_sku_price_amount(BigDecimal product_sku_price_amount) {
-        set(PRODUCT_SKU_PRICE_AMOUNT, product_sku_price_amount);
+    public void setProduct_sku_attribute_value(String product_sku_attribute_value) {
+        set(PRODUCT_SKU_ATTRIBUTE_VALUE, product_sku_attribute_value);
     }
 
     public String getSystem_create_user_id() {
@@ -98,14 +86,13 @@ public class ProductSkuPrice extends Model<ProductSkuPrice> {
         set(SYSTEM_CREATE_USER_ID, system_create_user_id);
     }
 
-    public Date getSystem_create_time() {
-        return getDate(SYSTEM_CREATE_TIME);
+    public String getSystem_create_time() {
+        return getStr(SYSTEM_CREATE_TIME);
     }
 
-    public void setSystem_create_time(Date system_create_time) {
+    public void setSystem_create_time(String system_create_time) {
         set(SYSTEM_CREATE_TIME, system_create_time);
     }
-
 
     public String getSystem_update_user_id() {
         return getStr(SYSTEM_UPDATE_USER_ID);

@@ -1,11 +1,13 @@
 package com.nowui.chuangshi.api.product.service;
 
 import com.nowui.chuangshi.api.product.dao.ProductSkuDao;
+import com.nowui.chuangshi.api.product.model.Product;
 import com.nowui.chuangshi.api.product.model.ProductSku;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductSkuService extends Service {
@@ -38,8 +40,17 @@ public class ProductSkuService extends Service {
         return productSku;
     }
 
-    public Boolean save(ProductSku product, String system_create_user_id) {
-        Boolean success = productSkuDao.save(product, system_create_user_id);
+    public Boolean save(List<ProductSku> productSkuList, String system_create_user_id) {
+        Boolean success = true;
+
+        int[] results = productSkuDao.batchSave(productSkuList, system_create_user_id);
+
+        for (int result : results) {
+            if (result == 0) {
+                success = false;
+            }
+        }
+
         return success;
     }
 

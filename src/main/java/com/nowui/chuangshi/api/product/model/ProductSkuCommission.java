@@ -11,14 +11,14 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-public class ProductSkuPrice extends Model<ProductSkuPrice> {
+public class ProductSkuCommission extends Model<ProductSkuCommission> {
 
     @Table
-    public static final String TABLE_PRODUCT_SKU_PRICE = "table_product_sku_price";
+    public static final String TABLE_PRODUCT_SKU_COMMISSION = "table_product_sku_commission";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "价格编号", updatable = false)
-    public static final String PRODUCT_SKU_PRICE_ID = "product_sku_price_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "佣金编号", updatable = false)
+    public static final String PRODUCT_SKU_COMMISSION_ID = "product_sku_commission_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "SKU编号")
     public static final String PRODUCT_SKU_ID = "product_sku_id";
@@ -29,8 +29,8 @@ public class ProductSkuPrice extends Model<ProductSkuPrice> {
     @Column(type = ColumnType.VARCHAR, length = 20, comment = "等级名称")
     public static final String MEMBER_LEVEL_NAME = "member_level_name";
 
-    @Column(type = ColumnType.DECIMAL, length = 0, comment = "SKU价格")
-    public static final String PRODUCT_SKU_PRICE_AMOUNT = "product_sku_price_amount";
+    @Column(type = ColumnType.DECIMAL, length = 0, comment = "佣金比例")
+    public static final String PRODUCT_SKU_COMMISSION_PERCENTAGE = "product_sku_commission_percentage";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -50,12 +50,12 @@ public class ProductSkuPrice extends Model<ProductSkuPrice> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
-    public String getProduct_sku_price_id() {
-        return getStr(PRODUCT_SKU_PRICE_ID);
+    public String getProduct_sku_commission_id() {
+        return getStr(PRODUCT_SKU_COMMISSION_ID);
     }
 
-    public void setProduct_sku_price_id(String product_sku_price_id) {
-        set(PRODUCT_SKU_PRICE_ID, product_sku_price_id);
+    public void setProduct_sku_commission_id(String product_sku_commission_id) {
+        set(PRODUCT_SKU_COMMISSION_ID, product_sku_commission_id);
     }
 
     public String getProduct_sku_id() {
@@ -82,12 +82,12 @@ public class ProductSkuPrice extends Model<ProductSkuPrice> {
         set(MEMBER_LEVEL_NAME, member_level_name);
     }
 
-    public BigDecimal getProduct_sku_price_amount() {
-        return getBigDecimal(PRODUCT_SKU_PRICE_AMOUNT);
+    public BigDecimal getProduct_sku_commission_percentage() {
+        return getBigDecimal(PRODUCT_SKU_COMMISSION_PERCENTAGE);
     }
 
-    public void setProduct_sku_price_amount(BigDecimal product_sku_price_amount) {
-        set(PRODUCT_SKU_PRICE_AMOUNT, product_sku_price_amount);
+    public void setProduct_sku_commission_percentage(BigDecimal product_sku_commission_percentage) {
+        set(PRODUCT_SKU_COMMISSION_PERCENTAGE, product_sku_commission_percentage);
     }
 
     public String getSystem_create_user_id() {

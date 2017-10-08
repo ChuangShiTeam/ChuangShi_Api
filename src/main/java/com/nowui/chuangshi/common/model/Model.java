@@ -92,19 +92,19 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         if (columnType.equals(ColumnType.TINYINT)) {
             stringBuilder.append((Boolean) value ? 1 : 0);
         } else if (columnType.equals(ColumnType.VARCHAR)) {
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
             stringBuilder.append(value);
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
         } else if (columnType.equals(ColumnType.TEXT)) {
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
             stringBuilder.append(value);
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
         } else if (columnType.equals(ColumnType.LONGTEXT)) {
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
             stringBuilder.append(value);
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
         } else if (columnType.equals(ColumnType.DATE)) {
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
             if (value instanceof String) {
                 stringBuilder.append(value);
             } else if (value instanceof Date) {
@@ -112,11 +112,11 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
             } else {
                 throw new RuntimeException("sql regex variable wrong");
             }
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
         } else if (columnType.equals(ColumnType.DATETIME)) {
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
             stringBuilder.append(DateUtil.getDateTimeString((Date) value));
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
         } else {
             stringBuilder.append(value);
         }
@@ -148,7 +148,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         }
 
         if (value instanceof String) {
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
 
             if (is_left_like) {
                 stringBuilder.append("%");
@@ -160,13 +160,13 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
                 stringBuilder.append("%");
             }
 
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
         } else if (value instanceof Boolean) {
             stringBuilder.append((Boolean) value ? 1 : 0);
         } else if (value instanceof Date) {
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
             stringBuilder.append(DateUtil.getDateTimeString((Date) value));
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
         } else {
             stringBuilder.append(value);
         }
@@ -232,9 +232,9 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
                     case IFNULL:
                         stringBuilder.append("IFNULL(");
                         stringBuilder.append(select.getKey());
-                        stringBuilder.append(", \"");
+                        stringBuilder.append(", '");
                         stringBuilder.append(select.getValue());
-                        stringBuilder.append("\") AS ");
+                        stringBuilder.append("') AS ");
                         stringBuilder.append(select.getName());
                         break;
                     case NORMAL:
@@ -250,12 +250,8 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
                     if (selectList.size() > 0) {
                         stringBuilder.append(",\n");
                     }
-                } else {
-                    stringBuilder.append("\n");
                 }
             }
-        } else {
-            stringBuilder.append("\n");
         }
 
         return stringBuilder.toString();
@@ -375,7 +371,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         }
 
         if (value instanceof String) {
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
 
             if (isLeftLike) {
                 stringBuilder.append("%");
@@ -387,13 +383,13 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
                 stringBuilder.append("%");
             }
 
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
         } else if (value instanceof Boolean) {
             stringBuilder.append((Boolean) value ? 1 : 0);
         } else if (value instanceof Date) {
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
             stringBuilder.append(DateUtil.getDateTimeString((Date) value));
-            stringBuilder.append("\"");
+            stringBuilder.append("'");
         } else {
             stringBuilder.append(value);
         }
@@ -488,6 +484,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
             stringBuilder.append("*");
         }
         stringBuilder.append(buildSelectSql());
+        stringBuilder.append("\n");
         stringBuilder.append("FROM ");
         stringBuilder.append(getTable().getName());
         stringBuilder.append("\n");
@@ -562,15 +559,15 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
                     } else if (column.get("type").equals(ColumnType.DECIMAL)) {
                         stringBuilder2.append(BigDecimal.valueOf(0));
                     } else if (column.get("type").equals(ColumnType.DATE)) {
-                        stringBuilder2.append("\"");
+                        stringBuilder2.append("'");
                         stringBuilder2.append(DateUtil.getDateString(new Date()));
-                        stringBuilder2.append("\"");
+                        stringBuilder2.append("'");
                     } else if (column.get("type").equals(ColumnType.DATETIME)) {
-                        stringBuilder2.append("\"");
+                        stringBuilder2.append("'");
                         stringBuilder2.append(DateUtil.getDateTimeString(new Date()));
-                        stringBuilder2.append("\"");
+                        stringBuilder2.append("'");
                     } else {
-                        stringBuilder2.append("\"\"");
+                        stringBuilder2.append("''");
                     }
                 }
 

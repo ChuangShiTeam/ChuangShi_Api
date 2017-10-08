@@ -10,6 +10,7 @@ import com.jfinal.config.JFinalConfig;
 import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
 import com.jfinal.core.Controller;
+import com.jfinal.core.JFinal;
 import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.cron4j.Cron4jPlugin;
@@ -379,12 +380,22 @@ public class WebConfig extends JFinalConfig {
                 ApiConfigKit.putApiConfig(apiConfig);
             }
         }
-
-        MinHangSocket.instance.sendMessage();
     }
 
     public void beforeJFinalStop() {
 
+    }
+
+    public static void main(String[] args) {
+        /**
+         * 特别注意：Eclipse 之下建议的启动方式
+         */
+        //JFinal.start("src/main/webapp", 8080, "/", 5);
+
+        /**
+         * 特别注意：IDEA 之下建议的启动方式，仅比 eclipse 之下少了最后一个参数
+         */
+        JFinal.start("src/main/webapp", 8080, "/");
     }
 
 }

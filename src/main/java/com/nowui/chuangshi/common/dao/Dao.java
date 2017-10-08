@@ -7,6 +7,7 @@ import com.nowui.chuangshi.common.sql.*;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.DateUtil;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -118,6 +119,29 @@ public class Dao {
         return Db.update(sql) != 0;
     }
 
+    public int[] batchSave(List<? extends Model> modelList, String system_create_user_id) {
+        List<String> sqlList = new ArrayList<String>();
+
+        for(int i = 0; i < modelList.size(); i++) {
+            Model model = modelList.get(i);
+
+            model.put(Constant.SYSTEM_CREATE_USER_ID, system_create_user_id);
+            model.put(Constant.SYSTEM_CREATE_TIME, new Date());
+            model.put(Constant.SYSTEM_UPDATE_USER_ID, system_create_user_id);
+            model.put(Constant.SYSTEM_UPDATE_TIME, new Date());
+            model.put(Constant.SYSTEM_VERSION, 0);
+            model.put(Constant.SYSTEM_STATUS, true);
+
+            String sql = model.buildSaveSql();
+            sqlList.add(sql);
+            if (i < 10) {
+                System.out.println(sql);
+            }
+        }
+
+        return Db.batch(sqlList, 100);
+    }
+
 //    public Boolean update(Model model, Cnd cnd) {
 //        model.setCriteria(cnd.getCriteria());
 //
@@ -153,6 +177,26 @@ public class Dao {
         System.out.println(sql);
 
         return Db.update(sql) != 0;
+    }
+
+    public int[] batchUpdate(List<Model> modelList, String system_update_user_id) {
+        List<String> sqlList = new ArrayList<String>();
+
+        for(int i = 0; i < modelList.size(); i++) {
+            Model model = modelList.get(i);
+
+            model.put(Constant.SYSTEM_UPDATE_USER_ID, system_update_user_id);
+            model.put(Constant.SYSTEM_UPDATE_TIME, new Date());
+
+            if (i < 10) {
+
+                String sql = model.buildUpdateSql();
+
+                System.out.println(sql);
+            }
+        }
+
+        return Db.batchUpdate(modelList, 100);
     }
 
     public Boolean delete(String system_update_user_id, Cnd cnd) {

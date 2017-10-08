@@ -1,12 +1,18 @@
 package com.nowui.chuangshi.api.user.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.nowui.chuangshi.api.user.dao.UserDao;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
+import com.nowui.chuangshi.util.AesUtil;
 import com.nowui.chuangshi.util.CacheUtil;
 import com.nowui.chuangshi.util.Util;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class UserService extends Service {
 
@@ -161,6 +167,24 @@ public class UserService extends Service {
         }
         
         return success;
+    }
+
+    public static void main(String[] args) {
+        try {
+            Date date = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.YEAR, 1);
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(User.USER_ID, "229736797b4d4283b284f6aef128585c");
+            jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
+
+            System.out.println(AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("登录不成功");
+        }
     }
 
 }

@@ -80,6 +80,7 @@ public class Product extends Model<Product> {
     public static final String SYSTEM_STATUS = "system_status";
 
     public static final String PRODUCT_IMAGE_FILE = "product_image_file";
+    public static final String PRODUCT_SKU_LIST = "product_sku_list";
 
     public String getProduct_id() {
         return getStr(PRODUCT_ID);
