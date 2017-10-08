@@ -2,6 +2,7 @@ package com.nowui.chuangshi.service;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,12 +14,24 @@ import com.jfinal.kit.HttpKit;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.app.service.AppService;
+import com.nowui.chuangshi.api.member.model.Member;
+import com.nowui.chuangshi.api.member.service.MemberService;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.cache.TradeCache;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
+import com.nowui.chuangshi.model.Bill;
+import com.nowui.chuangshi.model.BillCommission;
+import com.nowui.chuangshi.model.ProductSkuCommission;
 import com.nowui.chuangshi.model.Trade;
+import com.nowui.chuangshi.model.TradeCommossion;
+import com.nowui.chuangshi.model.TradeProductSku;
+import com.nowui.chuangshi.type.BillFlow;
+import com.nowui.chuangshi.type.BillType;
 import com.nowui.chuangshi.type.ExpressBelong;
 import com.nowui.chuangshi.type.ExpressFlow;
+import com.nowui.chuangshi.type.TradeDeliveryPattern;
 import com.nowui.chuangshi.type.TradeFlow;
 import com.nowui.chuangshi.util.Util;
 
@@ -31,6 +44,16 @@ public class TradeService extends Service {
     private ExpressService expressService = new ExpressService();
     
     private TradeExpressService tradeExpressService = new TradeExpressService();
+    
+    private final TradeProductSkuService tradeProductSkuService = new TradeProductSkuService();
+    
+    private final TradeCommossionService tradeCommossionService = new TradeCommossionService();
+    
+    private final BillService billService = new BillService();
+    
+    private final ProductSkuCommissionService productSkuCommissionService = new ProductSkuCommissionService();
+    
+    private final BillCommissionService billCommissionService = new BillCommissionService();
 
     public Integer countByApp_idOrLikeTrade_number(String app_id, String trade_number) {
         return tradeCache.countByApp_idOrLikeTrade_number(app_id, trade_number);
@@ -214,7 +237,17 @@ public class TradeService extends Service {
     public Boolean updateFinish(String trade_id) {
     	Trade trade = findByTrade_id(trade_id);
     	if (TradeFlow.WAIT_RECEIVE.getKey().equals(trade.getTrade_flow())) {  //订单处于待收货状态才可以完成订单
-    	    return updateTrade_flowByTrade_idValidateSystem_version(trade_id, TradeFlow.COMPLETE.getKey(), trade.getSystem_update_user_id(), trade.getSystem_version());
+    		//如果是货到付款则需要
+    	    if (trade.getTrade_deliver_pattern().equals(TradeDeliveryPattern.CASH_ON_DELIVERY.getKey())) {
+    	    	boolean isUpdate = updateTrade_is_payAndTrade_flowAndSystem_update_user_idAndSystem_update_timeAndByTrade_idAndSystem_version(
+    	                trade_id, true, TradeFlow.COMPLETE.getKey(), trade.getSystem_update_user_id(), trade.getSystem_version());
+    	    	if (isUpdate) {
+    	    		payChange(trade_id);
+    	    	}
+    	    } else {
+    	    	return updateTrade_flowByTrade_idValidateSystem_version(trade_id, TradeFlow.COMPLETE.getKey(), trade.getSystem_update_user_id(), trade.getSystem_version());
+
+    	    }
     	}
     	return false;
     }
@@ -255,6 +288,157 @@ public class TradeService extends Service {
             tradeExpressService.deleteByTrade_idAndExpress_idAndSystem_update_user_id(trade_id, express_id, request_user_id);
         }
         return result;
+    }
+    
+    //计算账单和分成
+    public void payChange(String trade_id) {
+        Trade trade = findByTrade_id(trade_id);
+
+        String user_id = trade.getUser_id();
+        User user = UserService.instance.find(user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
+
+        // 根据应用信息 获取是否分成 和分成级数
+        App app = AppService.instance.find(trade.getApp_id());
+        Boolean app_is_commission = app.getApp_is_commission();
+        Integer app_commission_level = app.getApp_commission_level();
+
+        // ["0","29b090a580244c10a78dc66faac40fc2"]
+        String member_parent_path = member.getMember_parent_path().trim();
+        member_parent_path = member_parent_path.replace("[", "");
+        member_parent_path = member_parent_path.replace("]", "");
+        member_parent_path = member_parent_path.replace("\"", "");
+        String[] member_parent_id_list = member_parent_path.split(",");
+        int length = member_parent_id_list.length - 1;
+
+        ArrayList<String> member_list = new ArrayList<String>();
+
+        if (app_commission_level - 1 > length) {
+            app_commission_level = length;
+        }
+
+        for (int i = 0; i < app_commission_level; i++) {
+            if (!member_parent_id_list[length - i].equals("0")) {
+                member_list.add(member_parent_id_list[length - i]);
+            }
+        }
+
+        List<TradeProductSku> tradeProductSkuList = tradeProductSkuService.listByTrade_id(trade_id);
+
+        List<Bill> billList = new ArrayList<Bill>();
+        List<BillCommission> billCommissionList = new ArrayList<BillCommission>();
+        List<TradeCommossion> tradeCommossionList = new ArrayList<TradeCommossion>();
+
+        // 添加订单账单记录
+        Bill tradeMemberBill = new Bill();
+        tradeMemberBill.setBill_id(Util.getRandomUUID());
+        tradeMemberBill.setApp_id(trade.getApp_id());
+        tradeMemberBill.setUser_id(user_id);
+        tradeMemberBill.setBill_is_income(false);
+        tradeMemberBill.setBill_amount(trade.getTrade_product_amount().add(trade.getTrade_express_amount())
+                .subtract(trade.getTrade_discount_amount()));
+        tradeMemberBill.setBill_type(BillType.TRADE.getKey());
+        tradeMemberBill.setBill_time(new Date());
+        tradeMemberBill.setBill_flow(BillFlow.COMPLETE.getKey());
+        tradeMemberBill.setBill_status(true);
+
+        tradeMemberBill.setSystem_create_user_id("");
+        tradeMemberBill.setSystem_create_time(new Date());
+        tradeMemberBill.setSystem_update_user_id("");
+        tradeMemberBill.setSystem_update_time(new Date());
+        tradeMemberBill.setSystem_version(0);
+        tradeMemberBill.setSystem_status(true);
+
+        billList.add(tradeMemberBill);
+
+        if (app_is_commission && member_list.size() > 0) {
+            for (String member_parent_id : member_list) {
+                Member member_parent = MemberService.instance.find(member_parent_id);
+
+                Bill bill = new Bill();
+                bill.setBill_id(Util.getRandomUUID());
+                bill.setApp_id(trade.getApp_id());
+                bill.setUser_id(member_parent.getUser_id());
+                bill.setBill_is_income(true);
+                bill.setBill_type(BillType.COMMISSION.getKey());
+                bill.setBill_time(new Date());
+                bill.setBill_flow(BillFlow.COMPLETE.getKey());
+                bill.setBill_status(true);
+
+                bill.setSystem_create_user_id("");
+                bill.setSystem_create_time(new Date());
+                bill.setSystem_update_user_id("");
+                bill.setSystem_update_time(new Date());
+                bill.setSystem_version(0);
+                bill.setSystem_status(true);
+
+                BigDecimal bill_amount = BigDecimal.ZERO;
+
+                for (TradeProductSku tradeProductSku : tradeProductSkuList) {
+                    List<ProductSkuCommission> productSkuCommissionList = productSkuCommissionService
+                            .listByProduct_sku_id(tradeProductSku.getProduct_sku_id());
+
+                    TradeCommossion tradeCommossion = new TradeCommossion();
+                    BillCommission billCommission = new BillCommission();
+
+                    for (ProductSkuCommission productSkuCommission : productSkuCommissionList) {
+                        if (productSkuCommission.getMember_level_id().equals(member_parent.getMember_level_id())) {
+
+                            String member_name = UserService.instance.find(member_parent.getUser_id()).getUser_name();
+                            BigDecimal a = productSkuCommission.getProduct_sku_commission();
+                            BigDecimal b = tradeProductSku.getProduct_sku_amount();
+                            BigDecimal c = a.divide(BigDecimal.valueOf(100));
+
+                            tradeCommossion.setTrade_id(trade_id);
+                            tradeCommossion.setProduct_sku_id(tradeProductSku.getProduct_sku_id());
+                            tradeCommossion.setMember_id(member_parent_id);
+                            tradeCommossion.setMember_name(member_name);
+                            tradeCommossion.setMember_level_id(productSkuCommission.getMember_level_id());
+                            tradeCommossion.setMember_level_name(productSkuCommission.getMember_level_name());
+                            tradeCommossion.setProduct_sku_commission(a);
+                            // TODO
+                            tradeCommossion.setProduct_sku_commission_amount(b.multiply(c));
+
+                            tradeCommossion.setSystem_create_user_id("");
+                            tradeCommossion.setSystem_create_time(new Date());
+                            tradeCommossion.setSystem_update_user_id("");
+                            tradeCommossion.setSystem_update_time(new Date());
+                            tradeCommossion.setSystem_version(0);
+                            tradeCommossion.setSystem_status(true);
+
+                            tradeCommossionList.add(tradeCommossion);
+
+                            billCommission.setBill_id(bill.getBill_id());
+                            billCommission.setProduct_sku_id(tradeProductSku.getProduct_sku_id());
+                            billCommission.setMember_id(member_parent_id);
+                            billCommission.setMember_name(member_name);
+                            billCommission.setMember_level_id(productSkuCommission.getMember_level_id());
+                            billCommission.setMember_level_name(productSkuCommission.getMember_level_name());
+                            billCommission.setProduct_sku_commission(a);
+                            // TODO
+                            billCommission.setProduct_sku_commission_amount(b.multiply(c));
+
+                            billCommission.setSystem_create_user_id("");
+                            billCommission.setSystem_create_time(new Date());
+                            billCommission.setSystem_update_user_id("");
+                            billCommission.setSystem_update_time(new Date());
+                            billCommission.setSystem_version(0);
+                            billCommission.setSystem_status(true);
+
+                            billCommissionList.add(billCommission);
+                            // TODO
+                            bill_amount = bill_amount.add(b.multiply(c));
+                            break;
+                        }
+                    }
+                }
+                bill.setBill_amount(bill_amount);
+                billList.add(bill);
+            }
+            billCommissionService.batchSave(billCommissionList);
+            tradeCommossionService.batchSave(tradeCommossionList);
+        }
+        billService.batchSave(billList);
     }
 
 
