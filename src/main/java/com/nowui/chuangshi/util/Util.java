@@ -207,4 +207,8 @@ public class Util {
 
         return HashKit.sha512(Config.private_key + user_password);
     }
+    
+    public static void main(String args[]) {
+    	System.out.println(getRandomUUID());
+    }
 }

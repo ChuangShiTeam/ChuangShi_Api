@@ -110,6 +110,12 @@
             <artifactId>socket.io-client</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <!-- 二维码支持 -->
+	    <dependency>
+		    <groupId>com.google.zxing</groupId>
+		    <artifactId>core</artifactId>
+		    <version>3.3.0</version>
+		</dependency>    
     </dependencies>
 
     <properties>
