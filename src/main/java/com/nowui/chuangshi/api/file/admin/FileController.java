@@ -68,7 +68,7 @@ public class FileController extends Controller {
 
         authenticateRequest_app_idAndRequest_user_id();
 
-        List<UploadFile> uploadFileList = getFiles(request_user_id, 1024 * 1024 * 2);
+        List<UploadFile> uploadFileList = getFiles(request_user_id, 1024 * 1024 * 300);
 
         List<Map<String, Object>> resultList = FileService.instance.upload(uploadFileList, request_app_id, request_user_id);
 
