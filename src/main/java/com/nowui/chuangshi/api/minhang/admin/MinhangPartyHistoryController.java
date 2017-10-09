@@ -18,13 +18,13 @@ public class MinhangPartyHistoryController extends Controller {
 
     @ActionKey("/admin/minhang/party/history/list")
     public void list() {
-        validateRequest(MinhangPartyHistory.TASK_ID, MinhangPartyHistory.BOOK_CODE, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(MinhangPartyHistory.BOOK_CODE, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         MinhangPartyHistory model = getModel(MinhangPartyHistory.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = MinhangPartyHistoryService.instance.adminCount(request_app_id, model.getTask_id(), model.getBook_code());
-        List<MinhangPartyHistory> resultList = MinhangPartyHistoryService.instance.adminList(request_app_id, model.getTask_id(), model.getBook_code(), getM(), getN());
+        Integer resultCount = MinhangPartyHistoryService.instance.adminCount(request_app_id, model.getBook_code());
+        List<MinhangPartyHistory> resultList = MinhangPartyHistoryService.instance.adminList(request_app_id, model.getBook_code(), getM(), getN());
 
         validateResponse(MinhangPartyHistory.PARTY_HISTORY_ID, MinhangPartyHistory.TASK_ID, MinhangPartyHistory.BOOK_CODE, MinhangPartyHistory.SYSTEM_VERSION);
 

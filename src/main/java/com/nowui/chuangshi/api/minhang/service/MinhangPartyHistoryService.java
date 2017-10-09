@@ -14,22 +14,20 @@ public class MinhangPartyHistoryService extends Service {
     private final String MINHANG_PARTY_HISTORY_ITEM_CACHE = "minhang_party_history_item_cache";
     private final MinhangPartyHistoryDao minhangPartyHistoryDao = new MinhangPartyHistoryDao();
 
-    public Integer adminCount(String app_id, String task_id, String book_code) {
+    public Integer adminCount(String app_id, String book_code) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangPartyHistory.SYSTEM_STATUS, true);
         cnd.and(MinhangPartyHistory.APP_ID, app_id);
-        cnd.andAllowEmpty(MinhangPartyHistory.TASK_ID, task_id);
         cnd.andAllowEmpty(MinhangPartyHistory.BOOK_CODE, book_code);
 
         Integer count = minhangPartyHistoryDao.count(cnd);
         return count;
     }
 
-    public List<MinhangPartyHistory> adminList(String app_id, String task_id, String book_code, Integer m, Integer n) {
+    public List<MinhangPartyHistory> adminList(String app_id, String book_code, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangPartyHistory.SYSTEM_STATUS, true);
         cnd.and(MinhangPartyHistory.APP_ID, app_id);
-        cnd.andAllowEmpty(MinhangPartyHistory.TASK_ID, task_id);
         cnd.andAllowEmpty(MinhangPartyHistory.BOOK_CODE, book_code);
         cnd.paginate(m, n);
 
