@@ -64,7 +64,7 @@ class #(first_upper_model_name_without_underline)Index extends Component {
 
     handleSearch() {
         new Promise(function (resolve, reject) {
-            let app_id = this.props.form.getFieldValue('app_id');
+            var app_id = this.props.form.getFieldValue('app_id');
             if (validate.isUndefined(app_id)) {
                 app_id = '';
             }

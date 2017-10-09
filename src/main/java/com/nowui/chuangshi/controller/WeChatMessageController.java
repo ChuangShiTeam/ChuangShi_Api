@@ -58,6 +58,7 @@ import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.QrcodeType;
 import com.nowui.chuangshi.type.UserType;
+import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 public class WeChatMessageController extends MsgController {
@@ -124,7 +125,7 @@ public class WeChatMessageController extends MsgController {
 
         ApiResult apiResult = UserApi.getUserInfo(wechat_open_id);
         wechat_union_id = apiResult.getStr("unionid");
-        String user_name = apiResult.getStr("nickname");
+        String user_name = Util.getEmoji(apiResult.getStr("nickname"));
         String user_avatar = apiResult.getStr("headimgurl");
         String system_create_user_id = "";
 
@@ -199,7 +200,7 @@ public class WeChatMessageController extends MsgController {
 
         ApiResult apiResult = UserApi.getUserInfo(wechat_open_id);
         wechat_union_id = apiResult.getStr("unionid");
-        String user_name = apiResult.getStr("nickname");
+        String user_name = Util.getEmoji(apiResult.getStr("nickname"));
         String user_avatar = apiResult.getStr("headimgurl");
 
         System.out.println(apiResult.getJson());
@@ -312,7 +313,7 @@ public class WeChatMessageController extends MsgController {
 
         ApiResult apiResult = UserApi.getUserInfo(wechat_open_id);
         String wechat_union_id = apiResult.getStr("unionid");
-        String user_name = apiResult.getStr("nickname");
+        String user_name = Util.getEmoji(apiResult.getStr("nickname"));
         String user_avatar = apiResult.getStr("headimgurl");
         String system_create_user_id = "";
 

@@ -27,6 +27,7 @@ public class MinHangSocket {
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("targetId", "0");
+            jsonObject.put("action", "event");
             jsonObject.put("data", "list");
 
             socket.emit("sendMessage", jsonObject, new Ack() {
