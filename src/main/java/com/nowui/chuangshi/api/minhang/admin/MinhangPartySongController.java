@@ -18,13 +18,13 @@ public class MinhangPartySongController extends Controller {
 
     @ActionKey("/admin/minhang/party/song/list")
     public void list() {
-        validateRequest(MinhangPartySong.TASK_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         MinhangPartySong model = getModel(MinhangPartySong.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = MinhangPartySongService.instance.adminCount(request_app_id, model.getTask_id());
-        List<MinhangPartySong> resultList = MinhangPartySongService.instance.adminList(request_app_id, model.getTask_id(), getM(), getN());
+        Integer resultCount = MinhangPartySongService.instance.adminCount(request_app_id);
+        List<MinhangPartySong> resultList = MinhangPartySongService.instance.adminList(request_app_id, getM(), getN());
 
         validateResponse(MinhangPartySong.PARTY_SONG_ID, MinhangPartySong.TASK_ID, MinhangPartySong.PARTY_SONG_URL, MinhangPartySong.SYSTEM_VERSION);
 
@@ -39,7 +39,7 @@ public class MinhangPartySongController extends Controller {
 
         MinhangPartySong result = MinhangPartySongService.instance.find(model.getParty_song_id());
 
-        validateResponse(MinhangPartySong.TASK_ID, MinhangPartySong.PARTY_SONG_CONTENT, MinhangPartySong.PARTY_SONG_URL, MinhangPartySong.SYSTEM_VERSION);
+        validateResponse(MinhangPartySong.TASK_ID, MinhangPartySong.PARTY_SONG_CONTENT, MinhangPartySong.PARTY_SONG_URL, MinhangPartySong.PARTY_SONG_CONTENT, MinhangPartySong.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }

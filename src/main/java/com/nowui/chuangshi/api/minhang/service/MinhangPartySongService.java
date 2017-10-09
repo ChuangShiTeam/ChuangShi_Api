@@ -14,21 +14,19 @@ public class MinhangPartySongService extends Service {
     private final String MINHANG_PARTY_SONG_ITEM_CACHE = "minhang_party_song_item_cache";
     private final MinhangPartySongDao minhangPartySongDao = new MinhangPartySongDao();
 
-    public Integer adminCount(String app_id, String task_id) {
+    public Integer adminCount(String app_id) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangPartySong.SYSTEM_STATUS, true);
         cnd.and(MinhangPartySong.APP_ID, app_id);
-        cnd.andAllowEmpty(MinhangPartySong.TASK_ID, task_id);
 
         Integer count = minhangPartySongDao.count(cnd);
         return count;
     }
 
-    public List<MinhangPartySong> adminList(String app_id, String task_id, Integer m, Integer n) {
+    public List<MinhangPartySong> adminList(String app_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangPartySong.SYSTEM_STATUS, true);
         cnd.and(MinhangPartySong.APP_ID, app_id);
-        cnd.andAllowEmpty(MinhangPartySong.TASK_ID, task_id);
         cnd.paginate(m, n);
 
         List<MinhangPartySong> minhang_party_songList = minhangPartySongDao.primaryKeyList(cnd);
