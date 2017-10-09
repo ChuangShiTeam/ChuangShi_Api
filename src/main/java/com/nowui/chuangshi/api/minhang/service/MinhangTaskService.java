@@ -44,6 +44,30 @@ public class MinhangTaskService extends Service {
         }
         return minhang_taskList;
     }
+    
+    public List<MinhangTask> keyList(String key_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangTask.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(MinhangTask.KEY_ID, key_id);
+
+        List<MinhangTask> minhang_taskList = minhangTaskDao.primaryKeyList(cnd);
+        for (MinhangTask minhang_task : minhang_taskList) {
+            minhang_task.put(find(minhang_task.getTask_id()));
+        }
+        return minhang_taskList;
+    }
+    
+    public List<MinhangTask> allList(String app_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangTask.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(MinhangTask.APP_ID, app_id);
+        
+        List<MinhangTask> minhang_taskList = minhangTaskDao.primaryKeyList(cnd);
+        for (MinhangTask minhang_task : minhang_taskList) {
+            minhang_task.put(find(minhang_task.getTask_id()));
+        }
+        return minhang_taskList;
+    }
 
     public MinhangTask find(String task_id) {
         MinhangTask minhang_task = CacheUtil.get(MINHANG_TASK_ITEM_CACHE, task_id);

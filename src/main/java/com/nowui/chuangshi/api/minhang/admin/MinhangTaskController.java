@@ -38,6 +38,31 @@ public class MinhangTaskController extends Controller {
 
         renderSuccessJson(resultCount, resultList);
     }
+    
+    @ActionKey("/admin/minhang/task/key/list")
+    public void keyList() {
+        validateRequest(MinhangTask.KEY_ID);
+
+        MinhangTask model = getModel(MinhangTask.class);
+
+        List<MinhangTask> resultList = MinhangTaskService.instance.keyList(model.getKey_id());
+        
+        validateResponse(MinhangTask.TASK_ID, MinhangTask.KEY_ID, MinhangTask.SCREEN_ID, MinhangTask.TASK_NAME, MinhangTask.TASK_TYPE, MinhangTask.TASK_QRCODE_URL, MinhangTask.TASK_SORT, MinhangTask.SYSTEM_VERSION);
+
+        renderSuccessJson(resultList);
+    }
+    
+    @ActionKey("/admin/minhang/task/all/list")
+    public void allList() {
+        
+        String request_app_id = getRequest_app_id();
+        
+        List<MinhangTask> resultList = MinhangTaskService.instance.allList(request_app_id);
+        
+        validateResponse(MinhangTask.TASK_ID, MinhangTask.KEY_ID, MinhangTask.SCREEN_ID, MinhangTask.TASK_NAME, MinhangTask.TASK_TYPE, MinhangTask.TASK_QRCODE_URL, MinhangTask.TASK_SORT, MinhangTask.SYSTEM_VERSION);
+
+        renderSuccessJson(resultList);
+    }
 
     @ActionKey("/admin/minhang/task/find")
     public void find() {

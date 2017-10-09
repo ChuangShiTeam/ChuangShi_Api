@@ -2,6 +2,7 @@ package com.nowui.chuangshi.api.minhang.admin;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.minhang.model.MinhangPoster;
 import com.nowui.chuangshi.api.minhang.service.MinhangPosterService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -18,15 +19,18 @@ public class MinhangPosterController extends Controller {
 
     @ActionKey("/admin/minhang/poster/list")
     public void list() {
-        validateRequest(MinhangPoster.TASK_ID, MinhangPoster.POSTER_TITLE, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(MinhangPoster.POSTER_TITLE, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         MinhangPoster model = getModel(MinhangPoster.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = MinhangPosterService.instance.adminCount(request_app_id, model.getTask_id(), model.getPoster_title());
-        List<MinhangPoster> resultList = MinhangPosterService.instance.adminList(request_app_id, model.getTask_id(), model.getPoster_title(), getM(), getN());
-
-        validateResponse(MinhangPoster.POSTER_ID, MinhangPoster.TASK_ID, MinhangPoster.POSTER_IMAGE, MinhangPoster.POSTER_TITLE, MinhangPoster.SYSTEM_VERSION);
+        Integer resultCount = MinhangPosterService.instance.adminCount(request_app_id, model.getPoster_title());
+        List<MinhangPoster> resultList = MinhangPosterService.instance.adminList(request_app_id, model.getPoster_title(), getM(), getN());
+        for (MinhangPoster minhangPoster : resultList) {
+            minhangPoster.put(MinhangPoster.POSTER_IMAGE_FILE, FileService.instance.getOriginalFile(minhangPoster.getPoster_image()));
+        }
+        
+        validateResponse(MinhangPoster.POSTER_ID, MinhangPoster.TASK_ID, MinhangPoster.POSTER_IMAGE, MinhangPoster.POSTER_IMAGE_FILE, MinhangPoster.POSTER_TITLE, MinhangPoster.POSTER_CONTENT, MinhangPoster.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -38,8 +42,10 @@ public class MinhangPosterController extends Controller {
         MinhangPoster model = getModel(MinhangPoster.class);
 
         MinhangPoster result = MinhangPosterService.instance.find(model.getPoster_id());
+        
+        result.put(MinhangPoster.POSTER_IMAGE_FILE, FileService.instance.getFile(result.getPoster_image()));
 
-        validateResponse(MinhangPoster.TASK_ID, MinhangPoster.POSTER_IMAGE, MinhangPoster.POSTER_TITLE, MinhangPoster.POSTER_CONTENT, MinhangPoster.SYSTEM_VERSION);
+        validateResponse(MinhangPoster.TASK_ID, MinhangPoster.POSTER_IMAGE, MinhangPoster.POSTER_IMAGE_FILE, MinhangPoster.POSTER_TITLE, MinhangPoster.POSTER_CONTENT, MinhangPoster.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }

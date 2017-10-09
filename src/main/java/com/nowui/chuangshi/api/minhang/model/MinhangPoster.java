@@ -51,6 +51,8 @@ public class MinhangPoster extends Model<MinhangPoster> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
+    
+    public static final String POSTER_IMAGE_FILE = "poster_image_file";
 
     public String getPoster_id() {
         return getStr(POSTER_ID);

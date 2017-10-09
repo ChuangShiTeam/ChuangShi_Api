@@ -14,22 +14,20 @@ public class MinhangPosterService extends Service {
     private final String MINHANG_POSTER_ITEM_CACHE = "minhang_poster_item_cache";
     private final MinhangPosterDao minhangPosterDao = new MinhangPosterDao();
 
-    public Integer adminCount(String app_id, String task_id, String poster_title) {
+    public Integer adminCount(String app_id, String poster_title) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangPoster.SYSTEM_STATUS, true);
         cnd.and(MinhangPoster.APP_ID, app_id);
-        cnd.andAllowEmpty(MinhangPoster.TASK_ID, task_id);
         cnd.andAllowEmpty(MinhangPoster.POSTER_TITLE, poster_title);
 
         Integer count = minhangPosterDao.count(cnd);
         return count;
     }
 
-    public List<MinhangPoster> adminList(String app_id, String task_id, String poster_title, Integer m, Integer n) {
+    public List<MinhangPoster> adminList(String app_id, String poster_title, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangPoster.SYSTEM_STATUS, true);
         cnd.and(MinhangPoster.APP_ID, app_id);
-        cnd.andAllowEmpty(MinhangPoster.TASK_ID, task_id);
         cnd.andAllowEmpty(MinhangPoster.POSTER_TITLE, poster_title);
         cnd.paginate(m, n);
 
