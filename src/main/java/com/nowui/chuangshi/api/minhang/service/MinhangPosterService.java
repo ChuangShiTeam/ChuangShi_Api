@@ -37,6 +37,18 @@ public class MinhangPosterService extends Service {
         }
         return minhang_posterList;
     }
+    
+    public List<MinhangPoster> appList(String app_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangPoster.SYSTEM_STATUS, true);
+        cnd.and(MinhangPoster.APP_ID, app_id);
+
+        List<MinhangPoster> minhang_posterList = minhangPosterDao.primaryKeyList(cnd);
+        for (MinhangPoster minhang_poster : minhang_posterList) {
+            minhang_poster.put(find(minhang_poster.getPoster_id()));
+        }
+        return minhang_posterList;
+    }
 
     public MinhangPoster find(String poster_id) {
         MinhangPoster minhang_poster = CacheUtil.get(MINHANG_POSTER_ITEM_CACHE, poster_id);

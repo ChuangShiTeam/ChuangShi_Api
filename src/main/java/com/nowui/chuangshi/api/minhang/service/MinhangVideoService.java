@@ -37,6 +37,29 @@ public class MinhangVideoService extends Service {
         }
         return minhang_videoList;
     }
+    
+    public Integer mobileCount(String app_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangVideo.SYSTEM_STATUS, true);
+        cnd.and(MinhangVideo.APP_ID, app_id);
+
+        Integer count = minhangVideoDao.count(cnd);
+        return count;
+    }
+    
+    public List<MinhangVideo> mobileList(String app_id, Integer m, Integer n) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangVideo.SYSTEM_STATUS, true);
+        cnd.and(MinhangVideo.APP_ID, app_id);
+        cnd.asc(MinhangVideo.VIDEO_SORT);
+        cnd.paginate(m, n);
+
+        List<MinhangVideo> minhang_videoList = minhangVideoDao.primaryKeyList(cnd);
+        for (MinhangVideo minhang_video : minhang_videoList) {
+            minhang_video.put(find(minhang_video.getVideo_id()));
+        }
+        return minhang_videoList;
+    }
 
     public MinhangVideo find(String video_id) {
         MinhangVideo minhang_video = CacheUtil.get(MINHANG_VIDEO_ITEM_CACHE, video_id);

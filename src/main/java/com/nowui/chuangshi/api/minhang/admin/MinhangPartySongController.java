@@ -39,7 +39,7 @@ public class MinhangPartySongController extends Controller {
 
         MinhangPartySong result = MinhangPartySongService.instance.find(model.getParty_song_id());
 
-        validateResponse(MinhangPartySong.TASK_ID, MinhangPartySong.PARTY_SONG_CONTENT, MinhangPartySong.PARTY_SONG_URL, MinhangPartySong.PARTY_SONG_CONTENT, MinhangPartySong.SYSTEM_VERSION);
+        validateResponse(MinhangPartySong.TASK_ID,  MinhangPartySong.PARTY_SONG_URL, MinhangPartySong.PARTY_SONG_CONTENT, MinhangPartySong.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }

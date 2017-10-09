@@ -7,6 +7,7 @@ import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 
 import java.util.List;
+import java.util.Random;
 
 public class MinhangPartySongService extends Service {
 
@@ -46,6 +47,22 @@ public class MinhangPartySongService extends Service {
         }
 
         return minhang_party_song;
+    }
+    
+    public MinhangPartySong randomFind(String app_id) {
+    	Cnd cnd = new Cnd();
+        cnd.where(MinhangPartySong.SYSTEM_STATUS, true);
+        cnd.and(MinhangPartySong.APP_ID, app_id);
+
+        List<MinhangPartySong> minhang_party_songList = minhangPartySongDao.primaryKeyList(cnd);
+        
+        if (minhang_party_songList == null || minhang_party_songList.size() == 0) {
+        	return new MinhangPartySong();
+        }
+        
+        MinhangPartySong minhang_party_song = minhang_party_songList.get(new Random().nextInt(minhang_party_songList.size()));
+        
+        return find(minhang_party_song.getParty_song_id());
     }
 
     public Boolean save(MinhangPartySong minhang_party_song, String system_create_user_id) {

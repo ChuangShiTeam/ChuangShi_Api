@@ -1,6 +1,10 @@
 package com.nowui.chuangshi.api.minhang.mobile;
 
+import java.util.List;
+
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.minhang.model.MinhangPartyHistory;
+import com.nowui.chuangshi.api.minhang.service.MinhangPartyHistoryService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 
@@ -17,6 +21,17 @@ public class MinhangPartyHistoryController extends Controller {
     public void find() {
 
         renderSuccessJson();
+    }
+    
+    @ActionKey("/mobile/minhang/party/history/random/find")
+    public void randomFind() {
+    	String request_app_id = getRequest_app_id();
+    	
+    	MinhangPartyHistory minhang_party_history = MinhangPartyHistoryService.instance.randomFind(request_app_id);
+    	
+    	validateResponse(MinhangPartyHistory.PARTY_HISTORY_ID, MinhangPartyHistory.TASK_ID, MinhangPartyHistory.PARTY_HISTORY_CONTENT, MinhangPartyHistory.BOOK_CODE, MinhangPartyHistory.SYSTEM_VERSION);
+    	
+        renderSuccessJson(minhang_party_history);
     }
 
     @ActionKey("/mobile/minhang/party/history/save")
