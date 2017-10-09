@@ -10,26 +10,26 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.util.Date;
 
 @Entity
-public class MinhangQuestion extends Model<MinhangQuestion> {
+public class MinhangVideoTask extends Model<MinhangVideoTask> {
 
     @Table
-    public static final String TABLE_MINHANG_QUESTION = "table_minhang_question";
+    public static final String TABLE_MINHANG_VIDEO_TASK = "table_minhang_video_task";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "题目编号", updatable = false)
-    public static final String QUESTION_ID = "question_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
+    public static final String VIDEO_TASK_ID = "video_task_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String APP_ID = "app_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "任务编号")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    public static final String VIDEO_ID = "video_id";
+
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
     public static final String TASK_ID = "task_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 500, comment = "题目标题")
-    public static final String QUESTION_TITLE = "question_title";
-
-    @Column(type = ColumnType.VARCHAR, length = 25, comment = "题目类型")
-    public static final String QUESTION_TYPE = "question_type";
+    @Column(type = ColumnType.INT, length = 11, comment = "视频触发任务时间(秒)")
+    public static final String VIDEO_TASK_TIME = "video_task_time";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -48,17 +48,13 @@ public class MinhangQuestion extends Model<MinhangQuestion> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
-    
-    public static final String QUESTION_OPTION_LIST = "question_option_list";
-    
-    public static final String QUESTION_ANSWER_LIST = "question_answer_list";
 
-    public String getQuestion_id() {
-        return getStr(QUESTION_ID);
+    public String getVideo_task_id() {
+        return getStr(VIDEO_TASK_ID);
     }
 
-    public void setQuestion_id(String question_id) {
-        set(QUESTION_ID, question_id);
+    public void setVideo_task_id(String video_task_id) {
+        set(VIDEO_TASK_ID, video_task_id);
     }
 
     public String getApp_id() {
@@ -69,6 +65,14 @@ public class MinhangQuestion extends Model<MinhangQuestion> {
         set(APP_ID, app_id);
     }
 
+    public String getVideo_id() {
+        return getStr(VIDEO_ID);
+    }
+
+    public void setVideo_id(String video_id) {
+        set(VIDEO_ID, video_id);
+    }
+
     public String getTask_id() {
         return getStr(TASK_ID);
     }
@@ -77,20 +81,12 @@ public class MinhangQuestion extends Model<MinhangQuestion> {
         set(TASK_ID, task_id);
     }
 
-    public String getQuestion_title() {
-        return getStr(QUESTION_TITLE);
+    public Integer getVideo_task_time() {
+        return getInt(VIDEO_TASK_TIME);
     }
 
-    public void setQuestion_title(String question_title) {
-        set(QUESTION_TITLE, question_title);
-    }
-
-    public String getQuestion_type() {
-        return getStr(QUESTION_TYPE);
-    }
-
-    public void setQuestion_type(String question_type) {
-        set(QUESTION_TYPE, question_type);
+    public void setVideo_task_time(Integer video_task_time) {
+        set(VIDEO_TASK_TIME, video_task_time);
     }
 
     public String getSystem_create_user_id() {

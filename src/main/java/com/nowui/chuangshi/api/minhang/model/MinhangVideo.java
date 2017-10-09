@@ -25,8 +25,8 @@ public class MinhangVideo extends Model<MinhangVideo> {
     @Column(type = ColumnType.VARCHAR, length = 100, comment = "视频标题")
     public static final String VIDEO_TITLE = "video_title";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "视频文件")
-    public static final String VIDEO_FILE = "video_file";
+    @Column(type = ColumnType.VARCHAR, length = 200, comment = "视频地址")
+    public static final String VIDEO_URL = "video_url";
 
     @Column(type = ColumnType.INT, length = 5, comment = "排序")
     public static final String VIDEO_SORT = "video_sort";
@@ -48,8 +48,6 @@ public class MinhangVideo extends Model<MinhangVideo> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
-    
-    public static final String VIDEO_FILE_FILE = "video_file_file";
 
     public String getVideo_id() {
         return getStr(VIDEO_ID);
@@ -75,12 +73,12 @@ public class MinhangVideo extends Model<MinhangVideo> {
         set(VIDEO_TITLE, video_title);
     }
 
-    public String getVideo_file() {
-        return getStr(VIDEO_FILE);
+    public String getVideo_url() {
+        return getStr(VIDEO_URL);
     }
 
-    public void setVideo_file(String video_file) {
-        set(VIDEO_FILE, video_file);
+    public void setVideo_url(String video_url) {
+        set(VIDEO_URL, video_url);
     }
 
     public Integer getVideo_sort() {

@@ -18,15 +18,15 @@ public class MinhangMemberKeyController extends Controller {
 
     @ActionKey("/admin/minhang/member/key/list")
     public void list() {
-        validateRequest(MinhangMemberKey.MEMBER_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(MinhangMemberKey.MEMBER_ID, MinhangMemberKey.KEY_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         MinhangMemberKey model = getModel(MinhangMemberKey.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = MinhangMemberKeyService.instance.adminCount(request_app_id, model.getMember_id());
-        List<MinhangMemberKey> resultList = MinhangMemberKeyService.instance.adminList(request_app_id, model.getMember_id(), getM(), getN());
+        Integer resultCount = MinhangMemberKeyService.instance.adminCount(request_app_id, model.getMember_id(), model.getKey_id());
+        List<MinhangMemberKey> resultList = MinhangMemberKeyService.instance.adminList(request_app_id, model.getMember_id(), model.getKey_id(), getM(), getN());
 
-        validateResponse(MinhangMemberKey.MEMBER_KEY_ID, MinhangMemberKey.MEMBER_ID, MinhangMemberKey.TASK_COMPLETE_QUANTITY, MinhangMemberKey.TASK_QUANTITY, MinhangMemberKey.KEY_IS_ACTIVATED, MinhangMemberKey.SYSTEM_VERSION);
+        validateResponse(MinhangMemberKey.MEMBER_KEY_ID, MinhangMemberKey.MEMBER_ID, MinhangMemberKey.KEY_ID, MinhangMemberKey.TASK_COMPLETE_QUANTITY, MinhangMemberKey.TASK_QUANTITY, MinhangMemberKey.KEY_IS_ACTIVATED, MinhangMemberKey.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }

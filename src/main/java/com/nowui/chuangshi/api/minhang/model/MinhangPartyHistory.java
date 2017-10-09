@@ -10,14 +10,14 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.util.Date;
 
 @Entity
-public class MinhangQuestion extends Model<MinhangQuestion> {
+public class MinhangPartyHistory extends Model<MinhangPartyHistory> {
 
     @Table
-    public static final String TABLE_MINHANG_QUESTION = "table_minhang_question";
+    public static final String TABLE_MINHANG_PARTY_HISTORY = "table_minhang_party_history";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "题目编号", updatable = false)
-    public static final String QUESTION_ID = "question_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "党史编号", updatable = false)
+    public static final String PARTY_HISTORY_ID = "party_history_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
@@ -25,11 +25,11 @@ public class MinhangQuestion extends Model<MinhangQuestion> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "任务编号")
     public static final String TASK_ID = "task_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 500, comment = "题目标题")
-    public static final String QUESTION_TITLE = "question_title";
+    @Column(type = ColumnType.LONGTEXT, length = 0, comment = "内容")
+    public static final String PARTY_HISTORY_CONTENT = "party_history_content";
 
-    @Column(type = ColumnType.VARCHAR, length = 25, comment = "题目类型")
-    public static final String QUESTION_TYPE = "question_type";
+    @Column(type = ColumnType.VARCHAR, length = 50, comment = "书编码")
+    public static final String BOOK_CODE = "book_code";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -48,17 +48,13 @@ public class MinhangQuestion extends Model<MinhangQuestion> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
-    
-    public static final String QUESTION_OPTION_LIST = "question_option_list";
-    
-    public static final String QUESTION_ANSWER_LIST = "question_answer_list";
 
-    public String getQuestion_id() {
-        return getStr(QUESTION_ID);
+    public String getParty_history_id() {
+        return getStr(PARTY_HISTORY_ID);
     }
 
-    public void setQuestion_id(String question_id) {
-        set(QUESTION_ID, question_id);
+    public void setParty_history_id(String party_history_id) {
+        set(PARTY_HISTORY_ID, party_history_id);
     }
 
     public String getApp_id() {
@@ -77,20 +73,20 @@ public class MinhangQuestion extends Model<MinhangQuestion> {
         set(TASK_ID, task_id);
     }
 
-    public String getQuestion_title() {
-        return getStr(QUESTION_TITLE);
+    public String getParty_history_content() {
+        return getStr(PARTY_HISTORY_CONTENT);
     }
 
-    public void setQuestion_title(String question_title) {
-        set(QUESTION_TITLE, question_title);
+    public void setParty_history_content(String party_history_content) {
+        set(PARTY_HISTORY_CONTENT, party_history_content);
     }
 
-    public String getQuestion_type() {
-        return getStr(QUESTION_TYPE);
+    public String getBook_code() {
+        return getStr(BOOK_CODE);
     }
 
-    public void setQuestion_type(String question_type) {
-        set(QUESTION_TYPE, question_type);
+    public void setBook_code(String book_code) {
+        set(BOOK_CODE, book_code);
     }
 
     public String getSystem_create_user_id() {

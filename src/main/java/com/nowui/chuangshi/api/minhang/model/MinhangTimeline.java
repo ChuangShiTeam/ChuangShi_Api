@@ -10,26 +10,26 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.util.Date;
 
 @Entity
-public class MinhangQuestion extends Model<MinhangQuestion> {
+public class MinhangTimeline extends Model<MinhangTimeline> {
 
     @Table
-    public static final String TABLE_MINHANG_QUESTION = "table_minhang_question";
+    public static final String TABLE_MINHANG_TIMELINE = "table_minhang_timeline";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "题目编号", updatable = false)
-    public static final String QUESTION_ID = "question_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "时间轴编号", updatable = false)
+    public static final String TIMELINE_ID = "timeline_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "任务编号")
-    public static final String TASK_ID = "task_id";
+    @Column(type = ColumnType.VARCHAR, length = 4, comment = "年份")
+    public static final String TIMELINE_YEAR = "timeline_year";
 
-    @Column(type = ColumnType.VARCHAR, length = 500, comment = "题目标题")
-    public static final String QUESTION_TITLE = "question_title";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "图片")
+    public static final String TIMELINE_IMAGE = "timeline_image";
 
-    @Column(type = ColumnType.VARCHAR, length = 25, comment = "题目类型")
-    public static final String QUESTION_TYPE = "question_type";
+    @Column(type = ColumnType.VARCHAR, length = 500, comment = "描述")
+    public static final String TIMELINE_DESCRIPTION = "timeline_description";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -48,17 +48,13 @@ public class MinhangQuestion extends Model<MinhangQuestion> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
-    
-    public static final String QUESTION_OPTION_LIST = "question_option_list";
-    
-    public static final String QUESTION_ANSWER_LIST = "question_answer_list";
 
-    public String getQuestion_id() {
-        return getStr(QUESTION_ID);
+    public String getTimeline_id() {
+        return getStr(TIMELINE_ID);
     }
 
-    public void setQuestion_id(String question_id) {
-        set(QUESTION_ID, question_id);
+    public void setTimeline_id(String timeline_id) {
+        set(TIMELINE_ID, timeline_id);
     }
 
     public String getApp_id() {
@@ -69,28 +65,28 @@ public class MinhangQuestion extends Model<MinhangQuestion> {
         set(APP_ID, app_id);
     }
 
-    public String getTask_id() {
-        return getStr(TASK_ID);
+    public String getTimeline_year() {
+        return getStr(TIMELINE_YEAR);
     }
 
-    public void setTask_id(String task_id) {
-        set(TASK_ID, task_id);
+    public void setTimeline_year(String timeline_year) {
+        set(TIMELINE_YEAR, timeline_year);
     }
 
-    public String getQuestion_title() {
-        return getStr(QUESTION_TITLE);
+    public String getTimeline_image() {
+        return getStr(TIMELINE_IMAGE);
     }
 
-    public void setQuestion_title(String question_title) {
-        set(QUESTION_TITLE, question_title);
+    public void setTimeline_image(String timeline_image) {
+        set(TIMELINE_IMAGE, timeline_image);
     }
 
-    public String getQuestion_type() {
-        return getStr(QUESTION_TYPE);
+    public String getTimeline_description() {
+        return getStr(TIMELINE_DESCRIPTION);
     }
 
-    public void setQuestion_type(String question_type) {
-        set(QUESTION_TYPE, question_type);
+    public void setTimeline_description(String timeline_description) {
+        set(TIMELINE_DESCRIPTION, timeline_description);
     }
 
     public String getSystem_create_user_id() {

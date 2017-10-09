@@ -2,10 +2,8 @@ package com.nowui.chuangshi.api.minhang.admin;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
-import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.minhang.model.MinhangVideo;
 import com.nowui.chuangshi.api.minhang.service.MinhangVideoService;
-import com.nowui.chuangshi.api.xietong.model.XietongTeacherRecruitment;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
@@ -28,7 +26,7 @@ public class MinhangVideoController extends Controller {
         Integer resultCount = MinhangVideoService.instance.adminCount(request_app_id, model.getVideo_title());
         List<MinhangVideo> resultList = MinhangVideoService.instance.adminList(request_app_id, model.getVideo_title(), getM(), getN());
 
-        validateResponse(MinhangVideo.VIDEO_ID, MinhangVideo.VIDEO_TITLE, MinhangVideo.VIDEO_SORT, MinhangVideo.SYSTEM_VERSION);
+        validateResponse(MinhangVideo.VIDEO_ID, MinhangVideo.VIDEO_TITLE, MinhangVideo.VIDEO_URL, MinhangVideo.VIDEO_SORT, MinhangVideo.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -40,17 +38,15 @@ public class MinhangVideoController extends Controller {
         MinhangVideo model = getModel(MinhangVideo.class);
 
         MinhangVideo result = MinhangVideoService.instance.find(model.getVideo_id());
-        
-        result.put(MinhangVideo.VIDEO_FILE_FILE, FileService.instance.getFile(result.getVideo_file()));
 
-        validateResponse(MinhangVideo.VIDEO_TITLE, MinhangVideo.VIDEO_FILE, MinhangVideo.VIDEO_FILE_FILE, MinhangVideo.VIDEO_SORT, MinhangVideo.SYSTEM_VERSION);
+        validateResponse(MinhangVideo.VIDEO_TITLE, MinhangVideo.VIDEO_URL, MinhangVideo.VIDEO_SORT, MinhangVideo.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
 
     @ActionKey("/admin/minhang/video/save")
     public void save() {
-        validateRequest(MinhangVideo.VIDEO_TITLE, MinhangVideo.VIDEO_FILE, MinhangVideo.VIDEO_SORT);
+        validateRequest(MinhangVideo.VIDEO_TITLE, MinhangVideo.VIDEO_URL, MinhangVideo.VIDEO_SORT);
 
         MinhangVideo model = getModel(MinhangVideo.class);
         model.setVideo_id(Util.getRandomUUID());
@@ -63,7 +59,7 @@ public class MinhangVideoController extends Controller {
 
     @ActionKey("/admin/minhang/video/update")
     public void update() {
-        validateRequest(MinhangVideo.VIDEO_ID, MinhangVideo.VIDEO_TITLE, MinhangVideo.VIDEO_FILE, MinhangVideo.VIDEO_SORT, MinhangVideo.SYSTEM_VERSION);
+        validateRequest(MinhangVideo.VIDEO_ID, MinhangVideo.VIDEO_TITLE, MinhangVideo.VIDEO_URL, MinhangVideo.VIDEO_SORT, MinhangVideo.SYSTEM_VERSION);
 
         MinhangVideo model = getModel(MinhangVideo.class);
         String request_user_id = getRequest_user_id();

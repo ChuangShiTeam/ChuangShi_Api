@@ -25,8 +25,8 @@ public class MinhangKey extends Model<MinhangKey> {
     @Column(type = ColumnType.VARCHAR, length = 30, comment = "钥匙名称")
     public static final String KEY_NAME = "key_name";
 
-    @Column(type = ColumnType.VARCHAR, length = 200, comment = "钥匙二维码")
-    public static final String KEY_QRCODE_URL = "key_qrcode_url";
+    @Column(type = ColumnType.INT, length = 5, comment = "钥匙激活需完成任务数")
+    public static final String KEY_ACTIVATED_TASK_QUANTITY = "key_activated_task_quantity";
 
     @Column(type = ColumnType.VARCHAR, length = 2000, comment = "钥匙简介")
     public static final String KEY_DESCRIPTION = "key_description";
@@ -73,12 +73,12 @@ public class MinhangKey extends Model<MinhangKey> {
         set(KEY_NAME, key_name);
     }
 
-    public String getKey_qrcode_url() {
-        return getStr(KEY_QRCODE_URL);
+    public Integer getKey_activated_task_quantity() {
+        return getInt(KEY_ACTIVATED_TASK_QUANTITY);
     }
 
-    public void setKey_qrcode_url(String key_qrcode_url) {
-        set(KEY_QRCODE_URL, key_qrcode_url);
+    public void setKey_activated_task_quantity(String key_activated_task_quantity) {
+        set(KEY_ACTIVATED_TASK_QUANTITY, key_activated_task_quantity);
     }
 
     public String getKey_description() {

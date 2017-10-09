@@ -24,6 +24,9 @@ public class MinhangTask extends Model<MinhangTask> {
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "钥匙编号")
     public static final String KEY_ID = "key_id";
+    
+    @Column(type = ColumnType.VARCHAR, length = 50, comment = "屏幕ID")
+    public static final String SCREEN_ID = "screen_id";
 
     @Column(type = ColumnType.VARCHAR, length = 200, comment = "任务名称")
     public static final String TASK_NAME = "task_name";
@@ -58,10 +61,8 @@ public class MinhangTask extends Model<MinhangTask> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
     
-    public static final String LOCATION_LIST = "location_list";
+    public static final String ACTION = "action";
     
-    public static final String QUESTION = "QUESTION";
-
     public String getTask_id() {
         return getStr(TASK_ID);
     }
@@ -84,6 +85,14 @@ public class MinhangTask extends Model<MinhangTask> {
 
     public void setKey_id(String key_id) {
         set(KEY_ID, key_id);
+    }
+    
+    public String getScreen_id() {
+        return getStr(SCREEN_ID);
+    }
+    
+    public void setScreen_id(String screen_id) {
+        set(SCREEN_ID, screen_id);
     }
 
     public String getTask_name() {

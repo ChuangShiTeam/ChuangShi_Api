@@ -18,15 +18,15 @@ public class MinhangMemberQuestionController extends Controller {
 
     @ActionKey("/admin/minhang/member/question/list")
     public void list() {
-        validateRequest(MinhangMemberQuestion.MEMBER_ID, MinhangMemberQuestion.TASK_ID, MinhangMemberQuestion.QUESTION_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(MinhangMemberQuestion.MEMBER_ID, MinhangMemberQuestion.TASK_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         MinhangMemberQuestion model = getModel(MinhangMemberQuestion.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = MinhangMemberQuestionService.instance.adminCount(request_app_id, model.getMember_id(), model.getTask_id(), model.getQuestion_id());
-        List<MinhangMemberQuestion> resultList = MinhangMemberQuestionService.instance.adminList(request_app_id, model.getMember_id(), model.getTask_id(), model.getQuestion_id(), getM(), getN());
+        Integer resultCount = MinhangMemberQuestionService.instance.adminCount(request_app_id, model.getMember_id(), model.getTask_id());
+        List<MinhangMemberQuestion> resultList = MinhangMemberQuestionService.instance.adminList(request_app_id, model.getMember_id(), model.getTask_id(), getM(), getN());
 
-        validateResponse(MinhangMemberQuestion.MEMBER_QUESTION_ID, MinhangMemberQuestion.MEMBER_ID, MinhangMemberQuestion.TASK_ID, MinhangMemberQuestion.SYSTEM_VERSION);
+        validateResponse(MinhangMemberQuestion.MEMBER_QUESTION_ID, MinhangMemberQuestion.MEMBER_ID, MinhangMemberQuestion.TASK_ID, MinhangMemberQuestion.QUESTION_ID, MinhangMemberQuestion.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }

@@ -16,7 +16,6 @@ public class Config {
     public static String table_schema = "";
     public static String notify_url = "";
     public static String rocket = "";
-    public static String minhang_qrcode_content = "";
 
     static {
         PropKit.clear();
@@ -34,7 +33,6 @@ public class Config {
         table_schema = PropKit.get("table_schema");
         notify_url = PropKit.get("notify_url");
         rocket = PropKit.get("rocket");
-        minhang_qrcode_content = PropKit.get("minhang_qrcode_content");
     }
 
 }

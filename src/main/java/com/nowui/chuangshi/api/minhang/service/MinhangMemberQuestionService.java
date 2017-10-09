@@ -14,25 +14,23 @@ public class MinhangMemberQuestionService extends Service {
     private final String MINHANG_MEMBER_QUESTION_ITEM_CACHE = "minhang_member_question_item_cache";
     private final MinhangMemberQuestionDao minhangMemberQuestionDao = new MinhangMemberQuestionDao();
 
-    public Integer adminCount(String app_id, String member_id, String task_id, String question_id) {
+    public Integer adminCount(String app_id, String member_id, String task_id) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangMemberQuestion.SYSTEM_STATUS, true);
         cnd.and(MinhangMemberQuestion.APP_ID, app_id);
         cnd.andAllowEmpty(MinhangMemberQuestion.MEMBER_ID, member_id);
         cnd.andAllowEmpty(MinhangMemberQuestion.TASK_ID, task_id);
-        cnd.andAllowEmpty(MinhangMemberQuestion.QUESTION_ID, question_id);
 
         Integer count = minhangMemberQuestionDao.count(cnd);
         return count;
     }
 
-    public List<MinhangMemberQuestion> adminList(String app_id, String member_id, String task_id, String question_id, Integer m, Integer n) {
+    public List<MinhangMemberQuestion> adminList(String app_id, String member_id, String task_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangMemberQuestion.SYSTEM_STATUS, true);
         cnd.and(MinhangMemberQuestion.APP_ID, app_id);
         cnd.andAllowEmpty(MinhangMemberQuestion.MEMBER_ID, member_id);
         cnd.andAllowEmpty(MinhangMemberQuestion.TASK_ID, task_id);
-        cnd.andAllowEmpty(MinhangMemberQuestion.QUESTION_ID, question_id);
         cnd.paginate(m, n);
 
         List<MinhangMemberQuestion> minhang_member_questionList = minhangMemberQuestionDao.primaryKeyList(cnd);

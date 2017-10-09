@@ -14,21 +14,23 @@ public class MinhangMemberKeyService extends Service {
     private final String MINHANG_MEMBER_KEY_ITEM_CACHE = "minhang_member_key_item_cache";
     private final MinhangMemberKeyDao minhangMemberKeyDao = new MinhangMemberKeyDao();
 
-    public Integer adminCount(String app_id, String member_id) {
+    public Integer adminCount(String app_id, String member_id, String key_id) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangMemberKey.SYSTEM_STATUS, true);
         cnd.and(MinhangMemberKey.APP_ID, app_id);
         cnd.andAllowEmpty(MinhangMemberKey.MEMBER_ID, member_id);
+        cnd.andAllowEmpty(MinhangMemberKey.KEY_ID, key_id);
 
         Integer count = minhangMemberKeyDao.count(cnd);
         return count;
     }
 
-    public List<MinhangMemberKey> adminList(String app_id, String member_id, Integer m, Integer n) {
+    public List<MinhangMemberKey> adminList(String app_id, String member_id, String key_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangMemberKey.SYSTEM_STATUS, true);
         cnd.and(MinhangMemberKey.APP_ID, app_id);
         cnd.andAllowEmpty(MinhangMemberKey.MEMBER_ID, member_id);
+        cnd.andAllowEmpty(MinhangMemberKey.KEY_ID, key_id);
         cnd.paginate(m, n);
 
         List<MinhangMemberKey> minhang_member_keyList = minhangMemberKeyDao.primaryKeyList(cnd);

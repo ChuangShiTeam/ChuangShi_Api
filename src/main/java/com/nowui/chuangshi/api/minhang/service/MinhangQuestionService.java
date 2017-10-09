@@ -14,10 +14,11 @@ public class MinhangQuestionService extends Service {
     private final String MINHANG_QUESTION_ITEM_CACHE = "minhang_question_item_cache";
     private final MinhangQuestionDao minhangQuestionDao = new MinhangQuestionDao();
 
-    public Integer adminCount(String app_id, String question_title, String question_type) {
+    public Integer adminCount(String app_id, String task_id, String question_title, String question_type) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangQuestion.SYSTEM_STATUS, true);
         cnd.and(MinhangQuestion.APP_ID, app_id);
+        cnd.andAllowEmpty(MinhangQuestion.TASK_ID, task_id);
         cnd.andAllowEmpty(MinhangQuestion.QUESTION_TITLE, question_title);
         cnd.andAllowEmpty(MinhangQuestion.QUESTION_TYPE, question_type);
 
@@ -25,13 +26,26 @@ public class MinhangQuestionService extends Service {
         return count;
     }
 
-    public List<MinhangQuestion> adminList(String app_id, String question_title, String question_type, Integer m, Integer n) {
+    public List<MinhangQuestion> adminList(String app_id, String task_id, String question_title, String question_type, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangQuestion.SYSTEM_STATUS, true);
         cnd.and(MinhangQuestion.APP_ID, app_id);
+        cnd.andAllowEmpty(MinhangQuestion.TASK_ID, task_id);
         cnd.andAllowEmpty(MinhangQuestion.QUESTION_TITLE, question_title);
         cnd.andAllowEmpty(MinhangQuestion.QUESTION_TYPE, question_type);
         cnd.paginate(m, n);
+
+        List<MinhangQuestion> minhang_questionList = minhangQuestionDao.primaryKeyList(cnd);
+        for (MinhangQuestion minhang_question : minhang_questionList) {
+            minhang_question.put(find(minhang_question.getQuestion_id()));
+        }
+        return minhang_questionList;
+    }
+    
+    public List<MinhangQuestion> taskList(String task_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangQuestion.SYSTEM_STATUS, true);
+        cnd.and(MinhangQuestion.TASK_ID, task_id);
 
         List<MinhangQuestion> minhang_questionList = minhangQuestionDao.primaryKeyList(cnd);
         for (MinhangQuestion minhang_question : minhang_questionList) {
@@ -45,6 +59,9 @@ public class MinhangQuestionService extends Service {
 
         if (minhang_question == null) {
             minhang_question = minhangQuestionDao.find(question_id);
+            
+            minhang_question.put(MinhangQuestion.QUESTION_ANSWER_LIST, MinhangQuestionAnswerService.instance.questionList(question_id));
+            minhang_question.put(MinhangQuestion.QUESTION_OPTION_LIST, MinhangQuestionOptionService.instance.questionList(question_id));
 
             CacheUtil.put(MINHANG_QUESTION_ITEM_CACHE, question_id, minhang_question);
         }

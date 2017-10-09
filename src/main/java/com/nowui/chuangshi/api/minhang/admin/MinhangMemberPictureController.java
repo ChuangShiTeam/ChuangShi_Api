@@ -18,15 +18,15 @@ public class MinhangMemberPictureController extends Controller {
 
     @ActionKey("/admin/minhang/member/picture/list")
     public void list() {
-        validateRequest(MinhangMemberPicture.MEMBER_ID, MinhangMemberPicture.TASK_ID, MinhangMemberPicture.PICTURE_FILE, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(MinhangMemberPicture.MEMBER_ID, MinhangMemberPicture.TASK_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         MinhangMemberPicture model = getModel(MinhangMemberPicture.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = MinhangMemberPictureService.instance.adminCount(request_app_id, model.getMember_id(), model.getTask_id(), model.getPicture_file());
-        List<MinhangMemberPicture> resultList = MinhangMemberPictureService.instance.adminList(request_app_id, model.getMember_id(), model.getTask_id(), model.getPicture_file(), getM(), getN());
+        Integer resultCount = MinhangMemberPictureService.instance.adminCount(request_app_id, model.getMember_id(), model.getTask_id());
+        List<MinhangMemberPicture> resultList = MinhangMemberPictureService.instance.adminList(request_app_id, model.getMember_id(), model.getTask_id(), getM(), getN());
 
-        validateResponse(MinhangMemberPicture.MEMBER_PICTURE_ID, MinhangMemberPicture.MEMBER_ID, MinhangMemberPicture.PICTURE_FILE, MinhangMemberPicture.SYSTEM_VERSION);
+        validateResponse(MinhangMemberPicture.MEMBER_PICTURE_ID, MinhangMemberPicture.MEMBER_ID, MinhangMemberPicture.TASK_ID, MinhangMemberPicture.PICTURE_FILE, MinhangMemberPicture.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }

@@ -10,26 +10,32 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.util.Date;
 
 @Entity
-public class MinhangQuestion extends Model<MinhangQuestion> {
+public class MinhangTimelineEvent extends Model<MinhangTimelineEvent> {
 
     @Table
-    public static final String TABLE_MINHANG_QUESTION = "table_minhang_question";
+    public static final String TABLE_MINHANG_TIMELINE_EVENT = "table_minhang_timeline_event";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "题目编号", updatable = false)
-    public static final String QUESTION_ID = "question_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "时间轴事件编号", updatable = false)
+    public static final String TIMELINE_EVENT_ID = "timeline_event_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
 
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "时间轴编号")
+    public static final String TIMELINE_ID = "timeline_id";
+
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "任务编号")
     public static final String TASK_ID = "task_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 500, comment = "题目标题")
-    public static final String QUESTION_TITLE = "question_title";
+    @Column(type = ColumnType.DATE, length = 0, comment = "时间")
+    public static final String TIMELINE_EVENT_TIME = "timeline_event_time";
 
-    @Column(type = ColumnType.VARCHAR, length = 25, comment = "题目类型")
-    public static final String QUESTION_TYPE = "question_type";
+    @Column(type = ColumnType.VARCHAR, length = 250, comment = "事件标题")
+    public static final String TIMELINE_EVENT_TITLE = "timeline_event_title";
+
+    @Column(type = ColumnType.LONGTEXT, length = 0, comment = "事件内容")
+    public static final String TIMELINE_EVENT_CONTENT = "timeline_event_content";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -48,17 +54,13 @@ public class MinhangQuestion extends Model<MinhangQuestion> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
-    
-    public static final String QUESTION_OPTION_LIST = "question_option_list";
-    
-    public static final String QUESTION_ANSWER_LIST = "question_answer_list";
 
-    public String getQuestion_id() {
-        return getStr(QUESTION_ID);
+    public String getTimeline_event_id() {
+        return getStr(TIMELINE_EVENT_ID);
     }
 
-    public void setQuestion_id(String question_id) {
-        set(QUESTION_ID, question_id);
+    public void setTimeline_event_id(String timeline_event_id) {
+        set(TIMELINE_EVENT_ID, timeline_event_id);
     }
 
     public String getApp_id() {
@@ -69,6 +71,14 @@ public class MinhangQuestion extends Model<MinhangQuestion> {
         set(APP_ID, app_id);
     }
 
+    public String getTimeline_id() {
+        return getStr(TIMELINE_ID);
+    }
+
+    public void setTimeline_id(String timeline_id) {
+        set(TIMELINE_ID, timeline_id);
+    }
+
     public String getTask_id() {
         return getStr(TASK_ID);
     }
@@ -77,20 +87,28 @@ public class MinhangQuestion extends Model<MinhangQuestion> {
         set(TASK_ID, task_id);
     }
 
-    public String getQuestion_title() {
-        return getStr(QUESTION_TITLE);
+    public Date getTimeline_event_time() {
+        return getDate(TIMELINE_EVENT_TIME);
     }
 
-    public void setQuestion_title(String question_title) {
-        set(QUESTION_TITLE, question_title);
+    public void setTimeline_event_time(Date timeline_event_time) {
+        set(TIMELINE_EVENT_TIME, timeline_event_time);
     }
 
-    public String getQuestion_type() {
-        return getStr(QUESTION_TYPE);
+    public String getTimeline_event_title() {
+        return getStr(TIMELINE_EVENT_TITLE);
     }
 
-    public void setQuestion_type(String question_type) {
-        set(QUESTION_TYPE, question_type);
+    public void setTimeline_event_title(String timeline_event_title) {
+        set(TIMELINE_EVENT_TITLE, timeline_event_title);
+    }
+
+    public String getTimeline_event_content() {
+        return getStr(TIMELINE_EVENT_CONTENT);
+    }
+
+    public void setTimeline_event_content(String timeline_event_content) {
+        set(TIMELINE_EVENT_CONTENT, timeline_event_content);
     }
 
     public String getSystem_create_user_id() {

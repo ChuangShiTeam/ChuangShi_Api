@@ -3,7 +3,6 @@ package com.nowui.chuangshi.type;
 public enum MinhangTaskType {
 	
 	QUESTION("QUESTION", "答题"),
-	LOCATION("LOCATION", "标记位置"),
 	PICTURE("PICTURE", "上传图片"),
     RECORD("RECORD", "上传录音");
 

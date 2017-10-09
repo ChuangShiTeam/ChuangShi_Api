@@ -14,25 +14,23 @@ public class MinhangMemberPictureService extends Service {
     private final String MINHANG_MEMBER_PICTURE_ITEM_CACHE = "minhang_member_picture_item_cache";
     private final MinhangMemberPictureDao minhangMemberPictureDao = new MinhangMemberPictureDao();
 
-    public Integer adminCount(String app_id, String member_id, String task_id, String picture_file) {
+    public Integer adminCount(String app_id, String member_id, String task_id) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangMemberPicture.SYSTEM_STATUS, true);
         cnd.and(MinhangMemberPicture.APP_ID, app_id);
         cnd.andAllowEmpty(MinhangMemberPicture.MEMBER_ID, member_id);
         cnd.andAllowEmpty(MinhangMemberPicture.TASK_ID, task_id);
-        cnd.andAllowEmpty(MinhangMemberPicture.PICTURE_FILE, picture_file);
 
         Integer count = minhangMemberPictureDao.count(cnd);
         return count;
     }
 
-    public List<MinhangMemberPicture> adminList(String app_id, String member_id, String task_id, String picture_file, Integer m, Integer n) {
+    public List<MinhangMemberPicture> adminList(String app_id, String member_id, String task_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangMemberPicture.SYSTEM_STATUS, true);
         cnd.and(MinhangMemberPicture.APP_ID, app_id);
         cnd.andAllowEmpty(MinhangMemberPicture.MEMBER_ID, member_id);
         cnd.andAllowEmpty(MinhangMemberPicture.TASK_ID, task_id);
-        cnd.andAllowEmpty(MinhangMemberPicture.PICTURE_FILE, picture_file);
         cnd.paginate(m, n);
 
         List<MinhangMemberPicture> minhang_member_pictureList = minhangMemberPictureDao.primaryKeyList(cnd);
