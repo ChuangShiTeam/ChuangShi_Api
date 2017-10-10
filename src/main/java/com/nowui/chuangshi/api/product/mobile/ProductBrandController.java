@@ -59,12 +59,12 @@ public class ProductBrandController extends Controller {
                     for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
                         if (ValidateUtil.isNullOrEmpty(member.getMember_level_id())) {
                             if (productSkuPrice.getMember_level_id().equals("")) {
-                                product.put(ProductSkuPrice.PRODUCT_SKU_PRICE_AMOUNT, productSkuPrice.getProduct_sku_price_amount());
+                                product.put(ProductSkuPrice.PRODUCT_SKU_PRICE, productSkuPrice.getProduct_sku_price());
                                 break;
                             }
                         } else {
                             if (productSkuPrice.getMember_level_id().equals(member.getMember_level_id())) {
-                                product.put(ProductSkuPrice.PRODUCT_SKU_PRICE_AMOUNT, productSkuPrice.getProduct_sku_price_amount());
+                                product.put(ProductSkuPrice.PRODUCT_SKU_PRICE, productSkuPrice.getProduct_sku_price());
                                 break;
                             }
                         }
@@ -73,7 +73,7 @@ public class ProductBrandController extends Controller {
             }
         }
 
-        validateResponse(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, ProductSkuPrice.PRODUCT_SKU_PRICE_AMOUNT);
+        validateResponse(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, ProductSkuPrice.PRODUCT_SKU_PRICE);
 
         renderSuccessJson(resultList);
     }
