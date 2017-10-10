@@ -14,23 +14,21 @@ public class MinhangTimelineEventService extends Service {
     private final String MINHANG_TIMELINE_EVENT_ITEM_CACHE = "minhang_timeline_event_item_cache";
     private final MinhangTimelineEventDao minhangTimelineEventDao = new MinhangTimelineEventDao();
 
-    public Integer adminCount(String app_id, String timeline_id, String task_id) {
+    public Integer adminCount(String app_id, String timeline_id) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangTimelineEvent.SYSTEM_STATUS, true);
         cnd.and(MinhangTimelineEvent.APP_ID, app_id);
         cnd.andAllowEmpty(MinhangTimelineEvent.TIMELINE_ID, timeline_id);
-        cnd.andAllowEmpty(MinhangTimelineEvent.TASK_ID, task_id);
 
         Integer count = minhangTimelineEventDao.count(cnd);
         return count;
     }
 
-    public List<MinhangTimelineEvent> adminList(String app_id, String timeline_id, String task_id, Integer m, Integer n) {
+    public List<MinhangTimelineEvent> adminList(String app_id, String timeline_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangTimelineEvent.SYSTEM_STATUS, true);
         cnd.and(MinhangTimelineEvent.APP_ID, app_id);
         cnd.andAllowEmpty(MinhangTimelineEvent.TIMELINE_ID, timeline_id);
-        cnd.andAllowEmpty(MinhangTimelineEvent.TASK_ID, task_id);
         cnd.paginate(m, n);
 
         List<MinhangTimelineEvent> minhang_timeline_eventList = minhangTimelineEventDao.primaryKeyList(cnd);

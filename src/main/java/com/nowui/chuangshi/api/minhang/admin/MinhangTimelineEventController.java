@@ -18,13 +18,13 @@ public class MinhangTimelineEventController extends Controller {
 
     @ActionKey("/admin/minhang/timeline/event/list")
     public void list() {
-        validateRequest(MinhangTimelineEvent.TIMELINE_ID, MinhangTimelineEvent.TASK_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(MinhangTimelineEvent.TIMELINE_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         MinhangTimelineEvent model = getModel(MinhangTimelineEvent.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = MinhangTimelineEventService.instance.adminCount(request_app_id, model.getTimeline_id(), model.getTask_id());
-        List<MinhangTimelineEvent> resultList = MinhangTimelineEventService.instance.adminList(request_app_id, model.getTimeline_id(), model.getTask_id(), getM(), getN());
+        Integer resultCount = MinhangTimelineEventService.instance.adminCount(request_app_id, model.getTimeline_id());
+        List<MinhangTimelineEvent> resultList = MinhangTimelineEventService.instance.adminList(request_app_id, model.getTimeline_id(), getM(), getN());
 
         validateResponse(MinhangTimelineEvent.TIMELINE_EVENT_ID, MinhangTimelineEvent.TIMELINE_ID, MinhangTimelineEvent.TASK_ID, MinhangTimelineEvent.TIMELINE_EVENT_TIME, MinhangTimelineEvent.TIMELINE_EVENT_TITLE, MinhangTimelineEvent.SYSTEM_VERSION);
 

@@ -2,6 +2,8 @@ package com.nowui.chuangshi.api.minhang.admin;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.file.service.FileService;
+import com.nowui.chuangshi.api.minhang.model.MinhangPoster;
 import com.nowui.chuangshi.api.minhang.model.MinhangTimeline;
 import com.nowui.chuangshi.api.minhang.service.MinhangTimelineService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -26,7 +28,11 @@ public class MinhangTimelineController extends Controller {
         Integer resultCount = MinhangTimelineService.instance.adminCount(request_app_id, model.getTimeline_year());
         List<MinhangTimeline> resultList = MinhangTimelineService.instance.adminList(request_app_id, model.getTimeline_year(), getM(), getN());
 
-        validateResponse(MinhangTimeline.TIMELINE_ID, MinhangTimeline.TIMELINE_YEAR, MinhangTimeline.TIMELINE_IMAGE, MinhangTimeline.SYSTEM_VERSION);
+        for (MinhangTimeline minhangTimeline : resultList) {
+            minhangTimeline.put(MinhangTimeline.TIMELINE_IMAGE_FILE, FileService.instance.getOriginalFile(minhangTimeline.getTimeline_image()));
+        }
+        
+        validateResponse(MinhangTimeline.TIMELINE_ID, MinhangTimeline.TIMELINE_YEAR, MinhangTimeline.TIMELINE_IMAGE, MinhangTimeline.TIMELINE_IMAGE_FILE, MinhangTimeline.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -38,8 +44,10 @@ public class MinhangTimelineController extends Controller {
         MinhangTimeline model = getModel(MinhangTimeline.class);
 
         MinhangTimeline result = MinhangTimelineService.instance.find(model.getTimeline_id());
+        
+        result.put(MinhangTimeline.TIMELINE_IMAGE_FILE, FileService.instance.getFile(result.getTimeline_image()));
 
-        validateResponse(MinhangTimeline.TIMELINE_YEAR, MinhangTimeline.TIMELINE_IMAGE, MinhangTimeline.TIMELINE_DESCRIPTION, MinhangTimeline.SYSTEM_VERSION);
+        validateResponse(MinhangTimeline.TIMELINE_YEAR, MinhangTimeline.TIMELINE_IMAGE, MinhangTimeline.TIMELINE_IMAGE_FILE, MinhangTimeline.TIMELINE_DESCRIPTION, MinhangTimeline.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }

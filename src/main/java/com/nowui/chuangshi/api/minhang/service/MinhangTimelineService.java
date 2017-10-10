@@ -37,6 +37,18 @@ public class MinhangTimelineService extends Service {
         }
         return minhang_timelineList;
     }
+    
+    public List<MinhangTimeline> appList(String app_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangTimeline.SYSTEM_STATUS, true);
+        cnd.and(MinhangTimeline.APP_ID, app_id);
+
+        List<MinhangTimeline> minhang_timelineList = minhangTimelineDao.primaryKeyList(cnd);
+        for (MinhangTimeline minhang_timeline : minhang_timelineList) {
+            minhang_timeline.put(find(minhang_timeline.getTimeline_id()));
+        }
+        return minhang_timelineList;
+    }
 
     public MinhangTimeline find(String timeline_id) {
         MinhangTimeline minhang_timeline = CacheUtil.get(MINHANG_TIMELINE_ITEM_CACHE, timeline_id);

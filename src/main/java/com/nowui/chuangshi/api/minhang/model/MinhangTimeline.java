@@ -48,6 +48,8 @@ public class MinhangTimeline extends Model<MinhangTimeline> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
+    
+    public static final String TIMELINE_IMAGE_FILE = "timeline_image_file";
 
     public String getTimeline_id() {
         return getStr(TIMELINE_ID);
