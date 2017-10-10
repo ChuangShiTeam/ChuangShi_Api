@@ -88,7 +88,7 @@
                                                 <a href="/index.html">首页</a> &gt;<a href="/gsskt.html">课程教学</a> &gt; <a>#(page_name)</a>
                                             </div>
                                         </div>
-                                        <div className="main-right-content" dangerouslySetInnerHTML={{__html: unescapeHtml(#(page_content))}}>
+                                        <div className="main-right-content" dangerouslySetInnerHTML={{__html: unescapeHtml('#(page_content)')}}>
                                         </div>
                                     </div>
                                 </div>
