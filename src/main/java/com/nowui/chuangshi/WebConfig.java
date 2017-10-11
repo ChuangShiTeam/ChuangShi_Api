@@ -27,7 +27,6 @@ import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
-import com.nowui.chuangshi.common.socket.MinHangSocket;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.controller.AdminController;
 import com.nowui.chuangshi.controller.ApiController;

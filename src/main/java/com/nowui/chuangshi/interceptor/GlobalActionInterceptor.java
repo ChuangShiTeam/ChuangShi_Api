@@ -14,7 +14,6 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.*;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.http.HttpStatus;
-import org.apache.rocketmq.client.producer.SendResult;
 
 import java.sql.Connection;
 import java.sql.SQLException;
