@@ -30,7 +30,7 @@ public class ProductSkuPrice extends Model<ProductSkuPrice> {
     public static final String MEMBER_LEVEL_NAME = "member_level_name";
 
     @Column(type = ColumnType.DECIMAL, length = 0, comment = "SKU价格")
-    public static final String PRODUCT_SKU_PRICE_AMOUNT = "product_sku_price_amount";
+    public static final String PRODUCT_SKU_PRICE = "product_sku_price";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -82,12 +82,12 @@ public class ProductSkuPrice extends Model<ProductSkuPrice> {
         set(MEMBER_LEVEL_NAME, member_level_name);
     }
 
-    public BigDecimal getProduct_sku_price_amount() {
-        return getBigDecimal(PRODUCT_SKU_PRICE_AMOUNT);
+    public BigDecimal getProduct_sku_price() {
+        return getBigDecimal(PRODUCT_SKU_PRICE);
     }
 
-    public void setProduct_sku_price_amount(BigDecimal product_sku_price_amount) {
-        set(PRODUCT_SKU_PRICE_AMOUNT, product_sku_price_amount);
+    public void setProduct_sku_price(BigDecimal product_sku_price) {
+        set(PRODUCT_SKU_PRICE, product_sku_price);
     }
 
     public String getSystem_create_user_id() {

@@ -51,12 +51,12 @@ public class ProductController extends Controller {
                 List<ProductSkuPrice> productSkuPriceList = ProductSkuPriceService.instance.productSkuList(productSku.getProduct_sku_id());
                 for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
                     if (productSkuPrice.getMember_level_id().equals("")) {
-                        result.put(ProductSkuPrice.PRODUCT_SKU_PRICE_AMOUNT, productSkuPrice.getProduct_sku_price_amount());
+                        result.put(ProductSkuPrice.PRODUCT_SKU_PRICE, productSkuPrice.getProduct_sku_price());
                     }
                 }
                 for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
                     if (productSkuPrice.getMember_level_id().equals(member.getMember_level_id())) {
-                        result.put(ProductSkuPrice.PRODUCT_SKU_PRICE_AMOUNT, productSkuPrice.getProduct_sku_price_amount());
+                        result.put(ProductSkuPrice.PRODUCT_SKU_PRICE, productSkuPrice.getProduct_sku_price());
                     }
                 }
 
@@ -111,7 +111,7 @@ public class ProductController extends Controller {
 
         result.put("product_sku_quantity", product_quantity_min);
 
-        validateResponse(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_CONTENT, ProductSkuPrice.PRODUCT_SKU_ID, ProductSkuPrice.PRODUCT_SKU_PRICE_AMOUNT, "product_sku_quantity", "is_first_purchase");
+        validateResponse(Product.PRODUCT_ID, Product.PRODUCT_NAME, Product.PRODUCT_IMAGE, Product.PRODUCT_CONTENT, ProductSkuPrice.PRODUCT_SKU_ID, ProductSkuPrice.PRODUCT_SKU_PRICE, "product_sku_quantity", "is_first_purchase");
 
         renderSuccessJson(result);
     }

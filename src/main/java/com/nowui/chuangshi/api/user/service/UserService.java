@@ -192,7 +192,7 @@ public class UserService extends Service {
             calendar.add(Calendar.YEAR, 1);
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(User.USER_ID, "29eb0c48812c4ba08b987965c9737193");
+            jsonObject.put(User.USER_ID, "745dfe90113e4f16a915f18f25c29337");
             jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
 
             System.out.println(AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));

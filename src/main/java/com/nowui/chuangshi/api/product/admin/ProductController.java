@@ -42,7 +42,7 @@ public class ProductController extends Controller {
 
             List<ProductSkuPrice> productSkuPriceList = ProductSkuPriceService.instance.productSkuList(productSku.getProduct_sku_id());
             for (ProductSkuPrice productSkuPrice : productSkuPriceList) {
-                productSkuPrice.keep(ProductSkuPrice.MEMBER_LEVEL_ID, ProductSkuPrice.PRODUCT_SKU_PRICE_AMOUNT);
+                productSkuPrice.keep(ProductSkuPrice.MEMBER_LEVEL_ID, ProductSkuPrice.PRODUCT_SKU_PRICE);
             }
             productSku.put(ProductSku.PRODUCT_SKU_PRICE_LIST, productSkuPriceList);
 
