@@ -1,4 +1,4 @@
-package com.nowui.chuangshi.api.minhang.model;
+package com.nowui.chuangshi.api.xietong.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
 import com.nowui.chuangshi.common.annotation.Entity;
@@ -10,32 +10,26 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.util.Date;
 
 @Entity
-public class MinhangKey extends Model<MinhangKey> {
+public class XietongOrganization extends Model<XietongOrganization> {
 
     @Table
-    public static final String TABLE_MINHANG_KEY = "table_minhang_key";
+    public static final String TABLE_XIETONG_ORGANIZATION = "table_xietong_organization";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "钥匙编号", updatable = false)
-    public static final String KEY_ID = "key_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "组织机构编号", updatable = false)
+    public static final String ORGANIZATION_ID = "organization_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 30, comment = "钥匙名称")
-    public static final String KEY_NAME = "key_name";
-    
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "钥匙图片")
-    public static final String KEY_IMAGE = "key_image";
+    @Column(type = ColumnType.VARCHAR, length = 100, comment = "名称")
+    public static final String ORGANIZATION_NAME = "organization_name";
 
-    @Column(type = ColumnType.INT, length = 5, comment = "钥匙激活需完成任务数")
-    public static final String KEY_ACTIVATED_TASK_QUANTITY = "key_activated_task_quantity";
-    
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "编码")
+    public static final String ORGANIZATION_CODE = "organization_code";
+
     @Column(type = ColumnType.INT, length = 5, comment = "排序")
-    public static final String KEY_SORT = "key_sort";
-
-    @Column(type = ColumnType.VARCHAR, length = 2000, comment = "钥匙简介")
-    public static final String KEY_DESCRIPTION = "key_description";
+    public static final String ORGANIZAITON_SORT = "organizaiton_sort";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -54,15 +48,13 @@ public class MinhangKey extends Model<MinhangKey> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
-    
-    public static final String KEY_IMAGE_FILE = "key_image_file";
 
-    public String getKey_id() {
-        return getStr(KEY_ID);
+    public String getOrganization_id() {
+        return getStr(ORGANIZATION_ID);
     }
 
-    public void setKey_id(String key_id) {
-        set(KEY_ID, key_id);
+    public void setOrganization_id(String organization_id) {
+        set(ORGANIZATION_ID, organization_id);
     }
 
     public String getApp_id() {
@@ -73,44 +65,28 @@ public class MinhangKey extends Model<MinhangKey> {
         set(APP_ID, app_id);
     }
 
-    public String getKey_name() {
-        return getStr(KEY_NAME);
+    public String getOrganization_name() {
+        return getStr(ORGANIZATION_NAME);
     }
 
-    public void setKey_name(String key_name) {
-        set(KEY_NAME, key_name);
-    }
-    
-    public String getKey_image() {
-        return getStr(KEY_IMAGE);
-    }
-    
-    public void setKey_image(String key_image) {
-        set(KEY_IMAGE, key_image);
+    public void setOrganization_name(String organization_name) {
+        set(ORGANIZATION_NAME, organization_name);
     }
 
-    public Integer getKey_activated_task_quantity() {
-        return getInt(KEY_ACTIVATED_TASK_QUANTITY);
+    public String getOrganization_code() {
+        return getStr(ORGANIZATION_CODE);
     }
 
-    public void setKey_activated_task_quantity(String key_activated_task_quantity) {
-        set(KEY_ACTIVATED_TASK_QUANTITY, key_activated_task_quantity);
-    }
-    
-    public Integer getKey_sort() {
-        return getInt(KEY_SORT);
-    }
-    
-    public void setKey_sort(String key_sort) {
-        set(KEY_SORT, key_sort);
+    public void setOrganization_code(String organization_code) {
+        set(ORGANIZATION_CODE, organization_code);
     }
 
-    public String getKey_description() {
-        return getStr(KEY_DESCRIPTION);
+    public Integer getOrganizaiton_sort() {
+        return getInt(ORGANIZAITON_SORT);
     }
 
-    public void setKey_description(String key_description) {
-        set(KEY_DESCRIPTION, key_description);
+    public void setOrganizaiton_sort(Integer organizaiton_sort) {
+        set(ORGANIZAITON_SORT, organizaiton_sort);
     }
 
     public String getSystem_create_user_id() {
@@ -128,6 +104,7 @@ public class MinhangKey extends Model<MinhangKey> {
     public void setSystem_create_time(Date system_create_time) {
         set(SYSTEM_CREATE_TIME, system_create_time);
     }
+
 
     public String getSystem_update_user_id() {
         return getStr(SYSTEM_UPDATE_USER_ID);

@@ -19,7 +19,7 @@ public class XietongTeacher extends Model<XietongTeacher> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "老师编号", updatable = false)
     public static final String TEACHER_ID = "teacher_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户编号")
@@ -27,6 +27,9 @@ public class XietongTeacher extends Model<XietongTeacher> {
 
     @Column(type = ColumnType.VARCHAR, length = 1000, comment = "班级编号")
     public static final String CLAZZ_ID = "clazz_id";
+    
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "组织机构编号")
+    public static final String ORGANIZATION_ID = "organization_id";
 
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "老师姓名")
     public static final String TEACHER_NAME = "teacher_name";
@@ -79,6 +82,14 @@ public class XietongTeacher extends Model<XietongTeacher> {
 
     public void setClazz_id(String clazz_id) {
         set(CLAZZ_ID, clazz_id);
+    }
+    
+    public String getOrganization_id() {
+        return getStr(ORGANIZATION_ID);
+    }
+    
+    public void setOrganization_id(String organization_id) {
+        set(ORGANIZATION_ID, organization_id);
     }
 
     public String getTeacher_name() {

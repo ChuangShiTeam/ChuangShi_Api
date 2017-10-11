@@ -29,6 +29,7 @@ public class MinhangKeyService extends Service {
         cnd.where(MinhangKey.SYSTEM_STATUS, true);
         cnd.and(MinhangKey.APP_ID, app_id);
         cnd.andAllowEmpty(MinhangKey.KEY_NAME, key_name);
+        cnd.asc(MinhangKey.KEY_SORT);
         cnd.paginate(m, n);
 
         List<MinhangKey> minhang_keyList = minhangKeyDao.primaryKeyList(cnd);
@@ -38,10 +39,11 @@ public class MinhangKeyService extends Service {
         return minhang_keyList;
     }
     
-    public List<MinhangKey> allList(String app_id) {
+    public List<MinhangKey> appList(String app_id) {
     	Cnd cnd = new Cnd();
         cnd.where(MinhangKey.SYSTEM_STATUS, true);
         cnd.and(MinhangKey.APP_ID, app_id);
+        cnd.asc(MinhangKey.KEY_SORT);
 
         List<MinhangKey> minhang_keyList = minhangKeyDao.primaryKeyList(cnd);
         for (MinhangKey minhang_key : minhang_keyList) {

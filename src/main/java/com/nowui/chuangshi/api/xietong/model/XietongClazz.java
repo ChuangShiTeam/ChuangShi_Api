@@ -16,11 +16,14 @@ public class XietongClazz extends Model<XietongClazz> {
     public static final String TABLE_XIETONG_CLAZZ = "table_xietong_clazz";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "班级编号", updatable = false)
     public static final String CLAZZ_ID = "clazz_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
+    
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "组织机构编号")
+    public static final String ORGANIZATION_ID = "organization_id";
 
     @Column(type = ColumnType.VARCHAR, length = 20, comment = "班级名称")
     public static final String CLAZZ_NAME = "clazz_name";
@@ -69,6 +72,14 @@ public class XietongClazz extends Model<XietongClazz> {
 
     public void setApp_id(String app_id) {
         set(APP_ID, app_id);
+    }
+    
+    public String getOrganization_id() {
+        return getStr(ORGANIZATION_ID);
+    }
+    
+    public void setOrganization_id(String organization_id) {
+        set(ORGANIZATION_ID, organization_id);
     }
 
     public String getClazz_name() {

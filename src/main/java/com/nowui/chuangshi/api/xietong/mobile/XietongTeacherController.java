@@ -40,46 +40,4 @@ public class XietongTeacherController extends Controller {
         renderSuccessJson(result);
     }
 
-    @ActionKey("/mobile/xietong/teacher/save")
-    public void save() {
-        validateRequest(XietongTeacher.TEACHER_NAME);
-        
-        XietongTeacher model = getModel(XietongTeacher.class);
-        User userModel = getModel(User.class);
-        
-        String request_user_id = getRequest_user_id();
-        
-        Boolean result = XietongTeacherService.instance.save(model, userModel, request_user_id);
-        
-        renderSuccessJson(result);
-    }
-
-    @ActionKey("/mobile/xietong/teacher/update")
-    public void update() {
-        validateRequest(XietongTeacher.TEACHER_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.SYSTEM_VERSION);
-        
-        XietongTeacher model = getModel(XietongTeacher.class);
-        User userModel = getModel(User.class);
-        
-        String request_user_id = getRequest_user_id();
-        
-        Boolean result = XietongTeacherService.instance.update(model, userModel, request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
-    }
-
-    @ActionKey("/mobile/xietong/teacher/delete")
-    public void delete() {
-
-        validateRequest(XietongTeacher.TEACHER_ID, XietongTeacher.SYSTEM_VERSION);
-
-        XietongTeacher model = getModel(XietongTeacher.class);
-        
-        String request_user_id = getRequest_user_id();
-
-        Boolean result = XietongTeacherService.instance.delete(model.getTeacher_id(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
-    }
-
 }

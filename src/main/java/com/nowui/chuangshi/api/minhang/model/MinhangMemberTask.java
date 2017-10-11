@@ -22,6 +22,9 @@ public class MinhangMemberTask extends Model<MinhangMemberTask> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
 
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "钥匙编号")
+    public static final String KEY_ID = "key_id";
+    
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员编号")
     public static final String MEMBER_ID = "member_id";
 
@@ -63,6 +66,14 @@ public class MinhangMemberTask extends Model<MinhangMemberTask> {
 
     public void setApp_id(String app_id) {
         set(APP_ID, app_id);
+    }
+    
+    public String getKey_id() {
+        return getStr(KEY_ID);
+    }
+    
+    public void setKey_id(String key_id) {
+        set(KEY_ID, key_id);
     }
 
     public String getMember_id() {

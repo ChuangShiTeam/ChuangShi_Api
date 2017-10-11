@@ -158,7 +158,22 @@ public class UserService extends Service {
     
     public Boolean userTypeDelete(String user_type, String system_update_user_id) {
         Cnd cnd = new Cnd();
+        cnd.where(User.SYSTEM_STATUS, true);
         cnd.and(User.USER_TYPE, user_type);
+
+        Boolean success = userDao.delete(system_update_user_id, cnd);
+        
+        if (success) {
+            CacheUtil.removeAll(USER_ITEM_CACHE);
+        }
+        
+        return success;
+    }
+    
+    public Boolean objectIdDelete(String object_id, String system_update_user_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(User.SYSTEM_STATUS, true);
+        cnd.and(User.OBJECT_ID, object_id);
 
         Boolean success = userDao.delete(system_update_user_id, cnd);
         
