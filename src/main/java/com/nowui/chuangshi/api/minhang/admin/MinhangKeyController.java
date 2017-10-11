@@ -8,6 +8,7 @@ import java.util.List;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.PathKit;
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.minhang.model.MinhangKey;
 import com.nowui.chuangshi.api.minhang.service.MinhangKeyService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -32,8 +33,10 @@ public class MinhangKeyController extends Controller {
 
         Integer resultCount = MinhangKeyService.instance.adminCount(request_app_id, model.getKey_name());
         List<MinhangKey> resultList = MinhangKeyService.instance.adminList(request_app_id, model.getKey_name(), getM(), getN());
-
-        validateResponse(MinhangKey.KEY_ID, MinhangKey.KEY_NAME, MinhangKey.KEY_ACTIVATED_TASK_QUANTITY, MinhangKey.SYSTEM_VERSION);
+        for (MinhangKey result : resultList) {
+            result.put(MinhangKey.KEY_IMAGE_FILE, FileService.instance.getFile(result.getKey_image()));
+        }
+        validateResponse(MinhangKey.KEY_ID, MinhangKey.KEY_NAME, MinhangKey.KEY_IMAGE_FILE, MinhangKey.KEY_ACTIVATED_TASK_QUANTITY, MinhangKey.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -57,14 +60,16 @@ public class MinhangKeyController extends Controller {
 
         MinhangKey result = MinhangKeyService.instance.find(model.getKey_id());
 
-        validateResponse(MinhangKey.KEY_NAME, MinhangKey.KEY_ACTIVATED_TASK_QUANTITY, MinhangKey.KEY_DESCRIPTION, MinhangKey.SYSTEM_VERSION);
+        result.put(MinhangKey.KEY_IMAGE_FILE, FileService.instance.getFile(result.getKey_image()));
+
+        validateResponse(MinhangKey.KEY_NAME, MinhangKey.KEY_IMAGE_FILE, MinhangKey.KEY_ACTIVATED_TASK_QUANTITY, MinhangKey.KEY_DESCRIPTION, MinhangKey.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
 
     @ActionKey("/admin/minhang/key/save")
     public void save() {
-        validateRequest(MinhangKey.KEY_NAME, MinhangKey.KEY_ACTIVATED_TASK_QUANTITY, MinhangKey.KEY_DESCRIPTION);
+        validateRequest(MinhangKey.KEY_NAME, MinhangKey.KEY_IMAGE, MinhangKey.KEY_ACTIVATED_TASK_QUANTITY, MinhangKey.KEY_DESCRIPTION);
 
         MinhangKey model = getModel(MinhangKey.class);
         model.setKey_id(Util.getRandomUUID());
@@ -77,7 +82,7 @@ public class MinhangKeyController extends Controller {
 
     @ActionKey("/admin/minhang/key/update")
     public void update() {
-        validateRequest(MinhangKey.KEY_ID, MinhangKey.KEY_NAME, MinhangKey.KEY_DESCRIPTION, MinhangKey.SYSTEM_VERSION);
+        validateRequest(MinhangKey.KEY_ID, MinhangKey.KEY_NAME, MinhangKey.KEY_IMAGE, MinhangKey.KEY_DESCRIPTION, MinhangKey.SYSTEM_VERSION);
 
         MinhangKey model = getModel(MinhangKey.class);
         String request_user_id = getRequest_user_id();

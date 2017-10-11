@@ -24,6 +24,9 @@ public class MinhangKey extends Model<MinhangKey> {
 
     @Column(type = ColumnType.VARCHAR, length = 30, comment = "钥匙名称")
     public static final String KEY_NAME = "key_name";
+    
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "钥匙图片")
+    public static final String KEY_IMAGE = "key_image";
 
     @Column(type = ColumnType.INT, length = 5, comment = "钥匙激活需完成任务数")
     public static final String KEY_ACTIVATED_TASK_QUANTITY = "key_activated_task_quantity";
@@ -48,6 +51,8 @@ public class MinhangKey extends Model<MinhangKey> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
+    
+    public static final String KEY_IMAGE_FILE = "key_image_file";
 
     public String getKey_id() {
         return getStr(KEY_ID);
@@ -71,6 +76,14 @@ public class MinhangKey extends Model<MinhangKey> {
 
     public void setKey_name(String key_name) {
         set(KEY_NAME, key_name);
+    }
+    
+    public String getKey_image() {
+        return getStr(KEY_IMAGE);
+    }
+    
+    public void setKey_image(String key_image) {
+        set(KEY_IMAGE, key_image);
     }
 
     public Integer getKey_activated_task_quantity() {
@@ -104,7 +117,6 @@ public class MinhangKey extends Model<MinhangKey> {
     public void setSystem_create_time(Date system_create_time) {
         set(SYSTEM_CREATE_TIME, system_create_time);
     }
-
 
     public String getSystem_update_user_id() {
         return getStr(SYSTEM_UPDATE_USER_ID);
