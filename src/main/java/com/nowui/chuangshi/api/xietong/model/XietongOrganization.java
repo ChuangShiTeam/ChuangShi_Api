@@ -10,35 +10,26 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.util.Date;
 
 @Entity
-public class XietongClazz extends Model<XietongClazz> {
-    
+public class XietongOrganization extends Model<XietongOrganization> {
+
     @Table
-    public static final String TABLE_XIETONG_CLAZZ = "table_xietong_clazz";
+    public static final String TABLE_XIETONG_ORGANIZATION = "table_xietong_organization";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "班级编号", updatable = false)
-    public static final String CLAZZ_ID = "clazz_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "组织机构编号", updatable = false)
+    public static final String ORGANIZATION_ID = "organization_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
-    
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "组织机构编号")
-    public static final String ORGANIZATION_ID = "organization_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "班级名称")
-    public static final String CLAZZ_NAME = "clazz_name";
+    @Column(type = ColumnType.VARCHAR, length = 100, comment = "名称")
+    public static final String ORGANIZATION_NAME = "organization_name";
 
-    @Column(type = ColumnType.INT, length = 3, comment = "选课限制人数")
-    public static final String CLAZZ_COURSE_APPLY_LIMIT = "clazz_course_apply_limit";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "编码")
+    public static final String ORGANIZATION_CODE = "organization_code";
 
-    @Column(type = ColumnType.VARCHAR, length = 19, comment = "选课开始时间")
-    public static final String CLAZZ_COURSE_APPLY_START_TIME = "clazz_course_apply_start_time";
-
-    @Column(type = ColumnType.VARCHAR, length = 19, comment = "选课结束时间")
-    public static final String CLAZZ_COURSE_APPLY_END_TIME = "clazz_course_apply_end_time";
-
-    @Column(type = ColumnType.INT, length = 3, comment = "班级排序")
-    public static final String CLAZZ_SORT = "clazz_sort";
+    @Column(type = ColumnType.INT, length = 5, comment = "排序")
+    public static final String ORGANIZAITON_SORT = "organizaiton_sort";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -58,12 +49,12 @@ public class XietongClazz extends Model<XietongClazz> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
-    public String getClazz_id() {
-        return getStr(CLAZZ_ID);
+    public String getOrganization_id() {
+        return getStr(ORGANIZATION_ID);
     }
 
-    public void setClazz_id(String clazz_id) {
-        set(CLAZZ_ID, clazz_id);
+    public void setOrganization_id(String organization_id) {
+        set(ORGANIZATION_ID, organization_id);
     }
 
     public String getApp_id() {
@@ -73,53 +64,29 @@ public class XietongClazz extends Model<XietongClazz> {
     public void setApp_id(String app_id) {
         set(APP_ID, app_id);
     }
-    
-    public String getOrganization_id() {
-        return getStr(ORGANIZATION_ID);
-    }
-    
-    public void setOrganization_id(String organization_id) {
-        set(ORGANIZATION_ID, organization_id);
+
+    public String getOrganization_name() {
+        return getStr(ORGANIZATION_NAME);
     }
 
-    public String getClazz_name() {
-        return getStr(CLAZZ_NAME);
+    public void setOrganization_name(String organization_name) {
+        set(ORGANIZATION_NAME, organization_name);
     }
 
-    public void setClazz_name(String clazz_name) {
-        set(CLAZZ_NAME, clazz_name);
+    public String getOrganization_code() {
+        return getStr(ORGANIZATION_CODE);
     }
 
-    public Integer getClazz_course_apply_limit() {
-        return getInt(CLAZZ_COURSE_APPLY_LIMIT);
+    public void setOrganization_code(String organization_code) {
+        set(ORGANIZATION_CODE, organization_code);
     }
 
-    public void setClazz_course_apply_limit(Integer clazz_course_apply_limit) {
-        set(CLAZZ_COURSE_APPLY_LIMIT, clazz_course_apply_limit);
+    public Integer getOrganizaiton_sort() {
+        return getInt(ORGANIZAITON_SORT);
     }
 
-    public String getClazz_course_apply_start_time() {
-        return getStr(CLAZZ_COURSE_APPLY_START_TIME);
-    }
-
-    public void setClazz_course_apply_start_time(String clazz_course_apply_start_time) {
-        set(CLAZZ_COURSE_APPLY_START_TIME, clazz_course_apply_start_time);
-    }
-
-    public String getClazz_course_apply_end_time() {
-        return getStr(CLAZZ_COURSE_APPLY_END_TIME);
-    }
-
-    public void setClazz_course_apply_end_time(String clazz_course_apply_end_time) {
-        set(CLAZZ_COURSE_APPLY_END_TIME, clazz_course_apply_end_time);
-    }
-
-    public Integer getClazz_sort() {
-        return getInt(CLAZZ_SORT);
-    }
-
-    public void setClazz_sort(Integer clazz_sort) {
-        set(CLAZZ_SORT, clazz_sort);
+    public void setOrganizaiton_sort(Integer organizaiton_sort) {
+        set(ORGANIZAITON_SORT, organizaiton_sort);
     }
 
     public String getSystem_create_user_id() {

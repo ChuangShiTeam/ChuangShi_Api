@@ -2,6 +2,7 @@ package com.nowui.chuangshi.api.xietong.service;
 
 import com.nowui.chuangshi.api.xietong.dao.XietongClazzDao;
 import com.nowui.chuangshi.api.xietong.model.XietongClazz;
+import com.nowui.chuangshi.api.xietong.model.XietongOrganization;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
@@ -14,23 +15,27 @@ public class XietongClazzService extends Service {
     private final String XIETONG_CLAZZ_ITEM_CACHE = "xietong_clazz_item_cache";
     private final XietongClazzDao xietongClazzDao = new XietongClazzDao();
 
-    public Integer adminCount(String app_id, String clazz_name) {
+    public Integer adminCount(String app_id, String clazz_name, String organization_id) {
         Cnd cnd = new Cnd();
         cnd.where(XietongClazz.SYSTEM_STATUS, true);
         cnd.and(XietongClazz.APP_ID, app_id);
         cnd.andLikeAllowEmpty(XietongClazz.CLAZZ_NAME, clazz_name);
+        cnd.andAllowEmpty(XietongClazz.ORGANIZATION_ID, organization_id);
 
         Integer count = xietongClazzDao.count(cnd);
         return count;
     }
 
-    public List<XietongClazz> adminList(String app_id, String clazz_name, Integer m, Integer n) {
+    public List<XietongClazz> adminList(String app_id, String clazz_name, String organization_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
-        cnd.where(XietongClazz.SYSTEM_STATUS, true);
-        cnd.and(XietongClazz.APP_ID, app_id);
-        cnd.andLikeAllowEmpty(XietongClazz.CLAZZ_NAME, clazz_name);
-        cnd.asc(XietongClazz.CLAZZ_SORT);
-        cnd.desc(XietongClazz.SYSTEM_CREATE_TIME);
+        cnd.select(XietongOrganization.TABLE_XIETONG_ORGANIZATION + "." + XietongOrganization.ORGANIZATION_NAME);
+        cnd.leftJoin(XietongOrganization.TABLE_XIETONG_ORGANIZATION, XietongOrganization.ORGANIZATION_ID, XietongClazz.TABLE_XIETONG_CLAZZ, XietongClazz.ORGANIZATION_ID);
+        cnd.where(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.SYSTEM_STATUS, true);
+        cnd.and(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.APP_ID, app_id);
+        cnd.andLikeAllowEmpty(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.CLAZZ_NAME, clazz_name);
+        cnd.andAllowEmpty(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.ORGANIZATION_ID, organization_id);
+        cnd.asc(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.CLAZZ_SORT);
+        cnd.desc(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
         List<XietongClazz> xietong_clazzList = xietongClazzDao.primaryKeyList(cnd);

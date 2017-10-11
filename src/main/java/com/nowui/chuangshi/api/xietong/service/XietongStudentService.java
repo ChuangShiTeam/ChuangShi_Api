@@ -147,6 +147,8 @@ public class XietongStudentService extends Service {
         Boolean success = xietongStudentDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
+            UserService.instance.objectIdDelete(student_id, system_update_user_id);
+            
             CacheUtil.remove(XIETONG_STUDENT_ITEM_CACHE, student_id);
         }
 

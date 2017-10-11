@@ -5,6 +5,7 @@ import java.util.List;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.api.xietong.dao.XietongTeacherDao;
+import com.nowui.chuangshi.api.xietong.model.XietongOrganization;
 import com.nowui.chuangshi.api.xietong.model.XietongTeacher;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
@@ -18,22 +19,26 @@ public class XietongTeacherService extends Service {
     private final String XIETONG_TEACHER_ITEM_CACHE = "xietong_teacher_item_cache";
     private final XietongTeacherDao xietongTeacherDao = new XietongTeacherDao();
 
-    public Integer adminCount(String app_id, String teacher_name) {
+    public Integer adminCount(String app_id, String teacher_name, String organization_id) {
         Cnd cnd = new Cnd();
         cnd.where(XietongTeacher.SYSTEM_STATUS, true);
         cnd.and(XietongTeacher.APP_ID, app_id);
-        cnd.andAllowEmpty(XietongTeacher.TEACHER_NAME, teacher_name);
+        cnd.andLikeAllowEmpty(XietongTeacher.TEACHER_NAME, teacher_name);
+        cnd.andAllowEmpty(XietongTeacher.ORGANIZATION_ID, organization_id);
 
         Integer count = xietongTeacherDao.count(cnd);
         return count;
     }
 
-    public List<XietongTeacher> adminList(String app_id, String teacher_name, Integer m, Integer n) {
+    public List<XietongTeacher> adminList(String app_id, String teacher_name, String organization_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
-        cnd.where(XietongTeacher.SYSTEM_STATUS, true);
-        cnd.and(XietongTeacher.APP_ID, app_id);
-        cnd.andLikeAllowEmpty(XietongTeacher.TEACHER_NAME, teacher_name);
-        cnd.desc(XietongTeacher.SYSTEM_CREATE_TIME);
+        cnd.select(XietongOrganization.TABLE_XIETONG_ORGANIZATION + "." + XietongOrganization.ORGANIZATION_NAME);
+        cnd.leftJoin(XietongOrganization.TABLE_XIETONG_ORGANIZATION, XietongOrganization.ORGANIZATION_ID, XietongTeacher.TABLE_XIETONG_TEACHER, XietongTeacher.ORGANIZATION_ID);
+        cnd.where(XietongTeacher.TABLE_XIETONG_TEACHER + "." + XietongTeacher.SYSTEM_STATUS, true);
+        cnd.and(XietongTeacher.TABLE_XIETONG_TEACHER + "." + XietongTeacher.APP_ID, app_id);
+        cnd.andLikeAllowEmpty(XietongTeacher.TABLE_XIETONG_TEACHER + "." + XietongTeacher.TEACHER_NAME, teacher_name);
+        cnd.andAllowEmpty(XietongTeacher.TABLE_XIETONG_TEACHER + "." + XietongTeacher.ORGANIZATION_ID, organization_id);
+        cnd.desc(XietongTeacher.TABLE_XIETONG_TEACHER + "." + XietongTeacher.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
         List<XietongTeacher> xietong_teacherList = xietongTeacherDao.primaryKeyList(cnd);
@@ -139,6 +144,8 @@ public class XietongTeacherService extends Service {
         Boolean success = xietongTeacherDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
+            UserService.instance.objectIdDelete(teacher_id, system_update_user_id);
+            
             CacheUtil.remove(XIETONG_TEACHER_ITEM_CACHE, teacher_id);
         }
 
