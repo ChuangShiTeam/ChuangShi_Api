@@ -6,12 +6,15 @@ import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MinhangMemberKeyService extends Service {
 
     public static final MinhangMemberKeyService instance = new MinhangMemberKeyService();
     private final String MINHANG_MEMBER_KEY_ITEM_CACHE = "minhang_member_key_item_cache";
+    private final String MINHANG_MEMBER_KEY_ID_USER_LIST_CACHE = "minhang_member_key_id_user_list_cache";
     private final MinhangMemberKeyDao minhangMemberKeyDao = new MinhangMemberKeyDao();
 
     public Integer adminCount(String app_id, String member_id, String key_id) {
@@ -39,6 +42,39 @@ public class MinhangMemberKeyService extends Service {
         }
         return minhang_member_keyList;
     }
+    
+    public MinhangMemberKey userAndKeyFind(String user_id, String key_id) {
+        List<MinhangMemberKey> minhang_member_keyList = userList(user_id);
+        
+        for (MinhangMemberKey minhangMemberKey : minhang_member_keyList) {
+            if (key_id.equals(minhangMemberKey.getKey_id())) {
+                return minhangMemberKey;
+            }
+        }
+        return null;
+    }
+    
+    public List<MinhangMemberKey> userList(String user_id) {
+        List<String> minhang_member_key_idList = CacheUtil.get(MINHANG_MEMBER_KEY_ID_USER_LIST_CACHE, user_id);
+            
+        if (minhang_member_key_idList == null) {
+            Cnd cnd = new Cnd();
+            cnd.where(MinhangMemberKey.SYSTEM_STATUS, true);
+            cnd.andAllowEmpty(MinhangMemberKey.USER_ID, user_id);
+
+            List<MinhangMemberKey> minhang_member_keyList = minhangMemberKeyDao.primaryKeyList(cnd);
+            
+            minhang_member_key_idList = minhang_member_keyList.stream()
+                                                            .map(minhang_member_key -> minhang_member_key.getMember_key_id())
+                                                            .collect(Collectors.toList());
+        }
+        
+        List<MinhangMemberKey> list = new ArrayList<>();
+        for (String minhang_member_key_id : minhang_member_key_idList) {
+            list.add(find(minhang_member_key_id));
+        }
+        return list;
+    }
 
     public MinhangMemberKey find(String member_key_id) {
         MinhangMemberKey minhang_member_key = CacheUtil.get(MINHANG_MEMBER_KEY_ITEM_CACHE, member_key_id);
@@ -51,7 +87,7 @@ public class MinhangMemberKeyService extends Service {
 
         return minhang_member_key;
     }
-
+    
     public Boolean save(MinhangMemberKey minhang_member_key, String system_create_user_id) {
         Boolean success = minhangMemberKeyDao.save(minhang_member_key, system_create_user_id);
         return success;
