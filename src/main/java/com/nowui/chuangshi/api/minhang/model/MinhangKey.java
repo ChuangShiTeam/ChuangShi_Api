@@ -30,6 +30,9 @@ public class MinhangKey extends Model<MinhangKey> {
 
     @Column(type = ColumnType.INT, length = 5, comment = "钥匙激活需完成任务数")
     public static final String KEY_ACTIVATED_TASK_QUANTITY = "key_activated_task_quantity";
+    
+    @Column(type = ColumnType.INT, length = 5, comment = "排序")
+    public static final String KEY_SORT = "key_sort";
 
     @Column(type = ColumnType.VARCHAR, length = 2000, comment = "钥匙简介")
     public static final String KEY_DESCRIPTION = "key_description";
@@ -92,6 +95,14 @@ public class MinhangKey extends Model<MinhangKey> {
 
     public void setKey_activated_task_quantity(String key_activated_task_quantity) {
         set(KEY_ACTIVATED_TASK_QUANTITY, key_activated_task_quantity);
+    }
+    
+    public Integer getKey_sort() {
+        return getInt(KEY_SORT);
+    }
+    
+    public void setKey_sort(String key_sort) {
+        set(KEY_SORT, key_sort);
     }
 
     public String getKey_description() {
