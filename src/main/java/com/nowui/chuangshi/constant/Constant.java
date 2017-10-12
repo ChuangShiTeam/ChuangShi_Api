@@ -112,5 +112,7 @@ public class Constant {
   	public static final String EXCEL03_EXTENSION = ".xls";
   	//excel2007扩展名  
   	public static final String EXCEL07_EXTENSION = ".xlsx";
+  	
+  	public static final String MEDIA_ID = "media_id";
     
 }

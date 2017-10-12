@@ -130,5 +130,20 @@ public class FileUtil {
             e.printStackTrace();
         }
     }
+    
+    public static byte[] readBytes(BufferedInputStream bufin) throws IOException {
+        int buffSize = 1024;
+        ByteArrayOutputStream out = new ByteArrayOutputStream(buffSize);
+
+        byte[] temp = new byte[buffSize];
+        int size = 0;
+        while ((size = bufin.read(temp)) != -1) {
+            out.write(temp, 0, size);
+        }
+        bufin.close();
+
+        byte[] content = out.toByteArray();
+        return content;
+    }
 
 }

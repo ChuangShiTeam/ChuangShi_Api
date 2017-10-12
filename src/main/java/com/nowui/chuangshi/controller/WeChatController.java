@@ -1,25 +1,34 @@
 package com.nowui.chuangshi.controller;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import javax.imageio.stream.FileImageOutputStream;
 
 import com.jfinal.weixin.sdk.api.*;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.jfinal.kit.FileKit;
 import com.jfinal.kit.HttpKit;
+import com.jfinal.kit.PathKit;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.app.service.AppService;
+import com.nowui.chuangshi.api.file.model.File;
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.member.model.Member;
 import com.nowui.chuangshi.api.member.service.MemberService;
 import com.nowui.chuangshi.api.user.model.User;
@@ -40,9 +49,11 @@ import com.nowui.chuangshi.service.MemberPurchaseOrderProductSkuService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderService;
 import com.nowui.chuangshi.service.TradeService;
 import com.nowui.chuangshi.type.ExpressPayWay;
+import com.nowui.chuangshi.type.FileType;
 import com.nowui.chuangshi.type.MemberDeliveryOrderFlow;
 import com.nowui.chuangshi.type.MemberPurchaseOrderFlow;
 import com.nowui.chuangshi.type.PayType;
+import com.nowui.chuangshi.util.FileUtil;
 import com.nowui.chuangshi.util.HttpUtil;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
@@ -490,6 +501,88 @@ public class WeChatController extends Controller {
         if (flag) {
             memberDeliveryOrderProductSkuService.batchSave(memberDeliveryOrderProductSkuList);
         }
+
+    }
+    
+    @ActionKey(Url.WECHAT_DOWNLOAD_IMAGE)
+    public void downloadImage() {
+        validate(Constant.MEDIA_ID);
+        
+        String request_app_id = getRequest_app_id();
+        String request_user_id = getRequest_user_id();
+        
+        JSONObject jsonObject = getParameterJSONObject();
+        
+        String media_id = jsonObject.getString(Constant.MEDIA_ID);
+        
+        MediaFile mediaFile = MediaApi.getMedia(media_id);
+        
+        Map<String, Object> result = new HashMap<String, Object>();
+        
+        if (mediaFile != null) {
+            String path = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + request_app_id + "/" + request_user_id;
+            String thumbnailPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + request_app_id + "/" + request_user_id + "/" + Constant.THUMBNAIL;
+            String originalPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + request_app_id + "/" + request_user_id + "/" + Constant.ORIGINAL;
+
+            FileUtil.createPath(path);
+            FileUtil.createPath(thumbnailPath);
+            FileUtil.createPath(originalPath);
+            
+            String original_file_name = mediaFile.getFileName();
+            String file_suffix = mediaFile.getSuffix();
+            String file_name = Util.getRandomUUID() + "." + file_suffix;
+
+            path = path + "/" + file_name;
+            thumbnailPath = thumbnailPath + "/" + file_name;
+            originalPath = originalPath + "/" + file_name;
+
+            java.io.File imageFile = new java.io.File(originalPath);
+            
+            try {
+                byte[] imageByte = FileUtil.readBytes(mediaFile.getFileStream());
+                FileImageOutputStream fos = new FileImageOutputStream(imageFile);
+                fos.write(imageByte);
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            String file_type = FileType.IMAGE.getKey();
+
+            if (file_suffix.equals("png") || file_suffix.equals("jpg") || file_suffix.equals("jpeg")) {
+                FileUtil.resizeImage(imageFile, file_suffix, thumbnailPath, 100);
+                FileUtil.resizeImage(imageFile, file_suffix, path, 360);
+            } else {
+                FileUtil.copy(imageFile, new java.io.File(path));
+
+                thumbnailPath = path;
+                originalPath = path;
+
+                file_type = FileType.OTHER.getKey();
+            }
+            
+            String file_id = Util.getRandomUUID();
+            Integer file_size = (int) imageFile.length();
+            String file_path = path.replace(PathKit.getWebRootPath(), "");
+            String file_thumbnail_path = thumbnailPath.replace(PathKit.getWebRootPath(), "");
+            String file_original_path = originalPath.replace(PathKit.getWebRootPath(), "");
+            String file_image = "";
+            Boolean file_is_external = false;
+
+            Boolean flag = FileService.instance.save(file_id, request_app_id, file_type, original_file_name, file_suffix, file_size, file_path, file_thumbnail_path, file_original_path, file_image, file_is_external, request_user_id);
+
+            if (!flag) {
+                throw new RuntimeException("上传不成功");
+            }
+            
+            result.put(File.FILE_ID, file_id);
+            result.put(File.FILE_NAME, original_file_name);
+            result.put(File.FILE_PATH, file_path);
+            
+            
+        }
+        renderSuccessJson(result); 
 
     }
 

@@ -14,10 +14,15 @@ import com.nowui.chuangshi.util.FileUtil;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.imageio.stream.FileImageOutputStream;
+
+import org.apache.commons.codec.binary.Base64;
 
 public class FileService extends Service {
 
@@ -261,6 +266,76 @@ public class FileService extends Service {
         }
 
         return list;
+    }
+    
+    public Map<String, Object> uploadBase64(String dataString, String app_id, String system_create_user_id) {
+        
+        String path = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + app_id + "/" + system_create_user_id;
+        String thumbnailPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + app_id + "/" + system_create_user_id + "/" + Constant.THUMBNAIL;
+        String originalPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + app_id + "/" + system_create_user_id + "/" + Constant.ORIGINAL;
+
+        FileUtil.createPath(path);
+        FileUtil.createPath(thumbnailPath);
+        FileUtil.createPath(originalPath);
+        
+        String file_suffix = dataString.substring(11, dataString.indexOf(";base64,"));
+        
+        String file_name = Util.getRandomUUID() + "." + file_suffix;
+
+        String imageString = dataString.substring(dataString.indexOf(","));
+
+        byte[] imageByte = Base64.decodeBase64(imageString.getBytes());
+        
+        path = path + "/" + file_name;
+        thumbnailPath = thumbnailPath + "/" + file_name;
+        originalPath = originalPath + "/" + file_name;
+        
+        java.io.File imageFile = new java.io.File(originalPath);
+        
+        try {
+            FileImageOutputStream fos = new FileImageOutputStream(imageFile);
+            fos.write(imageByte);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String file_type = FileType.IMAGE.getKey();
+
+        if (file_suffix.equals("png") || file_suffix.equals("jpg") || file_suffix.equals("jpeg")) {
+            FileUtil.resizeImage(imageFile, file_suffix, thumbnailPath, 100);
+            FileUtil.resizeImage(imageFile, file_suffix, path, 360);
+        } else {
+            FileUtil.copy(imageFile, new java.io.File(path));
+
+            thumbnailPath = path;
+            originalPath = path;
+
+            file_type = FileType.OTHER.getKey();
+        }
+        
+        String file_id = Util.getRandomUUID();
+        Integer file_size = (int) imageFile.length();
+        String file_path = path.replace(PathKit.getWebRootPath(), "");
+        String file_thumbnail_path = thumbnailPath.replace(PathKit.getWebRootPath(), "");
+        String file_original_path = originalPath.replace(PathKit.getWebRootPath(), "");
+        String file_image = "";
+        Boolean file_is_external = false;
+
+        Boolean flag = save(file_id, app_id, file_type, file_name, file_suffix, file_size, file_path, file_thumbnail_path, file_original_path, file_image, file_is_external, system_create_user_id);
+
+        if (!flag) {
+            throw new RuntimeException("上传不成功");
+        }
+        
+        Map<String, Object> result = new HashMap<String, Object>();
+        
+        result.put(File.FILE_ID, file_id);
+        result.put(File.FILE_NAME, file_name);
+        result.put(File.FILE_PATH, file_path);
+        
+        return result;
     }
 
 }

@@ -65,6 +65,12 @@ public class MinhangTask extends Model<MinhangTask> {
     
     public static final String QUESTION_LIST = "question_list";
     
+    public static final String MEMBER_QUESTION_LIST = "member_question_list";
+    
+    public static final String MEMBER_PICTURE = "member_picture";
+    
+    public static final String MEMBER_RECORD = "member_record";
+    
     public String getTask_id() {
         return getStr(TASK_ID);
     }

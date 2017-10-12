@@ -89,7 +89,7 @@ public class MinhangMemberTaskService extends Service {
         return null;
     	
     }
-
+    
     public Boolean save(MinhangMemberTask minhang_member_task, String system_create_user_id) {
         Boolean success = minhangMemberTaskDao.save(minhang_member_task, system_create_user_id);
         return success;
