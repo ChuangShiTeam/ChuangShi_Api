@@ -78,6 +78,20 @@ public class MinhangMemberTaskService extends Service {
         return list;
     }
     
+    public List<MinhangMemberTask> taskList(String task_id, Integer m, Integer n) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangMemberTask.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(MinhangMemberTask.TASK_ID, task_id);
+        cnd.desc(MinhangMemberTask.SYSTEM_CREATE_TIME);
+        cnd.paginate(m, n);
+        
+        List<MinhangMemberTask> minhang_member_taskList = minhangMemberTaskDao.primaryKeyList(cnd);
+        for (MinhangMemberTask minhang_member_task : minhang_member_taskList) {
+            minhang_member_task.put(find(minhang_member_task.getMember_task_id()));
+        }
+        return minhang_member_taskList;
+    }
+    
     public MinhangMemberTask userAndTaskFind(String user_id, String task_id) {
     	List<MinhangMemberTask> minhang_member_taskList = userList(user_id);
         
