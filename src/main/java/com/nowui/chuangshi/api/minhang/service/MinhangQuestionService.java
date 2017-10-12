@@ -50,6 +50,7 @@ public class MinhangQuestionService extends Service {
         List<MinhangQuestion> minhang_questionList = minhangQuestionDao.primaryKeyList(cnd);
         for (MinhangQuestion minhang_question : minhang_questionList) {
             minhang_question.put(find(minhang_question.getQuestion_id()));
+            minhang_question.put(MinhangQuestion.QUESTION_OPTION_LIST, MinhangQuestionOptionService.instance.questionList(minhang_question.getQuestion_id()));
         }
         return minhang_questionList;
     }

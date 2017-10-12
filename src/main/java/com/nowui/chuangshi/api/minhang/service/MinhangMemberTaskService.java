@@ -1,17 +1,21 @@
 package com.nowui.chuangshi.api.minhang.service;
 
 import com.nowui.chuangshi.api.minhang.dao.MinhangMemberTaskDao;
+import com.nowui.chuangshi.api.minhang.model.MinhangMemberKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberTask;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MinhangMemberTaskService extends Service {
 
     public static final MinhangMemberTaskService instance = new MinhangMemberTaskService();
     private final String MINHANG_MEMBER_TASK_ITEM_CACHE = "minhang_member_task_item_cache";
+    private final String MINHANG_MEMBER_TASK_ID_USER_LIST_CACHE = "minhang_member_task_id__user_list_cache";
     private final MinhangMemberTaskDao minhangMemberTaskDao = new MinhangMemberTaskDao();
 
     public Integer adminCount(String app_id, String member_id, String task_id) {
@@ -50,6 +54,40 @@ public class MinhangMemberTaskService extends Service {
         }
 
         return minhang_member_task;
+    }
+    
+    public List<MinhangMemberTask> userList(String user_id) {
+    	List<String> minhang_member_task_idList = CacheUtil.get(MINHANG_MEMBER_TASK_ID_USER_LIST_CACHE, user_id);
+        
+        if (minhang_member_task_idList == null) {
+            Cnd cnd = new Cnd();
+            cnd.where(MinhangMemberTask.SYSTEM_STATUS, true);
+            cnd.andAllowEmpty(MinhangMemberTask.USER_ID, user_id);
+
+            List<MinhangMemberTask> minhang_member_taskList = minhangMemberTaskDao.primaryKeyList(cnd);
+            
+            minhang_member_task_idList = minhang_member_taskList.stream()
+                                                            .map(minhang_member_task -> minhang_member_task.getMember_task_id())
+                                                            .collect(Collectors.toList());
+        }
+        
+        List<MinhangMemberTask> list = new ArrayList<>();
+        for (String minhang_member_task_id : minhang_member_task_idList) {
+            list.add(find(minhang_member_task_id));
+        }
+        return list;
+    }
+    
+    public MinhangMemberTask userAndTaskFind(String user_id, String task_id) {
+    	List<MinhangMemberTask> minhang_member_taskList = userList(user_id);
+        
+        for (MinhangMemberTask minhangMemberTask : minhang_member_taskList) {
+            if (task_id.equals(minhangMemberTask.getTask_id())) {
+                return minhangMemberTask;
+            }
+        }
+        return null;
+    	
     }
 
     public Boolean save(MinhangMemberTask minhang_member_task, String system_create_user_id) {
