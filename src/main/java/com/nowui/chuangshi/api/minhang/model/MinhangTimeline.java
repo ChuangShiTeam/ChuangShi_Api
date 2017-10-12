@@ -50,6 +50,8 @@ public class MinhangTimeline extends Model<MinhangTimeline> {
     public static final String SYSTEM_STATUS = "system_status";
     
     public static final String TIMELINE_IMAGE_FILE = "timeline_image_file";
+    
+    public static final String TIMELINE_EVENT_LIST = "timeline_event_list";
 
     public String getTimeline_id() {
         return getStr(TIMELINE_ID);
