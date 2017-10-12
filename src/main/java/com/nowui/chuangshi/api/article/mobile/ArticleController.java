@@ -38,6 +38,20 @@ public class ArticleController extends Controller {
         renderSuccessJson(articleList);
     }
     
+    @ActionKey("/mobile/article/all/list")
+    public void allList() {
+        String request_app_id = getRequest_app_id();
+        List<Article> articleList = ArticleService.instance.appList(request_app_id);
+
+        for(Article article : articleList) {
+            article.setArticle_image(FileService.instance.getFile_path(article.getArticle_image()));
+        }
+
+        validateResponse(Article.ARTICLE_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_SUMMARY);
+
+        renderSuccessJson(articleList);
+    }
+    
     @ActionKey("/mobile/article/find")
     public void find() {
         validateRequest(Article.ARTICLE_ID);

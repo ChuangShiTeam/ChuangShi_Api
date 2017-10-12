@@ -51,7 +51,7 @@ public class MinhangMemberTask extends Model<MinhangMemberTask> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
-
+    
     public String getMember_task_id() {
         return getStr(MEMBER_TASK_ID);
     }
