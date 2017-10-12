@@ -6,14 +6,12 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.product.model.*;
-import com.nowui.chuangshi.api.product.service.ProductService;
-import com.nowui.chuangshi.api.product.service.ProductSkuCommissionService;
-import com.nowui.chuangshi.api.product.service.ProductSkuPriceService;
-import com.nowui.chuangshi.api.product.service.ProductSkuService;
+import com.nowui.chuangshi.api.product.service.*;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +34,14 @@ public class ProductController extends Controller {
 
         Product product = ProductService.instance.find(model.getProduct_id());
 
+        List<ProductCategorySkuAttribute> productCategorySkuAttributeList;
+        if (ValidateUtil.isNullOrEmpty(product.getProduct_category_id())) {
+            productCategorySkuAttributeList = new ArrayList<ProductCategorySkuAttribute>();
+        } else {
+            productCategorySkuAttributeList = ProductCategorySkuAttributeService.instance.productCategoryList(product.getProduct_category_id());
+        }
+        product.put(product.PRODUCT_CATEGORY_SKU_ATTRIBUTE_LIST, productCategorySkuAttributeList);
+
         List<ProductSku> productSkuList = ProductSkuService.instance.productList(model.getProduct_id());
         for (ProductSku productSku : productSkuList) {
             productSku.keep(ProductSku.PRODUCT_SKU_ID, ProductSku.PRODUCT_SKU_IS_DEFAULT);
@@ -48,12 +54,13 @@ public class ProductController extends Controller {
 
             productSku.put(ProductSku.PRODUCT_SKU_ATTRIBUTE_LIST, new ArrayList<ProductSkuAttribute>());
 
-            List<ProductSkuCommission> productSkuCommissionList = ProductSkuCommissionService.instance.productSkuList(productSku.getProduct_sku_id());
-            for (ProductSkuCommission productSkuCommission : productSkuCommissionList) {
-                productSkuCommission.keep(ProductSkuCommission.MEMBER_LEVEL_ID,
-                        ProductSkuCommission.PRODUCT_SKU_COMMISSION_PERCENTAGE);
-            }
-            productSku.put(ProductSku.PRODUCT_SKU_COMMISSION_LIST, productSkuCommissionList);
+//            List<ProductSkuCommission> productSkuCommissionList = ProductSkuCommissionService.instance.productSkuList(productSku.getProduct_sku_id());
+//            for (ProductSkuCommission productSkuCommission : productSkuCommissionList) {
+//                productSkuCommission.keep(ProductSkuCommission.MEMBER_LEVEL_ID,
+//                        ProductSkuCommission.PRODUCT_SKU_COMMISSION_PERCENTAGE);
+//            }
+//            productSku.put(ProductSku.PRODUCT_SKU_COMMISSION_LIST, productSkuCommissionList);
+            productSku.put(ProductSku.PRODUCT_SKU_COMMISSION_LIST, new ArrayList<ProductSkuCommission>());
         }
         product.put(Product.PRODUCT_SKU_LIST, productSkuList);
 

@@ -10,6 +10,7 @@ import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.AesUtil;
 import com.nowui.chuangshi.util.CacheUtil;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -108,6 +109,10 @@ public class UserService extends Service {
     }
 
     public Boolean userNameUpdate(String user_id, String user_name, String system_update_user_id) {
+        if (ValidateUtil.isNullOrEmpty(user_name)) {
+            return false;
+        }
+
         User user = new User();
         user.setUser_name(user_name);
 
@@ -192,7 +197,7 @@ public class UserService extends Service {
             calendar.add(Calendar.YEAR, 1);
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(User.USER_ID, "745dfe90113e4f16a915f18f25c29337");
+            jsonObject.put(User.USER_ID, "b4ebfc43c1ea448291d0629ca002b092");
             jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
 
             System.out.println(AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));

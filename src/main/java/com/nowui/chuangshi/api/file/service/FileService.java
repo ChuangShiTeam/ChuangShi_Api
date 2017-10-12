@@ -127,6 +127,10 @@ public class FileService extends Service {
     }
 
     public Boolean filePathUpdate(String file_id, String file_path, String system_update_user_id) {
+        if (ValidateUtil.isNullOrEmpty(file_path)) {
+            return false;
+        }
+
         File file = new File();
         file.setFile_path(file_path);
         file.setFile_thumbnail_path(file_path);

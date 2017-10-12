@@ -14,6 +14,14 @@ public class ProductSkuCommissionService extends Service {
     private final String PRODUCT_SKU_COMMISSION_ITEM_CACHE = "product_sku_commission_item_cache";
     private final ProductSkuCommissionDao productSkuCommissionDao = new ProductSkuCommissionDao();
 
+    public List<ProductSkuCommission> allList( ) {
+        Cnd cnd = new Cnd();
+        cnd.where(ProductSkuCommission.SYSTEM_STATUS, true);
+
+        List<ProductSkuCommission> product_sku_commissionList = productSkuCommissionDao.primaryKeyList(cnd);
+        return product_sku_commissionList;
+    }
+
     public List<ProductSkuCommission> productSkuList( String product_sku_id) {
         Cnd cnd = new Cnd();
         cnd.where(ProductSkuCommission.SYSTEM_STATUS, true);

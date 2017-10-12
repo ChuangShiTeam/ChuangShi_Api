@@ -20,6 +20,7 @@ import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
 import com.jfinal.weixin.sdk.api.ApiConfig;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
+import com.jfinal.weixin.sdk.api.ApiResult;
 import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -379,6 +380,17 @@ public class WebConfig extends JFinalConfig {
                 ApiConfigKit.putApiConfig(apiConfig);
             }
         }
+
+        App app = AppService.instance.find("8acc2d49ad014f418878d1a16336c16b");
+
+        String wechat_app_id = ApiConfigKit.getAppId();
+        if (!wechat_app_id.equals(app.getWechat_app_id())) {
+            ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+//            AccessTokenApi.refreshAccessToken();
+        }
+
+        ApiResult apiResult = com.jfinal.weixin.sdk.api.MenuApi.createMenu("{\"is_menu_open\":1,\"selfmenu_info\":{\"button\":[{\"name\":\"党建功能\",\"sub_button\":{\"list\":[{\"type\":\"news\",\"name\":\"党员报到\",\"value\":\"Kzln8waR4IBj68ltHTU1fT0q_Wp90yZuBUePDMxOnrM\",\"news_info\":{\"list\":[{\"title\":\"来报到的党员朋友们，点这里！\",\"author\":\"\",\"digest\":\"来报到的党员朋友们，点这里！\",\"show_cover\":0,\"cover_url\":\"http:\\/\\/mmbiz.qpic.cn\\/mmbiz_png\\/ePp0HG6ibbicib8IFCJe8by3WialS1QLTGNHAXt58b0ZDVeRaFSDicY0v8V4DWPEIXDYg2J3iakHfR2ibic6tO1rnvTmkQ\\/0?wx_fmt=png\",\"content_url\":\"http:\\/\\/mp.weixin.qq.com\\/s?__biz=MzI3MDE4OTI2OA==&mid=503015440&idx=1&sn=23216f47df5e0b4978437ef4f809401e&chksm=72db1fab45ac96bdc43f0b4783fdafa106e7f9c8e3db00c33107c16eace291f5277fa1d52f5e#rd\",\"source_url\":\"\"}]}},{\"type\":\"news\",\"name\":\"城市党建\",\"value\":\"Kzln8waR4IBj68ltHTU1fWAl1OE9g-TSI-1h5PncypM\",\"news_info\":{\"list\":[{\"title\":\"【头条】不容错过！系列短片带你领略闵行城市基层党建工作！\",\"author\":\"\",\"digest\":\"3月14日，闵行区城市基层党建工作会议顺利召开。听说，这个会上“大片”云集，看过的还想回味，错过的后悔莫及。如果你恰巧错过了？没关系，党建小闵君满足你的所想所愿，把精彩留住，带你们重温昨日的精彩！\",\"show_cover\":0,\"cover_url\":\"http:\\/\\/mmbiz.qpic.cn\\/mmbiz_jpg\\/ePp0HG6ibbicibCoeLb4XjkKyWvTiaLTdT1cFYkMvD70d8yebqJquUEklvVZh3vs8c7Ivic5Y5cI5rC7eRPffDkJ1bA\\/0?wx_fmt=jpeg\",\"content_url\":\"http:\\/\\/mp.weixin.qq.com\\/s?__biz=MzI3MDE4OTI2OA==&mid=503015608&idx=1&sn=58502378271b24a809838e788e64901f&chksm=72db1f0345ac96151a31ef0f74f113c3b16bda03efa6265829d3bf86872f40bb1156fc0b4508#rd\",\"source_url\":\"https:\\/\\/v.qq.com\\/x\\/page\\/q0384oay1bu.html\"},{\"title\":\"【区域化党建】三级平台，1100多个共建项目，2017，一大波区域化党建项目火热袭来！\",\"author\":\"\",\"digest\":\"党建小闵君就带大家来领略一下2017年区级区域化党建六大重点共建项目发布。\",\"show_cover\":0,\"cover_url\":\"http:\\/\\/mmbiz.qpic.cn\\/mmbiz_jpg\\/ePp0HG6ibbicibCfaibmia5ojhGffJXzXmDzcDxG9uRror1R0dCymSK50YxueibPxwGanicibkSTUJKDKj55d6WaSQboiaw\\/0?wx_fmt=jpeg\",\"content_url\":\"http:\\/\\/mp.weixin.qq.com\\/s?__biz=MzI3MDE4OTI2OA==&mid=503015608&idx=2&sn=e630b901a39de5daae05da590896caf0&chksm=72db1f0345ac9615f238a4a4f00e049ff38bec298809979744d441f6302b8e1f5f4439e8ca5f#rd\",\"source_url\":\"\"},{\"title\":\"【关注】闵行区成立“上海市党建实践研究基地”理事会！\",\"author\":\"\",\"digest\":\"为贯彻中央和市委精神，深化对本市城市基层党建工作的理论思考与实践研究，市委组织部、市党建研究会在全市设立了一批“党建实践研究基地”。\",\"show_cover\":0,\"cover_url\":\"http:\\/\\/mmbiz.qpic.cn\\/mmbiz_jpg\\/ePp0HG6ibbicibCoeLb4XjkKyWvTiaLTdT1cia90ntsfjAbdM8VK2BibicuIm8ETC98DFibFC9Idc1nTmOZK4s0A46JnPg\\/0?wx_fmt=jpeg\",\"content_url\":\"http:\\/\\/mp.weixin.qq.com\\/s?__biz=MzI3MDE4OTI2OA==&mid=503015608&idx=3&sn=7414e5036bde8dde7d4d91b237d2b531&chksm=72db1f0345ac9615baaba3d0ba7afbc7af596cea1a37ad3e09e33a002ba1cf8ba3d39e25f0ad#rd\",\"source_url\":\"\"}]}}]}},{\"type\":\"view\",\"name\":\"微信矩阵\",\"url\":\"http:\\/\\/praymorn01.creatby.com\"},{\"type\":\"text\",\"name\":\"欢迎来稿\",\"value\":\"欢迎大家给党建小闵君投稿，请不吝相赠各类党建美文、暖文、美图、视频，也欢迎小伙伴们爆料噢！投稿或爆料，可发到minhangdangjian@163.com，谢谢！\"}]}}");
+        System.out.println(apiResult.getJson());
     }
 
     public void beforeJFinalStop() {
