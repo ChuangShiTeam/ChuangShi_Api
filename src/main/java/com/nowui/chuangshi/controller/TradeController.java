@@ -265,6 +265,8 @@ public class TradeController extends Controller {
         //如果是先付款后发货，则要进行支付
         if (flag && model.getTrade_deliver_pattern().equals(TradeDeliveryPattern.CASH_BEFORE_DELIVERY.getKey())) {
             result = tradeService.pay(trade_id, open_id, "WX", request_user_id);
+        } else {
+        	result.put("trade_id", trade_id);
         }
         renderSuccessJson(result);
     }
@@ -304,7 +306,7 @@ public class TradeController extends Controller {
         authenticateApp_id(trade.getApp_id());
         // authenticateSystem_create_user_id(trade.getSystem_create_user_id());
 
-        trade.keep(Trade.TRADE_IS_PAY, Trade.TRADE_TOTAL_AMOUNT);
+        trade.keep(Trade.TRADE_IS_PAY, Trade.TRADE_DELIVER_PATTERN, Trade.TRADE_TOTAL_AMOUNT);
 
         renderSuccessJson(trade);
     }
