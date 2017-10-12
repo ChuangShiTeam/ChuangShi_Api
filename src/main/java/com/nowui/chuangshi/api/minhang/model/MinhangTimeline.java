@@ -22,7 +22,7 @@ public class MinhangTimeline extends Model<MinhangTimeline> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 4, comment = "年份")
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "年份")
     public static final String TIMELINE_YEAR = "timeline_year";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "图片")
