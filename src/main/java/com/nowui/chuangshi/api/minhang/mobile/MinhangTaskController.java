@@ -7,6 +7,7 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.minhang.model.MinhangKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberPicture;
@@ -27,6 +28,7 @@ import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.MinhangTaskType;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
@@ -166,6 +168,23 @@ public class MinhangTaskController extends Controller {
         }
 
         renderSuccessJson(result);
+    }
+    
+    @ActionKey("/mobile/minhang/task/user/complete/list")
+    public void userCompleteList() {
+        validateRequest(MinhangTask.TASK_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        
+        MinhangTask model = getModel(MinhangTask.class);
+        
+        List<MinhangMemberTask> resultList = MinhangMemberTaskService.instance.taskList(model.getTask_id(), getM(), getN());
+        
+        for (MinhangMemberTask result : resultList) {
+            User user = UserService.instance.find(result.getUser_id());
+            result.put(User.USER_NAME, user.getUser_name());
+            result.put(User.USER_AVATAR, FileService.instance.getFile_path(user.getUser_avatar()));
+        }
+        validateResponse(User.USER_NAME, User.USER_AVATAR);
+        renderSuccessJson(resultList);
     }
 
     @ActionKey("/mobile/minhang/task/save")
