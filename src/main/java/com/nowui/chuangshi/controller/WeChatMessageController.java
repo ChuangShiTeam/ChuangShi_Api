@@ -55,6 +55,7 @@ import com.nowui.chuangshi.api.qrcode.model.Qrcode;
 import com.nowui.chuangshi.api.qrcode.service.QrcodeService;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
+import com.nowui.chuangshi.common.socket.MinHangSocket;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.QrcodeType;
 import com.nowui.chuangshi.type.UserType;
@@ -154,6 +155,14 @@ public class WeChatMessageController extends MsgController {
             outNewsMsg.addNews("欢迎使用济颐馆健康管理平台！", "济颐馆欢迎您",
                     "http://api.chuangshi.nowui.com/upload/df2078d6c9eb46babb0df957127273ab/6a4dbae2ac824d2fb170638d55139666/original/887c0dc8adf142169d50aac84c2d6dab.jpg",
                     "http://h5.jiyiguan.nowui.com/?#/index");
+            render(outNewsMsg);
+        } else if (app_id.equals("8acc2d49ad014f418878d1a16336c16b")) {
+            MinHangSocket.instance.sendMessage();
+
+            OutNewsMsg outNewsMsg = new OutNewsMsg(inFollowEvent);
+            outNewsMsg.addNews("欢迎使用闵行区党建服务中心平台！", "来报到的党员朋友们，点这里！",
+                    "http://api.chuangshi.nowui.com/upload/8acc2d49ad014f418878d1a16336c16b/f6a470d1597d4bea821d4e393cbbb00e/original/1eb85e1859c24909b221f767455a7d85.jpg",
+                    "http://h5.minhang.nowui.com/?#/index");
             render(outNewsMsg);
         } else {
             OutTextMsg outMsg = new OutTextMsg(inFollowEvent);

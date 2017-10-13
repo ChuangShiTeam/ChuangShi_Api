@@ -183,7 +183,7 @@ public class WeChatController extends Controller {
 //        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"星创会\",\"url\":\"http://h5."
 //                + "xingxiao.nowui.com" + "/?#/launch\"}]}");
 
-        App app = AppService.instance.find("df2078d6c9eb46babb0df957127273ab");
+        App app = AppService.instance.find("8acc2d49ad014f418878d1a16336c16b");
 
         String wechat_app_id = ApiConfigKit.getAppId();
         if (!wechat_app_id.equals(app.getWechat_app_id())) {
@@ -191,8 +191,11 @@ public class WeChatController extends Controller {
 //            AccessTokenApi.refreshAccessToken();
         }
 
-        //ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"健康推荐\",\"url\":\"http://h5.jiyiguan.nowui.com" + "/?#/index\"}]}");
-        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"健康推荐\",\"url\":\"http://h5.jiyiguan.nowui.com/?#/index/\"},{\"type\":\"view\",\"name\":\"睡前故事\",\"url\":\"http://h5.jiyiguan.nowui.com/?#/story/index/\"},{\"type\":\"view\",\"name\":\"医学科普\",\"url\":\"http://h5.jiyiguan.nowui.com/?#/science/index/\"}]}");
+        System.out.println(AccessTokenApi.getAccessToken().getAccessToken());
+
+
+        ApiResult apiResult = com.jfinal.weixin.sdk.api.MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"闵行党建服务中心平台\",\"url\":\"http://h5.minhang.nowui.com" + "/?#/index\"}]}");
+        System.out.println(apiResult.getJson());
 
         renderText(apiResult.getJson());
     }

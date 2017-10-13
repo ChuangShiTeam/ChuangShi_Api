@@ -15,7 +15,7 @@ public class MinHangSocket {
 
     public MinHangSocket() {
         try {
-            socket = IO.socket("http://localhost:2998");
+            socket = IO.socket("http://121.40.44.121:2998");
 
             socket.connect();
         } catch (URISyntaxException e) {
@@ -27,8 +27,8 @@ public class MinHangSocket {
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("targetId", "0");
-            jsonObject.put("action", "event");
-            jsonObject.put("data", "list");
+            jsonObject.put("action", "loadMember");
+            jsonObject.put("data", "");
 
             socket.emit("sendMessage", jsonObject, new Ack() {
                 public void call(Object... args) {
