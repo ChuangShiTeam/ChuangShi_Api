@@ -47,7 +47,7 @@ public class MinhangTimelineEventService extends Service {
         List<MinhangTimelineEvent> minhang_timeline_eventList = minhangTimelineEventDao.primaryKeyList(cnd);
         for (MinhangTimelineEvent minhang_timeline_event : minhang_timeline_eventList) {
             minhang_timeline_event.put(find(minhang_timeline_event.getTimeline_event_id()));
-            minhang_timeline_event.put(MinhangTask.TASK_QRCODE_URL, MinhangTaskService.instance.find(minhang_timeline_event.getTask_id()));
+            minhang_timeline_event.put(MinhangTask.TASK_QRCODE_URL, MinhangTaskService.instance.find(minhang_timeline_event.getTask_id()).getTask_qrcode_url());
         }
         return minhang_timeline_eventList;
     }
