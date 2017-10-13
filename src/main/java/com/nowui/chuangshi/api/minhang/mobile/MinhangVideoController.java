@@ -5,6 +5,7 @@ import java.util.List;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangVideo;
 import com.nowui.chuangshi.api.minhang.service.MinhangVideoService;
+import com.nowui.chuangshi.api.minhang.service.MinhangVideoTaskService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.constant.Constant;
@@ -20,8 +21,10 @@ public class MinhangVideoController extends Controller {
         
     	Integer resultCount = MinhangVideoService.instance.mobileCount(request_app_id);
         List<MinhangVideo> resultList = MinhangVideoService.instance.mobileList(request_app_id, getM(), getN());
-
-        validateResponse(MinhangVideo.VIDEO_ID, MinhangVideo.VIDEO_TITLE, MinhangVideo.VIDEO_URL, MinhangVideo.VIDEO_SORT, MinhangVideo.SYSTEM_VERSION);
+        for (MinhangVideo result : resultList) {
+            result.put(MinhangVideo.VIDEO_TASK_LIST, MinhangVideoTaskService.instance.videoList(result.getVideo_id()));
+        }
+        validateResponse(MinhangVideo.VIDEO_ID, MinhangVideo.VIDEO_TASK_LIST, MinhangVideo.VIDEO_TITLE, MinhangVideo.VIDEO_URL, MinhangVideo.VIDEO_SORT, MinhangVideo.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }

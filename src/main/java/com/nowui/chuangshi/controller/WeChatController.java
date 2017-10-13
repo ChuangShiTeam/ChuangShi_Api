@@ -25,6 +25,7 @@ import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.jfinal.weixin.sdk.api.ApiResult;
 import com.jfinal.weixin.sdk.api.MediaApi;
 import com.jfinal.weixin.sdk.api.MediaFile;
+import com.jfinal.weixin.sdk.api.MenuApi;
 import com.jfinal.weixin.sdk.api.SnsAccessToken;
 import com.jfinal.weixin.sdk.api.SnsAccessTokenApi;
 import com.jfinal.weixin.sdk.api.SnsApi;
