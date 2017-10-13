@@ -5,6 +5,7 @@ import java.util.List;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.minhang.model.MinhangTimeline;
+import com.nowui.chuangshi.api.minhang.service.MinhangTimelineEventService;
 import com.nowui.chuangshi.api.minhang.service.MinhangTimelineService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
@@ -21,9 +22,10 @@ public class MinhangTimelineController extends Controller {
 
         for (MinhangTimeline minhangTimeline : resultList) {
             minhangTimeline.put(MinhangTimeline.TIMELINE_IMAGE_FILE, FileService.instance.getFile(minhangTimeline.getTimeline_image()));
+            minhangTimeline.put(MinhangTimeline.TIMELINE_EVENT_LIST, MinhangTimelineEventService.instance.timeLineList(minhangTimeline.getTimeline_id()));
         }
         
-        validateResponse(MinhangTimeline.TIMELINE_ID, MinhangTimeline.TIMELINE_YEAR, MinhangTimeline.TIMELINE_IMAGE, MinhangTimeline.TIMELINE_IMAGE_FILE, MinhangTimeline.SYSTEM_VERSION);
+        validateResponse(MinhangTimeline.TIMELINE_ID, MinhangTimeline.TIMELINE_YEAR, MinhangTimeline.TIMELINE_IMAGE, MinhangTimeline.TIMELINE_IMAGE_FILE, MinhangTimeline.TIMELINE_EVENT_LIST, MinhangTimeline.TIMELINE_DESCRIPTION, MinhangTimeline.SYSTEM_VERSION);
 
         renderSuccessJson(resultList);
     }

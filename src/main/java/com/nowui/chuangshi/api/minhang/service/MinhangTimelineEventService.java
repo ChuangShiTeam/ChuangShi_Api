@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.minhang.service;
 
 import com.nowui.chuangshi.api.minhang.dao.MinhangTimelineEventDao;
+import com.nowui.chuangshi.api.minhang.model.MinhangTask;
 import com.nowui.chuangshi.api.minhang.model.MinhangTimelineEvent;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
@@ -34,6 +35,19 @@ public class MinhangTimelineEventService extends Service {
         List<MinhangTimelineEvent> minhang_timeline_eventList = minhangTimelineEventDao.primaryKeyList(cnd);
         for (MinhangTimelineEvent minhang_timeline_event : minhang_timeline_eventList) {
             minhang_timeline_event.put(find(minhang_timeline_event.getTimeline_event_id()));
+        }
+        return minhang_timeline_eventList;
+    }
+    
+    public List<MinhangTimelineEvent> timeLineList(String timeline_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangTimelineEvent.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(MinhangTimelineEvent.TIMELINE_ID, timeline_id);
+
+        List<MinhangTimelineEvent> minhang_timeline_eventList = minhangTimelineEventDao.primaryKeyList(cnd);
+        for (MinhangTimelineEvent minhang_timeline_event : minhang_timeline_eventList) {
+            minhang_timeline_event.put(find(minhang_timeline_event.getTimeline_event_id()));
+            minhang_timeline_event.put(MinhangTask.TASK_QRCODE_URL, MinhangTaskService.instance.find(minhang_timeline_event.getTask_id()));
         }
         return minhang_timeline_eventList;
     }

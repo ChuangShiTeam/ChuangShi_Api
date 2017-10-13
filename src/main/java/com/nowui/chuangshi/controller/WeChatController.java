@@ -1,6 +1,5 @@
 package com.nowui.chuangshi.controller;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -16,14 +15,19 @@ import java.util.TreeMap;
 
 import javax.imageio.stream.FileImageOutputStream;
 
-import com.jfinal.weixin.sdk.api.*;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
-import com.jfinal.kit.FileKit;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.kit.PathKit;
+import com.jfinal.weixin.sdk.api.AccessTokenApi;
+import com.jfinal.weixin.sdk.api.ApiConfigKit;
+import com.jfinal.weixin.sdk.api.ApiResult;
+import com.jfinal.weixin.sdk.api.MediaApi;
+import com.jfinal.weixin.sdk.api.MediaFile;
+import com.jfinal.weixin.sdk.api.SnsAccessToken;
+import com.jfinal.weixin.sdk.api.SnsAccessTokenApi;
+import com.jfinal.weixin.sdk.api.SnsApi;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
 import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.app.service.AppService;
@@ -506,8 +510,8 @@ public class WeChatController extends Controller {
 
     }
     
-    @ActionKey(Url.WECHAT_DOWNLOAD_IMAGE)
-    public void downloadImage() {
+    @ActionKey(Url.WECHAT_DOWNLOAD_MEDIA)
+    public void downloadMedia() {
         validate(Constant.MEDIA_ID);
         
         String request_app_id = getRequest_app_id();
