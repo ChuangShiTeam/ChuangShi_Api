@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangPartyHistory;
+import com.nowui.chuangshi.api.minhang.model.MinhangTask;
 import com.nowui.chuangshi.api.minhang.service.MinhangPartyHistoryService;
+import com.nowui.chuangshi.api.minhang.service.MinhangTaskService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 
@@ -29,7 +31,10 @@ public class MinhangPartyHistoryController extends Controller {
     	
     	MinhangPartyHistory minhang_party_history = MinhangPartyHistoryService.instance.randomFind(request_app_id);
     	
-    	validateResponse(MinhangPartyHistory.PARTY_HISTORY_ID, MinhangPartyHistory.TASK_ID, MinhangPartyHistory.PARTY_HISTORY_CONTENT, MinhangPartyHistory.BOOK_CODE, MinhangPartyHistory.SYSTEM_VERSION);
+    	MinhangTask minhangTask = MinhangTaskService.instance.find(minhang_party_history.getTask_id());
+    	minhang_party_history.put(MinhangTask.TASK_QRCODE_URL, minhangTask.getTask_qrcode_url());
+        
+    	validateResponse(MinhangPartyHistory.PARTY_HISTORY_ID, MinhangTask.TASK_QRCODE_URL, MinhangPartyHistory.TASK_ID, MinhangPartyHistory.PARTY_HISTORY_CONTENT, MinhangPartyHistory.BOOK_CODE, MinhangPartyHistory.SYSTEM_VERSION);
     	
         renderSuccessJson(minhang_party_history);
     }
