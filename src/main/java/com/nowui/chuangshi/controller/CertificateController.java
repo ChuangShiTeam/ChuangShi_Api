@@ -187,6 +187,19 @@ public class CertificateController extends Controller {
         JSONObject jsonObject = getParameterJSONObject();
         String open_id = jsonObject.getString("open_id");
 
+        User user = UserService.instance.find(request_user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
+        if (ValidateUtil.isNullOrEmpty(member.getMember_parent_id())) {
+            throw new RuntimeException("您还没有上一级");
+        } else {
+            Member parentMember = MemberService.instance.find(member.getMember_parent_id());
+
+            Integer count = com.nowui.chuangshi.api.certificate.service.CertificateService.instance.userCount(parentMember.getUser_id());
+            if (count == 0) {
+                throw new RuntimeException("您的上一级还没有缴纳保证金");
+            }
+        }
+
         BigDecimal total_fee_decimal = getMoney(request_user_id);
 
         if (request_user_id.equals("229736797b4d4283b284f6aef128585c") || request_user_id.equals("519b7acab2374f129ef4df5d4ab3ec25") || request_user_id.equals("66b8cac8e93840da857f4dc0812a4e3d")) {

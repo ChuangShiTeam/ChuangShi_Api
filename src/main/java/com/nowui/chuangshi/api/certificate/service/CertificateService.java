@@ -24,6 +24,16 @@ public class CertificateService extends Service {
         return count;
     }
 
+    public Integer userCount(String user_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(Certificate.SYSTEM_STATUS, true);
+        cnd.and(Certificate.USER_ID, user_id);
+        cnd.andAllowEmpty(Certificate.CERTIFICATE_IS_PAY, true);
+
+        Integer count = certificateDao.count(cnd);
+        return count;
+    }
+
     public List<Certificate> adminList(String app_id, String certificate_number, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(Certificate.SYSTEM_STATUS, true);

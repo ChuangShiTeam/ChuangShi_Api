@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.jfinal.weixin.iot.msg.InEquDataMsg;
 import com.jfinal.weixin.iot.msg.InEqubindEvent;
-import com.jfinal.weixin.sdk.api.AccessTokenApi;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.jfinal.weixin.sdk.api.ApiResult;
 import com.jfinal.weixin.sdk.api.UserApi;
@@ -144,11 +143,11 @@ public class WeChatMessageController extends MsgController {
             user_avatar = "";
         }
 
-        Member member = MemberService.instance.wechatSaveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, member_level_id, member_parent_path, user_name, user_avatar, member_status, system_create_user_id);
-
         if (event.equals("unsubscribe")) {
 //            QrcodeService.instance.updateQrcode_cancelByQrcode_id(member.getFrom_qrcode_id(), system_create_user_id);
         } else {
+            Member member = MemberService.instance.wechatSaveOrUpdate(app_id, wechat_open_id, wechat_union_id, member_parent_id, from_qrcode_id, member_level_id, member_parent_path, user_name, user_avatar, member_status, system_create_user_id);
+
             if (app_id.equals("df2078d6c9eb46babb0df957127273ab")) {
                 OutNewsMsg outNewsMsg = new OutNewsMsg(inFollowEvent);
                 outNewsMsg.addNews("欢迎使用济颐馆健康管理平台！", "济颐馆欢迎您",
@@ -215,6 +214,14 @@ public class WeChatMessageController extends MsgController {
 
         if (ValidateUtil.isNullOrEmpty(wechat_union_id)) {
             wechat_union_id = "";
+        }
+
+        if (ValidateUtil.isNullOrEmpty(user_name)) {
+            user_name = "";
+        }
+
+        if (ValidateUtil.isNullOrEmpty(user_avatar)) {
+            user_avatar = "";
         }
 
         if (qrcode.getQrcode_type().equals(QrcodeType.PLATFORM.getKey())) {
@@ -325,6 +332,20 @@ public class WeChatMessageController extends MsgController {
         String user_avatar = apiResult.getStr("headimgurl");
         String system_create_user_id = "";
 
+
+        if (ValidateUtil.isNullOrEmpty(wechat_union_id)) {
+            wechat_union_id = "";
+        }
+
+        if (ValidateUtil.isNullOrEmpty(user_name)) {
+            user_name = "";
+        }
+
+        if (ValidateUtil.isNullOrEmpty(user_avatar)) {
+            user_avatar = "";
+        }
+
+
         System.out.println(apiResult.getJson());
 
         User user = UserService.instance.wechatFind(app_id, UserType.MEMBER.getKey(), wechat_open_id, wechat_union_id);
@@ -343,6 +364,9 @@ public class WeChatMessageController extends MsgController {
                 MemberService.instance.cacheDelete(user.getObject_id());
             }
         }
+
+        System.out.println(inMenuEvent.getEventKey());
+        System.out.println(inMenuEvent.getScanCodeInfo());
     }
 
     @Override

@@ -2,9 +2,10 @@ package com.nowui.chuangshi.common.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.jfinal.plugin.activerecord.Model;
+import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.ValidateUtil;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.http.HttpStatus;
 
 import java.util.*;
@@ -191,6 +192,8 @@ public class Controller extends com.jfinal.core.Controller {
     }
 
     public void renderSuccessJson(String result) {
+        result = StringEscapeUtils.unescapeHtml4(result);
+
         Map<String, Object> map = new HashMap<String, Object>();
         map.put(Constant.CODE, HttpStatus.SC_OK);
         map.put(Constant.DATA, result);
@@ -203,6 +206,13 @@ public class Controller extends com.jfinal.core.Controller {
             result.keep(validateResponseKey);
         }
 
+        Set<Map.Entry<String, Object>> sets = result._getAttrsEntrySet();
+        for (Map.Entry<String, Object> entry : sets) {
+            if (entry.getValue() instanceof String) {
+                result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+            }
+        }
+
         Map<String, Object> map = new HashMap<String, Object>();
         map.put(Constant.CODE, HttpStatus.SC_OK);
         map.put(Constant.DATA, result);
@@ -211,6 +221,12 @@ public class Controller extends com.jfinal.core.Controller {
     }
 
     public void renderSuccessJson(Map<String, Object> result) {
+        for (Map.Entry<String, Object> entry : result.entrySet()) {
+            if (entry.getValue() instanceof String) {
+                result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+            }
+        }
+
         Map<String, Object> map = new HashMap<String, Object>();
         map.put(Constant.CODE, HttpStatus.SC_OK);
         map.put(Constant.DATA, result);
@@ -219,6 +235,14 @@ public class Controller extends com.jfinal.core.Controller {
     }
 
     public void renderSuccessMapListJson(List<Map<String, Object>> resultList) {
+        for (Map<String, Object> result : resultList) {
+            for (Map.Entry<String, Object> entry : result.entrySet()) {
+                if (entry.getValue() instanceof String) {
+                    result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+                }
+            }
+        }
+
         Map<String, Object> map = new HashMap<String, Object>();
         map.put(Constant.CODE, HttpStatus.SC_OK);
         map.put(Constant.DATA, resultList);
@@ -229,6 +253,13 @@ public class Controller extends com.jfinal.core.Controller {
     public void renderSuccessJson(List<? extends Model> resultList) {
         for (Model result : resultList) {
             result.keep(validateResponseKey);
+
+            Set<Map.Entry<String, Object>> sets = result._getAttrsEntrySet();
+            for (Map.Entry<String, Object> entry : sets) {
+                if (entry.getValue() instanceof String) {
+                    result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+                }
+            }
         }
 
         Map<String, Object> map = new HashMap<String, Object>();
@@ -241,6 +272,13 @@ public class Controller extends com.jfinal.core.Controller {
     public void renderSuccessJson(Integer total, List<? extends Model> resultList) {
         for (Model result : resultList) {
             result.keep(validateResponseKey);
+
+            Set<Map.Entry<String, Object>> sets = result._getAttrsEntrySet();
+            for (Map.Entry<String, Object> entry : sets) {
+                if (entry.getValue() instanceof String) {
+                    result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+                }
+            }
         }
 
         Map<String, Object> dataMap = new HashMap<String, Object>();
@@ -268,6 +306,14 @@ public class Controller extends com.jfinal.core.Controller {
                 }
             }
             newResultList.add(newResult);
+        }
+
+        for (Map<String, Object> result : newResultList) {
+            for (Map.Entry<String, Object> entry : result.entrySet()) {
+                if (entry.getValue() instanceof String) {
+                    result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+                }
+            }
         }
 
         Map<String, Object> dataMap = new HashMap<String, Object>();

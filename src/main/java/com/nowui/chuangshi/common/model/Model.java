@@ -22,6 +22,10 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
     private Criteria criteria;
 
+    public Map<String, Object> getAttrsMap() {
+        return this.getAttrs();
+    }
+
     public void setPrimaryKeyCriteria(String id) {
         Expression expression = new Expression(getTable().getPrimaryKey()[0], ExpressionType.EQUAL, id);
         Criteria criteria = new Criteria();
@@ -87,23 +91,19 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     }
 
     private String regexVariable(ColumnType columnType, Object value) {
+        if (value instanceof String) {
+            value = ((String)value).replaceAll("\"", "\\\"");
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
 
         if (columnType.equals(ColumnType.TINYINT)) {
             stringBuilder.append((Boolean) value ? 1 : 0);
         } else if (columnType.equals(ColumnType.VARCHAR)) {
-            if (((String)value).contains("\"")) {
-                value = ((String)value).replaceAll("\"", "\\\"");
-            }
-
             stringBuilder.append("\"");
             stringBuilder.append(value);
             stringBuilder.append("\"");
         } else if (columnType.equals(ColumnType.TEXT)) {
-            if (((String)value).contains("\"")) {
-                value = ((String)value).replaceAll("\"", "\\\"");
-            }
-
             stringBuilder.append("\"");
             stringBuilder.append(value);
             stringBuilder.append("\"");

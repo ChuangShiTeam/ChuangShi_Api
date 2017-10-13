@@ -1,6 +1,5 @@
 package com.nowui.chuangshi.controller;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -21,10 +20,11 @@ import com.jfinal.weixin.sdk.api.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
-import com.jfinal.kit.FileKit;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.kit.PathKit;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
+import com.jfinal.weixin.sdk.utils.HttpUtils;
+import com.jfinal.weixin.sdk.utils.JsonUtils;
 import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.api.file.model.File;
@@ -193,9 +193,22 @@ public class WeChatController extends Controller {
 
         System.out.println(AccessTokenApi.getAccessToken().getAccessToken());
 
-
-        ApiResult apiResult = com.jfinal.weixin.sdk.api.MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"闵行党建服务中心平台\",\"url\":\"http://h5.minhang.nowui.com" + "/?#/index\"}]}");
+        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"name\":\"党建功能\",\"sub_button\":[{\"type\":\"media_id\",\"name\":\"党员报到\",\"media_id\":\"Kzln8waR4IBj68ltHTU1fT0q_Wp90yZuBUePDMxOnrM\"},{\"type\":\"media_id\",\"name\":\"城市党建\",\"media_id\":\"Kzln8waR4IBj68ltHTU1fWAl1OE9g-TSI-1h5PncypM\"}]},{\"type\":\"view\",\"name\":\"微信矩阵\",\"url\":\"http://praymorn01.creatby.com\"},{\"type\":\"click\",\"name\":\"欢迎来稿\",\"key\":\"welcome_contribution\"}]}");
         System.out.println(apiResult.getJson());
+
+
+//        String url = "https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=" + AccessTokenApi.getAccessTokenStr();
+//
+//        Map<String, Object> dataMap = new HashMap<String, Object>();
+//        dataMap.put("type", "news");
+//        dataMap.put("offset", 70);
+//        dataMap.put("count", 90);
+//
+//        String jsonResult = HttpUtils.post(url, JsonUtils.toJson(dataMap));
+//
+//        System.out.println(jsonResult);
+//
+//        renderText(jsonResult);
 
         renderText(apiResult.getJson());
     }
