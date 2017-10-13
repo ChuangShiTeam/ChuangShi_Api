@@ -51,6 +51,23 @@ public class MemberService extends Service {
         List<Member> memberList = memberDao.list(cnd);
         return memberList;
     }
+    
+    public List<Member> appList(String app_id, Integer m, Integer n) {
+        Cnd cnd = new Cnd();
+        cnd.select(User.TABLE_USER + "." + User.USER_ID);
+        cnd.select(User.TABLE_USER + "." + User.USER_NAME);
+        cnd.select(File.TABLE_FILE + "." + File.FILE_PATH, User.USER_AVATAR);
+        cnd.leftJoin(User.TABLE_USER, User.USER_ID, Member.TABLE_MEMBER, Member.USER_ID);
+        cnd.leftJoin(File.TABLE_FILE, File.FILE_ID, User.TABLE_USER, User.USER_AVATAR);
+        cnd.where(Member.TABLE_MEMBER + "." + Member.SYSTEM_STATUS, true);
+        cnd.and(Member.TABLE_MEMBER + "." + Member.APP_ID, app_id);
+        cnd.desc(Member.TABLE_MEMBER + "." + Member.SYSTEM_CREATE_TIME);
+        cnd.paginate(m, n);
+        
+
+        List<Member> memberList = memberDao.list(cnd);
+        return memberList;
+    }
 
     public List<Map<String, Object>> teamList(String member_id) {
         List<Map<String, Object>> resultList = CacheUtil.get(MEMBER_PARENT_LIST_CACHE, member_id);

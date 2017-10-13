@@ -18,13 +18,13 @@ public class MinhangVideoTaskController extends Controller {
 
     @ActionKey("/admin/minhang/video/task/list")
     public void list() {
-        validateRequest(MinhangVideoTask.VIDEO_ID, MinhangVideoTask.TASK_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(MinhangVideoTask.VIDEO_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         MinhangVideoTask model = getModel(MinhangVideoTask.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = MinhangVideoTaskService.instance.adminCount(request_app_id, model.getVideo_id(), model.getTask_id());
-        List<MinhangVideoTask> resultList = MinhangVideoTaskService.instance.adminList(request_app_id, model.getVideo_id(), model.getTask_id(), getM(), getN());
+        Integer resultCount = MinhangVideoTaskService.instance.adminCount(request_app_id, model.getVideo_id());
+        List<MinhangVideoTask> resultList = MinhangVideoTaskService.instance.adminList(request_app_id, model.getVideo_id(), getM(), getN());
 
         validateResponse(MinhangVideoTask.VIDEO_TASK_ID, MinhangVideoTask.VIDEO_ID, MinhangVideoTask.TASK_ID, MinhangVideoTask.VIDEO_TASK_TIME, MinhangVideoTask.SYSTEM_VERSION);
 

@@ -8,7 +8,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.service.FileService;
-import com.nowui.chuangshi.api.minhang.model.MinhangKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberPicture;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberQuestion;
@@ -16,7 +15,6 @@ import com.nowui.chuangshi.api.minhang.model.MinhangMemberRecord;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberTask;
 import com.nowui.chuangshi.api.minhang.model.MinhangQuestion;
 import com.nowui.chuangshi.api.minhang.model.MinhangTask;
-import com.nowui.chuangshi.api.minhang.service.MinhangKeyService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberKeyService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberPictureService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberQuestionService;
@@ -56,9 +54,9 @@ public class MinhangTaskController extends Controller {
 
         MinhangMemberTask minhangMemberTask = MinhangMemberTaskService.instance.userAndTaskFind(request_user_id, model.getTask_id());
         
-        Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<String, Object>(); 
         
-        if (minhangMemberTask == null) {
+        if (minhangMemberTask == null) { 
         	//如果为答题任务查询题目列表
         	if (MinhangTaskType.QUESTION.getKey().equals(minhangTask.getTask_type())) {
         		List<MinhangQuestion> minhang_question_list = MinhangQuestionService.instance.taskList(minhangTask.getTask_id());

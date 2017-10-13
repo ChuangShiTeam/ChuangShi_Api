@@ -14,23 +14,21 @@ public class MinhangVideoTaskService extends Service {
     private final String MINHANG_VIDEO_TASK_ITEM_CACHE = "minhang_video_task_item_cache";
     private final MinhangVideoTaskDao minhangVideoTaskDao = new MinhangVideoTaskDao();
 
-    public Integer adminCount(String app_id, String video_id, String task_id) {
+    public Integer adminCount(String app_id, String video_id) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangVideoTask.SYSTEM_STATUS, true);
         cnd.and(MinhangVideoTask.APP_ID, app_id);
         cnd.andAllowEmpty(MinhangVideoTask.VIDEO_ID, video_id);
-        cnd.andAllowEmpty(MinhangVideoTask.TASK_ID, task_id);
 
         Integer count = minhangVideoTaskDao.count(cnd);
         return count;
     }
 
-    public List<MinhangVideoTask> adminList(String app_id, String video_id, String task_id, Integer m, Integer n) {
+    public List<MinhangVideoTask> adminList(String app_id, String video_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangVideoTask.SYSTEM_STATUS, true);
         cnd.and(MinhangVideoTask.APP_ID, app_id);
         cnd.andAllowEmpty(MinhangVideoTask.VIDEO_ID, video_id);
-        cnd.andAllowEmpty(MinhangVideoTask.TASK_ID, task_id);
         cnd.paginate(m, n);
 
         List<MinhangVideoTask> minhang_video_taskList = minhangVideoTaskDao.primaryKeyList(cnd);
