@@ -1,13 +1,16 @@
 package com.nowui.chuangshi.api.minhang.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.nowui.chuangshi.api.minhang.dao.MinhangVideoTaskDao;
+import com.nowui.chuangshi.api.minhang.model.MinhangQuestion;
 import com.nowui.chuangshi.api.minhang.model.MinhangTask;
 import com.nowui.chuangshi.api.minhang.model.MinhangVideoTask;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.type.MinhangTaskType;
 import com.nowui.chuangshi.util.CacheUtil;
-
-import java.util.List;
 
 public class MinhangVideoTaskService extends Service {
 
@@ -47,7 +50,16 @@ public class MinhangVideoTaskService extends Service {
         List<MinhangVideoTask> minhang_video_taskList = minhangVideoTaskDao.primaryKeyList(cnd);
         for (MinhangVideoTask minhang_video_task : minhang_video_taskList) {
             minhang_video_task.put(find(minhang_video_task.getVideo_task_id()));
-            minhang_video_task.put(MinhangTask.TASK_QRCODE_URL, MinhangTaskService.instance.find(minhang_video_task.getTask_id()));
+            MinhangTask minhangTask = MinhangTaskService.instance.find(minhang_video_task.getTask_id());
+            minhang_video_task.put(MinhangTask.TASK_QRCODE_URL, minhangTask.getTask_qrcode_url());
+            
+            List<MinhangQuestion> minhang_question_list = new ArrayList<>();
+            //查询任务对应的问题
+            if (MinhangTaskType.QUESTION.getKey().equals(minhangTask.getTask_type())) {
+                minhang_question_list = MinhangQuestionService.instance.taskList(minhangTask.getTask_id());
+            }
+            minhang_video_task.put(MinhangTask.QUESTION_LIST, minhang_question_list);
+            minhang_video_task.put(MinhangTask.TASK_QRCODE_URL, MinhangTaskService.instance.find(minhang_video_task.getTask_id()).getTask_qrcode_url());
         }
         return minhang_video_taskList;
     }
