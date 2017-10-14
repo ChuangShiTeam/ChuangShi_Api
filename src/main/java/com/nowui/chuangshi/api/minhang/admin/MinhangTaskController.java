@@ -90,7 +90,7 @@ public class MinhangTaskController extends Controller {
         OutputStream os = null;
         try {
             String directory_path = "/" + Constant.UPLOAD + "/" + request_app_id;
-            String qrcode_url = directory_path+ "/" + model.getKey_id() + ".png";
+            String qrcode_url = directory_path+ "/" + model.getTask_id() + ".png";
             String real_file_path = PathKit.getWebRootPath() + qrcode_url;
             FileUtil.createPath(PathKit.getWebRootPath() + directory_path);
             os = new FileOutputStream(real_file_path);

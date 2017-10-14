@@ -1,5 +1,8 @@
 package com.nowui.chuangshi.api.minhang.mobile;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +10,7 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.jfinal.kit.PathKit;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberPicture;
@@ -28,6 +32,8 @@ import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.MinhangTaskType;
+import com.nowui.chuangshi.util.FileUtil;
+import com.nowui.chuangshi.util.QRCodeUtil;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -185,12 +191,62 @@ public class MinhangTaskController extends Controller {
         renderSuccessJson(resultList);
     }
 
+    //按手印任务
+    @ActionKey("/mobile/minhang/task/handprint/save")
+    public void handprintSave() {
+        String request_user_id = getRequest_user_id();
+        String request_app_id = getRequest_app_id();
+        
+        MinhangTask minhang_task = new MinhangTask();
+        minhang_task.setTask_id(Util.getRandomUUID());
+        minhang_task.setApp_id(request_app_id);
+        minhang_task.setKey_id("7a3995d91c9d41d5a946a990a53e45bb");
+        minhang_task.setScreen_id("3");
+        minhang_task.setTask_name("上传手印图片");
+        minhang_task.setTask_sort(0);
+        minhang_task.setTask_type(MinhangTaskType.PICTURE.getKey());
+        
+        //生成任务二维码
+        OutputStream os = null;
+        try {
+            String directory_path = "/" + Constant.UPLOAD + "/" + request_app_id;
+            String qrcode_url = directory_path+ "/" + minhang_task.getTask_id() + ".png";
+            String real_file_path = PathKit.getWebRootPath() + qrcode_url;
+            FileUtil.createPath(PathKit.getWebRootPath() + directory_path);
+            os = new FileOutputStream(real_file_path);
+            
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(MinhangTask.TASK_ID, minhang_task.getTask_id());
+            jsonObject.put(MinhangTask.SCREEN_ID, minhang_task.getScreen_id());
+            jsonObject.put(MinhangTask.ACTION, ""); //TODO 动作怎样去定义
+            String content = jsonObject.toString();
+            QRCodeUtil.encode(content, os);
+            minhang_task.setTask_qrcode_url(qrcode_url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (os != null) {
+                    os.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        Boolean result = MinhangTaskService.instance.save(minhang_task, request_user_id);
+        
+        validateResponse(MinhangTask.TASK_ID, MinhangTask.TASK_QRCODE_URL);
+        
+        renderSuccessJson(minhang_task);
+    }
+    
     @ActionKey("/mobile/minhang/task/save")
     public void save() {
 
         renderSuccessJson();
     }
-
+    
     @ActionKey("/mobile/minhang/task/update")
     public void update() {
 
