@@ -1,5 +1,7 @@
 package com.nowui.chuangshi.common.request;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class BodyReaderHttpServletRequestWrapper extends HttpServletRequestWrapper {
-    
+
     private Map<String, String[]> params = new HashMap<String, String[]>();
 
     private final byte[] body;
@@ -22,7 +24,7 @@ public class BodyReaderHttpServletRequestWrapper extends HttpServletRequestWrapp
         this.modifyParameterValues();
         body = readBytes(request.getInputStream());
     }
-    
+
     // 将parameter的值去除空格后重写回去
     public void modifyParameterValues() {
         Set<String> set = params.keySet();
@@ -42,12 +44,22 @@ public class BodyReaderHttpServletRequestWrapper extends HttpServletRequestWrapp
         if (values == null || values.length == 0) {
             return null;
         }
-        return values[0];
+        return StringEscapeUtils.escapeHtml4(values[0]);
     }
 
     // 同上
     public String[] getParameterValues(String name) {
-        return params.get(name);
+        String[] values = params.get(name);
+        if (values == null || values.length == 0) {
+            return null;
+        }
+
+        int length = values.length;
+        String[] escapseValues = new String[length];
+        for (int i = 0; i < length; i++) {
+            escapseValues[i] = StringEscapeUtils.escapeHtml4(values[i]);
+        }
+        return escapseValues;
     }
 
     @Override
