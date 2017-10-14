@@ -48,6 +48,8 @@ public class MinhangVideo extends Model<MinhangVideo> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
+    
+    public static final String VIDEO_TASK_LIST = "video_task_list";
 
     public String getVideo_id() {
         return getStr(VIDEO_ID);

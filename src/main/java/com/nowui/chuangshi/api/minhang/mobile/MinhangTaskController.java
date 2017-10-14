@@ -74,9 +74,10 @@ public class MinhangTaskController extends Controller {
     
     @ActionKey("/mobile/minhang/task/member/complete")
     public void memberComplete() {
-        validateRequest(MinhangTask.TASK_ID);
+        validateRequest(MinhangTask.TASK_ID, MinhangMemberTask.KEY_ACTIVATED_STEP);
         
         MinhangTask model = getModel(MinhangTask.class);
+        MinhangMemberTask minhang_member_task = getModel(MinhangMemberTask.class);
         String request_user_id = getRequest_user_id();
         
         MinhangMemberTask minhangMemberTask = MinhangMemberTaskService.instance.userAndTaskFind(request_user_id, model.getTask_id());
@@ -97,7 +98,6 @@ public class MinhangTaskController extends Controller {
         User user = UserService.instance.find(request_user_id);
         
         //保存会员完成记录
-        MinhangMemberTask minhang_member_task = new MinhangMemberTask();
         minhang_member_task.setApp_id(task.getApp_id());
         minhang_member_task.setMember_task_id(Util.getRandomUUID());
         minhang_member_task.setTask_id(task.getTask_id());

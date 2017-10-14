@@ -33,6 +33,9 @@ public class MinhangMemberTask extends Model<MinhangMemberTask> {
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "任务编号")
     public static final String TASK_ID = "task_id";
+    
+    @Column(type = ColumnType.INT, length = 5, comment = "任务完成对应激活钥匙的步骤")
+    public static final String KEY_ACTIVATED_STEP = "key_activated_step";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -98,6 +101,14 @@ public class MinhangMemberTask extends Model<MinhangMemberTask> {
 
     public void setTask_id(String task_id) {
         set(TASK_ID, task_id);
+    }
+    
+    public Integer getKey_activated_step() {
+        return getInt(KEY_ACTIVATED_STEP);
+    }
+
+    public void setKey_activated_step(Integer key_activated_step) {
+        set(KEY_ACTIVATED_STEP, key_activated_step);
     }
 
     public String getSystem_create_user_id() {

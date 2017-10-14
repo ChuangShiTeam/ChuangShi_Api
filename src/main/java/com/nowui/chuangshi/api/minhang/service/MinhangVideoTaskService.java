@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.minhang.service;
 
 import com.nowui.chuangshi.api.minhang.dao.MinhangVideoTaskDao;
+import com.nowui.chuangshi.api.minhang.model.MinhangTask;
 import com.nowui.chuangshi.api.minhang.model.MinhangVideoTask;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
@@ -34,6 +35,19 @@ public class MinhangVideoTaskService extends Service {
         List<MinhangVideoTask> minhang_video_taskList = minhangVideoTaskDao.primaryKeyList(cnd);
         for (MinhangVideoTask minhang_video_task : minhang_video_taskList) {
             minhang_video_task.put(find(minhang_video_task.getVideo_task_id()));
+        }
+        return minhang_video_taskList;
+    }
+    
+    public List<MinhangVideoTask> videoList(String video_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangVideoTask.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(MinhangVideoTask.VIDEO_ID, video_id);
+
+        List<MinhangVideoTask> minhang_video_taskList = minhangVideoTaskDao.primaryKeyList(cnd);
+        for (MinhangVideoTask minhang_video_task : minhang_video_taskList) {
+            minhang_video_task.put(find(minhang_video_task.getVideo_task_id()));
+            minhang_video_task.put(MinhangTask.TASK_QRCODE_URL, MinhangTaskService.instance.find(minhang_video_task.getTask_id()));
         }
         return minhang_video_taskList;
     }

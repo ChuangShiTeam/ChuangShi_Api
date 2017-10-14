@@ -63,6 +63,7 @@ public class MinhangMemberTaskService extends Service {
             Cnd cnd = new Cnd();
             cnd.where(MinhangMemberTask.SYSTEM_STATUS, true);
             cnd.andAllowEmpty(MinhangMemberTask.USER_ID, user_id);
+            cnd.asc(MinhangMemberTask.SYSTEM_CREATE_TIME);
 
             List<MinhangMemberTask> minhang_member_taskList = minhangMemberTaskDao.primaryKeyList(cnd);
             
@@ -76,6 +77,17 @@ public class MinhangMemberTaskService extends Service {
             list.add(find(minhang_member_task_id));
         }
         return list;
+    }
+    
+    public List<MinhangMemberTask> userAndKeyList(String user_id, String key_id) {
+    	
+    	List<MinhangMemberTask> list = userList(user_id);
+    	
+    	if (list != null && list.size() > 0) {
+    		return list.stream().filter(minhangMemberTask -> key_id.equals(minhangMemberTask.getKey_id())).collect(Collectors.toList());
+    	}
+    	
+    	return new ArrayList<>();
     }
     
     public List<MinhangMemberTask> taskList(String task_id, Integer m, Integer n) {

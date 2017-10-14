@@ -8,8 +8,12 @@ import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.minhang.model.MinhangKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberKey;
+import com.nowui.chuangshi.api.minhang.model.MinhangMemberTask;
+import com.nowui.chuangshi.api.minhang.model.MinhangTask;
 import com.nowui.chuangshi.api.minhang.service.MinhangKeyService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberKeyService;
+import com.nowui.chuangshi.api.minhang.service.MinhangMemberTaskService;
+import com.nowui.chuangshi.api.minhang.service.MinhangTaskService;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -72,6 +76,17 @@ public class MinhangKeyController extends Controller {
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("key", minhangKey);
         result.put("member_key", member_key);
+        
+        if (!member_key.getKey_is_activated()) {
+        	List<MinhangMemberTask> member_task_list = MinhangMemberTaskService.instance.userAndKeyList(request_user_id, minhangKey.getKey_id());
+        	for (MinhangMemberTask minhangMemberTask : member_task_list) {
+        		MinhangTask task = MinhangTaskService.instance.find(minhangMemberTask.getTask_id());
+        		minhangMemberTask.put(MinhangTask.TASK_NAME, task.getTask_name());
+        		minhangMemberTask.put(MinhangTask.TASK_TYPE, task.getTask_type());
+        	}
+        	validateResponse(MinhangMemberTask.TASK_ID, MinhangMemberTask.KEY_ACTIVATED_STEP, MinhangTask.TASK_NAME, MinhangTask.TASK_TYPE);
+        	result.put("member_task_list", member_task_list);
+        }
         renderSuccessJson(result);
     }
 
