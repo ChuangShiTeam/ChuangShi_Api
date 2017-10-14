@@ -79,13 +79,15 @@ public class MinhangKeyController extends Controller {
         
         if (!member_key.getKey_is_activated()) {
         	List<MinhangMemberTask> member_task_list = MinhangMemberTaskService.instance.userAndKeyList(request_user_id, minhangKey.getKey_id());
-        	for (MinhangMemberTask minhangMemberTask : member_task_list) {
-        		MinhangTask task = MinhangTaskService.instance.find(minhangMemberTask.getTask_id());
-        		minhangMemberTask.put(MinhangTask.TASK_NAME, task.getTask_name());
-        		minhangMemberTask.put(MinhangTask.TASK_TYPE, task.getTask_type());
+        	if (member_task_list != null && member_task_list.size() > 0) {
+        	    for (MinhangMemberTask minhangMemberTask : member_task_list) {
+                    MinhangTask task = MinhangTaskService.instance.find(minhangMemberTask.getTask_id());
+                    minhangMemberTask.put(MinhangTask.TASK_NAME, task.getTask_name());
+                    minhangMemberTask.put(MinhangTask.TASK_TYPE, task.getTask_type());
+                }
+                validateResponse(MinhangMemberTask.TASK_ID, MinhangMemberTask.KEY_ACTIVATED_STEP, MinhangTask.TASK_NAME, MinhangTask.TASK_TYPE);
+                result.put("member_task_list", member_task_list);
         	}
-        	validateResponse(MinhangMemberTask.TASK_ID, MinhangMemberTask.KEY_ACTIVATED_STEP, MinhangTask.TASK_NAME, MinhangTask.TASK_TYPE);
-        	result.put("member_task_list", member_task_list);
         }
         renderSuccessJson(result);
     }

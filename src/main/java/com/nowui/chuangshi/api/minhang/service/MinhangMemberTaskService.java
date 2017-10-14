@@ -71,7 +71,9 @@ public class MinhangMemberTaskService extends Service {
                                                             .map(minhang_member_task -> minhang_member_task.getMember_task_id())
                                                             .collect(Collectors.toList());
         }
-        
+        if (minhang_member_task_idList == null || minhang_member_task_idList.size() == 0) {
+            return null;
+        }
         List<MinhangMemberTask> list = new ArrayList<>();
         for (String minhang_member_task_id : minhang_member_task_idList) {
             list.add(find(minhang_member_task_id));
@@ -87,7 +89,7 @@ public class MinhangMemberTaskService extends Service {
     		return list.stream().filter(minhangMemberTask -> key_id.equals(minhangMemberTask.getKey_id())).collect(Collectors.toList());
     	}
     	
-    	return new ArrayList<>();
+    	return null;
     }
     
     public List<MinhangMemberTask> taskList(String task_id, Integer m, Integer n) {
@@ -107,11 +109,14 @@ public class MinhangMemberTaskService extends Service {
     public MinhangMemberTask userAndTaskFind(String user_id, String task_id) {
     	List<MinhangMemberTask> minhang_member_taskList = userList(user_id);
         
-        for (MinhangMemberTask minhangMemberTask : minhang_member_taskList) {
-            if (task_id.equals(minhangMemberTask.getTask_id())) {
-                return minhangMemberTask;
+    	if (minhang_member_taskList != null && minhang_member_taskList.size() > 0) {
+    	    for (MinhangMemberTask minhangMemberTask : minhang_member_taskList) {
+                if (task_id.equals(minhangMemberTask.getTask_id())) {
+                    return minhangMemberTask;
+                }
             }
-        }
+    	}
+        
         return null;
     	
     }
