@@ -61,7 +61,7 @@ public class MemberService extends Service {
         cnd.leftJoin(File.TABLE_FILE, File.FILE_ID, User.TABLE_USER, User.USER_AVATAR);
         cnd.where(Member.TABLE_MEMBER + "." + Member.SYSTEM_STATUS, true);
         cnd.and(Member.TABLE_MEMBER + "." + Member.APP_ID, app_id);
-        cnd.desc(Member.TABLE_MEMBER + "." + Member.SYSTEM_CREATE_TIME);
+        cnd.desc(Member.TABLE_MEMBER + "." + Member.SYSTEM_UPDATE_TIME);
         cnd.paginate(m, n);
         
 
