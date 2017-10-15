@@ -13,7 +13,8 @@ import java.util.*;
 public class Controller extends com.jfinal.core.Controller {
 
     private String[] validateResponseKey = new String[]{};
-
+    
+    @Override
     public <T> T getModel(Class<T> modelClass) {
         try {
             Object model = modelClass.newInstance();
@@ -335,6 +336,7 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(map);
     }
 
+    @Override
     public void renderJson(Object object) {
         String response = JSON.toJSONString(object);
         setAttr(Constant.RESPONSE_PARAMETER, response);

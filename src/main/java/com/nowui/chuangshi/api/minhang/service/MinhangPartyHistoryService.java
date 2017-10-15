@@ -51,6 +51,19 @@ public class MinhangPartyHistoryService extends Service {
         return minhang_party_history;
     }
     
+    public List<MinhangPartyHistory> taskFind(String task_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangPartyHistory.SYSTEM_STATUS, true);
+        cnd.and(MinhangPartyHistory.TASK_ID, task_id);
+
+        List<MinhangPartyHistory> minhang_party_historyList = minhangPartyHistoryDao.primaryKeyList(cnd);
+        
+        for (MinhangPartyHistory minhang_party_history : minhang_party_historyList) {
+            minhang_party_history.put(find(minhang_party_history.getParty_history_id()));
+        }        
+        return minhang_party_historyList;
+    }
+    
     public MinhangPartyHistory randomFind(String app_id) {
     	Cnd cnd = new Cnd();
         cnd.where(MinhangPartyHistory.SYSTEM_STATUS, true);

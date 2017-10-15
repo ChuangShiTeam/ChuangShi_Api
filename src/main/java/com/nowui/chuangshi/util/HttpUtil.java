@@ -19,12 +19,13 @@ public class HttpUtil {
         } catch (IOException e) {
             throw new RuntimeException("IOException: " + e);
         } finally {
-            if (br != null)
+            if (br != null) {
                 try {
                     br.close();
                 } catch (IOException e) {
                     throw new RuntimeException("IOException: " + e);
                 }
+            }
         }
     }
 

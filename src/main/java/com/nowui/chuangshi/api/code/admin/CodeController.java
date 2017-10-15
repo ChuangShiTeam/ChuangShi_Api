@@ -56,13 +56,13 @@ public class CodeController extends Controller {
                 String length = record.getString("column_type").replace(data_type, "")
                         .replace("(", "").replace(")", "");
 
-                if (length.equals("") || length.contains(",")) {
+                if ("".equals(length) || length.contains(",")) {
                     length = "0";
                 }
 
                 record.put("character_maximum_length", length);
             } else {
-                if (data_type.equals("longtext")) {
+                if ("longtext".equals(data_type)) {
                     record.put("character_maximum_length", "0");
                 }
             }

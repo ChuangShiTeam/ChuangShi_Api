@@ -51,6 +51,18 @@ public class MinhangTimelineEventService extends Service {
         }
         return minhang_timeline_eventList;
     }
+    
+    public List<MinhangTimelineEvent> taskFind(String task_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangTimelineEvent.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(MinhangTimelineEvent.TASK_ID, task_id);
+        
+        List<MinhangTimelineEvent> minhang_timeline_eventList = minhangTimelineEventDao.primaryKeyList(cnd);
+        for (MinhangTimelineEvent minhang_timeline_event : minhang_timeline_eventList) {
+            minhang_timeline_event.put(find(minhang_timeline_event.getTimeline_event_id()));
+        }
+        return minhang_timeline_eventList;
+    }
 
     public MinhangTimelineEvent find(String timeline_event_id) {
         MinhangTimelineEvent minhang_timeline_event = CacheUtil.get(MINHANG_TIMELINE_EVENT_ITEM_CACHE, timeline_event_id);

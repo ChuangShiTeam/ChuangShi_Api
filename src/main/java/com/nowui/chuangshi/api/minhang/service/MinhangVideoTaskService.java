@@ -42,6 +42,18 @@ public class MinhangVideoTaskService extends Service {
         return minhang_video_taskList;
     }
     
+    public List<MinhangVideoTask> taskFind(String task_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangVideoTask.SYSTEM_STATUS, true);
+        cnd.and(MinhangVideoTask.TASK_ID, task_id);
+        
+        List<MinhangVideoTask> minhang_video_taskList = minhangVideoTaskDao.primaryKeyList(cnd);
+        for (MinhangVideoTask minhang_video_task : minhang_video_taskList) {
+            minhang_video_task.put(find(minhang_video_task.getVideo_task_id()));
+        }
+        return minhang_video_taskList;
+    }
+    
     public List<MinhangVideoTask> videoList(String video_id) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangVideoTask.SYSTEM_STATUS, true);

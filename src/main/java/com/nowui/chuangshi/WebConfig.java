@@ -124,6 +124,7 @@ import com.nowui.chuangshi.util.ValidateUtil;
 
 public class WebConfig extends JFinalConfig {
 
+    @Override
     public void configConstant(Constants constants) {
         constants.setDevMode(false);
         constants.setViewType(ViewType.JSP);
@@ -132,6 +133,7 @@ public class WebConfig extends JFinalConfig {
         ApiConfigKit.setDevMode(true);
     }
 
+    @Override
     public void configRoute(Routes routes) {
         routes.add("/wechat/message", WeChatMessageController.class);
         routes.add("/wechat", WeChatController.class);
@@ -186,6 +188,7 @@ public class WebConfig extends JFinalConfig {
 
     }
 
+    @Override
     public void configEngine(Engine engine) {
 
     }
@@ -203,6 +206,7 @@ public class WebConfig extends JFinalConfig {
         }
     }
 
+    @Override
     public void configPlugin(Plugins plugins) {
         DruidPlugin druidPlugin = new DruidPlugin(Config.jdbc_url, Config.user, Config.password);
         druidPlugin.set(Config.initial_size, Config.min_idle, Config.max_activee);
@@ -218,7 +222,7 @@ public class WebConfig extends JFinalConfig {
             java.io.File[] files = parentFile.listFiles();
             Boolean isLocal = true;
             for (java.io.File file : files) {
-                if (file.isDirectory() && file.getName().equals("sql")) {
+                if (file.isDirectory() && "sql".equals(file.getName())) {
                     isLocal = false;
                 }
             }
@@ -360,14 +364,17 @@ public class WebConfig extends JFinalConfig {
         return (String) field.get(object);
     }
 
+    @Override
     public void configInterceptor(Interceptors interceptors) {
         interceptors.addGlobalActionInterceptor(new GlobalActionInterceptor());
     }
 
+    @Override
     public void configHandler(Handlers handlers) {
 
     }
 
+    @Override
     public void afterJFinalStart() {
         List<App> appList = AppService.instance.allList();
         for (App app : appList) {
@@ -383,6 +390,7 @@ public class WebConfig extends JFinalConfig {
         }
     }
 
+    @Override
     public void beforeJFinalStop() {
 
     }
@@ -391,7 +399,7 @@ public class WebConfig extends JFinalConfig {
         /**
          * 特别注意：Eclipse 之下建议的启动方式
          */
-        //JFinal.start("src/main/webapp", 8080, "/", 5);
+        // JFinal.start("src/main/webapp", 8080, "/", 5);
 
         /**
          * 特别注意：IDEA 之下建议的启动方式，仅比 eclipse 之下少了最后一个参数

@@ -50,7 +50,7 @@ public class ValidateUtil {
     }
 
     public static boolean isEmail(String str) {
-        Pattern emailPattern = Pattern.compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
+        final Pattern emailPattern = Pattern.compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
         Matcher matcher = emailPattern.matcher(str);
         if (matcher.find()) {
             return true;

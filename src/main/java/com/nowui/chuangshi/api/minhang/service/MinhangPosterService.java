@@ -61,6 +61,18 @@ public class MinhangPosterService extends Service {
 
         return minhang_poster;
     }
+    
+    public List<MinhangPoster> taskFind(String task_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangPoster.SYSTEM_STATUS, true);
+        cnd.and(MinhangPoster.TASK_ID, task_id);
+
+        List<MinhangPoster> minhang_posterList = minhangPosterDao.primaryKeyList(cnd);
+        for (MinhangPoster minhang_poster : minhang_posterList) {
+            minhang_poster.put(find(minhang_poster.getPoster_id()));
+        }
+        return minhang_posterList;
+    }
 
     public Boolean save(MinhangPoster minhang_poster, String system_create_user_id) {
         Boolean success = minhangPosterDao.save(minhang_poster, system_create_user_id);

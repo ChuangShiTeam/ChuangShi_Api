@@ -40,7 +40,7 @@ public class ProductController extends Controller {
         } else {
             productCategorySkuAttributeList = ProductCategorySkuAttributeService.instance.productCategoryList(product.getProduct_category_id());
         }
-        product.put(product.PRODUCT_CATEGORY_SKU_ATTRIBUTE_LIST, productCategorySkuAttributeList);
+        product.put(Product.PRODUCT_CATEGORY_SKU_ATTRIBUTE_LIST, productCategorySkuAttributeList);
 
         List<ProductSku> productSkuList = ProductSkuService.instance.productList(model.getProduct_id());
         for (ProductSku productSku : productSkuList) {

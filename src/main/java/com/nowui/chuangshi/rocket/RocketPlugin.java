@@ -19,6 +19,7 @@ public class RocketPlugin implements IPlugin {
 
     private final List<DefaultMQPushConsumer> consumerList = new ArrayList<DefaultMQPushConsumer>();
 
+    @Override
     public boolean start() {
         Integer index = 0;
         Set<Class<?>> set = ClassUtil.scanPackageByAnnotation("com.nowui.chuangshi.handler", false, Handler.class);
@@ -72,6 +73,7 @@ public class RocketPlugin implements IPlugin {
         return true;
     }
 
+    @Override
     public boolean stop() {
         Iterator<DefaultMQPushConsumer> iterator = consumerList.iterator();
         while(iterator.hasNext()){

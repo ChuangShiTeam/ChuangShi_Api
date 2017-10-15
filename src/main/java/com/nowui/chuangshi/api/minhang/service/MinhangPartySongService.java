@@ -64,6 +64,18 @@ public class MinhangPartySongService extends Service {
         
         return find(minhang_party_song.getParty_song_id());
     }
+    
+    public List<MinhangPartySong> taskFind(String task_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangPartySong.SYSTEM_STATUS, true);
+        cnd.and(MinhangPartySong.TASK_ID, task_id);
+        
+        List<MinhangPartySong> minhang_party_songList = minhangPartySongDao.primaryKeyList(cnd);
+        for (MinhangPartySong minhang_party_song : minhang_party_songList) {
+            minhang_party_song.put(find(minhang_party_song.getParty_song_id()));
+        }
+        return minhang_party_songList;
+    }
 
     public Boolean save(MinhangPartySong minhang_party_song, String system_create_user_id) {
         Boolean success = minhangPartySongDao.save(minhang_party_song, system_create_user_id);

@@ -1,8 +1,5 @@
 package com.nowui.chuangshi.api.minhang.mobile;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,30 +7,39 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
-import com.jfinal.kit.PathKit;
 import com.nowui.chuangshi.api.file.service.FileService;
+import com.nowui.chuangshi.api.minhang.model.MinhangKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberPicture;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberQuestion;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberRecord;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberTask;
+import com.nowui.chuangshi.api.minhang.model.MinhangPartyHistory;
+import com.nowui.chuangshi.api.minhang.model.MinhangPartySong;
+import com.nowui.chuangshi.api.minhang.model.MinhangPoster;
 import com.nowui.chuangshi.api.minhang.model.MinhangQuestion;
 import com.nowui.chuangshi.api.minhang.model.MinhangTask;
+import com.nowui.chuangshi.api.minhang.model.MinhangTimelineEvent;
+import com.nowui.chuangshi.api.minhang.model.MinhangVideoTask;
+import com.nowui.chuangshi.api.minhang.service.MinhangKeyService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberKeyService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberPictureService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberQuestionService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberRecordService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberTaskService;
+import com.nowui.chuangshi.api.minhang.service.MinhangPartyHistoryService;
+import com.nowui.chuangshi.api.minhang.service.MinhangPartySongService;
+import com.nowui.chuangshi.api.minhang.service.MinhangPosterService;
 import com.nowui.chuangshi.api.minhang.service.MinhangQuestionService;
 import com.nowui.chuangshi.api.minhang.service.MinhangTaskService;
+import com.nowui.chuangshi.api.minhang.service.MinhangTimelineEventService;
+import com.nowui.chuangshi.api.minhang.service.MinhangVideoTaskService;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.MinhangTaskType;
-import com.nowui.chuangshi.util.FileUtil;
-import com.nowui.chuangshi.util.QRCodeUtil;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -190,57 +196,61 @@ public class MinhangTaskController extends Controller {
         validateResponse(User.USER_NAME, User.USER_AVATAR);
         renderSuccessJson(resultList);
     }
+    
+    @ActionKey("/mobile/minhang/task/check")
+    public void check() {
+        validateRequest(MinhangTask.TASK_ID,  MinhangTask.ACTION);
 
-    //按手印任务
-    @ActionKey("/mobile/minhang/task/handprint/save")
-    public void handprintSave() {
         String request_user_id = getRequest_user_id();
-        String request_app_id = getRequest_app_id();
+        MinhangTask model = getModel(MinhangTask.class);
         
-        MinhangTask minhang_task = new MinhangTask();
-        minhang_task.setTask_id(Util.getRandomUUID());
-        minhang_task.setApp_id(request_app_id);
-        minhang_task.setKey_id("7a3995d91c9d41d5a946a990a53e45bb");
-        minhang_task.setScreen_id("3");
-        minhang_task.setTask_name("上传手印图片");
-        minhang_task.setTask_sort(0);
-        minhang_task.setTask_type(MinhangTaskType.PICTURE.getKey());
+        MinhangTask minhangTask = MinhangTaskService.instance.find(model.getTask_id());
         
-        //生成任务二维码
-        OutputStream os = null;
-        try {
-            String directory_path = "/" + Constant.UPLOAD + "/" + request_app_id;
-            String qrcode_url = directory_path+ "/" + minhang_task.getTask_id() + ".png";
-            String real_file_path = PathKit.getWebRootPath() + qrcode_url;
-            FileUtil.createPath(PathKit.getWebRootPath() + directory_path);
-            os = new FileOutputStream(real_file_path);
-            
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(MinhangTask.TASK_ID, minhang_task.getTask_id());
-            jsonObject.put(MinhangTask.SCREEN_ID, minhang_task.getScreen_id());
-            jsonObject.put(MinhangTask.ACTION, ""); //TODO 动作怎样去定义
-            String content = jsonObject.toString();
-            QRCodeUtil.encode(content, os);
-            minhang_task.setTask_qrcode_url(qrcode_url);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (os != null) {
-                    os.close();
+        String result = null;
+        if (minhangTask == null) {
+            result = "请扫描正确任务二维码";
+        } else {
+            if ("loadPoster".equals(model.getStr(MinhangTask.ACTION))) {
+                List<MinhangPoster> minhangPosterList = MinhangPosterService.instance.taskFind(model.getTask_id());
+                if (minhangPosterList ==null || minhangPosterList.size() == 0) {
+                    result = "请扫描海报二维码";
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } else if ("loadPartyHistory".equals(model.getStr(MinhangTask.ACTION))) {
+                List<MinhangPartyHistory> minhangPartyHistoryList = MinhangPartyHistoryService.instance.taskFind(model.getTask_id());
+                if (minhangPartyHistoryList ==null || minhangPartyHistoryList.size() == 0) {
+                    result = "请扫描党史二维码";
+                }
+            } else if ("loadPartySong".equals(model.getStr(MinhangTask.ACTION))) {
+                List<MinhangPartySong> minhangPartySongList = MinhangPartySongService.instance.taskFind(model.getTask_id());
+                if (minhangPartySongList ==null || minhangPartySongList.size() == 0) {
+                    result = "请扫描党歌二维码";
+                }
+            } else if ("loadHandlePrint".equals(model.getStr(MinhangTask.ACTION))) {
+                if (!"001f46fc946647efa4bccaa9735f94e6".equals(model.getTask_id())) {
+                    result = "请扫描手印二维码";
+                }
+            } else if ("loadTimelineEvent".equals(model.getStr(MinhangTask.ACTION))) {
+                List<MinhangTimelineEvent> timelineEventList = MinhangTimelineEventService.instance.taskFind(model.getTask_id());
+                if (timelineEventList ==null || timelineEventList.size() == 0) {
+                    result = "请扫描党史时间轴事件二维码";
+                }
+            } else if ("loadVideoTask".equals(model.getStr(MinhangTask.ACTION))) {
+                List<MinhangVideoTask> minhangVideoTaskList = MinhangVideoTaskService.instance.taskFind(model.getTask_id());
+                if (minhangVideoTaskList ==null || minhangVideoTaskList.size() == 0) {
+                    result = "请扫描党课学习视频问题二维码";
+                }
+            } else {
+                MinhangMemberTask minhangMemberTask = MinhangMemberTaskService.instance.userAndTaskFind(request_user_id, model.getTask_id());
+                if (minhangMemberTask != null) {
+                    result = "您已完成该任务，请扫描其他任务二维码";
+                }
             }
+            
         }
         
-        Boolean result = MinhangTaskService.instance.save(minhang_task, request_user_id);
-        
-        validateResponse(MinhangTask.TASK_ID, MinhangTask.TASK_QRCODE_URL);
-        
-        renderSuccessJson(minhang_task);
+        renderSuccessJson(result);
     }
-    
+
     @ActionKey("/mobile/minhang/task/save")
     public void save() {
 
