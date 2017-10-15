@@ -16,15 +16,15 @@ public class MinhangPosterController extends Controller {
 
     @ActionKey("/mobile/minhang/poster/list")
     public void list() {
-    	String request_app_id = getRequest_app_id();
-    	
-    	List<MinhangPoster> minhang_poster_list = MinhangPosterService.instance.appList(request_app_id);
-    	
-    	for (MinhangPoster minhangPoster : minhang_poster_list) {
+        String request_app_id = getRequest_app_id();
+        
+        List<MinhangPoster> minhang_poster_list = MinhangPosterService.instance.appList(request_app_id);
+        
+        for (MinhangPoster minhangPoster : minhang_poster_list) {
             minhangPoster.put(MinhangPoster.POSTER_IMAGE_FILE, FileService.instance.getFile(minhangPoster.getPoster_image()));
             MinhangTask minhangTask = MinhangTaskService.instance.find(minhangPoster.getTask_id());
             minhangPoster.put(MinhangTask.TASK_QRCODE_URL, minhangTask.getTask_qrcode_url());
-    	}
+        }
         
         validateResponse(MinhangPoster.POSTER_ID, MinhangPoster.TASK_ID, MinhangTask.TASK_QRCODE_URL, MinhangPoster.POSTER_IMAGE, MinhangPoster.POSTER_IMAGE_FILE, MinhangPoster.POSTER_TITLE, MinhangPoster.POSTER_CONTENT, MinhangPoster.SYSTEM_VERSION);
 

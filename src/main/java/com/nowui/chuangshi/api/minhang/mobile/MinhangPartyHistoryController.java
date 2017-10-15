@@ -27,15 +27,15 @@ public class MinhangPartyHistoryController extends Controller {
     
     @ActionKey("/mobile/minhang/party/history/random/find")
     public void randomFind() {
-    	String request_app_id = getRequest_app_id();
-    	
-    	MinhangPartyHistory minhang_party_history = MinhangPartyHistoryService.instance.randomFind(request_app_id);
-    	
-    	MinhangTask minhangTask = MinhangTaskService.instance.find(minhang_party_history.getTask_id());
-    	minhang_party_history.put(MinhangTask.TASK_QRCODE_URL, minhangTask.getTask_qrcode_url());
+        String request_app_id = getRequest_app_id();
         
-    	validateResponse(MinhangPartyHistory.PARTY_HISTORY_ID, MinhangTask.TASK_QRCODE_URL, MinhangPartyHistory.TASK_ID, MinhangPartyHistory.PARTY_HISTORY_CONTENT, MinhangPartyHistory.BOOK_CODE, MinhangPartyHistory.SYSTEM_VERSION);
-    	
+        MinhangPartyHistory minhang_party_history = MinhangPartyHistoryService.instance.randomFind(request_app_id);
+        
+        MinhangTask minhangTask = MinhangTaskService.instance.find(minhang_party_history.getTask_id());
+        minhang_party_history.put(MinhangTask.TASK_QRCODE_URL, minhangTask.getTask_qrcode_url());
+        
+        validateResponse(MinhangPartyHistory.PARTY_HISTORY_ID, MinhangTask.TASK_QRCODE_URL, MinhangPartyHistory.TASK_ID, MinhangPartyHistory.PARTY_HISTORY_CONTENT, MinhangPartyHistory.BOOK_CODE, MinhangPartyHistory.SYSTEM_VERSION);
+        
         renderSuccessJson(minhang_party_history);
     }
 

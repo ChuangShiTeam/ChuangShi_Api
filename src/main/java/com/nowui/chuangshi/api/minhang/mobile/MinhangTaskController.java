@@ -48,7 +48,7 @@ public class MinhangTaskController extends Controller {
 
     @ActionKey("/mobile/minhang/task/find")
     public void find() {
-    	validateRequest(MinhangTask.TASK_ID);
+        validateRequest(MinhangTask.TASK_ID);
 
         MinhangTask model = getModel(MinhangTask.class);
         
@@ -63,15 +63,15 @@ public class MinhangTaskController extends Controller {
         Map<String, Object> result = new HashMap<String, Object>(); 
         
         if (minhangMemberTask == null) { 
-        	//如果为答题任务查询题目列表
-        	if (MinhangTaskType.QUESTION.getKey().equals(minhangTask.getTask_type())) {
-        		List<MinhangQuestion> minhang_question_list = MinhangQuestionService.instance.taskList(minhangTask.getTask_id());
-        		minhangTask.put(MinhangTask.QUESTION_LIST, minhang_question_list);
-        		validateResponse(MinhangTask.QUESTION_LIST);
-        	}
+            //如果为答题任务查询题目列表
+            if (MinhangTaskType.QUESTION.getKey().equals(minhangTask.getTask_type())) {
+                List<MinhangQuestion> minhang_question_list = MinhangQuestionService.instance.taskList(minhangTask.getTask_id());
+                minhangTask.put(MinhangTask.QUESTION_LIST, minhang_question_list);
+                validateResponse(MinhangTask.QUESTION_LIST);
+            }
         } else {
-        	validateResponse(MinhangMemberTask.MEMBER_TASK_ID, MinhangMemberTask.MEMBER_ID, MinhangMemberTask.TASK_ID);
-        	result.put("member_task", minhangMemberTask);
+            validateResponse(MinhangMemberTask.MEMBER_TASK_ID, MinhangMemberTask.MEMBER_ID, MinhangMemberTask.TASK_ID);
+            result.put("member_task", minhangMemberTask);
         }
         result.put("task", minhangTask);
         

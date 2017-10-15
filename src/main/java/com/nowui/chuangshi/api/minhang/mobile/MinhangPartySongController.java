@@ -25,15 +25,15 @@ public class MinhangPartySongController extends Controller {
     
     @ActionKey("/mobile/minhang/party/song/random/find")
     public void randomFind() {
-    	String request_app_id = getRequest_app_id();
-    	
-    	MinhangPartySong minhang_party_song = MinhangPartySongService.instance.randomFind(request_app_id);
-    	
-    	MinhangTask minhangTask = MinhangTaskService.instance.find(minhang_party_song.getTask_id());
+        String request_app_id = getRequest_app_id();
+        
+        MinhangPartySong minhang_party_song = MinhangPartySongService.instance.randomFind(request_app_id);
+        
+        MinhangTask minhangTask = MinhangTaskService.instance.find(minhang_party_song.getTask_id());
         minhang_party_song.put(MinhangTask.TASK_QRCODE_URL, minhangTask.getTask_qrcode_url());
         
-    	validateResponse(MinhangPartySong.PARTY_SONG_ID, MinhangTask.TASK_QRCODE_URL, MinhangPartySong.TASK_ID,  MinhangPartySong.PARTY_SONG_URL, MinhangPartySong.PARTY_SONG_CONTENT, MinhangPartySong.SYSTEM_VERSION);
-    	
+        validateResponse(MinhangPartySong.PARTY_SONG_ID, MinhangTask.TASK_QRCODE_URL, MinhangPartySong.TASK_ID,  MinhangPartySong.PARTY_SONG_URL, MinhangPartySong.PARTY_SONG_CONTENT, MinhangPartySong.SYSTEM_VERSION);
+        
         renderSuccessJson(minhang_party_song);
     }
 
