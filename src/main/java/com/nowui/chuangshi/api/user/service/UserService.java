@@ -146,6 +146,23 @@ public class UserService extends Service {
         return success;
     }
 
+    public Boolean systemUpdateTimeUpdate(String user_id, String system_update_user_id, Integer system_version) {
+        User user = new User();
+
+        Cnd cnd = new Cnd();
+        cnd.where(User.SYSTEM_STATUS, true);
+        cnd.and(User.USER_ID, user_id);
+        cnd.and(User.SYSTEM_VERSION, system_version);
+
+        Boolean success = userDao.delete(system_update_user_id, system_version, cnd);
+
+        if (success) {
+            CacheUtil.remove(USER_ITEM_CACHE, user_id);
+        }
+
+        return success;
+    }
+
     public Boolean delete(String user_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = new Cnd();
         cnd.where(User.SYSTEM_STATUS, true);

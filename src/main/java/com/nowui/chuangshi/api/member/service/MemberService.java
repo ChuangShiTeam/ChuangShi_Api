@@ -224,10 +224,18 @@ public class MemberService extends Service {
                 throw new RuntimeException("保存不成功");
             }
         } else {
+            Boolean isUpdateTime = true;
+
             if (!user.getUser_name().equals(user_name)) {
                 UserService.instance.userNameUpdate(user.getUser_id(), user_name, system_create_user_id);
 
                 cacheDelete(user.getObject_id());
+
+                isUpdateTime = false;
+            }
+
+            if (isUpdateTime) {
+                UserService.instance.systemUpdateTimeUpdate(user.getUser_id(), system_create_user_id, user.getSystem_version());
             }
 
             File file = FileService.instance.find(user.getUser_avatar());
