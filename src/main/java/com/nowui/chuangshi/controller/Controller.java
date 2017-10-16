@@ -13,6 +13,7 @@ import com.nowui.chuangshi.util.ValidateUtil;
 
 public class Controller extends com.jfinal.core.Controller {
 
+    @Override
     public <T> T getModel(Class<T> modelClass) {
         try {
             Object temp = modelClass.newInstance();
@@ -181,6 +182,7 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(map);
     }
 
+    @Override
     public void renderJson(Object object) {
         String response = JSON.toJSONString(object);
         setAttr(Constant.RESPONSE_PARAMETER, response);

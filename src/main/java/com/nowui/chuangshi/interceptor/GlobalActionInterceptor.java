@@ -25,6 +25,7 @@ public class GlobalActionInterceptor implements Interceptor {
 
     }
 
+    @Override
     public void intercept(Invocation invocation) {
         Date start = new Date();
         Connection connection = null;

@@ -18,7 +18,7 @@ public class ProbabilityUtil {
         return false;
     }
     
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         int countTrue = 0;
         int countFalse = 0;
         for (int i = 0; i < 1000; i++) {

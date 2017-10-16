@@ -50,7 +50,7 @@ public class ValidateUtil {
     }
 
     public static boolean isEmail(String str) {
-        final Pattern emailPattern = Pattern.compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
+        Pattern emailPattern = Pattern.compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
         Matcher matcher = emailPattern.matcher(str);
         if (matcher.find()) {
             return true;
@@ -59,10 +59,9 @@ public class ValidateUtil {
     }
 
     public static boolean isPhone(String str) {
-        Pattern p = null;
         Matcher m = null;
         boolean b = false;
-        p = Pattern.compile("^[1][3,4,5,8][0-9]{9}$");
+        Pattern p = Pattern.compile("^[1][3,4,5,8][0-9]{9}$");
         m = p.matcher(str);
         b = m.matches();
         return b;

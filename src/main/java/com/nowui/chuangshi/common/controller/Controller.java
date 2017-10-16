@@ -12,7 +12,8 @@ import java.util.*;
 
 public class Controller extends com.jfinal.core.Controller {
 
-    private String[] validateResponseKey = new String[]{};
+    private String[] validateResponseKeyList = new String[]{};
+    private List<Map<String, String[]>> validateSecondResponseKeyList = new ArrayList<>();
     
     @Override
     public <T> T getModel(Class<T> modelClass) {
@@ -57,7 +58,29 @@ public class Controller extends com.jfinal.core.Controller {
     }
 
     public void validateResponse(String... keys) {
-        validateResponseKey = keys;
+        validateResponseKeyList = keys;
+    }
+
+    public void validateSecondResponseKey(String key, String... keys) {
+        Boolean isExit = false;
+
+        for (Map<String, String[]> map : validateSecondResponseKeyList) {
+            for (Map.Entry<String, String[]> entry : map.entrySet()) {
+                if (key.equals(entry.getKey())) {
+                    isExit = true;
+                }
+            }
+
+            if (isExit) {
+                map.put(key, keys);
+            }
+        }
+
+        if (!isExit) {
+            Map<String, String[]> map = new HashMap<>();
+            map.put(key, keys);
+            validateSecondResponseKeyList.add(map);
+        }
     }
 
     public void setParameter(JSONObject parameter) {
@@ -204,7 +227,7 @@ public class Controller extends com.jfinal.core.Controller {
 
     public void renderSuccessJson(Model result) {
         if (result != null) {
-            result.keep(validateResponseKey);
+            result.keep(validateResponseKeyList);
         }
 
         Set<Map.Entry<String, Object>> sets = result._getAttrsEntrySet();
@@ -253,7 +276,7 @@ public class Controller extends com.jfinal.core.Controller {
 
     public void renderSuccessJson(List<? extends Model> resultList) {
         for (Model result : resultList) {
-            result.keep(validateResponseKey);
+            result.keep(validateResponseKeyList);
 
             Set<Map.Entry<String, Object>> sets = result._getAttrsEntrySet();
             for (Map.Entry<String, Object> entry : sets) {
@@ -272,7 +295,7 @@ public class Controller extends com.jfinal.core.Controller {
 
     public void renderSuccessJson(Integer total, List<? extends Model> resultList) {
         for (Model result : resultList) {
-            result.keep(validateResponseKey);
+            result.keep(validateResponseKeyList);
 
             Set<Map.Entry<String, Object>> sets = result._getAttrsEntrySet();
             for (Map.Entry<String, Object> entry : sets) {
@@ -297,7 +320,7 @@ public class Controller extends com.jfinal.core.Controller {
         List<Map<String, Object>> newResultList = new ArrayList<Map<String, Object>>();
         for (Map<String, Object> result : resultList) {
             Map<String, Object> newResult = new HashMap<String, Object>();
-            for (String key : validateResponseKey) {
+            for (String key : validateResponseKeyList) {
                 for (Map.Entry<String, Object> map : result.entrySet()) {
                     if (key.equals(map.getKey())) {
                         newResult.put(map.getKey(), map.getValue());

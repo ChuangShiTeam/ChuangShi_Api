@@ -216,7 +216,7 @@ public class MemberDeliveryOrderCache extends Cache {
         return member_delivery_order_number;
     }
     
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
         int j = 20;
         for (int i = 0; i < j; i++) {

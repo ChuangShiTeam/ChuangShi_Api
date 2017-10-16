@@ -78,8 +78,11 @@ public class ProductController extends Controller {
                 Product.PRODUCT_IS_VIRTUAL,
                 Product.PRODUCT_CONTENT,
                 Product.PRODUCT_STATUS,
+                Product.PRODUCT_CATEGORY_SKU_ATTRIBUTE_LIST,
                 Product.PRODUCT_SKU_LIST,
                 Product.SYSTEM_VERSION);
+
+        validateSecondResponseKey(Product.PRODUCT_CATEGORY_SKU_ATTRIBUTE_LIST, ProductCategorySkuAttribute.PRODUCT_CATEGORY_ID);
 
         renderSuccessJson(product);
     }

@@ -31,6 +31,7 @@ public class MinHangSocket {
             jsonObject.put("content", "");
 
             socket.emit("sendMessage", jsonObject, new Ack() {
+                @Override
                 public void call(Object... args) {
                     JSONObject object = (JSONObject) args[0];
                     System.out.println(object.toString());
