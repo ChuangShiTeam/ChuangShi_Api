@@ -13,7 +13,7 @@ import java.util.*;
 public class Controller extends com.jfinal.core.Controller {
 
     private String[] validateResponseKeyList = new String[]{};
-    private List<Map<String, String[]>> validateSecondResponseKeyList = new ArrayList<>();
+    private Map<String, String[]> validateSecondResponseKeyList = new HashMap<>();
     
     @Override
     public <T> T getModel(Class<T> modelClass) {
@@ -61,26 +61,8 @@ public class Controller extends com.jfinal.core.Controller {
         validateResponseKeyList = keys;
     }
 
-    public void validateSecondResponseKey(String key, String... keys) {
-        Boolean isExit = false;
-
-        for (Map<String, String[]> map : validateSecondResponseKeyList) {
-            for (Map.Entry<String, String[]> entry : map.entrySet()) {
-                if (key.equals(entry.getKey())) {
-                    isExit = true;
-                }
-            }
-
-            if (isExit) {
-                map.put(key, keys);
-            }
-        }
-
-        if (!isExit) {
-            Map<String, String[]> map = new HashMap<>();
-            map.put(key, keys);
-            validateSecondResponseKeyList.add(map);
-        }
+    public void validateSecondResponse(String key, String... keys) {
+        validateSecondResponseKeyList.put(key, keys);
     }
 
     public void setParameter(JSONObject parameter) {
@@ -223,6 +205,38 @@ public class Controller extends com.jfinal.core.Controller {
         map.put(Constant.DATA, result);
 
         renderJson(map);
+    }
+
+    private void filterResponses(Object result) {
+        if (result instanceof Model) {
+            Set<Map.Entry<String, Object>> sets = ((Model)result)._getAttrsEntrySet();
+            for (Map.Entry<String, Object> entry : sets) {
+                filterSecondResponse(entry.getKey(), entry.getValue());
+            }
+        } else if (result instanceof List) {
+            for (Object entry : (List) result) {
+
+            }
+        }
+    }
+
+    private void filterSecondResponse(String key, Object result) {
+        for (Map.Entry<String, String[]> responses : validateSecondResponseKeyList.entrySet()) {
+            if (key.equals(responses.getKey())) {
+                if (((Model)result).get(responses.getKey()) instanceof Model) {
+                    ((Model) ((Model)result).get(responses.getKey())).keep(responses.getValue());
+                } else if (((Model)result).get(responses.getKey()) instanceof List) {
+                    List list = (List) ((Model)result).get(responses.getKey());
+                    for (Object object : list) {
+                        if (object instanceof Model) {
+                            ((Model) object).keep(responses.getValue());
+                        } else if (object instanceof Map) {
+
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void renderSuccessJson(Model result) {

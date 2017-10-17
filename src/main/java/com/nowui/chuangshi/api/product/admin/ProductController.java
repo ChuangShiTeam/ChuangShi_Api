@@ -82,7 +82,7 @@ public class ProductController extends Controller {
                 Product.PRODUCT_SKU_LIST,
                 Product.SYSTEM_VERSION);
 
-        validateSecondResponseKey(Product.PRODUCT_CATEGORY_SKU_ATTRIBUTE_LIST, ProductCategorySkuAttribute.PRODUCT_CATEGORY_ID);
+        validateSecondResponse(Product.PRODUCT_CATEGORY_SKU_ATTRIBUTE_LIST, ProductCategorySkuAttribute.PRODUCT_CATEGORY_ID, ProductCategorySkuAttribute.PRODUCT_CATEGORY_SKU_ATTRIBUTE_NAME);
 
         renderSuccessJson(product);
     }
