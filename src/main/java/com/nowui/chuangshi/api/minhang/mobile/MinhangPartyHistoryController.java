@@ -1,7 +1,5 @@
 package com.nowui.chuangshi.api.minhang.mobile;
 
-import java.util.List;
-
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangPartyHistory;
 import com.nowui.chuangshi.api.minhang.model.MinhangTask;

@@ -20,7 +20,6 @@ public class MinhangPartySongController extends Controller {
     public void list() {
         validateRequest(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
-        MinhangPartySong model = getModel(MinhangPartySong.class);
         String request_app_id = getRequest_app_id();
 
         Integer resultCount = MinhangPartySongService.instance.adminCount(request_app_id);
