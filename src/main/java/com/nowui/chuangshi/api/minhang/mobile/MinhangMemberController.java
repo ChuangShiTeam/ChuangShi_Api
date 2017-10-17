@@ -18,7 +18,7 @@ public class MinhangMemberController extends Controller {
         validateRequest(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
         String request_app_id = getRequest_app_id();
         
-        List<Member> resultList = MemberService.instance.appList(request_app_id, 1, 7);
+        List<Member> resultList = MemberService.instance.appList(request_app_id, getM(), getN());
         
         validateResponse(Member.MEMBER_ID, User.USER_ID, User.USER_NAME, User.USER_AVATAR);
 
