@@ -8,7 +8,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.service.FileService;
-import com.nowui.chuangshi.api.minhang.model.MinhangKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberPicture;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberQuestion;
@@ -21,7 +20,6 @@ import com.nowui.chuangshi.api.minhang.model.MinhangQuestion;
 import com.nowui.chuangshi.api.minhang.model.MinhangTask;
 import com.nowui.chuangshi.api.minhang.model.MinhangTimelineEvent;
 import com.nowui.chuangshi.api.minhang.model.MinhangVideoTask;
-import com.nowui.chuangshi.api.minhang.service.MinhangKeyService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberKeyService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberPictureService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberQuestionService;
@@ -192,6 +190,24 @@ public class MinhangTaskController extends Controller {
             User user = UserService.instance.find(result.getUser_id());
             result.put(User.USER_NAME, user.getUser_name());
             result.put(User.USER_AVATAR, FileService.instance.getFile_path(user.getUser_avatar()));
+        }
+        validateResponse(User.USER_NAME, User.USER_AVATAR);
+        renderSuccessJson(resultList);
+    }
+    
+    @ActionKey("/mobile/minhang/task/member/picture/list")
+    public void memberPictureList() {
+        validateRequest(MinhangTask.TASK_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        
+        MinhangTask model = getModel(MinhangTask.class);
+        
+        List<MinhangMemberTask> resultList = MinhangMemberTaskService.instance.taskList(model.getTask_id(), getM(), getN());
+        
+        for (MinhangMemberTask result : resultList) {
+            MinhangMemberPicture minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskfind(result.getUser_id(), model.getTask_id());
+            User user = UserService.instance.find(result.getUser_id());
+            result.put(User.USER_NAME, user.getUser_name());
+            result.put(User.USER_AVATAR, FileService.instance.getFile_path(minhangMemberPicture.getPicture_file()));
         }
         validateResponse(User.USER_NAME, User.USER_AVATAR);
         renderSuccessJson(resultList);
