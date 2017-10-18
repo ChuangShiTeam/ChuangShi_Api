@@ -14,13 +14,13 @@ public class Controller extends com.jfinal.core.Controller {
 
     private String[] validateResponseKeyList = new String[]{};
     private Map<String, String[]> validateSecondResponseKeyList = new HashMap<>();
-    
+
     @Override
     public <T> T getModel(Class<T> modelClass) {
         try {
             Object model = modelClass.newInstance();
 
-            if(!(model instanceof Model)) {
+            if (!(model instanceof Model)) {
                 throw new RuntimeException("getModel only support class of Model, using getBean for other class.");
             } else {
                 JSONObject jsonObject = getAttr(Constant.REQUEST_PARAMETER);
@@ -209,13 +209,22 @@ public class Controller extends com.jfinal.core.Controller {
 
     private void filterResponses(Object result) {
         if (result instanceof Model) {
-            Set<Map.Entry<String, Object>> sets = ((Model)result)._getAttrsEntrySet();
+            Set<Map.Entry<String, Object>> sets = ((Model) result)._getAttrsEntrySet();
             for (Map.Entry<String, Object> entry : sets) {
                 filterSecondResponse(entry.getKey(), entry.getValue());
             }
         } else if (result instanceof List) {
-            for (Object entry : (List) result) {
-
+            for (Object item : (List) result) {
+                if (item instanceof Model) {
+                    Set<Map.Entry<String, Object>> sets = ((Model)item)._getAttrsEntrySet();
+                    for (Map.Entry<String, Object> entry : sets) {
+                        filterSecondResponse(entry.getKey(), entry.getValue());
+                    }
+                } else if (item instanceof Map) {
+                    for (Map.Entry<String, Object> entry : ((Map<String, Object>)item).entrySet()) {
+                        filterSecondResponse(entry.getKey(), entry.getValue());
+                    }
+                }
             }
         }
     }
@@ -223,26 +232,71 @@ public class Controller extends com.jfinal.core.Controller {
     private void filterSecondResponse(String key, Object result) {
         for (Map.Entry<String, String[]> responses : validateSecondResponseKeyList.entrySet()) {
             if (key.equals(responses.getKey())) {
-                if (((Model)result).get(responses.getKey()) instanceof Model) {
-                    ((Model) ((Model)result).get(responses.getKey())).keep(responses.getValue());
-                } else if (((Model)result).get(responses.getKey()) instanceof List) {
-                    List list = (List) ((Model)result).get(responses.getKey());
-                    for (Object object : list) {
-                        if (object instanceof Model) {
-                            ((Model) object).keep(responses.getValue());
-                        } else if (object instanceof Map) {
-
+                if (result instanceof Model) {
+                    ((Model)result).keep(responses.getValue());
+                } else if (result instanceof List) {
+                    for (Object item : (List) result) {
+                        if (item instanceof Model) {
+                            ((Model)item).keep(responses.getValue());
+                        } else if (item instanceof Map) {
+                            Iterator<Map.Entry<String, Object>> iterator = ((Map<String, Object>)item).entrySet().iterator();
+                            while(iterator.hasNext()){
+                                Map.Entry<String, Object> entry = iterator.next();
+                                Boolean isExit = false;
+                                for (String value : responses.getValue()) {
+                                    if (entry.getKey().equals(value)) {
+                                        isExit = true;
+                                        break;
+                                    }
+                                }
+                                if (!isExit) {
+                                    iterator.remove();
+                                }
+                            }
                         }
                     }
                 }
             }
         }
+
+//        for (Map.Entry<String, String[]> responses : validateSecondResponseKeyList.entrySet()) {
+//            if (key.equals(responses.getKey())) {
+//                if (((Model) result).get(responses.getKey()) instanceof Model) {
+//                    ((Model) ((Model) result).get(responses.getKey())).keep(responses.getValue());
+//                } else if (((Model) result).get(responses.getKey()) instanceof List) {
+//                    List list = (List) ((Model) result).get(responses.getKey());
+//                    for (Object object : list) {
+//                        if (object instanceof Model) {
+//                            ((Model) object).keep(responses.getValue());
+//                        } else if (object instanceof Map) {
+//                            Iterator<Map.Entry<String, Object>> iterator = ((Map) object).entrySet().iterator();
+//                            String[] values = responses.getValue();
+//                            while (iterator.hasNext()) {
+//                                Boolean isExit = false;
+//                                Map.Entry<String, Object> entry = iterator.next();
+//                                for (String value : values) {
+//                                    if (entry.getKey().equals(value)) {
+//                                        isExit = true;
+//                                        break;
+//                                    }
+//                                }
+//                                if (!isExit) {
+//                                    iterator.remove();
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     public void renderSuccessJson(Model result) {
         if (result != null) {
             result.keep(validateResponseKeyList);
         }
+
+        filterResponses(result);
 
         Set<Map.Entry<String, Object>> sets = result._getAttrsEntrySet();
         for (Map.Entry<String, Object> entry : sets) {
