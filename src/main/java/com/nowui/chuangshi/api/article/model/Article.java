@@ -45,6 +45,9 @@ public class Article extends Model<Article> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "是否外部链接")
     public static final String ARTICLE_IS_OUTER_LINK = "article_is_outer_link";
+    
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否置顶")
+    public static final String ARTICLE_IS_TOP = "article_is_top";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -144,6 +147,14 @@ public class Article extends Model<Article> {
 
     public void setArticle_is_outer_link(Boolean article_is_outer_link) {
         set(ARTICLE_IS_OUTER_LINK, article_is_outer_link);
+    }
+    
+    public Boolean getArticle_is_top() {
+        return getBoolean(ARTICLE_IS_TOP);
+    }
+    
+    public void setArticle_is_top(Boolean article_is_top) {
+        set(ARTICLE_IS_TOP, article_is_top);
     }
 
     public String getSystem_create_user_id() {

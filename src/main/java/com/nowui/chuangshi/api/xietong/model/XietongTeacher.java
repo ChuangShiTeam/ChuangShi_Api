@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Entity
 public class XietongTeacher extends Model<XietongTeacher> {
-    
+
     @Table
     public static final String TABLE_XIETONG_TEACHER = "table_xietong_teacher";
 
@@ -19,7 +19,7 @@ public class XietongTeacher extends Model<XietongTeacher> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "老师编号", updatable = false)
     public static final String TEACHER_ID = "teacher_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String APP_ID = "app_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户编号")
@@ -27,12 +27,27 @@ public class XietongTeacher extends Model<XietongTeacher> {
 
     @Column(type = ColumnType.VARCHAR, length = 1000, comment = "班级编号")
     public static final String CLAZZ_ID = "clazz_id";
-    
+
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "组织机构编号")
     public static final String ORGANIZATION_ID = "organization_id";
 
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "老师姓名")
     public static final String TEACHER_NAME = "teacher_name";
+
+    @Column(type = ColumnType.VARCHAR, length = 10, comment = "老师工号")
+    public static final String TEACHER_NUMBER = "teacher_number";
+
+    @Column(type = ColumnType.VARCHAR, length = 200, comment = "老师分类")
+    public static final String TEACHER_CATEGORY = "teacher_category";
+
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "老师照片")
+    public static final String TEACHER_IMAGE = "teacher_image";
+
+    @Column(type = ColumnType.VARCHAR, length = 500, comment = "老师职称")
+    public static final String TEACHER_TITLE = "teacher_title";
+
+    @Column(type = ColumnType.LONGTEXT, length = 0, comment = "老师简介")
+    public static final String TEACHER_DESCRIPTION = "teacher_description";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -83,11 +98,11 @@ public class XietongTeacher extends Model<XietongTeacher> {
     public void setClazz_id(String clazz_id) {
         set(CLAZZ_ID, clazz_id);
     }
-    
+
     public String getOrganization_id() {
         return getStr(ORGANIZATION_ID);
     }
-    
+
     public void setOrganization_id(String organization_id) {
         set(ORGANIZATION_ID, organization_id);
     }
@@ -98,6 +113,46 @@ public class XietongTeacher extends Model<XietongTeacher> {
 
     public void setTeacher_name(String teacher_name) {
         set(TEACHER_NAME, teacher_name);
+    }
+
+    public String getTeacher_number() {
+        return getStr(TEACHER_NUMBER);
+    }
+
+    public void setTeacher_number(String teacher_number) {
+        set(TEACHER_NUMBER, teacher_number);
+    }
+
+    public String getTeacher_category() {
+        return getStr(TEACHER_CATEGORY);
+    }
+
+    public void setTeacher_category(String teacher_category) {
+        set(TEACHER_CATEGORY, teacher_category);
+    }
+
+    public String getTeacher_image() {
+        return getStr(TEACHER_IMAGE);
+    }
+
+    public void setTeacher_image(String teacher_image) {
+        set(TEACHER_IMAGE, teacher_image);
+    }
+
+    public String getTeacher_title() {
+        return getStr(TEACHER_TITLE);
+    }
+
+    public void setTeacher_title(String teacher_title) {
+        set(TEACHER_TITLE, teacher_title);
+    }
+
+    public String getTeacher_description() {
+        return getStr(TEACHER_DESCRIPTION);
+    }
+
+    public void setTeacher_description(String teacher_description) {
+        set(TEACHER_DESCRIPTION, teacher_description);
     }
 
     public String getSystem_create_user_id() {

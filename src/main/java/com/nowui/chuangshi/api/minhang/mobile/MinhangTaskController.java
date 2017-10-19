@@ -183,13 +183,48 @@ public class MinhangTaskController extends Controller {
         validateRequest(MinhangTask.TASK_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
         
         MinhangTask model = getModel(MinhangTask.class);
+        String request_app_id = getRequest_app_id();
+        
+        List<MinhangMemberTask> resultList = MinhangMemberTaskService.instance.taskList(model.getTask_id(), getM(), getN());
+        
+        List<MinhangPoster> posterList = MinhangPosterService.instance.appList(request_app_id);
+        
+        for (MinhangMemberTask result : resultList) {
+            
+            User user = UserService.instance.find(result.getUser_id());
+            result.put(User.USER_NAME, user.getUser_name());
+            
+            MinhangMemberPicture minhangMemberPicture = null;
+            for (MinhangPoster poster : posterList) {
+                minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskfind(result.getUser_id(), poster.getTask_id());
+                if (minhangMemberPicture != null) {
+                   break;
+                }
+            }
+            if (minhangMemberPicture == null) {
+                result.put(User.USER_AVATAR, FileService.instance.getFile_path(user.getUser_avatar()));
+            } else {
+                result.put(User.USER_AVATAR, "http://api.chuangshi.nowui.com" + FileService.instance.getFile_path(minhangMemberPicture.getPicture_file()));
+
+            }
+        }
+        validateResponse(User.USER_NAME, User.USER_AVATAR);
+        renderSuccessJson(resultList);
+    }
+    
+    @ActionKey("/mobile/minhang/task/member/picture/list")
+    public void memberPictureList() {
+        validateRequest(MinhangTask.TASK_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        
+        MinhangTask model = getModel(MinhangTask.class);
         
         List<MinhangMemberTask> resultList = MinhangMemberTaskService.instance.taskList(model.getTask_id(), getM(), getN());
         
         for (MinhangMemberTask result : resultList) {
+            MinhangMemberPicture minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskfind(result.getUser_id(), model.getTask_id());
             User user = UserService.instance.find(result.getUser_id());
             result.put(User.USER_NAME, user.getUser_name());
-            result.put(User.USER_AVATAR, FileService.instance.getFile_path(user.getUser_avatar()));
+            result.put(User.USER_AVATAR, FileService.instance.getFile_path(minhangMemberPicture.getPicture_file()));
         }
         validateResponse(User.USER_NAME, User.USER_AVATAR);
         renderSuccessJson(resultList);
