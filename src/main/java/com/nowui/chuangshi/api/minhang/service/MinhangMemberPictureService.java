@@ -51,6 +51,19 @@ public class MinhangMemberPictureService extends Service {
 
         return minhang_member_picture;
     }
+    
+    public MinhangMemberPicture userAndTaskfind(String user_id, String task_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangMemberPicture.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(MinhangMemberPicture.USER_ID, user_id);
+        cnd.andAllowEmpty(MinhangMemberPicture.TASK_ID, task_id);
+
+        List<MinhangMemberPicture> minhang_member_pictureList = minhangMemberPictureDao.primaryKeyList(cnd);
+        if (minhang_member_pictureList == null || minhang_member_pictureList.size() == 0) {
+            return null;
+        }
+        return find(minhang_member_pictureList.get(0).getMember_picture_id());
+    }
 
     public Boolean save(MinhangMemberPicture minhang_member_picture, String system_create_user_id) {
         Boolean success = minhangMemberPictureDao.save(minhang_member_picture, system_create_user_id);
