@@ -1,4 +1,4 @@
-package com.nowui.chuangshi.api.product.model;
+package com.nowui.chuangshi.api.menu.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
 import com.nowui.chuangshi.common.annotation.Entity;
@@ -10,23 +10,35 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.util.Date;
 
 @Entity
-public class ProductCategorySkuAttribute extends Model<ProductCategorySkuAttribute> {
+public class Menu extends Model<Menu> {
 
     @Table
-    public static final String TABLE_PRODUCT_CATEGORY_SKU_ATTRIBUTE = "table_product_category_sku_attribute";
+    public static final String TABLE_MENU = "table_menu";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "SKU属性编号", updatable = false)
-    public static final String PRODUCT_CATEGORY_SKU_ATTRIBUTE_ID = "product_category_sku_attribute_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "菜单编号", updatable = false)
+    public static final String MENU_ID = "menu_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "商品分类编号")
-    public static final String PRODUCT_CATEGORY_ID = "product_category_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
+    public static final String APP_ID = "app_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "SKU属性名称")
-    public static final String PRODUCT_CATEGORY_SKU_ATTRIBUTE_NAME = "product_category_sku_attribute_name";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "菜单上一级编号")
+    public static final String MENU_PARENT_ID = "menu_parent_id";
 
-    @Column(type = ColumnType.INT, length = 3, comment = "SKU属性排序")
-    public static final String PRODUCT_CATEGORY_SKU_ATTRIBUTE_SORT = "product_category_sku_attribute_sort";
+    @Column(type = ColumnType.VARCHAR, length = 30, comment = "菜单名称")
+    public static final String MENU_NAME = "menu_name";
+
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "菜单图片")
+    public static final String MENU_IMAGE = "menu_image";
+
+    @Column(type = ColumnType.VARCHAR, length = 100, comment = "菜单地址")
+    public static final String MENU_URL = "menu_url";
+
+    @Column(type = ColumnType.INT, length = 3, comment = "菜单排序")
+    public static final String MENU_SORT = "menu_sort";
+
+    @Column(type = ColumnType.VARCHAR, length = 1000, comment = "菜单路径")
+    public static final String MENU_PARENT_PATH = "menu_parent_path";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -46,38 +58,68 @@ public class ProductCategorySkuAttribute extends Model<ProductCategorySkuAttribu
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
-    public static final String PRODUCT_CATEGORY_SKU_ATTRIBUTE_ITEM_LIST = "product_category_sku_attribute_item_list";
-
-    public String getProduct_category_sku_attribute_id() {
-        return getStr(PRODUCT_CATEGORY_SKU_ATTRIBUTE_ID);
+    public String getMenu_id() {
+        return getStr(MENU_ID);
     }
 
-    public void setProduct_category_sku_attribute_id(String product_category_sku_attribute_id) {
-        set(PRODUCT_CATEGORY_SKU_ATTRIBUTE_ID, product_category_sku_attribute_id);
+    public void setMenu_id(String menu_id) {
+        set(MENU_ID, menu_id);
     }
 
-    public String getProduct_category_id() {
-        return getStr(PRODUCT_CATEGORY_ID);
+    public String getApp_id() {
+        return getStr(APP_ID);
     }
 
-    public void setProduct_category_id(String product_category_id) {
-        set(PRODUCT_CATEGORY_ID, product_category_id);
+    public void setApp_id(String app_id) {
+        set(APP_ID, app_id);
     }
 
-    public String getProduct_category_sku_attribute_name() {
-        return getStr(PRODUCT_CATEGORY_SKU_ATTRIBUTE_NAME);
+    public String getMenu_parent_id() {
+        return getStr(MENU_PARENT_ID);
     }
 
-    public void setProduct_category_sku_attribute_name(String product_category_sku_attribute_name) {
-        set(PRODUCT_CATEGORY_SKU_ATTRIBUTE_NAME, product_category_sku_attribute_name);
+    public void setMenu_parent_id(String menu_parent_id) {
+        set(MENU_PARENT_ID, menu_parent_id);
     }
 
-    public Integer getProduct_category_sku_attribute_sort() {
-        return getInt(PRODUCT_CATEGORY_SKU_ATTRIBUTE_SORT);
+    public String getMenu_name() {
+        return getStr(MENU_NAME);
     }
 
-    public void setProduct_category_sku_attribute_sort(Integer product_category_sku_attribute_sort) {
-        set(PRODUCT_CATEGORY_SKU_ATTRIBUTE_SORT, product_category_sku_attribute_sort);
+    public void setMenu_name(String menu_name) {
+        set(MENU_NAME, menu_name);
+    }
+
+    public String getMenu_image() {
+        return getStr(MENU_IMAGE);
+    }
+
+    public void setMenu_image(String menu_image) {
+        set(MENU_IMAGE, menu_image);
+    }
+
+    public String getMenu_url() {
+        return getStr(MENU_URL);
+    }
+
+    public void setMenu_url(String menu_url) {
+        set(MENU_URL, menu_url);
+    }
+
+    public Integer getMenu_sort() {
+        return getInt(MENU_SORT);
+    }
+
+    public void setMenu_sort(Integer menu_sort) {
+        set(MENU_SORT, menu_sort);
+    }
+
+    public String getMenu_parent_path() {
+        return getStr(MENU_PARENT_PATH);
+    }
+
+    public void setMenu_parent_path(String menu_parent_path) {
+        set(MENU_PARENT_PATH, menu_parent_path);
     }
 
     public String getSystem_create_user_id() {

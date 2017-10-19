@@ -1,37 +1,40 @@
-package com.nowui.chuangshi.api.certificate.mobile;
+package com.nowui.chuangshi.api.menu.system;
 
+import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
+import com.nowui.chuangshi.common.interceptor.SystemInterceptor;
 
-@ControllerKey("/mobile/certificate")
-public class CertificateController extends Controller {
+@Before(SystemInterceptor.class)
+@ControllerKey("/system/menu")
+public class MenuController extends Controller {
 
-    @ActionKey("/mobile/certificate/list")
+    @ActionKey("/system/menu/list")
     public void list() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/mobile/certificate/find")
+    @ActionKey("/system/menu/find")
     public void find() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/mobile/certificate/save")
+    @ActionKey("/system/menu/save")
     public void save() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/mobile/certificate/update")
+    @ActionKey("/system/menu/update")
     public void update() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/mobile/certificate/delete")
+    @ActionKey("/system/menu/delete")
     public void delete() {
 
         renderSuccessJson();

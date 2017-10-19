@@ -1,4 +1,4 @@
-package com.nowui.chuangshi.api.product.model;
+package com.nowui.chuangshi.api.admin.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
 import com.nowui.chuangshi.common.annotation.Entity;
@@ -10,23 +10,20 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.util.Date;
 
 @Entity
-public class ProductCategorySkuAttribute extends Model<ProductCategorySkuAttribute> {
+public class Admin extends Model<Admin> {
 
     @Table
-    public static final String TABLE_PRODUCT_CATEGORY_SKU_ATTRIBUTE = "table_product_category_sku_attribute";
+    public static final String TABLE_ADMIN = "table_admin";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "SKU属性编号", updatable = false)
-    public static final String PRODUCT_CATEGORY_SKU_ATTRIBUTE_ID = "product_category_sku_attribute_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "管理员编号", updatable = false)
+    public static final String ADMIN_ID = "admin_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "商品分类编号")
-    public static final String PRODUCT_CATEGORY_ID = "product_category_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
+    public static final String APP_ID = "app_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "SKU属性名称")
-    public static final String PRODUCT_CATEGORY_SKU_ATTRIBUTE_NAME = "product_category_sku_attribute_name";
-
-    @Column(type = ColumnType.INT, length = 3, comment = "SKU属性排序")
-    public static final String PRODUCT_CATEGORY_SKU_ATTRIBUTE_SORT = "product_category_sku_attribute_sort";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户编号")
+    public static final String USER_ID = "user_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -46,38 +43,28 @@ public class ProductCategorySkuAttribute extends Model<ProductCategorySkuAttribu
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
-    public static final String PRODUCT_CATEGORY_SKU_ATTRIBUTE_ITEM_LIST = "product_category_sku_attribute_item_list";
-
-    public String getProduct_category_sku_attribute_id() {
-        return getStr(PRODUCT_CATEGORY_SKU_ATTRIBUTE_ID);
+    public String getAdmin_id() {
+        return getStr(ADMIN_ID);
     }
 
-    public void setProduct_category_sku_attribute_id(String product_category_sku_attribute_id) {
-        set(PRODUCT_CATEGORY_SKU_ATTRIBUTE_ID, product_category_sku_attribute_id);
+    public void setAdmin_id(String admin_id) {
+        set(ADMIN_ID, admin_id);
     }
 
-    public String getProduct_category_id() {
-        return getStr(PRODUCT_CATEGORY_ID);
+    public String getApp_id() {
+        return getStr(APP_ID);
     }
 
-    public void setProduct_category_id(String product_category_id) {
-        set(PRODUCT_CATEGORY_ID, product_category_id);
+    public void setApp_id(String app_id) {
+        set(APP_ID, app_id);
     }
 
-    public String getProduct_category_sku_attribute_name() {
-        return getStr(PRODUCT_CATEGORY_SKU_ATTRIBUTE_NAME);
+    public String getUser_id() {
+        return getStr(USER_ID);
     }
 
-    public void setProduct_category_sku_attribute_name(String product_category_sku_attribute_name) {
-        set(PRODUCT_CATEGORY_SKU_ATTRIBUTE_NAME, product_category_sku_attribute_name);
-    }
-
-    public Integer getProduct_category_sku_attribute_sort() {
-        return getInt(PRODUCT_CATEGORY_SKU_ATTRIBUTE_SORT);
-    }
-
-    public void setProduct_category_sku_attribute_sort(Integer product_category_sku_attribute_sort) {
-        set(PRODUCT_CATEGORY_SKU_ATTRIBUTE_SORT, product_category_sku_attribute_sort);
+    public void setUser_id(String user_id) {
+        set(USER_ID, user_id);
     }
 
     public String getSystem_create_user_id() {

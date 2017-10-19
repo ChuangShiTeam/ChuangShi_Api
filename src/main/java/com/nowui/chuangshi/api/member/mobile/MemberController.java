@@ -1,7 +1,6 @@
 package com.nowui.chuangshi.api.member.mobile;
 
 import com.jfinal.core.ActionKey;
-import com.jfinal.weixin.sdk.api.AccessTokenApi;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.jfinal.weixin.sdk.api.ApiResult;
 import com.jfinal.weixin.sdk.api.QrcodeApi;

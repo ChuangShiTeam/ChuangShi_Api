@@ -1,37 +1,37 @@
-package com.nowui.chuangshi.api.certificate.mobile;
+package com.nowui.chuangshi.api.menu.mobile;
 
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 
-@ControllerKey("/mobile/certificate")
-public class CertificateController extends Controller {
+@ControllerKey("/mobile/menu")
+public class MenuController extends Controller {
 
-    @ActionKey("/mobile/certificate/list")
+    @ActionKey("/mobile/menu/list")
     public void list() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/mobile/certificate/find")
+    @ActionKey("/mobile/menu/find")
     public void find() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/mobile/certificate/save")
+    @ActionKey("/mobile/menu/save")
     public void save() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/mobile/certificate/update")
+    @ActionKey("/mobile/menu/update")
     public void update() {
 
         renderSuccessJson();
     }
 
-    @ActionKey("/mobile/certificate/delete")
+    @ActionKey("/mobile/menu/delete")
     public void delete() {
 
         renderSuccessJson();
