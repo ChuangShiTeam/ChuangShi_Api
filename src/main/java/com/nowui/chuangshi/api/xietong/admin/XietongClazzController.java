@@ -6,7 +6,6 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.xietong.model.XietongClazz;
 import com.nowui.chuangshi.api.xietong.model.XietongOrganization;
-import com.nowui.chuangshi.api.xietong.model.XietongTeacher;
 import com.nowui.chuangshi.api.xietong.service.XietongClazzService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
@@ -53,7 +52,7 @@ public class XietongClazzController extends Controller {
 
         XietongClazz result = XietongClazzService.instance.find(model.getClazz_id());
 
-        validateResponse(XietongClazz.CLAZZ_NAME, XietongTeacher.ORGANIZATION_ID, XietongClazz.CLAZZ_COURSE_APPLY_LIMIT, XietongClazz.CLAZZ_COURSE_APPLY_START_TIME, XietongClazz.CLAZZ_COURSE_APPLY_END_TIME, XietongClazz.CLAZZ_SORT, XietongClazz.SYSTEM_VERSION);
+        validateResponse(XietongClazz.CLAZZ_NAME, XietongClazz.ORGANIZATION_ID, XietongClazz.CLAZZ_COURSE_APPLY_LIMIT, XietongClazz.CLAZZ_COURSE_APPLY_START_TIME, XietongClazz.CLAZZ_COURSE_APPLY_END_TIME, XietongClazz.CLAZZ_SORT, XietongClazz.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
