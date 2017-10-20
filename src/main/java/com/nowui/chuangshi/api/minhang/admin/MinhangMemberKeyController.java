@@ -69,16 +69,4 @@ public class MinhangMemberKeyController extends Controller {
         renderSuccessJson(result);
     }
 
-    @ActionKey("/admin/minhang/member/key/delete")
-    public void delete() {
-        validateRequest(MinhangMemberKey.MEMBER_KEY_ID, MinhangMemberKey.SYSTEM_VERSION);
-
-        MinhangMemberKey model = getModel(MinhangMemberKey.class);
-        String request_user_id = getRequest_user_id();
-
-        Boolean result = MinhangMemberKeyService.instance.delete(model.getMember_key_id(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
-    }
-
 }

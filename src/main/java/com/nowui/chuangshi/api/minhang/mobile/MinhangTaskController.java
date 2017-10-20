@@ -98,7 +98,8 @@ public class MinhangTaskController extends Controller {
         
         MinhangTask task = MinhangTaskService.instance.find(model.getTask_id());
         
-        MinhangMemberKey minhangMemberKey = MinhangMemberKeyService.instance.userAndKeyFind(request_user_id, task.getKey_id());
+        //TODO
+        MinhangMemberKey minhangMemberKey = MinhangMemberKeyService.instance.userAndKeyAndHistoryFind(request_user_id, task.getKey_id(), "");
         
         if (minhangMemberKey.getKey_is_activated()) {
             throw new RuntimeException("钥匙已激活，无需再完成任务");

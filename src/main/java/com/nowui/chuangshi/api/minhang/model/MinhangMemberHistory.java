@@ -10,20 +10,17 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.util.Date;
 
 @Entity
-public class MinhangMemberKey extends Model<MinhangMemberKey> {
+public class MinhangMemberHistory extends Model<MinhangMemberHistory> {
 
     @Table
-    public static final String TABLE_MINHANG_MEMBER_KEY = "table_minhang_member_key";
+    public static final String TABLE_MINHANG_MEMBER_HISTORY = "table_minhang_member_history";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
-    public static final String MEMBER_KEY_ID = "member_key_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员纪念册编号", updatable = false)
+    public static final String MEMBER_HISTORY_ID = "member_history_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
-    
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员纪念册编号", updatable = false)
-    public static final String MEMBER_HISTORY_ID = "member_history_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员编号")
     public static final String MEMBER_ID = "member_id";
@@ -31,17 +28,11 @@ public class MinhangMemberKey extends Model<MinhangMemberKey> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户编号")
     public static final String USER_ID = "user_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "钥匙编号")
-    public static final String KEY_ID = "key_id";
+    @Column(type = ColumnType.VARCHAR, length = 50, comment = "纪念册名称")
+    public static final String MEMBER_HISTORY_NAME = "member_history_name";
 
-    @Column(type = ColumnType.INT, length = 5, comment = "任务完成数量")
-    public static final String TASK_COMPLETE_QUANTITY = "task_complete_quantity";
-
-    @Column(type = ColumnType.INT, length = 5, comment = "任务数量")
-    public static final String TASK_QUANTITY = "task_quantity";
-
-    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否激活")
-    public static final String KEY_IS_ACTIVATED = "key_is_activated";
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否保存纪念册")
+    public static final String IS_SAVE_HISTORY = "is_save_history";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -61,12 +52,12 @@ public class MinhangMemberKey extends Model<MinhangMemberKey> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
-    public String getMember_key_id() {
-        return getStr(MEMBER_KEY_ID);
+    public String getMember_history_id() {
+        return getStr(MEMBER_HISTORY_ID);
     }
 
-    public void setMember_key_id(String member_key_id) {
-        set(MEMBER_KEY_ID, member_key_id);
+    public void setMember_history_id(String member_history_id) {
+        set(MEMBER_HISTORY_ID, member_history_id);
     }
 
     public String getApp_id() {
@@ -75,14 +66,6 @@ public class MinhangMemberKey extends Model<MinhangMemberKey> {
 
     public void setApp_id(String app_id) {
         set(APP_ID, app_id);
-    }
-    
-    public String getMember_history_id() {
-        return getStr(MEMBER_HISTORY_ID);
-    }
-
-    public void setMember_history_id(String member_history_id) {
-        set(MEMBER_HISTORY_ID, member_history_id);
     }
 
     public String getMember_id() {
@@ -101,36 +84,20 @@ public class MinhangMemberKey extends Model<MinhangMemberKey> {
         set(USER_ID, user_id);
     }
 
-    public String getKey_id() {
-        return getStr(KEY_ID);
+    public String getMember_history_name() {
+        return getStr(MEMBER_HISTORY_NAME);
     }
 
-    public void setKey_id(String key_id) {
-        set(KEY_ID, key_id);
+    public void setMember_history_name(String member_history_name) {
+        set(MEMBER_HISTORY_NAME, member_history_name);
     }
 
-    public Integer getTask_complete_quantity() {
-        return getInt(TASK_COMPLETE_QUANTITY);
+    public Boolean getIs_save_history() {
+        return getBoolean(IS_SAVE_HISTORY);
     }
 
-    public void setTask_complete_quantity(Integer task_complete_quantity) {
-        set(TASK_COMPLETE_QUANTITY, task_complete_quantity);
-    }
-
-    public Integer getTask_quantity() {
-        return getInt(TASK_QUANTITY);
-    }
-
-    public void setTask_quantity(Integer task_quantity) {
-        set(TASK_QUANTITY, task_quantity);
-    }
-
-    public Boolean getKey_is_activated() {
-        return getBoolean(KEY_IS_ACTIVATED);
-    }
-
-    public void setKey_is_activated(Boolean key_is_activated) {
-        set(KEY_IS_ACTIVATED, key_is_activated);
+    public void setIs_save_history(Boolean is_save_history) {
+        set(IS_SAVE_HISTORY, is_save_history);
     }
 
     public String getSystem_create_user_id() {
