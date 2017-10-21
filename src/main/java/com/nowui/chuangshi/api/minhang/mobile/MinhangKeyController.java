@@ -69,7 +69,7 @@ public class MinhangKeyController extends Controller {
         result.put("member_key", member_key);
         
         if (!member_key.getKey_is_activated()) {
-        	List<MinhangMemberTask> member_task_list = MinhangMemberTaskService.instance.userAndKeyList(request_user_id, minhangKey.getKey_id());
+        	List<MinhangMemberTask> member_task_list = MinhangMemberTaskService.instance.userAndKeyAndHistoryList(request_user_id, minhangKey.getKey_id(), member_history.getMember_history_id());
         	if (member_task_list != null && member_task_list.size() > 0) {
         	    for (MinhangMemberTask minhangMemberTask : member_task_list) {
                     MinhangTask task = MinhangTaskService.instance.find(minhangMemberTask.getTask_id());
@@ -81,24 +81,6 @@ public class MinhangKeyController extends Controller {
         	}
         }
         renderSuccessJson(result);
-    }
-
-    @ActionKey("/mobile/minhang/key/save")
-    public void save() {
-
-        renderSuccessJson();
-    }
-
-    @ActionKey("/mobile/minhang/key/update")
-    public void update() {
-
-        renderSuccessJson();
-    }
-
-    @ActionKey("/mobile/minhang/key/delete")
-    public void delete() {
-
-        renderSuccessJson();
     }
 
 }

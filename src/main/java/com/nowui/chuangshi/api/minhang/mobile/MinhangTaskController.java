@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.service.FileService;
+import com.nowui.chuangshi.api.minhang.model.MinhangMemberHistory;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberPicture;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberQuestion;
@@ -20,6 +21,7 @@ import com.nowui.chuangshi.api.minhang.model.MinhangQuestion;
 import com.nowui.chuangshi.api.minhang.model.MinhangTask;
 import com.nowui.chuangshi.api.minhang.model.MinhangTimelineEvent;
 import com.nowui.chuangshi.api.minhang.model.MinhangVideoTask;
+import com.nowui.chuangshi.api.minhang.service.MinhangMemberHistoryService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberKeyService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberPictureService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberQuestionService;
@@ -61,8 +63,15 @@ public class MinhangTaskController extends Controller {
         MinhangTask minhangTask = MinhangTaskService.instance.find(model.getTask_id());
         
         validateResponse(MinhangTask.KEY_ID, MinhangTask.TASK_NAME, MinhangTask.SCREEN_ID, MinhangTask.TASK_TYPE, MinhangTask.TASK_QRCODE_URL, MinhangTask.TASK_SORT, MinhangTask.TASK_DESCRIPTION, MinhangTask.SYSTEM_VERSION);
+      
+        //查询用户最近的寻钥之旅记录
+        MinhangMemberHistory member_history = MinhangMemberHistoryService.instance.userLatestFind(request_user_id);
 
-        MinhangMemberTask minhangMemberTask = MinhangMemberTaskService.instance.userAndTaskFind(request_user_id, model.getTask_id());
+        if (member_history == null) {
+            throw new RuntimeException("还没有开启寻钥之旅");
+        }
+        
+        MinhangMemberTask minhangMemberTask = MinhangMemberTaskService.instance.userAndTaskAndHistoryFind(request_user_id, model.getTask_id(), member_history.getMember_history_id());
         
         Map<String, Object> result = new HashMap<String, Object>(); 
         
@@ -90,7 +99,14 @@ public class MinhangTaskController extends Controller {
         MinhangMemberTask minhang_member_task = getModel(MinhangMemberTask.class);
         String request_user_id = getRequest_user_id();
         
-        MinhangMemberTask minhangMemberTask = MinhangMemberTaskService.instance.userAndTaskFind(request_user_id, model.getTask_id());
+        //查询用户最近的寻钥之旅记录
+        MinhangMemberHistory member_history = MinhangMemberHistoryService.instance.userLatestFind(request_user_id);
+
+        if (member_history == null) {
+            throw new RuntimeException("还没有开启寻钥之旅");
+        }
+        
+        MinhangMemberTask minhangMemberTask = MinhangMemberTaskService.instance.userAndTaskAndHistoryFind(request_user_id, model.getTask_id(), member_history.getMember_history_id());
         
         if (minhangMemberTask != null) {
             throw new RuntimeException("任务已经完成");
@@ -98,7 +114,6 @@ public class MinhangTaskController extends Controller {
         
         MinhangTask task = MinhangTaskService.instance.find(model.getTask_id());
         
-        //TODO
         MinhangMemberKey minhangMemberKey = MinhangMemberKeyService.instance.userAndKeyAndHistoryFind(request_user_id, task.getKey_id(), "");
         
         if (minhangMemberKey.getKey_is_activated()) {
@@ -111,6 +126,7 @@ public class MinhangTaskController extends Controller {
         //保存会员完成记录
         minhang_member_task.setApp_id(task.getApp_id());
         minhang_member_task.setMember_task_id(Util.getRandomUUID());
+        minhang_member_task.setMember_history_id(minhangMemberKey.getMember_history_id());
         minhang_member_task.setTask_id(task.getTask_id());
         minhang_member_task.setKey_id(task.getKey_id());
         minhang_member_task.setUser_id(user.getUser_id());
@@ -142,6 +158,7 @@ public class MinhangTaskController extends Controller {
                     }
                     minhangMemberQuestion.setMember_question_id(Util.getRandomUUID());
                     minhangMemberQuestion.setApp_id(task.getApp_id());
+                    minhangMemberQuestion.setMember_history_id(member_history.getMember_history_id());
                     minhangMemberQuestion.setMember_id(user.getObject_id());
                     minhangMemberQuestion.setTask_id(task.getTask_id());
                     minhangMemberQuestion.setUser_id(user.getUser_id());
@@ -156,6 +173,7 @@ public class MinhangTaskController extends Controller {
                 }
                 minhangMemberPicture.setMember_picture_id(Util.getRandomUUID());
                 minhangMemberPicture.setApp_id(task.getApp_id());
+                minhangMemberPicture.setMember_history_id(member_history.getMember_history_id());
                 minhangMemberPicture.setMember_id(user.getObject_id());
                 minhangMemberPicture.setUser_id(user.getUser_id());
                 minhangMemberPicture.setTask_id(task.getTask_id());
@@ -169,6 +187,7 @@ public class MinhangTaskController extends Controller {
                 }
                 minhangMemberRecord.setMember_record_id(Util.getRandomUUID());
                 minhangMemberRecord.setApp_id(task.getApp_id());
+                minhangMemberRecord.setMember_history_id(member_history.getMember_history_id());
                 minhangMemberRecord.setMember_id(user.getObject_id());
                 minhangMemberRecord.setUser_id(user.getUser_id());
                 minhangMemberRecord.setTask_id(task.getTask_id());
@@ -238,6 +257,13 @@ public class MinhangTaskController extends Controller {
         String request_user_id = getRequest_user_id();
         MinhangTask model = getModel(MinhangTask.class);
         
+        //查询用户最近的寻钥之旅记录
+        MinhangMemberHistory member_history = MinhangMemberHistoryService.instance.userLatestFind(request_user_id);
+
+        if (member_history == null) {
+            throw new RuntimeException("还没有开启寻钥之旅");
+        }
+        
         MinhangTask minhangTask = MinhangTaskService.instance.find(model.getTask_id());
         
         String result = null;
@@ -274,7 +300,7 @@ public class MinhangTaskController extends Controller {
                     result = "请扫描党课学习视频问题二维码";
                 }
             } else {
-                MinhangMemberTask minhangMemberTask = MinhangMemberTaskService.instance.userAndTaskFind(request_user_id, model.getTask_id());
+                MinhangMemberTask minhangMemberTask = MinhangMemberTaskService.instance.userAndTaskAndHistoryFind(request_user_id, model.getTask_id(), member_history.getMember_history_id());
                 if (minhangMemberTask != null) {
                     result = "您已完成该任务，请扫描其他任务二维码";
                 }
