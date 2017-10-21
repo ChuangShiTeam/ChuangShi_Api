@@ -1,5 +1,7 @@
 package com.nowui.chuangshi.api.minhang.mobile;
 
+import java.util.List;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberHistory;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberTask;
@@ -16,8 +18,14 @@ public class MinhangMemberHistoryController extends Controller {
      */
     @ActionKey("/mobile/minhang/member/history/list")
     public void list() {
-
-        renderSuccessJson();
+        
+        String request_user_id = getRequest_user_id();
+        
+        List<MinhangMemberHistory> minhangMemberHistoryList = MinhangMemberHistoryService.instance.userAndSaveList(request_user_id);
+        
+        validateResponse(MinhangMemberHistory.MEMBER_HISTORY_ID, MinhangMemberHistory.MEMBER_HISTORY_NAME);
+        
+        renderSuccessJson(minhangMemberHistoryList);
     }
 
     /**
@@ -25,7 +33,17 @@ public class MinhangMemberHistoryController extends Controller {
      */
     @ActionKey("/mobile/minhang/member/history/find")
     public void find() {
-
+        validateRequest(MinhangMemberHistory.MEMBER_HISTORY_ID);
+        
+        MinhangMemberHistory model = getModel(MinhangMemberHistory.class);
+        String request_user_id = getRequest_user_id();
+        
+        MinhangMemberHistory bean = MinhangMemberHistoryService.instance.find(model.getMember_history_id());
+        if (bean == null) {
+            throw new RuntimeException("纪念册不存在");
+        }
+        //查询纪念册对应的任务记录
+        
         renderSuccessJson();
     }
 
@@ -34,8 +52,22 @@ public class MinhangMemberHistoryController extends Controller {
      */
     @ActionKey("/mobile/minhang/member/history/save")
     public void save() {
-
-        renderSuccessJson();
+        validateRequest(MinhangMemberHistory.MEMBER_HISTORY_ID);
+        
+        MinhangMemberHistory model = getModel(MinhangMemberHistory.class);
+        String request_user_id = getRequest_user_id();
+        
+        MinhangMemberHistory bean = MinhangMemberHistoryService.instance.find(model.getMember_history_id());
+        
+        if (bean.getIs_save_history()) {
+            throw new RuntimeException("纪念册已生成");
+        }
+        
+        bean.setIs_save_history(true);
+        
+        Boolean result = MinhangMemberHistoryService.instance.update(bean, bean.getMember_history_id(), request_user_id, bean.getSystem_version());
+        
+        renderSuccessJson(result);
     }
 
     /**
@@ -46,10 +78,18 @@ public class MinhangMemberHistoryController extends Controller {
         validateRequest(MinhangMemberHistory.MEMBER_HISTORY_ID, MinhangMemberHistory.MEMBER_HISTORY_NAME);
         
         MinhangMemberHistory model = getModel(MinhangMemberHistory.class);
+        String request_user_id = getRequest_user_id();
         
         MinhangMemberHistory bean = MinhangMemberHistoryService.instance.find(model.getMember_history_id());
         
-        renderSuccessJson();
+        if (bean == null) {
+            throw new RuntimeException("纪念册不存在");
+        }
+        bean.setMember_history_name(model.getMember_history_name());
+        
+        Boolean result = MinhangMemberHistoryService.instance.update(bean, bean.getMember_history_id(), request_user_id, bean.getSystem_version());
+       
+        renderSuccessJson(result);
     }
 
     /**
@@ -57,8 +97,25 @@ public class MinhangMemberHistoryController extends Controller {
      */
     @ActionKey("/mobile/minhang/member/history/restart")
     public void restart() {
+        
+        String request_user_id = getRequest_user_id();
+        String request_app_id = getRequest_app_id();
+        
+        //判断用户上一次寻钥之旅是否生成纪念册
+        MinhangMemberHistory member_history = MinhangMemberHistoryService.instance.userLatestFind(request_user_id);
 
-        renderSuccessJson();
+        if (member_history == null) {
+            throw new RuntimeException("还没有开启寻钥之旅");
+        }
+        
+        if (!member_history.getIs_save_history()) {
+            throw new RuntimeException("请先保存纪念册");
+        }
+        
+        Boolean result = MinhangMemberHistoryService.instance.restart(request_user_id, request_app_id);
+        
+
+        renderSuccessJson(result);
     }
     
 }

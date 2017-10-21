@@ -216,7 +216,7 @@ public class MinhangTaskController extends Controller {
             
             MinhangMemberPicture minhangMemberPicture = null;
             for (MinhangPoster poster : posterList) {
-                minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskfind(result.getUser_id(), poster.getTask_id());
+                minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskFind(result.getUser_id(), poster.getTask_id());
                 if (minhangMemberPicture != null) {
                    break;
                 }
@@ -241,7 +241,7 @@ public class MinhangTaskController extends Controller {
         List<MinhangMemberTask> resultList = MinhangMemberTaskService.instance.taskList(model.getTask_id(), getM(), getN());
         
         for (MinhangMemberTask result : resultList) {
-            MinhangMemberPicture minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskfind(result.getUser_id(), model.getTask_id());
+            MinhangMemberPicture minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskFind(result.getUser_id(), model.getTask_id());
             User user = UserService.instance.find(result.getUser_id());
             result.put(User.USER_NAME, user.getUser_name());
             result.put(User.USER_AVATAR, FileService.instance.getFile_path(minhangMemberPicture.getPicture_file()));
