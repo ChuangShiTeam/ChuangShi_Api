@@ -14,7 +14,7 @@ public class MinhangMemberKeyService extends Service {
 
     public static final MinhangMemberKeyService instance = new MinhangMemberKeyService();
     private final String MINHANG_MEMBER_KEY_ITEM_CACHE = "minhang_member_key_item_cache";
-    private final String MINHANG_MEMBER_KEY_ID_USER_HISTORY_LIST_CACHE = "minhang_member_key_id_user_history_list_cache";
+    private final String MINHANG_MEMBER_KEY_ID_ITINERARY_LIST_CACHE = "minhang_member_key_id_itinerary_list_cache";
     private final MinhangMemberKeyDao minhangMemberKeyDao = new MinhangMemberKeyDao();
 
     public Integer adminCount(String app_id, String member_id, String key_id) {
@@ -43,8 +43,8 @@ public class MinhangMemberKeyService extends Service {
         return minhang_member_keyList;
     }
     
-    public MinhangMemberKey userAndKeyAndHistoryFind(String user_id, String key_id, String member_history_id) {
-        List<MinhangMemberKey> minhang_member_keyList = userAndHistoryList(user_id, member_history_id);
+    public MinhangMemberKey keyAndItineraryFind(String key_id, String member_itinerary_id) {
+        List<MinhangMemberKey> minhang_member_keyList = itineraryList(member_itinerary_id);
         
         for (MinhangMemberKey minhangMemberKey : minhang_member_keyList) {
             if (key_id.equals(minhangMemberKey.getKey_id())) {
@@ -54,14 +54,13 @@ public class MinhangMemberKeyService extends Service {
         return null;
     }
     
-    public List<MinhangMemberKey> userAndHistoryList(String user_id, String member_history_id) {
-        List<String> minhang_member_key_idList = CacheUtil.get(MINHANG_MEMBER_KEY_ID_USER_HISTORY_LIST_CACHE, user_id + member_history_id);
+    public List<MinhangMemberKey> itineraryList(String member_itinerary_id) {
+        List<String> minhang_member_key_idList = CacheUtil.get(MINHANG_MEMBER_KEY_ID_ITINERARY_LIST_CACHE, member_itinerary_id);
             
         if (minhang_member_key_idList == null) {
             Cnd cnd = new Cnd();
             cnd.where(MinhangMemberKey.SYSTEM_STATUS, true);
-            cnd.andAllowEmpty(MinhangMemberKey.USER_ID, user_id);
-            cnd.andAllowEmpty(MinhangMemberKey.MEMBER_HISTORY_ID, member_history_id);
+            cnd.andAllowEmpty(MinhangMemberKey.MEMBER_ITINERARY_ID, member_itinerary_id);
 
             List<MinhangMemberKey> minhang_member_keyList = minhangMemberKeyDao.primaryKeyList(cnd);
             

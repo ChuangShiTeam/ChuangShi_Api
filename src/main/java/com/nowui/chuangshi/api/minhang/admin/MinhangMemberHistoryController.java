@@ -26,7 +26,7 @@ public class MinhangMemberHistoryController extends Controller {
         Integer resultCount = MinhangMemberHistoryService.instance.adminCount(request_app_id, model.getUser_id(), model.getMember_history_name());
         List<MinhangMemberHistory> resultList = MinhangMemberHistoryService.instance.adminList(request_app_id, model.getUser_id(), model.getMember_history_name(), getM(), getN());
 
-        validateResponse(MinhangMemberHistory.MEMBER_HISTORY_ID, MinhangMemberHistory.USER_ID, MinhangMemberHistory.MEMBER_HISTORY_NAME, MinhangMemberHistory.IS_SAVE_HISTORY, MinhangMemberHistory.SYSTEM_VERSION);
+        validateResponse(MinhangMemberHistory.MEMBER_HISTORY_ID, MinhangMemberHistory.USER_ID, MinhangMemberHistory.MEMBER_HISTORY_NAME, MinhangMemberHistory.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -39,14 +39,14 @@ public class MinhangMemberHistoryController extends Controller {
 
         MinhangMemberHistory result = MinhangMemberHistoryService.instance.find(model.getMember_history_id());
 
-        validateResponse(MinhangMemberHistory.MEMBER_ID, MinhangMemberHistory.USER_ID, MinhangMemberHistory.MEMBER_HISTORY_NAME, MinhangMemberHistory.IS_SAVE_HISTORY, MinhangMemberHistory.SYSTEM_VERSION);
+        validateResponse(MinhangMemberHistory.MEMBER_ID, MinhangMemberHistory.USER_ID, MinhangMemberHistory.MEMBER_HISTORY_NAME, MinhangMemberHistory.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
 
     @ActionKey("/admin/minhang/member/history/save")
     public void save() {
-        validateRequest(MinhangMemberHistory.MEMBER_ID, MinhangMemberHistory.USER_ID, MinhangMemberHistory.MEMBER_HISTORY_NAME, MinhangMemberHistory.IS_SAVE_HISTORY);
+        validateRequest(MinhangMemberHistory.MEMBER_ID, MinhangMemberHistory.USER_ID, MinhangMemberHistory.MEMBER_HISTORY_NAME);
 
         MinhangMemberHistory model = getModel(MinhangMemberHistory.class);
         model.setMember_history_id(Util.getRandomUUID());
@@ -59,7 +59,7 @@ public class MinhangMemberHistoryController extends Controller {
 
     @ActionKey("/admin/minhang/member/history/update")
     public void update() {
-        validateRequest(MinhangMemberHistory.MEMBER_HISTORY_ID, MinhangMemberHistory.MEMBER_ID, MinhangMemberHistory.USER_ID, MinhangMemberHistory.MEMBER_HISTORY_NAME, MinhangMemberHistory.IS_SAVE_HISTORY, MinhangMemberHistory.SYSTEM_VERSION);
+        validateRequest(MinhangMemberHistory.MEMBER_HISTORY_ID, MinhangMemberHistory.MEMBER_ID, MinhangMemberHistory.USER_ID, MinhangMemberHistory.MEMBER_HISTORY_NAME, MinhangMemberHistory.SYSTEM_VERSION);
 
         MinhangMemberHistory model = getModel(MinhangMemberHistory.class);
         String request_user_id = getRequest_user_id();

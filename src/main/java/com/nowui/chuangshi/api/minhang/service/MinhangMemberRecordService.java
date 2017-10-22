@@ -1,12 +1,12 @@
 package com.nowui.chuangshi.api.minhang.service;
 
+import java.util.List;
+
 import com.nowui.chuangshi.api.minhang.dao.MinhangMemberRecordDao;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberRecord;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
-
-import java.util.List;
 
 public class MinhangMemberRecordService extends Service {
 
@@ -50,6 +50,18 @@ public class MinhangMemberRecordService extends Service {
         }
 
         return minhang_member_record;
+    }
+    
+    public List<MinhangMemberRecord> itineraryList(String member_itinerary_id) {
+    	Cnd cnd = new Cnd();
+        cnd.where(MinhangMemberRecord.SYSTEM_STATUS, true);
+        cnd.and(MinhangMemberRecord.MEMBER_HISTORY_ID, member_itinerary_id);
+
+        List<MinhangMemberRecord> minhang_member_recordList = minhangMemberRecordDao.primaryKeyList(cnd);
+        for (MinhangMemberRecord minhang_member_record : minhang_member_recordList) {
+            minhang_member_record.put(find(minhang_member_record.getMember_record_id()));
+        }
+        return minhang_member_recordList;
     }
 
     public Boolean save(MinhangMemberRecord minhang_member_record, String system_create_user_id) {

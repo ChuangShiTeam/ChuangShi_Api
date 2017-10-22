@@ -51,6 +51,19 @@ public class MinhangMemberQuestionService extends Service {
 
         return minhang_member_question;
     }
+    
+    public List<MinhangMemberQuestion> itineraryList(String member_itinerary_id) {
+    	Cnd cnd = new Cnd();
+        cnd.where(MinhangMemberQuestion.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(MinhangMemberQuestion.MEMBER_ITINERARY_ID, member_itinerary_id);
+
+        List<MinhangMemberQuestion> minhang_member_questionList = minhangMemberQuestionDao.primaryKeyList(cnd);
+        
+        for (MinhangMemberQuestion minhang_member_question : minhang_member_questionList) {
+            minhang_member_question.put(find(minhang_member_question.getMember_question_id()));
+        }
+        return minhang_member_questionList;
+    }
 
     public Boolean save(MinhangMemberQuestion minhang_member_question, String system_create_user_id) {
         Boolean success = minhangMemberQuestionDao.save(minhang_member_question, system_create_user_id);

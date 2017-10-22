@@ -24,6 +24,9 @@ public class MinhangMemberTask extends Model<MinhangMemberTask> {
     
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员纪念册编号", updatable = false)
     public static final String MEMBER_HISTORY_ID = "member_history_id";
+    
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员寻钥之旅编号")
+    public static final String MEMBER_ITINERARY_ID = "member_itinerary_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "钥匙编号")
     public static final String KEY_ID = "key_id";
@@ -64,6 +67,14 @@ public class MinhangMemberTask extends Model<MinhangMemberTask> {
 
     public void setMember_task_id(String member_task_id) {
         set(MEMBER_TASK_ID, member_task_id);
+    }
+    
+    public String getMember_itinerary_id() {
+    	return getStr(MEMBER_ITINERARY_ID);
+    }
+    
+    public void setMember_itinerary_id(String member_itinerary_id) {
+    	set(MEMBER_ITINERARY_ID, member_itinerary_id);
     }
 
     public String getApp_id() {

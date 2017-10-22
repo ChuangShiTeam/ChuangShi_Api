@@ -24,7 +24,10 @@ public class MinhangMemberQuestion extends Model<MinhangMemberQuestion> {
     
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员纪念册编号", updatable = false)
     public static final String MEMBER_HISTORY_ID = "member_history_id";
-
+    
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员寻钥之旅编号")
+    public static final String MEMBER_ITINERARY_ID = "member_itinerary_id";
+    
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员编号")
     public static final String MEMBER_ID = "member_id";
 
@@ -80,6 +83,14 @@ public class MinhangMemberQuestion extends Model<MinhangMemberQuestion> {
 
     public void setMember_history_id(String member_history_id) {
         set(MEMBER_HISTORY_ID, member_history_id);
+    }
+    
+    public String getMember_itinerary_id() {
+    	return getStr(MEMBER_ITINERARY_ID);
+    }
+    
+    public void setMember_itinerary_id(String member_itinerary_id) {
+    	set(MEMBER_ITINERARY_ID, member_itinerary_id);
     }
 
     public String getMember_id() {

@@ -10,14 +10,14 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.util.Date;
 
 @Entity
-public class MinhangMemberHistory extends Model<MinhangMemberHistory> {
+public class MinhangMemberItinerary extends Model<MinhangMemberItinerary> {
 
     @Table
-    public static final String TABLE_MINHANG_MEMBER_HISTORY = "table_minhang_member_history";
+    public static final String TABLE_MINHANG_MEMBER_ITINERARY = "table_minhang_member_itinerary";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员纪念册编号", updatable = false)
-    public static final String MEMBER_HISTORY_ID = "member_history_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员寻钥之旅编号", updatable = false)
+    public static final String MEMBER_ITINERARY_ID = "member_itinerary_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
@@ -27,12 +27,9 @@ public class MinhangMemberHistory extends Model<MinhangMemberHistory> {
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户编号")
     public static final String USER_ID = "user_id";
-    
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员寻钥之旅编号")
-    public static final String MEMBER_ITINERARY_ID = "member_itinerary_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 50, comment = "纪念册名称")
-    public static final String MEMBER_HISTORY_NAME = "member_history_name";
+    @Column(type = ColumnType.TINYINT, length = 1, comment = "是否完成")
+    public static final String ITINERARY_IS_COMPLETE = "itinerary_is_complete";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -52,12 +49,12 @@ public class MinhangMemberHistory extends Model<MinhangMemberHistory> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
-    public String getMember_history_id() {
-        return getStr(MEMBER_HISTORY_ID);
+    public String getMember_itinerary_id() {
+        return getStr(MEMBER_ITINERARY_ID);
     }
 
-    public void setMember_history_id(String member_history_id) {
-        set(MEMBER_HISTORY_ID, member_history_id);
+    public void setMember_itinerary_id(String member_itinerary_id) {
+        set(MEMBER_ITINERARY_ID, member_itinerary_id);
     }
 
     public String getApp_id() {
@@ -83,21 +80,13 @@ public class MinhangMemberHistory extends Model<MinhangMemberHistory> {
     public void setUser_id(String user_id) {
         set(USER_ID, user_id);
     }
-    
-    public String getMember_itinerary_id() {
-    	return getStr(MEMBER_ITINERARY_ID);
-    }
-    
-    public void setMember_itinerary_id(String member_itinerary_id) {
-    	set(MEMBER_ITINERARY_ID, member_itinerary_id);
+
+    public Boolean getItinerary_is_complete() {
+        return getBoolean(ITINERARY_IS_COMPLETE);
     }
 
-    public String getMember_history_name() {
-        return getStr(MEMBER_HISTORY_NAME);
-    }
-
-    public void setMember_history_name(String member_history_name) {
-        set(MEMBER_HISTORY_NAME, member_history_name);
+    public void setItinerary_is_complete(Boolean itinerary_is_complete) {
+        set(ITINERARY_IS_COMPLETE, itinerary_is_complete);
     }
 
     public String getSystem_create_user_id() {
