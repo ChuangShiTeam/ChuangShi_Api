@@ -93,7 +93,7 @@ public class MinhangTaskController extends Controller {
     
     @ActionKey("/mobile/minhang/task/member/complete")
     public void memberComplete() {
-        validateRequest(MinhangTask.TASK_ID, MinhangMemberTask.KEY_ACTIVATED_STEP);
+        validateRequest(MinhangTask.TASK_ID, MinhangMemberTask.MEMBER_TASK_TYPE, MinhangMemberTask.KEY_ACTIVATED_STEP);
         
         MinhangTask model = getModel(MinhangTask.class);
         MinhangMemberTask minhang_member_task = getModel(MinhangMemberTask.class);
