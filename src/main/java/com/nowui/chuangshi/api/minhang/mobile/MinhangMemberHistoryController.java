@@ -1,7 +1,9 @@
 package com.nowui.chuangshi.api.minhang.mobile;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberHistory;
@@ -22,6 +24,7 @@ import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
+import com.nowui.chuangshi.type.MinhangMemberTaskType;
 import com.nowui.chuangshi.util.DateUtil;
 import com.nowui.chuangshi.util.Util;
 
@@ -59,7 +62,32 @@ public class MinhangMemberHistoryController extends Controller {
         }
         //查询纪念册对应的任务记录
         
-        renderSuccessJson();
+        List<MinhangMemberTask> minhang_member_taskList = MinhangMemberTaskService.instance.historyList(model.getMember_history_id());
+        Map<String, Object> result = new HashMap<String, Object>();
+        for (MinhangMemberTask minhangMemberTask : minhang_member_taskList) {
+        	if (MinhangMemberTaskType.POSTER_PICTURE.getKey().equals(minhangMemberTask.getMember_task_type())) {
+        		MinhangMemberPicture minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskFind(request_user_id, minhangMemberTask.getTask_id());
+        		result.put(MinhangMemberTaskType.POSTER_PICTURE.getKey(), minhangMemberPicture);
+        	} else if (MinhangMemberTaskType.PARTY_HISTORY_RECORD.getKey().equals(minhangMemberTask.getMember_task_type())) {
+        		
+        		
+        	} else if (MinhangMemberTaskType.PARTY_SONG_RECORD.getKey().equals(minhangMemberTask.getMember_task_type())) {
+        		
+        	} else if (MinhangMemberTaskType.HAND_PRINT_PICTURE.getKey().equals(minhangMemberTask.getMember_task_type())) {
+        		
+        	} else if (MinhangMemberTaskType.LOCATION_QUESTION.getKey().equals(minhangMemberTask.getMember_task_type())) {
+        		
+        	} else if (MinhangMemberTaskType.INFO_QUESTION.getKey().equals(minhangMemberTask.getMember_task_type())) {
+        		
+        	} else if (MinhangMemberTaskType.TIMELINE_EVENT_QUESTION.getKey().equals(minhangMemberTask.getMember_task_type())) {
+        		
+        	} else if (MinhangMemberTaskType.VIDEO_QUESTION.getKey().equals(minhangMemberTask.getMember_task_type())) {
+        		
+        	}
+        }
+        
+        validateResponse(MinhangMemberTaskType.PARTY_HISTORY_RECORD.getKey(), MinhangMemberTaskType.PARTY_SONG_RECORD.getKey());
+        renderSuccessJson(minhang_member_taskList);
     }
 
     /**
