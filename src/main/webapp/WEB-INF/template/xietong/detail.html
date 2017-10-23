@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="佛山市实验学校,协同学校,佛山市协同学校,佛山协同国际学校"/>
+    <meta name="description"
+          content="佛山市协同（国际）学校，由佛山市实验学校教育集团管理运营，与美国协同教育集团战略合作，是一所国际化、特色化、精英化的学校。国内教育部为小学初中9年一贯制（将开设高中部），国际教育部为幼儿园小学初中高中15年一贯制。秉承“协性同心、和人济世”的教育理念，培养适应现代、走向世界、引领未来的精英人才。"/>
+    <title>佛山协同国际学校</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <script src="js/react.min.js"></script>
+    <script src="js/react-dom.min.js"></script>
+    <script src="js/browser.min.js"></script>
+    <script src="js/react-bootstrap.min.js"></script>
+    <script src="js/reqwest.min.js"></script>
+    <script src="js/util.js"></script>
+
+</head>
+<body id="root">
+</body>
+</html>
+<script type="text/babel" src="header.js"></script>
+<script type="text/babel" src="footer.js"></script>
+<script type="text/babel">
+    class Component extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                category_id: '0',
+                link: 'group'
+            }
+        }
+
+        componentDidMount() {
+
+        }
+
+        componentWillUnmount() {
+
+        }
+
+        render() {
+            const Carousel = ReactBootstrap.Carousel;
+
+            return (
+                    <div>
+                        <Header/>
+                        <div className="content container">
+                            <div className="title margin-top-20">
+                                <div className="title-icon"></div>
+                                <div className="title-breadcrumb"><a>首页</a> > <a>学术研究</a> > 学校2017年4月协同视讯</div>
+                            </div>
+                            <div className="row margin-top-20">
+                                <div className="subnav col-md-3">
+                                    <div className="subnav-item active">
+                                        <div className="subnav-item-menu"><a>学生在线选课</a></div>
+                                        <div className="subnav-item-arrow"></div>
+                                    </div>
+                                    <div className="subnav-item margin-top">
+                                        <div className="subnav-item-menu"><a>学生在线选课</a></div>
+                                        <div className="subnav-item-arrow"></div>
+                                    </div>
+                                    <div className="subnav-item margin-top">
+                                        <div className="subnav-item-menu"><a>学生在线选课</a></div>
+                                        <div className="subnav-item-arrow"></div>
+                                    </div>
+                                    <div className="subnav-item margin-top">
+                                        <div className="subnav-item-menu"><a>学生在线选课</a></div>
+                                        <div className="subnav-item-arrow"></div>
+                                    </div>
+                                    <div className="subnav-item margin-top">
+                                        <div className="subnav-item-menu"><a>学生在线选课</a></div>
+                                        <div className="subnav-item-arrow"></div>
+                                    </div>
+                                    <div className="department margin-top">
+                                        <a>
+                                            <img src="image/department0.jpg" alt=""/>
+                                            <div className="department-mask">小学部</div>
+                                        </a>
+                                    </div>
+                                    <div className="department margin-top">
+                                        <a>
+                                            <img src="image/department1.jpg" alt=""/>
+                                            <div className="department-mask">中学部</div>
+                                        </a>
+                                    </div>
+                                    <div className="department margin-top">
+                                        <a>
+                                            <img src="image/department2.jpg" alt=""/>
+                                            <div className="department-mask">国际部</div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="col-md-9">
+                                    d
+                                </div>
+                            </div>
+                        </div>
+                        <Footer/>
+                    </div>
+            );
+        }
+    }
+
+    ReactDOM.render(<Component/>, document.getElementById("root"));
+</script>

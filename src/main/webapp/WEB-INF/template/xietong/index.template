@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="佛山市实验学校,协同学校,佛山市协同学校,佛山协同国际学校"/>
+    <meta name="description"
+          content="佛山市协同（国际）学校，由佛山市实验学校教育集团管理运营，与美国协同教育集团战略合作，是一所国际化、特色化、精英化的学校。国内教育部为小学初中9年一贯制（将开设高中部），国际教育部为幼儿园小学初中高中15年一贯制。秉承“协性同心、和人济世”的教育理念，培养适应现代、走向世界、引领未来的精英人才。"/>
+    <title>佛山协同国际学校</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <script src="js/react.min.js"></script>
+    <script src="js/react-dom.min.js"></script>
+    <script src="js/browser.min.js"></script>
+    <script src="js/react-bootstrap.min.js"></script>
+    <script src="js/reqwest.min.js"></script>
+    <script src="js/util.js"></script>
+
+</head>
+<body id="root">
+</body>
+</html>
+<script type="text/babel" src="header.js"></script>
+<script type="text/babel" src="footer.js"></script>
+<script type="text/babel">
+    class Component extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+
+            }
+        }
+
+        componentDidMount() {
+
+        }
+
+        componentWillUnmount() {
+
+        }
+
+        render() {
+            const Header = window.Header;
+            const Footer = window.Footer;
+            const Carousel = ReactBootstrap.Carousel;
+
+            return (
+                    <div>
+                        <Header website_menu_id=""/>
+                        <div className="content container">
+                            <div className="row margin-top-30">
+                                <div className="col-md-4">
+                                    <div className="department">
+                                        <a href="#">
+                                            <img src="image/department0.jpg" alt=""/>
+                                            <div className="department-mask">小学部</div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="department">
+                                        <a href="#">
+                                            <img src="image/department1.jpg" alt=""/>
+                                            <div className="department-mask">中学部</div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="department">
+                                        <a href="#">
+                                            <img src="image/department2.jpg" alt=""/>
+                                            <div className="department-mask">国际部</div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row margin-top-20">
+                                <div className="col-md-8">
+                                    <div className="title">
+                                        <div className="pull-left">
+                                            <div className="title-icon"></div>
+                                            <div className="title-text">学校新闻</div>
+                                            <div className="title-line"></div>
+                                        </div>
+                                        <div className="pull-right">
+                                            <a href="#">更多</a>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <Carousel className="margin-top" interval={3000} keyboard={false}>
+                                                #for(article : articleList)
+                                                #if(article.article_category_id == "c9dd8759a7a04aaeb038973c3246d863")
+                                                <Carousel.Item>
+                                                    <a href="#">
+                                                        <img className="school-article-image" src={host + "#(article.file_path)"} alt=""/>
+                                                    </a>
+                                                </Carousel.Item>
+                                                #end
+                                                #end
+                                            </Carousel>
+                                        </div>
+                                        <div className="col-md-6">
+                                            #set(count = 0)
+                                            #for(article : articleList)
+                                            #if(article.article_category_id == "c9dd8759a7a04aaeb038973c3246d863" && count < 3)
+                                            <div className={"article-item #if(count == 0) margin-top#else margin-top-30#end"}>
+                                                <a href="#">
+                                                    <img className="article-item-image" src={host + "#(article.file_path)"} alt=""/>
+                                                    <div className="article-item-title">#(article.article_name)</div>
+                                                    <div className="article-item-description">#(article.article_summary)</div>
+                                                </a>
+                                            </div>
+                                            #set(count = count + 1)
+                                            #end
+                                            #end
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="title">
+                                        <div className="pull-left">
+                                            <div className="title-icon"></div>
+                                            <div className="title-text">党建活动</div>
+                                            <div className="title-line"></div>
+                                        </div>
+                                        <div className="pull-right">
+                                            <a href="#">更多</a>
+                                        </div>
+                                    </div>
+                                    #set(count = 0)
+                                    #for(article : articleList)
+                                    #if(article.article_category_id == "7e84950e6d96412b860b5be55f46d5e8" && count < 3)
+                                    <div className={"article-item #if(count == 0) margin-top#else margin-top-30#end"}>
+                                        <a href="#">
+                                            <img className="article-item-image" src={host + "#(article.file_path)"} alt=""/>
+                                            <div className="article-item-title">#(article.article_name)</div>
+                                            <div className="article-item-description">#(article.article_summary)</div>
+                                        </a>
+                                    </div>
+                                    #set(count = count + 1)
+                                    #end
+                                    #end
+                                </div>
+                            </div>
+                            <div className="row margin-top-20">
+                                <div className="col-md-4">
+                                    <div className="title">
+                                        <div className="pull-left">
+                                            <div className="title-icon"></div>
+                                            <div className="title-text">公告通知</div>
+                                            <div className="title-line"></div>
+                                        </div>
+                                        <div className="pull-right">
+                                            <a href="#">更多</a>
+                                        </div>
+                                    </div>
+                                    #set(count = 0)
+                                    #for(article : articleList)
+                                    #if(article.article_category_id == "0cc726f2b92f43d1ba5cc5d0065efb09" && count < 3)
+                                    <div className={"activity-item #if(count == 0) margin-top#else margin-top-30#end"}>
+                                        <a href="#">
+                                            <div className="activity-item-date">
+                                                <div className="activity-item-date-day">21</div>
+                                                <div className="activity-item-date-year-month">2007-10</div>
+                                            </div>
+                                            <div className="activity-item-title">#(article.article_name)</div>
+                                            <div className="activity-item-description">#(article.article_summary)</div>
+                                        </a>
+                                    </div>
+                                    #set(count = count + 1)
+                                    #end
+                                    #end
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="title">
+                                        <div className="pull-left">
+                                            <div className="title-icon"></div>
+                                            <div className="title-text">主题活动</div>
+                                            <div className="title-line"></div>
+                                        </div>
+                                        <div className="pull-right">
+                                            <a href="#">更多</a>
+                                        </div>
+                                    </div>
+                                    #set(count = 0)
+                                    #for(article : articleList)
+                                    #if(article.article_category_id == "da9b1750e8ea4f959df23cbdcba53f9a" && count < 3)
+                                    <div className={"activity-item #if(count == 0) margin-top#else margin-top-30#end"}>
+                                        <a href="#">
+                                            <div className="activity-item-date">
+                                                <div className="activity-item-date-day">21</div>
+                                                <div className="activity-item-date-year-month">2007-10</div>
+                                            </div>
+                                            <div className="activity-item-title">#(article.article_name)</div>
+                                            <div className="activity-item-description">#(article.article_summary)</div>
+                                        </a>
+                                    </div>
+                                    #set(count = count + 1)
+                                    #end
+                                    #end
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="title">
+                                        <div className="title-icon"></div>
+                                        <div className="title-text">用户导航</div>
+                                        <div className="title-line"></div>
+                                    </div>
+                                    <a href="/index.html">
+                                        <div className="enter-item margin-top-30">
+                                            <div className="enter-item-icon-0"></div>
+                                            <div className="enter-item-text">学生在线选课</div>
+                                            <div className="enter-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                    <a href="/index.html">
+                                        <div className="enter-item margin-top">
+                                            <div className="enter-item-icon-1"></div>
+                                            <div className="enter-item-text">我要招生报名</div>
+                                            <div className="enter-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                    <a href="/index.html">
+                                        <div className="enter-item margin-top">
+                                            <div className="enter-item-icon-2"></div>
+                                            <div className="enter-item-text">老师招聘报名</div>
+                                            <div className="enter-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                    <a href="/index.html">
+                                        <div className="enter-item margin-top">
+                                            <div className="enter-item-icon-3"></div>
+                                            <div className="enter-item-text">写信校长邮箱</div>
+                                            <div className="enter-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div className="row margin-top-30">
+                                <div className="col-md-3">
+                                    <a href="#">
+                                        <div className="sight">
+                                            <img className="sight-image-0" src="image/sight-0.jpg" alt=""/>
+                                            <div className="sight-mask">美丽校园</div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div className="col-md-3 no-padding-left">
+                                    <a href="#">
+                                        <div className="sight">
+                                            <img className="sight-image-1" src="image/sight-1.jpg" alt=""/>
+                                            <div className="sight-mask">教师风采</div>
+                                        </div>
+                                    </a>
+                                    <a href="#">
+                                        <div className="sight margin-top">
+                                            <img className="sight-image-1" src="image/sight-2.jpg" alt=""/>
+                                            <div className="sight-mask">学生社团</div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className="row">
+                                        <div className="col-md-6 no-padding-left">
+                                            <a href="#">
+                                                <div className="sight">
+                                                    <img className="sight-image-1" src="image/sight-3.jpg" alt=""/>
+                                                    <div className="sight-mask">课程选择</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div className="col-md-6 no-padding-left">
+                                            <a href="#">
+                                                <div className="sight">
+                                                    <img className="sight-image-1" src="image/sight-4.jpg" alt=""/>
+                                                    <div className="sight-mask">魅力课堂</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-md-12 no-padding-left">
+                                            <a href="#">
+                                                <div className="sight">
+                                                    <img className="sight-image-2 margin-top" src="image/sight-5.jpg"
+                                                         alt=""/>
+                                                    <div className="sight-mask">美丽校园</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <Footer/>
+                    </div>
+            );
+        }
+    }
+
+    ReactDOM.render(<Component/>, document.getElementById("root"));
+</script>

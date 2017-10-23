@@ -52,61 +52,61 @@ public class PageController extends Controller {
         renderSuccessJson(result);
     }
 
-    @ActionKey("/admin/page/all/write")
-    public void allWrite() {
-        String request_app_id = getRequest_app_id();
-
-        List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
-
-        List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryList, 7);
-
-        List<Page> pageList = PageService.instance.appList(request_app_id);
-
-        List<Map<String, Object>> websiteMenuList = WebsiteMenuService.instance.tree(request_app_id);
-        
-        List<Map<String, Object>> indexBannerList = AdvertisementService.instance.adminCategoryCodeList(request_app_id, "index_banner");
-
-        List<Map<String, Object>> indexFloatList = AdvertisementService.instance.adminCategoryCodeList(request_app_id, "index_float");
-        
-        Kv templateMap = Kv.create();
-        templateMap.put("articleCategoryList", articleCategoryList);
-        templateMap.put("articleList", articleList);
-        templateMap.put("websiteMenuList", websiteMenuList);
-        templateMap.put("indexBannerList", indexBannerList);
-        templateMap.put("indexFloatList", indexFloatList);
-        
-        if (articleCategoryList != null && articleCategoryList.size() > 0) {
-            ArticleCategory articleCategory = articleCategoryList.get(0);
-            
-            templateMap.put("article_category_id", articleCategory.getArticle_category_id());
-        }
-        
-        for (Page page : pageList) {
-            templateMap.put("page_name", page.getPage_name());
-            templateMap.put("page_content", page.getPage_content());
-            templateMap.put("page_url", page.getPage_url());
-            if (page.getPage_template().equals("xydt.template")) {
-                for (ArticleCategory articleCatgory : articleCategoryList) {
-                	PageService.instance.writeXydt(request_app_id, articleCatgory.getArticle_category_id());
-                }
-            } else if (page.getPage_template().equals("wzxq.template")) {
-              //生成所有文章页面
-                List<Article> allArticleList = ArticleService.instance.appList(request_app_id);
-                if (allArticleList != null && allArticleList.size() > 0) {
-                    for (Article article : allArticleList) {
-                        PageService.instance.writeWzxq(request_app_id, article.getArticle_id());
-                    }
-                }
-            } else {
-                PageService.instance.write(request_app_id, page, templateMap);
-            }
-            
-        }
-        
-        
-
-        renderSuccessJson();
-    }
+//    @ActionKey("/admin/page/all/write")
+//    public void allWrite() {
+//        String request_app_id = getRequest_app_id();
+//
+//        List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
+//
+//        List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryList, 7);
+//
+//        List<Page> pageList = PageService.instance.appList(request_app_id);
+//
+//        List<Map<String, Object>> websiteMenuList = WebsiteMenuService.instance.tree(request_app_id);
+//
+//        List<Map<String, Object>> indexBannerList = AdvertisementService.instance.adminCategoryCodeList(request_app_id, "index_banner");
+//
+//        List<Map<String, Object>> indexFloatList = AdvertisementService.instance.adminCategoryCodeList(request_app_id, "index_float");
+//
+//        Kv templateMap = Kv.create();
+//        templateMap.put("articleCategoryList", articleCategoryList);
+//        templateMap.put("articleList", articleList);
+//        templateMap.put("websiteMenuList", websiteMenuList);
+//        templateMap.put("indexBannerList", indexBannerList);
+//        templateMap.put("indexFloatList", indexFloatList);
+//
+//        if (articleCategoryList != null && articleCategoryList.size() > 0) {
+//            ArticleCategory articleCategory = articleCategoryList.get(0);
+//
+//            templateMap.put("article_category_id", articleCategory.getArticle_category_id());
+//        }
+//
+//        for (Page page : pageList) {
+//            templateMap.put("page_name", page.getPage_name());
+//            templateMap.put("page_content", page.getPage_content());
+//            templateMap.put("page_url", page.getPage_url());
+//            if (page.getPage_template().equals("xydt.template")) {
+//                for (ArticleCategory articleCatgory : articleCategoryList) {
+//                	PageService.instance.writeXydt(request_app_id, articleCatgory.getArticle_category_id());
+//                }
+//            } else if (page.getPage_template().equals("wzxq.template")) {
+//              //生成所有文章页面
+//                List<Article> allArticleList = ArticleService.instance.appList(request_app_id);
+//                if (allArticleList != null && allArticleList.size() > 0) {
+//                    for (Article article : allArticleList) {
+//                        PageService.instance.writeWzxq(request_app_id, article.getArticle_id());
+//                    }
+//                }
+//            } else {
+//                PageService.instance.write(request_app_id, page, templateMap);
+//            }
+//
+//        }
+//
+//
+//
+//        renderSuccessJson();
+//    }
 
     @ActionKey("/admin/page/write")
     public void write() {
@@ -159,7 +159,7 @@ public class PageController extends Controller {
                 }
             }
         } else {
-            PageService.instance.write(request_app_id, page, templateMap);
+//            PageService.instance.write(request_app_id, page, templateMap);
         }
         
         renderSuccessJson();
@@ -200,6 +200,47 @@ public class PageController extends Controller {
         Boolean result = PageService.instance.delete(model.getPage_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
+    }
+
+    @ActionKey("/admin/page/all/write")
+    public void allWrite() {
+        String request_app_id = getRequest_app_id();
+
+        List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
+
+        List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryList, 7);
+
+        List<Page> pageList = PageService.instance.appList(request_app_id);
+
+        List<Map<String, Object>> websiteMenuList = WebsiteMenuService.instance.tree(request_app_id);
+
+        List<Map<String, Object>> indexBannerList = AdvertisementService.instance.adminCategoryCodeList(request_app_id, "index_banner");
+
+        List<Map<String, Object>> indexFloatList = AdvertisementService.instance.adminCategoryCodeList(request_app_id, "index_float");
+
+        Kv templateMap = Kv.create();
+        templateMap.put("articleCategoryList", articleCategoryList);
+        templateMap.put("articleList", articleList);
+        templateMap.put("websiteMenuList", websiteMenuList);
+        templateMap.put("indexBannerList", indexBannerList);
+//        templateMap.put("indexFloatList", indexFloatList);
+
+        if (articleCategoryList != null && articleCategoryList.size() > 0) {
+            ArticleCategory articleCategory = articleCategoryList.get(0);
+
+            templateMap.put("article_category_id", articleCategory.getArticle_category_id());
+        }
+
+//        for (Page page : pageList) {
+//            PageService.instance.write(request_app_id, page, templateMap);
+//        }
+
+
+        PageService.instance.write(request_app_id, "header.template", "header.js", templateMap);
+        PageService.instance.write(request_app_id, "footer.template", "footer.js", templateMap);
+        PageService.instance.write(request_app_id, "index.template", "index.html", templateMap);
+
+        renderSuccessJson();
     }
 
 }
