@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.service.FileService;
+import com.nowui.chuangshi.api.minhang.model.MinhangMemberItinerary;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberPicture;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberQuestion;
@@ -20,6 +21,7 @@ import com.nowui.chuangshi.api.minhang.model.MinhangQuestion;
 import com.nowui.chuangshi.api.minhang.model.MinhangTask;
 import com.nowui.chuangshi.api.minhang.model.MinhangTimelineEvent;
 import com.nowui.chuangshi.api.minhang.model.MinhangVideoTask;
+import com.nowui.chuangshi.api.minhang.service.MinhangMemberItineraryService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberKeyService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberPictureService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberQuestionService;
@@ -61,8 +63,15 @@ public class MinhangTaskController extends Controller {
         MinhangTask minhangTask = MinhangTaskService.instance.find(model.getTask_id());
         
         validateResponse(MinhangTask.KEY_ID, MinhangTask.TASK_NAME, MinhangTask.SCREEN_ID, MinhangTask.TASK_TYPE, MinhangTask.TASK_QRCODE_URL, MinhangTask.TASK_SORT, MinhangTask.TASK_DESCRIPTION, MinhangTask.SYSTEM_VERSION);
+      
+        //查询用户最近的寻钥之旅记录
+        MinhangMemberItinerary member_itinerary = MinhangMemberItineraryService.instance.userLatestFind(request_user_id);
 
-        MinhangMemberTask minhangMemberTask = MinhangMemberTaskService.instance.userAndTaskFind(request_user_id, model.getTask_id());
+        if (member_itinerary == null) {
+            throw new RuntimeException("还没有开启寻钥之旅");
+        }
+        
+        MinhangMemberTask minhangMemberTask = MinhangMemberTaskService.instance.taskAndItineraryFind(model.getTask_id(), member_itinerary.getMember_itinerary_id());
         
         Map<String, Object> result = new HashMap<String, Object>(); 
         
@@ -84,13 +93,20 @@ public class MinhangTaskController extends Controller {
     
     @ActionKey("/mobile/minhang/task/member/complete")
     public void memberComplete() {
-        validateRequest(MinhangTask.TASK_ID, MinhangMemberTask.KEY_ACTIVATED_STEP);
+        validateRequest(MinhangTask.TASK_ID, MinhangMemberTask.MEMBER_TASK_TYPE, MinhangMemberTask.KEY_ACTIVATED_STEP);
         
         MinhangTask model = getModel(MinhangTask.class);
         MinhangMemberTask minhang_member_task = getModel(MinhangMemberTask.class);
         String request_user_id = getRequest_user_id();
         
-        MinhangMemberTask minhangMemberTask = MinhangMemberTaskService.instance.userAndTaskFind(request_user_id, model.getTask_id());
+        //查询用户最近的寻钥之旅记录
+        MinhangMemberItinerary member_itinerary = MinhangMemberItineraryService.instance.userLatestFind(request_user_id);
+        
+        if (member_itinerary == null) {
+            throw new RuntimeException("还没有开启寻钥之旅");
+        }
+        
+        MinhangMemberTask minhangMemberTask = MinhangMemberTaskService.instance.taskAndItineraryFind(model.getTask_id(), member_itinerary.getMember_itinerary_id());
         
         if (minhangMemberTask != null) {
             throw new RuntimeException("任务已经完成");
@@ -98,7 +114,7 @@ public class MinhangTaskController extends Controller {
         
         MinhangTask task = MinhangTaskService.instance.find(model.getTask_id());
         
-        MinhangMemberKey minhangMemberKey = MinhangMemberKeyService.instance.userAndKeyFind(request_user_id, task.getKey_id());
+        MinhangMemberKey minhangMemberKey = MinhangMemberKeyService.instance.keyAndItineraryFind(task.getKey_id(), member_itinerary.getMember_itinerary_id());
         
         if (minhangMemberKey.getKey_is_activated()) {
             throw new RuntimeException("钥匙已激活，无需再完成任务");
@@ -110,6 +126,7 @@ public class MinhangTaskController extends Controller {
         //保存会员完成记录
         minhang_member_task.setApp_id(task.getApp_id());
         minhang_member_task.setMember_task_id(Util.getRandomUUID());
+        minhang_member_task.setMember_itinerary_id(member_itinerary.getMember_itinerary_id());
         minhang_member_task.setTask_id(task.getTask_id());
         minhang_member_task.setKey_id(task.getKey_id());
         minhang_member_task.setUser_id(user.getUser_id());
@@ -141,6 +158,7 @@ public class MinhangTaskController extends Controller {
                     }
                     minhangMemberQuestion.setMember_question_id(Util.getRandomUUID());
                     minhangMemberQuestion.setApp_id(task.getApp_id());
+                    minhangMemberQuestion.setMember_itinerary_id(member_itinerary.getMember_itinerary_id());
                     minhangMemberQuestion.setMember_id(user.getObject_id());
                     minhangMemberQuestion.setTask_id(task.getTask_id());
                     minhangMemberQuestion.setUser_id(user.getUser_id());
@@ -155,6 +173,7 @@ public class MinhangTaskController extends Controller {
                 }
                 minhangMemberPicture.setMember_picture_id(Util.getRandomUUID());
                 minhangMemberPicture.setApp_id(task.getApp_id());
+                minhangMemberPicture.setMember_itinerary_id(member_itinerary.getMember_itinerary_id());
                 minhangMemberPicture.setMember_id(user.getObject_id());
                 minhangMemberPicture.setUser_id(user.getUser_id());
                 minhangMemberPicture.setTask_id(task.getTask_id());
@@ -168,6 +187,7 @@ public class MinhangTaskController extends Controller {
                 }
                 minhangMemberRecord.setMember_record_id(Util.getRandomUUID());
                 minhangMemberRecord.setApp_id(task.getApp_id());
+                minhangMemberRecord.setMember_itinerary_id(member_itinerary.getMember_itinerary_id());
                 minhangMemberRecord.setMember_id(user.getObject_id());
                 minhangMemberRecord.setUser_id(user.getUser_id());
                 minhangMemberRecord.setTask_id(task.getTask_id());
@@ -196,7 +216,7 @@ public class MinhangTaskController extends Controller {
             
             MinhangMemberPicture minhangMemberPicture = null;
             for (MinhangPoster poster : posterList) {
-                minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskfind(result.getUser_id(), poster.getTask_id());
+                minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskAndItineraryFind(result.getUser_id(), poster.getTask_id(), result.getMember_itinerary_id());
                 if (minhangMemberPicture != null) {
                    break;
                 }
@@ -221,7 +241,7 @@ public class MinhangTaskController extends Controller {
         List<MinhangMemberTask> resultList = MinhangMemberTaskService.instance.taskList(model.getTask_id(), getM(), getN());
         
         for (MinhangMemberTask result : resultList) {
-            MinhangMemberPicture minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskfind(result.getUser_id(), model.getTask_id());
+            MinhangMemberPicture minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskAndItineraryFind(result.getUser_id(), model.getTask_id(), result.getMember_itinerary_id());
             User user = UserService.instance.find(result.getUser_id());
             result.put(User.USER_NAME, user.getUser_name());
             result.put(User.USER_AVATAR, FileService.instance.getFile_path(minhangMemberPicture.getPicture_file()));
@@ -236,6 +256,13 @@ public class MinhangTaskController extends Controller {
 
         String request_user_id = getRequest_user_id();
         MinhangTask model = getModel(MinhangTask.class);
+        
+        //查询用户最近的寻钥之旅记录
+        MinhangMemberItinerary member_itinerary = MinhangMemberItineraryService.instance.userLatestFind(request_user_id);
+        
+        if (member_itinerary == null) {
+            throw new RuntimeException("还没有开启寻钥之旅");
+        }
         
         MinhangTask minhangTask = MinhangTaskService.instance.find(model.getTask_id());
         
@@ -273,7 +300,7 @@ public class MinhangTaskController extends Controller {
                     result = "请扫描党课学习视频问题二维码";
                 }
             } else {
-                MinhangMemberTask minhangMemberTask = MinhangMemberTaskService.instance.userAndTaskFind(request_user_id, model.getTask_id());
+                MinhangMemberTask minhangMemberTask = MinhangMemberTaskService.instance.taskAndItineraryFind(model.getTask_id(), member_itinerary.getMember_itinerary_id());
                 if (minhangMemberTask != null) {
                     result = "您已完成该任务，请扫描其他任务二维码";
                 }

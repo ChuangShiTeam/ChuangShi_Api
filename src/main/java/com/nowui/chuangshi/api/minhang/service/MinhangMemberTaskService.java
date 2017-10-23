@@ -14,7 +14,6 @@ public class MinhangMemberTaskService extends Service {
 
     public static final MinhangMemberTaskService instance = new MinhangMemberTaskService();
     private final String MINHANG_MEMBER_TASK_ITEM_CACHE = "minhang_member_task_item_cache";
-    private final String MINHANG_MEMBER_TASK_ID_USER_LIST_CACHE = "minhang_member_task_id__user_list_cache";
     private final MinhangMemberTaskDao minhangMemberTaskDao = new MinhangMemberTaskDao();
 
     public Integer adminCount(String app_id, String member_id, String task_id) {
@@ -55,21 +54,17 @@ public class MinhangMemberTaskService extends Service {
         return minhang_member_task;
     }
     
-    public List<MinhangMemberTask> userList(String user_id) {
-    	List<String> minhang_member_task_idList = CacheUtil.get(MINHANG_MEMBER_TASK_ID_USER_LIST_CACHE, user_id);
-        
-        if (minhang_member_task_idList == null) {
-            Cnd cnd = new Cnd();
-            cnd.where(MinhangMemberTask.SYSTEM_STATUS, true);
-            cnd.andAllowEmpty(MinhangMemberTask.USER_ID, user_id);
-            cnd.asc(MinhangMemberTask.SYSTEM_CREATE_TIME);
+    public List<MinhangMemberTask> itineraryList(String member_itinerary_id) {
+    	Cnd cnd = new Cnd();
+        cnd.where(MinhangMemberTask.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(MinhangMemberTask.MEMBER_ITINERARY_ID, member_itinerary_id);
+        cnd.asc(MinhangMemberTask.SYSTEM_CREATE_TIME);
 
-            List<MinhangMemberTask> minhang_member_taskList = minhangMemberTaskDao.primaryKeyList(cnd);
-            
-            minhang_member_task_idList = minhang_member_taskList.stream()
-                                                            .map(minhang_member_task -> minhang_member_task.getMember_task_id())
-                                                            .collect(Collectors.toList());
-        }
+        List<MinhangMemberTask> minhang_member_taskList = minhangMemberTaskDao.primaryKeyList(cnd);
+        
+        List<String> minhang_member_task_idList = minhang_member_taskList.stream()
+                                                        .map(minhang_member_task -> minhang_member_task.getMember_task_id())
+                                                        .collect(Collectors.toList());
         if (minhang_member_task_idList == null || minhang_member_task_idList.size() == 0) {
             return null;
         }
@@ -80,9 +75,31 @@ public class MinhangMemberTaskService extends Service {
         return list;
     }
     
-    public List<MinhangMemberTask> userAndKeyList(String user_id, String key_id) {
+    public List<MinhangMemberTask> historyList(String member_history_id) {
+    	Cnd cnd = new Cnd();
+        cnd.where(MinhangMemberTask.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(MinhangMemberTask.MEMBER_HISTORY_ID, member_history_id);
+        cnd.asc(MinhangMemberTask.SYSTEM_CREATE_TIME);
+
+        List<MinhangMemberTask> minhang_member_taskList = minhangMemberTaskDao.primaryKeyList(cnd);
+        
+        List<String>minhang_member_task_idList = minhang_member_taskList.stream()
+                                                        .map(minhang_member_task -> minhang_member_task.getMember_task_id())
+                                                        .collect(Collectors.toList());
+        
+        if (minhang_member_task_idList == null || minhang_member_task_idList.size() == 0) {
+            return null;
+        }
+        List<MinhangMemberTask> list = new ArrayList<>();
+        for (String minhang_member_task_id : minhang_member_task_idList) {
+            list.add(find(minhang_member_task_id));
+        }
+        return list;
+    }
+    
+    public List<MinhangMemberTask> keyAndItineraryList(String key_id, String member_history_id) {
     	
-    	List<MinhangMemberTask> list = userList(user_id);
+    	List<MinhangMemberTask> list = itineraryList(member_history_id);
     	
     	if (list != null && list.size() > 0) {
     		return list.stream().filter(minhangMemberTask -> key_id.equals(minhangMemberTask.getKey_id())).collect(Collectors.toList());
@@ -105,8 +122,8 @@ public class MinhangMemberTaskService extends Service {
         return minhang_member_taskList;
     }
     
-    public MinhangMemberTask userAndTaskFind(String user_id, String task_id) {
-    	List<MinhangMemberTask> minhang_member_taskList = userList(user_id);
+    public MinhangMemberTask taskAndItineraryFind(String task_id, String member_itinerary_id) {
+    	List<MinhangMemberTask> minhang_member_taskList = itineraryList(member_itinerary_id);
         
     	if (minhang_member_taskList != null && minhang_member_taskList.size() > 0) {
     	    for (MinhangMemberTask minhangMemberTask : minhang_member_taskList) {
@@ -132,21 +149,6 @@ public class MinhangMemberTaskService extends Service {
         cnd.and(MinhangMemberTask.SYSTEM_VERSION, system_version);
 
         Boolean success = minhangMemberTaskDao.update(minhang_member_task, system_update_user_id, system_version, cnd);
-
-        if (success) {
-            CacheUtil.remove(MINHANG_MEMBER_TASK_ITEM_CACHE, member_task_id);
-        }
-
-        return success;
-    }
-
-    public Boolean delete(String member_task_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = new Cnd();
-        cnd.where(MinhangMemberTask.SYSTEM_STATUS, true);
-        cnd.and(MinhangMemberTask.MEMBER_TASK_ID, member_task_id);
-        cnd.and(MinhangMemberTask.SYSTEM_VERSION, system_version);
-
-        Boolean success = minhangMemberTaskDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(MINHANG_MEMBER_TASK_ITEM_CACHE, member_task_id);

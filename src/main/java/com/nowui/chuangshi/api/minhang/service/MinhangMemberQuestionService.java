@@ -1,12 +1,12 @@
 package com.nowui.chuangshi.api.minhang.service;
 
+import java.util.List;
+
 import com.nowui.chuangshi.api.minhang.dao.MinhangMemberQuestionDao;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberQuestion;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
-
-import java.util.List;
 
 public class MinhangMemberQuestionService extends Service {
 
@@ -50,6 +50,50 @@ public class MinhangMemberQuestionService extends Service {
         }
 
         return minhang_member_question;
+    }
+    
+    public MinhangMemberQuestion userAndTaskAndItineraryFind(String user_id, String task_id, String member_itinerary_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangMemberQuestion.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(MinhangMemberQuestion.USER_ID, user_id);
+        cnd.andAllowEmpty(MinhangMemberQuestion.TASK_ID, task_id);
+        cnd.andAllowEmpty(MinhangMemberQuestion.MEMBER_ITINERARY_ID, member_itinerary_id);
+
+        List<MinhangMemberQuestion> minhang_member_questionList = minhangMemberQuestionDao.primaryKeyList(cnd);
+        if (minhang_member_questionList == null || minhang_member_questionList.size() == 0) {
+            return null;
+        }
+        return find(minhang_member_questionList.get(0).getMember_question_id());
+    }
+    
+    public List<MinhangMemberQuestion> userAndTaskAndItineraryList(String user_id, String task_id, String member_itinerary_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangMemberQuestion.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(MinhangMemberQuestion.USER_ID, user_id);
+        cnd.andAllowEmpty(MinhangMemberQuestion.TASK_ID, task_id);
+        cnd.andAllowEmpty(MinhangMemberQuestion.MEMBER_ITINERARY_ID, member_itinerary_id);
+
+        List<MinhangMemberQuestion> minhang_member_questionList = minhangMemberQuestionDao.primaryKeyList(cnd);
+        if (minhang_member_questionList == null || minhang_member_questionList.size() == 0) {
+            return null;
+        }
+        for (MinhangMemberQuestion minhang_member_question : minhang_member_questionList) {
+            minhang_member_question.put(find(minhang_member_question.getMember_question_id()));
+        }
+        return minhang_member_questionList;
+    }
+    
+    public List<MinhangMemberQuestion> itineraryList(String member_itinerary_id) {
+    	Cnd cnd = new Cnd();
+        cnd.where(MinhangMemberQuestion.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(MinhangMemberQuestion.MEMBER_ITINERARY_ID, member_itinerary_id);
+
+        List<MinhangMemberQuestion> minhang_member_questionList = minhangMemberQuestionDao.primaryKeyList(cnd);
+        
+        for (MinhangMemberQuestion minhang_member_question : minhang_member_questionList) {
+            minhang_member_question.put(find(minhang_member_question.getMember_question_id()));
+        }
+        return minhang_member_questionList;
     }
 
     public Boolean save(MinhangMemberQuestion minhang_member_question, String system_create_user_id) {
