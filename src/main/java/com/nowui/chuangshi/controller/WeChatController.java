@@ -544,8 +544,6 @@ public class WeChatController extends Controller {
             String file_suffix = mediaFile.getSuffix();
             String file_name = Util.getRandomUUID() + "." + file_suffix;
 
-            path = path + "/" + file_name;
-            thumbnailPath = thumbnailPath + "/" + file_name;
             originalPath = originalPath + "/" + file_name;
 
             java.io.File imageFile = new java.io.File(originalPath);
@@ -563,10 +561,12 @@ public class WeChatController extends Controller {
             String file_type = FileType.IMAGE.getKey();
 
             if (file_suffix.equals("png") || file_suffix.equals("jpg") || file_suffix.equals("jpeg")) {
+            	path = path + "/" + file_name;
+            	thumbnailPath = thumbnailPath + "/" + file_name;
                 FileUtil.resizeImage(imageFile, file_suffix, thumbnailPath, 100);
                 FileUtil.resizeImage(imageFile, file_suffix, path, 360);
             } else if (".amr".equals(file_suffix)) {
-            	path = file_name.split(".")[0] + ".mp3";
+            	path = path + "/" + file_name.split(".")[0] + ".mp3";
             	FileUtil.changeToMp3(originalPath, path);
             	
             	thumbnailPath = path;
@@ -574,6 +574,7 @@ public class WeChatController extends Controller {
 
                 file_type = FileType.OTHER.getKey();
             } else {
+            	path = path + "/" + file_name;
                 FileUtil.copy(imageFile, new java.io.File(path));
 
                 thumbnailPath = path;
