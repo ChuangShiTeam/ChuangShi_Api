@@ -1,11 +1,14 @@
 package com.nowui.chuangshi.api.minhang.mobile;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.file.model.File;
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberHistory;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberItinerary;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberKey;
@@ -20,6 +23,7 @@ import com.nowui.chuangshi.api.minhang.service.MinhangMemberPictureService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberQuestionService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberRecordService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberTaskService;
+import com.nowui.chuangshi.api.minhang.service.MinhangQuestionService;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -64,30 +68,65 @@ public class MinhangMemberHistoryController extends Controller {
         
         List<MinhangMemberTask> minhang_member_taskList = MinhangMemberTaskService.instance.historyList(model.getMember_history_id());
         Map<String, Object> result = new HashMap<String, Object>();
+        List<MinhangMemberQuestion> timelineEventQuestion = new ArrayList<>();
+        List<MinhangMemberQuestion> videoQuestion = new ArrayList<>();
         for (MinhangMemberTask minhangMemberTask : minhang_member_taskList) {
         	if (MinhangMemberTaskType.POSTER_PICTURE.getKey().equals(minhangMemberTask.getMember_task_type())) {
-        		MinhangMemberPicture minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskFind(request_user_id, minhangMemberTask.getTask_id());
+        		
+        		MinhangMemberPicture minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskAndItineraryFind(request_user_id, minhangMemberTask.getTask_id(), minhangMemberTask.getMember_itinerary_id());
+        		minhangMemberPicture.put(File.FILE_PATH, FileService.instance.getFile_path(minhangMemberPicture.getPicture_file()));
         		result.put(MinhangMemberTaskType.POSTER_PICTURE.getKey(), minhangMemberPicture);
+        	
         	} else if (MinhangMemberTaskType.PARTY_HISTORY_RECORD.getKey().equals(minhangMemberTask.getMember_task_type())) {
         		
-        		
+        		MinhangMemberRecord minhangMemberRecord = MinhangMemberRecordService.instance.userAndTaskAndItineraryFind(request_user_id, minhangMemberTask.getTask_id(), minhangMemberTask.getMember_itinerary_id());
+        		minhangMemberRecord.put(File.FILE_PATH, FileService.instance.getFile_path(minhangMemberRecord.getRecord_file()));
+        		result.put(MinhangMemberTaskType.PARTY_HISTORY_RECORD.getKey(), minhangMemberRecord);
+        	
         	} else if (MinhangMemberTaskType.PARTY_SONG_RECORD.getKey().equals(minhangMemberTask.getMember_task_type())) {
         		
+        		MinhangMemberRecord minhangMemberRecord = MinhangMemberRecordService.instance.userAndTaskAndItineraryFind(request_user_id, minhangMemberTask.getTask_id(), minhangMemberTask.getMember_itinerary_id());
+        		minhangMemberRecord.put(File.FILE_PATH, FileService.instance.getFile_path(minhangMemberRecord.getRecord_file()));
+        		result.put(MinhangMemberTaskType.PARTY_SONG_RECORD.getKey(), minhangMemberRecord);
+        	
         	} else if (MinhangMemberTaskType.HAND_PRINT_PICTURE.getKey().equals(minhangMemberTask.getMember_task_type())) {
         		
+        		MinhangMemberPicture minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskAndItineraryFind(request_user_id, minhangMemberTask.getTask_id(), minhangMemberTask.getMember_itinerary_id());
+        		minhangMemberPicture.put(File.FILE_PATH, FileService.instance.getFile_path(minhangMemberPicture.getPicture_file()));
+        		result.put(MinhangMemberTaskType.HAND_PRINT_PICTURE.getKey(), minhangMemberPicture);
+        	
         	} else if (MinhangMemberTaskType.LOCATION_QUESTION.getKey().equals(minhangMemberTask.getMember_task_type())) {
-        		
+        		List<MinhangMemberQuestion> locationQuestion = MinhangMemberQuestionService.instance.userAndTaskAndItineraryList(request_user_id, minhangMemberTask.getTask_id(), minhangMemberTask.getMember_itinerary_id());
+        		for (MinhangMemberQuestion minhangMemberQuestion : locationQuestion) {
+        			minhangMemberQuestion.put("question", MinhangQuestionService.instance.find(minhangMemberQuestion.getQuestion_id()));
+        		}
+        		result.put(MinhangMemberTaskType.LOCATION_QUESTION.getKey(), locationQuestion);
         	} else if (MinhangMemberTaskType.INFO_QUESTION.getKey().equals(minhangMemberTask.getMember_task_type())) {
-        		
+        		MinhangMemberQuestion minhangMemberQuestion = MinhangMemberQuestionService.instance.userAndTaskAndItineraryFind(request_user_id, minhangMemberTask.getTask_id(), minhangMemberTask.getMember_itinerary_id());
+        		minhangMemberQuestion.put("question", MinhangQuestionService.instance.find(minhangMemberQuestion.getQuestion_id()));
+        		result.put(MinhangMemberTaskType.INFO_QUESTION.getKey(), minhangMemberQuestion);
         	} else if (MinhangMemberTaskType.TIMELINE_EVENT_QUESTION.getKey().equals(minhangMemberTask.getMember_task_type())) {
-        		
+        		MinhangMemberQuestion minhangMemberQuestion = MinhangMemberQuestionService.instance.userAndTaskAndItineraryFind(request_user_id, minhangMemberTask.getTask_id(), minhangMemberTask.getMember_itinerary_id());
+        		minhangMemberQuestion.put("question", MinhangQuestionService.instance.find(minhangMemberQuestion.getQuestion_id()));
+        		timelineEventQuestion.add(minhangMemberQuestion);
+        		result.put(MinhangMemberTaskType.TIMELINE_EVENT_QUESTION.getKey(), timelineEventQuestion);
         	} else if (MinhangMemberTaskType.VIDEO_QUESTION.getKey().equals(minhangMemberTask.getMember_task_type())) {
-        		
+        		MinhangMemberQuestion minhangMemberQuestion = MinhangMemberQuestionService.instance.userAndTaskAndItineraryFind(request_user_id, minhangMemberTask.getTask_id(), minhangMemberTask.getMember_itinerary_id());
+        		minhangMemberQuestion.put("question", MinhangQuestionService.instance.find(minhangMemberQuestion.getQuestion_id()));
+        		videoQuestion.add(minhangMemberQuestion);
+        		result.put(MinhangMemberTaskType.VIDEO_QUESTION.getKey(), videoQuestion);
         	}
         }
         
-        validateResponse(MinhangMemberTaskType.PARTY_HISTORY_RECORD.getKey(), MinhangMemberTaskType.PARTY_SONG_RECORD.getKey());
-        renderSuccessJson(minhang_member_taskList);
+        validateResponse(MinhangMemberTaskType.POSTER_PICTURE.getKey(), 
+        				MinhangMemberTaskType.PARTY_HISTORY_RECORD.getKey(), 
+        				MinhangMemberTaskType.PARTY_SONG_RECORD.getKey(),
+        				MinhangMemberTaskType.HAND_PRINT_PICTURE.getKey(),
+        				MinhangMemberTaskType.LOCATION_QUESTION.getKey(),
+        				MinhangMemberTaskType.INFO_QUESTION.getKey(),
+        				MinhangMemberTaskType.TIMELINE_EVENT_QUESTION.getKey(),
+        				MinhangMemberTaskType.VIDEO_QUESTION.getKey());
+        renderSuccessJson(result);
     }
 
     /**
@@ -134,7 +173,7 @@ public class MinhangMemberHistoryController extends Controller {
             
             if (minhang_member_taskList != null && minhang_member_taskList.size() > 0) {
             	for (MinhangMemberTask minhangMemberTask : minhang_member_taskList) {
-            		minhangMemberTask.setMember_task_id(minhangMemberHistory.getMember_history_id());
+            		minhangMemberTask.setMember_history_id(minhangMemberHistory.getMember_history_id());
             		MinhangMemberTaskService.instance.update(minhangMemberTask, minhangMemberTask.getMember_task_id(), request_user_id, minhangMemberTask.getSystem_version());
             	
             	}

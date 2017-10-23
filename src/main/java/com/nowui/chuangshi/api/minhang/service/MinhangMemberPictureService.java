@@ -52,11 +52,12 @@ public class MinhangMemberPictureService extends Service {
         return minhang_member_picture;
     }
     
-    public MinhangMemberPicture userAndTaskFind(String user_id, String task_id) {
+    public MinhangMemberPicture userAndTaskAndItineraryFind(String user_id, String task_id, String member_itinerary_id) {
         Cnd cnd = new Cnd();
         cnd.where(MinhangMemberPicture.SYSTEM_STATUS, true);
         cnd.andAllowEmpty(MinhangMemberPicture.USER_ID, user_id);
         cnd.andAllowEmpty(MinhangMemberPicture.TASK_ID, task_id);
+        cnd.andAllowEmpty(MinhangMemberPicture.MEMBER_ITINERARY_ID, member_itinerary_id);
 
         List<MinhangMemberPicture> minhang_member_pictureList = minhangMemberPictureDao.primaryKeyList(cnd);
         if (minhang_member_pictureList == null || minhang_member_pictureList.size() == 0) {
