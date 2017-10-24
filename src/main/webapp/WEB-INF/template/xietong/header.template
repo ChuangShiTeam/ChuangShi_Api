@@ -5,7 +5,7 @@ window.Header = class Component extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props.name);
+
     }
 
     componentWillUnmount() {
@@ -21,9 +21,9 @@ window.Header = class Component extends React.Component {
                     <div className="container">
                         <div className="pull-left"><a href="/index.html">您好，欢迎光临佛山协同国际学校！</a></div>
                         <div className="pull-right">
-                            <a className="margin-right">我是学生</a>
+                            <a className="margin-right" href="#">我是学生</a>
                             |
-                            <a className="margin-left">我是老师</a>
+                            <a className="margin-left" href="#">我是老师</a>
                         </div>
                     </div>
                 </div>

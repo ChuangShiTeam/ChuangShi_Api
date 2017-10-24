@@ -48,7 +48,7 @@ public class MenuService extends Service {
 
         List<Menu> menuList = menuDao.list(cnd);
 
-        List<Map<String, Object>> resultList = getChildren(menuList, Constant.PARENT_ID, Menu.MENU_PARENT_ID, Menu.MENU_ID, Menu.MENU_NAME, Menu.MENU_IMAGE, Menu.MENU_URL);
+        List<Map<String, Object>> resultList = packageChildren(menuList, Constant.PARENT_ID, Menu.MENU_PARENT_ID, Menu.MENU_ID, Menu.MENU_ID, Menu.MENU_NAME, Menu.MENU_NAME, new String[]{Menu.MENU_IMAGE, Menu.MENU_URL});
 
         return resultList;
     }

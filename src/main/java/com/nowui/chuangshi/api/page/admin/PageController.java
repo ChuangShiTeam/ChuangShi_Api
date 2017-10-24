@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.api.page.admin;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import com.nowui.chuangshi.api.article.service.ArticleCategoryService;
 import com.nowui.chuangshi.api.article.service.ArticleService;
 import com.nowui.chuangshi.api.page.model.Page;
 import com.nowui.chuangshi.api.page.service.PageService;
+import com.nowui.chuangshi.api.website.model.WebsiteMenu;
 import com.nowui.chuangshi.api.website.service.WebsiteMenuService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
@@ -47,7 +49,7 @@ public class PageController extends Controller {
 
         Page result = PageService.instance.find(model.getPage_id());
 
-        validateResponse(Page.PAGE_NAME, Page.PAGE_TEMPLATE, Page.PAGE_URL, Page.PAGE_CONTENT, Page.PAGE_SORT, Page.SYSTEM_VERSION);
+        validateResponse(Page.WEBSITE_MENU_ID, Page.PAGE_NAME, Page.PAGE_TEMPLATE, Page.PAGE_URL, Page.PAGE_CONTENT, Page.PAGE_SORT, Page.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
@@ -167,7 +169,7 @@ public class PageController extends Controller {
     
     @ActionKey("/admin/page/save")
     public void save() {
-        validateRequest(Page.PAGE_NAME, Page.PAGE_TEMPLATE, Page.PAGE_URL, Page.PAGE_CONTENT, Page.PAGE_SORT);
+        validateRequest(Page.WEBSITE_MENU_ID, Page.PAGE_NAME, Page.PAGE_TEMPLATE, Page.PAGE_URL, Page.PAGE_CONTENT, Page.PAGE_SORT);
 
         Page model = getModel(Page.class);
         model.setPage_id(Util.getRandomUUID());
@@ -180,7 +182,7 @@ public class PageController extends Controller {
 
     @ActionKey("/admin/page/update")
     public void update() {
-        validateRequest(Page.PAGE_ID, Page.PAGE_NAME, Page.PAGE_TEMPLATE, Page.PAGE_URL, Page.PAGE_CONTENT, Page.PAGE_SORT, Page.SYSTEM_VERSION);
+        validateRequest(Page.PAGE_ID, Page.WEBSITE_MENU_ID, Page.PAGE_NAME, Page.PAGE_TEMPLATE, Page.PAGE_URL, Page.PAGE_CONTENT, Page.PAGE_SORT, Page.SYSTEM_VERSION);
 
         Page model = getModel(Page.class);
         String request_user_id = getRequest_user_id();
@@ -223,7 +225,6 @@ public class PageController extends Controller {
         templateMap.put("articleList", articleList);
         templateMap.put("websiteMenuList", websiteMenuList);
         templateMap.put("indexBannerList", indexBannerList);
-//        templateMap.put("indexFloatList", indexFloatList);
 
         if (articleCategoryList != null && articleCategoryList.size() > 0) {
             ArticleCategory articleCategory = articleCategoryList.get(0);
@@ -231,14 +232,29 @@ public class PageController extends Controller {
             templateMap.put("article_category_id", articleCategory.getArticle_category_id());
         }
 
-//        for (Page page : pageList) {
-//            PageService.instance.write(request_app_id, page, templateMap);
-//        }
-
 
         PageService.instance.write(request_app_id, "header.template", "header.js", templateMap);
         PageService.instance.write(request_app_id, "footer.template", "footer.js", templateMap);
         PageService.instance.write(request_app_id, "index.template", "index.html", templateMap);
+
+
+        for (Page page : pageList) {
+            Map<String, Object> websiteMenu = new HashMap<String, Object>();
+            for (Map<String, Object> websiteMenuMap : websiteMenuList) {
+                List<Map<String, Object>> childrenwebsiteMenuList = (List<Map<String, Object>>) websiteMenuMap.get(Constant.CHILDREN);
+                for (Map<String, Object> childrenwebsiteMenuMap : childrenwebsiteMenuList) {
+                    if (((String) childrenwebsiteMenuMap.get(WebsiteMenu.WEBSITE_MENU_ID)).equals(page.getWebsite_menu_id())) {
+                        websiteMenu = websiteMenuMap;
+                    }
+                }
+            }
+            templateMap.put("websiteMenu", websiteMenu);
+
+            templateMap.put("page", page);
+            if (page.getPage_template().equals("detail.template")) {
+                PageService.instance.write(request_app_id, "detail.template", page.getPage_url(), templateMap);
+            }
+        }
 
         renderSuccessJson();
     }

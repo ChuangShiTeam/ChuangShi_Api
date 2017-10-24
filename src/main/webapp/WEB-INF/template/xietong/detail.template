@@ -48,48 +48,68 @@
 
             return (
                     <div>
-                        <Header/>
+                        <Header website_menu_id="#(websiteMenu.website_menu_id)"/>
                         <div className="content container">
                             <div className="title margin-top-20">
                                 <div className="title-icon"></div>
-                                <div className="title-breadcrumb"><a>首页</a> > <a>学术研究</a> > 学校2017年4月协同视讯</div>
+                                <div className="title-breadcrumb"><a href="/index.html">首页</a> > <a href="#">#(websiteMenu.website_menu_name)</a> >
+                                    学校2017年4月协同视讯
+                                </div>
                             </div>
                             <div className="row margin-top-20">
                                 <div className="subnav col-md-3">
-                                    <div className="subnav-item active">
-                                        <div className="subnav-item-menu"><a>学生在线选课</a></div>
-                                        <div className="subnav-item-arrow"></div>
-                                    </div>
-                                    <div className="subnav-item margin-top">
-                                        <div className="subnav-item-menu"><a>学生在线选课</a></div>
-                                        <div className="subnav-item-arrow"></div>
-                                    </div>
-                                    <div className="subnav-item margin-top">
-                                        <div className="subnav-item-menu"><a>学生在线选课</a></div>
-                                        <div className="subnav-item-arrow"></div>
-                                    </div>
-                                    <div className="subnav-item margin-top">
-                                        <div className="subnav-item-menu"><a>学生在线选课</a></div>
-                                        <div className="subnav-item-arrow"></div>
-                                    </div>
-                                    <div className="subnav-item margin-top">
-                                        <div className="subnav-item-menu"><a>学生在线选课</a></div>
-                                        <div className="subnav-item-arrow"></div>
-                                    </div>
+                                    #for(websiteMenuChildren : websiteMenu.children)
+                                    <a href="/#(websiteMenuChildren.website_menu_url)">
+                                        <div className="subnav-item #if(websiteMenuChildren.website_menu_id == page.website_menu_id ? "active" : "")#end margin-top">
+                                            <div className="subnav-item-menu">#(websiteMenuChildren.website_menu_name)</div>
+                                            <div className="subnav-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                    #end
+                                    <a href="#">
+                                        <div className="subnav-item active">
+                                            <div className="subnav-item-menu">学生在线选课</div>
+                                            <div className="subnav-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                    <a href="#">
+                                        <div className="subnav-item margin-top">
+                                            <div className="subnav-item-menu">学生在线选课</div>
+                                            <div className="subnav-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                    <a href="#">
+                                        <div className="subnav-item margin-top">
+                                            <div className="subnav-item-menu">学生在线选课</div>
+                                            <div className="subnav-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                    <a href="#">
+                                        <div className="subnav-item margin-top">
+                                            <div className="subnav-item-menu">学生在线选课</div>
+                                            <div className="subnav-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                    <a href="#">
+                                        <div className="subnav-item margin-top">
+                                            <div className="subnav-item-menu">学生在线选课</div>
+                                            <div className="subnav-item-arrow"></div>
+                                        </div>
+                                    </a>
                                     <div className="department margin-top">
-                                        <a>
+                                        <a href="#">
                                             <img src="image/department0.jpg" alt=""/>
                                             <div className="department-mask">小学部</div>
                                         </a>
                                     </div>
                                     <div className="department margin-top">
-                                        <a>
+                                        <a href="#">
                                             <img src="image/department1.jpg" alt=""/>
                                             <div className="department-mask">中学部</div>
                                         </a>
                                     </div>
                                     <div className="department margin-top">
-                                        <a>
+                                        <a href="#">
                                             <img src="image/department2.jpg" alt=""/>
                                             <div className="department-mask">国际部</div>
                                         </a>
