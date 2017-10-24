@@ -65,7 +65,7 @@ public class ArticleCategoryService extends Service {
         }
 
         String parent_id = "";
-        List<Map<String, Object>> resultList = getChildren(articleCategoryList, parent_id, ArticleCategory.ARTICLE_CATEGORY_PARENT_ID, ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.ARTICLE_CATEGORY_NAME);
+        List<Map<String, Object>> resultList = packageChildren(articleCategoryList, parent_id, ArticleCategory.ARTICLE_CATEGORY_PARENT_ID, ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.ARTICLE_CATEGORY_NAME, ArticleCategory.ARTICLE_CATEGORY_NAME, new String[]{});
         return resultList;
     }
 
