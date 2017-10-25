@@ -3,7 +3,6 @@ package com.nowui.chuangshi.api.minhang.service;
 import java.util.List;
 
 import com.nowui.chuangshi.api.minhang.dao.MinhangMemberRecordDao;
-import com.nowui.chuangshi.api.minhang.model.MinhangMemberQuestion;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberRecord;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
