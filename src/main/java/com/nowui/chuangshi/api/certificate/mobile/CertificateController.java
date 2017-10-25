@@ -1,14 +1,11 @@
 package com.nowui.chuangshi.api.certificate.mobile;
 
 import com.jfinal.core.ActionKey;
-import com.nowui.chuangshi.api.certificate.service.CertificateService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 
 @ControllerKey("/mobile/certificate")
 public class CertificateController extends Controller {
-
-    private final CertificateService certificateService = new CertificateService();
 
     @ActionKey("/mobile/certificate/list")
     public void list() {

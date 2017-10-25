@@ -128,6 +128,28 @@ public class UserService extends Service {
 
         return success;
     }
+    
+    public Boolean userAccountAndNameUpdate(String user_id, String user_account, String user_name, String system_update_user_id) {
+        if (ValidateUtil.isNullOrEmpty(user_account)) {
+            return false;
+        }
+        
+        User user = new User();
+        user.setUser_account(user_account);
+        user.setUser_name(user_name);
+        
+        Cnd cnd = new Cnd();
+        cnd.where(User.SYSTEM_STATUS, true);
+        cnd.and(User.USER_ID, user_id);
+        
+        Boolean success = userDao.update(user, system_update_user_id, cnd);
+        
+        if (success) {
+            CacheUtil.remove(USER_ITEM_CACHE, user_id);
+        }
+        
+        return success;
+    }
 
     public Boolean userPasswordUpdate(String user_id, String user_password, String system_update_user_id) {
         User user = new User();
@@ -153,7 +175,7 @@ public class UserService extends Service {
         cnd.where(User.SYSTEM_STATUS, true);
         cnd.and(User.USER_ID, user_id);
         cnd.and(User.SYSTEM_VERSION, system_version);
-
+        
         Boolean success = userDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {

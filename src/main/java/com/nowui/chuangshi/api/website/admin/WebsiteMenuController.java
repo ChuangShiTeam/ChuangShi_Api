@@ -25,6 +25,15 @@ public class WebsiteMenuController extends Controller {
         renderSuccessMapListJson(resultList);
     }
 
+    @ActionKey("/admin/website/menu/all/list")
+    public void allList() {
+        String request_app_id = getRequest_app_id();
+
+        List<Map<String, Object>> resultList = WebsiteMenuService.instance.appTree(request_app_id, "value", "label");
+
+        renderSuccessMapListJson(resultList);
+    }
+
     @ActionKey("/admin/website/menu/find")
     public void find() {
         validateRequest(WebsiteMenu.WEBSITE_MENU_ID);

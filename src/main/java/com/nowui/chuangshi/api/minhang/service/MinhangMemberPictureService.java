@@ -51,6 +51,32 @@ public class MinhangMemberPictureService extends Service {
 
         return minhang_member_picture;
     }
+    
+    public MinhangMemberPicture userAndTaskAndItineraryFind(String user_id, String task_id, String member_itinerary_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangMemberPicture.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(MinhangMemberPicture.USER_ID, user_id);
+        cnd.andAllowEmpty(MinhangMemberPicture.TASK_ID, task_id);
+        cnd.andAllowEmpty(MinhangMemberPicture.MEMBER_ITINERARY_ID, member_itinerary_id);
+
+        List<MinhangMemberPicture> minhang_member_pictureList = minhangMemberPictureDao.primaryKeyList(cnd);
+        if (minhang_member_pictureList == null || minhang_member_pictureList.size() == 0) {
+            return null;
+        }
+        return find(minhang_member_pictureList.get(0).getMember_picture_id());
+    }
+    
+    public List<MinhangMemberPicture> itineraryList(String member_itinerary_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangMemberPicture.SYSTEM_STATUS, true);
+        cnd.andAllowEmpty(MinhangMemberPicture.MEMBER_ITINERARY_ID, member_itinerary_id);
+
+        List<MinhangMemberPicture> minhang_member_pictureList = minhangMemberPictureDao.primaryKeyList(cnd);
+        for (MinhangMemberPicture minhang_member_picture : minhang_member_pictureList) {
+            minhang_member_picture.put(find(minhang_member_picture.getMember_picture_id()));
+        }
+        return minhang_member_pictureList;
+    }
 
     public Boolean save(MinhangMemberPicture minhang_member_picture, String system_create_user_id) {
         Boolean success = minhangMemberPictureDao.save(minhang_member_picture, system_create_user_id);

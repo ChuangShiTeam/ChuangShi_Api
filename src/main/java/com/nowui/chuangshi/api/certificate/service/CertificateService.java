@@ -2,6 +2,8 @@ package com.nowui.chuangshi.api.certificate.service;
 
 import com.nowui.chuangshi.api.certificate.dao.CertificateDao;
 import com.nowui.chuangshi.api.certificate.model.Certificate;
+import com.nowui.chuangshi.api.certificate.model.CertificatePay;
+import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
@@ -14,11 +16,13 @@ public class CertificateService extends Service {
     private final String CERTIFICATE_ITEM_CACHE = "certificate_item_cache";
     private final CertificateDao certificateDao = new CertificateDao();
 
-    public Integer adminCount(String app_id, String certificate_number) {
+    public Integer adminCount(String app_id, String user_name, String certificate_number) {
         Cnd cnd = new Cnd();
-        cnd.where(Certificate.SYSTEM_STATUS, true);
-        cnd.and(Certificate.APP_ID, app_id);
-        cnd.andAllowEmpty(Certificate.CERTIFICATE_NUMBER, certificate_number);
+        cnd.leftJoin(User.TABLE_USER, User.USER_ID, Certificate.TABLE_CERTIFICATE, Certificate.USER_ID);
+        cnd.where(Certificate.TABLE_CERTIFICATE + "." + Certificate.SYSTEM_STATUS, true);
+        cnd.and(Certificate.TABLE_CERTIFICATE + "." + Certificate.APP_ID, app_id);
+        cnd.andLikeAllowEmpty(User.TABLE_USER + "." + User.USER_NAME, user_name);
+        cnd.andLikeAllowEmpty(Certificate.TABLE_CERTIFICATE + "." + Certificate.CERTIFICATE_NUMBER, certificate_number);
 
         Integer count = certificateDao.count(cnd);
         return count;
@@ -34,22 +38,34 @@ public class CertificateService extends Service {
         return count;
     }
 
-    public List<Certificate> adminList(String app_id, String certificate_number, Integer m, Integer n) {
+    public List<Certificate> adminList(String app_id, String user_name, String certificate_number, Integer m, Integer n) {
         Cnd cnd = new Cnd();
-        cnd.where(Certificate.SYSTEM_STATUS, true);
-        cnd.and(Certificate.APP_ID, app_id);
-        cnd.andAllowEmpty(Certificate.CERTIFICATE_NUMBER, certificate_number);
+        cnd.leftJoin(User.TABLE_USER, User.USER_ID, Certificate.TABLE_CERTIFICATE, Certificate.USER_ID);
+        cnd.where(Certificate.TABLE_CERTIFICATE + "." + Certificate.SYSTEM_STATUS, true);
+        cnd.and(Certificate.TABLE_CERTIFICATE + "." + Certificate.APP_ID, app_id);
+        cnd.andLikeAllowEmpty(User.TABLE_USER + "." + User.USER_NAME, user_name);
+        cnd.andLikeAllowEmpty(Certificate.TABLE_CERTIFICATE + "." + Certificate.CERTIFICATE_NUMBER, certificate_number);
         cnd.paginate(m, n);
 
-        List<Certificate> pageList = certificateDao.list(cnd);
-        return pageList;
+        List<Certificate> certificateList = certificateDao.primaryKeyList(cnd);
+        for (Certificate certificate : certificateList) {
+            certificate.put(find(certificate.getCertificate_id()));
+        }
+        return certificateList;
     }
 
     public Certificate find(String certificate_id) {
         Certificate certificate = CacheUtil.get(CERTIFICATE_ITEM_CACHE, certificate_id);
 
         if (certificate == null) {
-            certificate = certificateDao.find(certificate_id);
+            Cnd cnd = new Cnd();
+            cnd.select(User.TABLE_USER + "." + User.USER_NAME);
+            cnd.select(CertificatePay.TABLE_CERTIFICATE_PAY + "." + CertificatePay.CERTIFICATE_AMOUNT);
+            cnd.leftJoin(User.TABLE_USER, User.USER_ID, Certificate.TABLE_CERTIFICATE, Certificate.USER_ID);
+            cnd.leftJoin(CertificatePay.TABLE_CERTIFICATE_PAY, CertificatePay.CERTIFICATE_ID, Certificate.TABLE_CERTIFICATE, Certificate.CERTIFICATE_ID);
+            cnd.where(Certificate.TABLE_CERTIFICATE + "." + Certificate.CERTIFICATE_ID, certificate_id);
+
+            certificate = certificateDao.find(cnd);
 
             CacheUtil.put(CERTIFICATE_ITEM_CACHE, certificate_id, certificate);
         }

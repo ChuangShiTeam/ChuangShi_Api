@@ -40,6 +40,13 @@ public class ProductController extends Controller {
         } else {
             productCategorySkuAttributeList = ProductCategorySkuAttributeService.instance.productCategoryList(product.getProduct_category_id());
         }
+        for (ProductCategorySkuAttribute productCategorySkuAttribute : productCategorySkuAttributeList) {
+            List<ProductCategorySkuAttributeItem> productCategorySkuAttributeItemList = ProductCategorySkuAttributeItemService.instance.productCategorySkuAttributeList(productCategorySkuAttribute.getProduct_category_sku_attribute_id());
+            for (ProductCategorySkuAttributeItem productCategorySkuAttributeItem : productCategorySkuAttributeItemList) {
+                productCategorySkuAttributeItem.keep(ProductCategorySkuAttributeItem.PRODUCT_CATEGORY_SKU_ATTRIBUTE_ITEM_ID, ProductCategorySkuAttributeItem.PRODUCT_CATEGORY_SKU_ATTRIBUTE_ITEM_NAME);
+            }
+            productCategorySkuAttribute.put(ProductCategorySkuAttribute.PRODUCT_CATEGORY_SKU_ATTRIBUTE_ITEM_LIST, productCategorySkuAttributeItemList);
+        }
         product.put(Product.PRODUCT_CATEGORY_SKU_ATTRIBUTE_LIST, productCategorySkuAttributeList);
 
         List<ProductSku> productSkuList = ProductSkuService.instance.productList(model.getProduct_id());
@@ -82,7 +89,7 @@ public class ProductController extends Controller {
                 Product.PRODUCT_SKU_LIST,
                 Product.SYSTEM_VERSION);
 
-        validateSecondResponse(Product.PRODUCT_CATEGORY_SKU_ATTRIBUTE_LIST, ProductCategorySkuAttribute.PRODUCT_CATEGORY_ID, ProductCategorySkuAttribute.PRODUCT_CATEGORY_SKU_ATTRIBUTE_NAME);
+        validateSecondResponse(Product.PRODUCT_CATEGORY_SKU_ATTRIBUTE_LIST, ProductCategorySkuAttribute.PRODUCT_CATEGORY_ID, ProductCategorySkuAttribute.PRODUCT_CATEGORY_SKU_ATTRIBUTE_NAME, ProductCategorySkuAttribute.PRODUCT_CATEGORY_SKU_ATTRIBUTE_ITEM_LIST);
 
         renderSuccessJson(product);
     }

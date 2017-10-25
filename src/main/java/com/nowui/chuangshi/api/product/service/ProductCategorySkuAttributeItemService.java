@@ -37,6 +37,19 @@ public class ProductCategorySkuAttributeItemService extends Service {
         return product_category_sku_attribute_itemList;
     }
 
+    public List<ProductCategorySkuAttributeItem> productCategorySkuAttributeList(String product_category_sku_attribute_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(ProductCategorySkuAttributeItem.SYSTEM_STATUS, true);
+        cnd.and(ProductCategorySkuAttributeItem.PRODUCT_CATEGORY_SKU_ATTRIBUTE_ID, product_category_sku_attribute_id);
+        cnd.asc(ProductCategorySkuAttributeItem.PRODUCT_CATEGORY_SKU_ATTRIBUTE_ITEM_SORT);
+
+        List<ProductCategorySkuAttributeItem> product_category_sku_attribute_itemList = productCategorySkuAttributeItemDao.primaryKeyList(cnd);
+        for (ProductCategorySkuAttributeItem product_category_sku_attribute_item : product_category_sku_attribute_itemList) {
+            product_category_sku_attribute_item.put(find(product_category_sku_attribute_item.getProduct_category_sku_attribute_item_id()));
+        }
+        return product_category_sku_attribute_itemList;
+    }
+
     public ProductCategorySkuAttributeItem find(String product_category_sku_attribute_item_id) {
         ProductCategorySkuAttributeItem product_category_sku_attribute_item = CacheUtil.get(PRODUCT_CATEGORY_SKU_ATTRIBUTE_ITEM_ITEM_CACHE, product_category_sku_attribute_item_id);
 

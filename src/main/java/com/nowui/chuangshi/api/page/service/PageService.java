@@ -115,10 +115,10 @@ public class PageService extends Service {
         return success;
     }
     
-    public void write(String app_id, Page page, Kv templateMap) {
-        PageService.engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong_new/");
+    public void write(String app_id, String page_template, String page_url, Kv templateMap) {
+        PageService.engine.setBaseTemplatePath(PathKit.getWebRootPath() + "/WEB-INF/template/xietong/");
 
-        Template template = PageService.engine.getTemplate(page.getPage_template());
+        Template template = PageService.engine.getTemplate(page_template);
 
         String content = template.renderToString(templateMap);
 
@@ -128,7 +128,7 @@ public class PageService extends Service {
             throw new RuntimeException("路径不能为空");
         }
 
-        FileUtil.writeFile(content, app.getApp_website_path() + page.getPage_url());
+        FileUtil.writeFile(content, app.getApp_website_path() + page_url);
     }
     
     /**

@@ -193,15 +193,15 @@ public class UniLotteryService extends Service {
                 throw new RuntimeException("号码已被抽完了");
             }
 
-            if (("21").equals(DateUtil.getDay()) || "22".equals(DateUtil.getDay())) {//21、22号抽奖概率80%
+            if (("21").equals(DateUtil.getDay()) || "22".equals(DateUtil.getDay()) || ("23").equals(DateUtil.getDay()) || "24".equals(DateUtil.getDay())) {//21-24号抽奖概率80%
                 if (ProbabilityUtil.random(0.8)) {
                     return getLottery_number(numberList, bean, request_user_id, request_app_id);
                 }
-            } else if (("23").equals(DateUtil.getDay()) || "24".equals(DateUtil.getDay()) || "25".equals(DateUtil.getDay())) { //23、24、25号抽奖概率60%
-                if (ProbabilityUtil.random(0.6)) {
+            } else if (("25").equals(DateUtil.getDay()) || "26".equals(DateUtil.getDay()) || "27".equals(DateUtil.getDay()) || "28".equals(DateUtil.getDay())) { //25-28号抽奖概率50%
+                if (ProbabilityUtil.random(0.5)) {
                     return getLottery_number(numberList, bean, request_user_id, request_app_id);
                 }
-            } else if (("26").equals(DateUtil.getDay()) || "27".equals(DateUtil.getDay())) { //26、27号抽奖概率100%
+            } else if (("29").equals(DateUtil.getDay()) || "30".equals(DateUtil.getDay()) || "31".equals(DateUtil.getDay())) { //29、30、31号抽奖概率100%
                 return getLottery_number(numberList, bean, request_user_id, request_app_id);
             }
         }

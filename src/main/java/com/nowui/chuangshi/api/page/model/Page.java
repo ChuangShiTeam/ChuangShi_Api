@@ -22,6 +22,9 @@ public class Page extends Model<Page> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
 
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "菜单编号", updatable = false)
+    public static final String WEBSITE_MENU_ID = "website_menu_id";
+
     @Column(type = ColumnType.VARCHAR, length = 30, comment = "单页名称")
     public static final String PAGE_NAME = "page_name";
 
@@ -69,6 +72,14 @@ public class Page extends Model<Page> {
 
     public void setApp_id(String app_id) {
         set(APP_ID, app_id);
+    }
+
+    public String getWebsite_menu_id() {
+        return getStr(WEBSITE_MENU_ID);
+    }
+
+    public void setWebsite_menu_id(String website_menu_id) {
+        set(WEBSITE_MENU_ID, website_menu_id);
     }
 
     public String getPage_name() {

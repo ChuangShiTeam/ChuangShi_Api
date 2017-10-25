@@ -1,0 +1,36 @@
+window.Footer = class Component extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+
+        }
+    }
+
+    componentDidMount() {
+
+    }
+
+    componentWillUnmount() {
+
+    }
+
+    render() {
+        return (
+            <div className="footer">
+                <div className="container">
+                    <div className="menu">
+                        #for(websiteMenu : websiteMenuList)
+                        <li>
+                            <a href="/#(websiteMenu.website_menu_url)">#(websiteMenu.website_menu_name)</a>
+                        </li>
+                        #end
+                    </div>
+                    <div className="copyright">
+                        <p>学校地址：佛山市禅城区东鄱南路10号</p>
+                        <p>联系电话： 0757-82596128 18188719581 郑老师</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}

@@ -46,6 +46,8 @@ public class ProductCategorySkuAttribute extends Model<ProductCategorySkuAttribu
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
+    public static final String PRODUCT_CATEGORY_SKU_ATTRIBUTE_ITEM_LIST = "product_category_sku_attribute_item_list";
+
     public String getProduct_category_sku_attribute_id() {
         return getStr(PRODUCT_CATEGORY_SKU_ATTRIBUTE_ID);
     }

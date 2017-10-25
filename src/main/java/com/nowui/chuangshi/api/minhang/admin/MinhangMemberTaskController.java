@@ -69,16 +69,4 @@ public class MinhangMemberTaskController extends Controller {
         renderSuccessJson(result);
     }
 
-    @ActionKey("/admin/minhang/member/task/delete")
-    public void delete() {
-        validateRequest(MinhangMemberTask.MEMBER_TASK_ID, MinhangMemberTask.SYSTEM_VERSION);
-
-        MinhangMemberTask model = getModel(MinhangMemberTask.class);
-        String request_user_id = getRequest_user_id();
-
-        Boolean result = MinhangMemberTaskService.instance.delete(model.getMember_task_id(), request_user_id, model.getSystem_version());
-
-        renderSuccessJson(result);
-    }
-
 }

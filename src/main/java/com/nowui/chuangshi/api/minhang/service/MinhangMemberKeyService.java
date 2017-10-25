@@ -14,7 +14,7 @@ public class MinhangMemberKeyService extends Service {
 
     public static final MinhangMemberKeyService instance = new MinhangMemberKeyService();
     private final String MINHANG_MEMBER_KEY_ITEM_CACHE = "minhang_member_key_item_cache";
-    private final String MINHANG_MEMBER_KEY_ID_USER_LIST_CACHE = "minhang_member_key_id_user_list_cache";
+    private final String MINHANG_MEMBER_KEY_ID_ITINERARY_LIST_CACHE = "minhang_member_key_id_itinerary_list_cache";
     private final MinhangMemberKeyDao minhangMemberKeyDao = new MinhangMemberKeyDao();
 
     public Integer adminCount(String app_id, String member_id, String key_id) {
@@ -43,8 +43,8 @@ public class MinhangMemberKeyService extends Service {
         return minhang_member_keyList;
     }
     
-    public MinhangMemberKey userAndKeyFind(String user_id, String key_id) {
-        List<MinhangMemberKey> minhang_member_keyList = userList(user_id);
+    public MinhangMemberKey keyAndItineraryFind(String key_id, String member_itinerary_id) {
+        List<MinhangMemberKey> minhang_member_keyList = itineraryList(member_itinerary_id);
         
         for (MinhangMemberKey minhangMemberKey : minhang_member_keyList) {
             if (key_id.equals(minhangMemberKey.getKey_id())) {
@@ -54,13 +54,13 @@ public class MinhangMemberKeyService extends Service {
         return null;
     }
     
-    public List<MinhangMemberKey> userList(String user_id) {
-        List<String> minhang_member_key_idList = CacheUtil.get(MINHANG_MEMBER_KEY_ID_USER_LIST_CACHE, user_id);
+    public List<MinhangMemberKey> itineraryList(String member_itinerary_id) {
+        List<String> minhang_member_key_idList = CacheUtil.get(MINHANG_MEMBER_KEY_ID_ITINERARY_LIST_CACHE, member_itinerary_id);
             
         if (minhang_member_key_idList == null) {
             Cnd cnd = new Cnd();
             cnd.where(MinhangMemberKey.SYSTEM_STATUS, true);
-            cnd.andAllowEmpty(MinhangMemberKey.USER_ID, user_id);
+            cnd.andAllowEmpty(MinhangMemberKey.MEMBER_ITINERARY_ID, member_itinerary_id);
 
             List<MinhangMemberKey> minhang_member_keyList = minhangMemberKeyDao.primaryKeyList(cnd);
             
@@ -100,21 +100,6 @@ public class MinhangMemberKeyService extends Service {
         cnd.and(MinhangMemberKey.SYSTEM_VERSION, system_version);
 
         Boolean success = minhangMemberKeyDao.update(minhang_member_key, system_update_user_id, system_version, cnd);
-
-        if (success) {
-            CacheUtil.remove(MINHANG_MEMBER_KEY_ITEM_CACHE, member_key_id);
-        }
-
-        return success;
-    }
-
-    public Boolean delete(String member_key_id, String system_update_user_id, Integer system_version) {
-        Cnd cnd = new Cnd();
-        cnd.where(MinhangMemberKey.SYSTEM_STATUS, true);
-        cnd.and(MinhangMemberKey.MEMBER_KEY_ID, member_key_id);
-        cnd.and(MinhangMemberKey.SYSTEM_VERSION, system_version);
-
-        Boolean success = minhangMemberKeyDao.delete(system_update_user_id, system_version, cnd);
 
         if (success) {
             CacheUtil.remove(MINHANG_MEMBER_KEY_ITEM_CACHE, member_key_id);

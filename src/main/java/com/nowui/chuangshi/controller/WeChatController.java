@@ -22,8 +22,6 @@ import com.jfinal.kit.HttpKit;
 import com.jfinal.kit.PathKit;
 import com.jfinal.weixin.sdk.api.*;
 import com.jfinal.weixin.sdk.kit.PaymentKit;
-import com.jfinal.weixin.sdk.utils.HttpUtils;
-import com.jfinal.weixin.sdk.utils.JsonUtils;
 import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.api.file.model.File;
@@ -192,7 +190,7 @@ public class WeChatController extends Controller {
 
         System.out.println(AccessTokenApi.getAccessToken().getAccessToken());
 
-        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"name\":\"党建功能\",\"sub_button\":[{\"type\":\"media_id\",\"name\":\"党员报到\",\"media_id\":\"Kzln8waR4IBj68ltHTU1fT0q_Wp90yZuBUePDMxOnrM\"},{\"type\":\"media_id\",\"name\":\"城市党建\",\"media_id\":\"Kzln8waR4IBj68ltHTU1fWAl1OE9g-TSI-1h5PncypM\"}]},{\"type\":\"view\",\"name\":\"微信矩阵\",\"url\":\"http://praymorn01.creatby.com\"},{\"type\":\"click\",\"name\":\"欢迎来稿\",\"key\":\"welcome_contribution\"}]}");
+        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"name\":\"党建功能\",\"sub_button\":[{\"type\":\"view\",\"name\":\"党建中心\",\"url\":\"http://h5.minhang.nowui.com/?#/index\"},{\"type\":\"media_id\",\"name\":\"党员报到\",\"media_id\":\"Kzln8waR4IBj68ltHTU1fT0q_Wp90yZuBUePDMxOnrM\"},{\"type\":\"media_id\",\"name\":\"城市党建\",\"media_id\":\"Kzln8waR4IBj68ltHTU1fWAl1OE9g-TSI-1h5PncypM\"}]},{\"type\":\"view\",\"name\":\"微信矩阵\",\"url\":\"http://praymorn01.creatby.com\"},{\"type\":\"click\",\"name\":\"欢迎来稿\",\"key\":\"welcome_contribution\"}]}");
         System.out.println(apiResult.getJson());
 
 
@@ -546,8 +544,6 @@ public class WeChatController extends Controller {
             String file_suffix = mediaFile.getSuffix();
             String file_name = Util.getRandomUUID() + "." + file_suffix;
 
-            path = path + "/" + file_name;
-            thumbnailPath = thumbnailPath + "/" + file_name;
             originalPath = originalPath + "/" + file_name;
 
             java.io.File imageFile = new java.io.File(originalPath);
@@ -565,9 +561,20 @@ public class WeChatController extends Controller {
             String file_type = FileType.IMAGE.getKey();
 
             if (file_suffix.equals("png") || file_suffix.equals("jpg") || file_suffix.equals("jpeg")) {
+            	path = path + "/" + file_name;
+            	thumbnailPath = thumbnailPath + "/" + file_name;
                 FileUtil.resizeImage(imageFile, file_suffix, thumbnailPath, 100);
                 FileUtil.resizeImage(imageFile, file_suffix, path, 360);
+            } else if (".amr".equals(file_suffix)) {
+            	path = path + "/" + file_name.split(".")[0] + ".mp3";
+            	FileUtil.changeToMp3(originalPath, path);
+            	
+            	thumbnailPath = path;
+                originalPath = path;
+
+                file_type = FileType.OTHER.getKey();
             } else {
+            	path = path + "/" + file_name;
                 FileUtil.copy(imageFile, new java.io.File(path));
 
                 thumbnailPath = path;

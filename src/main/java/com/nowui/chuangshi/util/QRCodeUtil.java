@@ -30,7 +30,7 @@ public class QRCodeUtil {
 	private static final String CHARSET = "utf-8";  
     private static final String FORMAT_NAME = "JPG";  
     // 二维码尺寸  
-    private static final int QRCODE_SIZE = 346;  
+    private static final int QRCODE_SIZE = 430;  
     // LOGO宽度  
     private static final int WIDTH = 60;  
     // LOGO高度  
@@ -226,9 +226,4 @@ public class QRCodeUtil {
         QRCodeUtil.encode(content, null, output, false);  
     }  
   
-    public static void main(String[] args) throws Exception {  
-        String text = "http://www.thinkphp.cn/extend/295.html";  
-        QRCodeUtil.encode(text, "C:/Users/Public/Pictures/Sample Pictures/images.jpg", "C:/Users/Public/Pictures/Sample Pictures/", true);  
-    }  
-
 }

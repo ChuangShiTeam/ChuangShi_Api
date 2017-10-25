@@ -21,6 +21,12 @@ public class MinhangMemberTask extends Model<MinhangMemberTask> {
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
+    
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员纪念册编号", updatable = false)
+    public static final String MEMBER_HISTORY_ID = "member_history_id";
+    
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员寻钥之旅编号")
+    public static final String MEMBER_ITINERARY_ID = "member_itinerary_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "钥匙编号")
     public static final String KEY_ID = "key_id";
@@ -37,6 +43,9 @@ public class MinhangMemberTask extends Model<MinhangMemberTask> {
     @Column(type = ColumnType.INT, length = 5, comment = "任务完成对应激活钥匙的步骤")
     public static final String KEY_ACTIVATED_STEP = "key_activated_step";
 
+    @Column(type = ColumnType.VARCHAR, length = 25, comment = "任务类型")
+    public static final String MEMBER_TASK_TYPE = "member_task_type";
+    
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
 
@@ -62,6 +71,14 @@ public class MinhangMemberTask extends Model<MinhangMemberTask> {
     public void setMember_task_id(String member_task_id) {
         set(MEMBER_TASK_ID, member_task_id);
     }
+    
+    public String getMember_itinerary_id() {
+    	return getStr(MEMBER_ITINERARY_ID);
+    }
+    
+    public void setMember_itinerary_id(String member_itinerary_id) {
+    	set(MEMBER_ITINERARY_ID, member_itinerary_id);
+    }
 
     public String getApp_id() {
         return getStr(APP_ID);
@@ -69,6 +86,14 @@ public class MinhangMemberTask extends Model<MinhangMemberTask> {
 
     public void setApp_id(String app_id) {
         set(APP_ID, app_id);
+    }
+    
+    public String getMember_history_id() {
+        return getStr(MEMBER_HISTORY_ID);
+    }
+
+    public void setMember_history_id(String member_history_id) {
+        set(MEMBER_HISTORY_ID, member_history_id);
     }
     
     public String getKey_id() {
@@ -111,12 +136,20 @@ public class MinhangMemberTask extends Model<MinhangMemberTask> {
         set(KEY_ACTIVATED_STEP, key_activated_step);
     }
 
-    public String getSystem_create_user_id() {
-        return getStr(SYSTEM_CREATE_USER_ID);
+    public String getMember_task_type() {
+        return getStr(MEMBER_TASK_TYPE);
     }
 
+    public void setMember_task_type(String member_task_type) {
+        set(MEMBER_TASK_TYPE, member_task_type);
+    }
+    
+    public String getSystem_create_user_id() {
+    	return getStr(SYSTEM_CREATE_USER_ID);
+    }
+    
     public void setSystem_create_user_id(String system_create_user_id) {
-        set(SYSTEM_CREATE_USER_ID, system_create_user_id);
+    	set(SYSTEM_CREATE_USER_ID, system_create_user_id);
     }
 
     public Date getSystem_create_time() {
