@@ -21,6 +21,7 @@ import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 @Before(AdminInterceptor.class)
 @ControllerKey("/admin/page")
@@ -232,11 +233,9 @@ public class PageController extends Controller {
             templateMap.put("article_category_id", articleCategory.getArticle_category_id());
         }
 
-
         PageService.instance.write(request_app_id, "header.template", "header.js", templateMap);
         PageService.instance.write(request_app_id, "footer.template", "footer.js", templateMap);
         PageService.instance.write(request_app_id, "index.template", "index.html", templateMap);
-
 
         for (Page page : pageList) {
             Map<String, Object> websiteMenu = new HashMap<String, Object>();
@@ -250,6 +249,7 @@ public class PageController extends Controller {
             }
             templateMap.put("websiteMenu", websiteMenu);
 
+            page.setPage_content(StringEscapeUtils.unescapeHtml4(page.getPage_content()));
             templateMap.put("page", page);
             if (page.getPage_template().equals("detail.template")) {
                 PageService.instance.write(request_app_id, "detail.template", page.getPage_url(), templateMap);

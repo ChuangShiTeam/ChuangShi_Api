@@ -3,6 +3,7 @@ package com.nowui.chuangshi.api.article.service;
 import com.nowui.chuangshi.api.article.dao.ArticleDao;
 import com.nowui.chuangshi.api.article.model.Article;
 import com.nowui.chuangshi.api.article.model.ArticleCategory;
+import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
@@ -53,9 +54,10 @@ public class ArticleService extends Service {
         return articleList;
     }
 
-    public List<Article> categoryList(String article_category_id, Integer m, Integer n) {
+    public List<Article> categoryList(String app_id, String article_category_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(Article.SYSTEM_STATUS, true);
+        cnd.and(Article.APP_ID, app_id);
         cnd.and(Article.ARTICLE_CATEGORY_ID, article_category_id);
         cnd.paginate(m, n);
 
@@ -78,9 +80,10 @@ public class ArticleService extends Service {
         return articleList;
     }
     
-    public Integer categoryCount(String article_category_id) {
+    public Integer categoryCount(String app_id, String article_category_id) {
         Cnd cnd = new Cnd();
         cnd.where(Article.SYSTEM_STATUS, true);
+        cnd.and(Article.APP_ID, app_id);
         cnd.and(Article.ARTICLE_CATEGORY_ID, article_category_id);
 
         Integer count = articleDao.count(cnd);
@@ -117,7 +120,14 @@ public class ArticleService extends Service {
         Article article = CacheUtil.get(ARTICLE_ITEM_CACHE, article_id);
 
         if (article == null) {
-            article = articleDao.find(article_id);
+            Cnd cnd = new Cnd();
+            cnd.selectIfNull(File.TABLE_FILE + "." + File.FILE_ID, "", File.FILE_ID);
+            cnd.selectIfNull(File.TABLE_FILE + "." + File.FILE_PATH, "", File.FILE_PATH);
+            cnd.leftJoin(File.TABLE_FILE, File.FILE_ID, Article.TABLE_ARTICLE, Article.ARTICLE_IMAGE);
+            cnd.where(Article.TABLE_ARTICLE + "." + Article.SYSTEM_STATUS, true);
+            cnd.and(Article.TABLE_ARTICLE + "." + Article.ARTICLE_ID, article_id);
+
+            article = articleDao.find(cnd);
 
             CacheUtil.put(ARTICLE_ITEM_CACHE, article_id, article);
         }

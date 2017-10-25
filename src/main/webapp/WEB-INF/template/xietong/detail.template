@@ -9,22 +9,22 @@
     <meta name="keywords" content="佛山市实验学校,协同学校,佛山市协同学校,佛山协同国际学校"/>
     <meta name="description"
           content="佛山市协同（国际）学校，由佛山市实验学校教育集团管理运营，与美国协同教育集团战略合作，是一所国际化、特色化、精英化的学校。国内教育部为小学初中9年一贯制（将开设高中部），国际教育部为幼儿园小学初中高中15年一贯制。秉承“协性同心、和人济世”的教育理念，培养适应现代、走向世界、引领未来的精英人才。"/>
-    <title>佛山协同国际学校</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="css/style.css"/>
-    <script src="js/react.min.js"></script>
-    <script src="js/react-dom.min.js"></script>
-    <script src="js/browser.min.js"></script>
-    <script src="js/react-bootstrap.min.js"></script>
-    <script src="js/reqwest.min.js"></script>
-    <script src="js/util.js"></script>
+    <title>#(page.page_name) - 佛山协同国际学校</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/style.css"/>
+    <script src="/js/react.min.js"></script>
+    <script src="/js/react-dom.min.js"></script>
+    <script src="/js/browser.min.js"></script>
+    <script src="/js/react-bootstrap.min.js"></script>
+    <script src="/js/reqwest.min.js"></script>
+    <script src="/js/util.js"></script>
 
 </head>
 <body id="root">
 </body>
 </html>
-<script type="text/babel" src="header.js"></script>
-<script type="text/babel" src="footer.js"></script>
+<script type="text/babel" src="/header.js"></script>
+<script type="text/babel" src="/footer.js"></script>
 <script type="text/babel">
     class Component extends React.Component {
         constructor(props) {
@@ -52,71 +52,41 @@
                         <div className="content container">
                             <div className="title margin-top-20">
                                 <div className="title-icon"></div>
-                                <div className="title-breadcrumb"><a href="/index.html">首页</a> > <a href="#">#(websiteMenu.website_menu_name)</a> >
-                                    学校2017年4月协同视讯
+                                <div className="title-breadcrumb"><a href="/index.html">首页</a> > <a href="#(websiteMenu.website_menu_url)">#(websiteMenu.website_menu_name)</a> >
+                                    #(page.page_name)
                                 </div>
                             </div>
                             <div className="row margin-top-20">
                                 <div className="subnav col-md-3">
                                     #for(websiteMenuChildren : websiteMenu.children)
                                     <a href="/#(websiteMenuChildren.website_menu_url)">
-                                        <div className="subnav-item #if(websiteMenuChildren.website_menu_id == page.website_menu_id ? "active" : "")#end margin-top">
+                                        <div className="subnav-item #if(websiteMenuChildren.website_menu_id == page.website_menu_id) active #else #end #if(for.index == 0) #else margin-top #end">
                                             <div className="subnav-item-menu">#(websiteMenuChildren.website_menu_name)</div>
                                             <div className="subnav-item-arrow"></div>
                                         </div>
                                     </a>
                                     #end
-                                    <a href="#">
-                                        <div className="subnav-item active">
-                                            <div className="subnav-item-menu">学生在线选课</div>
-                                            <div className="subnav-item-arrow"></div>
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div className="subnav-item margin-top">
-                                            <div className="subnav-item-menu">学生在线选课</div>
-                                            <div className="subnav-item-arrow"></div>
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div className="subnav-item margin-top">
-                                            <div className="subnav-item-menu">学生在线选课</div>
-                                            <div className="subnav-item-arrow"></div>
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div className="subnav-item margin-top">
-                                            <div className="subnav-item-menu">学生在线选课</div>
-                                            <div className="subnav-item-arrow"></div>
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div className="subnav-item margin-top">
-                                            <div className="subnav-item-menu">学生在线选课</div>
-                                            <div className="subnav-item-arrow"></div>
-                                        </div>
-                                    </a>
                                     <div className="department margin-top">
                                         <a href="#">
-                                            <img src="image/department0.jpg" alt=""/>
+                                            <img src="/image/department0.jpg" alt=""/>
                                             <div className="department-mask">小学部</div>
                                         </a>
                                     </div>
                                     <div className="department margin-top">
                                         <a href="#">
-                                            <img src="image/department1.jpg" alt=""/>
+                                            <img src="/image/department1.jpg" alt=""/>
                                             <div className="department-mask">中学部</div>
                                         </a>
                                     </div>
                                     <div className="department margin-top">
                                         <a href="#">
-                                            <img src="image/department2.jpg" alt=""/>
+                                            <img src="/image/department2.jpg" alt=""/>
                                             <div className="department-mask">国际部</div>
                                         </a>
                                     </div>
                                 </div>
                                 <div className="col-md-9">
-                                    d
+                                    <div dangerouslySetInnerHTML={{__html: '#(page.page_content)'}}></div>
                                 </div>
                             </div>
                         </div>
