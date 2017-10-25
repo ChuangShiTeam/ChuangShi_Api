@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="佛山市实验学校,协同学校,佛山市协同学校,佛山协同国际学校"/>
+    <meta name="description"
+          content="佛山市协同（国际）学校，由佛山市实验学校教育集团管理运营，与美国协同教育集团战略合作，是一所国际化、特色化、精英化的学校。国内教育部为小学初中9年一贯制（将开设高中部），国际教育部为幼儿园小学初中高中15年一贯制。秉承“协性同心、和人济世”的教育理念，培养适应现代、走向世界、引领未来的精英人才。"/>
+    <title>#(article.article_name) - 佛山协同国际学校</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/style.css"/>
+    <script src="/js/react.min.js"></script>
+    <script src="/js/react-dom.min.js"></script>
+    <script src="/js/browser.min.js"></script>
+    <script src="/js/react-bootstrap.min.js"></script>
+    <script src="/js/reqwest.min.js"></script>
+    <script src="/js/util.js"></script>
+    <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv-printshiv.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-sham.js"></script>
+    <![endif]-->
+
+</head>
+<body id="root">
+</body>
+</html>
+<script type="text/babel" src="/header.js"></script>
+<script type="text/babel" src="/footer.js"></script>
+<script type="text/babel">
+    class Component extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                article_category: {},
+                article_category_list: [{
+                    article_category_id: '0cc726f2b92f43d1ba5cc5d0065efb09',
+                    article_category_name: '公告通知'
+                }, {
+                    article_category_id: 'c9dd8759a7a04aaeb038973c3246d863',
+                    article_category_name: '学校新闻'
+                }, {
+                    article_category_id: 'da9b1750e8ea4f959df23cbdcba53f9a',
+                    article_category_name: '主题活动'
+                }, {
+                    article_category_id: '7e84950e6d96412b860b5be55f46d5e8',
+                    article_category_name: '党建活动'
+                }],
+                article: {}
+            }
+        }
+
+        componentDidMount() {
+            var article_category = {};
+            for (var i = 0; i < this.state.article_category_list.length; i++) {
+                if (this.state.article_category_list[i].article_category_id == '#(article.article_category_id)') {
+                    article_category = this.state.article_category_list[i];
+                    break;
+                }
+            }
+
+            this.setState({
+                article_category: article_category
+            });
+        }
+
+        componentWillUnmount() {
+
+        }
+
+
+        render() {
+            return (
+                    <div>
+                        <Header website_menu_id=""/>
+                        <div className="content container">
+                            <div className="title margin-top-20">
+                                <div className="title-icon"></div>
+                                <div className="title-breadcrumb"><a href="/index.html">首页</a> > <a href="/article.html?category=#(article.article_category_id)">{this.state.article_category.article_category_name}</a> > #(article.article_name)
+                                </div>
+                            </div>
+                            <div className="row margin-top-20">
+                                <div className="subnav col-md-3">
+                                    {
+                                        this.state.article_category_list.map(function (article_category, index) {
+                                            return (
+                                                    <a href={"/article.html?category=" + article_category.article_category_id}>
+                                                        <div className={"subnav-item" + (index > 0 ? " margin-top " : "") + (article_category.article_category_id == this.state.article_category.article_category_id ? " active" : "")}>
+                                                            <div className="subnav-item-menu">{article_category.article_category_name}</div>
+                                                            <div className="subnav-item-arrow"></div>
+                                                        </div>
+                                                    </a>
+                                            )
+                                        }.bind(this))
+                                    }
+                                    <div className="department margin-top">
+                                        <a>
+                                            <img src="/image/department0.jpg" alt=""/>
+                                            <div className="department-mask">小学部</div>
+                                        </a>
+                                    </div>
+                                    <div className="department margin-top">
+                                        <a>
+                                            <img src="/image/department1.jpg" alt=""/>
+                                            <div className="department-mask">中学部</div>
+                                        </a>
+                                    </div>
+                                    <div className="department margin-top">
+                                        <a>
+                                            <img src="/image/department2.jpg" alt=""/>
+                                            <div className="department-mask">国际部</div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="col-md-9">
+                                    <div className="article-title margin-top">
+                                        <h3>#(article.article_name)</h3>
+                                    </div>
+                                    <div className="article-summary margin-top-20">
+                                        作者： #if(article.article_author) #(article.article_author) #else admin #end 更新时间：#date(article.system_update_time, "yyyy-MM-dd")
+                                    </div>
+                                    <div className="margin-top-30" dangerouslySetInnerHTML={{__html: '#(article.article_content)'}}>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <Footer/>
+                    </div>
+            );
+        }
+    }
+
+    ReactDOM.render(<Component/>, document.getElementById("root"));
+</script>

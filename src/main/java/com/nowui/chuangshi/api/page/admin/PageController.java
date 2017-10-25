@@ -256,6 +256,12 @@ public class PageController extends Controller {
             }
         }
 
+        for (Article article : articleList) {
+            article.setArticle_content(StringEscapeUtils.unescapeHtml4(article.getArticle_content()));
+            templateMap.put("article", article);
+            PageService.instance.write(request_app_id, "item.template", "article/" + article.getArticle_id() + ".html", templateMap);
+        }
+
         renderSuccessJson();
     }
 
