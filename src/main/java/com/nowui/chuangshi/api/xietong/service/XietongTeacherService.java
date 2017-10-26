@@ -36,6 +36,15 @@ public class XietongTeacherService extends Service {
         return count;
     }
 
+    public Integer desktopCount(String app_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(XietongTeacher.SYSTEM_STATUS, true);
+        cnd.and(XietongTeacher.APP_ID, app_id);
+
+        Integer count = xietongTeacherDao.count(cnd);
+        return count;
+    }
+
     public List<XietongTeacher> adminList(String app_id, String organization_id, String teacher_name, String teacher_number, String teacher_category, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.select(XietongOrganization.TABLE_XIETONG_ORGANIZATION + "." + XietongOrganization.ORGANIZATION_NAME);
@@ -46,6 +55,19 @@ public class XietongTeacherService extends Service {
         cnd.andAllowEmpty(XietongTeacher.TABLE_XIETONG_TEACHER + "." + XietongTeacher.TEACHER_NAME, teacher_name);
         cnd.andAllowEmpty(XietongTeacher.TABLE_XIETONG_TEACHER + "." + XietongTeacher.TEACHER_NUMBER, teacher_number);
         cnd.andAllowEmpty(XietongTeacher.TABLE_XIETONG_TEACHER + "." + XietongTeacher.TEACHER_CATEGORY, teacher_category);
+        cnd.paginate(m, n);
+
+        List<XietongTeacher> xietong_teacherList = xietongTeacherDao.primaryKeyList(cnd);
+        for (XietongTeacher xietong_teacher : xietong_teacherList) {
+            xietong_teacher.put(find(xietong_teacher.getTeacher_id()));
+        }
+        return xietong_teacherList;
+    }
+
+    public List<XietongTeacher> desktopList(String app_id, Integer m, Integer n) {
+        Cnd cnd = new Cnd();
+        cnd.where(XietongTeacher.SYSTEM_STATUS, true);
+        cnd.and(XietongTeacher.APP_ID, app_id);
         cnd.paginate(m, n);
 
         List<XietongTeacher> xietong_teacherList = xietongTeacherDao.primaryKeyList(cnd);

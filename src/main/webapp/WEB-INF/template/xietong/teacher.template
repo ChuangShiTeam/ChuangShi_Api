@@ -29,9 +29,9 @@
     class Component extends React.Component {
         constructor(props) {
             super(props);
-
             this.state = {
-
+                category_id: '0',
+                link: 'group'
             }
         }
 
@@ -44,6 +44,8 @@
         }
 
         render() {
+            const Carousel = ReactBootstrap.Carousel;
+
             return (
                     <div>
                         <Header website_menu_id="#(websiteMenu.website_menu_id)"/>

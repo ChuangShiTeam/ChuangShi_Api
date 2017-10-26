@@ -219,7 +219,7 @@ public class PageController extends Controller {
 
         List<Map<String, Object>> indexBannerList = AdvertisementService.instance.adminCategoryCodeList(request_app_id, "index_banner");
 
-        List<Map<String, Object>> indexFloatList = AdvertisementService.instance.adminCategoryCodeList(request_app_id, "index_float");
+//        List<Map<String, Object>> indexFloatList = AdvertisementService.instance.adminCategoryCodeList(request_app_id, "index_float");
 
         Kv templateMap = Kv.create();
         templateMap.put("articleCategoryList", articleCategoryList);
