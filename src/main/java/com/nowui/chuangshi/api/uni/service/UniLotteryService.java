@@ -193,24 +193,8 @@ public class UniLotteryService extends Service {
                 throw new RuntimeException("号码已被抽完了");
             }
 
-            if (("21").equals(DateUtil.getDay()) || "22".equals(DateUtil.getDay()) || ("23").equals(DateUtil.getDay()) || "24".equals(DateUtil.getDay())) {//21-24号抽奖概率80%
-                if (ProbabilityUtil.random(0.8)) {
-                    return getLottery_number(numberList, bean, request_user_id, request_app_id);
-                }
-            } else if (("25").equals(DateUtil.getDay()) || "26".equals(DateUtil.getDay()) || "27".equals(DateUtil.getDay()) || "28".equals(DateUtil.getDay())) { //25-28号抽奖概率50%
-                if (ProbabilityUtil.random(0.5)) {
-                    return getLottery_number(numberList, bean, request_user_id, request_app_id);
-                }
-            } else if (("29").equals(DateUtil.getDay()) || "30".equals(DateUtil.getDay()) || "31".equals(DateUtil.getDay())) { //29、30、31号抽奖概率100%
-                return getLottery_number(numberList, bean, request_user_id, request_app_id);
-            }
+            return getLottery_number(numberList, bean, request_user_id, request_app_id);
         }
-        System.out.println(bean.getLottery_user_mobile() + "未抽中号码");
-        //未抽中，则更新用户抽签次数，抽签次数加一
-        bean.setLottery_time(bean.getLottery_time() + 1);
-        bean.setLottery_status(true);
-        this.update(bean, request_user_id, request_user_id, bean.getSystem_version());
-        return null;
     }
 
     public String getLottery_number(List<String> numberList, UniLottery bean, String request_user_id, String request_app_id) {
