@@ -29,6 +29,7 @@
     class Component extends React.Component {
         constructor(props) {
             super(props);
+
             this.state = {
 
             }
@@ -109,7 +110,7 @@
                                             #if(article.article_category_id == "c9dd8759a7a04aaeb038973c3246d863" && count < 3)
                                             <div className={"article-item #if(count == 0) margin-top#else margin-top-30#end"}>
                                         <a href="/article/#(article.article_id).html">
-                                                    <img className="article-item-image" src={host + "#(article.file_path)"} alt=""/>
+                                                    <img className="article-item-image img-thumbnail" src={host + "#(article.file_path)"} alt=""/>
                                                     <div className="article-item-title">#(article.article_name)</div>
                                                     <div className="article-item-description">#(article.article_summary)</div>
                                                 </a>
@@ -136,7 +137,7 @@
                                     #if(article.article_category_id == "7e84950e6d96412b860b5be55f46d5e8" && count < 3)
                                     <div className={"article-item #if(count == 0) margin-top#else margin-top-30#end"}>
                                         <a href="/article/#(article.article_id).html">
-                                            <img className="article-item-image" src={host + "#(article.file_path)"} alt=""/>
+                                            <img className="article-item-image img-thumbnail" src={host + "#(article.file_path)"} alt=""/>
                                             <div className="article-item-title">#(article.article_name)</div>
                                             <div className="article-item-description">#(article.article_summary)</div>
                                         </a>

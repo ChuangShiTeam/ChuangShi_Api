@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.api.file.admin;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.HttpKit;
@@ -75,16 +76,17 @@ public class FileController extends Controller {
 
         renderSuccessMapListJson(resultList);
     }
-    
-    @ActionKey("/admin/file/base64/upload")
-    public void base64Upload() {
+
+    @ActionKey("/admin/file/image/base64/upload")
+    public void imageBase64Upload() {
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
+        JSONObject jsonObject = getParameterJSONObject();
 
         authenticateRequest_app_idAndRequest_user_id();
-        
-        String dataString = HttpKit.readData(getRequest());
-        
+
+        String dataString = jsonObject.getString(Constant.DATA);
+
         Map<String, Object> result = FileService.instance.uploadBase64(dataString, request_app_id, request_user_id);
 
         renderSuccessJson(result);
