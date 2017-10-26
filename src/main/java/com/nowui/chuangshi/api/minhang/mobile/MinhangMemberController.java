@@ -45,5 +45,19 @@ public class MinhangMemberController extends Controller {
 
         renderSuccessJson(result);
     }
+    
+    /**
+     * 会员签到
+     */
+    @ActionKey("/mobile/minhang/member/sign")
+    public void sign() {
+        String request_user_id = getRequest_user_id();
+        
+        User user = UserService.instance.find(request_user_id);
+        
+        Boolean result = UserService.instance.systemUpdateTimeUpdate(user.getUser_id(), request_user_id, user.getSystem_version());
+        
+        renderSuccessJson(result);
+    }
 
 }

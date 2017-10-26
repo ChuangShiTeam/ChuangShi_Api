@@ -169,14 +169,13 @@ public class UserService extends Service {
     }
 
     public Boolean systemUpdateTimeUpdate(String user_id, String system_update_user_id, Integer system_version) {
-        User user = new User();
 
         Cnd cnd = new Cnd();
         cnd.where(User.SYSTEM_STATUS, true);
         cnd.and(User.USER_ID, user_id);
         cnd.and(User.SYSTEM_VERSION, system_version);
         
-        Boolean success = userDao.delete(system_update_user_id, system_version, cnd);
+        Boolean success = userDao.update(new User(), system_update_user_id, cnd);
 
         if (success) {
             CacheUtil.remove(USER_ITEM_CACHE, user_id);
