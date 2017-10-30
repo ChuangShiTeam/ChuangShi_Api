@@ -16,6 +16,8 @@ import com.nowui.chuangshi.api.page.model.Page;
 import com.nowui.chuangshi.api.page.service.PageService;
 import com.nowui.chuangshi.api.website.model.WebsiteMenu;
 import com.nowui.chuangshi.api.website.service.WebsiteMenuService;
+import com.nowui.chuangshi.api.xietong.model.XietongTeacher;
+import com.nowui.chuangshi.api.xietong.service.XietongTeacherService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
@@ -221,11 +223,14 @@ public class PageController extends Controller {
 
 //        List<Map<String, Object>> indexFloatList = AdvertisementService.instance.adminCategoryCodeList(request_app_id, "index_float");
 
+        List<XietongTeacher> teacherList = XietongTeacherService.instance.appList(request_app_id);
+
         Kv templateMap = Kv.create();
         templateMap.put("articleCategoryList", articleCategoryList);
         templateMap.put("articleList", articleList);
         templateMap.put("websiteMenuList", websiteMenuList);
         templateMap.put("indexBannerList", indexBannerList);
+        templateMap.put("teacherList", teacherList);
 
         if (articleCategoryList != null && articleCategoryList.size() > 0) {
             ArticleCategory articleCategory = articleCategoryList.get(0);
@@ -251,8 +256,8 @@ public class PageController extends Controller {
 
             page.setPage_content(StringEscapeUtils.unescapeHtml4(page.getPage_content()));
             templateMap.put("page", page);
-            if (page.getPage_template().equals("detail.template")) {
-                PageService.instance.write(request_app_id, "detail.template", page.getPage_url(), templateMap);
+            if (page.getPage_template().equals("detail.template") || page.getPage_template().equals("teacher.template")) {
+                PageService.instance.write(request_app_id, page.getPage_template(), page.getPage_url(), templateMap);
             }
         }
 
@@ -260,6 +265,12 @@ public class PageController extends Controller {
             article.setArticle_content(StringEscapeUtils.unescapeHtml4(article.getArticle_content()));
             templateMap.put("article", article);
             PageService.instance.write(request_app_id, "item.template", "article/" + article.getArticle_id() + ".html", templateMap);
+        }
+
+        for (XietongTeacher teacher : teacherList) {
+            teacher.setTeacher_description(StringEscapeUtils.unescapeHtml4(teacher.getTeacher_description()));
+            templateMap.put("teacher", teacher);
+            PageService.instance.write(request_app_id, "teacher_item.template", "teacher/" + teacher.getTeacher_id() + ".html", templateMap);
         }
 
         renderSuccessJson();

@@ -12,6 +12,10 @@
     <title>#(page.page_name) - 佛山协同国际学校</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/style.css"/>
+    <!--[if IE 8]>
+    <script src="/js/es5-shim.min.js"></script>
+    <script src="/js/es5-sham.min.js"></script>
+    <![endif]-->
     <script src="/js/react.min.js"></script>
     <script src="/js/react-dom.min.js"></script>
     <script src="/js/browser.min.js"></script>
