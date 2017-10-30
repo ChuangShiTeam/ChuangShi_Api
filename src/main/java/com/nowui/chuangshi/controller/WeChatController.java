@@ -523,6 +523,14 @@ public class WeChatController extends Controller {
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
         
+        App app = AppService.instance.find(request_app_id);
+
+        String wechat_app_id = ApiConfigKit.getAppId();
+        if (!wechat_app_id.equals(app.getWechat_app_id())) {
+            ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+        }
+
+        
         JSONObject jsonObject = getParameterJSONObject();
         
         String media_id = jsonObject.getString(Constant.MEDIA_ID);
@@ -531,7 +539,7 @@ public class WeChatController extends Controller {
         
         Map<String, Object> result = new HashMap<String, Object>();
         
-        if (mediaFile != null) {
+        if (mediaFile != null && !ValidateUtil.isNullOrEmpty(mediaFile.getFileName())) {
             String path = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + request_app_id + "/" + request_user_id;
             String thumbnailPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + request_app_id + "/" + request_user_id + "/" + Constant.THUMBNAIL;
             String originalPath = PathKit.getWebRootPath() + "/" + Constant.UPLOAD + "/" + request_app_id + "/" + request_user_id + "/" + Constant.ORIGINAL;
