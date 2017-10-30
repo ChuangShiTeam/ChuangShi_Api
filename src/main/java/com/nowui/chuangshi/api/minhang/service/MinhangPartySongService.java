@@ -6,6 +6,7 @@ import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -110,6 +111,40 @@ public class MinhangPartySongService extends Service {
         }
 
         return success;
+    }
+    
+    public MinhangPartySong prevSong(String app_id, Date system_create_time) {
+        MinhangPartySong minhangPartySong = minhangPartySongDao.prevSong(app_id, system_create_time);
+        if (minhangPartySong == null) {
+            Cnd cnd = new Cnd();
+            cnd.where(MinhangPartySong.SYSTEM_STATUS, true);
+            cnd.and(MinhangPartySong.APP_ID, app_id);
+            cnd.asc(MinhangPartySong.SYSTEM_CREATE_TIME);
+            cnd.paginate(0, 1);
+            
+            List<MinhangPartySong> minhangPartySongList = minhangPartySongDao.list(cnd);
+            if (minhangPartySongList != null && minhangPartySongList.size() > 0) {
+                minhangPartySong = minhangPartySongList.get(0);
+            }
+        }
+        return minhangPartySong;
+    }
+    
+    public MinhangPartySong nextSong(String app_id, Date system_create_time) {
+        MinhangPartySong minhangPartySong = minhangPartySongDao.nextSong(app_id, system_create_time);
+        if (minhangPartySong == null) {
+            Cnd cnd = new Cnd();
+            cnd.where(MinhangPartySong.SYSTEM_STATUS, true);
+            cnd.and(MinhangPartySong.APP_ID, app_id);
+            cnd.desc(MinhangPartySong.SYSTEM_CREATE_TIME);
+            cnd.paginate(0, 1);
+            
+            List<MinhangPartySong> minhangPartySongList = minhangPartySongDao.list(cnd);
+            if (minhangPartySongList != null && minhangPartySongList.size() > 0) {
+                minhangPartySong = minhangPartySongList.get(0);
+            }
+        }
+        return minhangPartySong;
     }
 
 }

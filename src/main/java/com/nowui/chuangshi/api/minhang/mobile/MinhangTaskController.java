@@ -310,6 +310,41 @@ public class MinhangTaskController extends Controller {
         
         renderSuccessJson(result);
     }
+    
+    @ActionKey("/mobile/minhang/task/user/find")
+    public void userFind() {
+        String request_user_id = getRequest_user_id();
+        String request_app_id = getRequest_app_id();
+        
+        //查询用户最近的寻钥之旅记录
+        MinhangMemberItinerary member_itinerary = MinhangMemberItineraryService.instance.userLatestFind(request_user_id);
+       
+        if (member_itinerary == null) {
+            throw new RuntimeException("还没有开启寻钥之旅");
+        }
+        
+        User result = UserService.instance.find(request_user_id);
+        
+        List<MinhangPoster> posterList = MinhangPosterService.instance.appList(request_app_id);
+        
+        MinhangMemberPicture minhangMemberPicture = null;
+        for (MinhangPoster poster : posterList) {
+            minhangMemberPicture = MinhangMemberPictureService.instance.userAndTaskAndItineraryFind(result.getUser_id(), poster.getTask_id(), member_itinerary.getMember_itinerary_id());
+            if (minhangMemberPicture != null) {
+               break;
+            }
+        }
+        if (minhangMemberPicture == null) {
+            result.put(User.USER_AVATAR, FileService.instance.getFile_path(result.getUser_avatar()));
+        } else {
+            result.put(User.USER_AVATAR, "http://api.chuangshi.nowui.com" + FileService.instance.getFile_path(minhangMemberPicture.getPicture_file()));
+
+        }
+        
+        validateResponse(User.USER_NAME, User.USER_AVATAR);
+
+        renderSuccessJson(result);
+    }
 
     @ActionKey("/mobile/minhang/task/save")
     public void save() {

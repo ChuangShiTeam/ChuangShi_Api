@@ -7,7 +7,11 @@ import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.member.model.Member;
 import com.nowui.chuangshi.api.member.service.MemberService;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberHistory;
+import com.nowui.chuangshi.api.minhang.model.MinhangMemberPicture;
+import com.nowui.chuangshi.api.minhang.model.MinhangPoster;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberHistoryService;
+import com.nowui.chuangshi.api.minhang.service.MinhangMemberPictureService;
+import com.nowui.chuangshi.api.minhang.service.MinhangPosterService;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -43,6 +47,20 @@ public class MinhangMemberController extends Controller {
         
         validateResponse(User.USER_NAME, User.USER_AVATAR, "history_list");
 
+        renderSuccessJson(result);
+    }
+    
+    /**
+     * 会员签到
+     */
+    @ActionKey("/mobile/minhang/member/sign")
+    public void sign() {
+        String request_user_id = getRequest_user_id();
+        
+        User user = UserService.instance.find(request_user_id);
+        
+        Boolean result = UserService.instance.systemUpdateTimeUpdate(user.getUser_id(), request_user_id, user.getSystem_version());
+        
         renderSuccessJson(result);
     }
 
