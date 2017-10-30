@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.nowui.chuangshi.api.advertisement.dao.AdvertisementDao;
 import com.nowui.chuangshi.api.advertisement.model.Advertisement;
+import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
@@ -67,12 +68,32 @@ public class AdvertisementService extends Service {
         }
         return resultList;
     }
-    
+
+    public List<Advertisement> appList(String app_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(Advertisement.SYSTEM_STATUS, true);
+        cnd.and(Advertisement.APP_ID, app_id);
+        cnd.asc(Advertisement.ADVERTISEMENT_SORT);
+
+        List<Advertisement> articleCategoryList = advertisementDao.primaryKeyList(cnd);
+        for (Advertisement articleCategory : articleCategoryList) {
+            articleCategory.put(find(articleCategory.getAdvertisement_id()));
+        }
+        return articleCategoryList;
+    }
+
     public Advertisement find(String advertisement_id) {
         Advertisement advertisement = CacheUtil.get(ADVERTISEMENT_ITEM_CACHE, advertisement_id);
 
         if (advertisement == null) {
-            advertisement = advertisementDao.find(advertisement_id);
+            Cnd cnd = new Cnd();
+            cnd.selectIfNull(File.TABLE_FILE + "." + File.FILE_ID, "", File.FILE_ID);
+            cnd.selectIfNull(File.TABLE_FILE + "." + File.FILE_PATH, "", File.FILE_PATH);
+            cnd.leftJoin(File.TABLE_FILE, File.FILE_ID, Advertisement.TABLE_ADVERTISEMENT, Advertisement.ADVERTISEMENT_IMAGE);
+            cnd.where(Advertisement.TABLE_ADVERTISEMENT + "." + Advertisement.SYSTEM_STATUS, true);
+            cnd.and(Advertisement.TABLE_ADVERTISEMENT + "." + Advertisement.ADVERTISEMENT_ID, advertisement_id);
+
+            advertisement = advertisementDao.find(cnd);
 
             CacheUtil.put(ADVERTISEMENT_ITEM_CACHE, advertisement_id, advertisement);
         }
