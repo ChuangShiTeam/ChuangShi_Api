@@ -36,6 +36,51 @@ public class MinhangPartyHistoryController extends Controller {
         
         renderSuccessJson(minhang_party_history);
     }
+    
+    /**
+     * 上一篇
+     */
+    @ActionKey("/mobile/minhang/party/history/prev")
+    public void prev() {
+        validateRequest(MinhangPartyHistory.PARTY_HISTORY_ID);
+        String request_app_id = getRequest_app_id();
+        
+        MinhangPartyHistory model = getModel(MinhangPartyHistory.class);
+        
+        MinhangPartyHistory bean = MinhangPartyHistoryService.instance.find(model.getParty_history_id());
+        
+        MinhangPartyHistory minhang_party_history = MinhangPartyHistoryService.instance.prevHistory(request_app_id, bean.getSystem_create_time());
+        
+        MinhangTask minhangTask = MinhangTaskService.instance.find(minhang_party_history.getTask_id());
+        minhang_party_history.put(MinhangTask.TASK_QRCODE_URL, minhangTask.getTask_qrcode_url());
+        
+        validateResponse(MinhangPartyHistory.PARTY_HISTORY_ID, MinhangTask.TASK_QRCODE_URL, MinhangPartyHistory.TASK_ID, MinhangPartyHistory.PARTY_HISTORY_CONTENT, MinhangPartyHistory.BOOK_CODE, MinhangPartyHistory.SYSTEM_VERSION);
+        
+        renderSuccessJson(minhang_party_history);
+    }
+    
+    /**
+     * 下一篇
+     */
+    @ActionKey("/mobile/minhang/party/history/next")
+    public void next() {
+    	validateRequest(MinhangPartyHistory.PARTY_HISTORY_ID);
+        String request_app_id = getRequest_app_id();
+        
+        MinhangPartyHistory model = getModel(MinhangPartyHistory.class);
+        
+        MinhangPartyHistory bean = MinhangPartyHistoryService.instance.find(model.getParty_history_id());
+        
+        MinhangPartyHistory minhang_party_history = MinhangPartyHistoryService.instance.nextHistory(request_app_id, bean.getSystem_create_time());
+        
+        MinhangTask minhangTask = MinhangTaskService.instance.find(minhang_party_history.getTask_id());
+        minhang_party_history.put(MinhangTask.TASK_QRCODE_URL, minhangTask.getTask_qrcode_url());
+        
+        validateResponse(MinhangPartyHistory.PARTY_HISTORY_ID, MinhangTask.TASK_QRCODE_URL, MinhangPartyHistory.TASK_ID, MinhangPartyHistory.PARTY_HISTORY_CONTENT, MinhangPartyHistory.BOOK_CODE, MinhangPartyHistory.SYSTEM_VERSION);
+        
+        renderSuccessJson(minhang_party_history);
+    }
+
 
     @ActionKey("/mobile/minhang/party/history/save")
     public void save() {
