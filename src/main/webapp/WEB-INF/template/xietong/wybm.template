@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="佛山市实验学校,协同学校,佛山市协同学校,佛山协同国际学校"/>
+    <meta name="description"
+          content="佛山市协同（国际）学校，由佛山市实验学校教育集团管理运营，与美国协同教育集团战略合作，是一所国际化、特色化、精英化的学校。国内教育部为小学初中9年一贯制（将开设高中部），国际教育部为幼儿园小学初中高中15年一贯制。秉承“协性同心、和人济世”的教育理念，培养适应现代、走向世界、引领未来的精英人才。"/>
+    <title>佛山市实验学校教育集团 - 佛山协同国际学校</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/style.css"/>
+    <!--[if IE 8]>
+    <script src="/js/es5-shim.min.js"></script>
+    <script src="/js/es5-sham.min.js"></script>
+    <![endif]-->
+    <script src="/js/react.min.js"></script>
+    <script src="/js/react-dom.min.js"></script>
+    <script src="/js/browser.min.js"></script>
+    <script src="/js/react-bootstrap.min.js"></script>
+    <script src="/js/reqwest.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="js/rc-form.min.js"></script>
+
+</head>
+<body id="root">
+</body>
+</html>
+<script type="text/babel" src="/header.js"></script>
+<script type="text/babel" src="/footer.js"></script>
+<script type="text/babel">
+    class Component extends React.Component {
+        constructor(props) {
+            super(props);
+
+            this.state = {
+                is_load: false,
+                result_type: "",
+                result_message: "",
+                menu_index: 7
+            }
+        }
+
+        componentDidMount() {
+
+        }
+
+        componentWillUnmount() {
+
+        }
+
+        handlSubmit() {
+            this.props.form.validateFields((errors, values) => {
+                if (!!errors) {
+                    var message = '';
+                    for (var error in errors) {
+                        message += "<p>";
+                        message += errors[error].errors[0].message;
+                        message += "</p>";
+                    }
+                    this.setState({
+                        result_type: 'danger',
+                        result_message: message
+                    });
+
+                    return;
+                }
+                if (values.admissions_is_apply_live_school === 'true') {
+                    values.admissions_is_apply_live_school = true;
+                } else {
+                    values.admissions_is_apply_live_school = false;
+                }
+                this.setState({
+                    is_load: true,
+                    result_type: ""
+                });
+
+                request({
+                    url: '/mobile/xietong/admissions/save',
+                    data: values,
+                    success: function (data) {
+                        this.setState({
+                            result_type: 'success',
+                            result_message: '提交成功, 密码为证件号码后6位'
+                        });
+                    }.bind(this),
+                    error: function (data) {
+                        this.setState({
+                            result_type: 'danger',
+                            result_message: data.message
+                        });
+                    }.bind(this),
+                    complete: function () {
+                        this.setState({
+                            is_load: false
+                        });
+                    }.bind(this)
+                });
+            });
+        }
+
+        handleUpload() {
+
+        }
+
+        render() {
+            const {Navbar, Nav, NavItem, NavDropdown, MenuItem, Carousel, Form, FormGroup, Col, FormControl, ControlLabel, Button, Alert, Radio, HelpBlock} = ReactBootstrap;
+
+            const {getFieldProps, getFieldError, getFieldValue} = this.props.form;
+
+            const formInstance = (
+                    <Form horizontal style={{marginTop: '20px'}}>
+                        <FormGroup {...getFieldProps('admissions_name', {
+                            rules: [{
+                                required: true,
+                                message: '学生姓名不能为空'
+                            }],
+                            initialValue: ''
+                        })} validationState={getFieldError('admissions_name') ? 'error' : getFieldValue('admissions_name') === '' ? null : 'success'}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                学生姓名
+                            </Col>
+                            <Col sm={9}>
+                                <FormControl placeholder="请输入学生姓名"/>
+                                <FormControl.Feedback />
+                                <span className="error-message">{getFieldError('admissions_name')}</span>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup {...getFieldProps('admissions_sex', {
+                            rules: [{
+                                required: true,
+                                message: '性别不能为空'
+                            }],
+                            initialValue: ''
+                        })} validationState={getFieldError('admissions_sex') ? 'error' : getFieldValue('admissions_sex') === '' ? null : 'success'}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                性别
+                            </Col>
+                            <Col sm={9}>
+                                <Radio name="admissions_sex" value="男">
+                                    男
+                                </Radio>
+                                {' '}
+                                <Radio name="admissions_sex"  value="女">
+                                    女
+                                </Radio>
+                                <FormControl.Feedback />
+                                <span className="error-message">{getFieldError('admissions_sex')}</span>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup {...getFieldProps('admissions_birthday', {
+                            rules: [{
+                                required: true,
+                                message: '出生日期不能为空'
+                            }],
+                            initialValue: ''
+                        })} validationState={getFieldError('admissions_birthday') ? 'error' : getFieldValue('admissions_birthday') === '' ? null : 'success'}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                出生日期
+                            </Col>
+                            <Col sm={9}>
+                                <FormControl type="date"  placeholder="请输入出生日期" />
+                                <FormControl.Feedback />
+                                <span className="error-message">{getFieldError('admissions_birthday')}</span>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup {...getFieldProps('admissions_is_apply_live_school', {
+                            rules: [{
+                                required: true,
+                                message: '是否应届毕业生不能为空'
+                            }],
+                            initialValue: ''
+                        })} validationState={getFieldError('admissions_is_apply_live_school') ? 'error' : getFieldValue('admissions_is_apply_live_school') === '' ? null : 'success'}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                是否申请住校
+                            </Col>
+                            <Col sm={9}>
+                                <Radio name="admissions_is_apply_live_school" value="true">
+                                    是
+                                </Radio>
+                                {' '}
+                                <Radio name="admissions_is_apply_live_school" value="false">
+                                    否
+                                </Radio>
+                                <FormControl.Feedback />
+                                <span className="error-message">{getFieldError('admissions_is_apply_live_school')}</span>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup {...getFieldProps('admissions_old_school', {
+                            rules: [{
+                                required: true,
+                                message: '原就读学校不能为空'
+                            }],
+                            initialValue: ''
+                        })} validationState={getFieldError('admissions_old_school') ? 'error' : getFieldValue('admissions_old_school') === '' ? null : 'success'}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                原就读学校
+                            </Col>
+                            <Col sm={9}>
+                                <FormControl placeholder="请输入原就读学校" />
+                                <FormControl.Feedback />
+                                <span className="error-message">{getFieldError('admissions_old_school')}</span>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup {...getFieldProps('admissions_certificate_type', {
+                            rules: [{
+                                required: true,
+                                message: '证件类型不能为空'
+                            }],
+                            initialValue: ''
+                        })} validationState={getFieldError('admissions_certificate_type') ? 'error' : getFieldValue('admissions_certificate_type') === '' ? null : 'success'}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                证件类型
+                            </Col>
+                            <Col sm={9}>
+                                <FormControl placeholder="请输入证件类型" />
+                                <FormControl.Feedback />
+                                <span className="error-message">{getFieldError('admissions_certificate_type')}</span>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup {...getFieldProps('admissions_certificate_number', {
+                            rules: [{
+                                required: true,
+                                message: '证件号码不能为空'
+                            }],
+                            initialValue: ''
+                        })} validationState={getFieldError('admissions_certificate_number') ? 'error' : getFieldValue('admissions_certificate_number') === '' ? null : 'success'}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                证件号码
+                            </Col>
+                            <Col sm={9}>
+                                <FormControl placeholder="请输入证件号码" />
+                                <FormControl.Feedback />
+                                <span className="error-message">{getFieldError('admissions_certificate_number')}</span>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup {...getFieldProps('admissions_registration_address', {
+                            rules: [{
+                                required: true,
+                                message: '户籍地址不能为空'
+                            }],
+                            initialValue: ''
+                        })} validationState={getFieldError('admissions_registration_address') ? 'error' : getFieldValue('admissions_registration_address') === '' ? null : 'success'}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                户籍地址
+                            </Col>
+                            <Col sm={9}>
+                                <FormControl componentClass="textarea"/>
+                                <FormControl.Feedback />
+                                <span className="error-message">{getFieldError('admissions_registration_address')}</span>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup {...getFieldProps('admissions_home_address', {
+                            rules: [{
+                                required: true,
+                                message: '家庭住址不能为空'
+                            }],
+                            initialValue: ''
+                        })} validationState={getFieldError('admissions_home_address') ? 'error' : getFieldValue('admissions_home_address') === '' ? null : 'success'}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                家庭住址
+                            </Col>
+                            <Col sm={9}>
+                                <FormControl componentClass="textarea"/>
+                                <FormControl.Feedback />
+                                <span className="error-message">{getFieldError('admissions_home_address')}</span>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup {...getFieldProps('admissions_home_first_name', {
+                            rules: [{
+                                required: true,
+                                message: '家庭成员一姓名不能为空'
+                            }],
+                            initialValue: ''
+                        })} validationState={getFieldError('admissions_home_first_name') ? 'error' : getFieldValue('admissions_home_first_name') === '' ? null : 'success'}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                家庭成员一姓名
+                            </Col>
+                            <Col sm={9}>
+                                <FormControl type="text" placeholder="请输入家庭成员一姓名" />
+                                <FormControl.Feedback />
+                                <span className="error-message">{getFieldError('admissions_home_first_name')}</span>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup {...getFieldProps('admissions_home_first_unit', {initialValue: ''})} >
+                            <Col componentClass={ControlLabel} sm={2}>
+                                家庭成员一单位
+                            </Col>
+                            <Col sm={9}>
+                                <FormControl type="text" placeholder="请输入家庭成员一单位" />
+                            </Col>
+                        </FormGroup>
+                        <FormGroup {...getFieldProps('admissions_home_first_tel', {
+                            rules: [{
+                                required: true,
+                                message: '家庭成员一联系电话不能为空'
+                            }],
+                            initialValue: ''
+                        })} validationState={getFieldError('admissions_home_first_tel') ? 'error' : getFieldValue('admissions_home_first_tel') === '' ? null : 'success'}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                家庭成员一联系电话
+                            </Col>
+                            <Col sm={9}>
+                                <FormControl type="tel" placeholder="请输入家庭成员一联系电话" />
+                                <FormControl.Feedback />
+                                <span className="error-message">{getFieldError('admissions_home_first_tel')}</span>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup {...getFieldProps('admissions_home_second_name', {
+                            rules: [{
+                                required: true,
+                                message: '家庭成员一姓名不能为空'
+                            }],
+                            initialValue: ''
+                        })} validationState={getFieldError('admissions_home_second_name') ? 'error' : getFieldValue('admissions_home_second_name') === '' ? null : 'success'}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                家庭成员二姓名
+                            </Col>
+                            <Col sm={9}>
+                                <FormControl type="text" placeholder="请输入家庭成员二姓名" />
+                                <FormControl.Feedback />
+                                <span className="error-message">{getFieldError('admissions_home_second_name')}</span>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup {...getFieldProps('admissions_home_second_unit', {initialValue: ''})} >
+                            <Col componentClass={ControlLabel} sm={2}>
+                                家庭成员二单位
+                            </Col>
+                            <Col sm={9}>
+                                <FormControl type="text" placeholder="请输入家庭成员二单位" />
+                            </Col>
+                        </FormGroup>
+                        <FormGroup {...getFieldProps('admissions_home_second_tel', {
+                            rules: [{
+                                required: true,
+                                message: '家庭成员一联系电话不能为空'
+                            }],
+                            initialValue: ''
+                        })} validationState={getFieldError('admissions_home_second_tel') ? 'error' : getFieldValue('admissions_home_second_tel') === '' ? null : 'success'}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                家庭成员二联系电话
+                            </Col>
+                            <Col sm={9}>
+                                <FormControl type="tel" placeholder="请输入家庭成员二联系电话" />
+                                <FormControl.Feedback />
+                                <span className="error-message">{getFieldError('admissions_home_second_tel')}</span>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup {...getFieldProps('admissions_notes', {initialValue: ''})}>
+                            <Col componentClass={ControlLabel} sm={2}>
+                                需要说明事项
+                            </Col>
+                            <Col sm={9}>
+                                <FormControl componentClass="textarea"/>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup>
+                            <Col smOffset={2} sm={9}>
+                                <Button disabled={this.state.is_load} onClick={this.handlSubmit.bind(this)}>
+                                    {this.state.is_load ? "加载中.." : "提交"}
+                                </Button>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup>
+                            <Col smOffset={2} sm={9}>
+                                {
+                                    this.state.result_type == "" ?
+                                        ""
+                                        :
+                                            <Alert bsStyle={this.state.result_type}>
+                                                <h4>系统提示</h4>
+                                                <div className="margin-top-15"
+                                                     dangerouslySetInnerHTML={{__html: this.state.result_message}}></div>
+                                            </Alert>
+                                }
+                            </Col>
+                        </FormGroup>
+                    </Form>
+            );
+
+            return (
+                    <div>
+                        <Header website_menu_id="a8398373a697416eba6847c2e42c781d"/>
+                        <div className="content container">
+                            <div className="title margin-top-20">
+                                <div className="title-icon"></div>
+                                <div className="title-breadcrumb"><a href="/index.html">首页</a> > <a href="zsjh.html">招生招聘</a>
+                                    >
+                                    我要报名
+                                </div>
+                            </div>
+                            <div className="row margin-top-20">
+                                <div className="subnav col-md-3">
+                                    <a href="/xxbzs.html">
+                                        <div className="subnav-item  ">
+                                            <div className="subnav-item-menu">小学部招生简章</div>
+                                            <div className="subnav-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                    <a href="/zxbzs.html">
+                                        <div className="subnav-item margin-top ">
+                                            <div className="subnav-item-menu">中学部招生简章</div>
+                                            <div className="subnav-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                    <a href="/zsjh.html">
+                                        <div className="subnav-item margin-top ">
+                                            <div className="subnav-item-menu">国际部招生简章</div>
+                                            <div className="subnav-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                    <a href="/rdhd.html">
+                                        <div className="subnav-item margin-top ">
+                                            <div className="subnav-item-menu">热点问答</div>
+                                            <div className="subnav-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                    <a href="/zpxx.html">
+                                        <div className="subnav-item margin-top ">
+                                            <div className="subnav-item-menu">招聘信息</div>
+                                            <div className="subnav-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                    <a href="/jszp.html">
+                                        <div className="subnav-item margin-top ">
+                                            <div className="subnav-item-menu">教师招聘</div>
+                                            <div className="subnav-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                    <a href="/wybm.html">
+                                        <div className="subnav-item active margin-top ">
+                                            <div className="subnav-item-menu">我要报名</div>
+                                            <div className="subnav-item-arrow"></div>
+                                        </div>
+                                    </a>
+                                    <div className="department margin-top">
+                                        <a href="#">
+                                            <img src="/image/department0.jpg" alt=""/>
+                                            <div className="department-mask">小学部</div>
+                                        </a>
+                                    </div>
+                                    <div className="department margin-top">
+                                        <a href="#">
+                                            <img src="/image/department1.jpg" alt=""/>
+                                            <div className="department-mask">中学部</div>
+                                        </a>
+                                    </div>
+                                    <div className="department margin-top">
+                                        <a href="#">
+                                            <img src="/image/department2.jpg" alt=""/>
+                                            <div className="department-mask">国际部</div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="col-md-9">
+                                    {formInstance}
+                                </div>
+                            </div>
+                        </div>
+                        <Footer/>
+                    </div>
+            );
+        }
+    }
+
+    const Form = window['rc-form'];
+    Component = Form.createForm()(Component);
+    ReactDOM.render(<Component/>, document.getElementById("root"));
+</script>

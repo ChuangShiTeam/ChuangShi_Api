@@ -26,8 +26,17 @@ window.Footer = class Component extends React.Component {
                         #end
                     </div>
                     <div className="copyright">
+                        <p>联系电话：</p>
+                        <p className="margin-top-30"></p>
                         <p>学校地址：佛山市禅城区东鄱南路10号</p>
-                        <p>联系电话： 0757-82596128 18188719581 郑老师</p>
+                        <div className="contact">
+                            <span>郑老师 82596128、18188718581（中小学）</span>
+                            <span className="margin-left-50">董老师 82596004（中小学）</span>
+                            <span className="margin-left-50">陈老师 82596001 （小学）</span>
+                            <span className="margin-left-50">吴老师 82596002 （小学）</span>
+                            <p>田老师 82596016 （中学）<span className="margin-left-50">李老师 82596003 （中学）</span></p>
+
+                        </div>
                     </div>
                 </div>
             </div>
