@@ -3,7 +3,6 @@ package com.nowui.chuangshi.api.file.admin;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
-import com.jfinal.kit.HttpKit;
 import com.jfinal.upload.UploadFile;
 import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.file.service.FileService;
