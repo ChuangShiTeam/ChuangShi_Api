@@ -1,5 +1,7 @@
 package com.nowui.chuangshi.api.renault.service;
 
+import com.nowui.chuangshi.api.file.model.File;
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.renault.dao.RenaultShareImageDao;
 import com.nowui.chuangshi.api.renault.model.RenaultShareImage;
 import com.nowui.chuangshi.common.service.Service;
@@ -45,6 +47,8 @@ public class RenaultShareImageService extends Service {
 
         if (renault_share_image == null) {
             renault_share_image = renaultShareImageDao.find(image_id);
+            
+            renault_share_image.put(File.FILE_PATH, FileService.instance.getFile_path(renault_share_image.getFile_id()));
 
             CacheUtil.put(RENAULT_SHARE_IMAGE_ITEM_CACHE, image_id, renault_share_image);
         }
@@ -88,7 +92,7 @@ public class RenaultShareImageService extends Service {
     }
 
     //获取图片列表
-    public List<RenaultShareImage> GetListBySahreId(String share_id) {
+    public List<RenaultShareImage> shareList(String share_id) {
         Cnd cnd = new Cnd();
         cnd.where(RenaultShareImage.SYSTEM_STATUS, true);
         cnd.andAllowEmpty(RenaultShareImage.SHARE_ID, share_id);

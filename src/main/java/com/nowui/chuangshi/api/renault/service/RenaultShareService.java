@@ -85,11 +85,12 @@ public class RenaultShareService extends Service {
         return success;
     }
 
-    public List<RenaultShare> appList(String app_id) {
+    public List<RenaultShare> mobileList(String app_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(RenaultShare.SYSTEM_STATUS, true);
         cnd.and(RenaultShare.APP_ID, app_id);
         cnd.asc(RenaultShare.SYSTEM_CREATE_TIME);
+        cnd.paginate(m, n);
 
         List<RenaultShare> renaultshareList = renaultShareDao.primaryKeyList(cnd);
         for (RenaultShare renaultshareCategory : renaultshareList) {

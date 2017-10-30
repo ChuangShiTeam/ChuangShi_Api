@@ -52,6 +52,8 @@ public class RenaultShare extends Model<RenaultShare> {
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
+    
+    public static final String SHARE_IMAGE_LIST = "share_image_list";
 
     public String getShare_id() {
         return getStr(SHARE_ID);
@@ -150,7 +152,5 @@ public class RenaultShare extends Model<RenaultShare> {
     public void setApp_id(String app_id) {
         set(APP_ID, app_id);
     }
-
-    public static final String Renault_Share_Image_LIST = "renault_share_image_list";
 
 }
