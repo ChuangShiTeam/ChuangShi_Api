@@ -11,6 +11,7 @@ import com.nowui.chuangshi.util.AesUtil;
 import com.nowui.chuangshi.util.CacheUtil;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -228,6 +229,8 @@ public class UserService extends Service {
     }
 
     public static void main(String[] args) {
+        System.out.println(StringEscapeUtils.escapeHtml4("http://wx.qlogo.cn/mmopen/JcDicrZBlREhnNXZRudod9PmibRkIs5K2f1tUQ7lFjC63pYHaXGxNDgMzjGDEuvzYZbFOqtUXaxSdoZG6iane5ko9H30krIbzGv/0"));
+
         try {
             Date date = new Date();
             Calendar calendar = Calendar.getInstance();
