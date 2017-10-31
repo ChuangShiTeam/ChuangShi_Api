@@ -13,7 +13,7 @@ import java.util.Date;
 public class TeacherCategory extends Model<TeacherCategory> {
 
     @Table
-    public static final String TABLE_TEACHER_CATEGORY = "table_teacher_category";
+    public static final String TABLE_TEACHER_CATEGORY = "table_xietong_teacher_category";
 
     @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "分类编号", updatable = false)
