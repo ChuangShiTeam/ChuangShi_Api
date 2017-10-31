@@ -181,100 +181,167 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(map);
     }
 
-    public void renderSuccessJson(Boolean result) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put(Constant.CODE, HttpStatus.SC_OK);
-        map.put(Constant.DATA, result);
-
-        renderJson(map);
-    }
-
-    public void renderSuccessJson(Integer result) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put(Constant.CODE, HttpStatus.SC_OK);
-        map.put(Constant.DATA, result);
-
-        renderJson(map);
-    }
-
-    public void renderSuccessJson(String result) {
-        result = StringEscapeUtils.unescapeHtml4(result);
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put(Constant.CODE, HttpStatus.SC_OK);
-        map.put(Constant.DATA, result);
-
-        renderJson(map);
-    }
-
-    private void filterResponses(Object result) {
+    private Object checkResponse(Object result) {
         if (result instanceof Model) {
             Set<Map.Entry<String, Object>> sets = ((Model) result)._getAttrsEntrySet();
             for (Map.Entry<String, Object> entry : sets) {
-                filterSecondResponse(entry.getKey(), entry.getValue());
+                checkSecondResponse(entry);
             }
         } else if (result instanceof List) {
             for (Object item : (List) result) {
                 if (item instanceof Model) {
-                    Set<Map.Entry<String, Object>> sets = ((Model)item)._getAttrsEntrySet();
+                    Set<Map.Entry<String, Object>> sets = ((Model) item)._getAttrsEntrySet();
                     for (Map.Entry<String, Object> entry : sets) {
-                        filterSecondResponse(entry.getKey(), entry.getValue());
+                        checkSecondResponse(entry);
                     }
                 } else if (item instanceof Map) {
-                    for (Map.Entry<String, Object> entry : ((Map<String, Object>)item).entrySet()) {
-                        filterSecondResponse(entry.getKey(), entry.getValue());
+                    for (Map.Entry<String, Object> entry : ((Map<String, Object>) item).entrySet()) {
+                        checkSecondResponse(entry);
                     }
                 }
             }
+        } else if (result instanceof String) {
+            result = StringEscapeUtils.unescapeHtml4((String) result);
         }
+
+        return result;
     }
 
-    private void filterSecondResponse(String key, Object result) {
-        for (Map.Entry<String, String[]> responses : validateSecondResponseKeyList.entrySet()) {
-            if (key.equals(responses.getKey())) {
-                if (result instanceof Model) {
-                    ((Model)result).keep(responses.getValue());
-                } else if (result instanceof List) {
-                    for (Object item : (List) result) {
-                        if (item instanceof Model) {
-                            ((Model)item).keep(responses.getValue());
-                        } else if (item instanceof Map) {
-                            Iterator<Map.Entry<String, Object>> iterator = ((Map<String, Object>)item).entrySet().iterator();
-                            while(iterator.hasNext()){
-                                Map.Entry<String, Object> entry = iterator.next();
-                                Boolean isExit = false;
-                                for (String value : responses.getValue()) {
-                                    if (entry.getKey().equals(value)) {
-                                        isExit = true;
-                                        break;
-                                    }
-                                }
-                                if (!isExit) {
-                                    iterator.remove();
-                                }
-                            }
+    private void checkSecondResponse(Object result) {
+        if (result instanceof Model) {
+            Set<Map.Entry<String, Object>> sets = ((Model) result)._getAttrsEntrySet();
+            for (Map.Entry<String, Object> entry : sets) {
+                if (entry.getValue() instanceof String) {
+                    entry.setValue(StringEscapeUtils.unescapeHtml4((String)entry.getValue()));
+                }
+            }
+        } else if (result instanceof List) {
+            for (Object item : (List) result) {
+                if (item instanceof Model) {
+                    Set<Map.Entry<String, Object>> sets = ((Model) item)._getAttrsEntrySet();
+                    for (Map.Entry<String, Object> entry : sets) {
+                        if (entry.getValue() instanceof String) {
+                            entry.setValue(StringEscapeUtils.unescapeHtml4((String)entry.getValue()));
+                        }
+                    }
+                } else if (item instanceof Map) {
+                    Iterator<Map.Entry<String, Object>> iterator = ((Map<String, Object>)item).entrySet().iterator();
+                    while(iterator.hasNext()){
+                        Map.Entry<String, Object> entry = iterator.next();
+                        if (entry.getValue() instanceof String) {
+                            entry.setValue(StringEscapeUtils.unescapeHtml4((String)entry.getValue()));
                         }
                     }
                 }
             }
+        } else if (result instanceof Map.Entry) {
+            if (((Map.Entry)result).getValue() instanceof String) {
+                ((Map.Entry)result).setValue(StringEscapeUtils.unescapeHtml4((String) ((Map.Entry)result).getValue()));
+
+//                System.out.println(((Map.Entry)result).getValue());
+//                System.out.println(StringEscapeUtils.unescapeHtml4((String) ((Map.Entry)result).getValue()));
+            }
+        }
+    }
+
+    public void renderSuccessJson(Object result) {
+        result = checkResponse(result);
+
+        System.out.println(JSON.toJSONString(result));
+
+        if (result instanceof Model) {
+            Set<Map.Entry<String, Object>> sets = ((Model) result)._getAttrsEntrySet();
+            for (Map.Entry<String, Object> entry : sets) {
+                if (entry.getValue() instanceof String) {
+                    System.out.println(entry.getValue());
+                }
+            }
         }
 
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(Constant.CODE, HttpStatus.SC_OK);
+        map.put(Constant.DATA, result);
+
+        renderJson(map);
+    }
+
+    public void renderSuccessJson(Integer total, Object result) {
+        result = checkResponse(result);
+
+        Map<String, Object> dataMap = new HashMap<String, Object>();
+        dataMap.put(Constant.TOTAL, total);
+        dataMap.put(Constant.LIST, result);
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(Constant.CODE, HttpStatus.SC_OK);
+        map.put(Constant.DATA, dataMap);
+
+        renderJson(map);
+    }
+
+//    public void renderSuccessJson(Boolean result) {
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put(Constant.CODE, HttpStatus.SC_OK);
+//        map.put(Constant.DATA, result);
+//
+//        renderJson(map);
+//    }
+//
+//    public void renderSuccessJson(Integer result) {
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put(Constant.CODE, HttpStatus.SC_OK);
+//        map.put(Constant.DATA, result);
+//
+//        renderJson(map);
+//    }
+//
+//    public void renderSuccessJson(String result) {
+//        result = StringEscapeUtils.unescapeHtml4(result);
+//
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put(Constant.CODE, HttpStatus.SC_OK);
+//        map.put(Constant.DATA, result);
+//
+//        renderJson(map);
+//    }
+//
+//    private void filterResponses(Object result) {
+//        if (result instanceof Model) {
+//            Set<Map.Entry<String, Object>> sets = ((Model) result)._getAttrsEntrySet();
+//            for (Map.Entry<String, Object> entry : sets) {
+//                filterSecondResponse(entry.getKey(), entry.getValue());
+//            }
+//        } else if (result instanceof List) {
+//            for (Object item : (List) result) {
+//                if (item instanceof Model) {
+//                    Set<Map.Entry<String, Object>> sets = ((Model)item)._getAttrsEntrySet();
+//                    for (Map.Entry<String, Object> entry : sets) {
+//                        filterSecondResponse(entry.getKey(), entry.getValue());
+//                    }
+//                } else if (item instanceof Map) {
+//                    for (Map.Entry<String, Object> entry : ((Map<String, Object>)item).entrySet()) {
+//                        filterSecondResponse(entry.getKey(), entry.getValue());
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    private void filterSecondResponse(String key, Object result) {
 //        for (Map.Entry<String, String[]> responses : validateSecondResponseKeyList.entrySet()) {
 //            if (key.equals(responses.getKey())) {
-//                if (((Model) result).get(responses.getKey()) instanceof Model) {
-//                    ((Model) ((Model) result).get(responses.getKey())).keep(responses.getValue());
-//                } else if (((Model) result).get(responses.getKey()) instanceof List) {
-//                    List list = (List) ((Model) result).get(responses.getKey());
-//                    for (Object object : list) {
-//                        if (object instanceof Model) {
-//                            ((Model) object).keep(responses.getValue());
-//                        } else if (object instanceof Map) {
-//                            Iterator<Map.Entry<String, Object>> iterator = ((Map) object).entrySet().iterator();
-//                            String[] values = responses.getValue();
-//                            while (iterator.hasNext()) {
-//                                Boolean isExit = false;
+//                if (result instanceof Model) {
+//                    ((Model)result).keep(responses.getValue());
+//                } else if (result instanceof List) {
+//                    for (Object item : (List) result) {
+//                        if (item instanceof Model) {
+//                            ((Model)item).keep(responses.getValue());
+//                        } else if (item instanceof Map) {
+//                            Iterator<Map.Entry<String, Object>> iterator = ((Map<String, Object>)item).entrySet().iterator();
+//                            while(iterator.hasNext()){
 //                                Map.Entry<String, Object> entry = iterator.next();
-//                                for (String value : values) {
+//                                Boolean isExit = false;
+//                                for (String value : responses.getValue()) {
 //                                    if (entry.getKey().equals(value)) {
 //                                        isExit = true;
 //                                        break;
@@ -289,135 +356,166 @@ public class Controller extends com.jfinal.core.Controller {
 //                }
 //            }
 //        }
-    }
-
-    public void renderSuccessJson(Model result) {
-        if (result != null) {
-            result.keep(validateResponseKeyList);
-        }
-
-        filterResponses(result);
-
-        Set<Map.Entry<String, Object>> sets = result._getAttrsEntrySet();
-        for (Map.Entry<String, Object> entry : sets) {
-            if (entry.getValue() instanceof String) {
-                result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
-            }
-        }
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put(Constant.CODE, HttpStatus.SC_OK);
-        map.put(Constant.DATA, result);
-
-        renderJson(map);
-    }
-
-    public void renderSuccessJson(Map<String, Object> result) {
-        for (Map.Entry<String, Object> entry : result.entrySet()) {
-            if (entry.getValue() instanceof String) {
-                result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
-            }
-        }
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put(Constant.CODE, HttpStatus.SC_OK);
-        map.put(Constant.DATA, result);
-
-        renderJson(map);
-    }
-
-    public void renderSuccessMapListJson(List<Map<String, Object>> resultList) {
-        for (Map<String, Object> result : resultList) {
-            for (Map.Entry<String, Object> entry : result.entrySet()) {
-                if (entry.getValue() instanceof String) {
-                    result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
-                }
-            }
-        }
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put(Constant.CODE, HttpStatus.SC_OK);
-        map.put(Constant.DATA, resultList);
-
-        renderJson(map);
-    }
-
-    public void renderSuccessJson(List<? extends Model> resultList) {
-        for (Model result : resultList) {
-            result.keep(validateResponseKeyList);
-
-            Set<Map.Entry<String, Object>> sets = result._getAttrsEntrySet();
-            for (Map.Entry<String, Object> entry : sets) {
-                if (entry.getValue() instanceof String) {
-                    result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
-                }
-            }
-        }
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put(Constant.CODE, HttpStatus.SC_OK);
-        map.put(Constant.DATA, resultList);
-
-        renderJson(map);
-    }
-
-    public void renderSuccessJson(Integer total, List<? extends Model> resultList) {
-        for (Model result : resultList) {
-            result.keep(validateResponseKeyList);
-
-            Set<Map.Entry<String, Object>> sets = result._getAttrsEntrySet();
-            for (Map.Entry<String, Object> entry : sets) {
-                if (entry.getValue() instanceof String) {
-                    result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
-                }
-            }
-        }
-
-        Map<String, Object> dataMap = new HashMap<String, Object>();
-        dataMap.put(Constant.TOTAL, total);
-        dataMap.put(Constant.LIST, resultList);
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put(Constant.CODE, HttpStatus.SC_OK);
-        map.put(Constant.DATA, dataMap);
-
-        renderJson(map);
-    }
-
-    public void renderSuccessMapListJson(Integer total, List<Map<String, Object>> resultList) {
-        List<Map<String, Object>> newResultList = new ArrayList<Map<String, Object>>();
-        for (Map<String, Object> result : resultList) {
-            Map<String, Object> newResult = new HashMap<String, Object>();
-            for (String key : validateResponseKeyList) {
-                for (Map.Entry<String, Object> map : result.entrySet()) {
-                    if (key.equals(map.getKey())) {
-                        newResult.put(map.getKey(), map.getValue());
-
-                        break;
-                    }
-                }
-            }
-            newResultList.add(newResult);
-        }
-
-        for (Map<String, Object> result : newResultList) {
-            for (Map.Entry<String, Object> entry : result.entrySet()) {
-                if (entry.getValue() instanceof String) {
-                    result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
-                }
-            }
-        }
-
-        Map<String, Object> dataMap = new HashMap<String, Object>();
-        dataMap.put(Constant.TOTAL, total);
-        dataMap.put(Constant.LIST, resultList);
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put(Constant.CODE, HttpStatus.SC_OK);
-        map.put(Constant.DATA, newResultList);
-
-        renderJson(map);
-    }
+//
+////        for (Map.Entry<String, String[]> responses : validateSecondResponseKeyList.entrySet()) {
+////            if (key.equals(responses.getKey())) {
+////                if (((Model) result).get(responses.getKey()) instanceof Model) {
+////                    ((Model) ((Model) result).get(responses.getKey())).keep(responses.getValue());
+////                } else if (((Model) result).get(responses.getKey()) instanceof List) {
+////                    List list = (List) ((Model) result).get(responses.getKey());
+////                    for (Object object : list) {
+////                        if (object instanceof Model) {
+////                            ((Model) object).keep(responses.getValue());
+////                        } else if (object instanceof Map) {
+////                            Iterator<Map.Entry<String, Object>> iterator = ((Map) object).entrySet().iterator();
+////                            String[] values = responses.getValue();
+////                            while (iterator.hasNext()) {
+////                                Boolean isExit = false;
+////                                Map.Entry<String, Object> entry = iterator.next();
+////                                for (String value : values) {
+////                                    if (entry.getKey().equals(value)) {
+////                                        isExit = true;
+////                                        break;
+////                                    }
+////                                }
+////                                if (!isExit) {
+////                                    iterator.remove();
+////                                }
+////                            }
+////                        }
+////                    }
+////                }
+////            }
+////        }
+//    }
+//
+//    public void renderSuccessJson(Model result) {
+//        if (result != null) {
+//            result.keep(validateResponseKeyList);
+//        }
+//
+//        filterResponses(result);
+//
+//        Set<Map.Entry<String, Object>> sets = result._getAttrsEntrySet();
+//        for (Map.Entry<String, Object> entry : sets) {
+//            if (entry.getValue() instanceof String) {
+//                result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+//            }
+//        }
+//
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put(Constant.CODE, HttpStatus.SC_OK);
+//        map.put(Constant.DATA, result);
+//
+//        renderJson(map);
+//    }
+//
+//    public void renderSuccessJson(Map<String, Object> result) {
+//        for (Map.Entry<String, Object> entry : result.entrySet()) {
+//            if (entry.getValue() instanceof String) {
+//                result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+//            }
+//        }
+//
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put(Constant.CODE, HttpStatus.SC_OK);
+//        map.put(Constant.DATA, result);
+//
+//        renderJson(map);
+//    }
+//
+//    public void renderSuccessMapListJson(List<Map<String, Object>> resultList) {
+//        for (Map<String, Object> result : resultList) {
+//            for (Map.Entry<String, Object> entry : result.entrySet()) {
+//                if (entry.getValue() instanceof String) {
+//                    result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+//                }
+//            }
+//        }
+//
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put(Constant.CODE, HttpStatus.SC_OK);
+//        map.put(Constant.DATA, resultList);
+//
+//        renderJson(map);
+//    }
+//
+//    public void renderSuccessJson(List<? extends Model> resultList) {
+//        for (Model result : resultList) {
+//            result.keep(validateResponseKeyList);
+//
+//            Set<Map.Entry<String, Object>> sets = result._getAttrsEntrySet();
+//            for (Map.Entry<String, Object> entry : sets) {
+//                if (entry.getValue() instanceof String) {
+//                    result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+//                }
+//            }
+//        }
+//
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put(Constant.CODE, HttpStatus.SC_OK);
+//        map.put(Constant.DATA, resultList);
+//
+//        renderJson(map);
+//    }
+//
+//    public void renderSuccessJson(Integer total, List<? extends Model> resultList) {
+//        for (Model result : resultList) {
+//            result.keep(validateResponseKeyList);
+//
+//            Set<Map.Entry<String, Object>> sets = result._getAttrsEntrySet();
+//            for (Map.Entry<String, Object> entry : sets) {
+//                if (entry.getValue() instanceof String) {
+//                    result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+//                }
+//            }
+//        }
+//
+//        Map<String, Object> dataMap = new HashMap<String, Object>();
+//        dataMap.put(Constant.TOTAL, total);
+//        dataMap.put(Constant.LIST, resultList);
+//
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put(Constant.CODE, HttpStatus.SC_OK);
+//        map.put(Constant.DATA, dataMap);
+//
+//        renderJson(map);
+//    }
+//
+//    public void renderSuccessMapListJson(Integer total, List<Map<String, Object>> resultList) {
+//        List<Map<String, Object>> newResultList = new ArrayList<Map<String, Object>>();
+//        for (Map<String, Object> result : resultList) {
+//            Map<String, Object> newResult = new HashMap<String, Object>();
+//            for (String key : validateResponseKeyList) {
+//                for (Map.Entry<String, Object> map : result.entrySet()) {
+//                    if (key.equals(map.getKey())) {
+//                        newResult.put(map.getKey(), map.getValue());
+//
+//                        break;
+//                    }
+//                }
+//            }
+//            newResultList.add(newResult);
+//        }
+//
+//        for (Map<String, Object> result : newResultList) {
+//            for (Map.Entry<String, Object> entry : result.entrySet()) {
+//                if (entry.getValue() instanceof String) {
+//                    result.put(entry.getKey(), StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+//                }
+//            }
+//        }
+//
+//        Map<String, Object> dataMap = new HashMap<String, Object>();
+//        dataMap.put(Constant.TOTAL, total);
+//        dataMap.put(Constant.LIST, resultList);
+//
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put(Constant.CODE, HttpStatus.SC_OK);
+//        map.put(Constant.DATA, newResultList);
+//
+//        renderJson(map);
+//    }
 
     public void renderErrorJson(String message) {
         Map<String, Object> map = new HashMap<String, Object>();

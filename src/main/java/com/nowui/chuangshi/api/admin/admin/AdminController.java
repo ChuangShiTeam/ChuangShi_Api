@@ -108,7 +108,7 @@ public class AdminController extends Controller {
 
         List<Map<String, Object>> resultList = MenuService.instance.menuList(request_app_id);
 
-        renderSuccessMapListJson(resultList);
+        renderSuccessJson(resultList);
     }
 
     @ActionKey("/admin/admin/login")

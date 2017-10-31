@@ -73,7 +73,7 @@ public class FileController extends Controller {
 
         List<Map<String, Object>> resultList = FileService.instance.upload(uploadFileList, request_app_id, request_user_id);
 
-        renderSuccessMapListJson(resultList);
+        renderSuccessJson(resultList);
     }
 
     @ActionKey("/admin/file/image/base64/upload")

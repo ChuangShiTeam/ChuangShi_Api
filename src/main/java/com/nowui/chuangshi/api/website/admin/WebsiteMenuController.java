@@ -22,7 +22,7 @@ public class WebsiteMenuController extends Controller {
 
         List<Map<String, Object>> resultList = WebsiteMenuService.instance.tree(request_app_id);
 
-        renderSuccessMapListJson(resultList);
+        renderSuccessJson(resultList);
     }
 
     @ActionKey("/admin/website/menu/all/list")
@@ -31,7 +31,7 @@ public class WebsiteMenuController extends Controller {
 
         List<Map<String, Object>> resultList = WebsiteMenuService.instance.appTree(request_app_id, "value", "label");
 
-        renderSuccessMapListJson(resultList);
+        renderSuccessJson(resultList);
     }
 
     @ActionKey("/admin/website/menu/find")
