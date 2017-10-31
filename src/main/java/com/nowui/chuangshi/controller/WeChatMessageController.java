@@ -357,6 +357,8 @@ public class WeChatMessageController extends MsgController {
             }
 
             File file = FileService.instance.find(user.getUser_avatar());
+            System.out.println(user_avatar);
+            System.out.println(file.getFile_path());
 
             if (!user_avatar.equals(file.getFile_path())) {
                 FileService.instance.filePathUpdate(user.getUser_avatar(), user_avatar, system_create_user_id);
