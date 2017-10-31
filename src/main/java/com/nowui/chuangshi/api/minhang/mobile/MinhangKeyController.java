@@ -27,15 +27,20 @@ public class MinhangKeyController extends Controller {
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
         
+        //查询用户最近的寻钥之旅记录
+        MinhangMemberItinerary member_itinerary = MinhangMemberItineraryService.instance.userLatestFind(request_user_id);
+        
+        if (member_itinerary == null) {
+            member_itinerary = MinhangMemberItineraryService.instance.start(request_user_id, request_app_id);
+        }
+        
         List<MinhangKey> resultList = MinhangKeyService.instance.appList(request_app_id);
         for (MinhangKey result : resultList) {
             result.put(MinhangKey.KEY_IMAGE_FILE, FileService.instance.getFile(result.getKey_image()));
+            result.put("member_key", MinhangMemberKeyService.instance.keyAndItineraryFind(result.getKey_id(), member_itinerary.getMember_itinerary_id()));
         }
         
-        //用户开始寻钥之旅，开始过不会再开始
-        MinhangMemberItineraryService.instance.start(request_user_id, request_app_id);
-        
-        validateResponse(MinhangKey.KEY_ID, MinhangKey.KEY_NAME, MinhangKey.KEY_IMAGE_FILE, MinhangKey.KEY_ACTIVATED_TASK_QUANTITY, MinhangKey.KEY_DESCRIPTION, MinhangKey.SYSTEM_VERSION);
+        validateResponse("member_key", MinhangKey.KEY_ID, MinhangKey.KEY_NAME, MinhangKey.KEY_IMAGE_FILE, MinhangKey.KEY_ACTIVATED_TASK_QUANTITY, MinhangKey.KEY_DESCRIPTION, MinhangKey.SYSTEM_VERSION);
 
         renderSuccessJson(resultList);
     }

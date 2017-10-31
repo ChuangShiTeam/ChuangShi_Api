@@ -79,6 +79,10 @@ public class MinhangTaskController extends Controller {
             //如果为答题任务查询题目列表
             if (MinhangTaskType.QUESTION.getKey().equals(minhangTask.getTask_type())) {
                 List<MinhangQuestion> minhang_question_list = MinhangQuestionService.instance.taskList(minhangTask.getTask_id());
+                for (MinhangQuestion question : minhang_question_list) {
+                    question.keep(MinhangQuestion.QUESTION_ID, MinhangQuestion.QUESTION_TITLE, MinhangQuestion.QUESTION_ANSWER_LIST, MinhangQuestion.QUESTION_OPTION_LIST, MinhangQuestion.QUESTION_TYPE);
+                    unescapeHtml4Model(question);
+                }
                 minhangTask.put(MinhangTask.QUESTION_LIST, minhang_question_list);
                 validateResponse(MinhangTask.QUESTION_LIST);
             }
@@ -288,6 +292,14 @@ public class MinhangTaskController extends Controller {
             } else if ("loadHandlePrint".equals(model.getStr(MinhangTask.ACTION))) {
                 if (!"001f46fc946647efa4bccaa9735f94e6".equals(model.getTask_id())) {
                     result = "请扫描手印二维码";
+                }
+            } else if ("loadLoactionTask".equals(model.getStr(MinhangTask.ACTION))) {
+                if (!"5f8af80e33c94dcf9952220c31274fe4".equals(model.getTask_id())) {
+                    result = "请扫描标注位置二维码";
+                }
+            } else if ("loadLoactionQuestionTask".equals(model.getStr(MinhangTask.ACTION))) {
+                if (!"d14b3a04d7f24be088ef90b23f51cfb1".equals(model.getTask_id())) {
+                    result = "请扫描答题二维码";
                 }
             } else if ("loadTimelineEvent".equals(model.getStr(MinhangTask.ACTION))) {
                 List<MinhangTimelineEvent> timelineEventList = MinhangTimelineEventService.instance.taskFind(model.getTask_id());

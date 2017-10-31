@@ -45,7 +45,9 @@ public class MinhangMemberKeyService extends Service {
     
     public MinhangMemberKey keyAndItineraryFind(String key_id, String member_itinerary_id) {
         List<MinhangMemberKey> minhang_member_keyList = itineraryList(member_itinerary_id);
-        
+        if (minhang_member_keyList == null || minhang_member_keyList.size() == 0) {
+            return null;
+        }
         for (MinhangMemberKey minhangMemberKey : minhang_member_keyList) {
             if (key_id.equals(minhangMemberKey.getKey_id())) {
                 return minhangMemberKey;
