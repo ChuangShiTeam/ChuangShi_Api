@@ -205,35 +205,39 @@ public class Controller extends com.jfinal.core.Controller {
 
                     ((Model) item).keep(validateResponseKeyList);
                 } else if (item instanceof Map) {
-                    Iterator<Map.Entry<String, Object>> iterator = ((Map) item).entrySet().iterator();
-                    while (iterator.hasNext()) {
-                        Map.Entry<String, Object> entry = iterator.next();
-
-                        Boolean isExit = false;
-                        for (String key : validateResponseKeyList) {
-                            if (entry.getKey().equals(key)) {
-                                isExit = true;
-                                break;
-                            }
-                        }
-
-                        if (!isExit) {
-                            iterator.remove();
-                        }
-                    }
+                    checkMap((Map) item);
 
                     for (Map.Entry<String, Object> entry : ((Map<String, Object>) item).entrySet()) {
                         checkSecondResponse(entry);
                     }
                 }
             }
-
-
+        } else if (result instanceof Map) {
+            checkMap((Map) result);
         } else if (result instanceof String) {
             result = StringEscapeUtils.unescapeHtml4((String) result);
         }
 
         return result;
+    }
+
+    private void checkMap(Map result) {
+        Iterator<Map.Entry<String, Object>> iterator = (result).entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Object> entry = iterator.next();
+
+            Boolean isExit = false;
+            for (String key : validateResponseKeyList) {
+                if (entry.getKey().equals(key)) {
+                    isExit = true;
+                    break;
+                }
+            }
+
+            if (!isExit) {
+                iterator.remove();
+            }
+        }
     }
 
     private void checkSecondResponse(Object result) {
