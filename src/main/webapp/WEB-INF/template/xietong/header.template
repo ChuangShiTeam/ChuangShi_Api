@@ -20,7 +20,7 @@ window.Header = class Component extends React.Component {
                 <div className="navigation">
                     <div className="container col-padding">
                         <div className="pull-left"><a href="/index.html">您好，欢迎光临佛山协同国际学校！</a></div>
-                        <div className="pull-right">
+                        <div className="pull-right hidden-xs">
                             <a className="margin-right" href="/404.html">我是学生</a>
                             |
                             <a className="margin-left" href="/404.html">我是老师</a>
@@ -30,7 +30,7 @@ window.Header = class Component extends React.Component {
                 <div className="main">
                     <div className="container col-padding">
                         <div className="pull-left"><a href="/index.html"><img className="logo" src="/image/logo.png" alt=""/></a></div>
-                        <div className="pull-right">
+                        <div className="pull-right hidden-xs">
                             <a href="/404.html">
                                 <div className="search">
                                     <div className="search-input">

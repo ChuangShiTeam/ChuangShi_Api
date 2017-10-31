@@ -18,24 +18,37 @@ window.Footer = class Component extends React.Component {
         return (
             <div className="footer">
                 <div className="container">
-                    <div className="menu">
+                    <div className="row menu hidden-xs">
                         #for(websiteMenu : websiteMenuList)
-                        <li>
+                        <div className="col-md-1 col-xs-3">
                             <a href="/#(websiteMenu.website_menu_url)">#(websiteMenu.website_menu_name)</a>
-                        </li>
+                        </div>
                         #end
                     </div>
-                    <div className="copyright">
-                        <p>联系电话：</p>
-                        <p className="margin-top-30"></p>
-                        <p>学校地址：佛山市禅城区东鄱南路10号</p>
-                        <div className="contact">
-                            <span>郑老师 82596128、18188718581（中小学）</span>
-                            <span className="margin-left-50">董老师 82596004（中小学）</span>
-                            <span className="margin-left-50">陈老师 82596001 （小学）</span>
-                            <span className="margin-left-50">吴老师 82596002 （小学）</span>
-                            <p>田老师 82596016 （中学）<span className="margin-left-50">李老师 82596003 （中学）</span></p>
-
+                    <div className="row line hidden-xs"></div>
+                    <div className="row copyright margin-top-20">
+                        <div className="col-md-3 col-xs-12">
+                            郑老师 82596128 18188718581(中小学)
+                        </div>
+                        <div className="col-md-3 col-xs-12">
+                            董老师 82596004(中小学)
+                        </div>
+                        <div className="col-md-3 col-xs-12">
+                            陈老师 82596001(小学)
+                        </div>
+                        <div className="col-md-3 col-xs-12">
+                            吴老师 82596002(小学)
+                        </div>
+                        <div className="col-md-3 col-xs-12">
+                            田老师 82596016(中学)
+                        </div>
+                        <div className="col-md-3 col-xs-12">
+                            李老师 82596003(中学)
+                        </div>
+                        <div className="col-md-3 col-xs-12">
+                            学校地址：佛山市禅城区东鄱南路10号
+                        </div>
+                        <div className="col-xs-12 visible-xs margin-bottom-20">
                         </div>
                     </div>
                 </div>

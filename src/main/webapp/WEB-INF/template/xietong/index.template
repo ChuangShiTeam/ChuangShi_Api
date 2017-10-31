@@ -56,7 +56,7 @@
                         <div className="content-background-1">
                             <div className="container">
                                 <div className="row margin-top-20 margin-bottom-20">
-                                    <div className="col-md-4 col-padding">
+                                    <div className="col-md-4 col-xs-4 col-padding">
                                         <div className="department">
                                             <a href="#">
                                                 <img src="image/department0.jpg" alt=""/>
@@ -64,7 +64,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div className="col-md-4 col-padding">
+                                    <div className="col-md-4 col-xs-4 col-padding">
                                         <div className="department">
                                             <a href="#">
                                                 <img src="image/department1.jpg" alt=""/>
@@ -72,7 +72,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div className="col-md-4 col-padding">
+                                    <div className="col-md-4 col-xs-4 col-padding">
                                         <div className="department">
                                             <a href="#">
                                                 <img src="image/department2.jpg" alt=""/>
@@ -97,7 +97,7 @@
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="col-md-6 col-padding-righ">
+                                        <div className="col-md-6 col-padding-right">
                                             <Carousel className="margin-top" interval={3000} keyboard={false}>
                                                 #for(article : articleList)
                                                 #if(article.article_category_id == "c9dd8759a7a04aaeb038973c3246d863")
