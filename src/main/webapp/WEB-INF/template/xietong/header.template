@@ -18,7 +18,7 @@ window.Header = class Component extends React.Component {
         return (
             <div className="header">
                 <div className="navigation">
-                    <div className="container">
+                    <div className="container col-padding">
                         <div className="pull-left"><a href="/index.html">您好，欢迎光临佛山协同国际学校！</a></div>
                         <div className="pull-right">
                             <a className="margin-right" href="/404.html">我是学生</a>
@@ -28,22 +28,24 @@ window.Header = class Component extends React.Component {
                     </div>
                 </div>
                 <div className="main">
-                    <div className="container">
+                    <div className="container col-padding">
                         <div className="pull-left"><a href="/index.html"><img className="logo" src="/image/logo.png" alt=""/></a></div>
                         <div className="pull-right">
-                            <div className="search">
-                                <div className="search-input">
+                            <a href="/404.html">
+                                <div className="search">
+                                    <div className="search-input">
 
+                                    </div>
+                                    <div className="search-bottom">
+                                        全站搜索
+                                    </div>
                                 </div>
-                                <div className="search-bottom">
-                                    全站搜索
-                                </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
-                <div className="menu">
-                    <ul className="container">
+                <div className="menu autoaffix">
+                    <ul className="container col-padding">
                         <li className={this.props.website_menu_id === "home" ? "active" : ""}>
                             <a href="/index.html">首页</a>
                         </li>

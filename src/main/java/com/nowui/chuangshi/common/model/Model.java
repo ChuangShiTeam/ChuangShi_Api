@@ -92,7 +92,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
     private String regexVariable(ColumnType columnType, Object value) {
         if (value instanceof String) {
-            value = ((String)value).replaceAll("\"", "\\\"");
+            value = ((String)value).replaceAll("\"", "\\\\\"");
         }
 
         StringBuilder stringBuilder = new StringBuilder();

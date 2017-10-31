@@ -92,25 +92,19 @@
                                 <div className="col-md-9">
                                     <div className="row">
                                         #for(teacher : teacherList)
-                                        <a href="/teacher/(teacher.teacher_id).html">
-                                            <div className="team-item">
-                                                <div className="col-md-2 team-image">
-                                                    <img className="img-circle" src={host + "#(teacher.file_path)"} alt=""/>
-                                                </div>
-                                                <div className="col-md-10">
-                                                    <div>
-                                                        <div className="team-name">#(teacher.teacher_name)</div>
-                                                        <div>#(teacher.teacher_title)</div>
-                                                    </div>
+                                        <div className="team-item #if(for.index > 0)margin-top-20#end">
+                                            <div className="col-md-2 team-image">
+                                                <img className="img-circle" src={host + "#(teacher.file_path)"} alt=""/>
+                                            </div>
+                                            <div className="col-md-10">
+                                                <div>
+                                                    <div className="team-name">#(teacher.teacher_name)</div>
+                                                    <div>#(teacher.teacher_title)</div>
                                                 </div>
                                             </div>
-                                        </a>
+                                        </div>
                                         #end
                                     </div>
-                                    <Pagination
-                                        ellipsis
-                                        boundaryLinks
-                                    />
                                 </div>
                             </div>
                         </div>
