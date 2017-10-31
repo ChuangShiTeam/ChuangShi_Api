@@ -276,17 +276,6 @@ public class Controller extends com.jfinal.core.Controller {
     public void renderSuccessJson(Object result) {
         result = checkResponse(result);
 
-        System.out.println(JSON.toJSONString(result));
-
-        if (result instanceof Model) {
-            Set<Map.Entry<String, Object>> sets = ((Model) result)._getAttrsEntrySet();
-            for (Map.Entry<String, Object> entry : sets) {
-                if (entry.getValue() instanceof String) {
-                    System.out.println(entry.getValue());
-                }
-            }
-        }
-
         Map<String, Object> map = new HashMap<String, Object>();
         map.put(Constant.CODE, HttpStatus.SC_OK);
         map.put(Constant.DATA, result);
