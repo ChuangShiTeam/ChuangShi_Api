@@ -193,6 +193,8 @@ public class Controller extends com.jfinal.core.Controller {
             for (Map.Entry<String, Object> entry : sets) {
                 checkSecondResponse(entry);
             }
+
+            ((Model) result).keep(validateResponseKeyList);
         } else if (result instanceof List) {
             for (Object item : (List) result) {
                 if (item instanceof Model) {
@@ -200,12 +202,33 @@ public class Controller extends com.jfinal.core.Controller {
                     for (Map.Entry<String, Object> entry : sets) {
                         checkSecondResponse(entry);
                     }
+
+                    ((Model) item).keep(validateResponseKeyList);
                 } else if (item instanceof Map) {
+                    Iterator<Map.Entry<String, Object>> iterator = ((Map) item).entrySet().iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry<String, Object> entry = iterator.next();
+
+                        Boolean isExit = false;
+                        for (String key : validateResponseKeyList) {
+                            if (entry.getKey().equals(key)) {
+                                isExit = true;
+                                break;
+                            }
+                        }
+
+                        if (!isExit) {
+                            iterator.remove();
+                        }
+                    }
+
                     for (Map.Entry<String, Object> entry : ((Map<String, Object>) item).entrySet()) {
                         checkSecondResponse(entry);
                     }
                 }
             }
+
+
         } else if (result instanceof String) {
             result = StringEscapeUtils.unescapeHtml4((String) result);
         }
@@ -218,7 +241,7 @@ public class Controller extends com.jfinal.core.Controller {
             Set<Map.Entry<String, Object>> sets = ((Model) result)._getAttrsEntrySet();
             for (Map.Entry<String, Object> entry : sets) {
                 if (entry.getValue() instanceof String) {
-                    entry.setValue(StringEscapeUtils.unescapeHtml4((String)entry.getValue()));
+                    entry.setValue(StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
                 }
             }
         } else if (result instanceof List) {
@@ -227,22 +250,22 @@ public class Controller extends com.jfinal.core.Controller {
                     Set<Map.Entry<String, Object>> sets = ((Model) item)._getAttrsEntrySet();
                     for (Map.Entry<String, Object> entry : sets) {
                         if (entry.getValue() instanceof String) {
-                            entry.setValue(StringEscapeUtils.unescapeHtml4((String)entry.getValue()));
+                            entry.setValue(StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
                         }
                     }
                 } else if (item instanceof Map) {
-                    Iterator<Map.Entry<String, Object>> iterator = ((Map<String, Object>)item).entrySet().iterator();
-                    while(iterator.hasNext()){
+                    Iterator<Map.Entry<String, Object>> iterator = ((Map<String, Object>) item).entrySet().iterator();
+                    while (iterator.hasNext()) {
                         Map.Entry<String, Object> entry = iterator.next();
                         if (entry.getValue() instanceof String) {
-                            entry.setValue(StringEscapeUtils.unescapeHtml4((String)entry.getValue()));
+                            entry.setValue(StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
                         }
                     }
                 }
             }
         } else if (result instanceof Map.Entry) {
-            if (((Map.Entry)result).getValue() instanceof String) {
-                ((Map.Entry)result).setValue(StringEscapeUtils.unescapeHtml4((String) ((Map.Entry)result).getValue()));
+            if (((Map.Entry) result).getValue() instanceof String) {
+                ((Map.Entry) result).setValue(StringEscapeUtils.unescapeHtml4((String) ((Map.Entry) result).getValue()));
 
 //                System.out.println(((Map.Entry)result).getValue());
 //                System.out.println(StringEscapeUtils.unescapeHtml4((String) ((Map.Entry)result).getValue()));
@@ -538,7 +561,7 @@ public class Controller extends com.jfinal.core.Controller {
 
         super.renderJson(object);
     }
-    
+
     public void unescapeHtml4Model(Model result) {
         Set<Map.Entry<String, Object>> sets = result._getAttrsEntrySet();
         for (Map.Entry<String, Object> entry : sets) {
