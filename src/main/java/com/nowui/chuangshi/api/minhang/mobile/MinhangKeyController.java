@@ -56,7 +56,7 @@ public class MinhangKeyController extends Controller {
 
         minhangKey.put(MinhangKey.KEY_IMAGE_FILE, FileService.instance.getFile(minhangKey.getKey_image()));
 
-        validateResponse(MinhangKey.KEY_NAME, MinhangKey.KEY_IMAGE_FILE, MinhangKey.KEY_ACTIVATED_TASK_QUANTITY, MinhangKey.KEY_SORT, MinhangKey.KEY_DESCRIPTION, MinhangKey.SYSTEM_VERSION);
+        minhangKey.keep(MinhangKey.KEY_NAME, MinhangKey.KEY_IMAGE_FILE, MinhangKey.KEY_ACTIVATED_TASK_QUANTITY, MinhangKey.KEY_SORT, MinhangKey.KEY_DESCRIPTION, MinhangKey.SYSTEM_VERSION);
 
         //查询用户最近的寻钥之旅记录
         MinhangMemberItinerary member_itinerary = MinhangMemberItineraryService.instance.userLatestFind(request_user_id);
@@ -67,7 +67,7 @@ public class MinhangKeyController extends Controller {
         
         MinhangMemberKey member_key = MinhangMemberKeyService.instance.keyAndItineraryFind(model.getKey_id(), member_itinerary.getMember_itinerary_id());
        
-        validateResponse(MinhangMemberKey.MEMBER_KEY_ID, MinhangMemberKey.KEY_ID, MinhangMemberKey.TASK_QUANTITY, MinhangMemberKey.TASK_COMPLETE_QUANTITY, MinhangMemberKey.KEY_IS_ACTIVATED);
+        member_key.keep(MinhangMemberKey.MEMBER_KEY_ID, MinhangMemberKey.KEY_ID, MinhangMemberKey.TASK_QUANTITY, MinhangMemberKey.TASK_COMPLETE_QUANTITY, MinhangMemberKey.KEY_IS_ACTIVATED);
         
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("key", minhangKey);
@@ -80,11 +80,12 @@ public class MinhangKeyController extends Controller {
                     MinhangTask task = MinhangTaskService.instance.find(minhangMemberTask.getTask_id());
                     minhangMemberTask.put(MinhangTask.TASK_NAME, task.getTask_name());
                     minhangMemberTask.put(MinhangTask.TASK_TYPE, task.getTask_type());
+                    minhangMemberTask.keep(MinhangMemberTask.TASK_ID, MinhangMemberTask.KEY_ACTIVATED_STEP, MinhangTask.TASK_NAME, MinhangTask.TASK_TYPE);
                 }
-                validateResponse(MinhangMemberTask.TASK_ID, MinhangMemberTask.KEY_ACTIVATED_STEP, MinhangTask.TASK_NAME, MinhangTask.TASK_TYPE);
                 result.put("member_task_list", member_task_list);
         	}
         }
+        validateResponse("member_key", "key");
         renderSuccessJson(result);
     }
 
