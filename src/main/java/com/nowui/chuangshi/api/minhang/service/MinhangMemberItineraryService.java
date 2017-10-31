@@ -126,39 +126,33 @@ public class MinhangMemberItineraryService extends Service {
      * @param user_id
      * @return
      */
-    public Boolean start(String user_id, String app_id) {
-        //查询用户是否有过寻钥之旅
-        List<MinhangMemberItinerary> minhangMemberItineraryList = userList(user_id);
+    public MinhangMemberItinerary start(String user_id, String app_id) {
+        User user = UserService.instance.find(user_id);
         
-        if (minhangMemberItineraryList == null || minhangMemberItineraryList.size() == 0) {
-            User user = UserService.instance.find(user_id);
-            
-            MinhangMemberItinerary minhangMemberItinerary = new MinhangMemberItinerary();
-            minhangMemberItinerary.setMember_itinerary_id(Util.getRandomUUID());
-            minhangMemberItinerary.setApp_id(app_id);
-            minhangMemberItinerary.setMember_id(user.getObject_id());
-            minhangMemberItinerary.setUser_id(user_id);
-            minhangMemberItinerary.setItinerary_is_complete(false);
-            Boolean result = this.save(minhangMemberItinerary, user_id);
-            if (result) {
-                List<MinhangKey> minhangKeyList = MinhangKeyService.instance.appList(app_id);
-                for (MinhangKey minhangKey : minhangKeyList) {
-                    MinhangMemberKey minhangMemberKey = new MinhangMemberKey();
-                    minhangMemberKey.setMember_key_id(Util.getRandomUUID());
-                    minhangMemberKey.setApp_id(minhangKey.getApp_id());
-                    minhangMemberKey.setMember_itinerary_id(minhangMemberItinerary.getMember_itinerary_id());
-                    minhangMemberKey.setKey_id(minhangKey.getKey_id());
-                    minhangMemberKey.setMember_id(user.getObject_id());
-                    minhangMemberKey.setUser_id(user_id);
-                    minhangMemberKey.setKey_is_activated(false);
-                    minhangMemberKey.setTask_quantity(minhangKey.getKey_activated_task_quantity());
-                    minhangMemberKey.setTask_complete_quantity(0);
-                    MinhangMemberKeyService.instance.save(minhangMemberKey, user_id);
-                }
+        MinhangMemberItinerary minhangMemberItinerary = new MinhangMemberItinerary();
+        minhangMemberItinerary.setMember_itinerary_id(Util.getRandomUUID());
+        minhangMemberItinerary.setApp_id(app_id);
+        minhangMemberItinerary.setMember_id(user.getObject_id());
+        minhangMemberItinerary.setUser_id(user_id);
+        minhangMemberItinerary.setItinerary_is_complete(false);
+        Boolean result = this.save(minhangMemberItinerary, user_id);
+        if (result) {
+            List<MinhangKey> minhangKeyList = MinhangKeyService.instance.appList(app_id);
+            for (MinhangKey minhangKey : minhangKeyList) {
+                MinhangMemberKey minhangMemberKey = new MinhangMemberKey();
+                minhangMemberKey.setMember_key_id(Util.getRandomUUID());
+                minhangMemberKey.setApp_id(minhangKey.getApp_id());
+                minhangMemberKey.setMember_itinerary_id(minhangMemberItinerary.getMember_itinerary_id());
+                minhangMemberKey.setKey_id(minhangKey.getKey_id());
+                minhangMemberKey.setMember_id(user.getObject_id());
+                minhangMemberKey.setUser_id(user_id);
+                minhangMemberKey.setKey_is_activated(false);
+                minhangMemberKey.setTask_quantity(minhangKey.getKey_activated_task_quantity());
+                minhangMemberKey.setTask_complete_quantity(0);
+                MinhangMemberKeyService.instance.save(minhangMemberKey, user_id);
             }
-            return result;
         }
-        return false;
+        return minhangMemberItinerary;
     }
     
     /**
