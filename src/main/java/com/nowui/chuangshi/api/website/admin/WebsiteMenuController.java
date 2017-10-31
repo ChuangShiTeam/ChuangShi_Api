@@ -7,6 +7,7 @@ import com.nowui.chuangshi.api.website.service.WebsiteMenuService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
@@ -22,6 +23,8 @@ public class WebsiteMenuController extends Controller {
 
         List<Map<String, Object>> resultList = WebsiteMenuService.instance.tree(request_app_id);
 
+        validateResponse(WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_URL, WebsiteMenu.WEBSITE_MENU_SORT);
+
         renderSuccessJson(resultList);
     }
 
@@ -30,6 +33,8 @@ public class WebsiteMenuController extends Controller {
         String request_app_id = getRequest_app_id();
 
         List<Map<String, Object>> resultList = WebsiteMenuService.instance.appTree(request_app_id, "value", "label");
+
+        validateResponse("value", "label", Constant.CHILDREN);
 
         renderSuccessJson(resultList);
     }

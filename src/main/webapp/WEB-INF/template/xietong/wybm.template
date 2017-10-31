@@ -392,7 +392,7 @@
                                 </div>
                             </div>
                             <div className="row margin-top-20">
-                                <div className="subnav col-md-3">
+                                <div className="subnav col-md-3 hidden-xs">
                                     <a href="/xxbzs.html">
                                         <div className="subnav-item  ">
                                             <div className="subnav-item-menu">小学部招生简章</div>

@@ -20,9 +20,9 @@ window.Footer = class Component extends React.Component {
                 <div className="container">
                     <div className="row menu hidden-xs">
                         #for(websiteMenu : websiteMenuList)
-                        <div className="col-md-1 col-xs-3">
+                        <li>
                             <a href="/#(websiteMenu.website_menu_url)">#(websiteMenu.website_menu_name)</a>
-                        </div>
+                        </li>
                         #end
                     </div>
                     <div className="row line hidden-xs"></div>
@@ -45,7 +45,7 @@ window.Footer = class Component extends React.Component {
                         <div className="col-md-3 col-xs-12">
                             李老师 82596003(中学)
                         </div>
-                        <div className="col-md-3 col-xs-12">
+                        <div className="col-md-12 col-xs-12">
                             学校地址：佛山市禅城区东鄱南路10号
                         </div>
                         <div className="col-xs-12 visible-xs margin-bottom-20">

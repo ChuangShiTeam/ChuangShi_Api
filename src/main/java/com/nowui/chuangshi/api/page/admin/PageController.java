@@ -256,7 +256,7 @@ public class PageController extends Controller {
 
             page.setPage_content(StringEscapeUtils.unescapeHtml4(page.getPage_content()));
             templateMap.put("page", page);
-            if (page.getPage_template().equals("detail.template") || page.getPage_template().equals("teacher.template") || page.getPage_template().equals("teacher2.template")) {
+            if (page.getPage_template().equals("detail.template") || page.getPage_template().equals("teacher.template") || page.getPage_template().equals("teacher2.template") || page.getPage_template().equals("wybm.template") || page.getPage_template().equals("jszp.template")) {
                 PageService.instance.write(request_app_id, page.getPage_template(), page.getPage_url(), templateMap);
             }
         }

@@ -59,7 +59,7 @@
                                 </div>
                             </div>
                             <div className="row margin-top-20">
-                                <div className="subnav col-md-3">
+                                <div className="subnav col-md-3 hidden-xs">
                                     #for(websiteMenuChildren : websiteMenu.children)
                                     <a href="/#(websiteMenuChildren.website_menu_url)">
                                         <div className="subnav-item #if(websiteMenuChildren.website_menu_id == page.website_menu_id) active #else #end #if(for.index == 0) #else margin-top #end">
