@@ -39,7 +39,7 @@ public class MemberController extends Controller {
 
         Member result = MemberService.instance.find(model.getMember_id());
 
-        validateResponse( Member.SYSTEM_VERSION);
+        validateResponse(Member.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }

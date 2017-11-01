@@ -73,6 +73,8 @@ public class FileController extends Controller {
 
         List<Map<String, Object>> resultList = FileService.instance.upload(uploadFileList, request_app_id, request_user_id);
 
+        validateResponse(File.FILE_ID, File.FILE_NAME, File.FILE_PATH);
+        
         renderSuccessJson(resultList);
     }
 
@@ -88,6 +90,7 @@ public class FileController extends Controller {
 
         Map<String, Object> result = FileService.instance.uploadBase64(dataString, request_app_id, request_user_id);
 
+        validateResponse(File.FILE_ID, File.FILE_NAME, File.FILE_PATH);
         renderSuccessJson(result);
     }
 
