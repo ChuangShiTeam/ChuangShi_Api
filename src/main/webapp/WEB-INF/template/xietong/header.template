@@ -13,37 +13,66 @@ window.Header = class Component extends React.Component {
     }
 
     render() {
+        const Navbar = ReactBootstrap.Navbar;
+        const Nav = ReactBootstrap.Nav;
+        const NavItem = ReactBootstrap.NavItem;
+        const NavDropdown = ReactBootstrap.NavDropdown;
+        const MenuItem = ReactBootstrap.MenuItem;
         const Carousel = ReactBootstrap.Carousel;
 
         return (
             <div className="header">
-                <div className="navigation">
-                    <div className="container">
+                <Navbar className="hidden-sm hidden-md hidden-lg mobile-header" fixedTop={true}>
+                    <Navbar.Header>
+                        <Navbar.Brand>
+                            <a href="/index.html">您好，欢迎光临佛山协同国际学校！</a>
+                        </Navbar.Brand>
+                        <Navbar.Toggle/>
+                    </Navbar.Header>
+                    <Navbar.Collapse>
+                        <Nav>
+                	 		#for(websiteMenu : websiteMenuList)
+                    	 		<NavDropdown eventKey={"#(websiteMenu.website_menu_id)"} title="#(websiteMenu.website_menu_name)" id="basic-nav-dropdown">
+                    	 			#for(websiteMenuChildren : websiteMenu.children)
+                    	 				<MenuItem eventKey={"#(websiteMenu.website_menu_id).#(websiteMenuChildren.website_menu_id)"} href="/#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</MenuItem>
+                                        #if(!for.last)
+                                        	<MenuItem divider/>
+                                        #end
+                					#end
+                                </NavDropdown>
+                            #end
+                        </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
+                <div className="navigation hidden-xs">
+                    <div className="container col-padding">
                         <div className="pull-left"><a href="/index.html">您好，欢迎光临佛山协同国际学校！</a></div>
-                        <div className="pull-right">
-                            <a className="margin-right" href="#">我是学生</a>
+                        <div className="pull-right hidden-xs">
+                            <a className="margin-right" href="/404.html">我是学生</a>
                             |
-                            <a className="margin-left" href="#">我是老师</a>
+                            <a className="margin-left" href="/404.html">我是老师</a>
                         </div>
                     </div>
                 </div>
                 <div className="main">
-                    <div className="container">
+                    <div className="container col-padding">
                         <div className="pull-left"><a href="/index.html"><img className="logo" src="/image/logo.png" alt=""/></a></div>
-                        <div className="pull-right">
-                            <div className="search">
-                                <div className="search-input">
+                        <div className="pull-right hidden-xs">
+                            <a href="/404.html">
+                                <div className="search">
+                                    <div className="search-input">
 
+                                    </div>
+                                    <div className="search-bottom">
+                                        全站搜索
+                                    </div>
                                 </div>
-                                <div className="search-bottom">
-                                    全站搜索
-                                </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
-                <div className="menu">
-                    <ul className="container">
+                <div className="menu autoaffix hidden-xs">
+                    <ul className="container col-padding">
                         <li className={this.props.website_menu_id === "home" ? "active" : ""}>
                             <a href="/index.html">首页</a>
                         </li>
@@ -61,7 +90,7 @@ window.Header = class Component extends React.Component {
                 </div>
                 {
                     this.props.is_show_banner ?
-                        <Carousel className="banner" interval={5000} keyboard={false}>
+                        <Carousel className="banner hidden-xs" interval={5000} keyboard={false}>
                             #for(advertisement : indexBannerList)
                                 <Carousel.Item>
                                     #if(advertisement.advertisement_link)

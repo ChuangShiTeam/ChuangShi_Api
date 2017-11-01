@@ -1,13 +1,14 @@
 package com.nowui.chuangshi.api.minhang.service;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
 import com.nowui.chuangshi.api.minhang.dao.MinhangPartyHistoryDao;
 import com.nowui.chuangshi.api.minhang.model.MinhangPartyHistory;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
-
-import java.util.List;
-import java.util.Random;
 
 public class MinhangPartyHistoryService extends Service {
 
@@ -113,6 +114,40 @@ public class MinhangPartyHistoryService extends Service {
         }
 
         return success;
+    }
+    
+    public MinhangPartyHistory prevHistory(String app_id, Date system_create_time) {
+    	MinhangPartyHistory minhangPartyHistory = minhangPartyHistoryDao.prevHistory(app_id, system_create_time);
+        if (minhangPartyHistory == null) {
+            Cnd cnd = new Cnd();
+            cnd.where(MinhangPartyHistory.SYSTEM_STATUS, true);
+            cnd.and(MinhangPartyHistory.APP_ID, app_id);
+            cnd.asc(MinhangPartyHistory.SYSTEM_CREATE_TIME);
+            cnd.paginate(0, 1);
+            
+            List<MinhangPartyHistory> minhangPartyHistoryList = minhangPartyHistoryDao.list(cnd);
+            if (minhangPartyHistoryList != null && minhangPartyHistoryList.size() > 0) {
+            	minhangPartyHistory = minhangPartyHistoryList.get(0);
+            }
+        }
+        return minhangPartyHistory;
+    }
+    
+    public MinhangPartyHistory nextHistory(String app_id, Date system_create_time) {
+    	MinhangPartyHistory minhangPartyHistory = minhangPartyHistoryDao.nextHistory(app_id, system_create_time);
+        if (minhangPartyHistory == null) {
+            Cnd cnd = new Cnd();
+            cnd.where(MinhangPartyHistory.SYSTEM_STATUS, true);
+            cnd.and(MinhangPartyHistory.APP_ID, app_id);
+            cnd.desc(MinhangPartyHistory.SYSTEM_CREATE_TIME);
+            cnd.paginate(0, 1);
+            
+            List<MinhangPartyHistory> minhangPartyHistoryList = minhangPartyHistoryDao.list(cnd);
+            if (minhangPartyHistoryList != null && minhangPartyHistoryList.size() > 0) {
+            	minhangPartyHistory = minhangPartyHistoryList.get(0);
+            }
+        }
+        return minhangPartyHistory;
     }
 
 }

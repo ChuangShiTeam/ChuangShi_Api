@@ -52,7 +52,7 @@ public class MemberController extends Controller {
 
         List<Map<String, Object>> resultList = MemberService.instance.teamList(member.getMember_id());
 
-        renderSuccessMapListJson(resultList);
+        renderSuccessJson(resultList);
     }
 
     @ActionKey("/mobile/member/children/address/list")

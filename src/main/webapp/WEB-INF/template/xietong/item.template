@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                             <div className="row margin-top-20">
-                                <div className="subnav col-md-3">
+                                <div className="subnav col-md-3 hidden-xs">
                                     {
                                         this.state.article_category_list.map(function (article_category, index) {
                                             return (

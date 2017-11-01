@@ -1,9 +1,7 @@
 package com.nowui.chuangshi.controller;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -135,7 +133,7 @@ public class WeChatController extends Controller {
                 wechat_union_id = "";
             }
 
-            String user_name = apiResult.getStr("nickname");
+            String user_name = Util.getEmoji(apiResult.getStr("nickname"));
             String user_avatar = apiResult.getStr("headimgurl");
             String scene_id = "";
             Boolean member_status = false;
@@ -152,12 +150,6 @@ public class WeChatController extends Controller {
             // url = url.contains("?") ? url + "&" : url + "?";
 
             // System.out.println("url : " + url);
-
-            try {
-                user_name = URLEncoder.encode(user_name, "utf-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
 
             System.out.println("open_id:" + wechat_open_id);
             System.out.println("token:" + token);

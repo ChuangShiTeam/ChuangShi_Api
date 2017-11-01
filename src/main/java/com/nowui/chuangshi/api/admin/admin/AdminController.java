@@ -5,6 +5,7 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.admin.model.Admin;
 import com.nowui.chuangshi.api.admin.service.AdminService;
+import com.nowui.chuangshi.api.menu.model.Menu;
 import com.nowui.chuangshi.api.menu.service.MenuService;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
@@ -108,7 +109,9 @@ public class AdminController extends Controller {
 
         List<Map<String, Object>> resultList = MenuService.instance.menuList(request_app_id);
 
-        renderSuccessMapListJson(resultList);
+        validateResponse(Menu.MENU_ID, Menu.MENU_NAME, Menu.MENU_IMAGE, Menu.MENU_URL, Constant.CHILDREN);
+
+        renderSuccessJson(resultList);
     }
 
     @ActionKey("/admin/admin/login")
