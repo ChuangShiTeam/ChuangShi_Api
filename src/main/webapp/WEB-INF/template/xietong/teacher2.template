@@ -71,19 +71,19 @@
                                     </a>
                                     #end
                                     <div className="department margin-top">
-                                        <a href="#">
+                                        <a href="/xxb.html">
                                             <img src="/image/department0.jpg" alt=""/>
                                             <div className="department-mask">小学部</div>
                                         </a>
                                     </div>
                                     <div className="department margin-top">
-                                        <a href="#">
+                                        <a href="/zxb.html">
                                             <img src="/image/department1.jpg" alt=""/>
                                             <div className="department-mask">中学部</div>
                                         </a>
                                     </div>
                                     <div className="department margin-top">
-                                        <a href="#">
+                                        <a href="/gjb.html">
                                             <img src="/image/department2.jpg" alt=""/>
                                             <div className="department-mask">国际部</div>
                                         </a>
@@ -93,16 +93,16 @@
                                     #set(i = 0)
                                     #for(teacher : teacherList)
                                     #if(teacher.teacher_category == "管理团队")
-                                    <a href="/teacher/#(teacher.teacher_id).html" className="teacher-image">
+                                    <a href="#" className="teacher-image">
                                         <div className="team-item #if(i > 0)margin-top-20#end">
                                             <div className="col-md-4 team-image">
-                                                <img className="img-circle" src={host + "#(teacher.file_path)"} alt=""/>
+                                                <div className="team-image-item">
+                                                    <img className="img-circle" src={host + "#(teacher.file_path)"} alt=""/>
+                                                </div>
                                             </div>
                                             <div className="col-md-8">
-                                                <div>
-                                                    <div className="team-name">#(teacher.teacher_name)</div>
-                                                    <div>#(teacher.teacher_title)</div>
-                                                </div>
+                                                <div className="team-name">#(teacher.teacher_name)</div>
+                                                <div dangerouslySetInnerHTML={{__html: '#(teacher.teacher_description)'}}></div>
                                             </div>
                                         </div>
                                     </a>

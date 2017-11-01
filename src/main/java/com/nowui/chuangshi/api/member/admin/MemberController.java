@@ -26,7 +26,7 @@ public class MemberController extends Controller {
         Integer resultCount = MemberService.instance.adminCount(request_app_id, model.getUser_name());
         List<Member> resultList = MemberService.instance.adminList(request_app_id, model.getUser_name(), getM(), getN());
 
-        validateResponse(Member.MEMBER_ID, Member.USER_ID, User.USER_NAME, Member.SYSTEM_VERSION);
+        validateResponse(Member.MEMBER_ID, Member.USER_ID, User.USER_AVATAR, User.USER_NAME, Member.SYSTEM_CREATE_TIME, Member.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }

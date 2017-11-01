@@ -187,33 +187,43 @@ public class Controller extends com.jfinal.core.Controller {
         renderJson(map);
     }
 
-    private Object checkResponse(Object result) {
+    private Object checkResponse(int index, Object result) {
+        index++;
+
         if (result instanceof Model) {
             Set<Map.Entry<String, Object>> sets = ((Model) result)._getAttrsEntrySet();
             for (Map.Entry<String, Object> entry : sets) {
-                checkSecondResponse(entry);
+                checkResponse(index, entry);
             }
 
-            ((Model) result).keep(validateResponseKeyList);
+            if (index == 1) {
+                ((Model) result).keep(validateResponseKeyList);
+            }
         } else if (result instanceof List) {
             for (Object item : (List) result) {
                 if (item instanceof Model) {
                     Set<Map.Entry<String, Object>> sets = ((Model) item)._getAttrsEntrySet();
                     for (Map.Entry<String, Object> entry : sets) {
-                        checkSecondResponse(entry);
+                        checkResponse(index, entry);
                     }
 
-                    ((Model) item).keep(validateResponseKeyList);
+                    if (index == 1) {
+                        ((Model) item).keep(validateResponseKeyList);
+                    }
                 } else if (item instanceof Map) {
-                    checkMap((Map) item);
+                    checkMap(index, (Map) item);
 
                     for (Map.Entry<String, Object> entry : ((Map<String, Object>) item).entrySet()) {
-                        checkSecondResponse(entry);
+                        checkResponse(index, entry);
                     }
                 }
             }
         } else if (result instanceof Map) {
-            checkMap((Map) result);
+            checkMap(index, (Map) result);
+        } else if (result instanceof Map.Entry) {
+            if (((Map.Entry) result).getValue() instanceof String) {
+                ((Map.Entry) result).setValue(StringEscapeUtils.unescapeHtml4((String) ((Map.Entry) result).getValue()));
+            }
         } else if (result instanceof String) {
             result = StringEscapeUtils.unescapeHtml4((String) result);
         }
@@ -221,21 +231,27 @@ public class Controller extends com.jfinal.core.Controller {
         return result;
     }
 
-    private void checkMap(Map result) {
+    private void checkMap(int index, Map result) {
         Iterator<Map.Entry<String, Object>> iterator = result.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, Object> entry = iterator.next();
 
-            Boolean isExit = false;
-            for (String key : validateResponseKeyList) {
-                if (entry.getKey().equals(key)) {
-                    isExit = true;
-                    break;
+            if (index == 1) {
+                Boolean isExit = false;
+                for (String key : validateResponseKeyList) {
+                    if (entry.getKey().equals(key)) {
+                        isExit = true;
+                        break;
+                    }
                 }
-            }
 
-            if (!isExit) {
-                iterator.remove();
+                if (!isExit) {
+                    iterator.remove();
+                } else {
+                    if (entry.getValue() instanceof String) {
+                        entry.setValue(StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+                    }
+                }
             } else {
                 if (entry.getValue() instanceof String) {
                     entry.setValue(StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
@@ -282,7 +298,7 @@ public class Controller extends com.jfinal.core.Controller {
     }
 
     public void renderSuccessJson(Object result) {
-        result = checkResponse(result);
+        result = checkResponse(0, result);
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put(Constant.CODE, HttpStatus.SC_OK);
@@ -292,7 +308,7 @@ public class Controller extends com.jfinal.core.Controller {
     }
 
     public void renderSuccessJson(Integer total, Object result) {
-        result = checkResponse(result);
+        result = checkResponse(0, result);
 
         Map<String, Object> dataMap = new HashMap<String, Object>();
         dataMap.put(Constant.TOTAL, total);

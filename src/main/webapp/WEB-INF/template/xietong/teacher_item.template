@@ -69,19 +69,19 @@
                                     </a>
                                     #end
                                     <div className="department margin-top">
-                                        <a href="#">
+                                        <a href="/xxb.html">
                                             <img src="/image/department0.jpg" alt=""/>
                                             <div className="department-mask">小学部</div>
                                         </a>
                                     </div>
                                     <div className="department margin-top">
-                                        <a href="#">
+                                        <a href="/zxb.html">
                                             <img src="/image/department1.jpg" alt=""/>
                                             <div className="department-mask">中学部</div>
                                         </a>
                                     </div>
                                     <div className="department margin-top">
-                                        <a href="#">
+                                        <a href="/gjb.html">
                                             <img src="/image/department2.jpg" alt=""/>
                                             <div className="department-mask">国际部</div>
                                         </a>
@@ -92,10 +92,10 @@
                                         <h3>#(teacher.teacher_name)</h3>
                                         <div>#(teacher.teacher_title)</div>
                                     </div>
-                                    <div className="margin-top-20">
+                                    <div className="margin-top-20 col-md-6">
                                         <img src={host + "#(teacher.file_path)"} alt=""/>
                                     </div>
-                                    <div className="margin-top-30" dangerouslySetInnerHTML={{__html: '#(teacher.teacher_description)'}}></div>
+                                    <div className="margin-top-20 col-md-6" dangerouslySetInnerHTML={{__html: '#(teacher.teacher_description)'}}></div>
                                 </div>
                             </div>
                         </div>

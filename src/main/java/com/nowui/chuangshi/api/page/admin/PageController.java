@@ -238,10 +238,16 @@ public class PageController extends Controller {
             templateMap.put("article_category_id", articleCategory.getArticle_category_id());
         }
 
+        for (XietongTeacher teacher : teacherList) {
+            teacher.setTeacher_description(StringEscapeUtils.unescapeHtml4(teacher.getTeacher_description()));
+        }
+
         PageService.instance.write(request_app_id, "header.template", "header.js", templateMap);
         PageService.instance.write(request_app_id, "footer.template", "footer.js", templateMap);
         PageService.instance.write(request_app_id, "index.template", "index.html", templateMap);
 
+
+        Map<String, Object> teacherWebsiteMenu = new HashMap<String, Object>();
         for (Page page : pageList) {
             Map<String, Object> websiteMenu = new HashMap<String, Object>();
             for (Map<String, Object> websiteMenuMap : websiteMenuList) {
@@ -253,6 +259,10 @@ public class PageController extends Controller {
                 }
             }
             templateMap.put("websiteMenu", websiteMenu);
+
+            if (page.getPage_template().equals("teacher.template")) {
+                teacherWebsiteMenu = websiteMenu;
+            }
 
             page.setPage_content(StringEscapeUtils.unescapeHtml4(page.getPage_content()));
             templateMap.put("page", page);
@@ -268,8 +278,9 @@ public class PageController extends Controller {
         }
 
         for (XietongTeacher teacher : teacherList) {
-            teacher.setTeacher_description(StringEscapeUtils.unescapeHtml4(teacher.getTeacher_description()));
             templateMap.put("teacher", teacher);
+
+            templateMap.put("websiteMenu", teacherWebsiteMenu);
             PageService.instance.write(request_app_id, "teacher_item.template", "teacher/" + teacher.getTeacher_id() + ".html", templateMap);
         }
 
