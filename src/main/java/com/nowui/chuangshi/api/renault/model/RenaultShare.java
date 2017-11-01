@@ -17,10 +17,10 @@ public class RenaultShare extends Model<RenaultShare> {
     public static final String TABLE_RENAULT_SHARE = "table_renault_share";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "分享编号", updatable = false)
     public static final String SHARE_ID = "share_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "分享人id")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "分享人编号")
     public static final String SHARE_USER_ID = "share_user_id";
 
     @Column(type = ColumnType.INT, length = 11, comment = "分享数量")
@@ -29,7 +29,7 @@ public class RenaultShare extends Model<RenaultShare> {
     @Column(type = ColumnType.INT, length = 11, comment = "点赞次数")
     public static final String LIKE_NUM = "like_num";
 
-    @Column(type = ColumnType.VARCHAR, length = 200, comment = "描述")
+    @Column(type = ColumnType.LONGTEXT, length = 0, comment = "分享心得")
     public static final String REMARK = "remark";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)

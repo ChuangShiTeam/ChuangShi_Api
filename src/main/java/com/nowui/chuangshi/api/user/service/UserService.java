@@ -89,6 +89,16 @@ public class UserService extends Service {
         Boolean success = sava(user_id, app_id, object_id, user_type, user_name, user_avatar, user_account, user_mobile, user_email, user_password, wechat_open_id, wechat_union_id, system_create_user_id);
         return success;
     }
+    
+    public Boolean userAccountAndAvatarSave(String user_id, String app_id, String object_id, String user_type, String user_name, String user_account, String user_password, String user_avatar, String system_create_user_id) {
+        String user_mobile = "";
+        String user_email = "";
+        String wechat_open_id = "";
+        String wechat_union_id = "";
+
+        Boolean success = sava(user_id, app_id, object_id, user_type, user_name, user_avatar, user_account, user_mobile, user_email, user_password, wechat_open_id, wechat_union_id, system_create_user_id);
+        return success;
+    }
 
     public Boolean sava(String user_id, String app_id, String object_id, String user_type, String user_name, String user_avatar, String user_account, String user_mobile, String user_email, String user_password, String wechat_open_id, String wechat_union_id, String system_create_user_id) {
         User user = new User();
