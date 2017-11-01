@@ -1,16 +1,12 @@
 package com.nowui.chuangshi.api.renault.service;
 
+import java.util.List;
+
 import com.nowui.chuangshi.api.renault.dao.RenaultCustomerDao;
 import com.nowui.chuangshi.api.renault.model.RenaultCustomer;
-import com.nowui.chuangshi.api.user.model.User;
-import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
-import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.CacheUtil;
-import com.nowui.chuangshi.util.Util;
-
-import java.util.List;
 
 public class RenaultCustomerService extends Service {
 
@@ -61,22 +57,6 @@ public class RenaultCustomerService extends Service {
         return success;
     }
     
-    public Boolean save(RenaultCustomer renault_customer, User user, String system_create_user_id) {
-        String user_id = Util.getRandomUUID();
-        
-        renault_customer.setCustomer_id(Util.getRandomUUID());
-        renault_customer.setCustomer_name(user.getUser_name());
-        renault_customer.setCustomer_phone("");
-        renault_customer.setUser_id(user_id);
-        
-        Boolean success = renaultCustomerDao.save(renault_customer, system_create_user_id);
-        
-        if (success) {
-            UserService.instance.userAccountAndAvatarSave(user_id, renault_customer.getApp_id(), renault_customer.getCustomer_id(), UserType.CUSTOMER.getKey(), user.getUser_name(), user.getUser_account(), user.getUser_password(), user.getUser_avatar(), user_id);
-        }
-        return success;
-    }
-
     public Boolean update(RenaultCustomer renault_customer, String customer_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = new Cnd();
         cnd.where(RenaultCustomer.SYSTEM_STATUS, true);

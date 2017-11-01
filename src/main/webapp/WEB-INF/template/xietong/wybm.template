@@ -436,19 +436,19 @@
                                         </div>
                                     </a>
                                     <div className="department margin-top">
-                                        <a href="#">
+                                        <a href="/xxb.html">
                                             <img src="/image/department0.jpg" alt=""/>
                                             <div className="department-mask">小学部</div>
                                         </a>
                                     </div>
                                     <div className="department margin-top">
-                                        <a href="#">
+                                        <a href="/zxb.html">
                                             <img src="/image/department1.jpg" alt=""/>
                                             <div className="department-mask">中学部</div>
                                         </a>
                                     </div>
                                     <div className="department margin-top">
-                                        <a href="#">
+                                        <a href="/gjb.html">
                                             <img src="/image/department2.jpg" alt=""/>
                                             <div className="department-mask">国际部</div>
                                         </a>

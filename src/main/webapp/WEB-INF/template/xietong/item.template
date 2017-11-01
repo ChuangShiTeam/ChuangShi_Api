@@ -81,7 +81,7 @@
                         <div className="content container">
                             <div className="title margin-top-20">
                                 <div className="title-icon"></div>
-                                <div className="title-breadcrumb"><a href="/index.html">首页</a> > <a href="/article.html?category=#(article.article_category_id)">{this.state.article_category.article_category_name}</a> > #(article.article_name)
+                                <div className="title-breadcrumb"><a href="/index.html">首页</a> > <a href="/article.html?category=#(article.article_category_id)">{this.state.article_category.article_category_name}</a>
                                 </div>
                             </div>
                             <div className="row margin-top-20">
@@ -99,19 +99,19 @@
                                         }.bind(this))
                                     }
                                     <div className="department margin-top">
-                                        <a>
+                                        <a href="/xxb.html">
                                             <img src="/image/department0.jpg" alt=""/>
                                             <div className="department-mask">小学部</div>
                                         </a>
                                     </div>
                                     <div className="department margin-top">
-                                        <a>
+                                        <a href="/zxb.html">
                                             <img src="/image/department1.jpg" alt=""/>
                                             <div className="department-mask">中学部</div>
                                         </a>
                                     </div>
                                     <div className="department margin-top">
-                                        <a>
+                                        <a href="/gjb.html">
                                             <img src="/image/department2.jpg" alt=""/>
                                             <div className="department-mask">国际部</div>
                                         </a>

@@ -85,7 +85,7 @@ public class MinhangKeyController extends Controller {
                 result.put("member_task_list", member_task_list);
         	}
         }
-        validateResponse("member_key", "key");
+        validateResponse("member_key", "key", "member_task_list");
         renderSuccessJson(result);
     }
 

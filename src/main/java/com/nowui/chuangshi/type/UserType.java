@@ -10,7 +10,7 @@ public enum UserType {
     STUDENT("STUDENT", "学生"),
     ADMISSIONS("ADMISSIONS", "报名者"),
     TEACHER("TEACHER", "老师"),
-    CUSTOMER("CUSTOMER", "客户");
+    RENAULT_MEMBER("RENAULT_MEMBER", "雷诺会员");
 
     private String key;
     private String value;

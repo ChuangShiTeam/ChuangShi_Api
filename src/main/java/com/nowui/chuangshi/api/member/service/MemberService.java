@@ -42,7 +42,9 @@ public class MemberService extends Service {
         Cnd cnd = new Cnd();
         cnd.select(User.TABLE_USER + "." + User.USER_ID);
         cnd.select(User.TABLE_USER + "." + User.USER_NAME);
+        cnd.select(File.TABLE_FILE + "." + File.FILE_PATH, User.USER_AVATAR);
         cnd.leftJoin(User.TABLE_USER, User.USER_ID, Member.TABLE_MEMBER, Member.USER_ID);
+        cnd.leftJoin(File.TABLE_FILE, File.FILE_ID, User.TABLE_USER, User.USER_AVATAR);
         cnd.where(Member.TABLE_MEMBER + "." + Member.SYSTEM_STATUS, true);
         cnd.and(Member.TABLE_MEMBER + "." + Member.APP_ID, app_id);
         cnd.desc(Member.SYSTEM_CREATE_TIME);

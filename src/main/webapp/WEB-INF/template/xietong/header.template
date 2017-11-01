@@ -25,7 +25,7 @@ window.Header = class Component extends React.Component {
                 <Navbar className="hidden-sm hidden-md hidden-lg mobile-header" fixedTop={true}>
                     <Navbar.Header>
                         <Navbar.Brand>
-                            <a href="/index.html">您好，欢迎光临佛山协同国际学校！</a>
+                            <a href="/index.html">欢迎光临佛山协同(国际)学校</a>
                         </Navbar.Brand>
                         <Navbar.Toggle/>
                     </Navbar.Header>
@@ -46,7 +46,7 @@ window.Header = class Component extends React.Component {
                 </Navbar>
                 <div className="navigation hidden-xs">
                     <div className="container col-padding">
-                        <div className="pull-left"><a href="/index.html">您好，欢迎光临佛山协同国际学校！</a></div>
+                        <div className="pull-left"><a href="/index.html">您好，欢迎光临佛山协同(国际)学校！</a></div>
                         <div className="pull-right hidden-xs">
                             <a className="margin-right" href="/404.html">我是学生</a>
                             |
