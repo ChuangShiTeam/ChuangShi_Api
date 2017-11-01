@@ -40,10 +40,27 @@ public class RenaultShareController extends Controller {
         renderSuccessJson(renaultsharelist);
     }
 
+    //用户分享信息详情接口。 分享内容 图片 点赞数量
+    //Add by lyn
+    //2017.11.1
     @ActionKey("/mobile/renault/share/find")
     public void find() {
+        validateRequest(RenaultShare.SHARE_ID);
+        RenaultShare renault_share = getModel(RenaultShare.class);
+        RenaultShare result = RenaultShareService.instance.find(renault_share.getShare_id());
 
-        renderSuccessJson();
+        //String request_user_id = getRequest_user_id();
+        List<RenaultShareImage> renault_share_imageList = RenaultShareImageService.instance.shareList(result.getShare_id());
+
+        for (RenaultShareImage renaultShareImage : renault_share_imageList) {
+            renaultShareImage.keep(RenaultShareImage.IMAGE_ID, RenaultShareImage.FILE_ID, File.FILE_PATH);
+        }
+
+        result.put(RenaultShare.SHARE_IMAGE_LIST, renault_share_imageList);
+
+        validateResponse(RenaultShare.SHARE_ID, RenaultShare.SHARE_IMAGE_LIST, RenaultShare.REMARK, RenaultShare.LIKE_NUM, RenaultShare.SHARE_NUM);
+
+        renderSuccessJson(result);
     }
 
     @ActionKey("/mobile/renault/share/save")
