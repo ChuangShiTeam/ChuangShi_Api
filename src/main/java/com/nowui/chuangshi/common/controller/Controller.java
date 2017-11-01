@@ -222,7 +222,7 @@ public class Controller extends com.jfinal.core.Controller {
     }
 
     private void checkMap(Map result) {
-        Iterator<Map.Entry<String, Object>> iterator = (result).entrySet().iterator();
+        Iterator<Map.Entry<String, Object>> iterator = result.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, Object> entry = iterator.next();
 
@@ -236,6 +236,10 @@ public class Controller extends com.jfinal.core.Controller {
 
             if (!isExit) {
                 iterator.remove();
+            } else {
+                if (entry.getValue() instanceof String) {
+                    entry.setValue(StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+                }
             }
         }
     }
