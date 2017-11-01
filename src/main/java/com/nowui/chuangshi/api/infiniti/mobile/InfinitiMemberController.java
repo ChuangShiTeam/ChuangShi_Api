@@ -85,6 +85,8 @@ public class InfinitiMemberController extends Controller {
         }
         result.put("is_prize", is_prize);
         result.put("is_over", is_over);
+        
+        validateResponse(InfinitiPrize.PRIZE_ID, InfinitiPrize.PRIZE_NAME, InfinitiMember.MEMBER_REDEEM_CODE, "is_prize", "is_over");
 
         renderSuccessJson(result);
     }
