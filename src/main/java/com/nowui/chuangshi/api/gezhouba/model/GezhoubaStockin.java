@@ -1,4 +1,4 @@
-package com.nowui.chuangshi.api.renault.model;
+package com.nowui.chuangshi.api.gezhouba.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
 import com.nowui.chuangshi.common.annotation.Entity;
@@ -8,29 +8,31 @@ import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
-public class RenaultShare extends Model<RenaultShare> {
+public class GezhoubaStockin extends Model<GezhoubaStockin> {
 
     @Table
-    public static final String TABLE_RENAULT_SHARE = "table_renault_share";
+    public static final String TABLE_GEZHOUBA_STOCKIN = "table_gezhouba_stockin";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "分享编号", updatable = false)
-    public static final String SHARE_ID = "share_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "入库单id", updatable = false)
+    public static final String STOCKIN_ID = "stockin_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "分享人编号")
-    public static final String SHARE_USER_ID = "share_user_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "入库单编号")
+    public static final String STOCKIN_NO = "stockin_no";
 
-    @Column(type = ColumnType.INT, length = 11, comment = "分享数量")
-    public static final String SHARE_NUM = "share_num";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "入库单名称")
+    public static final String STOCKIN_NAME = "stockin_name";
 
-    @Column(type = ColumnType.INT, length = 11, comment = "点赞次数")
-    public static final String LIKE_NUM = "like_num";
+    @Column(type = ColumnType.DATE, length = 0, comment = "入库日期")
+    public static final String STOCKIN_DATE = "stockin_date";
 
-    @Column(type = ColumnType.LONGTEXT, length = 0, comment = "分享心得")
-    public static final String REMARK = "remark";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "供应商id")
+    public static final String SUPPLIER_ID = "supplier_id";
+
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
+    public static final String APP_ID = "app_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -50,49 +52,52 @@ public class RenaultShare extends Model<RenaultShare> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
-    public static final String APP_ID = "app_id";
-    
-    public static final String SHARE_IMAGE_LIST = "share_image_list";
-
-    public String getShare_id() {
-        return getStr(SHARE_ID);
+    public String getStockin_id() {
+        return getStr(STOCKIN_ID);
     }
 
-    public void setShare_id(String share_id) {
-        set(SHARE_ID, share_id);
+    public void setStockin_id(String stockin_id) {
+        set(STOCKIN_ID, stockin_id);
     }
 
-    public String getShare_user_id() {
-        return getStr(SHARE_USER_ID);
+    public String getStockin_no() {
+        return getStr(STOCKIN_NO);
     }
 
-    public void setShare_user_id(String share_user_id) {
-        set(SHARE_USER_ID, share_user_id);
+    public void setStockin_no(String stockin_no) {
+        set(STOCKIN_NO, stockin_no);
     }
 
-    public Integer getShare_num() {
-        return getInt(SHARE_NUM);
+    public String getStockin_name() {
+        return getStr(STOCKIN_NAME);
     }
 
-    public void setShare_num(Integer share_num) {
-        set(SHARE_NUM, share_num);
+    public void setStockin_name(String stockin_name) {
+        set(STOCKIN_NAME, stockin_name);
     }
 
-    public Integer getLike_num() {
-        return getInt(LIKE_NUM);
+    public Date getStockin_date() {
+        return getDate(STOCKIN_DATE);
     }
 
-    public void setLike_num(Integer like_num) {
-        set(LIKE_NUM, like_num);
+    public void setStockin_date(Date stockin_date) {
+        set(STOCKIN_DATE, stockin_date);
     }
 
-    public String getRemark() {
-        return getStr(REMARK);
+    public String getSupplier_id() {
+        return getStr(SUPPLIER_ID);
     }
 
-    public void setRemark(String remark) {
-        set(REMARK, remark);
+    public void setSupplier_id(String supplier_id) {
+        set(SUPPLIER_ID, supplier_id);
+    }
+
+    public String getApp_id() {
+        return getStr(APP_ID);
+    }
+
+    public void setApp_id(String app_id) {
+        set(APP_ID, app_id);
     }
 
     public String getSystem_create_user_id() {
@@ -143,14 +148,6 @@ public class RenaultShare extends Model<RenaultShare> {
 
     public void setSystem_status(Boolean system_status) {
         set(SYSTEM_STATUS, system_status);
-    }
-
-    public String getApp_id() {
-        return getStr(APP_ID);
-    }
-
-    public void setApp_id(String app_id) {
-        set(APP_ID, app_id);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.nowui.chuangshi.api.renault.model;
+package com.nowui.chuangshi.api.gezhouba.model;
 
 import com.nowui.chuangshi.common.annotation.Column;
 import com.nowui.chuangshi.common.annotation.Entity;
@@ -8,29 +8,31 @@ import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.type.ColumnType;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
-public class RenaultShare extends Model<RenaultShare> {
+public class GezhoubaStockinfo extends Model<GezhoubaStockinfo> {
 
     @Table
-    public static final String TABLE_RENAULT_SHARE = "table_renault_share";
+    public static final String TABLE_GEZHOUBA_STOCKINFO = "table_gezhouba_stockinfo";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "分享编号", updatable = false)
-    public static final String SHARE_ID = "share_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "库存id", updatable = false)
+    public static final String STOCK_ID = "stock_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "分享人编号")
-    public static final String SHARE_USER_ID = "share_user_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "商品id")
+    public static final String SUPPLIER_ID = "supplier_id";
 
-    @Column(type = ColumnType.INT, length = 11, comment = "分享数量")
-    public static final String SHARE_NUM = "share_num";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "商品id")
+    public static final String PRODUCT_ID = "product_id";
 
-    @Column(type = ColumnType.INT, length = 11, comment = "点赞次数")
-    public static final String LIKE_NUM = "like_num";
+    @Column(type = ColumnType.INT, length = 11, comment = "实际库存数量")
+    public static final String STOCK_NUM = "stock_num";
 
-    @Column(type = ColumnType.LONGTEXT, length = 0, comment = "分享心得")
-    public static final String REMARK = "remark";
+    @Column(type = ColumnType.INT, length = 11, comment = "锁定库存数量")
+    public static final String STOCK_LOCK_NUM = "stock_lock_num";
+
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
+    public static final String APP_ID = "app_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -50,49 +52,52 @@ public class RenaultShare extends Model<RenaultShare> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
-    public static final String APP_ID = "app_id";
-    
-    public static final String SHARE_IMAGE_LIST = "share_image_list";
-
-    public String getShare_id() {
-        return getStr(SHARE_ID);
+    public String getStock_id() {
+        return getStr(STOCK_ID);
     }
 
-    public void setShare_id(String share_id) {
-        set(SHARE_ID, share_id);
+    public void setStock_id(String stock_id) {
+        set(STOCK_ID, stock_id);
     }
 
-    public String getShare_user_id() {
-        return getStr(SHARE_USER_ID);
+    public String getSupplier_id() {
+        return getStr(SUPPLIER_ID);
     }
 
-    public void setShare_user_id(String share_user_id) {
-        set(SHARE_USER_ID, share_user_id);
+    public void setSupplier_id(String supplier_id) {
+        set(SUPPLIER_ID, supplier_id);
     }
 
-    public Integer getShare_num() {
-        return getInt(SHARE_NUM);
+    public String getProduct_id() {
+        return getStr(PRODUCT_ID);
     }
 
-    public void setShare_num(Integer share_num) {
-        set(SHARE_NUM, share_num);
+    public void setProduct_id(String product_id) {
+        set(PRODUCT_ID, product_id);
     }
 
-    public Integer getLike_num() {
-        return getInt(LIKE_NUM);
+    public Integer getStock_num() {
+        return getInt(STOCK_NUM);
     }
 
-    public void setLike_num(Integer like_num) {
-        set(LIKE_NUM, like_num);
+    public void setStock_num(Integer stock_num) {
+        set(STOCK_NUM, stock_num);
     }
 
-    public String getRemark() {
-        return getStr(REMARK);
+    public Integer getStock_lock_num() {
+        return getInt(STOCK_LOCK_NUM);
     }
 
-    public void setRemark(String remark) {
-        set(REMARK, remark);
+    public void setStock_lock_num(Integer stock_lock_num) {
+        set(STOCK_LOCK_NUM, stock_lock_num);
+    }
+
+    public String getApp_id() {
+        return getStr(APP_ID);
+    }
+
+    public void setApp_id(String app_id) {
+        set(APP_ID, app_id);
     }
 
     public String getSystem_create_user_id() {
@@ -143,14 +148,6 @@ public class RenaultShare extends Model<RenaultShare> {
 
     public void setSystem_status(Boolean system_status) {
         set(SYSTEM_STATUS, system_status);
-    }
-
-    public String getApp_id() {
-        return getStr(APP_ID);
-    }
-
-    public void setApp_id(String app_id) {
-        set(APP_ID, app_id);
     }
 
 }

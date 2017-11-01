@@ -15,7 +15,7 @@ public class RenaultShareImage extends Model<RenaultShareImage> {
     @Table
     public static final String TABLE_RENAULT_SHARE_IMAGE = "table_renault_share_image";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "商品编号")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "分享编号")
     public static final String SHARE_ID = "share_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "文件编号")

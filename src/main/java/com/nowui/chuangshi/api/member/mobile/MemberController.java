@@ -52,6 +52,7 @@ public class MemberController extends Controller {
 
         List<Map<String, Object>> resultList = MemberService.instance.teamList(member.getMember_id());
 
+        validateResponse(Member.MEMBER_ID, User.USER_NAME, User.USER_AVATAR, MemberLevel.MEMBER_LEVEL_NAME, Constant.CHILDREN);
         renderSuccessJson(resultList);
     }
 
@@ -118,7 +119,7 @@ public class MemberController extends Controller {
             }
         }
         result.put(CertificatePay.CERTIFICATE_AMOUNT, certificate_amount);
-
+        validateResponse(User.USER_NAME, User.USER_AVATAR, Member.MEMBER_COMMISSION_AMOUNT, Member.MEMBER_ORDER_AMOUNT, Member.MEMBER_WAIT_PAY, Member.MEMBER_WAIT_SEND, Member.MEMBER_WAIT_RECEIVE, Member.MEMBER_STATUS, MemberLevel.MEMBER_LEVEL_NAME, MemberLevel.MEMBER_LEVEL_SORT, CertificatePay.CERTIFICATE_AMOUNT);
         renderSuccessJson(result);
     }
 

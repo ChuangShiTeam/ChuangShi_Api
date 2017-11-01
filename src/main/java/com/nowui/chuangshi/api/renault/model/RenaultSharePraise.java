@@ -10,23 +10,23 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.util.Date;
 
 @Entity
-public class RenaultShareComment extends Model<RenaultShareComment> {
+public class RenaultSharePraise extends Model<RenaultSharePraise> {
 
     @Table
-    public static final String TABLE_RENAULT_SHARE_COMMENT = "table_renault_share_comment";
-    
-    @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "评论编号", updatable = false)
-    public static final String COMMENT_ID = "comment_id";
+    public static final String TABLE_RENAULT_SHARE_PRAISE = "table_renault_share_praise";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "分享编号")
+    @Primary
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "主键", updatable = false)
+    public static final String PRAISE_ID = "praise_id";
+
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "点赞分享")
     public static final String SHARE_ID = "share_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 200, comment = "内容")
-    public static final String REMARK = "remark";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "点赞人")
+    public static final String USER_ID = "user_id";
 
-    @Column(type = ColumnType.INT, length = 11, comment = "点赞次数")
-    public static final String LIKE_NUM = "like_num";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
+    public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
 
     @Column(type = ColumnType.DATETIME, length = 0, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_TIME = "system_create_time";
@@ -43,8 +43,16 @@ public class RenaultShareComment extends Model<RenaultShareComment> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
-    public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
+    public static final String APP_ID = "app_id";
+
+    public String getPraise_id() {
+        return getStr(PRAISE_ID);
+    }
+
+    public void setPraise_id(String praise_id) {
+        set(PRAISE_ID, praise_id);
+    }
 
     public String getShare_id() {
         return getStr(SHARE_ID);
@@ -54,20 +62,20 @@ public class RenaultShareComment extends Model<RenaultShareComment> {
         set(SHARE_ID, share_id);
     }
 
-    public String getRemark() {
-        return getStr(REMARK);
+    public String getUser_id() {
+        return getStr(USER_ID);
     }
 
-    public void setRemark(String remark) {
-        set(REMARK, remark);
+    public void setUser_id(String user_id) {
+        set(USER_ID, user_id);
     }
 
-    public Integer getLike_num() {
-        return getInt(LIKE_NUM);
+    public String getSystem_create_user_id() {
+        return getStr(SYSTEM_CREATE_USER_ID);
     }
 
-    public void setLike_num(Integer like_num) {
-        set(LIKE_NUM, like_num);
+    public void setSystem_create_user_id(String system_create_user_id) {
+        set(SYSTEM_CREATE_USER_ID, system_create_user_id);
     }
 
     public Date getSystem_create_time() {
@@ -112,20 +120,12 @@ public class RenaultShareComment extends Model<RenaultShareComment> {
         set(SYSTEM_STATUS, system_status);
     }
 
-    public String getSystem_create_user_id() {
-        return getStr(SYSTEM_CREATE_USER_ID);
+    public String getApp_id() {
+        return getStr(APP_ID);
     }
 
-    public void setSystem_create_user_id(String system_create_user_id) {
-        set(SYSTEM_CREATE_USER_ID, system_create_user_id);
-    }
-
-    public String getComment_id() {
-        return getStr(COMMENT_ID);
-    }
-
-    public void setComment_id(String comment_id) {
-        set(COMMENT_ID, comment_id);
+    public void setApp_id(String app_id) {
+        set(APP_ID, app_id);
     }
 
 }
