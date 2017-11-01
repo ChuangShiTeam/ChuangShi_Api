@@ -1,5 +1,9 @@
 package com.nowui.chuangshi.api.renault.mobile;
 
+import java.util.List;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.renault.model.RenaultShare;
@@ -9,8 +13,8 @@ import com.nowui.chuangshi.api.renault.service.RenaultShareService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.constant.Constant;
-
-import java.util.List;
+import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 @ControllerKey("/mobile/renault/share")
 public class RenaultShareController extends Controller {
@@ -65,8 +69,38 @@ public class RenaultShareController extends Controller {
 
     @ActionKey("/mobile/renault/share/save")
     public void save() {
-
-        renderSuccessJson();
+        validateRequest(RenaultShare.SHARE_IMAGE_LIST, RenaultShare.REMARK);
+        
+        String request_user_id = getRequest_user_id();
+        RenaultShare renault_share = getModel(RenaultShare.class);
+        JSONObject jsonObject = getParameterJSONObject();
+        
+        String share_id = Util.getRandomUUID();
+        renault_share.setShare_id(share_id);
+        renault_share.setLike_num(0);
+        renault_share.setShare_num(0);
+        renault_share.setShare_user_id(request_user_id);
+        
+        Boolean result = RenaultShareService.instance.save(renault_share, request_user_id);
+        
+        if (result) {
+            JSONArray jsonArray = jsonObject.getJSONArray(RenaultShare.SHARE_IMAGE_LIST);
+            
+            for (int i = 0; i < jsonArray.size(); i++) {
+                RenaultShareImage renaultShareImage = jsonArray.getJSONObject(i).toJavaObject(RenaultShareImage.class);
+                if (ValidateUtil.isNullOrEmpty(renaultShareImage.getFile_id())) {
+                    throw new RuntimeException("图片不能为空");
+                }
+                if (ValidateUtil.isNullOrEmpty(renaultShareImage.getShare_file_sort())) {
+                    throw new RuntimeException("排序不能为空");
+                }
+                renaultShareImage.setImage_id(Util.getRandomUUID());
+                renaultShareImage.setShare_id(share_id);
+                RenaultShareImageService.instance.save(renaultShareImage, request_user_id);
+            }
+        }
+        
+        renderSuccessJson(result);
     }
 
     @ActionKey("/mobile/renault/share/update")
