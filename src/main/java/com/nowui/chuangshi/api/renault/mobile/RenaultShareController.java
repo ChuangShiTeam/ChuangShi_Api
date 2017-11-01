@@ -103,10 +103,27 @@ public class RenaultShareController extends Controller {
         renderSuccessJson(result);
     }
 
+    //增加点赞数量接口、增加分享数量接口
+    //Add by lyn 2017.11.1
     @ActionKey("/mobile/renault/share/update")
     public void update() {
+        validateRequest(RenaultShare.LIKE_NUM);
+        String request_user_id = getRequest_user_id();
+        RenaultShare renault_share = getModel(RenaultShare.class);
 
-        renderSuccessJson();
+        if(renault_share.getLike_num()==1)
+        {
+            renault_share.setLike_num(renault_share.getShare_num()+1);
+        }else{
+            renault_share.setLike_num(renault_share.getShare_num()-1);
+        }
+
+        renault_share.setShare_num(renault_share.getShare_num()+1);//每次都加1
+        renault_share.setShare_user_id(request_user_id);
+
+        Boolean result = RenaultShareService.instance.update(renault_share,renault_share.getShare_id() ,request_user_id,renault_share.getSystem_version());
+
+        renderSuccessJson(result);
     }
 
     @ActionKey("/mobile/renault/share/delete")

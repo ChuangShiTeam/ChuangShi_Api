@@ -34,6 +34,8 @@ public class RenaultCustomerController extends Controller {
         renderSuccessJson();
     }
 
+    //用户信息保存
+    //add by lyn 2017.11.1
     @ActionKey("/mobile/renault/customer/save")
     public void save() {
         validateRequest(User.USER_NAME, User.USER_ACCOUNT, User.USER_PASSWORD, User.USER_AVATAR);
