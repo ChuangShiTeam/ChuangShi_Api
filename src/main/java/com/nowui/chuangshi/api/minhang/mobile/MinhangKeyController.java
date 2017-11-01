@@ -56,7 +56,7 @@ public class MinhangKeyController extends Controller {
 
         minhangKey.put(MinhangKey.KEY_IMAGE_FILE, FileService.instance.getFile(minhangKey.getKey_image()));
 
-        minhangKey.keep(MinhangKey.KEY_NAME, MinhangKey.KEY_IMAGE_FILE, MinhangKey.KEY_ACTIVATED_TASK_QUANTITY, MinhangKey.KEY_SORT, MinhangKey.KEY_DESCRIPTION, MinhangKey.SYSTEM_VERSION);
+        minhangKey.keep(MinhangKey.KEY_ID, MinhangKey.KEY_NAME, MinhangKey.KEY_IMAGE_FILE, MinhangKey.KEY_ACTIVATED_TASK_QUANTITY, MinhangKey.KEY_SORT, MinhangKey.KEY_DESCRIPTION, MinhangKey.SYSTEM_VERSION);
 
         //查询用户最近的寻钥之旅记录
         MinhangMemberItinerary member_itinerary = MinhangMemberItineraryService.instance.userLatestFind(request_user_id);
