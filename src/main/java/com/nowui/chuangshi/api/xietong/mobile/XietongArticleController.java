@@ -26,15 +26,16 @@ public class XietongArticleController extends Controller {
 
         for(Article article : articleList) {
         	article.put(Article.ARTICLE_IMAGE_FILE, FileService.instance.getFile_path(article.getArticle_image()));
+            article.keep(Article.ARTICLE_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_IMAGE_FILE, Article.ARTICLE_SUMMARY, Article.SYSTEM_CREATE_TIME);
         }
-
-        validateResponse(Article.ARTICLE_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, Article.ARTICLE_IMAGE_FILE, Article.ARTICLE_SUMMARY, Article.SYSTEM_CREATE_TIME);
 
         Integer count = ArticleService.instance.categoryCount(request_app_id, model.getArticle_category_id());
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("total", count);
         resultMap.put("articleList", articleList);
+        
+        validateResponse("total", "articleList");
 
         renderSuccessJson(resultMap);
     }
