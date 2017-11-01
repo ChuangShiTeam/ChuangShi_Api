@@ -16,6 +16,7 @@ import com.nowui.chuangshi.api.minhang.model.MinhangMemberPicture;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberQuestion;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberRecord;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberTask;
+import com.nowui.chuangshi.api.minhang.model.MinhangQuestion;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberHistoryService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberItineraryService;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberKeyService;
@@ -103,17 +104,23 @@ public class MinhangMemberHistoryController extends Controller {
         		result.put(MinhangMemberTaskType.LOCATION_QUESTION.getKey(), locationQuestion);
         	} else if (MinhangMemberTaskType.INFO_QUESTION.getKey().equals(minhangMemberTask.getMember_task_type())) {
         		MinhangMemberQuestion minhangMemberQuestion = MinhangMemberQuestionService.instance.userAndTaskAndItineraryFind(request_user_id, minhangMemberTask.getTask_id(), minhangMemberTask.getMember_itinerary_id());
-        		minhangMemberQuestion.put("question", MinhangQuestionService.instance.find(minhangMemberQuestion.getQuestion_id()));
+        		MinhangQuestion question = MinhangQuestionService.instance.find(minhangMemberQuestion.getQuestion_id());
+		        unescapeHtml4Model(question);
+        		minhangMemberQuestion.put("question", question);
         		result.put(MinhangMemberTaskType.INFO_QUESTION.getKey(), minhangMemberQuestion);
         	} else if (MinhangMemberTaskType.TIMELINE_EVENT_QUESTION.getKey().equals(minhangMemberTask.getMember_task_type())) {
         		MinhangMemberQuestion minhangMemberQuestion = MinhangMemberQuestionService.instance.userAndTaskAndItineraryFind(request_user_id, minhangMemberTask.getTask_id(), minhangMemberTask.getMember_itinerary_id());
-        		minhangMemberQuestion.put("question", MinhangQuestionService.instance.find(minhangMemberQuestion.getQuestion_id()));
+        		MinhangQuestion question = MinhangQuestionService.instance.find(minhangMemberQuestion.getQuestion_id());
+                unescapeHtml4Model(question);
+        		minhangMemberQuestion.put("question", question);
         		timelineEventQuestion.add(minhangMemberQuestion);
         		result.put(MinhangMemberTaskType.TIMELINE_EVENT_QUESTION.getKey(), timelineEventQuestion);
         	} else if (MinhangMemberTaskType.VIDEO_QUESTION.getKey().equals(minhangMemberTask.getMember_task_type())) {
         		MinhangMemberQuestion minhangMemberQuestion = MinhangMemberQuestionService.instance.userAndTaskAndItineraryFind(request_user_id, minhangMemberTask.getTask_id(), minhangMemberTask.getMember_itinerary_id());
-        		minhangMemberQuestion.put("question", MinhangQuestionService.instance.find(minhangMemberQuestion.getQuestion_id()));
-        		videoQuestion.add(minhangMemberQuestion);
+        		MinhangQuestion question = MinhangQuestionService.instance.find(minhangMemberQuestion.getQuestion_id());
+                unescapeHtml4Model(question);
+                minhangMemberQuestion.put("question", question);        		
+                videoQuestion.add(minhangMemberQuestion);
         		result.put(MinhangMemberTaskType.VIDEO_QUESTION.getKey(), videoQuestion);
         	}
         }
