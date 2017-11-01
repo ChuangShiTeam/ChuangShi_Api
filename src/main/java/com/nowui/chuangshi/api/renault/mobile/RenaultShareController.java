@@ -110,13 +110,8 @@ public class RenaultShareController extends Controller {
         validateRequest(RenaultShare.LIKE_NUM);
         String request_user_id = getRequest_user_id();
         RenaultShare renault_share = getModel(RenaultShare.class);
-
-        if(renault_share.getLike_num()==1)
-        {
-            renault_share.setLike_num(renault_share.getShare_num()+1);
-        }else{
-            renault_share.setLike_num(renault_share.getShare_num()-1);
-        }
+        renault_share = RenaultShareService.instance.find(renault_share.getShare_id());
+        renault_share.setLike_num(renault_share.getShare_num()+1);
 
         renault_share.setShare_num(renault_share.getShare_num()+1);//每次都加1
         renault_share.setShare_user_id(request_user_id);

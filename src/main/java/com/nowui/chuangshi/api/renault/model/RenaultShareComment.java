@@ -128,4 +128,7 @@ public class RenaultShareComment extends Model<RenaultShareComment> {
         set(COMMENT_ID, comment_id);
     }
 
+    //评论人信息
+    public static final String SHARE_COMMENT_USER= "share_comment_user";
+
 }
