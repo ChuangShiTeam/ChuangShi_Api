@@ -56,6 +56,16 @@ public class UserService extends Service {
         User user = userDao.find(cnd);
         return user;
     }
+    
+    public User userAccountFind(String app_id, String user_account) {
+        Cnd cnd = new Cnd();
+        cnd.where(User.SYSTEM_STATUS, true);
+        cnd.and(User.APP_ID, app_id);
+        cnd.and(User.USER_ACCOUNT, user_account);
+
+        User user = userDao.find(cnd);
+        return user;
+    }
 
     public User userAccountFind(String app_id, String user_type, String user_account, String user_password) {
         Cnd cnd = new Cnd();

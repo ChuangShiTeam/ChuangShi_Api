@@ -42,9 +42,15 @@ public class RenaultMemberController extends Controller {
          
          RenaultMember renault_member = getModel(RenaultMember.class);
          User userModel = getModel(User.class);
-          
-         String request_user_id = getRequest_user_id();
          
+         String request_user_id = getRequest_user_id();
+         String request_app_id = getRequest_app_id();
+         
+         User bean = UserService.instance.userAccountFind(request_app_id, userModel.getUser_account());
+         if (bean != null) {
+        	 throw new RuntimeException("邮箱已经被注册过了");
+         }
+          
          Boolean result = RenaultMemberService.instance.save(renault_member, userModel, request_user_id);
 
          renderSuccessJson(result);
