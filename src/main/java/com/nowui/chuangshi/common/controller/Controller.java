@@ -236,26 +236,30 @@ public class Controller extends com.jfinal.core.Controller {
         while (iterator.hasNext()) {
             Map.Entry<String, Object> entry = iterator.next();
 
-            if (index == 1) {
-                Boolean isExit = false;
-                for (String key : validateResponseKeyList) {
-                    if (entry.getKey().equals(key)) {
-                        isExit = true;
-                        break;
-                    }
-                }
+//            if (index == 1) {
+//                Boolean isExit = false;
+//                for (String key : validateResponseKeyList) {
+//                    if (entry.getKey().equals(key)) {
+//                        isExit = true;
+//                        break;
+//                    }
+//                }
+//
+//                if (!isExit) {
+//                    iterator.remove();
+//                } else {
+//                    if (entry.getValue() instanceof String) {
+//                        entry.setValue(StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+//                    }
+//                }
+//            } else {
+//                if (entry.getValue() instanceof String) {
+//                    entry.setValue(StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
+//                }
+//            }
 
-                if (!isExit) {
-                    iterator.remove();
-                } else {
-                    if (entry.getValue() instanceof String) {
-                        entry.setValue(StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
-                    }
-                }
-            } else {
-                if (entry.getValue() instanceof String) {
-                    entry.setValue(StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
-                }
+            if (entry.getValue() instanceof String) {
+                entry.setValue(StringEscapeUtils.unescapeHtml4((String) entry.getValue()));
             }
         }
     }
