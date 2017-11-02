@@ -81,6 +81,7 @@ public class XietongTeacherService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(XietongTeacher.SYSTEM_STATUS, true);
         cnd.and(XietongTeacher.APP_ID, app_id);
+        cnd.asc(XietongTeacher.TEACHER_SORT);
         cnd.desc(XietongTeacher.SYSTEM_CREATE_TIME);
 
         List<XietongTeacher> xietong_teacherList = xietongTeacherDao.primaryKeyList(cnd);

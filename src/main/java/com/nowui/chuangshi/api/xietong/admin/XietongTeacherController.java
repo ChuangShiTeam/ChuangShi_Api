@@ -28,7 +28,7 @@ public class XietongTeacherController extends Controller {
         Integer resultCount = XietongTeacherService.instance.adminCount(request_app_id, model.getOrganization_id(), model.getTeacher_name(), model.getTeacher_number(), model.getTeacher_category());
         List<XietongTeacher> resultList = XietongTeacherService.instance.adminList(request_app_id, model.getOrganization_id(), model.getTeacher_name(), model.getTeacher_number(), model.getTeacher_category(), getM(), getN());
 
-        validateResponse(XietongTeacher.TEACHER_ID, XietongOrganization.ORGANIZATION_NAME, File.FILE_ID, File.FILE_PATH, XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY, XietongTeacher.TEACHER_IMAGE, XietongTeacher.SYSTEM_VERSION);
+        validateResponse(XietongTeacher.TEACHER_ID, XietongOrganization.ORGANIZATION_NAME, File.FILE_ID, File.FILE_PATH, XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY, XietongTeacher.TEACHER_IMAGE, XietongTeacher.TEACHER_SORT, XietongTeacher.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -41,7 +41,7 @@ public class XietongTeacherController extends Controller {
 
         XietongTeacher result = XietongTeacherService.instance.find(model.getTeacher_id());
 
-        validateResponse(XietongTeacher.USER_ID, XietongTeacher.CLAZZ_ID, File.FILE_ID, File.FILE_PATH, XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY, XietongTeacher.TEACHER_IMAGE, XietongTeacher.TEACHER_TITLE, XietongTeacher.TEACHER_DESCRIPTION, XietongTeacher.SYSTEM_VERSION);
+        validateResponse(XietongTeacher.USER_ID, XietongTeacher.CLAZZ_ID, File.FILE_ID, File.FILE_PATH, XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY, XietongTeacher.TEACHER_IMAGE, XietongTeacher.TEACHER_TITLE, XietongTeacher.TEACHER_DESCRIPTION, XietongTeacher.TEACHER_SORT, XietongTeacher.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }

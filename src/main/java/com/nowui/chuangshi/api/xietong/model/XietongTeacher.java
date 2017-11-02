@@ -49,6 +49,9 @@ public class XietongTeacher extends Model<XietongTeacher> {
     @Column(type = ColumnType.LONGTEXT, length = 0, comment = "老师简介")
     public static final String TEACHER_DESCRIPTION = "teacher_description";
 
+    @Column(type = ColumnType.INT, length = 3, comment = "老师排序")
+    public static final String TEACHER_SORT = "teacher_sort";
+
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
 
@@ -153,6 +156,14 @@ public class XietongTeacher extends Model<XietongTeacher> {
 
     public void setTeacher_description(String teacher_description) {
         set(TEACHER_DESCRIPTION, teacher_description);
+    }
+
+    public Integer getTeache_sort() {
+        return getInt(TEACHER_SORT);
+    }
+
+    public void setTeache_sort(Integer teacher_sort) {
+        set(TEACHER_SORT, teacher_sort);
     }
 
     public String getSystem_create_user_id() {
