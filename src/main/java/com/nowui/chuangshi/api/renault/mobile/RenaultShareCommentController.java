@@ -30,6 +30,7 @@ public class RenaultShareCommentController extends Controller {
            User renault_share_comment_user = UserService.instance.find(result.getUser_id());
            
            result.put(User.USER_NAME, renault_share_comment_user.getUser_name());
+           
            String user_avatar = FileService.instance.getFile_path(renault_share_comment_user.getUser_avatar());
            if (!ValidateUtil.isNullOrEmpty(user_avatar) && user_avatar.startsWith("http://")) {  //微信头像无需处理，自己上传的头像加上前置url
                user_avatar = "http://api.chuangshi.nowui.com" + user_avatar;
