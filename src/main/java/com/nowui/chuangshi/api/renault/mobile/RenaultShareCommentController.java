@@ -12,6 +12,7 @@ import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 @ControllerKey("/mobile/renault/share/comment")
 public class RenaultShareCommentController extends Controller {
@@ -29,7 +30,11 @@ public class RenaultShareCommentController extends Controller {
            User renault_share_comment_user = UserService.instance.find(result.getUser_id());
            
            result.put(User.USER_NAME, renault_share_comment_user.getUser_name());
-           result.put(User.USER_AVATAR, FileService.instance.getFile_path(renault_share_comment_user.getUser_avatar()));
+           String user_avatar = FileService.instance.getFile_path(renault_share_comment_user.getUser_avatar());
+           if (!ValidateUtil.isNullOrEmpty(user_avatar) && user_avatar.startsWith("http://")) {  //微信头像无需处理，自己上传的头像加上前置url
+               user_avatar = "http://api.chuangshi.nowui.com" + user_avatar;
+           }
+           result.put(User.USER_AVATAR, user_avatar);
 
         }
 

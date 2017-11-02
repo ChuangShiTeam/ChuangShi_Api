@@ -37,7 +37,7 @@ public class RenaultShareController extends Controller {
             List<RenaultShareImage> renault_share_imageList = RenaultShareImageService.instance.shareList(result.getShare_id());
             
             for (RenaultShareImage renaultShareImage : renault_share_imageList) {
-                renaultShareImage.keep(RenaultShareImage.IMAGE_ID, RenaultShareImage.FILE_ID, File.FILE_PATH);
+                renaultShareImage.keep(File.FILE_PATH);
             }
             
             result.put(RenaultShare.SHARE_IMAGE_LIST, renault_share_imageList);
@@ -46,7 +46,12 @@ public class RenaultShareController extends Controller {
             User user = UserService.instance.find(result.getShare_user_id());
             
             result.put(User.USER_NAME, user.getUser_name());
-            result.put(User.USER_AVATAR, FileService.instance.getFile_path(user.getUser_avatar()));
+            
+            String user_avatar = FileService.instance.getFile_path(user.getUser_avatar());
+            if (!ValidateUtil.isNullOrEmpty(user_avatar) && user_avatar.startsWith("http://")) {  //微信头像无需处理，自己上传的头像加上前置url
+                user_avatar = "http://api.chuangshi.nowui.com" + user_avatar;
+            }
+            result.put(User.USER_AVATAR, user_avatar);
             
             //分享评论数
             result.put(RenaultShare.COMMENT_NUM, RenaultShareCommentService.instance.shareCount(result.getShare_id()));
@@ -80,7 +85,12 @@ public class RenaultShareController extends Controller {
         User user = UserService.instance.find(result.getShare_user_id());
         
         result.put(User.USER_NAME, user.getUser_name());
-        result.put(User.USER_AVATAR, FileService.instance.getFile_path(user.getUser_avatar()));
+        
+        String user_avatar = FileService.instance.getFile_path(user.getUser_avatar());
+        if (!ValidateUtil.isNullOrEmpty(user_avatar) && user_avatar.startsWith("http://")) {  //微信头像无需处理，自己上传的头像加上前置url
+            user_avatar = "http://api.chuangshi.nowui.com" + user_avatar;
+        }
+        result.put(User.USER_AVATAR, user_avatar);
         
         //分享评论数
         result.put(RenaultShare.COMMENT_NUM, RenaultShareCommentService.instance.shareCount(result.getShare_id()));
