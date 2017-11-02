@@ -24,6 +24,15 @@ public class RenaultShareCommentService extends Service {
         return count;
     }
 
+    public Integer adminCount(String share_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(RenaultShareComment.SYSTEM_STATUS, true);
+         cnd.and(RenaultShareComment.SHARE_ID, share_id);
+
+        Integer count = renaultShareCommentDao.count(cnd);
+        return count;
+    }
+
     public List<RenaultShareComment> adminList(String app_id, String remark, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(RenaultShareComment.SYSTEM_STATUS, true);
