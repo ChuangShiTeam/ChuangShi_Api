@@ -1,14 +1,13 @@
 package com.nowui.chuangshi.api.renault.model;
 
+import java.util.Date;
+
 import com.nowui.chuangshi.common.annotation.Column;
 import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.type.ColumnType;
-
-import java.util.Date;
-import java.util.List;
 
 @Entity
 public class RenaultShare extends Model<RenaultShare> {
@@ -54,6 +53,8 @@ public class RenaultShare extends Model<RenaultShare> {
     public static final String APP_ID = "app_id";
     
     public static final String SHARE_IMAGE_LIST = "share_image_list";
+    
+    public static final String COMMENT_NUM = "comment_num";
 
     public String getShare_id() {
         return getStr(SHARE_ID);

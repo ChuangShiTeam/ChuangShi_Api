@@ -2,7 +2,11 @@ package com.nowui.chuangshi.api.renault.admin;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.renault.model.RenaultShare;
+import com.nowui.chuangshi.api.renault.model.RenaultShareImage;
+import com.nowui.chuangshi.api.renault.service.RenaultShareCommentService;
+import com.nowui.chuangshi.api.renault.service.RenaultShareImageService;
 import com.nowui.chuangshi.api.renault.service.RenaultShareService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
@@ -26,7 +30,20 @@ public class RenaultShareController extends Controller {
         Integer resultCount = RenaultShareService.instance.adminCount(request_app_id, model.getRemark());
         List<RenaultShare> resultList = RenaultShareService.instance.adminList(request_app_id, model.getRemark(), getM(), getN());
 
-        validateResponse(RenaultShare.SHARE_ID, RenaultShare.SHARE_NUM, RenaultShare.LIKE_NUM, RenaultShare.REMARK, RenaultShare.SYSTEM_VERSION);
+        for (RenaultShare result : resultList) {
+            List<RenaultShareImage> renault_share_imageList = RenaultShareImageService.instance.shareList(result.getShare_id());
+
+            for (RenaultShareImage renaultShareImage : renault_share_imageList) {
+                renaultShareImage.keep(File.FILE_PATH);
+            }
+            result.put(RenaultShare.SHARE_IMAGE_LIST, renault_share_imageList);
+
+            Integer resultCommnentCount = RenaultShareCommentService.instance.adminCount(result.getShare_id());
+
+            result.put(RenaultShare.COMMENT_NUM, resultCommnentCount);
+        }
+
+        validateResponse(RenaultShare.SHARE_ID, RenaultShare.SHARE_NUM, RenaultShare.LIKE_NUM, RenaultShare.REMARK, RenaultShare.SYSTEM_VERSION,RenaultShare.COMMENT_NUM,RenaultShare.SHARE_IMAGE_LIST);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -39,7 +56,14 @@ public class RenaultShareController extends Controller {
 
         RenaultShare result = RenaultShareService.instance.find(model.getShare_id());
 
-        validateResponse(RenaultShare.SHARE_USER_ID, RenaultShare.SHARE_NUM, RenaultShare.LIKE_NUM, RenaultShare.REMARK, RenaultShare.SYSTEM_VERSION);
+        List<RenaultShareImage> renault_share_imageList = RenaultShareImageService.instance.shareList(result.getShare_id());
+
+        for (RenaultShareImage renaultShareImage : renault_share_imageList) {
+            renaultShareImage.keep(File.FILE_PATH);
+        }
+        result.put(RenaultShare.SHARE_IMAGE_LIST, renault_share_imageList);
+
+        validateResponse(RenaultShare.SHARE_USER_ID, RenaultShare.SHARE_NUM, RenaultShare.LIKE_NUM, RenaultShare.REMARK, RenaultShare.SYSTEM_VERSION,RenaultShare.SHARE_IMAGE_LIST);
 
         renderSuccessJson(result);
     }

@@ -24,6 +24,15 @@ public class RenaultShareCommentService extends Service {
         return count;
     }
 
+    public Integer adminCount(String share_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(RenaultShareComment.SYSTEM_STATUS, true);
+         cnd.and(RenaultShareComment.SHARE_ID, share_id);
+
+        Integer count = renaultShareCommentDao.count(cnd);
+        return count;
+    }
+
     public List<RenaultShareComment> adminList(String app_id, String remark, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(RenaultShareComment.SYSTEM_STATUS, true);
@@ -48,6 +57,15 @@ public class RenaultShareCommentService extends Service {
         }
 
         return renault_share_comment;
+    }
+    
+    public Integer shareCount(String share_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(RenaultShareComment.SYSTEM_STATUS, true);
+        cnd.and(RenaultShareComment.SHARE_ID, share_id);
+        
+        Integer count = renaultShareCommentDao.count(cnd);
+        return count;
     }
 
     public Boolean save(RenaultShareComment renault_share_comment, String system_create_user_id) {
@@ -83,6 +101,20 @@ public class RenaultShareCommentService extends Service {
         }
 
         return success;
+    }
+
+    public List<RenaultShareComment> mobileList(String share_id, Integer m, Integer n) {
+        Cnd cnd = new Cnd();
+        cnd.where(RenaultShareComment.SYSTEM_STATUS, true);
+        cnd.and(RenaultShareComment.SHARE_ID, share_id);
+        cnd.asc(RenaultShareComment.SYSTEM_CREATE_TIME);
+        cnd.paginate(m, n);
+
+        List<RenaultShareComment> renaultsharecommentList = renaultShareCommentDao.primaryKeyList(cnd);
+        for (RenaultShareComment renaultsharecommentCategory : renaultsharecommentList ){
+            renaultsharecommentCategory.put(find(renaultsharecommentCategory.getComment_id()));
+        }
+        return renaultsharecommentList;
     }
 
 }

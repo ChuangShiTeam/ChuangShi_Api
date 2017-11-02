@@ -6,10 +6,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.model.File;
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.renault.model.RenaultShare;
 import com.nowui.chuangshi.api.renault.model.RenaultShareImage;
+import com.nowui.chuangshi.api.renault.service.RenaultShareCommentService;
 import com.nowui.chuangshi.api.renault.service.RenaultShareImageService;
 import com.nowui.chuangshi.api.renault.service.RenaultShareService;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.constant.Constant;
@@ -29,17 +33,32 @@ public class RenaultShareController extends Controller {
 
         for (RenaultShare result : renaultsharelist) {
             
+            //分享图片
             List<RenaultShareImage> renault_share_imageList = RenaultShareImageService.instance.shareList(result.getShare_id());
             
             for (RenaultShareImage renaultShareImage : renault_share_imageList) {
-                renaultShareImage.keep(RenaultShareImage.IMAGE_ID, RenaultShareImage.FILE_ID, File.FILE_PATH);
+                renaultShareImage.keep(File.FILE_PATH);
             }
             
             result.put(RenaultShare.SHARE_IMAGE_LIST, renault_share_imageList);
+            
+            //分享用户昵称、头像
+            User user = UserService.instance.find(result.getShare_user_id());
+            
+            result.put(User.USER_NAME, user.getUser_name());
+            
+            String user_avatar = FileService.instance.getFile_path(user.getUser_avatar());
+            if (!ValidateUtil.isNullOrEmpty(user_avatar) && user_avatar.startsWith("http://")) {  //微信头像无需处理，自己上传的头像加上前置url
+                user_avatar = "http://api.chuangshi.nowui.com" + user_avatar;
+            }
+            result.put(User.USER_AVATAR, user_avatar);
+            
+            //分享评论数
+            result.put(RenaultShare.COMMENT_NUM, RenaultShareCommentService.instance.shareCount(result.getShare_id()));
         
         }
 
-        validateResponse(RenaultShare.SHARE_ID, RenaultShare.SHARE_IMAGE_LIST, RenaultShare.REMARK, RenaultShare.LIKE_NUM, RenaultShare.SHARE_NUM);
+        validateResponse(RenaultShare.SHARE_ID, User.USER_NAME, User.USER_AVATAR, RenaultShare.SHARE_IMAGE_LIST, RenaultShare.REMARK, RenaultShare.LIKE_NUM, RenaultShare.SHARE_NUM, RenaultShare.COMMENT_NUM);
 
         renderSuccessJson(renaultsharelist);
     }
@@ -61,8 +80,22 @@ public class RenaultShareController extends Controller {
         }
 
         result.put(RenaultShare.SHARE_IMAGE_LIST, renault_share_imageList);
+        
+        //分享用户昵称、头像
+        User user = UserService.instance.find(result.getShare_user_id());
+        
+        result.put(User.USER_NAME, user.getUser_name());
+        
+        String user_avatar = FileService.instance.getFile_path(user.getUser_avatar());
+        if (!ValidateUtil.isNullOrEmpty(user_avatar) && user_avatar.startsWith("http://")) {  //微信头像无需处理，自己上传的头像加上前置url
+            user_avatar = "http://api.chuangshi.nowui.com" + user_avatar;
+        }
+        result.put(User.USER_AVATAR, user_avatar);
+        
+        //分享评论数
+        result.put(RenaultShare.COMMENT_NUM, RenaultShareCommentService.instance.shareCount(result.getShare_id()));
 
-        validateResponse(RenaultShare.SHARE_ID, RenaultShare.SHARE_IMAGE_LIST, RenaultShare.REMARK, RenaultShare.LIKE_NUM, RenaultShare.SHARE_NUM);
+        validateResponse(RenaultShare.SHARE_ID, User.USER_NAME, User.USER_AVATAR, RenaultShare.SHARE_IMAGE_LIST, RenaultShare.REMARK, RenaultShare.LIKE_NUM, RenaultShare.SHARE_NUM, RenaultShare.COMMENT_NUM);
 
         renderSuccessJson(result);
     }
@@ -103,10 +136,22 @@ public class RenaultShareController extends Controller {
         renderSuccessJson(result);
     }
 
+    //增加点赞数量接口、增加分享数量接口
+    //Add by lyn 2017.11.1
     @ActionKey("/mobile/renault/share/update")
     public void update() {
+        validateRequest(RenaultShare.LIKE_NUM);
+        String request_user_id = getRequest_user_id();
+        RenaultShare renault_share = getModel(RenaultShare.class);
+        renault_share = RenaultShareService.instance.find(renault_share.getShare_id());
+        renault_share.setLike_num(renault_share.getLike_num()+1);
 
-        renderSuccessJson();
+        renault_share.setShare_num(renault_share.getShare_num()+1);//每次都加1
+        renault_share.setShare_user_id(request_user_id);
+
+        Boolean result = RenaultShareService.instance.update(renault_share,renault_share.getShare_id() ,request_user_id,renault_share.getSystem_version());
+
+        renderSuccessJson(result);
     }
 
     @ActionKey("/mobile/renault/share/delete")
