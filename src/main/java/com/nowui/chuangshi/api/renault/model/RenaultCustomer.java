@@ -19,9 +19,6 @@ public class RenaultCustomer extends Model<RenaultCustomer> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "客户id", updatable = false)
     public static final String CUSTOMER_ID = "customer_id";
     
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户编号", updatable = false)
-    public static final String USER_ID = "user_id";
-
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "客户名称")
     public static final String CUSTOMER_NAME = "customer_name";
 
@@ -57,14 +54,6 @@ public class RenaultCustomer extends Model<RenaultCustomer> {
         set(CUSTOMER_ID, customer_id);
     }
     
-    public String getUser_id() {
-        return getStr(USER_ID);
-    }
-    
-    public void setUser_id(String user_id) {
-        set(USER_ID, user_id);
-    }
-
     public String getCustomer_name() {
         return getStr(CUSTOMER_NAME);
     }
