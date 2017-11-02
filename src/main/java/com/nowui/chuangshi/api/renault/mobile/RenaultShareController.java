@@ -6,10 +6,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.model.File;
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.renault.model.RenaultShare;
 import com.nowui.chuangshi.api.renault.model.RenaultShareImage;
+import com.nowui.chuangshi.api.renault.service.RenaultShareCommentService;
 import com.nowui.chuangshi.api.renault.service.RenaultShareImageService;
 import com.nowui.chuangshi.api.renault.service.RenaultShareService;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.constant.Constant;
@@ -29,6 +33,7 @@ public class RenaultShareController extends Controller {
 
         for (RenaultShare result : renaultsharelist) {
             
+            //分享图片
             List<RenaultShareImage> renault_share_imageList = RenaultShareImageService.instance.shareList(result.getShare_id());
             
             for (RenaultShareImage renaultShareImage : renault_share_imageList) {
@@ -36,10 +41,19 @@ public class RenaultShareController extends Controller {
             }
             
             result.put(RenaultShare.SHARE_IMAGE_LIST, renault_share_imageList);
+            
+            //分享用户昵称、头像
+            User user = UserService.instance.find(result.getShare_user_id());
+            
+            result.put(User.USER_NAME, user.getUser_name());
+            result.put(User.USER_AVATAR, FileService.instance.getFile_path(user.getUser_avatar()));
+            
+            //分享评论数
+            result.put(RenaultShare.COMMENT_NUM, RenaultShareCommentService.instance.shareCount(result.getShare_id()));
         
         }
 
-        validateResponse(RenaultShare.SHARE_ID, RenaultShare.SHARE_IMAGE_LIST, RenaultShare.REMARK, RenaultShare.LIKE_NUM, RenaultShare.SHARE_NUM);
+        validateResponse(RenaultShare.SHARE_ID, User.USER_NAME, User.USER_AVATAR, RenaultShare.SHARE_IMAGE_LIST, RenaultShare.REMARK, RenaultShare.LIKE_NUM, RenaultShare.SHARE_NUM, RenaultShare.COMMENT_NUM);
 
         renderSuccessJson(renaultsharelist);
     }
@@ -61,8 +75,17 @@ public class RenaultShareController extends Controller {
         }
 
         result.put(RenaultShare.SHARE_IMAGE_LIST, renault_share_imageList);
+        
+        //分享用户昵称、头像
+        User user = UserService.instance.find(result.getShare_user_id());
+        
+        result.put(User.USER_NAME, user.getUser_name());
+        result.put(User.USER_AVATAR, FileService.instance.getFile_path(user.getUser_avatar()));
+        
+        //分享评论数
+        result.put(RenaultShare.COMMENT_NUM, RenaultShareCommentService.instance.shareCount(result.getShare_id()));
 
-        validateResponse(RenaultShare.SHARE_ID, RenaultShare.SHARE_IMAGE_LIST, RenaultShare.REMARK, RenaultShare.LIKE_NUM, RenaultShare.SHARE_NUM);
+        validateResponse(RenaultShare.SHARE_ID, User.USER_NAME, User.USER_AVATAR, RenaultShare.SHARE_IMAGE_LIST, RenaultShare.REMARK, RenaultShare.LIKE_NUM, RenaultShare.SHARE_NUM, RenaultShare.COMMENT_NUM);
 
         renderSuccessJson(result);
     }

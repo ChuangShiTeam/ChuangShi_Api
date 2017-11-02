@@ -49,6 +49,15 @@ public class RenaultShareCommentService extends Service {
 
         return renault_share_comment;
     }
+    
+    public Integer shareCount(String share_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(RenaultShareComment.SYSTEM_STATUS, true);
+        cnd.and(RenaultShareComment.SHARE_ID, share_id);
+        
+        Integer count = renaultShareCommentDao.count(cnd);
+        return count;
+    }
 
     public Boolean save(RenaultShareComment renault_share_comment, String system_create_user_id) {
         Boolean success = renaultShareCommentDao.save(renault_share_comment, system_create_user_id);
