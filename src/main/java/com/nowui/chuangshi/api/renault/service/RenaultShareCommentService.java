@@ -1,10 +1,14 @@
 package com.nowui.chuangshi.api.renault.service;
 
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.renault.dao.RenaultShareCommentDao;
 import com.nowui.chuangshi.api.renault.model.RenaultShareComment;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.List;
 
@@ -14,35 +18,34 @@ public class RenaultShareCommentService extends Service {
     private final String RENAULT_SHARE_COMMENT_ITEM_CACHE = "renault_share_comment_item_cache";
     private final RenaultShareCommentDao renaultShareCommentDao = new RenaultShareCommentDao();
 
-    public Integer adminCount(String app_id, String remark) {
-        Cnd cnd = new Cnd();
-        cnd.where(RenaultShareComment.SYSTEM_STATUS, true);
-        //cnd.and(RenaultShareComment.APP_ID, app_id);
-        cnd.andAllowEmpty(RenaultShareComment.REMARK, remark);
-
-        Integer count = renaultShareCommentDao.count(cnd);
-        return count;
-    }
-
     public Integer adminCount(String share_id) {
         Cnd cnd = new Cnd();
         cnd.where(RenaultShareComment.SYSTEM_STATUS, true);
-         cnd.and(RenaultShareComment.SHARE_ID, share_id);
+        cnd.andAllowEmpty(RenaultShareComment.SHARE_ID, share_id);
 
         Integer count = renaultShareCommentDao.count(cnd);
         return count;
     }
 
-    public List<RenaultShareComment> adminList(String app_id, String remark, Integer m, Integer n) {
+    public List<RenaultShareComment> adminList(String share_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(RenaultShareComment.SYSTEM_STATUS, true);
-        //cnd.and(RenaultShareComment.APP_ID, app_id);
-        cnd.andAllowEmpty(RenaultShareComment.REMARK, remark);
+        cnd.and(RenaultShareComment.SHARE_ID, share_id);
+        cnd.desc(RenaultShareComment.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
         List<RenaultShareComment> renault_share_commentList = renaultShareCommentDao.primaryKeyList(cnd);
-        for (RenaultShareComment renault_share_comment : renault_share_commentList) {
-            renault_share_comment.put(find(renault_share_comment.getComment_id()));
+        for (RenaultShareComment renaultShareComment : renault_share_commentList) {
+            
+            renaultShareComment.put(find(renaultShareComment.getComment_id()));
+            
+            User comment_user = UserService.instance.find(renaultShareComment.getUser_id());
+            renaultShareComment.put(User.USER_NAME, comment_user.getUser_name());
+            String user_avatar = FileService.instance.getFile_path(comment_user.getUser_avatar());
+            if (!ValidateUtil.isNullOrEmpty(user_avatar) && !user_avatar.startsWith("http://")) {  //微信头像无需处理，自己上传的头像加上前置url
+                user_avatar = "http://api.chuangshi.nowui.com" + user_avatar;
+            }
+            renaultShareComment.put(User.USER_AVATAR, user_avatar);
         }
         return renault_share_commentList;
     }
@@ -107,7 +110,7 @@ public class RenaultShareCommentService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(RenaultShareComment.SYSTEM_STATUS, true);
         cnd.and(RenaultShareComment.SHARE_ID, share_id);
-        cnd.asc(RenaultShareComment.SYSTEM_CREATE_TIME);
+        cnd.desc(RenaultShareComment.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
         List<RenaultShareComment> renaultsharecommentList = renaultShareCommentDao.primaryKeyList(cnd);

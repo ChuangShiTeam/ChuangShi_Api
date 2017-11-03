@@ -19,7 +19,7 @@ public class RenaultShareCommentController extends Controller {
 
     @ActionKey("/mobile/renault/share/comment/list")
     public void list() {
-        validateRequest(Constant.PAGE_INDEX, Constant.PAGE_SIZE,RenaultShareComment.SHARE_ID);
+        validateRequest(Constant.PAGE_INDEX, Constant.PAGE_SIZE, RenaultShareComment.SHARE_ID);
         
         RenaultShareComment renault_share_comment = getModel(RenaultShareComment.class);
 
