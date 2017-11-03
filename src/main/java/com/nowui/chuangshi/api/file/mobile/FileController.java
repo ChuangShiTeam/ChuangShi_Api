@@ -45,8 +45,6 @@ public class FileController extends Controller {
     
     @ActionKey("/mobile/file/image/base64/upload")
     public void imageBase64Upload() {
-        validateRequest(Constant.REQUEST_APP_ID, Constant.REQUEST_USER_ID);
-        
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
         JSONObject jsonObject = getParameterJSONObject();
