@@ -55,7 +55,9 @@ public class RenaultShareController extends Controller {
             result.put(RenaultShare.COMMENT_NUM, resultCommnentCount);
         }
 
-        validateResponse(RenaultShare.SHARE_ID, User.USER_NAME, User.USER_AVATAR, RenaultShare.SHARE_NUM, RenaultShare.LIKE_NUM, RenaultShare.REMARK, RenaultShare.SYSTEM_VERSION,RenaultShare.COMMENT_NUM,RenaultShare.SHARE_IMAGE_LIST);
+        validateResponse(RenaultShare.SHARE_ID, User.USER_NAME, User.USER_AVATAR, RenaultShare.SHARE_NUM,
+                RenaultShare.LIKE_NUM, RenaultShare.REMARK, RenaultShare.SYSTEM_VERSION,RenaultShare.COMMENT_NUM,
+                RenaultShare.SHARE_IMAGE_LIST,RenaultShare.IS_TOP);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -86,7 +88,8 @@ public class RenaultShareController extends Controller {
         }
         result.put(User.USER_AVATAR, user_avatar);
 
-        validateResponse(RenaultShare.SHARE_USER_ID, User.USER_NAME, User.USER_AVATAR, RenaultShare.SHARE_NUM, RenaultShare.LIKE_NUM, RenaultShare.REMARK, RenaultShare.SYSTEM_VERSION,RenaultShare.SHARE_IMAGE_LIST);
+        validateResponse(RenaultShare.SHARE_USER_ID, User.USER_NAME, User.USER_AVATAR, RenaultShare.SHARE_NUM, RenaultShare.LIKE_NUM,
+                RenaultShare.REMARK, RenaultShare.SYSTEM_VERSION,RenaultShare.SHARE_IMAGE_LIST,RenaultShare.IS_TOP);
 
         renderSuccessJson(result);
     }
@@ -124,6 +127,23 @@ public class RenaultShareController extends Controller {
         String request_user_id = getRequest_user_id();
 
         Boolean result = RenaultShareService.instance.delete(model.getShare_id(), request_user_id, model.getSystem_version());
+
+        renderSuccessJson(result);
+    }
+
+    //是否置顶
+    //Add by lyn
+    //2017.11.3
+    @ActionKey("/admin/renault/share/istop")
+    public void istop() {
+        validateRequest(RenaultShare.SHARE_ID, RenaultShare.SYSTEM_VERSION, RenaultShare.IS_TOP);
+
+        RenaultShare model = getModel(RenaultShare.class);
+        String request_user_id = getRequest_user_id();
+
+
+        Boolean result = RenaultShareService.instance.update(model, model.getShare_id(), request_user_id, model.getSystem_version());
+
 
         renderSuccessJson(result);
     }

@@ -34,6 +34,8 @@ public class RenaultShareService extends Service {
         cnd.where(RenaultShare.TABLE_RENAULT_SHARE + "." + RenaultShare.SYSTEM_STATUS, true);
         cnd.and(RenaultShare.TABLE_RENAULT_SHARE + "." + RenaultShare.APP_ID, app_id);
         cnd.andLikeAllowEmpty(User.TABLE_USER + "." + User.USER_NAME, user_name);
+        cnd.desc(RenaultShare.IS_TOP);
+        cnd.desc(RenaultShare.TABLE_RENAULT_SHARE + "."+RenaultShare.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
         List<RenaultShare> renault_shareList = renaultShareDao.primaryKeyList(cnd);
