@@ -96,6 +96,7 @@ public class RenaultShareImageService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(RenaultShareImage.SYSTEM_STATUS, true);
         cnd.andAllowEmpty(RenaultShareImage.SHARE_ID, share_id);
+        cnd.asc(RenaultShareImage.SHARE_FILE_SORT);
 
         List<RenaultShareImage> renault_share_imageList = renaultShareImageDao.primaryKeyList(cnd);
         for (RenaultShareImage renault_share_image : renault_share_imageList) {

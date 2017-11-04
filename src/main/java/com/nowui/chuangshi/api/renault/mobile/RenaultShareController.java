@@ -48,7 +48,7 @@ public class RenaultShareController extends Controller {
             result.put(User.USER_NAME, user.getUser_name());
             
             String user_avatar = FileService.instance.getFile_path(user.getUser_avatar());
-            if (!ValidateUtil.isNullOrEmpty(user_avatar) && user_avatar.startsWith("http://")) {  //微信头像无需处理，自己上传的头像加上前置url
+            if (!ValidateUtil.isNullOrEmpty(user_avatar) && !user_avatar.startsWith("http://")) {  //微信头像无需处理，自己上传的头像加上前置url
                 user_avatar = "http://api.chuangshi.nowui.com" + user_avatar;
             }
             result.put(User.USER_AVATAR, user_avatar);
@@ -87,7 +87,7 @@ public class RenaultShareController extends Controller {
         result.put(User.USER_NAME, user.getUser_name());
         
         String user_avatar = FileService.instance.getFile_path(user.getUser_avatar());
-        if (!ValidateUtil.isNullOrEmpty(user_avatar) && user_avatar.startsWith("http://")) {  //微信头像无需处理，自己上传的头像加上前置url
+        if (!ValidateUtil.isNullOrEmpty(user_avatar) && !user_avatar.startsWith("http://")) {  //微信头像无需处理，自己上传的头像加上前置url
             user_avatar = "http://api.chuangshi.nowui.com" + user_avatar;
         }
         result.put(User.USER_AVATAR, user_avatar);

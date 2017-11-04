@@ -4,6 +4,7 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.renault.model.RenaultShareComment;
 import com.nowui.chuangshi.api.renault.service.RenaultShareCommentService;
+import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
@@ -18,15 +19,15 @@ public class RenaultShareCommentController extends Controller {
 
     @ActionKey("/admin/renault/share/comment/list")
     public void list() {
-        validateRequest(RenaultShareComment.REMARK, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(RenaultShareComment.SHARE_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         RenaultShareComment model = getModel(RenaultShareComment.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = RenaultShareCommentService.instance.adminCount(request_app_id, model.getRemark());
-        List<RenaultShareComment> resultList = RenaultShareCommentService.instance.adminList(request_app_id, model.getRemark(), getM(), getN());
+        Integer resultCount = RenaultShareCommentService.instance.adminCount(model.getShare_id());
+        List<RenaultShareComment> resultList = RenaultShareCommentService.instance.adminList(model.getShare_id(), getM(), getN());
 
-        validateResponse(RenaultShareComment.COMMENT_ID, RenaultShareComment.REMARK, RenaultShareComment.LIKE_NUM, RenaultShareComment.SYSTEM_VERSION);
+        validateResponse(RenaultShareComment.SHARE_ID, User.USER_NAME, User.USER_AVATAR, RenaultShareComment.REMARK, RenaultShareComment.LIKE_NUM, RenaultShareComment.COMMENT_ID, RenaultShareComment.SYSTEM_CREATE_TIME, RenaultShareComment.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }

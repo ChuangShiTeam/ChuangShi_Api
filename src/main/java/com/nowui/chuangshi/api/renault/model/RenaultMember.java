@@ -128,4 +128,8 @@ public class RenaultMember extends Model<RenaultMember> {
         set(SYSTEM_STATUS, system_status);
     }
 
+    //静态变量
+    public static final String USER_ACCOUNT = "user_account";
+    public static final String USER_AVATAR = "user_avatar";
+
 }
