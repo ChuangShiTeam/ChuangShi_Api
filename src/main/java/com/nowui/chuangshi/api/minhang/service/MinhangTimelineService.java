@@ -29,6 +29,7 @@ public class MinhangTimelineService extends Service {
         cnd.where(MinhangTimeline.SYSTEM_STATUS, true);
         cnd.and(MinhangTimeline.APP_ID, app_id);
         cnd.andAllowEmpty(MinhangTimeline.TIMELINE_YEAR, timeline_year);
+        cnd.desc(MinhangTimeline.TIMELINE_YEAR);
         cnd.paginate(m, n);
 
         List<MinhangTimeline> minhang_timelineList = minhangTimelineDao.primaryKeyList(cnd);
