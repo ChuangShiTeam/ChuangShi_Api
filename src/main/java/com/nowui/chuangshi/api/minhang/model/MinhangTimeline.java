@@ -28,7 +28,7 @@ public class MinhangTimeline extends Model<MinhangTimeline> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "图片")
     public static final String TIMELINE_IMAGE = "timeline_image";
 
-    @Column(type = ColumnType.VARCHAR, length = 500, comment = "描述")
+    @Column(type = ColumnType.LONGTEXT, length = 0, comment = "描述")
     public static final String TIMELINE_DESCRIPTION = "timeline_description";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)

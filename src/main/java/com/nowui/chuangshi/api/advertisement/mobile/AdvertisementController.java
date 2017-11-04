@@ -17,7 +17,7 @@ public class AdvertisementController extends Controller {
 
         List<Advertisement> advertisementList = AdvertisementService.instance.appList(request_app_id);
 
-        validateResponse(Advertisement.ADVERTISEMENT_ID, File.FILE_PATH, Advertisement.ADVERTISEMENT_LINK);
+        validateResponse(Advertisement.ADVERTISEMENT_ID, File.FILE_PATH, File.FILE_ORIGINAL_PATH, Advertisement.ADVERTISEMENT_LINK);
 
         renderSuccessJson(advertisementList);
     }
