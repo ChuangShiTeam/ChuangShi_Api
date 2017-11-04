@@ -1,6 +1,10 @@
 package com.nowui.chuangshi.api.renault.mobile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.http.HttpStatus;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -27,6 +31,7 @@ public class RenaultShareController extends Controller {
     @ActionKey("/mobile/renault/share/list")
     public void list() {
         validateRequest(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        
         String request_app_id = getRequest_app_id();
         
         List<RenaultShare> renaultsharelist = RenaultShareService.instance.mobileList(request_app_id, getM(), getN());
@@ -105,35 +110,46 @@ public class RenaultShareController extends Controller {
         validateRequest(RenaultShare.SHARE_IMAGE_LIST, RenaultShare.REMARK);
         
         String request_user_id = getRequest_user_id();
-        RenaultShare renault_share = getModel(RenaultShare.class);
-        JSONObject jsonObject = getParameterJSONObject();
-        
-        String share_id = Util.getRandomUUID();
-        renault_share.setShare_id(share_id);
-        renault_share.setLike_num(0);
-        renault_share.setShare_num(0);
-        renault_share.setShare_user_id(request_user_id);
-        
-        Boolean result = RenaultShareService.instance.save(renault_share, request_user_id);
-        
-        if (result) {
-            JSONArray jsonArray = jsonObject.getJSONArray(RenaultShare.SHARE_IMAGE_LIST);
-            
-            for (int i = 0; i < jsonArray.size(); i++) {
-                RenaultShareImage renaultShareImage = jsonArray.getJSONObject(i).toJavaObject(RenaultShareImage.class);
-                if (ValidateUtil.isNullOrEmpty(renaultShareImage.getFile_id())) {
-                    throw new RuntimeException("图片不能为空");
-                }
-                if (ValidateUtil.isNullOrEmpty(renaultShareImage.getShare_file_sort())) {
-                    throw new RuntimeException("排序不能为空");
-                }
-                renaultShareImage.setImage_id(Util.getRandomUUID());
-                renaultShareImage.setShare_id(share_id);
-                RenaultShareImageService.instance.save(renaultShareImage, request_user_id);
-            }
+        //判断用户是否有效
+        User user = UserService.instance.find(request_user_id);
+        if (user == null) {
+        	Map<String, Object> map = new HashMap<String, Object>();
+            map.put(Constant.CODE, HttpStatus.SC_NOT_IMPLEMENTED);
+            map.put(Constant.DATA, "用户不存在");
+
+            renderJson(map);
+        } else {
+        	 RenaultShare renault_share = getModel(RenaultShare.class);
+             JSONObject jsonObject = getParameterJSONObject();
+             
+             String share_id = Util.getRandomUUID();
+             renault_share.setShare_id(share_id);
+             renault_share.setLike_num(0);
+             renault_share.setShare_num(0);
+             renault_share.setShare_user_id(request_user_id);
+             
+             Boolean result = RenaultShareService.instance.save(renault_share, request_user_id);
+             
+             if (result) {
+                 JSONArray jsonArray = jsonObject.getJSONArray(RenaultShare.SHARE_IMAGE_LIST);
+                 
+                 for (int i = 0; i < jsonArray.size(); i++) {
+                     RenaultShareImage renaultShareImage = jsonArray.getJSONObject(i).toJavaObject(RenaultShareImage.class);
+                     if (ValidateUtil.isNullOrEmpty(renaultShareImage.getFile_id())) {
+                         throw new RuntimeException("图片不能为空");
+                     }
+                     if (ValidateUtil.isNullOrEmpty(renaultShareImage.getShare_file_sort())) {
+                         throw new RuntimeException("排序不能为空");
+                     }
+                     renaultShareImage.setImage_id(Util.getRandomUUID());
+                     renaultShareImage.setShare_id(share_id);
+                     RenaultShareImageService.instance.save(renaultShareImage, request_user_id);
+                 }
+             }
+             
+             renderSuccessJson(result);
         }
-        
-        renderSuccessJson(result);
+       
     }
 
     //增加点赞数量接口、增加分享数量接口
