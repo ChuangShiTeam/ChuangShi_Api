@@ -158,7 +158,7 @@ public class RenaultShareController extends Controller {
     //Add by lyn 2017.11.1
     @ActionKey("/mobile/renault/share/like")
     public void like() {
-        validateRequest(RenaultShare.LIKE_NUM);
+        validateRequest(RenaultShare.SHARE_ID, RenaultShare.LIKE_NUM);
         
         String request_user_id = getRequest_user_id();
         String request_app_id = getRequest_app_id();
@@ -167,10 +167,9 @@ public class RenaultShareController extends Controller {
         
         RenaultSharePraise renaultSharePraise = RenaultSharePraiseService.instance.userAndShareFind(request_user_id, renault_share.getShare_id());
         
-        if (renaultSharePraise == null) {
+        if (renaultSharePraise != null) {
             throw new RuntimeException("您已经点过赞了");
-        }
-        
+        } 
         RenaultSharePraise bean = new RenaultSharePraise();
         
         bean.setPraise_id(Util.getRandomUUID());
