@@ -40,7 +40,7 @@ public class RenaultShareController extends Controller {
             List<RenaultShareImage> renault_share_imageList = RenaultShareImageService.instance.shareList(result.getShare_id());
 
             for (RenaultShareImage renaultShareImage : renault_share_imageList) {
-                renaultShareImage.keep(File.FILE_PATH);
+                renaultShareImage.keep(File.FILE_PATH,  File.FILE_ORIGINAL_PATH);
             }
             result.put(RenaultShare.SHARE_IMAGE_LIST, renault_share_imageList);
             
@@ -73,7 +73,7 @@ public class RenaultShareController extends Controller {
         List<RenaultShareImage> renault_share_imageList = RenaultShareImageService.instance.shareList(result.getShare_id());
 
         for (RenaultShareImage renaultShareImage : renault_share_imageList) {
-            renaultShareImage.keep(File.FILE_PATH);
+            renaultShareImage.keep(File.FILE_PATH, File.FILE_ORIGINAL_PATH);
         }
         result.put(RenaultShare.SHARE_IMAGE_LIST, renault_share_imageList);
         

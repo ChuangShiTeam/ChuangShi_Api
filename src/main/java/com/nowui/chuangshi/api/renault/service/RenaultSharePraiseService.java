@@ -49,6 +49,20 @@ public class RenaultSharePraiseService extends Service {
 
         return renault_share_praise;
     }
+    
+    public RenaultSharePraise userAndShareFind(String user_id, String share_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(RenaultSharePraise.SYSTEM_STATUS, true);
+        cnd.and(RenaultSharePraise.USER_ID, user_id);
+        cnd.and(RenaultSharePraise.SHARE_ID, share_id);
+
+        List<RenaultSharePraise> renault_share_praiseList = renaultSharePraiseDao.primaryKeyList(cnd);
+        
+        if (renault_share_praiseList == null || renault_share_praiseList.size() == 0) {
+            return null;
+        }
+        return find(renault_share_praiseList.get(0).getPraise_id());
+    }
 
     public Boolean save(RenaultSharePraise renault_share_praise, String system_create_user_id) {
         Boolean success = renaultSharePraiseDao.save(renault_share_praise, system_create_user_id);

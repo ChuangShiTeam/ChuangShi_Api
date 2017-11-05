@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.renault.model.RenaultMember;
 import com.nowui.chuangshi.api.renault.service.RenaultMemberService;
 import com.nowui.chuangshi.api.user.model.User;
@@ -65,10 +66,12 @@ public class RenaultMemberController extends Controller {
              jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
              
              result.put(Constant.TOKEN, AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));
-             validateResponse(Constant.TOKEN);
+             result.put(User.USER_AVATAR, FileService.instance.getFile_path(userModel.getUser_avatar()));
+             result.put(User.USER_NAME, userModel.getUser_name());
+             validateResponse(Constant.TOKEN, User.USER_NAME, User.USER_AVATAR);
          } catch (Exception e) {
              e.printStackTrace();
-             throw new RuntimeException("注册登录不成功");
+             throw new RuntimeException("登录不成功");
          }
 
          renderSuccessJson(result);
@@ -114,7 +117,9 @@ public class RenaultMemberController extends Controller {
             jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
             
             result.put(Constant.TOKEN, AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));
-            validateResponse(Constant.TOKEN);
+            result.put(User.USER_AVATAR, FileService.instance.getFile_path(user.getUser_avatar()));
+            result.put(User.USER_NAME, user.getUser_name());
+            validateResponse(Constant.TOKEN, User.USER_NAME, User.USER_AVATAR);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("登录不成功");
