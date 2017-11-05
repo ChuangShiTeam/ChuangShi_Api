@@ -28,7 +28,7 @@ public class MinhangTimelineController extends Controller {
         List<MinhangTimeline> resultList = MinhangTimelineService.instance.adminList(request_app_id, model.getTimeline_year(), getM(), getN());
 
         for (MinhangTimeline minhangTimeline : resultList) {
-            minhangTimeline.put(MinhangTimeline.TIMELINE_IMAGE_FILE, FileService.instance.getOriginalFile(minhangTimeline.getTimeline_image()));
+            minhangTimeline.put(MinhangTimeline.TIMELINE_IMAGE_FILE, FileService.instance.getFile(minhangTimeline.getTimeline_image()));
         }
         
         validateResponse(MinhangTimeline.TIMELINE_ID, MinhangTimeline.TIMELINE_YEAR, MinhangTimeline.TIMELINE_IMAGE, MinhangTimeline.TIMELINE_IMAGE_FILE, MinhangTimeline.SYSTEM_VERSION);

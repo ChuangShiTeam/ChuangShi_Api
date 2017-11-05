@@ -27,7 +27,7 @@ public class MinhangPosterController extends Controller {
         Integer resultCount = MinhangPosterService.instance.adminCount(request_app_id, model.getPoster_title());
         List<MinhangPoster> resultList = MinhangPosterService.instance.adminList(request_app_id, model.getPoster_title(), getM(), getN());
         for (MinhangPoster minhangPoster : resultList) {
-            minhangPoster.put(MinhangPoster.POSTER_IMAGE_FILE, FileService.instance.getOriginalFile(minhangPoster.getPoster_image()));
+            minhangPoster.put(MinhangPoster.POSTER_IMAGE_FILE, FileService.instance.getFile(minhangPoster.getPoster_image()));
         }
         
         validateResponse(MinhangPoster.POSTER_ID, MinhangPoster.TASK_ID, MinhangPoster.POSTER_IMAGE, MinhangPoster.POSTER_IMAGE_FILE, MinhangPoster.POSTER_TITLE, MinhangPoster.POSTER_CONTENT, MinhangPoster.SYSTEM_VERSION);

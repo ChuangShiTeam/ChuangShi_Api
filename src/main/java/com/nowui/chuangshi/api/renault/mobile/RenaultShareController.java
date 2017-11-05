@@ -13,8 +13,10 @@ import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.renault.model.RenaultShare;
 import com.nowui.chuangshi.api.renault.model.RenaultShareImage;
+import com.nowui.chuangshi.api.renault.model.RenaultSharePraise;
 import com.nowui.chuangshi.api.renault.service.RenaultShareCommentService;
 import com.nowui.chuangshi.api.renault.service.RenaultShareImageService;
+import com.nowui.chuangshi.api.renault.service.RenaultSharePraiseService;
 import com.nowui.chuangshi.api.renault.service.RenaultShareService;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
@@ -42,7 +44,7 @@ public class RenaultShareController extends Controller {
             List<RenaultShareImage> renault_share_imageList = RenaultShareImageService.instance.shareList(result.getShare_id());
             
             for (RenaultShareImage renaultShareImage : renault_share_imageList) {
-                renaultShareImage.keep(File.FILE_PATH);
+                renaultShareImage.keep(File.FILE_PATH, File.FILE_ORIGINAL_PATH);
             }
             
             result.put(RenaultShare.SHARE_IMAGE_LIST, renault_share_imageList);
@@ -81,7 +83,7 @@ public class RenaultShareController extends Controller {
         List<RenaultShareImage> renault_share_imageList = RenaultShareImageService.instance.shareList(result.getShare_id());
 
         for (RenaultShareImage renaultShareImage : renault_share_imageList) {
-            renaultShareImage.keep(RenaultShareImage.IMAGE_ID, RenaultShareImage.FILE_ID, File.FILE_PATH);
+            renaultShareImage.keep(RenaultShareImage.IMAGE_ID, RenaultShareImage.FILE_ID, File.FILE_PATH, File.FILE_ORIGINAL_PATH);
         }
 
         result.put(RenaultShare.SHARE_IMAGE_LIST, renault_share_imageList);
@@ -152,20 +154,58 @@ public class RenaultShareController extends Controller {
        
     }
 
-    //增加点赞数量接口、增加分享数量接口
+    //增加点赞数量接口
     //Add by lyn 2017.11.1
-    @ActionKey("/mobile/renault/share/update")
-    public void update() {
+    @ActionKey("/mobile/renault/share/like")
+    public void like() {
         validateRequest(RenaultShare.LIKE_NUM);
+        
         String request_user_id = getRequest_user_id();
+        String request_app_id = getRequest_app_id();
+        
         RenaultShare renault_share = getModel(RenaultShare.class);
+        
+        RenaultSharePraise renaultSharePraise = RenaultSharePraiseService.instance.userAndShareFind(request_user_id, renault_share.getShare_id());
+        
+        if (renaultSharePraise == null) {
+            throw new RuntimeException("您已经点过赞了");
+        }
+        
+        RenaultSharePraise bean = new RenaultSharePraise();
+        
+        bean.setPraise_id(Util.getRandomUUID());
+        bean.setApp_id(request_app_id);
+        bean.setShare_id(renault_share.getShare_id());
+        bean.setUser_id(request_user_id);
+        
+        Boolean result = RenaultSharePraiseService.instance.save(bean, request_user_id);
+        
+        if (result) {
+            renault_share = RenaultShareService.instance.find(renault_share.getShare_id());
+
+            renault_share.setLike_num(renault_share.getLike_num() + 1);//每次都加1
+
+            RenaultShareService.instance.update(renault_share, renault_share.getShare_id(), request_user_id, renault_share.getSystem_version());
+ 
+        }
+        renderSuccessJson(result);
+    }
+    
+    //增加分享数量接口
+    //Add by lyn 2017.11.1
+    @ActionKey("/mobile/renault/share/share")
+    public void share() {
+        validateRequest(RenaultShare.SHARE_NUM);
+        
+        String request_user_id = getRequest_user_id();
+        
+        RenaultShare renault_share = getModel(RenaultShare.class);
+        
         renault_share = RenaultShareService.instance.find(renault_share.getShare_id());
-        renault_share.setLike_num(renault_share.getLike_num()+1);
 
-        renault_share.setShare_num(renault_share.getShare_num()+1);//每次都加1
-        renault_share.setShare_user_id(request_user_id);
+        renault_share.setShare_num(renault_share.getShare_num() + 1);//每次都加1
 
-        Boolean result = RenaultShareService.instance.update(renault_share,renault_share.getShare_id() ,request_user_id,renault_share.getSystem_version());
+        Boolean result = RenaultShareService.instance.update(renault_share, renault_share.getShare_id(), request_user_id, renault_share.getSystem_version());
 
         renderSuccessJson(result);
     }
