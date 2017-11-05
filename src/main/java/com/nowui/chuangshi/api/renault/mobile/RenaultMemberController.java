@@ -51,7 +51,25 @@ public class RenaultMemberController extends Controller {
         	 throw new RuntimeException("邮箱已经被注册过了");
          }
           
-         Boolean result = RenaultMemberService.instance.save(renault_member, userModel, request_user_id);
+         String user_id = RenaultMemberService.instance.save(renault_member, userModel, request_user_id);
+
+         Map<String, Object> result = new HashMap<String, Object>();
+         try {
+             Date date = new Date();
+             Calendar calendar = Calendar.getInstance();
+             calendar.setTime(date);
+             calendar.add(Calendar.YEAR, 1);
+
+             JSONObject jsonObject = new JSONObject();
+             jsonObject.put(User.USER_ID, user_id);
+             jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
+             
+             result.put(Constant.TOKEN, AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));
+             validateResponse(Constant.TOKEN);
+         } catch (Exception e) {
+             e.printStackTrace();
+             throw new RuntimeException("登录不成功");
+         }
 
          renderSuccessJson(result);
     }
