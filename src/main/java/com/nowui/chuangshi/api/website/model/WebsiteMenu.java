@@ -25,6 +25,9 @@ public class WebsiteMenu extends Model<WebsiteMenu> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "上一级编号")
     public static final String WEBSITE_MENU_PARENT_ID = "website_menu_parent_id";
 
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "单页编号", updatable = false)
+    public static final String PAGE_ID = "page_id";
+
     @Column(type = ColumnType.VARCHAR, length = 20, comment = "菜单名称")
     public static final String WEBSITE_MENU_NAME = "website_menu_name";
 
@@ -74,6 +77,14 @@ public class WebsiteMenu extends Model<WebsiteMenu> {
 
     public void setWebsite_menu_parent_id(String website_menu_parent_id) {
         set(WEBSITE_MENU_PARENT_ID, website_menu_parent_id);
+    }
+
+    public String getPage_id() {
+        return getStr(PAGE_ID);
+    }
+
+    public void setPage_id(String page_id) {
+        set(PAGE_ID, page_id);
     }
 
     public String getWebsite_menu_name() {

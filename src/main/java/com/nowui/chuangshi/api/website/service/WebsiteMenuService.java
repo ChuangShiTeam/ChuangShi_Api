@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.api.website.service;
 
+import com.nowui.chuangshi.api.page.model.Page;
 import com.nowui.chuangshi.api.website.dao.WebsiteMenuDao;
 import com.nowui.chuangshi.api.website.model.WebsiteMenu;
 import com.nowui.chuangshi.common.service.Service;
@@ -27,11 +28,11 @@ public class WebsiteMenuService extends Service {
         }
 
         String parent_id = "";
-        List<Map<String, Object>> resultList = packageChildren(websiteMenuList, parent_id, WebsiteMenu.WEBSITE_MENU_PARENT_ID, WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_NAME, new String[]{WebsiteMenu.WEBSITE_MENU_URL, WebsiteMenu.WEBSITE_MENU_SORT});
+        List<Map<String, Object>> resultList = packageChildren(websiteMenuList, parent_id, WebsiteMenu.WEBSITE_MENU_PARENT_ID, WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_NAME, new String[]{WebsiteMenu.WEBSITE_MENU_URL, WebsiteMenu.WEBSITE_MENU_SORT, WebsiteMenu.PAGE_ID});
         return resultList;
     }
 
-    public List<Map<String, Object>> appTree(String app_id, String id_custom_name, String name_coustom_name) {
+    public List<Map<String, Object>> appTree(String app_id, String id_custom_name, String name_coustom_name, String... keys) {
         Cnd cnd = new Cnd();
         cnd.where(WebsiteMenu.SYSTEM_STATUS, true);
         cnd.and(WebsiteMenu.APP_ID, app_id);
@@ -43,14 +44,31 @@ public class WebsiteMenuService extends Service {
         }
 
         String parent_id = "";
-        List<Map<String, Object>> resultList = packageChildren(websiteMenuList, parent_id, WebsiteMenu.WEBSITE_MENU_PARENT_ID, WebsiteMenu.WEBSITE_MENU_ID, id_custom_name, WebsiteMenu.WEBSITE_MENU_NAME, name_coustom_name, new String[]{});
+        List<Map<String, Object>> resultList = packageChildren(websiteMenuList, parent_id, WebsiteMenu.WEBSITE_MENU_PARENT_ID, WebsiteMenu.WEBSITE_MENU_ID, id_custom_name, WebsiteMenu.WEBSITE_MENU_NAME, name_coustom_name, keys);
         return resultList;
+    }
+
+    public WebsiteMenu parentFind(String website_menu_id) {
+        WebsiteMenu childrenWebsiteMenu = find(website_menu_id);
+        WebsiteMenu websiteMenu = WebsiteMenuService.instance.find(childrenWebsiteMenu.getWebsite_menu_parent_id());
+
+        if (websiteMenu == null) {
+            websiteMenu = new WebsiteMenu();
+        }
+
+        return websiteMenu;
     }
 
     public WebsiteMenu find(String website_menu_id) {
         WebsiteMenu websiteMenu = CacheUtil.get(WEB_SITE_ITEM_CACHE, website_menu_id);
 
         if (websiteMenu == null) {
+            Cnd cnd = new Cnd();
+            cnd.selectIfNull(WebsiteMenu.TABLE_WEBSITE_MENU + "." + WebsiteMenu.PAGE_ID, "", WebsiteMenu.PAGE_ID);
+            cnd.leftJoin(Page.TABLE_PAGE, Page.PAGE_ID, WebsiteMenu.TABLE_WEBSITE_MENU, WebsiteMenu.PAGE_ID);
+            cnd.where(WebsiteMenu.TABLE_WEBSITE_MENU + "." + WebsiteMenu.SYSTEM_STATUS, true);
+            cnd.and(WebsiteMenu.TABLE_WEBSITE_MENU + "." + WebsiteMenu.WEBSITE_MENU_ID, website_menu_id);
+
             websiteMenu = websiteMenuDao.find(website_menu_id);
 
             CacheUtil.put(WEB_SITE_ITEM_CACHE, website_menu_id, websiteMenu);

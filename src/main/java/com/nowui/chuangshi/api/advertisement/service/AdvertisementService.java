@@ -89,6 +89,7 @@ public class AdvertisementService extends Service {
             Cnd cnd = new Cnd();
             cnd.selectIfNull(File.TABLE_FILE + "." + File.FILE_ID, "", File.FILE_ID);
             cnd.selectIfNull(File.TABLE_FILE + "." + File.FILE_PATH, "", File.FILE_PATH);
+            cnd.selectIfNull(File.TABLE_FILE + "." + File.FILE_ORIGINAL_PATH, "", File.FILE_ORIGINAL_PATH);
             cnd.leftJoin(File.TABLE_FILE, File.FILE_ID, Advertisement.TABLE_ADVERTISEMENT, Advertisement.ADVERTISEMENT_IMAGE);
             cnd.where(Advertisement.TABLE_ADVERTISEMENT + "." + Advertisement.SYSTEM_STATUS, true);
             cnd.and(Advertisement.TABLE_ADVERTISEMENT + "." + Advertisement.ADVERTISEMENT_ID, advertisement_id);
