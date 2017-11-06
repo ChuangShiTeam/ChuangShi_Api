@@ -106,6 +106,15 @@ public class XietongSignupJunior extends Model<XietongSignupJunior> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "数据分数")
+    public static final String MATH_SCORE = "math_score";
+
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "英语成绩")
+    public static final String ENGLISH_SCORE = "english_score";
+
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "语文成绩")
+    public static final String CHINESE_SCORE = "chinese_score";
+
     public String getSignup_id() {
         return getStr(SIGNUP_ID);
     }
@@ -347,6 +356,30 @@ public class XietongSignupJunior extends Model<XietongSignupJunior> {
 
     public void setSystem_status(Boolean system_status) {
         set(SYSTEM_STATUS, system_status);
+    }
+
+    public String getMath_score() {
+        return getStr(MATH_SCORE);
+    }
+
+    public void setMath_score(String math_score) {
+        set(MATH_SCORE, math_score);
+    }
+
+    public String getEnglish_score() {
+        return getStr(ENGLISH_SCORE);
+    }
+
+    public void setEnglish_score(String english_score) {
+        set(ENGLISH_SCORE, english_score);
+    }
+
+    public String getChinese_score() {
+        return getStr(CHINESE_SCORE);
+    }
+
+    public void setChinese_score(String chinese_score) {
+        set(CHINESE_SCORE, chinese_score);
     }
 
 }
