@@ -22,7 +22,7 @@ public class RenaultShareComment extends Model<RenaultShareComment> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "分享编号")
     public static final String SHARE_ID = "share_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "分享人编号")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "评论人编号")
     public static final String USER_ID = "user_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "上一级评论ID")
