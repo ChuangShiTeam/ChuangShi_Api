@@ -155,8 +155,8 @@ public class PageController extends Controller {
                 templateMap.put("article_category_id", articleCategory.getArticle_category_id());
             }
 
-            List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryList, 7);
-            templateMap.put("articleList", articleList);
+//            List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryList, 7);
+//            templateMap.put("articleList", articleList);
             
             List<Map<String, Object>> indexFloatList = AdvertisementService.instance.adminCategoryCodeList(request_app_id, "index_float");
             templateMap.put("indexFloatList", indexFloatList);

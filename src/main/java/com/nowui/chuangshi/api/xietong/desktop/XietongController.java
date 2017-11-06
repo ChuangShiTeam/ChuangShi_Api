@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.api.xietong.desktop;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,11 +27,13 @@ public class XietongController extends Controller {
 
     @ActionKey("/desktop/xietong/website/index")
     public void index() {
-        String request_app_id = getRequest_app_id();
+        List<String> articleCategoryIdList = new ArrayList<String>();
+        articleCategoryIdList.add("c9dd8759a7a04aaeb038973c3246d863");
+        articleCategoryIdList.add("7e84950e6d96412b860b5be55f46d5e8");
+        articleCategoryIdList.add("0cc726f2b92f43d1ba5cc5d0065efb09");
+        articleCategoryIdList.add("da9b1750e8ea4f959df23cbdcba53f9a");
 
-        List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
-
-        List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryList, 7);
+        List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryIdList, 7);
 
         validateResponse(Article.ARTICLE_ID, File.FILE_PATH, Article.ARTICLE_NAME, Article.SYSTEM_CREATE_TIME);
 

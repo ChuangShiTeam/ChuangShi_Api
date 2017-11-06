@@ -106,12 +106,7 @@ public class ArticleService extends Service {
         return articleDao.nextArticle(article.getArticle_category_id(), article.getSystem_create_time());
     }
 
-    public List<Article> topCategoryList(List<ArticleCategory> articleCategoryList, Integer n) {
-        List<String> articleCategoryIdList = new ArrayList<String>();
-        for (ArticleCategory articleCategory : articleCategoryList) {
-            articleCategoryIdList.add(articleCategory.getArticle_category_id());
-        }
-
+    public List<Article> topCategoryList(List<String> articleCategoryIdList, Integer n) {
         List<Article> resultList = articleDao.topCategoryList(articleCategoryIdList, n);
         return resultList;
     }

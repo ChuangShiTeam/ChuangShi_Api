@@ -26,10 +26,10 @@ public class PageController extends Controller {
         Page result = PageService.instance.find(model.getPage_id());
 
         WebsiteMenu websiteMenu = WebsiteMenuService.instance.parentFind(result.getWebsite_menu_id());
-        websiteMenu.keep(WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_URL);
+        websiteMenu.keep(WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_URL);
         result.put(websiteMenu);
 
-        validateResponse(Page.PAGE_ID, Page.PAGE_NAME, Page.PAGE_CONTENT, Page.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_URL);
+        validateResponse(Page.PAGE_ID, Page.PAGE_NAME, Page.PAGE_CONTENT, WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_URL);
 
         renderSuccessJson(result);
     }
