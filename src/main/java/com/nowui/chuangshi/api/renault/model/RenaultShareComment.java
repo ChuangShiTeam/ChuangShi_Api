@@ -14,16 +14,22 @@ public class RenaultShareComment extends Model<RenaultShareComment> {
 
     @Table
     public static final String TABLE_RENAULT_SHARE_COMMENT = "table_renault_share_comment";
-    
+
     @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "评论编号", updatable = false)
     public static final String COMMENT_ID = "comment_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "分享编号")
     public static final String SHARE_ID = "share_id";
-    
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "分享人编号")
+
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "评论人编号")
     public static final String USER_ID = "user_id";
+
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "上一级评论ID")
+    public static final String PARENT_COMMENT_ID = "parent_comment_id";
+
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "上一级评论人ID")
+    public static final String PARENT_USER_ID = "parent_user_id";
 
     @Column(type = ColumnType.VARCHAR, length = 200, comment = "评论内容")
     public static final String REMARK = "remark";
@@ -56,13 +62,29 @@ public class RenaultShareComment extends Model<RenaultShareComment> {
     public void setShare_id(String share_id) {
         set(SHARE_ID, share_id);
     }
-    
+
     public String getUser_id() {
         return getStr(USER_ID);
     }
-    
+
     public void setUser_id(String user_id) {
         set(USER_ID, user_id);
+    }
+
+    public String getParent_user_id() {
+        return getStr(PARENT_USER_ID);
+    }
+
+    public void setParent_user_id(String parent_user_id) {
+        set(PARENT_USER_ID, parent_user_id);
+    }
+
+    public String getParent_comment_id() {
+        return getStr(PARENT_COMMENT_ID);
+    }
+
+    public void setParent_comment_id(String parent_comment_id) {
+        set(PARENT_USER_ID, parent_comment_id);
     }
 
     public String getRemark() {
@@ -138,5 +160,8 @@ public class RenaultShareComment extends Model<RenaultShareComment> {
     public void setComment_id(String comment_id) {
         set(COMMENT_ID, comment_id);
     }
+
+    //父级评论人名称
+    public static final String PARENT_USER_NAME = "parent_user_name";
 
 }

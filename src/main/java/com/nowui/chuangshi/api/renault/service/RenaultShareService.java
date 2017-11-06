@@ -2,6 +2,7 @@ package com.nowui.chuangshi.api.renault.service;
 
 import com.nowui.chuangshi.api.renault.dao.RenaultShareDao;
 import com.nowui.chuangshi.api.renault.model.RenaultShare;
+import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
@@ -14,21 +15,27 @@ public class RenaultShareService extends Service {
     private final String RENAULT_SHARE_ITEM_CACHE = "renault_share_item_cache";
     private final RenaultShareDao renaultShareDao = new RenaultShareDao();
 
-    public Integer adminCount(String app_id, String remark) {
+    public Integer adminCount(String app_id, String user_name) {
         Cnd cnd = new Cnd();
-        cnd.where(RenaultShare.SYSTEM_STATUS, true);
-        cnd.and(RenaultShare.APP_ID, app_id);
-        cnd.andAllowEmpty(RenaultShare.REMARK, remark);
+        cnd.leftJoin(User.TABLE_USER, User.USER_ID, RenaultShare.TABLE_RENAULT_SHARE, RenaultShare.SHARE_USER_ID);
+        cnd.where(RenaultShare.TABLE_RENAULT_SHARE + "." + RenaultShare.SYSTEM_STATUS, true);
+        cnd.and(RenaultShare.TABLE_RENAULT_SHARE + "." + RenaultShare.APP_ID, app_id);
+        cnd.andLikeAllowEmpty(User.TABLE_USER + "." + User.USER_NAME, user_name);
 
         Integer count = renaultShareDao.count(cnd);
         return count;
     }
 
-    public List<RenaultShare> adminList(String app_id, String remark, Integer m, Integer n) {
+    public List<RenaultShare> adminList(String app_id, String user_name, Integer m, Integer n) {
         Cnd cnd = new Cnd();
-        cnd.where(RenaultShare.SYSTEM_STATUS, true);
-        cnd.and(RenaultShare.APP_ID, app_id);
-        cnd.andAllowEmpty(RenaultShare.REMARK, remark);
+        cnd.select(User.TABLE_USER + "." + User.USER_NAME);
+        cnd.select(User.TABLE_USER + "." + User.USER_AVATAR);
+        cnd.leftJoin(User.TABLE_USER, User.USER_ID, RenaultShare.TABLE_RENAULT_SHARE, RenaultShare.SHARE_USER_ID);
+        cnd.where(RenaultShare.TABLE_RENAULT_SHARE + "." + RenaultShare.SYSTEM_STATUS, true);
+        cnd.and(RenaultShare.TABLE_RENAULT_SHARE + "." + RenaultShare.APP_ID, app_id);
+        cnd.andLikeAllowEmpty(User.TABLE_USER + "." + User.USER_NAME, user_name);
+        cnd.desc(RenaultShare.IS_TOP);
+        cnd.desc(RenaultShare.TABLE_RENAULT_SHARE + "."+RenaultShare.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
         List<RenaultShare> renault_shareList = renaultShareDao.primaryKeyList(cnd);
@@ -89,7 +96,7 @@ public class RenaultShareService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(RenaultShare.SYSTEM_STATUS, true);
         cnd.and(RenaultShare.APP_ID, app_id);
-        cnd.asc(RenaultShare.SYSTEM_CREATE_TIME);
+        cnd.desc(RenaultShare.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
         List<RenaultShare> renaultshareList = renaultShareDao.primaryKeyList(cnd);

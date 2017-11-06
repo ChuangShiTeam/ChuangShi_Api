@@ -31,6 +31,9 @@ public class RenaultShare extends Model<RenaultShare> {
     @Column(type = ColumnType.LONGTEXT, length = 0, comment = "分享心得")
     public static final String REMARK = "remark";
 
+    @Column(type = ColumnType.TINYINT, length = 0, comment = "是否置顶")
+    public static final String IS_TOP = "is_top";
+
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
 
@@ -62,6 +65,14 @@ public class RenaultShare extends Model<RenaultShare> {
 
     public void setShare_id(String share_id) {
         set(SHARE_ID, share_id);
+    }
+
+    public Boolean getIs_top() {
+        return getBoolean(IS_TOP);
+    }
+
+    public void setIs_top(Boolean is_top) {
+        set(IS_TOP, is_top);
     }
 
     public String getShare_user_id() {

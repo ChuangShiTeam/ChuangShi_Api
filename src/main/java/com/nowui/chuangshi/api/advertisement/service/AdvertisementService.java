@@ -59,7 +59,7 @@ public class AdvertisementService extends Service {
             Advertisement bean = find(advertisement.getAdvertisement_id());
             
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put(Advertisement.ADVERTISEMENT_IMAGE_FILE, FileService.instance.getOriginalFile(bean.getAdvertisement_image()));
+            map.put(Advertisement.ADVERTISEMENT_IMAGE_FILE, FileService.instance.getFile(bean.getAdvertisement_image()));
             map.put(Advertisement.ADVERTISEMENT_ID, bean.getAdvertisement_id());
             map.put(Advertisement.ADVERTISEMENT_TITLE, bean.getAdvertisement_title());
             map.put(Advertisement.ADVERTISEMENT_LINK, bean.getAdvertisement_link());

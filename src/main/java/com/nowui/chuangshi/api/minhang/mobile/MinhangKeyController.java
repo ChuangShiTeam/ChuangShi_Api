@@ -56,8 +56,6 @@ public class MinhangKeyController extends Controller {
 
         minhangKey.put(MinhangKey.KEY_IMAGE_FILE, FileService.instance.getFile(minhangKey.getKey_image()));
 
-        minhangKey.keep(MinhangKey.KEY_ID, MinhangKey.KEY_NAME, MinhangKey.KEY_IMAGE_FILE, MinhangKey.KEY_ACTIVATED_TASK_QUANTITY, MinhangKey.KEY_SORT, MinhangKey.KEY_DESCRIPTION, MinhangKey.SYSTEM_VERSION);
-
         //查询用户最近的寻钥之旅记录
         MinhangMemberItinerary member_itinerary = MinhangMemberItineraryService.instance.userLatestFind(request_user_id);
         
@@ -67,11 +65,7 @@ public class MinhangKeyController extends Controller {
         
         MinhangMemberKey member_key = MinhangMemberKeyService.instance.keyAndItineraryFind(model.getKey_id(), member_itinerary.getMember_itinerary_id());
        
-        member_key.keep(MinhangMemberKey.MEMBER_KEY_ID, MinhangMemberKey.KEY_ID, MinhangMemberKey.TASK_QUANTITY, MinhangMemberKey.TASK_COMPLETE_QUANTITY, MinhangMemberKey.KEY_IS_ACTIVATED);
-        
         Map<String, Object> result = new HashMap<String, Object>();
-        result.put("key", minhangKey);
-        result.put("member_key", member_key);
         
         if (!member_key.getKey_is_activated()) {
         	List<MinhangMemberTask> member_task_list = MinhangMemberTaskService.instance.keyAndItineraryList(minhangKey.getKey_id(), member_itinerary.getMember_itinerary_id());
@@ -85,6 +79,15 @@ public class MinhangKeyController extends Controller {
                 result.put("member_task_list", member_task_list);
         	}
         }
+        
+        member_key.keep(MinhangMemberKey.MEMBER_KEY_ID, MinhangMemberKey.KEY_ID, MinhangMemberKey.TASK_QUANTITY, MinhangMemberKey.TASK_COMPLETE_QUANTITY, MinhangMemberKey.KEY_IS_ACTIVATED);
+        
+        minhangKey.keep(MinhangKey.KEY_ID, MinhangKey.KEY_NAME, MinhangKey.KEY_IMAGE_FILE, MinhangKey.KEY_ACTIVATED_TASK_QUANTITY, MinhangKey.KEY_SORT, MinhangKey.KEY_DESCRIPTION, MinhangKey.SYSTEM_VERSION);
+
+        result.put("key", minhangKey);
+        
+        result.put("member_key", member_key);
+        
         validateResponse("member_key", "key", "member_task_list");
         renderSuccessJson(result);
     }

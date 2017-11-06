@@ -10,23 +10,20 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.util.Date;
 
 @Entity
-public class RenaultMember extends Model<RenaultMember> {
+public class RenaultShareCommentPraise extends Model<RenaultShareCommentPraise> {
 
     @Table
-    public static final String TABLE_RENAULT_MEMBER = "table_renault_member";
+    public static final String TABLE_RENAULT_SHARE_COMMENT_PRAISE = "table_renault_share_comment_praise";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 50, comment = "会员编号", updatable = false)
-    public static final String MEMBER_ID = "member_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "主键", updatable = false)
+    public static final String PRAISE_ID = "praise_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
-    public static final String APP_ID = "app_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "评论id")
+    public static final String COMMENT_ID = "comment_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "")
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "点赞人")
     public static final String USER_ID = "user_id";
-
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "会员昵称")
-    public static final String MEMBER_NICK_NAME = "member_nick_name";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -46,20 +43,23 @@ public class RenaultMember extends Model<RenaultMember> {
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
 
-    public String getMember_id() {
-        return getStr(MEMBER_ID);
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
+    public static final String APP_ID = "app_id";
+
+    public String getPraise_id() {
+        return getStr(PRAISE_ID);
     }
 
-    public void setMember_id(String member_id) {
-        set(MEMBER_ID, member_id);
+    public void setPraise_id(String praise_id) {
+        set(PRAISE_ID, praise_id);
     }
 
-    public String getApp_id() {
-        return getStr(APP_ID);
+    public String getComment_id() {
+        return getStr(COMMENT_ID);
     }
 
-    public void setApp_id(String app_id) {
-        set(APP_ID, app_id);
+    public void setComment_id(String comment_id) {
+        set(COMMENT_ID, comment_id);
     }
 
     public String getUser_id() {
@@ -68,14 +68,6 @@ public class RenaultMember extends Model<RenaultMember> {
 
     public void setUser_id(String user_id) {
         set(USER_ID, user_id);
-    }
-
-    public String getMember_nick_name() {
-        return getStr(MEMBER_NICK_NAME);
-    }
-
-    public void setMember_nick_name(String member_nick_name) {
-        set(MEMBER_NICK_NAME, member_nick_name);
     }
 
     public String getSystem_create_user_id() {
@@ -128,8 +120,12 @@ public class RenaultMember extends Model<RenaultMember> {
         set(SYSTEM_STATUS, system_status);
     }
 
-    //静态变量
-    public static final String USER_ACCOUNT = "user_account";
-    public static final String USER_AVATAR = "user_avatar";
+    public String getApp_id() {
+        return getStr(APP_ID);
+    }
+
+    public void setApp_id(String app_id) {
+        set(APP_ID, app_id);
+    }
 
 }

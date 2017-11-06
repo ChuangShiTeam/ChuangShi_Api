@@ -47,8 +47,11 @@ public class RenaultShareImageService extends Service {
 
         if (renault_share_image == null) {
             renault_share_image = renaultShareImageDao.find(image_id);
+            File file = FileService.instance.getFile(renault_share_image.getFile_id());
             
-            renault_share_image.put(File.FILE_PATH, FileService.instance.getFile_path(renault_share_image.getFile_id()));
+            renault_share_image.put(File.FILE_PATH, file.getFile_path());
+            
+            renault_share_image.put(File.FILE_ORIGINAL_PATH, file.getFile_original_path());
 
             CacheUtil.put(RENAULT_SHARE_IMAGE_ITEM_CACHE, image_id, renault_share_image);
         }
@@ -96,6 +99,7 @@ public class RenaultShareImageService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(RenaultShareImage.SYSTEM_STATUS, true);
         cnd.andAllowEmpty(RenaultShareImage.SHARE_ID, share_id);
+        cnd.asc(RenaultShareImage.SHARE_FILE_SORT);
 
         List<RenaultShareImage> renault_share_imageList = renaultShareImageDao.primaryKeyList(cnd);
         for (RenaultShareImage renault_share_image : renault_share_imageList) {
