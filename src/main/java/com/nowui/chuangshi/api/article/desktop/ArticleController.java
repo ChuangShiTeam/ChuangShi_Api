@@ -29,4 +29,17 @@ public class ArticleController extends Controller {
         renderSuccessJson(count, articleList);
     }
 
+    @ActionKey("/desktop/article/find")
+    public void find() {
+        validateRequest(Article.ARTICLE_ID);
+
+        Article model = getModel(Article.class);
+
+        Article result = ArticleService.instance.find(model.getArticle_id());
+
+        validateResponse(Article.ARTICLE_CATEGORY_ID, Article.ARTICLE_CATEGORY_ID, Article.ARTICLE_NAME, Article.ARTICLE_CONTENT, Article.SYSTEM_CREATE_TIME);
+
+        renderSuccessJson(result);
+    }
+
 }

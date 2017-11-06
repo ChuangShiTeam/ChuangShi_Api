@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import com.nowui.chuangshi.api.file.model.File;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -69,6 +70,19 @@ public class XietongStudentService extends Service {
         cnd.paginate(m, n);
         return xietongStudentDao.primaryKeyList(cnd);
     }
+
+    public List<XietongStudent> categoryList(String app_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(XietongStudent.SYSTEM_STATUS, true);
+        cnd.andNot(XietongStudent.STUDENT_CATEGORY_ID, "");
+        cnd.desc(XietongStudent.SYSTEM_CREATE_TIME);
+
+        List<XietongStudent> studentList = xietongStudentDao.primaryKeyList(cnd);
+        for (XietongStudent student : studentList) {
+            student.put(find(student.getStudent_id()));
+        }
+        return studentList;
+    }
     
     public XietongStudent userFind(String user_id) {
         
@@ -82,7 +96,15 @@ public class XietongStudentService extends Service {
         XietongStudent xietong_student = CacheUtil.get(XIETONG_STUDENT_ITEM_CACHE, student_id);
 
         if (xietong_student == null) {
-            xietong_student = xietongStudentDao.find(student_id);
+            Cnd cnd = new Cnd();
+            cnd.select(File.TABLE_FILE + "." + File.FILE_ID);
+            cnd.selectIfNull(File.TABLE_FILE + "." + File.FILE_PATH, "", File.FILE_PATH);
+            cnd.selectIfNull(File.TABLE_FILE + "." + File.FILE_ORIGINAL_PATH, "", File.FILE_ORIGINAL_PATH);
+            cnd.leftJoin(File.TABLE_FILE, File.FILE_ID, XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.STUDENT_IMAGE);
+            cnd.where(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.SYSTEM_STATUS, true);
+            cnd.and(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_ID, student_id);
+            
+            xietong_student = xietongStudentDao.find(cnd);
             xietong_student.put(XietongClazz.CLAZZ_NAME, XietongClazzService.instance.find(xietong_student.getClazz_id()).getClazz_name());
             CacheUtil.put(XIETONG_STUDENT_ITEM_CACHE, student_id, xietong_student);
         }
@@ -203,7 +225,7 @@ public class XietongStudentService extends Service {
                     String student_clazz = clazzCell.getStringCellValue();
                     String student_number = clazzCell.getStringCellValue() + (numberCell.getStringCellValue().length() == 1 ? "0" : "") + numberCell.getStringCellValue();
                     String student_name = nameCell.getStringCellValue();
-                    String student_category = "";
+                    String student_category_id_id = "";
                     String student_sex = sexCell.getStringCellValue();
                     String user_password = passwordCell.getStringCellValue();
 
@@ -227,7 +249,7 @@ public class XietongStudentService extends Service {
                             XietongStudent student = new XietongStudent();
                             student.setApp_id(request_app_id);
                             student.setClazz_id(clazz_id);
-                            student.setStudent_category(student_category);
+                            student.setStudent_category_id(student_category_id_id);
                             student.setStudent_name(student_name);
                             student.setStudent_number(student_number);
                             student.setStudent_sex(student_sex);

@@ -37,8 +37,8 @@ public class XietongTeacher extends Model<XietongTeacher> {
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "老师工号")
     public static final String TEACHER_NUMBER = "teacher_number";
 
-    @Column(type = ColumnType.VARCHAR, length = 200, comment = "老师分类")
-    public static final String TEACHER_CATEGORY = "teacher_category";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "老师分类")
+    public static final String TEACHER_CATEGORY_ID = "teacher_category_id";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "老师照片")
     public static final String TEACHER_IMAGE = "teacher_image";
@@ -126,12 +126,12 @@ public class XietongTeacher extends Model<XietongTeacher> {
         set(TEACHER_NUMBER, teacher_number);
     }
 
-    public String getTeacher_category() {
-        return getStr(TEACHER_CATEGORY);
+    public String getTeacher_category_id() {
+        return getStr(TEACHER_CATEGORY_ID);
     }
 
-    public void setTeacher_category(String teacher_category) {
-        set(TEACHER_CATEGORY, teacher_category);
+    public void setTeacher_category_id(String teacher_category_id) {
+        set(TEACHER_CATEGORY_ID, teacher_category_id);
     }
 
     public String getTeacher_image() {

@@ -33,9 +33,9 @@ public class XietongController extends Controller {
         articleCategoryIdList.add("0cc726f2b92f43d1ba5cc5d0065efb09");
         articleCategoryIdList.add("da9b1750e8ea4f959df23cbdcba53f9a");
 
-        List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryIdList, 7);
+        List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryIdList, 4);
 
-        validateResponse(Article.ARTICLE_ID, File.FILE_PATH, Article.ARTICLE_NAME, Article.SYSTEM_CREATE_TIME);
+        validateResponse(Article.ARTICLE_ID, Article.ARTICLE_CATEGORY_ID, File.FILE_PATH, Article.ARTICLE_NAME, Article.ARTICLE_SUMMARY, Article.SYSTEM_CREATE_TIME);
 
         renderSuccessJson(articleList);
     }

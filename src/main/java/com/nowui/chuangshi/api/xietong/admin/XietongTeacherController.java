@@ -20,15 +20,15 @@ public class XietongTeacherController extends Controller {
 
     @ActionKey("/admin/xietong/teacher/list")
     public void list() {
-        validateRequest(XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         XietongTeacher model = getModel(XietongTeacher.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = XietongTeacherService.instance.adminCount(request_app_id, model.getOrganization_id(), model.getTeacher_name(), model.getTeacher_number(), model.getTeacher_category());
-        List<XietongTeacher> resultList = XietongTeacherService.instance.adminList(request_app_id, model.getOrganization_id(), model.getTeacher_name(), model.getTeacher_number(), model.getTeacher_category(), getM(), getN());
+        Integer resultCount = XietongTeacherService.instance.adminCount(request_app_id, model.getOrganization_id(), model.getTeacher_name(), model.getTeacher_number(), model.getTeacher_category_id());
+        List<XietongTeacher> resultList = XietongTeacherService.instance.adminList(request_app_id, model.getOrganization_id(), model.getTeacher_name(), model.getTeacher_number(), model.getTeacher_category_id(), getM(), getN());
 
-        validateResponse(XietongTeacher.TEACHER_ID, XietongOrganization.ORGANIZATION_NAME, File.FILE_ID, File.FILE_PATH, XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY, XietongTeacher.TEACHER_IMAGE, XietongTeacher.TEACHER_SORT, XietongTeacher.SYSTEM_VERSION);
+        validateResponse(XietongTeacher.TEACHER_ID, XietongOrganization.ORGANIZATION_NAME, File.FILE_ID, File.FILE_PATH, XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY_ID, XietongTeacher.TEACHER_IMAGE, XietongTeacher.TEACHER_SORT, XietongTeacher.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -41,14 +41,14 @@ public class XietongTeacherController extends Controller {
 
         XietongTeacher result = XietongTeacherService.instance.find(model.getTeacher_id());
 
-        validateResponse(XietongTeacher.USER_ID, XietongTeacher.CLAZZ_ID, File.FILE_ID, File.FILE_PATH, XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY, XietongTeacher.TEACHER_IMAGE, XietongTeacher.TEACHER_TITLE, XietongTeacher.TEACHER_DESCRIPTION, XietongTeacher.TEACHER_SORT, XietongTeacher.SYSTEM_VERSION);
+        validateResponse(XietongTeacher.USER_ID, XietongTeacher.CLAZZ_ID, File.FILE_ID, File.FILE_PATH, XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY_ID, XietongTeacher.TEACHER_IMAGE, XietongTeacher.TEACHER_TITLE, XietongTeacher.TEACHER_DESCRIPTION, XietongTeacher.TEACHER_SORT, XietongTeacher.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
 
     @ActionKey("/admin/xietong/teacher/save")
     public void save() {
-        validateRequest(User.USER_PASSWORD, XietongTeacher.CLAZZ_ID, XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY, XietongTeacher.TEACHER_IMAGE, XietongTeacher.TEACHER_TITLE, XietongTeacher.TEACHER_DESCRIPTION);
+        validateRequest(User.USER_PASSWORD, XietongTeacher.CLAZZ_ID, XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY_ID, XietongTeacher.TEACHER_IMAGE, XietongTeacher.TEACHER_TITLE, XietongTeacher.TEACHER_DESCRIPTION);
 
         XietongTeacher model = getModel(XietongTeacher.class);
         User userModel = getModel(User.class);
@@ -62,7 +62,7 @@ public class XietongTeacherController extends Controller {
 
     @ActionKey("/admin/xietong/teacher/update")
     public void update() {
-        validateRequest(XietongTeacher.TEACHER_ID, XietongTeacher.USER_ID, XietongTeacher.CLAZZ_ID, XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY, XietongTeacher.TEACHER_IMAGE, XietongTeacher.TEACHER_TITLE, XietongTeacher.TEACHER_DESCRIPTION, XietongTeacher.SYSTEM_VERSION);
+        validateRequest(XietongTeacher.TEACHER_ID, XietongTeacher.USER_ID, XietongTeacher.CLAZZ_ID, XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY_ID, XietongTeacher.TEACHER_IMAGE, XietongTeacher.TEACHER_TITLE, XietongTeacher.TEACHER_DESCRIPTION, XietongTeacher.SYSTEM_VERSION);
 
         XietongTeacher model = getModel(XietongTeacher.class);
         User userModel = getModel(User.class);

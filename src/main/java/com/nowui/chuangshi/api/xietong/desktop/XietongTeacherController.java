@@ -4,12 +4,12 @@ import java.util.List;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.xietong.model.XietongTeacher;
 import com.nowui.chuangshi.api.xietong.service.XietongTeacherService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
-import com.nowui.chuangshi.constant.Constant;
 
 @Before(AdminInterceptor.class)
 @ControllerKey("/desktop/xietong/teacher")
@@ -17,16 +17,26 @@ public class XietongTeacherController extends Controller {
 
     @ActionKey("/desktop/xietong/teacher/list")
     public void list() {
-        validateRequest(XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
-
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = XietongTeacherService.instance.desktopCount(request_app_id);
-        List<XietongTeacher> resultList = XietongTeacherService.instance.desktopList(request_app_id, getM(), getN());
+        List<XietongTeacher> resultList = XietongTeacherService.instance.appList(request_app_id);
 
-        validateResponse(XietongTeacher.TEACHER_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_DESCRIPTION);
+        validateResponse(XietongTeacher.TEACHER_ID, XietongTeacher.TEACHER_CATEGORY_ID, File.FILE_PATH, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_TITLE, XietongTeacher.TEACHER_DESCRIPTION);
 
-        renderSuccessJson(resultCount, resultList);
+        renderSuccessJson(resultList);
+    }
+
+    @ActionKey("/desktop/xietong/teacher/find")
+    public void find() {
+        validateRequest(XietongTeacher.TEACHER_ID);
+
+        XietongTeacher model = getModel(XietongTeacher.class);
+
+        XietongTeacher result = XietongTeacherService.instance.find(model.getTeacher_id());
+
+        validateResponse(XietongTeacher.TEACHER_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_CATEGORY_ID, File.FILE_ORIGINAL_PATH, XietongTeacher.TEACHER_TITLE, XietongTeacher.TEACHER_DESCRIPTION);
+
+        renderSuccessJson(result);
     }
 
 }

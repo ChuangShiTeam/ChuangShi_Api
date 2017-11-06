@@ -5,6 +5,7 @@ import java.util.List;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.upload.UploadFile;
+import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.xietong.model.XietongClazz;
 import com.nowui.chuangshi.api.xietong.model.XietongStudent;
@@ -28,7 +29,7 @@ public class XietongStudentController extends Controller {
         Integer resultCount = XietongStudentService.instance.adminCount(request_app_id, model.getStudent_name(), model.getClazz_id());
         List<XietongStudent> resultList = XietongStudentService.instance.adminList(request_app_id, model.getStudent_name(), model.getClazz_id(), getM(), getN());
 
-        validateResponse(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_CATEGORY, XietongStudent.STUDENT_NAME, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX, XietongStudent.SYSTEM_VERSION);
+        validateResponse(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_CATEGORY_ID, XietongStudent.STUDENT_NAME, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX, XietongStudent.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -41,27 +42,27 @@ public class XietongStudentController extends Controller {
 
         XietongStudent result = XietongStudentService.instance.find(model.getStudent_id());
 
-        validateResponse(XietongStudent.USER_ID, XietongStudent.CLAZZ_ID, XietongStudent.STUDENT_CATEGORY, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX, XietongStudent.SYSTEM_VERSION);
+        validateResponse(XietongStudent.USER_ID, XietongStudent.CLAZZ_ID, XietongStudent.STUDENT_CATEGORY_ID, File.FILE_PATH, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX, XietongStudent.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
 
     @ActionKey("/admin/xietong/student/save")
     public void save() {
-        validateRequest(XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_CATEGORY);
+        validateRequest(XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_CATEGORY_ID, XietongStudent.STUDENT_IMAGE);
         XietongStudent model = getModel(XietongStudent.class);
         User userModel = getModel(User.class);
-        
+
         String request_user_id = getRequest_user_id();
-        
+
         Boolean result = XietongStudentService.instance.save(model, userModel, request_user_id);
-        
+
         renderSuccessJson(result);
     }
 
     @ActionKey("/admin/xietong/student/update")
     public void update() {
-        validateRequest(XietongStudent.USER_ID, XietongStudent.STUDENT_ID, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_CATEGORY, XietongStudent.SYSTEM_VERSION);
+        validateRequest(XietongStudent.USER_ID, XietongStudent.STUDENT_ID, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_CATEGORY_ID, XietongStudent.SYSTEM_VERSION);
         XietongStudent model = getModel(XietongStudent.class);
         User userModel = getModel(User.class);
         

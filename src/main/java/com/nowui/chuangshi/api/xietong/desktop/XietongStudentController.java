@@ -1,12 +1,10 @@
 package com.nowui.chuangshi.api.xietong.desktop;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.api.xietong.model.XietongClazz;
@@ -21,6 +19,30 @@ import com.nowui.chuangshi.util.AesUtil;
 
 @ControllerKey("/desktop/xietong/student")
 public class XietongStudentController extends Controller {
+
+    @ActionKey("/desktop/xietong/student/list")
+    public void list() {
+        String request_app_id = getRequest_app_id();
+
+        List<XietongStudent> resultList = XietongStudentService.instance.categoryList(request_app_id);
+
+        validateResponse(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_CATEGORY_ID, File.FILE_PATH, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME);
+
+        renderSuccessJson(resultList);
+    }
+
+    @ActionKey("/desktop/xietong/student/find")
+    public void find() {
+        validateRequest(XietongStudent.STUDENT_ID);
+
+        XietongStudent model = getModel(XietongStudent.class);
+
+        XietongStudent result = XietongStudentService.instance.find(model.getStudent_id());
+
+        validateResponse(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_CATEGORY_ID, File.FILE_ORIGINAL_PATH, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME);
+
+        renderSuccessJson(result);
+    }
     
     @ActionKey("/desktop/xietong/student/login")
     public void login() {
