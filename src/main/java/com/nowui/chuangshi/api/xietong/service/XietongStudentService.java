@@ -203,6 +203,7 @@ public class XietongStudentService extends Service {
                     String student_clazz = clazzCell.getStringCellValue();
                     String student_number = clazzCell.getStringCellValue() + (numberCell.getStringCellValue().length() == 1 ? "0" : "") + numberCell.getStringCellValue();
                     String student_name = nameCell.getStringCellValue();
+                    String student_category = "";
                     String student_sex = sexCell.getStringCellValue();
                     String user_password = passwordCell.getStringCellValue();
 
@@ -226,6 +227,7 @@ public class XietongStudentService extends Service {
                             XietongStudent student = new XietongStudent();
                             student.setApp_id(request_app_id);
                             student.setClazz_id(clazz_id);
+                            student.setStudent_category(student_category);
                             student.setStudent_name(student_name);
                             student.setStudent_number(student_number);
                             student.setStudent_sex(student_sex);
