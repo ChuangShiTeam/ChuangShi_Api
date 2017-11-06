@@ -27,7 +27,7 @@ public class RenaultShareCommentController extends Controller {
         Integer resultCount = RenaultShareCommentService.instance.adminCount(model.getShare_id());
         List<RenaultShareComment> resultList = RenaultShareCommentService.instance.adminList(model.getShare_id(), getM(), getN());
 
-        validateResponse(RenaultShareComment.SHARE_ID, User.USER_NAME, User.USER_AVATAR, RenaultShareComment.REMARK, RenaultShareComment.LIKE_NUM, RenaultShareComment.COMMENT_ID, RenaultShareComment.SYSTEM_CREATE_TIME, RenaultShareComment.SYSTEM_VERSION);
+        validateResponse(RenaultShareComment.SHARE_ID, User.USER_NAME, User.USER_AVATAR, RenaultShareComment.REMARK, RenaultShareComment.LIKE_NUM,  RenaultShareComment.USER_ID, RenaultShareComment.COMMENT_ID, RenaultShareComment.SYSTEM_CREATE_TIME, RenaultShareComment.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
