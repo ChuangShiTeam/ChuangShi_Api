@@ -44,6 +44,18 @@ public class PageController extends Controller {
         renderSuccessJson(resultCount, resultList);
     }
 
+    @ActionKey("/admin/page/all/list")
+    public void allList() {
+        String request_app_id = getRequest_app_id();
+
+
+        List<Page> resultList = PageService.instance.appList(request_app_id);
+
+        validateResponse(Page.PAGE_ID, Page.PAGE_NAME);
+
+        renderSuccessJson(resultList);
+    }
+
     @ActionKey("/admin/page/find")
     public void find() {
         validateRequest(Page.PAGE_ID);
@@ -211,11 +223,11 @@ public class PageController extends Controller {
     public void allWrite() {
         String request_app_id = getRequest_app_id();
 
-        List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
+//        List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
 
-        List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryList, 7);
+//        List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryList, 7);
 
-        List<Page> pageList = PageService.instance.appList(request_app_id);
+//        List<Page> pageList = PageService.instance.appList(request_app_id);
 
         List<Map<String, Object>> websiteMenuList = WebsiteMenuService.instance.tree(request_app_id);
 
@@ -223,66 +235,66 @@ public class PageController extends Controller {
 
 //        List<Map<String, Object>> indexFloatList = AdvertisementService.instance.adminCategoryCodeList(request_app_id, "index_float");
 
-        List<XietongTeacher> teacherList = XietongTeacherService.instance.appList(request_app_id);
+//        List<XietongTeacher> teacherList = XietongTeacherService.instance.appList(request_app_id);
 
         Kv templateMap = Kv.create();
-        templateMap.put("articleCategoryList", articleCategoryList);
-        templateMap.put("articleList", articleList);
+//        templateMap.put("articleCategoryList", articleCategoryList);
+//        templateMap.put("articleList", articleList);
         templateMap.put("websiteMenuList", websiteMenuList);
         templateMap.put("indexBannerList", indexBannerList);
-        templateMap.put("teacherList", teacherList);
+//        templateMap.put("teacherList", teacherList);
 
-        if (articleCategoryList != null && articleCategoryList.size() > 0) {
-            ArticleCategory articleCategory = articleCategoryList.get(0);
-
-            templateMap.put("article_category_id", articleCategory.getArticle_category_id());
-        }
-
-        for (XietongTeacher teacher : teacherList) {
-            teacher.setTeacher_description(StringEscapeUtils.unescapeHtml4(teacher.getTeacher_description()));
-        }
+//        if (articleCategoryList != null && articleCategoryList.size() > 0) {
+//            ArticleCategory articleCategory = articleCategoryList.get(0);
+//
+//            templateMap.put("article_category_id", articleCategory.getArticle_category_id());
+//        }
+//
+//        for (XietongTeacher teacher : teacherList) {
+//            teacher.setTeacher_description(StringEscapeUtils.unescapeHtml4(teacher.getTeacher_description()));
+//        }
 
         PageService.instance.write(request_app_id, "header.template", "header.js", templateMap);
         PageService.instance.write(request_app_id, "footer.template", "footer.js", templateMap);
-        PageService.instance.write(request_app_id, "index.template", "index.html", templateMap);
+//        PageService.instance.write(request_app_id, "index.template", "index.html", templateMap);
 
 
-        Map<String, Object> teacherWebsiteMenu = new HashMap<String, Object>();
-        for (Page page : pageList) {
-            Map<String, Object> websiteMenu = new HashMap<String, Object>();
-            for (Map<String, Object> websiteMenuMap : websiteMenuList) {
-                List<Map<String, Object>> childrenwebsiteMenuList = (List<Map<String, Object>>) websiteMenuMap.get(Constant.CHILDREN);
-                for (Map<String, Object> childrenwebsiteMenuMap : childrenwebsiteMenuList) {
-                    if (((String) childrenwebsiteMenuMap.get(WebsiteMenu.WEBSITE_MENU_ID)).equals(page.getWebsite_menu_id())) {
-                        websiteMenu = websiteMenuMap;
-                    }
-                }
-            }
-            templateMap.put("websiteMenu", websiteMenu);
-
-            if (page.getPage_template().equals("teacher.template")) {
-                teacherWebsiteMenu = websiteMenu;
-            }
-
-            page.setPage_content(StringEscapeUtils.unescapeHtml4(page.getPage_content()));
-            templateMap.put("page", page);
-            if (page.getPage_template().equals("detail.template") || page.getPage_template().equals("teacher.template") || page.getPage_template().equals("teacher2.template") || page.getPage_template().equals("wybm.template") || page.getPage_template().equals("jszp.template")) {
-                PageService.instance.write(request_app_id, page.getPage_template(), page.getPage_url(), templateMap);
-            }
-        }
-
-        for (Article article : articleList) {
-            article.setArticle_content(StringEscapeUtils.unescapeHtml4(article.getArticle_content()));
-            templateMap.put("article", article);
-            PageService.instance.write(request_app_id, "item.template", "article/" + article.getArticle_id() + ".html", templateMap);
-        }
-
-        for (XietongTeacher teacher : teacherList) {
-            templateMap.put("teacher", teacher);
-
-            templateMap.put("websiteMenu", teacherWebsiteMenu);
-            PageService.instance.write(request_app_id, "teacher_item.template", "teacher/" + teacher.getTeacher_id() + ".html", templateMap);
-        }
+//        Map<String, Object> teacherWebsiteMenu = new HashMap<String, Object>();
+//        for (Page page : pageList) {
+//            Map<String, Object> websiteMenu = new HashMap<String, Object>();
+//            for (Map<String, Object> websiteMenuMap : websiteMenuList) {
+//                List<Map<String, Object>> childrenwebsiteMenuList = (List<Map<String, Object>>) websiteMenuMap.get(Constant.CHILDREN);
+//                for (Map<String, Object> childrenwebsiteMenuMap : childrenwebsiteMenuList) {
+//                    if (((String) childrenwebsiteMenuMap.get(WebsiteMenu.WEBSITE_MENU_ID)).equals(page.getWebsite_menu_id())) {
+//                        websiteMenu = websiteMenuMap;
+//                    }
+//                }
+//            }
+//            templateMap.put("websiteMenu", websiteMenu);
+//
+//            if (page.getPage_template().equals("teacher.template")) {
+//                teacherWebsiteMenu = websiteMenu;
+//            }
+//
+//            page.setPage_content(StringEscapeUtils.unescapeHtml4(page.getPage_content()));
+//            templateMap.put("page", page);
+//            if (page.getPage_template().equals("detail.template") || page.getPage_template().equals("teacher.template") || page.getPage_template().equals("teacher2.template") || page.getPage_template().equals("wybm.template") || page.getPage_template().equals("jszp.template")) {
+//                PageService.instance.write(request_app_id, page.getPage_template(), page.getPage_url(), templateMap);
+//            }
+//        }
+//
+//        for (Article article : articleList) {
+//            article.setArticle_content(StringEscapeUtils.unescapeHtml4(article.getArticle_content()));
+//            templateMap.put("article", article);
+//            PageService.instance.write(request_app_id, "item.template", "article/" + article.getArticle_id() + ".html", templateMap);
+//        }
+//
+//        for (XietongTeacher teacher : teacherList) {
+//            templateMap.put("teacher", teacher);
+//
+//            templateMap.put("websiteMenu", teacherWebsiteMenu);
+//            PageService.instance.write(request_app_id, "teacher_item.template", "teacher/" + teacher.getTeacher_id() + ".html", templateMap);
+//        }
 
         renderSuccessJson();
     }

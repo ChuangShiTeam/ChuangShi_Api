@@ -16,6 +16,7 @@ import com.nowui.chuangshi.api.article.service.ArticleCategoryService;
 import com.nowui.chuangshi.api.article.service.ArticleService;
 import com.nowui.chuangshi.api.page.dao.PageDao;
 import com.nowui.chuangshi.api.page.model.Page;
+import com.nowui.chuangshi.api.website.model.WebsiteMenu;
 import com.nowui.chuangshi.api.website.service.WebsiteMenuService;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
@@ -60,6 +61,7 @@ public class PageService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(Page.SYSTEM_STATUS, true);
         cnd.and(Page.APP_ID, app_id);
+        cnd.asc(Page.PAGE_SORT);
 
         List<Page> pageList = pageDao.list(cnd);
         for (Page page : pageList) {
@@ -127,6 +129,8 @@ public class PageService extends Service {
         if (ValidateUtil.isNullOrEmpty(app.getApp_website_path())) {
             throw new RuntimeException("路径不能为空");
         }
+
+        System.out.println(app.getApp_website_path());
 
         FileUtil.writeFile(content, app.getApp_website_path() + page_url);
     }

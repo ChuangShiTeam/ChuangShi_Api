@@ -47,7 +47,7 @@ public class WebsiteMenuController extends Controller {
 
         WebsiteMenu result = WebsiteMenuService.instance.find(model.getWebsite_menu_id());
 
-        validateResponse(WebsiteMenu.WEBSITE_MENU_PARENT_ID, WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_URL, WebsiteMenu.WEBSITE_MENU_SORT, WebsiteMenu.SYSTEM_VERSION);
+        validateResponse(WebsiteMenu.WEBSITE_MENU_PARENT_ID, WebsiteMenu.PAGE_ID, WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_URL, WebsiteMenu.WEBSITE_MENU_SORT, WebsiteMenu.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }

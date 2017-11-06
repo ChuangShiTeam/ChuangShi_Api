@@ -1,6 +1,13 @@
-window.Header = class Component extends React.Component {
+import React, {Component} from 'react';
+import {Navbar, Nav, NavDropdown, MenuItem, Carousel} from 'react-bootstrap';
+import {AutoAffix} from 'react-overlays';
+
+var host = "http://api.chuangshi.nowui.com";
+
+class Header extends Component {
     constructor(props) {
         super(props);
+
         this.state = {}
     }
 
@@ -13,32 +20,25 @@ window.Header = class Component extends React.Component {
     }
 
     render() {
-        const Navbar = ReactBootstrap.Navbar;
-        const Nav = ReactBootstrap.Nav;
-        const NavItem = ReactBootstrap.NavItem;
-        const NavDropdown = ReactBootstrap.NavDropdown;
-        const MenuItem = ReactBootstrap.MenuItem;
-        const Carousel = ReactBootstrap.Carousel;
-
         return (
             <div className="header">
                 <Navbar className="hidden-sm hidden-md hidden-lg mobile-header" fixedTop={true}>
                     <Navbar.Header>
                         <Navbar.Brand>
-                            <a href="/index.html">欢迎光临佛山协同(国际)学校</a>
+                            <a href="/#/index">欢迎光临佛山协同(国际)学校</a>
                         </Navbar.Brand>
                         <Navbar.Toggle/>
                     </Navbar.Header>
                     <Navbar.Collapse>
                         <Nav>
-                	 		#for(websiteMenu : websiteMenuList)
-                    	 		<NavDropdown eventKey={"#(websiteMenu.website_menu_id)"} title="#(websiteMenu.website_menu_name)" id="basic-nav-dropdown">
-                    	 			#for(websiteMenuChildren : websiteMenu.children)
-                    	 				<MenuItem eventKey={"#(websiteMenu.website_menu_id).#(websiteMenuChildren.website_menu_id)"} href="/#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</MenuItem>
+                            #for(websiteMenu : websiteMenuList)
+                                <NavDropdown eventKey={"#(websiteMenu.website_menu_id)"} title="#(websiteMenu.website_menu_name)" id="basic-nav-dropdown">
+                                    #for(websiteMenuChildren : websiteMenu.children)
+                                        <MenuItem eventKey={"#(websiteMenuChildren.website_menu_id)"} onClick={this.handleClickeMenu.bind(this, '#if(websiteMenuChildren.page_id == "")#(websiteMenuChildren.website_menu_url)#else/#/page/#(websiteMenuChildren.page_id)#end')}>#(websiteMenuChildren.website_menu_name)</MenuItem>
                                         #if(!for.last)
-                                        	<MenuItem divider/>
+                                            <MenuItem divider/>
                                         #end
-                					#end
+                                    #end
                                 </NavDropdown>
                             #end
                         </Nav>
@@ -46,17 +46,21 @@ window.Header = class Component extends React.Component {
                 </Navbar>
                 <div className="navigation hidden-xs">
                     <div className="container col-padding">
-                        <div className="pull-left"><a href="/index.html">您好，欢迎光临佛山协同(国际)学校！</a></div>
+                        <div className="pull-left"><a href="/#/index">您好，欢迎光临佛山协同(国际)学校！</a></div>
                         <div className="pull-right hidden-xs">
-                            <a className="margin-right" href="/404.html">我是学生</a>
+                            <a className="margin-right" href="/#/not/found">我是学生</a>
                             |
-                            <a className="margin-left" href="/404.html">我是老师</a>
+                            <a className="margin-left" href="/#/not/found">我是老师</a>
                         </div>
                     </div>
                 </div>
                 <div className="main">
                     <div className="container col-padding">
-                        <div className="pull-left"><a href="/index.html"><img className="logo" src="/image/logo.png" alt=""/></a></div>
+                        <div className="pull-left">
+                            <a href="/#/index">
+                                <img className="logo" src="/image/logo.png" alt=""/>
+                            </a>
+                        </div>
                         <div className="pull-right hidden-xs">
                             <a href="/404.html">
                                 <div className="search">
@@ -71,23 +75,25 @@ window.Header = class Component extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="menu autoaffix hidden-xs">
-                    <ul className="container col-padding">
-                        <li className={this.props.website_menu_id === "home" ? "active" : ""}>
-                            <a href="/index.html">首页</a>
-                        </li>
-                        #for(websiteMenu : websiteMenuList)
-                        <li className={this.props.website_menu_id === "#(websiteMenu.website_menu_id)" ? "active" : ""}>
-                            <a href="/#(websiteMenu.website_menu_url)">#(websiteMenu.website_menu_name)</a>
-                            <ul>
-                                #for(websiteMenuChildren : websiteMenu.children)
-                                <li><a href="/#(websiteMenuChildren.website_menu_url)">#(websiteMenuChildren.website_menu_name)</a></li>
-                                #end
-                            </ul>
-                        </li>
-                        #end
-                    </ul>
-                </div>
+                <AutoAffix viewportOffsetTop={0}>
+                    <div className="menu hidden-xs">
+                        <ul className="container col-padding">
+                            <li className={this.props.website_menu_id === "home" ? "active" : ""}>
+                                <a href="/#/index">首页</a>
+                            </li>
+                            #for(websiteMenu : websiteMenuList)
+                            <li className={this.props.website_menu_id === "#(websiteMenu.website_menu_id)" ? "active" : ""}>
+                                <a onClick={this.handleClickeMenu.bind(this, '#if(websiteMenu.page_id == "")#(websiteMenu.website_menu_url)#else/#/page/#(websiteMenu.page_id)#end')}>#(websiteMenu.website_menu_name)</a>
+                                <ul>
+                                    #for(websiteMenuChildren : websiteMenu.children)
+                                    <li><a onClick={this.handleClickeMenu.bind(this, '#if(websiteMenuChildren.page_id == "")#(websiteMenuChildren.website_menu_url)#else/#/page/#(websiteMenuChildren.page_id)#end')}>#(websiteMenuChildren.website_menu_name)</a></li>
+                                    #end
+                                </ul>
+                            </li>
+                            #end
+                        </ul>
+                    </div>
+                </AutoAffix>
                 {
                     this.props.is_show_banner ?
                         <Carousel className="banner hidden-xs" interval={5000} keyboard={false}>
@@ -111,12 +117,14 @@ window.Header = class Component extends React.Component {
     }
 }
 
-window.Header.propTypes = {
+Header.propTypes = {
     website_menu_id: React.PropTypes.string.isRequired,
     is_show_banner: React.PropTypes.bool
 };
 
-window.Header.defaultProps = {
+Header.defaultProps = {
     website_menu_id: '',
     is_show_banner: true
 };
+
+export default Header;
