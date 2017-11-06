@@ -50,8 +50,8 @@ public class RenaultShareCommentController extends Controller {
 
         }
 
-        validateResponse(RenaultShareComment.SHARE_ID, User.USER_NAME, User.USER_AVATAR, RenaultShareComment.PARENT_USER_NAME,
-                RenaultShareComment.REMARK, RenaultShareComment.LIKE_NUM, RenaultShareComment.COMMENT_ID,
+        validateResponse(RenaultShareComment.SHARE_ID, User.USER_NAME, User.USER_AVATAR, RenaultShareComment.USER_ID,
+                RenaultShareComment.PARENT_USER_NAME, RenaultShareComment.REMARK, RenaultShareComment.LIKE_NUM, RenaultShareComment.COMMENT_ID,
                 RenaultShareComment.SYSTEM_CREATE_TIME);
 
         renderSuccessJson(renaultlist);
