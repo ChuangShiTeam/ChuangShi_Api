@@ -28,7 +28,7 @@ public class XietongStudentController extends Controller {
         Integer resultCount = XietongStudentService.instance.adminCount(request_app_id, model.getStudent_name(), model.getClazz_id());
         List<XietongStudent> resultList = XietongStudentService.instance.adminList(request_app_id, model.getStudent_name(), model.getClazz_id(), getM(), getN());
 
-        validateResponse(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_NAME, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX, XietongStudent.SYSTEM_VERSION);
+        validateResponse(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_CATEGORY, XietongStudent.STUDENT_NAME, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX, XietongStudent.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -41,14 +41,14 @@ public class XietongStudentController extends Controller {
 
         XietongStudent result = XietongStudentService.instance.find(model.getStudent_id());
 
-        validateResponse(XietongStudent.USER_ID, XietongStudent.CLAZZ_ID, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX, XietongStudent.SYSTEM_VERSION);
+        validateResponse(XietongStudent.USER_ID, XietongStudent.CLAZZ_ID, XietongStudent.STUDENT_CATEGORY, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX, XietongStudent.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
 
     @ActionKey("/admin/xietong/student/save")
     public void save() {
-        validateRequest(XietongStudent.STUDENT_NAME);
+        validateRequest(XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_CATEGORY);
         XietongStudent model = getModel(XietongStudent.class);
         User userModel = getModel(User.class);
         
@@ -61,7 +61,7 @@ public class XietongStudentController extends Controller {
 
     @ActionKey("/admin/xietong/student/update")
     public void update() {
-        validateRequest(XietongStudent.USER_ID, XietongStudent.STUDENT_ID, XietongStudent.STUDENT_NAME, XietongStudent.SYSTEM_VERSION);
+        validateRequest(XietongStudent.USER_ID, XietongStudent.STUDENT_ID, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_CATEGORY, XietongStudent.SYSTEM_VERSION);
         XietongStudent model = getModel(XietongStudent.class);
         User userModel = getModel(User.class);
         

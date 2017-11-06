@@ -1,9 +1,11 @@
 package com.nowui.chuangshi.api.file.mobile;
 
+import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.jfinal.upload.UploadFile;
 import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -41,6 +43,22 @@ public class FileController extends Controller {
     public void delete() {
 
         renderSuccessJson();
+    }
+    
+    @ActionKey("/mobile/file/upload")
+    public void upload() {
+        String request_app_id = getRequest_app_id();
+        String request_user_id = getRequest_user_id();
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        List<UploadFile> uploadFileList = getFiles(request_user_id, 1024 * 1024 * 300);
+
+        List<Map<String, Object>> resultList = FileService.instance.upload(uploadFileList, request_app_id, request_user_id);
+
+        validateResponse(File.FILE_ID, File.FILE_NAME, File.FILE_PATH);
+        
+        renderSuccessJson(resultList);
     }
     
     @ActionKey("/mobile/file/image/base64/upload")

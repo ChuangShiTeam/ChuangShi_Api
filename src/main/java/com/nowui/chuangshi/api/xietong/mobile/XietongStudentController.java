@@ -1,24 +1,15 @@
 package com.nowui.chuangshi.api.xietong.mobile;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.user.model.User;
-import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.api.xietong.model.XietongClazz;
 import com.nowui.chuangshi.api.xietong.model.XietongStudent;
 import com.nowui.chuangshi.api.xietong.service.XietongStudentService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
-import com.nowui.chuangshi.type.UserType;
-import com.nowui.chuangshi.util.AesUtil;
 
 @ControllerKey("/mobile/xietong/student")
 public class XietongStudentController extends Controller {

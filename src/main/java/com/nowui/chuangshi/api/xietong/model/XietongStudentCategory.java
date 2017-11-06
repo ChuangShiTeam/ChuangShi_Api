@@ -10,35 +10,23 @@ import com.nowui.chuangshi.type.ColumnType;
 import java.util.Date;
 
 @Entity
-public class XietongStudent extends Model<XietongStudent> {
-    
+public class XietongStudentCategory extends Model<XietongStudentCategory> {
+
     @Table
-    public static final String TABLE_XIETONG_STUDENT = "table_xietong_student";
+    public static final String TABLE_XIETONG_STUDENT_CATEGORY = "table_xietong_student_category";
 
     @Primary
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "学生编号", updatable = false)
-    public static final String STUDENT_ID = "student_id";
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "分类编号", updatable = false)
+    public static final String STUDENT_CATEGORY_ID = "student_category_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "应用编号", updatable = false)
     public static final String APP_ID = "app_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户编号")
-    public static final String USER_ID = "user_id";
+    @Column(type = ColumnType.VARCHAR, length = 30, comment = "分类名称")
+    public static final String STUDENT_CATEGORY_NAME = "student_category_name";
 
-    @Column(type = ColumnType.VARCHAR, length = 32, comment = "班级编号")
-    public static final String CLAZZ_ID = "clazz_id";
-    
-    @Column(type = ColumnType.VARCHAR, length = 200, comment = "学生分类")
-    public static final String STUDENT_CATEGORY = "student_category";
-
-    @Column(type = ColumnType.VARCHAR, length = 20, comment = "学生姓名")
-    public static final String STUDENT_NAME = "student_name";
-
-    @Column(type = ColumnType.VARCHAR, length = 10, comment = "学生学号")
-    public static final String STUDENT_NUMBER = "student_number";
-
-    @Column(type = ColumnType.VARCHAR, length = 2, comment = "学生性别")
-    public static final String STUDENT_SEX = "student_sex";
+    @Column(type = ColumnType.INT, length = 3, comment = "分类排序")
+    public static final String STUDENT_CATEGORY_SORT = "student_category_sort";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -57,13 +45,13 @@ public class XietongStudent extends Model<XietongStudent> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
-    
-    public String getStudent_id() {
-        return getStr(STUDENT_ID);
+
+    public String getStudent_category_id() {
+        return getStr(STUDENT_CATEGORY_ID);
     }
 
-    public void setStudent_id(String student_id) {
-        set(STUDENT_ID, student_id);
+    public void setStudent_category_id(String student_category_id) {
+        set(STUDENT_CATEGORY_ID, student_category_id);
     }
 
     public String getApp_id() {
@@ -74,52 +62,20 @@ public class XietongStudent extends Model<XietongStudent> {
         set(APP_ID, app_id);
     }
 
-    public String getUser_id() {
-        return getStr(USER_ID);
+    public String getStudent_category_name() {
+        return getStr(STUDENT_CATEGORY_NAME);
     }
 
-    public void setUser_id(String user_id) {
-        set(USER_ID, user_id);
+    public void setStudent_category_name(String student_category_name) {
+        set(STUDENT_CATEGORY_NAME, student_category_name);
     }
 
-    public String getClazz_id() {
-        return getStr(CLAZZ_ID);
+    public Integer getStudent_category_sort() {
+        return getInt(STUDENT_CATEGORY_SORT);
     }
 
-    public void setClazz_id(String clazz_id) {
-        set(CLAZZ_ID, clazz_id);
-    }
-
-    public String getStudent_category() {
-        return getStr(STUDENT_CATEGORY);
-    }
-
-    public void setStudent_category(String student_category) {
-        set(STUDENT_CATEGORY, student_category);
-    }
-    
-    public String getStudent_name() {
-        return getStr(STUDENT_NAME);
-    }
-    
-    public void setStudent_name(String student_name) {
-        set(STUDENT_NAME, student_name);
-    }
-
-    public String getStudent_number() {
-        return getStr(STUDENT_NUMBER);
-    }
-
-    public void setStudent_number(String student_number) {
-        set(STUDENT_NUMBER, student_number);
-    }
-
-    public String getStudent_sex() {
-        return getStr(STUDENT_SEX);
-    }
-
-    public void setStudent_sex(String student_sex) {
-        set(STUDENT_SEX, student_sex);
+    public void setStudent_category_sort(Integer student_category_sort) {
+        set(STUDENT_CATEGORY_SORT, student_category_sort);
     }
 
     public String getSystem_create_user_id() {
