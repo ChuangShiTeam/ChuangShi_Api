@@ -62,8 +62,6 @@ public class MinhangTaskController extends Controller {
 
         MinhangTask minhangTask = MinhangTaskService.instance.find(model.getTask_id());
         
-        minhangTask.keep(MinhangTask.KEY_ID, MinhangTask.TASK_NAME, MinhangTask.SCREEN_ID, MinhangTask.TASK_TYPE, MinhangTask.TASK_QRCODE_URL, MinhangTask.TASK_SORT, MinhangTask.TASK_DESCRIPTION, MinhangTask.SYSTEM_VERSION);
-      
         //查询用户最近的寻钥之旅记录
         MinhangMemberItinerary member_itinerary = MinhangMemberItineraryService.instance.userLatestFind(request_user_id);
 
@@ -84,13 +82,12 @@ public class MinhangTaskController extends Controller {
                     unescapeHtml4Model(question);
                 }
                 minhangTask.put(MinhangTask.QUESTION_LIST, minhang_question_list);
-                minhangTask.keep(MinhangTask.QUESTION_LIST);
             }
         } else {
-            result.put("member_task", minhangMemberTask);
             minhangMemberTask.keep(MinhangMemberTask.MEMBER_TASK_ID, MinhangMemberTask.MEMBER_ID, MinhangMemberTask.TASK_ID);
-
+            result.put("member_task", minhangMemberTask);
         }
+        minhangTask.keep(MinhangTask.KEY_ID, MinhangTask.QUESTION_LIST, MinhangTask.TASK_NAME, MinhangTask.SCREEN_ID, MinhangTask.TASK_TYPE, MinhangTask.TASK_QRCODE_URL, MinhangTask.TASK_SORT, MinhangTask.TASK_DESCRIPTION, MinhangTask.SYSTEM_VERSION);
         result.put("task", minhangTask);
         
         validateResponse("task", "member_task");
