@@ -39,6 +39,21 @@ public class XietongController extends Controller {
 
         renderSuccessJson(articleList);
     }
+    
+    @ActionKey("/desktop/xietong/website/xxb")
+    public void xxb() {
+        List<String> articleCategoryIdList = new ArrayList<String>();
+        articleCategoryIdList.add("c9dd8759a7a04aaeb038973c3246d863");
+        articleCategoryIdList.add("7e84950e6d96412b860b5be55f46d5e8");
+        articleCategoryIdList.add("0cc726f2b92f43d1ba5cc5d0065efb09");
+        articleCategoryIdList.add("da9b1750e8ea4f959df23cbdcba53f9a");
+
+        List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryIdList, 4);
+
+        validateResponse(Article.ARTICLE_ID, Article.ARTICLE_CATEGORY_ID, File.FILE_PATH, Article.ARTICLE_NAME, Article.ARTICLE_SUMMARY, Article.SYSTEM_CREATE_TIME);
+
+        renderSuccessJson(articleList);
+    }
 
     @ActionKey("/desktop/xietong/website/init")
     public void init() {
