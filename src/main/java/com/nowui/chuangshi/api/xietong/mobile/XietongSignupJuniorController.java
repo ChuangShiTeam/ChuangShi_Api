@@ -19,7 +19,27 @@ public class XietongSignupJuniorController extends Controller {
     @ActionKey("/mobile/xietong/signup/junior/find")
     public void find() {
 
-        renderSuccessJson();
+        XietongSignupJunior xietong_signup_pupil = getModel(XietongSignupJunior.class);
+
+        XietongSignupJunior bean = XietongSignupJuniorService.instance.idNoFind(xietong_signup_pupil.getId_no());
+
+        if (bean != null) {
+            //已报名，已确定，已签到，已评分，已录取，已阅读
+
+            if (bean.getSignup_status() == "已确定") {
+
+                throw new RuntimeException("面谈时间：" + bean.getInterview_time().toString());
+            } else if (bean.getSignup_status() == "已评分") {
+
+                throw new RuntimeException("最终评分：" + bean.getMark());
+
+            } else {
+                throw new RuntimeException(bean.getSignup_status());
+            }
+        } else {
+
+            throw new RuntimeException("该学生未报名");
+        }
     }
 
     @ActionKey("/mobile/xietong/signup/junior/save")
@@ -29,6 +49,13 @@ public class XietongSignupJuniorController extends Controller {
         String request_user_id = getRequest_user_id();
         XietongSignupJunior xietong_signup_junior = getModel(XietongSignupJunior.class);
 
+        XietongSignupJunior bean = XietongSignupJuniorService.instance.idNoFind(xietong_signup_junior.getId_no());
+        if (bean != null) {
+            //
+            throw new RuntimeException("该学生已经报名");
+        }
+
+        xietong_signup_junior.setSignup_status("已报名");
         xietong_signup_junior.setSignup_id(Util.getRandomUUID());
         xietong_signup_junior.setApp_id(request_app_id);
         Boolean result = XietongSignupJuniorService.instance.save(xietong_signup_junior, request_user_id);

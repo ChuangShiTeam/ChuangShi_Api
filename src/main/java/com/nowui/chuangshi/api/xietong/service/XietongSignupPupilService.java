@@ -12,6 +12,7 @@ public class XietongSignupPupilService extends Service {
 
     public static final XietongSignupPupilService instance = new XietongSignupPupilService();
     private final String XIETONG_SIGNUP_PUPIL_ITEM_CACHE = "xietong_signup_pupil_item_cache";
+    private final String MOBILE_XIETONG_SIGNUP_PUPIL_ITEM_CACHE = "mobile_xietong_signup_pupil_item_cache";
     private final XietongSignupPupilDao xietongSignupPupilDao = new XietongSignupPupilDao();
 
     public Integer adminCount(String app_id, String student_name, String id_no) {
@@ -47,6 +48,22 @@ public class XietongSignupPupilService extends Service {
             xietong_signup_pupil = xietongSignupPupilDao.find(signup_id);
 
             CacheUtil.put(XIETONG_SIGNUP_PUPIL_ITEM_CACHE, signup_id, xietong_signup_pupil);
+        }
+
+        return xietong_signup_pupil;
+    }
+
+    //根据证件号码查询
+    public XietongSignupPupil idNoFind(String id_no) {
+        XietongSignupPupil xietong_signup_pupil = CacheUtil.get(MOBILE_XIETONG_SIGNUP_PUPIL_ITEM_CACHE, id_no);
+        Cnd cnd = new Cnd();
+        cnd.where(XietongSignupPupil.SYSTEM_STATUS, true);
+        cnd.and(XietongSignupPupil.ID_NO, id_no);
+
+        if (xietong_signup_pupil == null) {
+            xietong_signup_pupil = xietongSignupPupilDao.find(cnd);
+
+            CacheUtil.put(MOBILE_XIETONG_SIGNUP_PUPIL_ITEM_CACHE, id_no, xietong_signup_pupil);
         }
 
         return xietong_signup_pupil;
