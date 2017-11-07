@@ -12,6 +12,9 @@ public class XietongSignupJuniorService extends Service {
 
     public static final XietongSignupJuniorService instance = new XietongSignupJuniorService();
     private final String XIETONG_SIGNUP_JUNIOR_ITEM_CACHE = "xietong_signup_junior_item_cache";
+    private final String MOBILE_XIETONG_SIGNUP_JUNIOR_ITEM_CACHE = "mobile_xietong_signup_junior_item_cache";
+
+
     private final XietongSignupJuniorDao xietongSignupJuniorDao = new XietongSignupJuniorDao();
 
     public Integer adminCount(String app_id, String student_name, String id_no) {
@@ -57,6 +60,21 @@ public class XietongSignupJuniorService extends Service {
         return success;
     }
 
+    //根据证件号码查询
+    public XietongSignupJunior idNoFind(String id_no) {
+        XietongSignupJunior xietong_signup_junior = CacheUtil.get(MOBILE_XIETONG_SIGNUP_JUNIOR_ITEM_CACHE, id_no);
+        Cnd cnd = new Cnd();
+        cnd.where(XietongSignupJunior.SYSTEM_STATUS, true);
+        cnd.and(XietongSignupJunior.ID_NO, id_no);
+
+        if (xietong_signup_junior == null) {
+            xietong_signup_junior = xietongSignupJuniorDao.find(cnd);
+
+            CacheUtil.put(MOBILE_XIETONG_SIGNUP_JUNIOR_ITEM_CACHE, id_no, xietong_signup_junior);
+        }
+
+        return xietong_signup_junior;
+    }
     public Boolean update(XietongSignupJunior xietong_signup_junior, String signup_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = new Cnd();
         cnd.where(XietongSignupJunior.SYSTEM_STATUS, true);
