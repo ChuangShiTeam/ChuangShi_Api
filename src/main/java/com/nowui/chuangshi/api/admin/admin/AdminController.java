@@ -1,7 +1,7 @@
 package com.nowui.chuangshi.api.admin.admin;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.admin.model.Admin;
 import com.nowui.chuangshi.api.admin.service.AdminService;
@@ -11,7 +11,7 @@ import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.UserType;
@@ -20,7 +20,7 @@ import com.nowui.chuangshi.util.Util;
 
 import java.util.*;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/admin")
 public class AdminController extends Controller {
 

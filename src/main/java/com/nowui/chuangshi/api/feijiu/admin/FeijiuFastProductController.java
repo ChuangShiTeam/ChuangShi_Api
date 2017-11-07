@@ -1,20 +1,20 @@
 package com.nowui.chuangshi.api.feijiu.admin;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.feijiu.model.FeijiuFastProduct;
 import com.nowui.chuangshi.api.feijiu.service.FeijiuFastProductService;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.List;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/feijiu/fast/product")
 public class FeijiuFastProductController extends Controller {
     

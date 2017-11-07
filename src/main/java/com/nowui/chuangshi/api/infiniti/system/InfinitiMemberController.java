@@ -1,12 +1,12 @@
 package com.nowui.chuangshi.api.infiniti.system;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.SystemInterceptor;
 
-@Before(SystemInterceptor.class)
+
+
 @ControllerKey("/system/infiniti/member")
 public class InfinitiMemberController extends Controller {
 

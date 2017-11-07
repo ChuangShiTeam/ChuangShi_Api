@@ -1,14 +1,14 @@
 package com.nowui.chuangshi.api.xietong.admin;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.article.model.Article;
 import com.nowui.chuangshi.api.page.service.PageService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
 
-@Before(AdminInterceptor.class)
+
+
 @ControllerKey("/admin/xietong/article")
 public class XietongArticleController extends Controller {
     

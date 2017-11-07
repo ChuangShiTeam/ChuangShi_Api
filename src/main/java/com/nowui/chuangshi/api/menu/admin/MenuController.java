@@ -1,18 +1,18 @@
 package com.nowui.chuangshi.api.menu.admin;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.menu.model.Menu;
 import com.nowui.chuangshi.api.menu.service.MenuService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/menu")
 public class MenuController extends Controller {
 

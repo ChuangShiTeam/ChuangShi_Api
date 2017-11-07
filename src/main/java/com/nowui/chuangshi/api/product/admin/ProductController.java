@@ -2,21 +2,21 @@ package com.nowui.chuangshi.api.product.admin;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.product.model.*;
 import com.nowui.chuangshi.api.product.service.*;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/product")
 public class ProductController extends Controller {
 

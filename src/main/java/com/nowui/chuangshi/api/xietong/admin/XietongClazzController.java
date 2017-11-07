@@ -2,18 +2,18 @@ package com.nowui.chuangshi.api.xietong.admin;
 
 import java.util.List;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.xietong.model.XietongClazz;
 import com.nowui.chuangshi.api.xietong.model.XietongOrganization;
 import com.nowui.chuangshi.api.xietong.service.XietongClazzService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/xietong/clazz")
 public class XietongClazzController extends Controller {
 

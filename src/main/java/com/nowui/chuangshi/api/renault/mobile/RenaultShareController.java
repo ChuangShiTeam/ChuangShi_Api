@@ -129,6 +129,7 @@ public class RenaultShareController extends Controller {
              renault_share.setLike_num(0);
              renault_share.setShare_num(0);
              renault_share.setShare_user_id(request_user_id);
+             renault_share.setRemark(Util.getEmoji(renault_share.getRemark()));
              
              Boolean result = RenaultShareService.instance.save(renault_share, request_user_id);
              

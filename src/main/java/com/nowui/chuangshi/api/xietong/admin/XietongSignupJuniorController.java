@@ -1,18 +1,18 @@
 package com.nowui.chuangshi.api.xietong.admin;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.xietong.model.XietongSignupJunior;
 import com.nowui.chuangshi.api.xietong.service.XietongSignupJuniorService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/xietong/signup/junior")
 public class XietongSignupJuniorController extends Controller {
 

@@ -1,18 +1,18 @@
 package com.nowui.chuangshi.api.minhang.admin;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangMemberQuestion;
 import com.nowui.chuangshi.api.minhang.service.MinhangMemberQuestionService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/minhang/member/question")
 public class MinhangMemberQuestionController extends Controller {
 

@@ -43,7 +43,7 @@ public class RenaultShareCommentController extends Controller {
                 result.put(User.USER_NAME, renault_share_comment_user.getUser_name());
 
             String user_avatar = FileService.instance.getFile_path(renault_share_comment_user.getUser_avatar());
-            if (!ValidateUtil.isNullOrEmpty(user_avatar) && user_avatar.startsWith("http://")) {  //微信头像无需处理，自己上传的头像加上前置url
+            if (!ValidateUtil.isNullOrEmpty(user_avatar) && !user_avatar.startsWith("http://")) {  //微信头像无需处理，自己上传的头像加上前置url
                 user_avatar = "http://api.chuangshi.nowui.com" + user_avatar;
             }
             result.put(User.USER_AVATAR, user_avatar);
@@ -76,6 +76,7 @@ public class RenaultShareCommentController extends Controller {
         renault_sharecomment.setComment_id(Util.getRandomUUID());
         renault_sharecomment.setUser_id(request_user_id);
         renault_sharecomment.setLike_num(0);
+        renault_sharecomment.setRemark(Util.getEmoji(renault_sharecomment.getRemark()));
 
         Boolean result = RenaultShareCommentService.instance.save(renault_sharecomment, request_user_id);
 

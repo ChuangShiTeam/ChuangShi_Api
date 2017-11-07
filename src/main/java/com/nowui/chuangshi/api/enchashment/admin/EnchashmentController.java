@@ -1,19 +1,19 @@
 package com.nowui.chuangshi.api.enchashment.admin;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.enchashment.model.Enchashment;
 import com.nowui.chuangshi.api.enchashment.service.EnchashmentService;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/enchashment")
 public class EnchashmentController extends Controller {
 

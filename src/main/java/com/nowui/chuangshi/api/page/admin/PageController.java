@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.Kv;
 import com.nowui.chuangshi.api.advertisement.service.AdvertisementService;
@@ -20,12 +20,12 @@ import com.nowui.chuangshi.api.xietong.model.XietongTeacher;
 import com.nowui.chuangshi.api.xietong.service.XietongTeacherService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 import org.apache.commons.lang3.StringEscapeUtils;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/page")
 public class PageController extends Controller {
 

@@ -7,6 +7,7 @@ import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
+import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.AesUtil;
 import com.nowui.chuangshi.util.CacheUtil;
 import com.nowui.chuangshi.util.Util;
@@ -42,6 +43,16 @@ public class UserService extends Service {
             CacheUtil.put(USER_ITEM_CACHE, user_id, user);
         }
 
+        return user;
+    }
+    
+    public User appAndAdminFind(String app_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(User.SYSTEM_STATUS, true);
+        cnd.and(User.APP_ID, app_id);
+        cnd.and(User.USER_TYPE, UserType.ADMIN.getKey());
+        
+        User user = userDao.find(cnd);
         return user;
     }
 

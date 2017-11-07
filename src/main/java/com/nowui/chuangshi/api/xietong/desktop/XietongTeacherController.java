@@ -2,16 +2,16 @@ package com.nowui.chuangshi.api.xietong.desktop;
 
 import java.util.List;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.xietong.model.XietongTeacher;
 import com.nowui.chuangshi.api.xietong.service.XietongTeacherService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
 
-@Before(AdminInterceptor.class)
+
+
 @ControllerKey("/desktop/xietong/teacher")
 public class XietongTeacherController extends Controller {
 

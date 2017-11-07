@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.jfinal.kit.PathKit;
 import com.nowui.chuangshi.api.minhang.model.MinhangKey;
@@ -14,13 +14,13 @@ import com.nowui.chuangshi.api.minhang.model.MinhangTask;
 import com.nowui.chuangshi.api.minhang.service.MinhangTaskService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.FileUtil;
 import com.nowui.chuangshi.util.QRCodeUtil;
 import com.nowui.chuangshi.util.Util;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/minhang/task")
 public class MinhangTaskController extends Controller {
 

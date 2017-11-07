@@ -2,7 +2,7 @@ package com.nowui.chuangshi.api.xietong.admin;
 
 import java.util.List;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.jfinal.upload.UploadFile;
 import com.nowui.chuangshi.api.file.service.FileService;
@@ -14,12 +14,12 @@ import com.nowui.chuangshi.api.xietong.service.XietongCourseService;
 import com.nowui.chuangshi.api.xietong.service.XietongCourseStudentService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.CourseStudentType;
 import com.nowui.chuangshi.util.Util;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/xietong/course")
 public class XietongCourseController extends Controller {
 

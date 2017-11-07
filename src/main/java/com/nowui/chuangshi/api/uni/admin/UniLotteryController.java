@@ -2,17 +2,17 @@ package com.nowui.chuangshi.api.uni.admin;
 
 import java.util.List;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.uni.model.UniLottery;
 import com.nowui.chuangshi.api.uni.service.UniLotteryService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/uni/lottery")
 public class UniLotteryController extends Controller {
 

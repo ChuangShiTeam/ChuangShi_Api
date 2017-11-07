@@ -1,13 +1,13 @@
 package com.nowui.chuangshi.api.feijiu.system;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.feijiu.service.FeijiuFastProductService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.SystemInterceptor;
 
-@Before(SystemInterceptor.class)
+
+
 @ControllerKey("/system/feijiu/fast/product")
 public class FeijiuFastProductController extends Controller {
 

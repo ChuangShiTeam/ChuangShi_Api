@@ -2,7 +2,7 @@ package com.nowui.chuangshi.api.minhang.admin;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.minhang.model.MinhangQuestion;
 import com.nowui.chuangshi.api.minhang.model.MinhangQuestionAnswer;
@@ -12,13 +12,13 @@ import com.nowui.chuangshi.api.minhang.service.MinhangQuestionOptionService;
 import com.nowui.chuangshi.api.minhang.service.MinhangQuestionService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/minhang/question")
 public class MinhangQuestionController extends Controller {
 

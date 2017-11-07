@@ -2,7 +2,7 @@ package com.nowui.chuangshi.api.xietong.admin;
 
 import java.util.List;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.user.model.User;
@@ -11,10 +11,10 @@ import com.nowui.chuangshi.api.xietong.model.XietongTeacher;
 import com.nowui.chuangshi.api.xietong.service.XietongTeacherService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/xietong/teacher")
 public class XietongTeacherController extends Controller {
 

@@ -1,13 +1,13 @@
 package com.nowui.chuangshi.api.bill.system;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.bill.service.BillService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.SystemInterceptor;
 
-@Before(SystemInterceptor.class)
+
+
 @ControllerKey("/system/bill")
 public class BillController extends Controller {
 

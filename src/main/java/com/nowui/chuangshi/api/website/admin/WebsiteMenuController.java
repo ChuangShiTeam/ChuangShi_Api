@@ -1,19 +1,19 @@
 package com.nowui.chuangshi.api.website.admin;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.website.model.WebsiteMenu;
 import com.nowui.chuangshi.api.website.service.WebsiteMenuService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
 import java.util.Map;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/website/menu")
 public class WebsiteMenuController extends Controller {
 

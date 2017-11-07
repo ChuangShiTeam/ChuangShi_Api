@@ -1,6 +1,6 @@
 package com.nowui.chuangshi.api.infiniti.admin;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.infiniti.model.InfinitiMember;
 import com.nowui.chuangshi.api.infiniti.model.InfinitiPrize;
@@ -8,7 +8,7 @@ import com.nowui.chuangshi.api.infiniti.service.InfinitiMemberService;
 import com.nowui.chuangshi.api.infiniti.service.InfinitiPrizeService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.common.render.ExcelRender;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.DateUtil;
@@ -18,7 +18,7 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 import java.util.List;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/infiniti/member")
 public class InfinitiMemberController extends Controller {
 

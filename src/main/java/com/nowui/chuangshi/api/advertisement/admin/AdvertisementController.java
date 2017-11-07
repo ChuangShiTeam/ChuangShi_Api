@@ -3,18 +3,18 @@ package com.nowui.chuangshi.api.advertisement.admin;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.advertisement.model.Advertisement;
 import com.nowui.chuangshi.api.advertisement.service.AdvertisementService;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/advertisement")
 public class AdvertisementController extends Controller {
 

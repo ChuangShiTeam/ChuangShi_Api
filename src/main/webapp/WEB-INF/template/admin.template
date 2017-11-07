@@ -1,18 +1,17 @@
 package com.nowui.chuangshi.api.#(package_name).admin;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.#(package_name).model.#(first_upper_model_name_without_underline);
 import com.nowui.chuangshi.api.#(package_name).service.#(first_upper_model_name_without_underline)Service;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
 
-@Before(AdminInterceptor.class)
 @ControllerKey("/admin/#(url_model_name)")
 public class #(first_upper_model_name_without_underline)Controller extends Controller {
 

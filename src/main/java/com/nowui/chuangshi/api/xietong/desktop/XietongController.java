@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.advertisement.model.Advertisement;
 import com.nowui.chuangshi.api.advertisement.service.AdvertisementService;
@@ -19,9 +19,9 @@ import com.nowui.chuangshi.api.website.model.WebsiteMenu;
 import com.nowui.chuangshi.api.website.service.WebsiteMenuService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
 
-@Before(AdminInterceptor.class)
+
+
 @ControllerKey("/desktop/xietong")
 public class XietongController extends Controller {
 

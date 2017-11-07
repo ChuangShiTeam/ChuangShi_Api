@@ -1,18 +1,18 @@
 package com.nowui.chuangshi.api.app.system;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.SystemInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
 
-@Before(SystemInterceptor.class)
+
 @ControllerKey("/system/app")
 public class AppController extends Controller {
 

@@ -1,19 +1,19 @@
 package com.nowui.chuangshi.api.article.admin;
 
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.article.model.Article;
 import com.nowui.chuangshi.api.article.service.ArticleService;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
 import java.util.List;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/article")
 public class ArticleController extends Controller {
 

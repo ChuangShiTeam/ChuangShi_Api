@@ -3,7 +3,7 @@ package com.nowui.chuangshi.api.renault.admin;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jfinal.aop.Before;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.file.service.FileService;
@@ -17,12 +17,12 @@ import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.interceptor.AdminInterceptor;
+
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
-@Before(AdminInterceptor.class)
+
 @ControllerKey("/admin/renault/share")
 public class RenaultShareController extends Controller {
 
