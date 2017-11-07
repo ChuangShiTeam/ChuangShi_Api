@@ -14,8 +14,6 @@ public class XietongTeacherRecruitmentController extends Controller {
 
     @ActionKey("/desktop/xietong/teacher/recruitment/save")
     public void save() {
-        JSONObject jsonObject = getParameterJSONObject();
-        System.out.println(jsonObject.toJSONString());
         validateRequest(XietongTeacherRecruitment.TEACHER_RECRUITMENT_NAME, XietongTeacherRecruitment.TEACHER_RECRUITMENT_SEX, XietongTeacherRecruitment.TEACHER_RECRUITMENT_BIRTHDAY, XietongTeacherRecruitment.TEACHER_RECRUITMENT_MOBILE, XietongTeacherRecruitment.TEACHER_RECRUITMENT_EMAIL, XietongTeacherRecruitment.TEACHER_RECRUITMENT_FACULTY, XietongTeacherRecruitment.TEACHER_RECRUITMENT_SUBJECT, XietongTeacherRecruitment.TEACHER_RECRUITMENT_IS_FRESH_GRADUATE, XietongTeacherRecruitment.TEACHER_RECRUITMENT_WORK_YEAR, XietongTeacherRecruitment.TEACHER_RECRUITMENT_OLD_UNIT, XietongTeacherRecruitment.TEACHER_RECRUITMENT_POLITICS_STATUS, XietongTeacherRecruitment.TEACHER_RECRUITMENT_JOB_TITLE, XietongTeacherRecruitment.TEACHER_RECRUITMENT_EDUCATION, XietongTeacherRecruitment.TEACHER_RECRUITMENT_MAJOR, XietongTeacherRecruitment.TEACHER_RECRUITMENT_GRAD_SCHOOL, XietongTeacherRecruitment.TEACHER_RECRUITMENT_EDUCATION_EXPERIENCE, XietongTeacherRecruitment.TEACHER_RECRUITMENT_WORK_EXPERIENCE, XietongTeacherRecruitment.TEACHER_RECRUITMENT_REPRESENTATIVE_HONOR, XietongTeacherRecruitment.TEACHER_RECRUITMENT_NOW_ADDRESS, XietongTeacherRecruitment.TEACHER_RECRUITMENT_FILE);
 
         XietongTeacherRecruitment model = getModel(XietongTeacherRecruitment.class);
