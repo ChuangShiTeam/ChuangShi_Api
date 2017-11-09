@@ -9,9 +9,12 @@ import java.util.Map;
 import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.member.model.Member;
+import com.nowui.chuangshi.api.member.service.MemberLevelService;
 import com.nowui.chuangshi.api.member.service.MemberService;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
+import com.nowui.chuangshi.model.*;
+import com.nowui.chuangshi.api.member.model.MemberLevel;
 import com.nowui.chuangshi.util.ValidateUtil;
 
 import com.alibaba.fastjson.JSONArray;
@@ -21,13 +24,6 @@ import com.nowui.chuangshi.api.trade.model.MemberDeliveryOrder;
 import com.nowui.chuangshi.api.trade.service.MemberDeliveryOrderService;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Url;
-import com.nowui.chuangshi.model.Express;
-import com.nowui.chuangshi.model.MemberAddress;
-import com.nowui.chuangshi.model.MemberPurchaseOrder;
-import com.nowui.chuangshi.model.MemberPurchaseOrderProductSku;
-import com.nowui.chuangshi.model.Product;
-import com.nowui.chuangshi.model.ProductSku;
-import com.nowui.chuangshi.model.ProductSkuPrice;
 import com.nowui.chuangshi.service.MemberAddressService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderExpressService;
 import com.nowui.chuangshi.service.MemberPurchaseOrderProductSkuService;
@@ -37,6 +33,7 @@ import com.nowui.chuangshi.service.ProductSkuPriceService;
 import com.nowui.chuangshi.service.ProductSkuService;
 import com.nowui.chuangshi.type.MemberPurchaseOrderFlow;
 import com.nowui.chuangshi.util.Util;
+import org.apache.http.HttpStatus;
 
 public class MemberPurchaseOrderController extends Controller {
 
@@ -188,7 +185,7 @@ public class MemberPurchaseOrderController extends Controller {
         List<Express> expressList = new ArrayList<>();
         if (member_purchase_order.getMember_purchase_order_flow().equals(MemberPurchaseOrderFlow.WAIT_RECEIVE.getKey())
                 || member_purchase_order.getMember_purchase_order_flow()
-                        .equals(MemberPurchaseOrderFlow.COMPLETE.getKey())) {
+                .equals(MemberPurchaseOrderFlow.COMPLETE.getKey())) {
             expressList = memberPurchaseOrderExpressService
                     .listByMember_purchase_order_id(member_purchase_order.getMember_purchase_order_id());
             for (Express express : expressList) {
@@ -226,9 +223,128 @@ public class MemberPurchaseOrderController extends Controller {
         renderSuccessJson(member_purchase_order);
     }
 
+    //拆单
+    @ActionKey(Url.MEMBER_PURCHASE_ORDER_SPLIT)
+    public void split() {
+        validateRequest_app_id();
+
+        validate(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_WAREHOUSE_RECEIVE,
+                MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_MESSAGE, Product.PRODUCT_SKU_LIST, "open_id");
+        JSONObject jsonObject = getParameterJSONObject();
+        Boolean member_purchase_order_is_warehouse_receive = jsonObject
+                .getBoolean(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_WAREHOUSE_RECEIVE);
+        // 非仓库待收，需填写收货人信息
+        if (!member_purchase_order_is_warehouse_receive) {
+            validate(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_RECEIVER_NAME,
+                    MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_RECEIVER_MOBILE,
+                    MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_RECEIVER_PROVINCE,
+                    MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_RECEIVER_CITY,
+                    MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_RECEIVER_AREA,
+                    MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_RECEIVER_ADDRESS);
+        }
+        MemberPurchaseOrder model = getModel(MemberPurchaseOrder.class);
+
+        String request_app_id = getRequest_app_id();
+        String request_user_id = getRequest_user_id();
+
+        JSONArray jsonArray = jsonObject.getJSONArray(Product.PRODUCT_SKU_LIST);
+        String open_id = jsonObject.getString("open_id");
+
+        authenticateRequest_app_idAndRequest_user_id();
+
+        User user = UserService.instance.find(request_user_id);
+        Member member = MemberService.instance.find(user.getObject_id());
+
+
+        // 判断会员是否有上级，无上级不能进货
+        if (ValidateUtil.isNullOrEmpty(member.getMember_parent_id())) {
+            throw new RuntimeException("没有上级，不能进货");
+        }
+        Member parent = MemberService.instance.find(member.getMember_parent_id());
+        String parent_user_id = parent.getUser_id();
+
+        int member_purchase_order_total_quantity = 0;
+
+
+        BigDecimal member_purchase_order_product_amount = new BigDecimal(0);
+        //for (int i = 0; i < jsonArray.size(); i++) {
+        //MemberPurchaseOrderProductSku memberPurchaseOrderProductSku = jsonArray.getJSONObject(i)
+        //      .toJavaObject(MemberPurchaseOrderProductSku.class);
+        MemberPurchaseOrderProductSku memberPurchaseOrderProductSku = jsonArray.getJSONObject(0)
+                .toJavaObject(MemberPurchaseOrderProductSku.class);
+
+
+        for (int less_quantity = memberPurchaseOrderProductSku.getProduct_sku_quantity();
+             less_quantity > 0;
+             less_quantity = less_quantity - 400) {
+            String member_purchase_order_id = Util.getRandomUUID();
+
+            int quantity = 400;
+            if (less_quantity < quantity) {
+                quantity = less_quantity;
+
+            }
+            BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(
+                    memberPurchaseOrderProductSku.getProduct_sku_id(), member.getMember_level_id());
+
+            BigDecimal product_sku_amount = product_sku_price
+                    .multiply(new BigDecimal(quantity));
+
+            //保存订单商品信息
+            memberPurchaseOrderProductSkuService.save(member_purchase_order_id,
+                    memberPurchaseOrderProductSku.getProduct_sku_id(), "",
+                    memberPurchaseOrderProductSku.getProduct_sku_quantity(), product_sku_amount, request_user_id);
+
+            member_purchase_order_total_quantity = quantity;
+            member_purchase_order_product_amount = product_sku_amount;
+            //}
+
+
+            String member_purchase_order_number = memberPurchaseOrderService.generateMember_purchase_order_number();
+            String member_purchase_order_flow = MemberPurchaseOrderFlow.WAIT_PAY.getKey();
+            BigDecimal member_purchase_order_express_amount = new BigDecimal(0);
+            BigDecimal member_purchase_order_discount_amount = new BigDecimal(0);
+            String member_purchase_order_express_pay_way = "";
+            String member_purchase_order_express_shipper_code = "";
+            boolean member_purchase_order_is_pay = false;
+            boolean member_purchase_order_is_complete = false;
+            String member_purchase_order_receiver_name = "";
+            String member_purchase_order_receiver_mobile = "";
+            String member_purchase_order_receiver_province = "";
+            String member_purchase_order_receiver_city = "";
+            String member_purchase_order_receiver_area = "";
+            String member_purchase_order_receiver_address = "";
+            if (!member_purchase_order_is_warehouse_receive) {
+                member_purchase_order_receiver_name = model.getMember_purchase_order_receiver_name();
+                member_purchase_order_receiver_mobile = model.getMember_purchase_order_receiver_mobile();
+                member_purchase_order_receiver_province = model.getMember_purchase_order_receiver_province();
+                member_purchase_order_receiver_city = model.getMember_purchase_order_receiver_city();
+                member_purchase_order_receiver_area = model.getMember_purchase_order_receiver_area();
+                member_purchase_order_receiver_address = model.getMember_purchase_order_receiver_address();
+            }
+
+            //保存订单表信息
+            memberPurchaseOrderService.save(member_purchase_order_id, request_app_id, request_user_id,
+                    member.getMember_level_id(), parent_user_id, member_purchase_order_number,
+                    member_purchase_order_product_amount, member_purchase_order_express_amount,
+                    member_purchase_order_discount_amount, member_purchase_order_product_amount,
+                    member_purchase_order_total_quantity, member_purchase_order_receiver_name,
+                    member_purchase_order_receiver_mobile, member_purchase_order_receiver_province,
+                    member_purchase_order_receiver_city, member_purchase_order_receiver_area,
+                    member_purchase_order_receiver_address, member_purchase_order_express_pay_way,
+                    member_purchase_order_express_shipper_code, member_purchase_order_is_warehouse_receive,
+                    member_purchase_order_is_pay, member_purchase_order_flow, member_purchase_order_is_complete,
+                    model.getMember_purchase_order_message(), request_user_id);
+        }
+        renderSuccessJson();
+
+    }
+
     @ActionKey(Url.MEMBER_PURCHASE_ORDER_SAVE)
     public void save() {
         validateRequest_app_id();
+
+
         validate(MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_IS_WAREHOUSE_RECEIVE,
                 MemberPurchaseOrder.MEMBER_PURCHASE_ORDER_MESSAGE, Product.PRODUCT_SKU_LIST, "open_id");
         JSONObject jsonObject = getParameterJSONObject();
@@ -256,70 +372,83 @@ public class MemberPurchaseOrderController extends Controller {
 
         User user = UserService.instance.find(request_user_id);
         Member member = MemberService.instance.find(user.getObject_id());
-        // 判断会员是否有上级，无上级不能进货
-        if (ValidateUtil.isNullOrEmpty(member.getMember_parent_id())) {
-            throw new RuntimeException("没有上级，不能进货");
-        }
-        Member parent = MemberService.instance.find(member.getMember_parent_id());
-        String parent_user_id = parent.getUser_id();
-        
-        int member_purchase_order_total_quantity = 0;
-        BigDecimal member_purchase_order_product_amount = new BigDecimal(0);
-        for (int i = 0; i < jsonArray.size(); i++) {
-            MemberPurchaseOrderProductSku memberPurchaseOrderProductSku = jsonArray.getJSONObject(i)
-                    .toJavaObject(MemberPurchaseOrderProductSku.class);
-            BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(
-                    memberPurchaseOrderProductSku.getProduct_sku_id(), member.getMember_level_id());
-            BigDecimal product_sku_amount = product_sku_price
-                    .multiply(new BigDecimal(memberPurchaseOrderProductSku.getProduct_sku_quantity()));
-            memberPurchaseOrderProductSkuService.save(member_purchase_order_id,
-                    memberPurchaseOrderProductSku.getProduct_sku_id(), "",
-                    memberPurchaseOrderProductSku.getProduct_sku_quantity(), product_sku_amount, request_user_id);
-            member_purchase_order_total_quantity += memberPurchaseOrderProductSku.getProduct_sku_quantity();
-            member_purchase_order_product_amount = member_purchase_order_product_amount.add(product_sku_amount);
-        }
 
-        String member_purchase_order_number = memberPurchaseOrderService.generateMember_purchase_order_number();
-        String member_purchase_order_flow = MemberPurchaseOrderFlow.WAIT_PAY.getKey();
-        BigDecimal member_purchase_order_express_amount = new BigDecimal(0);
-        BigDecimal member_purchase_order_discount_amount = new BigDecimal(0);
-        String member_purchase_order_express_pay_way = "";
-        String member_purchase_order_express_shipper_code = "";
-        boolean member_purchase_order_is_pay = false;
-        boolean member_purchase_order_is_complete = false;
-        String member_purchase_order_receiver_name = "";
-        String member_purchase_order_receiver_mobile = "";
-        String member_purchase_order_receiver_province = "";
-        String member_purchase_order_receiver_city = "";
-        String member_purchase_order_receiver_area = "";
-        String member_purchase_order_receiver_address = "";
-        if (!member_purchase_order_is_warehouse_receive) {
-            member_purchase_order_receiver_name = model.getMember_purchase_order_receiver_name();
-            member_purchase_order_receiver_mobile = model.getMember_purchase_order_receiver_mobile();
-            member_purchase_order_receiver_province = model.getMember_purchase_order_receiver_province();
-            member_purchase_order_receiver_city = model.getMember_purchase_order_receiver_city();
-            member_purchase_order_receiver_area = model.getMember_purchase_order_receiver_area();
-            member_purchase_order_receiver_address = model.getMember_purchase_order_receiver_address();
+        //董事需要拆单
+        MemberLevel memberlevel = MemberLevelService.instance.find(member.getMember_level_id());
+        if (memberlevel != null && memberlevel.getMember_level_value().equals(4) && memberlevel.getMember_level_name().equals("董事")) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put(Constant.CODE, HttpStatus.SC_NO_CONTENT);
+
+            renderSuccessJson(map);
+            //throw new RuntimeException("支付金额过大，建议拆单");
+        } else {
+
+
+            // 判断会员是否有上级，无上级不能进货
+            if (ValidateUtil.isNullOrEmpty(member.getMember_parent_id())) {
+                throw new RuntimeException("没有上级，不能进货");
+            }
+            Member parent = MemberService.instance.find(member.getMember_parent_id());
+            String parent_user_id = parent.getUser_id();
+
+            int member_purchase_order_total_quantity = 0;
+            BigDecimal member_purchase_order_product_amount = new BigDecimal(0);
+            for (int i = 0; i < jsonArray.size(); i++) {
+                MemberPurchaseOrderProductSku memberPurchaseOrderProductSku = jsonArray.getJSONObject(i)
+                        .toJavaObject(MemberPurchaseOrderProductSku.class);
+                BigDecimal product_sku_price = productSkuPriceService.findByProduct_sku_idAndMember_level_id(
+                        memberPurchaseOrderProductSku.getProduct_sku_id(), member.getMember_level_id());
+                BigDecimal product_sku_amount = product_sku_price
+                        .multiply(new BigDecimal(memberPurchaseOrderProductSku.getProduct_sku_quantity()));
+                memberPurchaseOrderProductSkuService.save(member_purchase_order_id,
+                        memberPurchaseOrderProductSku.getProduct_sku_id(), "",
+                        memberPurchaseOrderProductSku.getProduct_sku_quantity(), product_sku_amount, request_user_id);
+                member_purchase_order_total_quantity += memberPurchaseOrderProductSku.getProduct_sku_quantity();
+                member_purchase_order_product_amount = member_purchase_order_product_amount.add(product_sku_amount);
+            }
+
+            String member_purchase_order_number = memberPurchaseOrderService.generateMember_purchase_order_number();
+            String member_purchase_order_flow = MemberPurchaseOrderFlow.WAIT_PAY.getKey();
+            BigDecimal member_purchase_order_express_amount = new BigDecimal(0);
+            BigDecimal member_purchase_order_discount_amount = new BigDecimal(0);
+            String member_purchase_order_express_pay_way = "";
+            String member_purchase_order_express_shipper_code = "";
+            boolean member_purchase_order_is_pay = false;
+            boolean member_purchase_order_is_complete = false;
+            String member_purchase_order_receiver_name = "";
+            String member_purchase_order_receiver_mobile = "";
+            String member_purchase_order_receiver_province = "";
+            String member_purchase_order_receiver_city = "";
+            String member_purchase_order_receiver_area = "";
+            String member_purchase_order_receiver_address = "";
+            if (!member_purchase_order_is_warehouse_receive) {
+                member_purchase_order_receiver_name = model.getMember_purchase_order_receiver_name();
+                member_purchase_order_receiver_mobile = model.getMember_purchase_order_receiver_mobile();
+                member_purchase_order_receiver_province = model.getMember_purchase_order_receiver_province();
+                member_purchase_order_receiver_city = model.getMember_purchase_order_receiver_city();
+                member_purchase_order_receiver_area = model.getMember_purchase_order_receiver_area();
+                member_purchase_order_receiver_address = model.getMember_purchase_order_receiver_address();
+            }
+
+            Boolean flag = memberPurchaseOrderService.save(member_purchase_order_id, request_app_id, request_user_id,
+                    member.getMember_level_id(), parent_user_id, member_purchase_order_number,
+                    member_purchase_order_product_amount, member_purchase_order_express_amount,
+                    member_purchase_order_discount_amount, member_purchase_order_product_amount,
+                    member_purchase_order_total_quantity, member_purchase_order_receiver_name,
+                    member_purchase_order_receiver_mobile, member_purchase_order_receiver_province,
+                    member_purchase_order_receiver_city, member_purchase_order_receiver_area,
+                    member_purchase_order_receiver_address, member_purchase_order_express_pay_way,
+                    member_purchase_order_express_shipper_code, member_purchase_order_is_warehouse_receive,
+                    member_purchase_order_is_pay, member_purchase_order_flow, member_purchase_order_is_complete,
+                    model.getMember_purchase_order_message(), request_user_id);
+
+            Map<String, String> result = new HashMap<>();
+            if (flag) {
+                result = memberPurchaseOrderService.pay(member_purchase_order_id, open_id, "WX", request_user_id);
+            }
+
+            renderSuccessJson(result);
         }
-
-        Boolean flag = memberPurchaseOrderService.save(member_purchase_order_id, request_app_id, request_user_id,
-                member.getMember_level_id(), parent_user_id, member_purchase_order_number,
-                member_purchase_order_product_amount, member_purchase_order_express_amount,
-                member_purchase_order_discount_amount, member_purchase_order_product_amount,
-                member_purchase_order_total_quantity, member_purchase_order_receiver_name,
-                member_purchase_order_receiver_mobile, member_purchase_order_receiver_province,
-                member_purchase_order_receiver_city, member_purchase_order_receiver_area,
-                member_purchase_order_receiver_address, member_purchase_order_express_pay_way,
-                member_purchase_order_express_shipper_code, member_purchase_order_is_warehouse_receive,
-                member_purchase_order_is_pay, member_purchase_order_flow, member_purchase_order_is_complete,
-                model.getMember_purchase_order_message(), request_user_id);
-
-        Map<String, String> result = new HashMap<>();
-        if (flag) {
-            result = memberPurchaseOrderService.pay(member_purchase_order_id, open_id, "WX", request_user_id);
-        }
-
-        renderSuccessJson(result);
     }
 
     @ActionKey(Url.MEMBER_PURCHASE_ORDER_PAY)
