@@ -435,6 +435,7 @@ public class Url {
     public static final String EXPRESS_SYSTEM_DELETE = "/express/system/delete";
     public static final String EXPRESS_SYSTEM_COMPLETE = "/express/system/complete";
     public static final String EXPRESS_PUSH = "/express/push";
+    public static final String EXPRESS_CALLBACK = "/express/callback";
 
     // 交易
     public static final String TRADE_LIST = "/trade/list";
