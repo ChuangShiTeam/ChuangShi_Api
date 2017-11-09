@@ -263,7 +263,7 @@ public class TradeController extends Controller {
                 trade_flow, model.getTrade_deliver_pattern(), trade_status, "", request_user_id);
         Map<String, String> result = new HashMap<>();
         //如果是先付款后发货，则要进行支付
-        if (flag && model.getTrade_deliver_pattern().equals(TradeDeliveryPattern.CASH_BEFORE_DELIVERY.getKey())) {
+        if (flag && TradeDeliveryPattern.CASH_BEFORE_DELIVERY.getKey().equals(model.getTrade_deliver_pattern())) {
             result = tradeService.pay(trade_id, open_id, "WX", request_user_id);
         } else {
         	result.put("trade_id", trade_id);
