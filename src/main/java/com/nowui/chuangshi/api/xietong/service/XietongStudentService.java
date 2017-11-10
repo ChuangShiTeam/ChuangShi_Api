@@ -84,6 +84,21 @@ public class XietongStudentService extends Service {
         return studentList;
     }
     
+    public List<XietongStudent> organizationAndCategoryList(String organization_id, String category_id, Integer m, Integer n) {
+        Cnd cnd = new Cnd();
+        cnd.leftJoin(XietongClazz.TABLE_XIETONG_CLAZZ, XietongClazz.CLAZZ_ID, XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.CLAZZ_ID);
+        cnd.where(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.SYSTEM_STATUS, true);
+        cnd.where(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.ORGANIZATION_ID, organization_id);
+        cnd.and(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_CATEGORY_ID, category_id);
+        cnd.desc(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.SYSTEM_UPDATE_TIME);
+        
+        List<XietongStudent> studentList = xietongStudentDao.primaryKeyList(cnd);
+        for (XietongStudent student : studentList) {
+            student.put(find(student.getStudent_id()));
+        }
+        return studentList;
+    }
+    
     public XietongStudent userFind(String user_id) {
         
         User user = UserService.instance.find(user_id);
