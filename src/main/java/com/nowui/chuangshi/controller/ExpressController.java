@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
@@ -54,6 +56,7 @@ public class ExpressController extends Controller {
         resp.setMessage("保存失败");
         try {
             String param = getPara("param");
+            param = StringEscapeUtils.unescapeHtml4(param);
             System.out.println(param);
             NoticeRequest nReq = JSONObject.parseObject(param, NoticeRequest.class);
 
@@ -157,6 +160,8 @@ public class ExpressController extends Controller {
     @ActionKey(Url.EXPRESS_PUSH)
     public void push() {
         String requestData = getPara("RequestData");
+        
+        requestData = StringEscapeUtils.unescapeHtml4(requestData);
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("EBusinessID", Kdniao.EBusinessID);
