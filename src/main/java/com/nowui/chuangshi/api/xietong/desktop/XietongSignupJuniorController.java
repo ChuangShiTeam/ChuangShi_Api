@@ -17,7 +17,6 @@ import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.AesUtil;
-import com.nowui.chuangshi.util.Util;
 
 @ControllerKey("/desktop/xietong/signup/junior")
 public class XietongSignupJuniorController extends Controller {
