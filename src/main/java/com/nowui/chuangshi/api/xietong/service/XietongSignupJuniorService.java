@@ -1,12 +1,22 @@
 package com.nowui.chuangshi.api.xietong.service;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import com.alibaba.fastjson.JSONObject;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.api.xietong.dao.XietongSignupJuniorDao;
 import com.nowui.chuangshi.api.xietong.model.XietongSignupJunior;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
+import com.nowui.chuangshi.constant.Config;
+import com.nowui.chuangshi.constant.Constant;
+import com.nowui.chuangshi.type.UserType;
+import com.nowui.chuangshi.util.AesUtil;
 import com.nowui.chuangshi.util.CacheUtil;
-
-import java.util.List;
+import com.nowui.chuangshi.util.Util;
 
 public class XietongSignupJuniorService extends Service {
 
@@ -59,6 +69,51 @@ public class XietongSignupJuniorService extends Service {
         Boolean success = xietongSignupJuniorDao.save(xietong_signup_junior, system_create_user_id);
         return success;
     }
+    
+    public String save(XietongSignupJunior xietong_signup_junior, User user, String system_create_user_id) {
+    	String user_id = Util.getRandomUUID();
+    	xietong_signup_junior.setUser_id(user_id);
+    	xietong_signup_junior.setSignup_id(Util.getRandomUUID());
+        Boolean result = save(xietong_signup_junior, system_create_user_id);
+        
+        String token = null;
+
+        if (result) {
+        	user.setUser_password("123456");	//初始密码为123456 
+            UserService.instance.userAccountSave(user_id, xietong_signup_junior.getApp_id(), xietong_signup_junior.getSignup_id(), UserType.JUNIOR_ADMISSIONS.getKey(), xietong_signup_junior.getStudent_name(), xietong_signup_junior.getId_no(), user.getUser_password(), system_create_user_id);
+            
+            Date date = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.YEAR, 1);
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(User.USER_ID, user_id);
+            jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
+            
+            try {
+				token = AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        }
+
+        return token;
+    }
+    
+    /**
+     * 根据用户编号查询
+     * @param user_id
+     * @return
+     */
+    public XietongSignupJunior userFind(String user_id) {
+    	 Cnd cnd = new Cnd();
+         cnd.where(XietongSignupJunior.SYSTEM_STATUS, true);
+         cnd.and(XietongSignupJunior.USER_ID, user_id);
+         
+         return xietongSignupJuniorDao.find(cnd);
+    }
+
 
     //根据证件号码查询
     public XietongSignupJunior idNoFind(String id_no) {
@@ -75,6 +130,7 @@ public class XietongSignupJuniorService extends Service {
 
         return xietong_signup_junior;
     }
+    
     public Boolean update(XietongSignupJunior xietong_signup_junior, String signup_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = new Cnd();
         cnd.where(XietongSignupJunior.SYSTEM_STATUS, true);

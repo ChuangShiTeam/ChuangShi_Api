@@ -1,7 +1,6 @@
 package com.nowui.chuangshi.api.xietong.desktop;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.xietong.model.XietongTeacherRecruitment;
 import com.nowui.chuangshi.api.xietong.service.XietongTeacherRecruitmentService;

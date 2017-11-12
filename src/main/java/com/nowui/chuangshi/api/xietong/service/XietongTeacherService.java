@@ -1,8 +1,8 @@
 package com.nowui.chuangshi.api.xietong.service;
 
+import java.util.List;
+
 import com.nowui.chuangshi.api.file.model.File;
-import com.nowui.chuangshi.api.file.service.FileService;
-import com.nowui.chuangshi.api.product.model.ProductBrand;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.api.xietong.dao.XietongTeacherDao;
@@ -14,8 +14,6 @@ import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.CacheUtil;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
-
-import java.util.List;
 
 public class XietongTeacherService extends Service {
 

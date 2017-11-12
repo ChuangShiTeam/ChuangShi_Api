@@ -18,6 +18,9 @@ public class XietongSignupPupil extends Model<XietongSignupPupil> {
     @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "报名id 主键", updatable = false)
     public static final String SIGNUP_ID = "signup_id";
+    
+    @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户编号")
+    public static final String USER_ID = "user_id";
 
     @Column(type = ColumnType.VARCHAR, length = 20, comment = "学生姓名")
     public static final String STUDENT_NAME = "student_name";
@@ -106,6 +109,14 @@ public class XietongSignupPupil extends Model<XietongSignupPupil> {
 
     public void setSignup_id(String signup_id) {
         set(SIGNUP_ID, signup_id);
+    }
+    
+    public String getUser_id() {
+        return getStr(USER_ID);
+    }
+
+    public void setUser_id(String user_id) {
+        set(USER_ID, user_id);
     }
 
     public String getStudent_name() {
