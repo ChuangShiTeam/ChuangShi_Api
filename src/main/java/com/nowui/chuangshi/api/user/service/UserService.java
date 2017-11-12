@@ -260,8 +260,6 @@ public class UserService extends Service {
     }
 
     public static void main(String[] args) {
-        System.out.println(StringEscapeUtils.escapeHtml4("http://wx.qlogo.cn/mmopen/JcDicrZBlREhnNXZRudod9PmibRkIs5K2f1tUQ7lFjC63pYHaXGxNDgMzjGDEuvzYZbFOqtUXaxSdoZG6iane5ko9H30krIbzGv/0"));
-
         try {
             Date date = new Date();
             Calendar calendar = Calendar.getInstance();
@@ -269,7 +267,7 @@ public class UserService extends Service {
             calendar.add(Calendar.YEAR, 1);
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(User.USER_ID, "b4ebfc43c1ea448291d0629ca002b092");
+            jsonObject.put(User.USER_ID, "ffb11c2d4a3043ec8eb28c8cca9d1fc8");
             jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
 
             System.out.println(AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));

@@ -22,6 +22,15 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
     private Criteria criteria;
 
+    public Boolean getBoolean(String attr) {
+        Object value = this.getAttrs().get(attr);
+        if (value instanceof Integer) {
+            return (Integer)value == Integer.valueOf(1);
+        } else {
+            return (Boolean)value;
+        }
+    }
+
     public Map<String, Object> getAttrsMap() {
         return this.getAttrs();
     }

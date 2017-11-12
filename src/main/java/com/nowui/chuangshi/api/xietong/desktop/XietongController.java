@@ -35,14 +35,14 @@ public class XietongController extends Controller {
 
         List<Article> articleList = ArticleService.instance.topCategoryList(articleCategoryIdList, 4);
 
-        validateResponse(Article.ARTICLE_ID, Article.ARTICLE_CATEGORY_ID, File.FILE_PATH, Article.ARTICLE_NAME, Article.ARTICLE_SUMMARY, Article.SYSTEM_CREATE_TIME);
+        validateResponse(Article.ARTICLE_ID, Article.ARTICLE_CATEGORY_ID, File.FILE_PATH, Article.ARTICLE_NAME, Article.ARTICLE_OUTER_LINK, Article.ARTICLE_IS_OUTER_LINK, Article.ARTICLE_SUMMARY, Article.SYSTEM_CREATE_TIME);
 
         renderSuccessJson(articleList);
     }
 
     @ActionKey("/desktop/xietong/website/init")
     public void init() {
-        String request_app_id = getRequest_app_id();
+        String request_app_id = "749388e5dac3465f922c54e61d16a993";
 
         Map<String, Object> result = new HashMap<String, Object>();
 
@@ -63,6 +63,25 @@ public class XietongController extends Controller {
         result.put("article_category_list", articleCategoryList);
 
         validateResponse("website_menu_list", "advertisement_list", "article_category_list");
+
+        renderSuccessJson(result);
+    }
+
+    @ActionKey("/desktop/xietong/primary/school/init")
+    public void primarySchoolInit() {
+        String request_app_id = "749388e5dac3465f922c54e61d16a993";
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
+        for (ArticleCategory articleCategory : articleCategoryList) {
+            articleCategory.keep(ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.ARTICLE_CATEGORY_NAME);
+        }
+
+//        result.put("article_list", websiteMenuList);
+//        result.put("student_list", advertisementList);
+
+        validateResponse("article_list", "student_list");
 
         renderSuccessJson(result);
     }

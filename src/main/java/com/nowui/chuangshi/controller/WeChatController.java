@@ -162,28 +162,28 @@ public class WeChatController extends Controller {
 
     @ActionKey(Url.WECHAT_MENU)
     public void menu() {
-//        App app = AppService.instance.find("c1af3f1ae00e4e0da9b20f5bd41b4279");
+        App app = AppService.instance.find("c1af3f1ae00e4e0da9b20f5bd41b4279");
+//
+        String wechat_app_id = ApiConfigKit.getAppId();
+        if (!wechat_app_id.equals(app.getWechat_app_id())) {
+            ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+        }
+
+        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"V+Lab\",\"url\":\"http://h5."
+                + "xingxiao.nowui.com" + "/?#/launch\"}]}");
+
+//        App app = AppService.instance.find("8acc2d49ad014f418878d1a16336c16b");
 //
 //        String wechat_app_id = ApiConfigKit.getAppId();
 //        if (!wechat_app_id.equals(app.getWechat_app_id())) {
 //            ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+////            AccessTokenApi.refreshAccessToken();
 //        }
 //
-//        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"type\":\"view\",\"name\":\"星创会\",\"url\":\"http://h5."
-//                + "xingxiao.nowui.com" + "/?#/launch\"}]}");
-
-        App app = AppService.instance.find("8acc2d49ad014f418878d1a16336c16b");
-
-        String wechat_app_id = ApiConfigKit.getAppId();
-        if (!wechat_app_id.equals(app.getWechat_app_id())) {
-            ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
-//            AccessTokenApi.refreshAccessToken();
-        }
-
-        System.out.println(AccessTokenApi.getAccessToken().getAccessToken());
-
-        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"name\":\"党建功能\",\"sub_button\":[{\"type\":\"view\",\"name\":\"党建中心\",\"url\":\"http://h5.minhang.nowui.com/?#/index\"},{\"type\":\"media_id\",\"name\":\"党员报到\",\"media_id\":\"Kzln8waR4IBj68ltHTU1fT0q_Wp90yZuBUePDMxOnrM\"},{\"type\":\"media_id\",\"name\":\"城市党建\",\"media_id\":\"Kzln8waR4IBj68ltHTU1fWAl1OE9g-TSI-1h5PncypM\"}]},{\"type\":\"view\",\"name\":\"微信矩阵\",\"url\":\"http://praymorn01.creatby.com\"},{\"type\":\"click\",\"name\":\"欢迎来稿\",\"key\":\"welcome_contribution\"}]}");
-        System.out.println(apiResult.getJson());
+//        System.out.println(AccessTokenApi.getAccessToken().getAccessToken());
+//
+//        ApiResult apiResult = MenuApi.createMenu("{\"button\":[{\"name\":\"党建功能\",\"sub_button\":[{\"type\":\"view\",\"name\":\"党建中心\",\"url\":\"http://h5.minhang.nowui.com/?#/index\"},{\"type\":\"media_id\",\"name\":\"党员报到\",\"media_id\":\"Kzln8waR4IBj68ltHTU1fT0q_Wp90yZuBUePDMxOnrM\"},{\"type\":\"media_id\",\"name\":\"城市党建\",\"media_id\":\"Kzln8waR4IBj68ltHTU1fWAl1OE9g-TSI-1h5PncypM\"}]},{\"type\":\"view\",\"name\":\"微信矩阵\",\"url\":\"http://praymorn01.creatby.com\"},{\"type\":\"click\",\"name\":\"欢迎来稿\",\"key\":\"welcome_contribution\"}]}");
+//        System.out.println(apiResult.getJson());
 
 
 //        String url = "https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=" + AccessTokenApi.getAccessTokenStr();

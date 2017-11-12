@@ -8,8 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
+import com.jfinal.weixin.sdk.utils.HttpUtils;
 import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.file.service.FileService;
@@ -42,12 +44,13 @@ public class CertificateController extends Controller {
     // 默认最低100条
     @ActionKey(Url.CERTIFICATE_WEBSITE_FIND)
     public void websiteFind() {
-        validate(Certificate.CERTIFICATE_NUMBER, App.APP_ID);
+        validate(Certificate.CERTIFICATE_NUMBER);
 
         Certificate model = getModel(Certificate.class);
+        String request_app_id = getRequest_app_id();
 
         List<Certificate> certificateList = certificateService
-                .listByApp_idOrLikeCertificate_numberAndLimit(model.getApp_id(), model.getCertificate_number(), 0, 100);
+                .listByApp_idOrLikeCertificate_numberAndLimit(request_app_id, model.getCertificate_number(), 0, 100);
 
         List<CertificateImage> certificateImageWXList = new ArrayList<>();
         List<CertificateImage> certificateImageOtherList = new ArrayList<>();
@@ -71,6 +74,18 @@ public class CertificateController extends Controller {
 
         certificateImageWXList.addAll(certificateImageOtherList);
         renderSuccessJson(certificateImageWXList);
+    }
+
+    @ActionKey(Url.CERTIFICATE_QRCODE_FIND)
+    public void qrcodeFind() {
+        validate("fwcode", "vcode");
+
+        JSONObject jsonObject = getParameterJSONObject();
+
+        String jsonResult = HttpUtils.get("http://www.12365.cm/fwqueryjsonv.ashx?fwcode=" + jsonObject.getString("fwcode") + "&vcode=" + jsonObject.getString("vcode"));
+        jsonResult = jsonResult.substring(1, jsonResult.length());
+        jsonResult = jsonResult.substring(0, jsonResult.length() - 1);
+        renderSuccessJson(JSON.parseObject(jsonResult));
     }
 
     @ActionKey(Url.CERTIFICATE_LIST)
