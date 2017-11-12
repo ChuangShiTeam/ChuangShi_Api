@@ -238,17 +238,15 @@ public class TradeService extends Service {
     	Trade trade = findByTrade_id(trade_id);
     	if (TradeFlow.WAIT_RECEIVE.getKey().equals(trade.getTrade_flow())) {  //订单处于待收货状态才可以完成订单
     		//如果是货到付款则需要
-    	    /*if (trade.getTrade_deliver_pattern().equals(TradeDeliveryPattern.CASH_ON_DELIVERY.getKey())) {
+    	    if (trade.getTrade_deliver_pattern().equals(TradeDeliveryPattern.CASH_ON_DELIVERY.getKey())) {
     	    	boolean isUpdate = updateTrade_is_payAndTrade_flowAndSystem_update_user_idAndSystem_update_timeAndByTrade_idAndSystem_version(
     	                trade_id, true, TradeFlow.COMPLETE.getKey(), trade.getSystem_update_user_id(), trade.getSystem_version());
     	    	if (isUpdate) {
     	    		payChange(trade_id);
     	    	}
     	    } else {
-    	    	
-    	    }*/
-    	    return updateTrade_flowByTrade_idValidateSystem_version(trade_id, TradeFlow.COMPLETE.getKey(), trade.getSystem_update_user_id(), trade.getSystem_version());
-
+    	          return updateTrade_flowByTrade_idValidateSystem_version(trade_id, TradeFlow.COMPLETE.getKey(), trade.getSystem_update_user_id(), trade.getSystem_version());
+    	    }
     	}
     	return false;
     }

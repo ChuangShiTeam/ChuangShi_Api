@@ -8,7 +8,8 @@ public enum UserType {
     DEALER("DEALER", "经销商"),
     SUPPLIER("SUPPLIER", "供应商"),
     STUDENT("STUDENT", "学生"),
-    ADMISSIONS("ADMISSIONS", "报名者"),
+    PUPIL_ADMISSIONS("PUPIL_ADMISSIONS", "小学报名者"),
+    JUNIOR_ADMISSIONS("JUNIOR_ADMISSIONS", "中学报名者"),
     TEACHER("TEACHER", "老师"),
     RENAULT_MEMBER("RENAULT_MEMBER", "雷诺会员");
 

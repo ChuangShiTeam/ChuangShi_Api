@@ -112,6 +112,14 @@
     AND express_id = #p(express_id)
   #end
   
+  #sql("findByExpress_no")
+    SELECT
+    *
+    FROM table_express
+    WHERE system_status = 1
+    AND express_no = #p(express_no)
+  #end
+  
   #sql("save")
     INSERT INTO table_express (
       express_id,

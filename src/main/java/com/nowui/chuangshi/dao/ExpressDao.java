@@ -106,6 +106,21 @@ public class ExpressDao extends Dao {
             return expressList.get(0);
         }
     }
+    
+    public Express findByExpress_no(String express_no) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put(Express.EXPRESS_NO, express_no);
+        SqlPara sqlPara = Db.getSqlPara("express.findByExpress_no", sqlMap);
+        
+        logSql("express", "findByExpress_no", sqlPara);
+        
+        List<Express> expressList = new Express().find(sqlPara.getSql(), sqlPara.getPara());
+        if (expressList.size() == 0) {
+            return null;
+        } else {
+            return expressList.get(0);
+        }
+    }
 
     public Boolean save(String express_id, String app_id, String express_belong, String express_shipper_code, String express_no, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile, String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address, String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province, String express_sender_city, String express_sender_area, String express_sender_address, BigDecimal express_cost, Boolean express_is_pay, String express_pay_way, String express_traces, String express_flow, Boolean express_is_complete, String express_remark, String system_create_user_id) {
         Kv sqlMap = Kv.create();

@@ -258,6 +258,7 @@ public class Url {
     public static final String MEMBER_PURCHASE_ORDER_LIST = "/member/purchase/order/list";
     public static final String MEMBER_PURCHASE_ORDER_FIND = "/member/purchase/order/find";
     public static final String MEMBER_PURCHASE_ORDER_SAVE = "/member/purchase/order/save";
+    public static final String MEMBER_PURCHASE_ORDER_SPLIT = "/member/purchase/order/split"; //拆分订单
     public static final String MEMBER_PURCHASE_ORDER_UPDATE = "/member/purchase/order/update";
     public static final String MEMBER_PURCHASE_ORDER_DELETE = "/member/purchase/order/delete";
     public static final String MEMBER_PURCHASE_ORDER_CHECK = "/member/purchase/order/check";
@@ -435,6 +436,7 @@ public class Url {
     public static final String EXPRESS_SYSTEM_DELETE = "/express/system/delete";
     public static final String EXPRESS_SYSTEM_COMPLETE = "/express/system/complete";
     public static final String EXPRESS_PUSH = "/express/push";
+    public static final String EXPRESS_CALLBACK = "/express/callback";
 
     // 交易
     public static final String TRADE_LIST = "/trade/list";

@@ -10,6 +10,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.nowui.chuangshi.cache.ExpressCache;
 import com.nowui.chuangshi.constant.Kdniao;
+import com.nowui.chuangshi.constant.Kuaidi100;
+import com.nowui.chuangshi.kuaidi100.HttpRequest;
+import com.nowui.chuangshi.kuaidi100.pojo.TaskRequest;
+import com.nowui.chuangshi.kuaidi100.pojo.TaskResponse;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.util.ExpressUtil;
 
@@ -18,40 +22,63 @@ public class ExpressService extends Service {
     private ExpressCache expressCache = new ExpressCache();
     
     /**
-     * 订阅快递
+     * 订阅快递，顺丰的订阅快递100，其他的订阅快递鸟
      * 
      * @param express_id
      * @param expCode
      * @param expNo
      */
     public void subscription(String express_id, String expCode, String expNo) {
-        String eBusinessID = Kdniao.EBusinessID;
-        String appKey = Kdniao.AppKey;
-        String reqURL = Kdniao.ReqURL;
-
-        try {
-            String requestData = "{'CallBack':'" + express_id + "','OrderCode':'','ShipperCode':'" + expCode
-                    + "','LogisticCode':'" + expNo + "'}";
-
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("RequestData", ExpressUtil.urlEncoder(requestData, "UTF-8"));
-            params.put("EBusinessID", eBusinessID);
-            params.put("RequestType", "1008");
-            String dataSign = ExpressUtil.encrypt(requestData, appKey, "UTF-8");
-            params.put("DataSign", ExpressUtil.urlEncoder(dataSign, "UTF-8"));
-            params.put("DataType", "2");
-
-            String result = ExpressUtil.sendPost(reqURL, params);
-
-            JSONObject jsonObject = JSON.parseObject(result);
-
-            Boolean success = jsonObject.getBoolean("Success");
-
-            if (!success) {
-                throw new RuntimeException("快递单订阅物流信息不成功");
+        if ("SF".equals(expCode)) {
+            TaskRequest req = new TaskRequest();
+            req.setCompany("shunfeng");
+            req.setNumber(expNo);
+            req.getParameters().put("callbackurl", Kuaidi100.KUAIDI100_CALLBACK_URL);
+            req.setKey(Kuaidi100.KUAIDI100_POLL_KEY);
+            
+            HashMap<String, String> p = new HashMap<String, String>(); 
+            p.put("schema", "json");
+            p.put("param", JSONObject.toJSONString(req));
+            try {
+                String ret = HttpRequest.postData(Kuaidi100.KUAIDI100_POLL_URL, "UTF-8");
+                TaskResponse resp = JSONObject.parseObject(ret, TaskResponse.class);
+                if(resp.getResult()==true){
+                    System.out.println("订阅成功");
+                }else{
+                    throw new RuntimeException("快递单订阅物流信息不成功");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            throw new RuntimeException("Exception: " + e.toString());
+        } else {
+            String eBusinessID = Kdniao.EBusinessID;
+            String appKey = Kdniao.AppKey;
+            String reqURL = Kdniao.ReqURL;
+
+            try {
+                String requestData = "{'CallBack':'" + express_id + "','OrderCode':'','ShipperCode':'" + expCode
+                        + "','LogisticCode':'" + expNo + "'}";
+
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("RequestData", ExpressUtil.urlEncoder(requestData, "UTF-8"));
+                params.put("EBusinessID", eBusinessID);
+                params.put("RequestType", "1008");
+                String dataSign = ExpressUtil.encrypt(requestData, appKey, "UTF-8");
+                params.put("DataSign", ExpressUtil.urlEncoder(dataSign, "UTF-8"));
+                params.put("DataType", "2");
+
+                String result = ExpressUtil.sendPost(reqURL, params);
+
+                JSONObject jsonObject = JSON.parseObject(result);
+
+                Boolean success = jsonObject.getBoolean("Success");
+
+                if (!success) {
+                    throw new RuntimeException("快递单订阅物流信息不成功");
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Exception: " + e.toString());
+            }
         }
     }
 
@@ -90,6 +117,10 @@ public class ExpressService extends Service {
 
     public Express findByExpress_id(String express_id) {
         return expressCache.findByExpress_id(express_id);
+    }
+    
+    public Express findByExpress_no(String express_no) {
+        return expressCache.findByExpress_no(express_no);
     }
 
     public Boolean save(String express_id, String app_id, String express_belong, String express_shipper_code, String express_no, String express_receiver_company, String express_receiver_name, String express_receiver_tel, String express_receiver_mobile, String express_receiver_postcode, String express_receiver_province, String express_receiver_city, String express_receiver_area, String express_receiver_address, String express_sender_company, String express_sender_name, String express_sender_tel, String express_sender_mobile, String express_sender_postcode, String express_sender_province, String express_sender_city, String express_sender_area, String express_sender_address, BigDecimal express_cost, Boolean express_is_pay, String express_pay_way, String express_traces, String express_flow, Boolean express_is_complete, String express_remark, String system_create_user_id) {

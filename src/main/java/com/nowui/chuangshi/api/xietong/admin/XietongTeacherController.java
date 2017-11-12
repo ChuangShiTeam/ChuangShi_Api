@@ -32,6 +32,20 @@ public class XietongTeacherController extends Controller {
 
         renderSuccessJson(resultCount, resultList);
     }
+    
+    
+    @ActionKey("/admin/xietong/teacher/all/list")
+    public void allList() {
+
+        String request_app_id = getRequest_app_id();
+
+        List<XietongTeacher> resultList = XietongTeacherService.instance.appList(request_app_id);
+
+        validateResponse(XietongTeacher.TEACHER_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.SYSTEM_VERSION);
+
+        renderSuccessJson(resultList);
+    }
+
 
     @ActionKey("/admin/xietong/teacher/find")
     public void find() {

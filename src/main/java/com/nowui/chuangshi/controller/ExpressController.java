@@ -5,12 +5,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.constant.Kdniao;
+import com.nowui.chuangshi.constant.Kuaidi100;
 import com.nowui.chuangshi.constant.Url;
+import com.nowui.chuangshi.kuaidi100.HttpRequest;
+import com.nowui.chuangshi.kuaidi100.pojo.NoticeRequest;
+import com.nowui.chuangshi.kuaidi100.pojo.NoticeResponse;
+import com.nowui.chuangshi.kuaidi100.pojo.Result;
+import com.nowui.chuangshi.kuaidi100.pojo.ResultItem;
+import com.nowui.chuangshi.kuaidi100.util.MD5;
 import com.nowui.chuangshi.model.Express;
 import com.nowui.chuangshi.model.MemberDeliveryOrderExpress;
 import com.nowui.chuangshi.model.TradeExpress;
@@ -35,13 +44,124 @@ public class ExpressController extends Controller {
     private final TradeExpressService tradeExpressService = new TradeExpressService();
     
     private final TradeService tradeService = new TradeService();
+    
+    /**
+     * 快递100回调推送物流信息
+     */
+    @ActionKey(Url.EXPRESS_CALLBACK)
+    public void callback() {
+        NoticeResponse resp = new NoticeResponse();
+        resp.setResult(false);
+        resp.setReturnCode("500");
+        resp.setMessage("保存失败");
+        try {
+            String param = getPara("param");
+            param = StringEscapeUtils.unescapeHtml4(param);
+            System.out.println(param);
+            NoticeRequest nReq = JSONObject.parseObject(param, NoticeRequest.class);
+
+            Result result = nReq.getLastResult();
+            // 处理快递结果
+            System.out.println("快递推送结果: " + result);
+            
+            String express_flow = "无轨迹";
+            Boolean express_is_complete = false;
+            if ("0".equals(result.getState())) {
+                express_flow = "在途中";
+            } else if ("1".equals(result.getState())) {
+                express_flow = "已揽收";
+            } else if ("2".equals(result.getState())) {
+                express_flow = "疑难";
+            } else if ("3".equals(result.getState())) {
+                express_flow = "已签收";
+                express_is_complete = true;
+            } else if ("4".equals(result.getState())) {
+                express_flow = "退签";
+            } else if ("5".equals(result.getState())) {
+                express_flow = "同城派送中";
+            } else if ("6".equals(result.getState())) {
+                express_flow = "退回";
+            } else if ("10".equals(result.getState())) {
+                express_flow = "待清关";
+            } else if ("11".equals(result.getState())) {
+                express_flow = "清关中";
+            } else if ("12".equals(result.getState())) {
+                express_flow = "已清关";
+            } else if ("13".equals(result.getState())) {
+                express_flow = "清关异常";
+            } else if ("14".equals(result.getState())) {
+                express_flow = "收件人拒签";
+            }
+            Express express = expressService.findByExpress_no(result.getNu());
+            if (express_is_complete) {
+                if (ExpressBelong.MEMBER_DELIVERY_ORDER.getKey().equals(express.getExpress_belong())) {
+                    MemberDeliveryOrderExpress memberDeliveryOrderExpress = memberDeliveryOrderExpressService.findByExpress_id(express.getExpress_id());
+                    if (memberDeliveryOrderExpress != null && !ValidateUtil.isNullOrEmpty(memberDeliveryOrderExpress.getMember_delivery_order_id())) {
+                        List<Express> expressList = memberDeliveryOrderExpressService.listByMember_delivery_order_id(memberDeliveryOrderExpress.getMember_delivery_order_id());
+                        Boolean flag = true;
+                        for (Express e : expressList) {
+                            if (e.getExpress_is_complete() || e.getExpress_id().equals(express.getExpress_id())) {
+                                continue;
+                            }
+                            flag = false;
+                            break;
+                        }
+                        if (flag) {
+                            memberDeliveryOrderService.updateFinish(memberDeliveryOrderExpress.getMember_delivery_order_id());
+                        }
+                    }  
+                } else if (ExpressBelong.TRADE.getKey().equals(express.getExpress_belong())){
+                    TradeExpress tradeExpress = tradeExpressService.findByExpress_id(express.getExpress_id());
+                    if (tradeExpress != null && !ValidateUtil.isNullOrEmpty(tradeExpress.getTrade_id())) {
+                        List<Express> expressList = tradeExpressService.listByTrade_id(tradeExpress.getTrade_id());
+                        Boolean flag = true;
+                        for (Express e : expressList) {
+                            if (e.getExpress_is_complete() || e.getExpress_id().equals(express.getExpress_id())) {
+                                continue;
+                            }
+                            flag = false;
+                            break;
+                        }
+                        if (flag) {
+                            tradeService.updateFinish(tradeExpress.getTrade_id());
+                        }
+                    }
+                }
+            }
+            String express_traces = "";
+            List<ResultItem> list = result.getData();
+            if (list != null && list.size() > 0) {
+                JSONArray jsonArry1 = new JSONArray();
+                for (ResultItem resultItem : list) {
+                    JSONObject jsonObject1 = new JSONObject();
+                    jsonObject1.put("AcceptStation", resultItem.getContext());
+                    jsonObject1.put("AcceptTime", resultItem.getTime());
+                    jsonObject1.put("Remark", "");
+                    jsonArry1.add(jsonObject1);
+                }
+                System.out.println(jsonArry1.toJSONString());
+                express_traces = jsonArry1.toJSONString();
+            }
+            
+            expressService.updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idValidateSystem_version(express.getExpress_id(), express_flow, express_is_complete, express_traces, express.getSystem_create_user_id(), express.getSystem_version());
+
+            resp.setResult(true);
+            resp.setReturnCode("200");
+            renderJson(resp); //这里必须返回，否则认为失败，过30分钟又会重复推送。
+        } catch (Exception e) {
+            resp.setMessage("保存失败" + e.getMessage());
+            renderJson(resp);//保存失败，服务端等30分钟会重复推送。
+        }
+    }
 
     /**
-     * 接收物流信息
+     * 接收快递鸟物流信息
      */
     @ActionKey(Url.EXPRESS_PUSH)
     public void push() {
         String requestData = getPara("RequestData");
+        
+        requestData = StringEscapeUtils.unescapeHtml4(requestData);
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("EBusinessID", Kdniao.EBusinessID);
@@ -237,46 +357,59 @@ public class ExpressController extends Controller {
     }
     
     /**
-     * 接收物流信息
+     * 查询物流信息
      */
     @ActionKey(Url.EXPRESS_ADMIN_PULL)
     public void pull() {
         List<Express> express_list = expressService.listNotComplete();
         for (Express express : express_list) {
-            String eBusinessID = Kdniao.EBusinessID;
-            String appKey = Kdniao.AppKey;
-            String reqURL = Kdniao.PullReqURL;
-            
-            String requestData= "{'OrderCode':'','ShipperCode':'" + express.getExpress_shipper_code() + "','LogisticCode':'" + express.getExpress_no() + "'}";
-            try {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("RequestData", ExpressUtil.urlEncoder(requestData, "UTF-8"));
-                params.put("EBusinessID", eBusinessID);
-                params.put("RequestType", "1002");
-                String dataSign = ExpressUtil.encrypt(requestData, appKey, "UTF-8");
-                params.put("DataSign", ExpressUtil.urlEncoder(dataSign, "UTF-8"));
-                params.put("DataType", "2");
-                String result = ExpressUtil.sendPost(reqURL, params); 
-                JSONObject jsonObject = JSONObject.parseObject(result);
-                Boolean success = jsonObject.getBoolean("Success");
-                String express_flow = "无轨迹";
-                Boolean express_is_complete = false;
-                if (success) {
-                    String state = jsonObject.getString("State");
-                    if (state.equals("1")) {
-                        express_flow = "已揽收";
-                    } else if (state.equals("2")) {
-                        express_flow = "在途中";
-                    } else if (state.equals("201")) {
-                        express_flow = "到达派件城市";
-                    } else if (state.equals("3")) {
-                        express_flow = "签收";
-
-                        express_is_complete = true;
-                    } else if (state.equals("4")) {
-                        express_flow = "问题件";
+            if ("SF".equals(express.getExpress_shipper_code())) {
+                String key = Kuaidi100.KUAIDI100_REAL_TIME_QUERY_KEY;
+                String customer = Kuaidi100.KUAIDI100_REAL_TIME_QUERY_CUSTOMER;
+                String url = Kuaidi100.KUAIDI100_REAL_TIME_QUESY_URL;
+                
+                String param = "{'com':'shunfeng','num':'" + express.getExpress_no() + "'}";
+                
+                String sign = MD5.encode(param + key + customer);
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("param", param);
+                params.put("sign", sign);
+                params.put("customer", customer);
+                try {
+                    String resp = HttpRequest.postData(url, params, "utf-8").toString();
+                    JSONObject jsonObject = JSONObject.parseObject(resp);
+                    String state = jsonObject.getString("state");
+                    if (ValidateUtil.isNullOrEmpty(state)) {
+                        throw new RuntimeException(resp);
                     }
-
+                    String express_flow = "无轨迹";
+                    Boolean express_is_complete = false;
+                    if ("0".equals(state)) {
+                        express_flow = "在途中";
+                    } else if ("1".equals(state)) {
+                        express_flow = "已揽收";
+                    } else if ("2".equals(state)) {
+                        express_flow = "疑难";
+                    } else if ("3".equals(state)) {
+                        express_flow = "已签收";
+                        express_is_complete = true;
+                    } else if ("4".equals(state)) {
+                        express_flow = "退签";
+                    } else if ("5".equals(state)) {
+                        express_flow = "同城派送中";
+                    } else if ("6".equals(state)) {
+                        express_flow = "退回";
+                    } else if ("10".equals(state)) {
+                        express_flow = "待清关";
+                    } else if ("11".equals(state)) {
+                        express_flow = "清关中";
+                    } else if ("12".equals(state)) {
+                        express_flow = "已清关";
+                    } else if ("13".equals(state)) {
+                        express_flow = "清关异常";
+                    } else if ("14".equals(state)) {
+                        express_flow = "收件人拒签";
+                    }
                     if (express_is_complete) {
                         if (ExpressBelong.MEMBER_DELIVERY_ORDER.getKey().equals(express.getExpress_belong())) {
                             MemberDeliveryOrderExpress memberDeliveryOrderExpress = memberDeliveryOrderExpressService.findByExpress_id(express.getExpress_id());
@@ -312,16 +445,106 @@ public class ExpressController extends Controller {
                             }
                         }
                     }
-                    String express_traces = jsonObject.getString("Traces");
-                    if (ValidateUtil.isNullOrEmpty(express_traces) || "[]".equals(express_traces)) {
-                        express_traces = ""; 
+                    String express_traces = "";
+                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    if (jsonArray != null && jsonArray.size() > 0) {
+                        JSONArray jsonArry1 = new JSONArray();
+                        for (int i = 0; i < jsonArray.size(); i++) {
+                            JSONObject jsonObject1 = new JSONObject();
+                            jsonObject1.put("AcceptStation", jsonArray.getJSONObject(i).getString("context"));
+                            jsonObject1.put("AcceptTime", jsonArray.getJSONObject(i).getString("time"));
+                            jsonObject1.put("Remark", "");
+                            jsonArry1.add(jsonObject1);
+                        }
+                        System.out.println(jsonArry1.toJSONString());
+                        express_traces = jsonArry1.toJSONString();
                     }
                     expressService.updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idValidateSystem_version(express.getExpress_id(), express_flow, express_is_complete, express_traces, express.getSystem_create_user_id(), express.getSystem_version());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else {
+                String eBusinessID = Kdniao.EBusinessID;
+                String appKey = Kdniao.AppKey;
+                String reqURL = Kdniao.PullReqURL;
+                
+                String requestData= "{'OrderCode':'','ShipperCode':'" + express.getExpress_shipper_code() + "','LogisticCode':'" + express.getExpress_no() + "'}";
+                try {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("RequestData", ExpressUtil.urlEncoder(requestData, "UTF-8"));
+                    params.put("EBusinessID", eBusinessID);
+                    params.put("RequestType", "1002");
+                    String dataSign = ExpressUtil.encrypt(requestData, appKey, "UTF-8");
+                    params.put("DataSign", ExpressUtil.urlEncoder(dataSign, "UTF-8"));
+                    params.put("DataType", "2");
+                    String result = ExpressUtil.sendPost(reqURL, params); 
+                    JSONObject jsonObject = JSONObject.parseObject(result);
+                    Boolean success = jsonObject.getBoolean("Success");
+                    String express_flow = "无轨迹";
+                    Boolean express_is_complete = false;
+                    if (success) {
+                        String state = jsonObject.getString("State");
+                        if (state.equals("1")) {
+                            express_flow = "已揽收";
+                        } else if (state.equals("2")) {
+                            express_flow = "在途中";
+                        } else if (state.equals("201")) {
+                            express_flow = "到达派件城市";
+                        } else if (state.equals("3")) {
+                            express_flow = "签收";
+
+                            express_is_complete = true;
+                        } else if (state.equals("4")) {
+                            express_flow = "问题件";
+                        }
+
+                        if (express_is_complete) {
+                            if (ExpressBelong.MEMBER_DELIVERY_ORDER.getKey().equals(express.getExpress_belong())) {
+                                MemberDeliveryOrderExpress memberDeliveryOrderExpress = memberDeliveryOrderExpressService.findByExpress_id(express.getExpress_id());
+                                if (memberDeliveryOrderExpress != null && !ValidateUtil.isNullOrEmpty(memberDeliveryOrderExpress.getMember_delivery_order_id())) {
+                                    List<Express> expressList = memberDeliveryOrderExpressService.listByMember_delivery_order_id(memberDeliveryOrderExpress.getMember_delivery_order_id());
+                                    Boolean flag = true;
+                                    for (Express e : expressList) {
+                                        if (e.getExpress_is_complete() || e.getExpress_id().equals(express.getExpress_id())) {
+                                            continue;
+                                        }
+                                        flag = false;
+                                        break;
+                                    }
+                                    if (flag) {
+                                        memberDeliveryOrderService.updateFinish(memberDeliveryOrderExpress.getMember_delivery_order_id());
+                                    }
+                                }  
+                            } else if (ExpressBelong.TRADE.getKey().equals(express.getExpress_belong())){
+                                TradeExpress tradeExpress = tradeExpressService.findByExpress_id(express.getExpress_id());
+                                if (tradeExpress != null && !ValidateUtil.isNullOrEmpty(tradeExpress.getTrade_id())) {
+                                    List<Express> expressList = tradeExpressService.listByTrade_id(tradeExpress.getTrade_id());
+                                    Boolean flag = true;
+                                    for (Express e : expressList) {
+                                        if (e.getExpress_is_complete() || e.getExpress_id().equals(express.getExpress_id())) {
+                                            continue;
+                                        }
+                                        flag = false;
+                                        break;
+                                    }
+                                    if (flag) {
+                                        tradeService.updateFinish(tradeExpress.getTrade_id());
+                                    }
+                                }
+                            }
+                        }
+                        String express_traces = jsonObject.getString("Traces");
+                        if (ValidateUtil.isNullOrEmpty(express_traces) || "[]".equals(express_traces)) {
+                            express_traces = ""; 
+                        }
+                        expressService.updateExpress_flowAndExpress_is_completeAndExpress_tracesByExpress_idValidateSystem_version(express.getExpress_id(), express_flow, express_is_complete, express_traces, express.getSystem_create_user_id(), express.getSystem_version());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        }
+            }
+            
         renderSuccessJson("success");
     }
 

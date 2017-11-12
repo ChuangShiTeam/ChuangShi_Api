@@ -1,5 +1,7 @@
 package com.nowui.chuangshi.api.product.mobile;
 
+import java.util.List;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.member.model.Member;
@@ -12,16 +14,12 @@ import com.nowui.chuangshi.api.product.model.ProductSkuPrice;
 import com.nowui.chuangshi.api.product.service.ProductService;
 import com.nowui.chuangshi.api.product.service.ProductSkuPriceService;
 import com.nowui.chuangshi.api.product.service.ProductSkuService;
-import com.nowui.chuangshi.api.trade.model.MemberPurchaseOrder;
 import com.nowui.chuangshi.api.trade.service.MemberPurchaseOrderService;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.ValidateUtil;
-
-import java.util.List;
 
 @ControllerKey("/mobile/product")
 public class ProductController extends Controller {
