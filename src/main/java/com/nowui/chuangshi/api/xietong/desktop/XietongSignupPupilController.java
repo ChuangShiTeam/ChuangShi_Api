@@ -36,19 +36,31 @@ public class XietongSignupPupilController extends Controller {
 
         if (bean != null) {
             //已报名，已确定，已签到，已评分，已录取，已阅读
-
+            Map<String, Object> result = new HashMap<String, Object>();
+            
             if (bean.getSignup_status() == "已确定") {
-
-                throw new RuntimeException("面谈时间：" + bean.getInterview_time().toString());
+                result.put("tip", "面谈时间：" + bean.getInterview_time().toString());
             } else if (bean.getSignup_status() == "已评分") {
-
-                throw new RuntimeException("最终评分：" + bean.getMark());
-
+                result.put("tip", "最终评分：" + bean.getMark());
             } else {
-                throw new RuntimeException(bean.getSignup_status());
+                result.put("tip", bean.getSignup_status());
             }
+            
+            bean.keep(XietongSignupPupil.SIGNUP_ID, XietongSignupPupil.USER_ID, 
+                    XietongSignupPupil.FATHER_NAME, XietongSignupPupil.FATHER_PHONE, 
+                    XietongSignupPupil.FATHER_WORK, XietongSignupPupil.ID_NO, 
+                    XietongSignupPupil.ID_TYPE, XietongSignupPupil.KINDERGARTEN, 
+                    XietongSignupPupil.LIVE_ADDRESSS, XietongSignupPupil.MOTHER_NAME, 
+                    XietongSignupPupil.MOTHER_PHONE, XietongSignupPupil.MOTHER_WORK, 
+                    XietongSignupPupil.PERMANENT_ADDRESS, XietongSignupPupil.REMARK, 
+                    XietongSignupPupil.SIGNUP_STATUS, XietongSignupPupil.STUDENT_BIRTHDAY, 
+                    XietongSignupPupil.STUDENT_NAME, XietongSignupPupil.STUDENT_SEX, 
+                    XietongSignupPupil.SYSTEM_VERSION);
+            result.put("signup_pupil", bean);
+            
+            validateResponse("signup_pupil", "tip");
+            renderSuccessJson(result);
         } else {
-
             throw new RuntimeException("该学生未报名");
         }
     }
@@ -58,15 +70,15 @@ public class XietongSignupPupilController extends Controller {
     //2017.11.6
     @ActionKey("/desktop/xietong/signup/pupil/save")
     public void save() {
-
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
+        
         XietongSignupPupil xietong_signup_pupil = getModel(XietongSignupPupil.class);
         User userModel = getModel(User.class);
 
         XietongSignupPupil bean = XietongSignupPupilService.instance.idNoFind(xietong_signup_pupil.getId_no());
         if (bean != null) {
-            throw new RuntimeException("该学生已经报名");
+            throw new RuntimeException("该证件号码已经报过名");
         }
 
         xietong_signup_pupil.setSignup_status("已报名");
@@ -84,11 +96,29 @@ public class XietongSignupPupilController extends Controller {
         
         renderSuccessJson(result);
     }
-
+    
     @ActionKey("/desktop/xietong/signup/pupil/update")
     public void update() {
-
-        renderSuccessJson();
+        validateRequest(XietongSignupPupil.SIGNUP_ID, XietongSignupPupil.USER_ID, XietongSignupPupil.SYSTEM_VERSION);
+        
+        String request_user_id = getRequest_user_id();
+        
+        XietongSignupPupil xietong_signup_pupil = getModel(XietongSignupPupil.class);
+        User userModel = getModel(User.class);
+        
+        XietongSignupPupil bean = XietongSignupPupilService.instance.find(xietong_signup_pupil.getSignup_id());
+        if (!bean.getId_no().equals(xietong_signup_pupil.getId_no())) {
+            XietongSignupPupil xietongSignupPupil =  XietongSignupPupilService.instance.idNoFind(xietong_signup_pupil.getId_no());
+            
+            if (xietongSignupPupil != null) {
+                if (bean != null) {
+                    throw new RuntimeException("该证件号码已经报过名");
+                }
+            }
+        }
+        Boolean result = XietongSignupPupilService.instance.update(xietong_signup_pupil, userModel, request_user_id);
+        
+        renderSuccessJson(result);
     }
 
     @ActionKey("/desktop/xietong/signup/pupil/delete")

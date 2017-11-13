@@ -142,6 +142,17 @@ public class XietongSignupPupilService extends Service {
 
         return success;
     }
+    
+    public Boolean update(XietongSignupPupil xietong_signup_pupil, User user, String system_update_user_id) {
+        Boolean result = update(xietong_signup_pupil, xietong_signup_pupil.getSignup_id(), system_update_user_id, xietong_signup_pupil.getSystem_version());
+        
+        if (result) {
+            UserService.instance.userAccountAndNameUpdate(user.getUser_id(), xietong_signup_pupil.getId_no(), xietong_signup_pupil.getStudent_name(), system_update_user_id);
+        }
+        
+        return result;
+    }
+
 
     public Boolean delete(String signup_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = new Cnd();
