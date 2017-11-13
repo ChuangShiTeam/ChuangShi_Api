@@ -28,7 +28,7 @@ public class ArticleController extends Controller {
 
         List<Article> articleList = ArticleService.instance.categoryList(request_app_id, articleCategoryIdList, getM(), getN());
 
-        validateResponse(Article.ARTICLE_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, File.FILE_PATH, Article.ARTICLE_SUMMARY, Article.SYSTEM_CREATE_TIME);
+        validateResponse(Article.ARTICLE_ID, Article.ARTICLE_NAME, File.FILE_PATH, Article.ARTICLE_SUMMARY, Article.SYSTEM_CREATE_TIME);
 
         renderSuccessJson(count, articleList);
     }
