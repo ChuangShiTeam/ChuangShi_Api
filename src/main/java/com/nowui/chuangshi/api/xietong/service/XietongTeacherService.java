@@ -67,6 +67,34 @@ public class XietongTeacherService extends Service {
         return xietong_teacherList;
     }
 
+    public List<XietongTeacher> organizationList(String organization_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(XietongTeacher.SYSTEM_STATUS, true);
+        cnd.and(XietongTeacher.ORGANIZATION_ID, organization_id);
+        cnd.asc(XietongTeacher.TEACHER_SORT);
+        cnd.desc(XietongTeacher.SYSTEM_CREATE_TIME);
+
+        List<XietongTeacher> xietong_teacherList = xietongTeacherDao.primaryKeyList(cnd);
+        for (XietongTeacher xietong_teacher : xietong_teacherList) {
+            xietong_teacher.put(find(xietong_teacher.getTeacher_id()));
+        }
+        return xietong_teacherList;
+    }
+
+    public List<XietongTeacher> categoryList(String teacher_category_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(XietongTeacher.SYSTEM_STATUS, true);
+        cnd.and(XietongTeacher.TEACHER_CATEGORY_ID, teacher_category_id);
+        cnd.asc(XietongTeacher.TEACHER_SORT);
+        cnd.desc(XietongTeacher.SYSTEM_CREATE_TIME);
+
+        List<XietongTeacher> xietong_teacherList = xietongTeacherDao.primaryKeyList(cnd);
+        for (XietongTeacher xietong_teacher : xietong_teacherList) {
+            xietong_teacher.put(find(xietong_teacher.getTeacher_id()));
+        }
+        return xietong_teacherList;
+    }
+
     public XietongTeacher find(String teacher_id) {
         XietongTeacher xietong_teacher = CacheUtil.get(XIETONG_TEACHER_ITEM_CACHE, teacher_id);
 

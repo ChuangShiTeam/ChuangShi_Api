@@ -44,6 +44,10 @@ public class XietongStudentService extends Service {
         return count;
     }
 
+    public List<XietongStudent> clazzList(List<String> clazzIdList, String student_category_id, int m, int n) {
+        return xietongStudentDao.clazzList(clazzIdList, student_category_id, m, n);
+    }
+
     public List<XietongStudent> adminList(String app_id, String student_name, String clazz_id, Integer m, Integer n) {
         Cnd cnd = new Cnd(); 
         cnd.select(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_NAME);

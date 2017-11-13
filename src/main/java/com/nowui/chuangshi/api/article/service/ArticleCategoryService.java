@@ -31,6 +31,7 @@ public class ArticleCategoryService extends Service {
         cnd.where(ArticleCategory.SYSTEM_STATUS, true);
         cnd.and(ArticleCategory.APP_ID, app_id);
         cnd.andAllowEmpty(ArticleCategory.ARTICLE_CATEGORY_NAME, article_category_name);
+        cnd.asc(ArticleCategory.ARTICLE_CATEGORY_SORT);
         cnd.paginate(m, n);
 
         List<ArticleCategory> articleCategoryList = articleCategoryDao.primaryKeyList(cnd);

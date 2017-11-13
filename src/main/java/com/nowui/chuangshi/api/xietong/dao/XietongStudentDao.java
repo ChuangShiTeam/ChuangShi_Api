@@ -16,6 +16,19 @@ public class XietongStudentDao extends Dao {
     public XietongStudentDao() {
         setModel(new XietongStudent());
     }
+
+    public List<XietongStudent> clazzList(List<String> clazzIdList, String student_category_id, int m, int n) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put("clazzIdList", clazzIdList);
+        sqlMap.put(XietongStudent.STUDENT_CATEGORY_ID, student_category_id);
+        sqlMap.put(Constant.M, m);
+        sqlMap.put(Constant.N, n);
+        SqlPara sqlPara = Db.getSqlPara("xietong_student.clazzList", sqlMap);
+
+        logSql("xietong_student", "clazzList", sqlPara);
+
+        return new XietongStudent().find(sqlPara.getSql(), sqlPara.getPara());
+    }
     
     public List<XietongStudent> list(String app_id, String student_name, String clazz_id, int m, int n) {
         Kv sqlMap = Kv.create();

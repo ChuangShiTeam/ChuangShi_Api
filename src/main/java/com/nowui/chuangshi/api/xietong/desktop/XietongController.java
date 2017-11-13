@@ -20,7 +20,9 @@ import com.nowui.chuangshi.api.website.model.WebsiteMenu;
 import com.nowui.chuangshi.api.website.service.WebsiteMenuService;
 import com.nowui.chuangshi.api.xietong.model.XietongClazz;
 import com.nowui.chuangshi.api.xietong.model.XietongStudent;
+import com.nowui.chuangshi.api.xietong.model.XietongTeacher;
 import com.nowui.chuangshi.api.xietong.service.XietongStudentService;
+import com.nowui.chuangshi.api.xietong.service.XietongTeacherService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 
@@ -110,15 +112,35 @@ public class XietongController extends Controller {
 
         Map<String, Object> result = new HashMap<String, Object>();
 
-        List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
-        for (ArticleCategory articleCategory : articleCategoryList) {
-            articleCategory.keep(ArticleCategory.ARTICLE_CATEGORY_ID, ArticleCategory.ARTICLE_CATEGORY_NAME);
+        List<XietongTeacher> teacherList = XietongTeacherService.instance.organizationList("6fd70c5e490e403b844ca722e0a5d756");
+        for (XietongTeacher teacher : teacherList) {
+            teacher.keep(XietongTeacher.TEACHER_ID, XietongTeacher.TEACHER_NAME, File.FILE_PATH);
         }
 
-//        result.put("article_list", websiteMenuList);
-//        result.put("student_list", advertisementList);
+        List<XietongTeacher> teacherList2 = XietongTeacherService.instance.categoryList("5a3e3e701efe486383eaa54dbbe80467");
+        for (XietongTeacher teacher : teacherList2) {
+            teacher.keep(XietongTeacher.TEACHER_ID, XietongTeacher.TEACHER_NAME, File.FILE_PATH);
+        }
 
-        validateResponse("article_list", "student_list");
+        List<String> clazzIdList = new ArrayList<String>();
+        clazzIdList.add("71d14fdd1565426f8a8669ee682f7f37");
+
+        List<XietongStudent> studentList = XietongStudentService.instance.clazzList(clazzIdList, "1d49d03576954b3c998608b8f43be324", 0, 5);
+        for (XietongStudent student : studentList) {
+            student.keep(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_NAME, File.FILE_PATH);
+        }
+
+        List<Article> articleList = ArticleService.instance.categoryList("194dfd824f2042d58dd101d374272455");
+        for (Article article : articleList) {
+            article.keep(Article.ARTICLE_ID, Article.ARTICLE_NAME, File.FILE_PATH);
+        }
+
+        result.put("teacher_list", teacherList);
+        result.put("teacher_list_2", teacherList2);
+        result.put("student_list", studentList);
+        result.put("article_list", articleList);
+
+        validateResponse("teacher_list", "student_list", "article_list");
 
         renderSuccessJson(result);
     }
