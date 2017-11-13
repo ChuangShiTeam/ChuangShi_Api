@@ -60,14 +60,28 @@ public class XietongClazzService extends Service {
         }
         return xietong_clazzList;
     }
-    
+
     public List<XietongClazz> allList(String app_id) {
         Cnd cnd = new Cnd();
         cnd.where(XietongClazz.SYSTEM_STATUS, true);
         cnd.and(XietongClazz.APP_ID, app_id);
         cnd.asc(XietongClazz.CLAZZ_SORT);
         cnd.desc(XietongClazz.SYSTEM_CREATE_TIME);
-        
+
+        List<XietongClazz> xietong_clazzList = xietongClazzDao.primaryKeyList(cnd);
+        for (XietongClazz xietong_clazz : xietong_clazzList) {
+            xietong_clazz.put(find(xietong_clazz.getClazz_id()));
+        }
+        return xietong_clazzList;
+    }
+
+    public List<XietongClazz> organizationList(String organization_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(XietongClazz.SYSTEM_STATUS, true);
+        cnd.and(XietongClazz.ORGANIZATION_ID, organization_id);
+        cnd.asc(XietongClazz.CLAZZ_SORT);
+        cnd.desc(XietongClazz.SYSTEM_CREATE_TIME);
+
         List<XietongClazz> xietong_clazzList = xietongClazzDao.primaryKeyList(cnd);
         for (XietongClazz xietong_clazz : xietong_clazzList) {
             xietong_clazz.put(find(xietong_clazz.getClazz_id()));
