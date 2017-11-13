@@ -31,7 +31,7 @@ public class WebsiteMenu extends Model<WebsiteMenu> {
     @Column(type = ColumnType.VARCHAR, length = 20, comment = "菜单名称")
     public static final String WEBSITE_MENU_NAME = "website_menu_name";
 
-    @Column(type = ColumnType.VARCHAR, length = 100, comment = "菜单地址")
+    @Column(type = ColumnType.VARCHAR, length = 200, comment = "菜单地址")
     public static final String WEBSITE_MENU_URL = "website_menu_url";
 
     @Column(type = ColumnType.INT, length = 3, comment = "菜单排序")

@@ -19,6 +19,31 @@ public class ArticleDao extends Dao {
         setModel(article);
     }
 
+    public Integer categoryCount(String app_id, List<String> articleCategoryIdList) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put("app_id", app_id);
+        sqlMap.put("articleCategoryIdList", articleCategoryIdList);
+        SqlPara sqlPara = Db.getSqlPara("article.categoryCount", sqlMap);
+
+        logSql("article", "categoryCount", sqlPara);
+
+        Number count = Db.queryFirst(sqlPara.getSql(), sqlPara.getPara());
+        return count.intValue();
+    }
+
+    public List<Article> categoryList(String app_id, List<String> articleCategoryIdList, Integer m, Integer n) {
+        Kv sqlMap = Kv.create();
+        sqlMap.put("app_id", app_id);
+        sqlMap.put("articleCategoryIdList", articleCategoryIdList);
+        sqlMap.put(Constant.M, m);
+        sqlMap.put(Constant.N, n);
+        SqlPara sqlPara = Db.getSqlPara("article.categoryList", sqlMap);
+
+        logSql("article", "categoryList", sqlPara);
+
+        return article.find(sqlPara.getSql(), sqlPara.getPara());
+    }
+
     public List<Article> topCategoryList(List<String> articleCategoryIdList, Integer n) {
         Kv sqlMap = Kv.create();
         sqlMap.put("articleCategoryIdList", articleCategoryIdList);

@@ -54,6 +54,16 @@ public class ArticleService extends Service {
         return articleList;
     }
 
+    public Integer categoryCount(String app_id, List<String> articleCategoryIdList) {
+        Integer count = articleDao.categoryCount(app_id, articleCategoryIdList);
+        return count;
+    }
+
+    public List<Article> categoryList(String app_id, List<String> articleCategoryIdList, Integer m, Integer n) {
+        List<Article> articleList = articleDao.categoryList(app_id, articleCategoryIdList, m, n);
+        return articleList;
+    }
+
     public List<Article> categoryList(String app_id, String article_category_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(Article.SYSTEM_STATUS, true);
@@ -79,7 +89,7 @@ public class ArticleService extends Service {
         }
         return articleList;
     }
-    
+
     public Integer categoryCount(String app_id, String article_category_id) {
         Cnd cnd = new Cnd();
         cnd.where(Article.SYSTEM_STATUS, true);

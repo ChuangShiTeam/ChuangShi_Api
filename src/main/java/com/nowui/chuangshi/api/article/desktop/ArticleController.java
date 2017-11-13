@@ -1,5 +1,7 @@
 package com.nowui.chuangshi.api.article.desktop;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.jfinal.core.ActionKey;
@@ -20,9 +22,11 @@ public class ArticleController extends Controller {
         Article model = getModel(Article.class);
         String request_app_id = getRequest_app_id();
 
-        Integer count = ArticleService.instance.categoryCount(request_app_id, model.getArticle_category_id());
+        List<String> articleCategoryIdList = Arrays.asList(model.getArticle_category_id().split("_"));
 
-        List<Article> articleList = ArticleService.instance.categoryList(request_app_id, model.getArticle_category_id(), getM(), getN());
+        Integer count = ArticleService.instance.categoryCount(request_app_id, articleCategoryIdList);
+
+        List<Article> articleList = ArticleService.instance.categoryList(request_app_id, articleCategoryIdList, getM(), getN());
 
         validateResponse(Article.ARTICLE_ID, Article.ARTICLE_NAME, Article.ARTICLE_IMAGE, File.FILE_PATH, Article.ARTICLE_SUMMARY, Article.SYSTEM_CREATE_TIME);
 

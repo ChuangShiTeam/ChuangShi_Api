@@ -1,5 +1,33 @@
 #namespace("article")
 
+  #sql("categoryCount")
+    SELECT
+    COUNT(*)
+    FROM table_article
+    WHERE system_status = 1
+    AND app_id = #p(app_id)
+    AND (
+      #for(article_category_id : articleCategoryIdList)
+        #if(!for.first)OR #end article_category_id = #p(article_category_id)
+      #end
+    )
+  #end
+
+  #sql("categoryList")
+    SELECT
+    *
+    FROM table_article
+    WHERE system_status = 1
+    AND app_id = #p(app_id)
+    AND (
+      #for(article_category_id : articleCategoryIdList)
+        #if(!for.first)OR #end article_category_id = #p(article_category_id)
+      #end
+    )
+    ORDER BY system_create_time DESC
+    LIMIT #p(m), #p(n)
+  #end
+
   #sql("topCategoryList")
     #for(article_category_id : articleCategoryIdList)
     (SELECT

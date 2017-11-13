@@ -9,7 +9,7 @@
     WHERE table_xietong_student.system_status = 1
     AND (
       #for(clazz_id : clazzIdList)
-        #if(!for.first)OR#end table_xietong_student.clazz_id = #p(clazz_id)
+        #if(!for.first)OR #end table_xietong_student.clazz_id = #p(clazz_id)
       #end
     )
     AND table_xietong_student.student_category_id = #p(student_category_id)
