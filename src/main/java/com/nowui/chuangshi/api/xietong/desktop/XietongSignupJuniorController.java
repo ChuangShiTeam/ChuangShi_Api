@@ -36,17 +36,31 @@ public class XietongSignupJuniorController extends Controller {
 
         if (bean != null) {
             //已报名，已确定，已签到，已评分，已录取，已阅读
-
+            Map<String, Object> result = new HashMap<String, Object>();
+            
             if (bean.getSignup_status() == "已确定") {
-
-                throw new RuntimeException("面谈时间：" + bean.getInterview_time().toString());
+                result.put("tip", "面谈时间：" + bean.getInterview_time().toString());
             } else if (bean.getSignup_status() == "已评分") {
-
-                throw new RuntimeException("最终评分：" + bean.getMark());
-
+                result.put("tip", "最终评分：" + bean.getMark());
             } else {
-                throw new RuntimeException(bean.getSignup_status());
+                result.put("tip", bean.getSignup_status());
             }
+            
+            bean.keep(XietongSignupJunior.SIGNUP_ID, XietongSignupJunior.USER_ID, 
+                    XietongSignupJunior.FATHER_NAME, XietongSignupJunior.FATHER_PHONE, 
+                    XietongSignupJunior.FATHER_WORK, XietongSignupJunior.ID_NO, 
+                    XietongSignupJunior.ID_TYPE, XietongSignupJunior.JOB, 
+                    XietongSignupJunior.PRIMARY_SCHOOL, XietongSignupJunior.PRIMARY_SCHOOL_CLASS,
+                    XietongSignupJunior.LIVE_ADDRESSS, XietongSignupJunior.MOTHER_NAME, 
+                    XietongSignupJunior.MOTHER_PHONE, XietongSignupJunior.MOTHER_WORK, 
+                    XietongSignupJunior.PERMANENT_ADDRESS, XietongSignupJunior.REMARK, 
+                    XietongSignupJunior.SIGNUP_STATUS, XietongSignupJunior.STUDENT_BIRTHDAY, 
+                    XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.STUDENT_SEX, 
+                    XietongSignupJunior.SYSTEM_VERSION);
+            result.put("signup_junior", bean);
+            
+            validateResponse("signup_junior", "tip");
+            renderSuccessJson(result);
         } else {
 
             throw new RuntimeException("该学生未报名");
@@ -82,8 +96,26 @@ public class XietongSignupJuniorController extends Controller {
 
     @ActionKey("/desktop/xietong/signup/junior/update")
     public void update() {
-
-        renderSuccessJson();
+        validateRequest(XietongSignupJunior.SIGNUP_ID, XietongSignupJunior.USER_ID, XietongSignupJunior.SYSTEM_VERSION);
+        
+        String request_user_id = getRequest_user_id();
+        
+        XietongSignupJunior xietong_signup_junior = getModel(XietongSignupJunior.class);
+        User userModel = getModel(User.class);
+        
+        XietongSignupJunior bean = XietongSignupJuniorService.instance.find(xietong_signup_junior.getSignup_id());
+        if (!bean.getId_no().equals(xietong_signup_junior.getId_no())) {
+            XietongSignupJunior xietongSignupJunior =  XietongSignupJuniorService.instance.idNoFind(xietong_signup_junior.getId_no());
+            
+            if (xietongSignupJunior != null) {
+                if (bean != null) {
+                    throw new RuntimeException("该证件号码已经报过名");
+                }
+            }
+        }
+        Boolean result = XietongSignupJuniorService.instance.update(xietong_signup_junior, userModel, request_user_id);
+        
+        renderSuccessJson(result);
     }
 
     @ActionKey("/desktop/xietong/signup/junior/delete")
