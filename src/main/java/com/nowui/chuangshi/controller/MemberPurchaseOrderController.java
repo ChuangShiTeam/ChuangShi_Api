@@ -373,15 +373,15 @@ public class MemberPurchaseOrderController extends Controller {
         User user = UserService.instance.find(request_user_id);
         Member member = MemberService.instance.find(user.getObject_id());
 
-        //董事需要拆单
-        MemberLevel memberlevel = MemberLevelService.instance.find(member.getMember_level_id());
-        if (memberlevel != null && memberlevel.getMember_level_value().equals(4) && memberlevel.getMember_level_name().equals("董事")) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(Constant.CODE, HttpStatus.SC_NO_CONTENT);
-
-            renderSuccessJson(map);
-            //throw new RuntimeException("支付金额过大，建议拆单");
-        } else {
+//        //董事需要拆单
+//        MemberLevel memberlevel = MemberLevelService.instance.find(member.getMember_level_id());
+//        if (memberlevel != null && memberlevel.getMember_level_value().equals(4) && memberlevel.getMember_level_name().equals("董事")) {
+//            Map<String, Object> map = new HashMap<String, Object>();
+//            map.put(Constant.CODE, HttpStatus.SC_NO_CONTENT);
+//
+//            renderSuccessJson(map);
+//            //throw new RuntimeException("支付金额过大，建议拆单");
+//        } else {
 
 
             // 判断会员是否有上级，无上级不能进货
@@ -447,8 +447,9 @@ public class MemberPurchaseOrderController extends Controller {
                 result = memberPurchaseOrderService.pay(member_purchase_order_id, open_id, "WX", request_user_id);
             }
 
+            result.put(Member.MEMBER_LEVEL_ID, member.getMember_level_id());
+
             renderSuccessJson(result);
-        }
     }
 
     @ActionKey(Url.MEMBER_PURCHASE_ORDER_PAY)
