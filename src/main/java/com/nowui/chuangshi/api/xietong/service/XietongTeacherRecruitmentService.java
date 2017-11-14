@@ -1,12 +1,26 @@
 package com.nowui.chuangshi.api.xietong.service;
 
 import com.nowui.chuangshi.api.xietong.dao.XietongTeacherRecruitmentDao;
+import com.nowui.chuangshi.api.xietong.model.XietongClazz;
+import com.nowui.chuangshi.api.xietong.model.XietongCourse;
+import com.nowui.chuangshi.api.xietong.model.XietongCourseApply;
+import com.nowui.chuangshi.api.xietong.model.XietongStudent;
 import com.nowui.chuangshi.api.xietong.model.XietongTeacherRecruitment;
+import com.nowui.chuangshi.common.render.ExcelRender;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
+import com.nowui.chuangshi.util.DateUtil;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 public class XietongTeacherRecruitmentService extends Service {
 
@@ -31,6 +45,18 @@ public class XietongTeacherRecruitmentService extends Service {
         cnd.andAllowEmpty(XietongTeacherRecruitment.TEACHER_RECRUITMENT_NAME, teacher_recruitment_name);
         cnd.paginate(m, n);
 
+        List<XietongTeacherRecruitment> xietong_teacher_recruitmentList = xietongTeacherRecruitmentDao.primaryKeyList(cnd);
+        for (XietongTeacherRecruitment xietong_teacher_recruitment : xietong_teacher_recruitmentList) {
+            xietong_teacher_recruitment.put(find(xietong_teacher_recruitment.getTeacher_recruitment_id()));
+        }
+        return xietong_teacher_recruitmentList;
+    }
+    
+    public List<XietongTeacherRecruitment> appList(String app_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(XietongTeacherRecruitment.SYSTEM_STATUS, true);
+        cnd.and(XietongTeacherRecruitment.APP_ID, app_id);
+        
         List<XietongTeacherRecruitment> xietong_teacher_recruitmentList = xietongTeacherRecruitmentDao.primaryKeyList(cnd);
         for (XietongTeacherRecruitment xietong_teacher_recruitment : xietong_teacher_recruitmentList) {
             xietong_teacher_recruitment.put(find(xietong_teacher_recruitment.getTeacher_recruitment_id()));
@@ -84,5 +110,147 @@ public class XietongTeacherRecruitmentService extends Service {
 
         return success;
     }
+    
+    public ExcelRender recruitmentAllExport(String app_id) {
+               
+        List<XietongTeacherRecruitment> xietong_teacher_recruitmentlist = appList(app_id);
+        
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+
+        HSSFSheet sheet = wb.createSheet("教师招聘信息汇总");
+
+        HSSFRow row = sheet.createRow(0);
+        HSSFCell cell = row.createCell(0);
+        cell.setCellValue("姓名");
+        cell.setCellStyle(style);
+        cell = row.createCell(1);
+        cell.setCellValue("性别");
+        cell.setCellStyle(style);
+        cell = row.createCell(2);
+        cell.setCellValue("出生日期");
+        cell.setCellStyle(style);
+        cell = row.createCell(3);
+        cell.setCellValue("手机号码");
+        cell.setCellStyle(style);
+        cell = row.createCell(4);
+        cell.setCellValue("邮箱地址");
+        cell.setCellStyle(style);
+        cell = row.createCell(5);
+        cell.setCellValue("应聘学部");
+        cell.setCellStyle(style);
+        cell = row.createCell(6);
+        cell.setCellValue("应聘学科");
+        cell.setCellStyle(style);
+        cell = row.createCell(7);
+        cell.setCellValue("应聘学部");
+        cell.setCellStyle(style);
+        cell = row.createCell(8);
+        cell.setCellValue("是否应届毕业生");
+        cell.setCellStyle(style);
+        cell = row.createCell(9);
+        cell.setCellValue("工作年限");
+        cell.setCellStyle(style);
+        cell = row.createCell(10);
+        cell.setCellValue("原工作单位");
+        cell.setCellStyle(style);
+        cell = row.createCell(11);
+        cell.setCellValue("政治面貌");
+        cell.setCellStyle(style);
+        cell = row.createCell(12);
+        cell.setCellValue("职称");
+        cell.setCellStyle(style);
+        cell = row.createCell(13);
+        cell.setCellValue("学历");
+        cell.setCellStyle(style);
+        cell = row.createCell(14);
+        cell.setCellValue("专业");
+        cell.setCellStyle(style);
+        cell = row.createCell(15);
+        cell.setCellValue("毕业院校");
+        cell.setCellStyle(style);
+        cell = row.createCell(16);
+        cell.setCellValue("教育经历");
+        cell.setCellStyle(style);
+        cell = row.createCell(17);
+        cell.setCellValue("工作经历");
+        cell.setCellStyle(style);
+        cell = row.createCell(18);
+        cell.setCellValue("所获代表性荣誉");
+        cell.setCellStyle(style);
+        cell = row.createCell(19);
+        cell.setCellValue("现在住址");
+        cell.setCellStyle(style);
+        
+        for (int i = 0; i < xietong_teacher_recruitmentlist.size(); i++) {
+            XietongTeacherRecruitment xietongTeacherRecruitment = xietong_teacher_recruitmentlist.get(i);
+            
+            row = sheet.createRow(i + 1);
+            cell = row.createCell(0);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_name());
+            cell.setCellStyle(style);
+            cell = row.createCell(1);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_sex());
+            cell.setCellStyle(style);
+            cell = row.createCell(2);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_birthday());
+            cell.setCellStyle(style);
+            cell = row.createCell(3);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_mobile());
+            cell.setCellStyle(style);
+            cell = row.createCell(4);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_email());
+            cell.setCellStyle(style);
+            cell = row.createCell(5);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_faculty());
+            cell.setCellStyle(style);
+            cell = row.createCell(6);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_subject());
+            cell.setCellStyle(style);
+            cell = row.createCell(7);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_is_fresh_graduate()?"是":"否");
+            cell.setCellStyle(style);
+            cell = row.createCell(8);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_work_year());
+            cell.setCellStyle(style);
+            cell = row.createCell(9);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_old_unit());
+            cell.setCellStyle(style);
+            cell = row.createCell(10);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_politics_status());
+            cell.setCellStyle(style);
+            cell = row.createCell(11);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_job_title());
+            cell.setCellStyle(style);
+            cell = row.createCell(12);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_faculty());
+            cell.setCellStyle(style);
+            cell = row.createCell(13);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_faculty());
+            cell.setCellStyle(style);
+            cell = row.createCell(14);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_faculty());
+            cell.setCellStyle(style);
+            cell = row.createCell(15);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_faculty());
+            cell.setCellStyle(style);
+            cell = row.createCell(16);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_faculty());
+            cell.setCellStyle(style);
+            cell = row.createCell(17);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_faculty());
+            cell.setCellStyle(style);
+            cell = row.createCell(18);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_now_address());
+            cell.setCellStyle(style);
+            cell = row.createCell(19);
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_now_address());
+            cell.setCellStyle(style);
+        }
+
+        return new ExcelRender(wb, "选课信息");
+    }
+
 
 }
