@@ -224,10 +224,10 @@ public class XietongTeacherRecruitmentService extends Service {
             cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_job_title());
             cell.setCellStyle(style);
             cell = row.createCell(12);
-            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_faculty());
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_education());
             cell.setCellStyle(style);
             cell = row.createCell(13);
-            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_faculty());
+            cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_major());
             cell.setCellStyle(style);
             cell = row.createCell(14);
             cell.setCellValue(xietongTeacherRecruitment.getTeacher_recruitment_faculty());
