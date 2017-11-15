@@ -1,16 +1,15 @@
 package com.nowui.chuangshi.api.xietong.admin;
 
 
+import java.util.List;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.xietong.model.XietongSignupPupil;
 import com.nowui.chuangshi.api.xietong.service.XietongSignupPupilService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
-
-import java.util.List;
 
 
 @ControllerKey("/admin/xietong/signup/pupil")
@@ -79,6 +78,11 @@ public class XietongSignupPupilController extends Controller {
         Boolean result = XietongSignupPupilService.instance.delete(model.getSignup_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
+    }
+    
+    @ActionKey("/admin/xietong/signup/pupil/all/export")
+    public void allExport() {
+        render(XietongSignupPupilService.instance.allExport());
     }
 
 }

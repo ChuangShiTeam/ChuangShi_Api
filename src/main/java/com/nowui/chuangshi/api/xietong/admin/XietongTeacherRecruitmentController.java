@@ -2,14 +2,12 @@ package com.nowui.chuangshi.api.xietong.admin;
 
 import java.util.List;
 
-
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.xietong.model.XietongTeacherRecruitment;
 import com.nowui.chuangshi.api.xietong.service.XietongTeacherRecruitmentService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 
@@ -82,6 +80,11 @@ public class XietongTeacherRecruitmentController extends Controller {
         Boolean result = XietongTeacherRecruitmentService.instance.delete(model.getTeacher_recruitment_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
+    }
+    
+    @ActionKey("/admin/xietong/teacher/recruitment/all/export")
+    public void allExport() {
+        render(XietongTeacherRecruitmentService.instance.allExport());
     }
 
 }
