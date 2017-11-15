@@ -8,6 +8,7 @@ import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.xietong.model.XietongOrganization;
 import com.nowui.chuangshi.api.xietong.model.XietongTeacher;
+import com.nowui.chuangshi.api.xietong.model.XietongTeacherCategory;
 import com.nowui.chuangshi.api.xietong.service.XietongTeacherService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
@@ -28,7 +29,7 @@ public class XietongTeacherController extends Controller {
         Integer resultCount = XietongTeacherService.instance.adminCount(request_app_id, model.getOrganization_id(), model.getTeacher_name(), model.getTeacher_number(), model.getTeacher_category_id());
         List<XietongTeacher> resultList = XietongTeacherService.instance.adminList(request_app_id, model.getOrganization_id(), model.getTeacher_name(), model.getTeacher_number(), model.getTeacher_category_id(), getM(), getN());
 
-        validateResponse(XietongTeacher.TEACHER_ID, XietongOrganization.ORGANIZATION_NAME, File.FILE_ID, File.FILE_PATH, XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY_ID, XietongTeacher.TEACHER_IMAGE, XietongTeacher.TEACHER_SORT, XietongTeacher.SYSTEM_VERSION);
+        validateResponse(XietongTeacher.TEACHER_ID, XietongOrganization.ORGANIZATION_NAME, XietongTeacherCategory.TEACHER_CATEGORY_NAME, File.FILE_ID, File.FILE_PATH, XietongTeacher.ORGANIZATION_ID, XietongTeacher.TEACHER_NAME, XietongTeacher.TEACHER_NUMBER, XietongTeacher.TEACHER_CATEGORY_ID, XietongTeacher.TEACHER_IMAGE, XietongTeacher.TEACHER_SORT, XietongTeacher.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }

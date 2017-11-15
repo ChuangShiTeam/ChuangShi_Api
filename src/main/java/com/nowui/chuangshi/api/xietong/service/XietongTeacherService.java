@@ -8,6 +8,7 @@ import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.api.xietong.dao.XietongTeacherDao;
 import com.nowui.chuangshi.api.xietong.model.XietongOrganization;
 import com.nowui.chuangshi.api.xietong.model.XietongTeacher;
+import com.nowui.chuangshi.api.xietong.model.XietongTeacherCategory;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.type.UserType;
@@ -37,7 +38,9 @@ public class XietongTeacherService extends Service {
     public List<XietongTeacher> adminList(String app_id, String organization_id, String teacher_name, String teacher_number, String teacher_category_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.select(XietongOrganization.TABLE_XIETONG_ORGANIZATION + "." + XietongOrganization.ORGANIZATION_NAME);
+        cnd.select(XietongTeacherCategory.TABLE_XIETONG_TEACHER_CATEGORY + "." + XietongTeacherCategory.TEACHER_CATEGORY_NAME);
         cnd.leftJoin(XietongOrganization.TABLE_XIETONG_ORGANIZATION, XietongOrganization.ORGANIZATION_ID, XietongTeacher.TABLE_XIETONG_TEACHER, XietongTeacher.ORGANIZATION_ID);
+        cnd.leftJoin(XietongTeacherCategory.TABLE_XIETONG_TEACHER_CATEGORY, XietongTeacherCategory.TEACHER_CATEGORY_ID, XietongTeacher.TABLE_XIETONG_TEACHER, XietongTeacher.TEACHER_CATEGORY_ID);
         cnd.where(XietongTeacher.TABLE_XIETONG_TEACHER + "." + XietongTeacher.SYSTEM_STATUS, true);
         cnd.and(XietongTeacher.TABLE_XIETONG_TEACHER + "." + XietongTeacher.APP_ID, app_id);
         cnd.andAllowEmpty(XietongTeacher.TABLE_XIETONG_TEACHER + "." + XietongTeacher.ORGANIZATION_ID, organization_id);
