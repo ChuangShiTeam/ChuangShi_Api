@@ -1,19 +1,19 @@
 package com.nowui.chuangshi.api.article.service;
 
+import java.util.List;
+import java.util.Map;
+
 import com.nowui.chuangshi.api.article.dao.ArticleCategoryDao;
 import com.nowui.chuangshi.api.article.model.ArticleCategory;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 public class ArticleCategoryService extends Service {
 
     public static final ArticleCategoryService instance = new ArticleCategoryService();
     private final String ARTICLE_CATEGORY_ITEM_CACHE = "article_category_item_cache";
+    private final String ARTICLE_CATEGORY_ID_LIST_BY_APP_CACHE = "article_category_id_list_by_app_cache";
     private final ArticleCategoryDao articleCategoryDao = new ArticleCategoryDao();
 
     public Integer adminCount(String app_id, String article_category_name) {
@@ -42,12 +42,19 @@ public class ArticleCategoryService extends Service {
     }
 
     public List<ArticleCategory> appList(String app_id) {
-        Cnd cnd = new Cnd();
-        cnd.where(ArticleCategory.SYSTEM_STATUS, true);
-        cnd.and(ArticleCategory.APP_ID, app_id);
-        cnd.asc(ArticleCategory.ARTICLE_CATEGORY_SORT);
+        List<ArticleCategory> articleCategoryList = CacheUtil.get(ARTICLE_CATEGORY_ID_LIST_BY_APP_CACHE, app_id);
+        
+        if (articleCategoryList == null) {
+            Cnd cnd = new Cnd();
+            cnd.where(ArticleCategory.SYSTEM_STATUS, true);
+            cnd.and(ArticleCategory.APP_ID, app_id);
+            cnd.asc(ArticleCategory.ARTICLE_CATEGORY_SORT);
 
-        List<ArticleCategory> articleCategoryList = articleCategoryDao.primaryKeyList(cnd);
+            articleCategoryList = articleCategoryDao.primaryKeyList(cnd);
+            
+            CacheUtil.put(ARTICLE_CATEGORY_ID_LIST_BY_APP_CACHE, app_id, articleCategoryList);
+        }
+        
         for (ArticleCategory articleCategory : articleCategoryList) {
             articleCategory.put(find(articleCategory.getArticle_category_id()));
         }
@@ -97,6 +104,9 @@ public class ArticleCategoryService extends Service {
 
     public Boolean save(ArticleCategory articleCategory, String system_create_user_id) {
         Boolean success = articleCategoryDao.save(articleCategory, system_create_user_id);
+        if (success) {
+            CacheUtil.removeAll(ARTICLE_CATEGORY_ID_LIST_BY_APP_CACHE);
+        }
         return success;
     }
 
@@ -125,6 +135,7 @@ public class ArticleCategoryService extends Service {
 
         if (success) {
             CacheUtil.remove(ARTICLE_CATEGORY_ITEM_CACHE, article_category_id);
+            CacheUtil.removeAll(ARTICLE_CATEGORY_ID_LIST_BY_APP_CACHE);
         }
 
         return success;

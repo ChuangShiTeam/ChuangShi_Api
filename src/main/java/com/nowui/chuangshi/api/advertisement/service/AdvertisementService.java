@@ -17,6 +17,7 @@ public class AdvertisementService extends Service {
 
     public static final AdvertisementService instance = new AdvertisementService();
     private final String ADVERTISEMENT_ITEM_CACHE = "advertisement_item_cache";
+    private final String ADVERTISEMENT_ID_LIST_BY_APP_CACHE = "advertisement_id_list_by_app_cache";
     private final AdvertisementDao advertisementDao = new AdvertisementDao();
 
     public Integer adminCount(String app_id, String advertisement_category_code, String advertisement_title) {
@@ -70,16 +71,23 @@ public class AdvertisementService extends Service {
     }
 
     public List<Advertisement> appList(String app_id) {
-        Cnd cnd = new Cnd();
-        cnd.where(Advertisement.SYSTEM_STATUS, true);
-        cnd.and(Advertisement.APP_ID, app_id);
-        cnd.asc(Advertisement.ADVERTISEMENT_SORT);
+        List<Advertisement> advertisementList = CacheUtil.get(ADVERTISEMENT_ID_LIST_BY_APP_CACHE, app_id);
+        
+        if (advertisementList == null) {
+            Cnd cnd = new Cnd();
+            cnd.where(Advertisement.SYSTEM_STATUS, true);
+            cnd.and(Advertisement.APP_ID, app_id);
+            cnd.asc(Advertisement.ADVERTISEMENT_SORT);
 
-        List<Advertisement> articleCategoryList = advertisementDao.primaryKeyList(cnd);
-        for (Advertisement articleCategory : articleCategoryList) {
-            articleCategory.put(find(articleCategory.getAdvertisement_id()));
+            advertisementList = advertisementDao.primaryKeyList(cnd);
+            
+            CacheUtil.put(ADVERTISEMENT_ID_LIST_BY_APP_CACHE, app_id, advertisementList);
         }
-        return articleCategoryList;
+        
+        for (Advertisement advertisement : advertisementList) {
+            advertisement.put(find(advertisement.getAdvertisement_id()));
+        }
+        return advertisementList;
     }
 
     public Advertisement find(String advertisement_id) {
@@ -104,6 +112,9 @@ public class AdvertisementService extends Service {
 
     public Boolean save(Advertisement advertisement, String system_create_user_id) {
         Boolean success = advertisementDao.save(advertisement, system_create_user_id);
+        if (success) {
+            CacheUtil.removeAll(ADVERTISEMENT_ID_LIST_BY_APP_CACHE);
+        }
         return success;
     }
 
@@ -132,6 +143,7 @@ public class AdvertisementService extends Service {
 
         if (success) {
             CacheUtil.remove(ADVERTISEMENT_ITEM_CACHE, advertisement_id);
+            CacheUtil.removeAll(ADVERTISEMENT_ID_LIST_BY_APP_CACHE);
         }
 
         return success;

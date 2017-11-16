@@ -3,6 +3,7 @@ package com.nowui.chuangshi.api.article.admin;
 
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.article.model.Article;
+import com.nowui.chuangshi.api.article.model.ArticleCategory;
 import com.nowui.chuangshi.api.article.service.ArticleService;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
@@ -27,7 +28,7 @@ public class ArticleController extends Controller {
         Integer resultCount = ArticleService.instance.adminCount(request_app_id, model.getArticle_name());
         List<Article> resultList = ArticleService.instance.adminList(request_app_id, model.getArticle_name(), getM(), getN());
 
-        validateResponse(Article.ARTICLE_ID, Article.ARTICLE_NAME, Article.SYSTEM_VERSION);
+        validateResponse(Article.ARTICLE_ID, Article.ARTICLE_NAME, ArticleCategory.ARTICLE_CATEGORY_NAME, Article.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }

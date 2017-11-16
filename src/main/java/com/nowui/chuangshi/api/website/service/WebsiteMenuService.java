@@ -14,6 +14,7 @@ public class WebsiteMenuService extends Service {
 
     public static final WebsiteMenuService instance = new WebsiteMenuService();
     private final String WEB_SITE_ITEM_CACHE = "web_site_item_cache";
+    private final String WEB_SITE_ID_LIST_BY_APP_CACHE = "web_site_id_list_by_app_cache";
     private final WebsiteMenuDao websiteMenuDao = new WebsiteMenuDao();
 
     public List<Map<String, Object>> tree(String app_id) {
@@ -33,12 +34,19 @@ public class WebsiteMenuService extends Service {
     }
 
     public List<Map<String, Object>> appTree(String app_id, String id_custom_name, String name_coustom_name, String... keys) {
-        Cnd cnd = new Cnd();
-        cnd.where(WebsiteMenu.SYSTEM_STATUS, true);
-        cnd.and(WebsiteMenu.APP_ID, app_id);
-        cnd.asc(WebsiteMenu.WEBSITE_MENU_SORT);
-
-        List<WebsiteMenu> websiteMenuList = websiteMenuDao.primaryKeyList(cnd);
+        List<WebsiteMenu> websiteMenuList = CacheUtil.get(WEB_SITE_ID_LIST_BY_APP_CACHE, app_id);
+        
+        if (websiteMenuList == null) {
+            Cnd cnd = new Cnd();
+            cnd.where(WebsiteMenu.SYSTEM_STATUS, true);
+            cnd.and(WebsiteMenu.APP_ID, app_id);
+            cnd.asc(WebsiteMenu.WEBSITE_MENU_SORT);
+            websiteMenuList = websiteMenuDao.primaryKeyList(cnd);
+            
+            CacheUtil.put(WEB_SITE_ID_LIST_BY_APP_CACHE, app_id, websiteMenuList);
+            
+        }
+        
         for (WebsiteMenu websiteMenu : websiteMenuList) {
             websiteMenu.put(find(websiteMenu.getWebsite_menu_id()));
         }
@@ -79,6 +87,9 @@ public class WebsiteMenuService extends Service {
 
     public Boolean save(WebsiteMenu websiteMenu, String system_create_user_id) {
         Boolean success = websiteMenuDao.save(websiteMenu, system_create_user_id);
+        if (success) {
+            CacheUtil.removeAll(WEB_SITE_ID_LIST_BY_APP_CACHE);
+        }
         return success;
     }
 
@@ -107,6 +118,7 @@ public class WebsiteMenuService extends Service {
 
         if (success) {
             CacheUtil.remove(WEB_SITE_ITEM_CACHE, website_menu_id);
+            CacheUtil.removeAll(WEB_SITE_ID_LIST_BY_APP_CACHE);
         }
 
         return success;

@@ -1,16 +1,15 @@
 package com.nowui.chuangshi.api.article.admin;
 
 
+import java.util.List;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.article.model.ArticleCategory;
 import com.nowui.chuangshi.api.article.service.ArticleCategoryService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
-
-import java.util.List;
 
 
 @ControllerKey("/admin/article/category")
@@ -33,7 +32,6 @@ public class ArticleCategoryController extends Controller {
 
     @ActionKey("/admin/article/category/all/list")
     public void allList() {
-        ArticleCategory model = getModel(ArticleCategory.class);
         String request_app_id = getRequest_app_id();
 
         List<ArticleCategory> resultList = ArticleCategoryService.instance.appList(request_app_id);

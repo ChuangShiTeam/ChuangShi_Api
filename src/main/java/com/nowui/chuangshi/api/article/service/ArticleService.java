@@ -1,5 +1,7 @@
 package com.nowui.chuangshi.api.article.service;
 
+import java.util.List;
+
 import com.nowui.chuangshi.api.article.dao.ArticleDao;
 import com.nowui.chuangshi.api.article.model.Article;
 import com.nowui.chuangshi.api.article.model.ArticleCategory;
@@ -8,13 +10,11 @@ import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ArticleService extends Service {
 
     public static final ArticleService instance = new ArticleService();
     private final String ARTICLE_ITEM_CACHE = "article_item_cache";
+    private final String ARTICLE_LIST_BY_CATEGORY_IDS_CACHE = "article_list_by_category_ids_cache";
     private final ArticleDao articleDao = new ArticleDao();
 
     public Integer adminCount(String app_id, String article_name) {
@@ -117,7 +117,14 @@ public class ArticleService extends Service {
     }
 
     public List<Article> topCategoryList(List<String> articleCategoryIdList, Integer n) {
-        List<Article> resultList = articleDao.topCategoryList(articleCategoryIdList, n);
+        List<Article> resultList = CacheUtil.get(ARTICLE_LIST_BY_CATEGORY_IDS_CACHE, articleCategoryIdList.toString() + n.toString());
+        
+        if (resultList == null || resultList.size() == 0) {
+            resultList = articleDao.topCategoryList(articleCategoryIdList, n);
+            
+            CacheUtil.put(ARTICLE_LIST_BY_CATEGORY_IDS_CACHE, articleCategoryIdList.toString() + n.toString(), resultList);
+        }
+        
         return resultList;
     }
 
@@ -126,8 +133,10 @@ public class ArticleService extends Service {
 
         if (article == null) {
             Cnd cnd = new Cnd();
+            cnd.select(ArticleCategory.TABLE_ARTICLE_CATEGORY + "." + ArticleCategory.ARTICLE_CATEGORY_NAME);
             cnd.selectIfNull(File.TABLE_FILE + "." + File.FILE_ID, "", File.FILE_ID);
             cnd.selectIfNull(File.TABLE_FILE + "." + File.FILE_PATH, "", File.FILE_PATH);
+            cnd.leftJoin(ArticleCategory.TABLE_ARTICLE_CATEGORY, ArticleCategory.ARTICLE_CATEGORY_ID, Article.TABLE_ARTICLE, Article.ARTICLE_CATEGORY_ID);
             cnd.leftJoin(File.TABLE_FILE, File.FILE_ID, Article.TABLE_ARTICLE, Article.ARTICLE_IMAGE);
             cnd.where(Article.TABLE_ARTICLE + "." + Article.SYSTEM_STATUS, true);
             cnd.and(Article.TABLE_ARTICLE + "." + Article.ARTICLE_ID, article_id);
@@ -142,6 +151,10 @@ public class ArticleService extends Service {
 
     public Boolean save(Article article, String system_create_user_id) {
         Boolean success = articleDao.save(article, system_create_user_id);
+        
+        if (success) {
+            CacheUtil.removeAll(ARTICLE_LIST_BY_CATEGORY_IDS_CACHE);
+        }
         return success;
     }
 
@@ -155,6 +168,7 @@ public class ArticleService extends Service {
 
         if (success) {
             CacheUtil.remove(ARTICLE_ITEM_CACHE, article_id);
+            CacheUtil.removeAll(ARTICLE_LIST_BY_CATEGORY_IDS_CACHE);
         }
 
         return success;
@@ -170,6 +184,7 @@ public class ArticleService extends Service {
 
         if (success) {
             CacheUtil.remove(ARTICLE_ITEM_CACHE, article_id);
+            CacheUtil.removeAll(ARTICLE_LIST_BY_CATEGORY_IDS_CACHE);
         }
 
         return success;
