@@ -26,7 +26,7 @@ public class AdminController extends Controller {
 
     @ActionKey("/admin/admin/list")
     public void list() {
-        validateRequest(Admin.USER_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(User.USER_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         Admin model = getModel(Admin.class);
         String request_app_id = getRequest_app_id();
@@ -34,7 +34,7 @@ public class AdminController extends Controller {
         Integer resultCount = AdminService.instance.adminCount(request_app_id, model.getUser_id());
         List<Admin> resultList = AdminService.instance.adminList(request_app_id, model.getUser_id(), getM(), getN());
 
-        validateResponse(Admin.ADMIN_ID, Admin.USER_ID, Admin.SYSTEM_VERSION);
+        validateResponse(Admin.ADMIN_ID, Admin.USER_ID, User.USER_NAME, Admin.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -47,7 +47,7 @@ public class AdminController extends Controller {
 
         Admin result = AdminService.instance.find(model.getAdmin_id());
 
-        validateResponse(Admin.USER_ID, Admin.SYSTEM_VERSION);
+        validateResponse(Admin.ADMIN_ID, Admin.USER_ID, User.USER_NAME, User.USER_ACCOUNT, Admin.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }

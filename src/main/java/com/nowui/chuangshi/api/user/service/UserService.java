@@ -1,6 +1,12 @@
 package com.nowui.chuangshi.api.user.service;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import com.alibaba.fastjson.JSONObject;
+import com.nowui.chuangshi.api.menu.service.MenuService;
 import com.nowui.chuangshi.api.user.dao.UserDao;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.common.service.Service;
@@ -12,10 +18,6 @@ import com.nowui.chuangshi.util.AesUtil;
 import com.nowui.chuangshi.util.CacheUtil;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
-import org.apache.commons.lang3.StringEscapeUtils;
-
-import java.util.Calendar;
-import java.util.Date;
 
 public class UserService extends Service {
 
@@ -258,6 +260,10 @@ public class UserService extends Service {
         
         return success;
     }
+    
+    public List<Map<String, Object>> menuList(String user_id) {
+        return MenuService.instance.userList(user_id);
+    }
 
     public static void main(String[] args) {
         try {
@@ -276,5 +282,5 @@ public class UserService extends Service {
             throw new RuntimeException("登录不成功");
         }
     }
-
+    
 }

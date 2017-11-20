@@ -2,6 +2,8 @@ package com.nowui.chuangshi.api.admin.service;
 
 import com.nowui.chuangshi.api.admin.dao.AdminDao;
 import com.nowui.chuangshi.api.admin.model.Admin;
+import com.nowui.chuangshi.api.user.model.User;
+import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
@@ -14,21 +16,24 @@ public class AdminService extends Service {
     private final String ADMIN_ITEM_CACHE = "admin_item_cache";
     private final AdminDao adminDao = new AdminDao();
 
-    public Integer adminCount(String app_id, String user_id) {
+    public Integer adminCount(String app_id, String user_name) {
         Cnd cnd = new Cnd();
-        cnd.where(Admin.SYSTEM_STATUS, true);
-        cnd.and(Admin.APP_ID, app_id);
-        cnd.andAllowEmpty(Admin.USER_ID, user_id);
+        cnd.leftJoin(User.TABLE_USER, User.USER_ID, Admin.TABLE_ADMIN, Admin.USER_ID);
+        cnd.where(Admin.TABLE_ADMIN + "." + Admin.SYSTEM_STATUS, true);
+        cnd.and(Admin.TABLE_ADMIN + "." + Admin.APP_ID, app_id);
+        cnd.andLikeAllowEmpty(User.TABLE_USER + "." + User.USER_NAME, user_name);
 
         Integer count = adminDao.count(cnd);
         return count;
     }
 
-    public List<Admin> adminList(String app_id, String user_id, Integer m, Integer n) {
+    public List<Admin> adminList(String app_id, String user_name, Integer m, Integer n) {
         Cnd cnd = new Cnd();
-        cnd.where(Admin.SYSTEM_STATUS, true);
-        cnd.and(Admin.APP_ID, app_id);
-        cnd.andAllowEmpty(Admin.USER_ID, user_id);
+        cnd.leftJoin(User.TABLE_USER, User.USER_ID, Admin.TABLE_ADMIN, Admin.USER_ID);
+        cnd.where(Admin.TABLE_ADMIN + "." + Admin.SYSTEM_STATUS, true);
+        cnd.and(Admin.TABLE_ADMIN + "." + Admin.APP_ID, app_id);
+        cnd.andAllowEmpty(User.TABLE_USER + "." + User.USER_NAME, user_name);
+        cnd.desc(Admin.TABLE_ADMIN + "." + Admin.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
         List<Admin> adminList = adminDao.primaryKeyList(cnd);
@@ -43,7 +48,9 @@ public class AdminService extends Service {
 
         if (admin == null) {
             admin = adminDao.find(admin_id);
-
+            User user = UserService.instance.find(admin.getUser_id());
+            admin.put(User.USER_NAME, user.getUser_name());
+            admin.put(User.USER_ACCOUNT, user.getUser_account());
             CacheUtil.put(ADMIN_ITEM_CACHE, admin_id, admin);
         }
 

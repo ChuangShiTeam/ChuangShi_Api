@@ -2,6 +2,9 @@ package com.nowui.chuangshi.api.menu.service;
 
 import com.nowui.chuangshi.api.menu.dao.MenuDao;
 import com.nowui.chuangshi.api.menu.model.Menu;
+import com.nowui.chuangshi.api.role.model.Role;
+import com.nowui.chuangshi.api.role.model.RoleMenu;
+import com.nowui.chuangshi.api.user.model.UserRole;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Constant;
@@ -9,6 +12,7 @@ import com.nowui.chuangshi.util.CacheUtil;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MenuService extends Service {
 
@@ -41,16 +45,44 @@ public class MenuService extends Service {
     }
 
     public List<Map<String, Object>> menuList(String app_id) {
+        List<Menu> menuList = appList(app_id);
+
+        List<Map<String, Object>> resultList = packageChildren(menuList, Constant.PARENT_ID, Menu.MENU_PARENT_ID, Menu.MENU_ID, Menu.MENU_ID, Menu.MENU_NAME, Menu.MENU_NAME, new String[]{Menu.MENU_IMAGE, Menu.MENU_URL});
+
+        return resultList;
+    }
+    
+    public List<Map<String, Object>> userList(String user_id) {
+        Cnd cnd = new Cnd();
+        cnd.leftJoin(RoleMenu.TABLE_ROLE_MENU, RoleMenu.MENU_ID, Menu.TABLE_MENU, Menu.MENU_ID);
+        cnd.leftJoin(UserRole.TABLE_USER_ROLE, UserRole.ROLE_ID, RoleMenu.TABLE_ROLE_MENU, RoleMenu.ROLE_ID);
+        cnd.where(Menu.TABLE_MENU + "." + Menu.SYSTEM_STATUS, true);
+        cnd.and(UserRole.TABLE_USER_ROLE + "." + UserRole.SYSTEM_STATUS, true);
+        cnd.and(RoleMenu.TABLE_ROLE_MENU + "." + RoleMenu.SYSTEM_STATUS, true);
+        cnd.and(UserRole.TABLE_USER_ROLE + "." + UserRole.USER_ID, user_id);
+        cnd.asc(Menu.TABLE_MENU + "." + Menu.MENU_SORT);
+        
+        List<Menu> menuList = menuDao.primaryKeyList(cnd);
+        menuList = menuList.stream().distinct().collect(Collectors.toList());
+        
+        for (Menu menu : menuList) {
+            menu.put(find(menu.getMenu_id()));
+        }
+        
+        List<Map<String, Object>> resultList = packageChildren(menuList, Constant.PARENT_ID, Menu.MENU_PARENT_ID, Menu.MENU_ID, Menu.MENU_ID, Menu.MENU_NAME, Menu.MENU_NAME, new String[]{Menu.MENU_IMAGE, Menu.MENU_URL});
+        
+        return resultList;
+    }
+    
+    public List<Menu> appList(String app_id) {
         Cnd cnd = new Cnd();
         cnd.where(Menu.SYSTEM_STATUS, true);
         cnd.and(Menu.APP_ID, app_id);
         cnd.asc(Menu.MENU_SORT);
 
         List<Menu> menuList = menuDao.list(cnd);
-
-        List<Map<String, Object>> resultList = packageChildren(menuList, Constant.PARENT_ID, Menu.MENU_PARENT_ID, Menu.MENU_ID, Menu.MENU_ID, Menu.MENU_NAME, Menu.MENU_NAME, new String[]{Menu.MENU_IMAGE, Menu.MENU_URL});
-
-        return resultList;
+        
+        return menuList;
     }
 
     public Menu find(String menu_id) {
