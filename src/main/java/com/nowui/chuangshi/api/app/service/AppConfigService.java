@@ -2,6 +2,7 @@ package com.nowui.chuangshi.api.app.service;
 
 import com.nowui.chuangshi.api.app.dao.AppConfigDao;
 import com.nowui.chuangshi.api.app.model.AppConfig;
+import com.nowui.chuangshi.api.app.model.AppConfigCategory;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
@@ -47,7 +48,8 @@ public class AppConfigService extends Service {
 
         if (app_config == null) {
             app_config = appConfigDao.find(config_id);
-
+            AppConfigCategory app_config_category = AppConfigCategoryService.instance.find(app_config.getConfig_category_id());
+            app_config.put(AppConfigCategory.CONFIG_CATEGORY_NAME, app_config_category.getConfig_category_name());
             CacheUtil.put(APP_CONFIG_ITEM_CACHE, config_id, app_config);
         }
 
