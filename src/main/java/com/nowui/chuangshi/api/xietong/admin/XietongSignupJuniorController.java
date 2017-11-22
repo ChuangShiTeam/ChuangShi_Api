@@ -17,15 +17,15 @@ public class XietongSignupJuniorController extends Controller {
 
     @ActionKey("/admin/xietong/signup/junior/list")
     public void list() {
-        validateRequest(XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.ID_NO, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.STUDENT_CATEGORY, XietongSignupJunior.ID_NO, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         XietongSignupJunior model = getModel(XietongSignupJunior.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = XietongSignupJuniorService.instance.adminCount(request_app_id, model.getStudent_name(), model.getId_no());
-        List<XietongSignupJunior> resultList = XietongSignupJuniorService.instance.adminList(request_app_id, model.getStudent_name(), model.getId_no(), getM(), getN());
+        Integer resultCount = XietongSignupJuniorService.instance.adminCount(request_app_id, model.getStudent_name(), model.getStudent_category(), model.getId_no());
+        List<XietongSignupJunior> resultList = XietongSignupJuniorService.instance.adminList(request_app_id, model.getStudent_name(), model.getStudent_category(), model.getId_no(), getM(), getN());
 
-        validateResponse(XietongSignupJunior.SIGNUP_ID, XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.STUDENT_SEX, XietongSignupJunior.STUDENT_BIRTHDAY, XietongSignupJunior.JOB, XietongSignupJunior.ID_TYPE, XietongSignupJunior.ID_NO, XietongSignupJunior.PERMANENT_ADDRESS, XietongSignupJunior.LIVE_ADDRESSS, XietongSignupJunior.SYSTEM_VERSION);
+        validateResponse(XietongSignupJunior.SIGNUP_ID, XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.STUDENT_SEX, XietongSignupJunior.STUDENT_CATEGORY, XietongSignupJunior.STUDENT_BIRTHDAY, XietongSignupJunior.JOB, XietongSignupJunior.ID_TYPE, XietongSignupJunior.ID_NO, XietongSignupJunior.PERMANENT_ADDRESS, XietongSignupJunior.LIVE_ADDRESSS, XietongSignupJunior.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -38,14 +38,14 @@ public class XietongSignupJuniorController extends Controller {
 
         XietongSignupJunior result = XietongSignupJuniorService.instance.find(model.getSignup_id());
 
-        validateResponse(XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.STUDENT_SEX, XietongSignupJunior.STUDENT_BIRTHDAY, XietongSignupJunior.INTERVIEW_TIME, XietongSignupJunior.JOB, XietongSignupJunior.PRIMARY_SCHOOL_CLASS, XietongSignupJunior.PRIMARY_SCHOOL, XietongSignupJunior.ID_TYPE, XietongSignupJunior.ID_NO, XietongSignupJunior.PERMANENT_ADDRESS, XietongSignupJunior.LIVE_ADDRESSS, XietongSignupJunior.FATHER_NAME, XietongSignupJunior.FATHER_ID_NO, XietongSignupJunior.FATHER_WORK, XietongSignupJunior.FATHER_PHONE, XietongSignupJunior.MOTHER_NAME, XietongSignupJunior.MOTHER_ID_NO, XietongSignupJunior.MOTHER_WORK, XietongSignupJunior.MOTHER_PHONE, XietongSignupJunior.MARK, XietongSignupJunior.REMARK, XietongSignupJunior.SIGNUP_STATUS, XietongSignupJunior.MATH_SCORE, XietongSignupJunior.ENGLISH_SCORE, XietongSignupJunior.CHINESE_SCORE, XietongSignupJunior.SYSTEM_VERSION);
+        validateResponse(XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.STUDENT_SEX, XietongSignupJunior.STUDENT_CATEGORY, XietongSignupJunior.STUDENT_BIRTHDAY, XietongSignupJunior.INTERVIEW_TIME, XietongSignupJunior.JOB, XietongSignupJunior.PRIMARY_SCHOOL_CLASS, XietongSignupJunior.PRIMARY_SCHOOL, XietongSignupJunior.ID_TYPE, XietongSignupJunior.ID_NO, XietongSignupJunior.PERMANENT_ADDRESS, XietongSignupJunior.LIVE_ADDRESSS, XietongSignupJunior.FATHER_NAME, XietongSignupJunior.FATHER_ID_NO, XietongSignupJunior.FATHER_WORK, XietongSignupJunior.FATHER_PHONE, XietongSignupJunior.MOTHER_NAME, XietongSignupJunior.MOTHER_ID_NO, XietongSignupJunior.MOTHER_WORK, XietongSignupJunior.MOTHER_PHONE, XietongSignupJunior.MARK, XietongSignupJunior.REMARK, XietongSignupJunior.SIGNUP_STATUS, XietongSignupJunior.MATH_SCORE, XietongSignupJunior.ENGLISH_SCORE, XietongSignupJunior.CHINESE_SCORE, XietongSignupJunior.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
 
     @ActionKey("/admin/xietong/signup/junior/save")
     public void save() {
-        validateRequest(XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.STUDENT_SEX, XietongSignupJunior.STUDENT_BIRTHDAY, XietongSignupJunior.INTERVIEW_TIME, XietongSignupJunior.JOB, XietongSignupJunior.PRIMARY_SCHOOL_CLASS, XietongSignupJunior.PRIMARY_SCHOOL, XietongSignupJunior.ID_TYPE, XietongSignupJunior.ID_NO, XietongSignupJunior.PERMANENT_ADDRESS, XietongSignupJunior.LIVE_ADDRESSS, XietongSignupJunior.FATHER_NAME, XietongSignupJunior.FATHER_ID_NO, XietongSignupJunior.FATHER_WORK, XietongSignupJunior.FATHER_PHONE, XietongSignupJunior.MOTHER_NAME, XietongSignupJunior.MOTHER_ID_NO, XietongSignupJunior.MOTHER_WORK, XietongSignupJunior.MOTHER_PHONE, XietongSignupJunior.MARK, XietongSignupJunior.REMARK, XietongSignupJunior.SIGNUP_STATUS, XietongSignupJunior.MATH_SCORE, XietongSignupJunior.ENGLISH_SCORE, XietongSignupJunior.CHINESE_SCORE);
+        validateRequest(XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.STUDENT_SEX, XietongSignupJunior.STUDENT_CATEGORY, XietongSignupJunior.STUDENT_BIRTHDAY, XietongSignupJunior.INTERVIEW_TIME, XietongSignupJunior.JOB, XietongSignupJunior.PRIMARY_SCHOOL_CLASS, XietongSignupJunior.PRIMARY_SCHOOL, XietongSignupJunior.ID_TYPE, XietongSignupJunior.ID_NO, XietongSignupJunior.PERMANENT_ADDRESS, XietongSignupJunior.LIVE_ADDRESSS, XietongSignupJunior.FATHER_NAME, XietongSignupJunior.FATHER_ID_NO, XietongSignupJunior.FATHER_WORK, XietongSignupJunior.FATHER_PHONE, XietongSignupJunior.MOTHER_NAME, XietongSignupJunior.MOTHER_ID_NO, XietongSignupJunior.MOTHER_WORK, XietongSignupJunior.MOTHER_PHONE, XietongSignupJunior.MARK, XietongSignupJunior.REMARK, XietongSignupJunior.SIGNUP_STATUS, XietongSignupJunior.MATH_SCORE, XietongSignupJunior.ENGLISH_SCORE, XietongSignupJunior.CHINESE_SCORE);
 
         XietongSignupJunior model = getModel(XietongSignupJunior.class);
         model.setSignup_id(Util.getRandomUUID());
@@ -58,7 +58,7 @@ public class XietongSignupJuniorController extends Controller {
 
     @ActionKey("/admin/xietong/signup/junior/update")
     public void update() {
-        validateRequest(XietongSignupJunior.SIGNUP_ID, XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.STUDENT_SEX, XietongSignupJunior.STUDENT_BIRTHDAY, XietongSignupJunior.INTERVIEW_TIME, XietongSignupJunior.JOB, XietongSignupJunior.PRIMARY_SCHOOL_CLASS, XietongSignupJunior.PRIMARY_SCHOOL, XietongSignupJunior.ID_TYPE, XietongSignupJunior.ID_NO, XietongSignupJunior.PERMANENT_ADDRESS, XietongSignupJunior.LIVE_ADDRESSS, XietongSignupJunior.FATHER_NAME, XietongSignupJunior.FATHER_ID_NO, XietongSignupJunior.FATHER_WORK, XietongSignupJunior.FATHER_PHONE, XietongSignupJunior.MOTHER_NAME, XietongSignupJunior.MOTHER_ID_NO, XietongSignupJunior.MOTHER_WORK, XietongSignupJunior.MOTHER_PHONE, XietongSignupJunior.MARK, XietongSignupJunior.REMARK, XietongSignupJunior.SIGNUP_STATUS, XietongSignupJunior.MATH_SCORE, XietongSignupJunior.ENGLISH_SCORE, XietongSignupJunior.CHINESE_SCORE, XietongSignupJunior.SYSTEM_VERSION);
+        validateRequest(XietongSignupJunior.SIGNUP_ID, XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.STUDENT_SEX, XietongSignupJunior.STUDENT_CATEGORY, XietongSignupJunior.STUDENT_BIRTHDAY, XietongSignupJunior.INTERVIEW_TIME, XietongSignupJunior.JOB, XietongSignupJunior.PRIMARY_SCHOOL_CLASS, XietongSignupJunior.PRIMARY_SCHOOL, XietongSignupJunior.ID_TYPE, XietongSignupJunior.ID_NO, XietongSignupJunior.PERMANENT_ADDRESS, XietongSignupJunior.LIVE_ADDRESSS, XietongSignupJunior.FATHER_NAME, XietongSignupJunior.FATHER_ID_NO, XietongSignupJunior.FATHER_WORK, XietongSignupJunior.FATHER_PHONE, XietongSignupJunior.MOTHER_NAME, XietongSignupJunior.MOTHER_ID_NO, XietongSignupJunior.MOTHER_WORK, XietongSignupJunior.MOTHER_PHONE, XietongSignupJunior.MARK, XietongSignupJunior.REMARK, XietongSignupJunior.SIGNUP_STATUS, XietongSignupJunior.MATH_SCORE, XietongSignupJunior.ENGLISH_SCORE, XietongSignupJunior.CHINESE_SCORE, XietongSignupJunior.SYSTEM_VERSION);
 
         XietongSignupJunior model = getModel(XietongSignupJunior.class);
         String request_user_id = getRequest_user_id();

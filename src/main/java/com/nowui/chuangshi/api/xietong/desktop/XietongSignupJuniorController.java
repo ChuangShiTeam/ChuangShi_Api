@@ -55,8 +55,8 @@ public class XietongSignupJuniorController extends Controller {
                     XietongSignupJunior.MOTHER_PHONE, XietongSignupJunior.MOTHER_WORK, 
                     XietongSignupJunior.PERMANENT_ADDRESS, XietongSignupJunior.REMARK, 
                     XietongSignupJunior.SIGNUP_STATUS, XietongSignupJunior.STUDENT_BIRTHDAY, 
-                    XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.STUDENT_SEX, 
-                    XietongSignupJunior.SYSTEM_VERSION);
+                    XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.STUDENT_SEX,
+                    XietongSignupJunior.STUDENT_CATEGORY, XietongSignupJunior.SYSTEM_VERSION);
             result.put("signup_junior", bean);
             
             validateResponse("signup_junior", "tip");

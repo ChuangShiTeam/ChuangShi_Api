@@ -55,7 +55,7 @@ public class XietongSignupPupilController extends Controller {
                     XietongSignupPupil.PERMANENT_ADDRESS, XietongSignupPupil.REMARK, 
                     XietongSignupPupil.SIGNUP_STATUS, XietongSignupPupil.STUDENT_BIRTHDAY, 
                     XietongSignupPupil.STUDENT_NAME, XietongSignupPupil.STUDENT_SEX, 
-                    XietongSignupPupil.SYSTEM_VERSION);
+                    XietongSignupPupil.STUDENT_CATEGORY, XietongSignupPupil.SYSTEM_VERSION);
             result.put("signup_pupil", bean);
             
             validateResponse("signup_pupil", "tip");

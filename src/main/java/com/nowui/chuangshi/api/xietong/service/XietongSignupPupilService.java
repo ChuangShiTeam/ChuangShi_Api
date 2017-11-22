@@ -34,23 +34,25 @@ public class XietongSignupPupilService extends Service {
     private final String MOBILE_XIETONG_SIGNUP_PUPIL_ITEM_CACHE = "mobile_xietong_signup_pupil_item_cache";
     private final XietongSignupPupilDao xietongSignupPupilDao = new XietongSignupPupilDao();
 
-    public Integer adminCount(String app_id, String student_name, String id_no) {
+    public Integer adminCount(String app_id, String student_name, String student_category, String id_no) {
         Cnd cnd = new Cnd();
         cnd.where(XietongSignupPupil.SYSTEM_STATUS, true);
         cnd.and(XietongSignupPupil.APP_ID, app_id);
-        cnd.andAllowEmpty(XietongSignupPupil.STUDENT_NAME, student_name);
-        cnd.andAllowEmpty(XietongSignupPupil.ID_NO, id_no);
+        cnd.andLikeAllowEmpty(XietongSignupPupil.STUDENT_NAME, student_name);
+        cnd.andAllowEmpty(XietongSignupPupil.STUDENT_CATEGORY, student_category);
+        cnd.andLikeAllowEmpty(XietongSignupPupil.ID_NO, id_no);
 
         Integer count = xietongSignupPupilDao.count(cnd);
         return count;
     }
 
-    public List<XietongSignupPupil> adminList(String app_id, String student_name, String id_no, Integer m, Integer n) {
+    public List<XietongSignupPupil> adminList(String app_id, String student_name, String student_category, String id_no, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(XietongSignupPupil.SYSTEM_STATUS, true);
         cnd.and(XietongSignupPupil.APP_ID, app_id);
-        cnd.andAllowEmpty(XietongSignupPupil.STUDENT_NAME, student_name);
-        cnd.andAllowEmpty(XietongSignupPupil.ID_NO, id_no);
+        cnd.andLikeAllowEmpty(XietongSignupPupil.STUDENT_NAME, student_name);
+        cnd.andAllowEmpty(XietongSignupPupil.STUDENT_CATEGORY, student_category);
+        cnd.andLikeAllowEmpty(XietongSignupPupil.ID_NO, id_no);
         cnd.desc(XietongSignupPupil.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
