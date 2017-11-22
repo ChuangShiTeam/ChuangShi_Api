@@ -23,7 +23,7 @@ public class WebsiteMenuController extends Controller {
 
         List<Map<String, Object>> resultList = WebsiteMenuService.instance.tree(request_app_id);
 
-        validateResponse(WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_URL, WebsiteMenu.WEBSITE_MENU_SORT);
+        validateResponse(WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_URL, WebsiteMenu.WEBSITE_MENU_SORT, WebsiteMenu.SYSTEM_VERSION);
 
         renderSuccessJson(resultList);
     }
