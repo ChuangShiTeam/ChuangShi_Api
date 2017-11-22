@@ -182,7 +182,7 @@ public class SupplierController extends Controller {
             User user = UserService.instance.find(result.getUser_id());
             result.put(User.USER_NAME, user.getUser_name());
             result.put(User.USER_ACCOUNT, user.getUser_account());
-            result.keep(Supplier.SUPPLIER_ID, Supplier.SUPPLIER_STATUS, User.USER_NAME, User.USER_ACCOUNT,
+            result.keep(Supplier.SUPPLIER_ID, Supplier.SUPPLIER_STATUS, Supplier.USER_ID, User.USER_NAME, User.USER_ACCOUNT,
                     Supplier.SYSTEM_VERSION, Supplier.SYSTEM_CREATE_TIME);
         }
 
