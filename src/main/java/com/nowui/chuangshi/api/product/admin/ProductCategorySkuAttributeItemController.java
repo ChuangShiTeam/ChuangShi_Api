@@ -22,8 +22,8 @@ public class ProductCategorySkuAttributeItemController extends Controller {
 
         ProductCategorySkuAttributeItem model = getModel(ProductCategorySkuAttributeItem.class);
 
-        Integer resultCount = ProductCategorySkuAttributeItemService.instance.adminCount( model.getProduct_category_sku_attribute_id());
-        List<ProductCategorySkuAttributeItem> resultList = ProductCategorySkuAttributeItemService.instance.adminList( model.getProduct_category_sku_attribute_id(), getM(), getN());
+        Integer resultCount = ProductCategorySkuAttributeItemService.instance.adminCount(model.getProduct_category_sku_attribute_id());
+        List<ProductCategorySkuAttributeItem> resultList = ProductCategorySkuAttributeItemService.instance.adminList(model.getProduct_category_sku_attribute_id(), getM(), getN());
 
         validateResponse(ProductCategorySkuAttributeItem.PRODUCT_CATEGORY_SKU_ATTRIBUTE_ITEM_ID, ProductCategorySkuAttributeItem.PRODUCT_CATEGORY_SKU_ATTRIBUTE_ID, ProductCategorySkuAttributeItem.PRODUCT_CATEGORY_SKU_ATTRIBUTE_ITEM_NAME, ProductCategorySkuAttributeItem.PRODUCT_CATEGORY_SKU_ATTRIBUTE_ITEM_SORT, ProductCategorySkuAttributeItem.SYSTEM_VERSION);
 

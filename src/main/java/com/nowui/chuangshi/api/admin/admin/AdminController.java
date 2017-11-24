@@ -31,8 +31,8 @@ public class AdminController extends Controller {
         Admin model = getModel(Admin.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = AdminService.instance.adminCount(request_app_id, model.getUser_id());
-        List<Admin> resultList = AdminService.instance.adminList(request_app_id, model.getUser_id(), getM(), getN());
+        Integer resultCount = AdminService.instance.adminCount(request_app_id, model.getStr(User.USER_NAME));
+        List<Admin> resultList = AdminService.instance.adminList(request_app_id, model.getStr(User.USER_NAME), getM(), getN());
 
         validateResponse(Admin.ADMIN_ID, Admin.USER_ID, User.USER_NAME, Admin.SYSTEM_VERSION);
 

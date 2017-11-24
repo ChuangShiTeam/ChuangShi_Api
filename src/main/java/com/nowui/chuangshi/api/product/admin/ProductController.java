@@ -10,6 +10,7 @@ import com.nowui.chuangshi.api.product.service.*;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 
+import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
 
@@ -22,8 +23,17 @@ public class ProductController extends Controller {
 
     @ActionKey("/admin/product/list")
     public void list() {
+        validateRequest(Product.PRODUCT_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
-        renderSuccessJson();
+        Product model = getModel(Product.class);
+        String request_app_id = getRequest_app_id();
+
+        Integer resultCount = ProductService.instance.adminCount(request_app_id, model.getProduct_name());
+        List<Product> resultList = ProductService.instance.adminList(request_app_id, model.getProduct_name(), getM(), getN());
+
+        validateResponse(Product.PRODUCT_ID, Product.PRODUCT_NAME, File.FILE_PATH, Product.SYSTEM_VERSION);
+
+        renderSuccessJson(resultCount, resultList);
     }
 
     @ActionKey("/admin/product/find")
