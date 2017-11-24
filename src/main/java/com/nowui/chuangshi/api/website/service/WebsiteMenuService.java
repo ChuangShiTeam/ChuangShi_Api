@@ -29,7 +29,7 @@ public class WebsiteMenuService extends Service {
         }
 
         String parent_id = "";
-        List<Map<String, Object>> resultList = packageChildren(websiteMenuList, parent_id, WebsiteMenu.WEBSITE_MENU_PARENT_ID, WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_NAME, new String[]{WebsiteMenu.WEBSITE_MENU_URL, WebsiteMenu.WEBSITE_MENU_SORT, WebsiteMenu.PAGE_ID});
+        List<Map<String, Object>> resultList = packageChildren(websiteMenuList, parent_id, WebsiteMenu.WEBSITE_MENU_PARENT_ID, WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_ID, WebsiteMenu.WEBSITE_MENU_NAME, WebsiteMenu.WEBSITE_MENU_NAME, new String[]{WebsiteMenu.WEBSITE_MENU_URL, WebsiteMenu.WEBSITE_MENU_SORT, WebsiteMenu.PAGE_ID, WebsiteMenu.SYSTEM_VERSION});
         return resultList;
     }
 
