@@ -63,6 +63,7 @@ public class AdminController extends Controller {
 
         Admin model = getModel(Admin.class);
         model.setAdmin_id(admin_id);
+        model.setUser_id(user_id);
 
         Boolean result = AdminService.instance.save(model, request_user_id);
 

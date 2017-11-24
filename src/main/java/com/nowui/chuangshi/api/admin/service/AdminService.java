@@ -29,7 +29,8 @@ public class AdminService extends Service {
 
     public List<Admin> adminList(String app_id, String user_name, Integer m, Integer n) {
         Cnd cnd = new Cnd();
-        cnd.select(Admin.USER_ID);
+        cnd.select(Admin.TABLE_ADMIN + "." + Admin.USER_ID);
+        cnd.select(User.TABLE_USER + "." + User.USER_NAME);
         cnd.leftJoin(User.TABLE_USER, User.USER_ID, Admin.TABLE_ADMIN, Admin.USER_ID);
         cnd.where(Admin.TABLE_ADMIN + "." + Admin.SYSTEM_STATUS, true);
         cnd.and(Admin.TABLE_ADMIN + "." + Admin.APP_ID, app_id);
@@ -49,10 +50,6 @@ public class AdminService extends Service {
 
         if (admin == null) {
             admin = adminDao.find(admin_id);
-            User user = UserService.instance.find(admin.getUser_id());
-            admin.put(User.USER_NAME, user.getUser_name());
-            admin.put(User.USER_ACCOUNT, user.getUser_account());
-            CacheUtil.put(ADMIN_ITEM_CACHE, admin_id, admin);
         }
 
         return admin;
