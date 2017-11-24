@@ -24,7 +24,7 @@ public class ProductService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(Product.SYSTEM_STATUS, true);
         cnd.and(Product.APP_ID, app_id);
-        cnd.andAllowEmpty(Product.PRODUCT_NAME, product_name);
+        cnd.andLikeAllowEmpty(Product.PRODUCT_NAME, product_name);
 
         Integer count = productDao.count(cnd);
         return count;
@@ -34,7 +34,7 @@ public class ProductService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(Product.SYSTEM_STATUS, true);
         cnd.and(Product.APP_ID, app_id);
-        cnd.andAllowEmpty(Product.PRODUCT_NAME, product_name);
+        cnd.andLikeAllowEmpty(Product.PRODUCT_NAME, product_name);
         cnd.paginate(m, n);
 
         List<Product> productList = productDao.primaryKeyList(cnd);
