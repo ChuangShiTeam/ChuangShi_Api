@@ -78,13 +78,8 @@ public class XietongController extends Controller {
 
         String organization_id = "6fd70c5e490e403b844ca722e0a5d756";
 
-        List<XietongTeacher> teacherList = XietongTeacherService.instance.organizationList(organization_id);
+        List<XietongTeacher> teacherList = XietongTeacherService.instance.organizationList(organization_id, 0, 5);
         for (XietongTeacher teacher : teacherList) {
-            teacher.keep(XietongTeacher.TEACHER_ID, XietongTeacher.TEACHER_NAME, File.FILE_PATH);
-        }
-
-        List<XietongTeacher> teacherList2 = XietongTeacherService.instance.categoryList("5a3e3e701efe486383eaa54dbbe80467");
-        for (XietongTeacher teacher : teacherList2) {
             teacher.keep(XietongTeacher.TEACHER_ID, XietongTeacher.TEACHER_NAME, File.FILE_PATH);
         }
 
@@ -100,17 +95,22 @@ public class XietongController extends Controller {
             student.keep(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_NAME, File.FILE_PATH);
         }
 
-        List<Article> articleList = ArticleService.instance.categoryList("194dfd824f2042d58dd101d374272455");
+        List<Article> articleList = ArticleService.instance.categoryList("194dfd824f2042d58dd101d374272455", 0, 5);
         for (Article article : articleList) {
             article.keep(Article.ARTICLE_ID, Article.ARTICLE_NAME, File.FILE_PATH);
         }
 
+        List<Article> articleList2 = ArticleService.instance.categoryList("cc3480ea6dd64ad5be680e5e1b5a4ace", 0, 5);
+        for (Article article : articleList2) {
+            article.keep(Article.ARTICLE_ID, Article.ARTICLE_NAME, File.FILE_PATH);
+        }
+
         result.put("teacher_list", teacherList);
-        result.put("teacher_list_2", teacherList2);
         result.put("student_list", studentList);
         result.put("article_list", articleList);
+        result.put("article_list_2", articleList2);
 
-        validateResponse("teacher_list", "student_list", "article_list");
+        validateResponse("teacher_list", "student_list", "article_list", "article_list_2");
 
         renderSuccessJson(result);
     }
@@ -121,13 +121,8 @@ public class XietongController extends Controller {
 
         String organization_id = "afd4eef8ebd6460290d2b37b1aad2ab2";
 
-        List<XietongTeacher> teacherList = XietongTeacherService.instance.organizationList(organization_id);
+        List<XietongTeacher> teacherList = XietongTeacherService.instance.organizationList(organization_id, 0, 5);
         for (XietongTeacher teacher : teacherList) {
-            teacher.keep(XietongTeacher.TEACHER_ID, XietongTeacher.TEACHER_NAME, File.FILE_PATH);
-        }
-
-        List<XietongTeacher> teacherList2 = XietongTeacherService.instance.categoryList("e0e0904b845244578f4e7a23109b1746");
-        for (XietongTeacher teacher : teacherList2) {
             teacher.keep(XietongTeacher.TEACHER_ID, XietongTeacher.TEACHER_NAME, File.FILE_PATH);
         }
 
@@ -143,17 +138,22 @@ public class XietongController extends Controller {
             student.keep(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_NAME, File.FILE_PATH);
         }
 
-        List<Article> articleList = ArticleService.instance.categoryList("9d8508d24242499ebcf344e17d8222de");
+        List<Article> articleList = ArticleService.instance.categoryList("9d8508d24242499ebcf344e17d8222de", 0, 5);
         for (Article article : articleList) {
             article.keep(Article.ARTICLE_ID, Article.ARTICLE_NAME, File.FILE_PATH);
         }
 
+        List<Article> articleList2 = ArticleService.instance.categoryList("7ee46fef73a04bbf94cf73e4a09655b5", 0, 5);
+        for (Article article : articleList2) {
+            article.keep(Article.ARTICLE_ID, Article.ARTICLE_NAME, File.FILE_PATH);
+        }
+
         result.put("teacher_list", teacherList);
-        result.put("teacher_list_2", teacherList2);
         result.put("student_list", studentList);
         result.put("article_list", articleList);
+        result.put("article_list_2", articleList2);
 
-        validateResponse("teacher_list", "student_list", "article_list");
+        validateResponse("teacher_list", "student_list", "article_list", "article_list_2");
 
         renderSuccessJson(result);
     }
@@ -164,13 +164,8 @@ public class XietongController extends Controller {
 
         String organization_id = "b8452059f0bd49ee9293879677c50ce2";
 
-        List<XietongTeacher> teacherList = XietongTeacherService.instance.organizationList(organization_id);
+        List<XietongTeacher> teacherList = XietongTeacherService.instance.organizationList(organization_id, 0, 5);
         for (XietongTeacher teacher : teacherList) {
-            teacher.keep(XietongTeacher.TEACHER_ID, XietongTeacher.TEACHER_NAME, File.FILE_PATH);
-        }
-
-        List<XietongTeacher> teacherList2 = XietongTeacherService.instance.categoryList("d2b38db94dc540928d63f4d51f2dc0ff");
-        for (XietongTeacher teacher : teacherList2) {
             teacher.keep(XietongTeacher.TEACHER_ID, XietongTeacher.TEACHER_NAME, File.FILE_PATH);
         }
 
@@ -186,17 +181,22 @@ public class XietongController extends Controller {
             student.keep(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_NAME, File.FILE_PATH);
         }
 
-        List<Article> articleList = ArticleService.instance.categoryList("9c204d00ccd446298c22cff6350bb6ff");
+        List<Article> articleList = ArticleService.instance.categoryList("9c204d00ccd446298c22cff6350bb6ff", 0, 5);
         for (Article article : articleList) {
             article.keep(Article.ARTICLE_ID, Article.ARTICLE_NAME, File.FILE_PATH);
         }
 
+        List<Article> articleList2 = ArticleService.instance.categoryList("a76e98398a7b4839a3e74fd2cbad2847", 0, 5);
+        for (Article article : articleList2) {
+            article.keep(Article.ARTICLE_ID, Article.ARTICLE_NAME, File.FILE_PATH);
+        }
+
         result.put("teacher_list", teacherList);
-        result.put("teacher_list_2", teacherList2);
         result.put("student_list", studentList);
         result.put("article_list", articleList);
+        result.put("article_list_2", articleList2);
 
-        validateResponse("teacher_list", "student_list", "article_list");
+        validateResponse("teacher_list", "student_list", "article_list", "article_list_2");
 
         renderSuccessJson(result);
     }

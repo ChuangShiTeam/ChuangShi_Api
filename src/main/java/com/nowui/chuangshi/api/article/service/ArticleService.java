@@ -78,10 +78,11 @@ public class ArticleService extends Service {
         return articleList;
     }
     
-    public List<Article> categoryList(String article_category_id) {
+    public List<Article> categoryList(String article_category_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(Article.SYSTEM_STATUS, true);
         cnd.and(Article.ARTICLE_CATEGORY_ID, article_category_id);
+        cnd.paginate(m, n);
 
         List<Article> articleList = articleDao.primaryKeyList(cnd);
         for (Article article : articleList) {

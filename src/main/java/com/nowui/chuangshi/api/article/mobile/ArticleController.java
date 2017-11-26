@@ -14,7 +14,7 @@ public class ArticleController extends Controller {
 
     @ActionKey("/mobile/article/story/list")
     public void storyList() {
-        List<Article> articleList = ArticleService.instance.categoryList("5f77073450b14c4381bd2e2e6bec5007");
+        List<Article> articleList = ArticleService.instance.categoryList("5f77073450b14c4381bd2e2e6bec5007", 0, 20);
 
         for(Article article : articleList) {
             article.setArticle_image(FileService.instance.getFile_path(article.getArticle_image()));
@@ -27,7 +27,7 @@ public class ArticleController extends Controller {
 
     @ActionKey("/mobile/article/science/list")
     public void scienceList() {
-        List<Article> articleList = ArticleService.instance.categoryList("50e29503e00946caaa021af6ce9f34d3");
+        List<Article> articleList = ArticleService.instance.categoryList("50e29503e00946caaa021af6ce9f34d3", 0, 20);
 
         for(Article article : articleList) {
             article.setArticle_image(FileService.instance.getFile_path(article.getArticle_image()));

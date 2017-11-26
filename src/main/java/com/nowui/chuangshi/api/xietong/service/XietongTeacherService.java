@@ -70,12 +70,13 @@ public class XietongTeacherService extends Service {
         return xietong_teacherList;
     }
 
-    public List<XietongTeacher> organizationList(String organization_id) {
+    public List<XietongTeacher> organizationList(String organization_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(XietongTeacher.SYSTEM_STATUS, true);
         cnd.and(XietongTeacher.ORGANIZATION_ID, organization_id);
         cnd.asc(XietongTeacher.TEACHER_SORT);
         cnd.desc(XietongTeacher.SYSTEM_CREATE_TIME);
+        cnd.paginate(m, n);
 
         List<XietongTeacher> xietong_teacherList = xietongTeacherDao.primaryKeyList(cnd);
         for (XietongTeacher xietong_teacher : xietong_teacherList) {

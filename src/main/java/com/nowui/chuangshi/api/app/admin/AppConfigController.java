@@ -3,7 +3,6 @@ package com.nowui.chuangshi.api.app.admin;
 
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.app.model.AppConfig;
-import com.nowui.chuangshi.api.app.model.AppConfigCategory;
 import com.nowui.chuangshi.api.app.service.AppConfigService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
@@ -18,15 +17,15 @@ public class AppConfigController extends Controller {
 
     @ActionKey("/admin/app/config/list")
     public void list() {
-        validateRequest(AppConfig.CONFIG_CATEGORY_ID, AppConfig.CONFIG_KEY, AppConfig.CONFIG_IS_DISABLED, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(AppConfig.CONFIG_KEY, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         AppConfig model = getModel(AppConfig.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = AppConfigService.instance.adminCount(request_app_id, model.getConfig_category_id(), model.getConfig_key(), model.getConfig_is_disabled());
-        List<AppConfig> resultList = AppConfigService.instance.adminList(request_app_id, model.getConfig_category_id(), model.getConfig_key(), model.getConfig_is_disabled(), getM(), getN());
+        Integer resultCount = AppConfigService.instance.adminCount(request_app_id, model.getConfig_key());
+        List<AppConfig> resultList = AppConfigService.instance.adminList(request_app_id, model.getConfig_key(), getM(), getN());
 
-        validateResponse(AppConfig.CONFIG_ID, AppConfigCategory.CONFIG_CATEGORY_NAME, AppConfig.CONFIG_KEY, AppConfig.CONFIG_VALUE, AppConfig.CONFIG_IS_DISABLED, AppConfig.SYSTEM_VERSION);
+        validateResponse(AppConfig.CONFIG_ID, AppConfig.CONFIG_KEY, AppConfig.CONFIG_VALUE, AppConfig.CONFIG_IS_DISABLED, AppConfig.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }

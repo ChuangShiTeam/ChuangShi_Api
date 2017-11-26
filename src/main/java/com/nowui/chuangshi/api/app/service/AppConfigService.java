@@ -2,7 +2,6 @@ package com.nowui.chuangshi.api.app.service;
 
 import com.nowui.chuangshi.api.app.dao.AppConfigDao;
 import com.nowui.chuangshi.api.app.model.AppConfig;
-import com.nowui.chuangshi.api.app.model.AppConfigCategory;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
@@ -15,25 +14,21 @@ public class AppConfigService extends Service {
     private final String APP_CONFIG_ITEM_CACHE = "app_config_item_cache";
     private final AppConfigDao appConfigDao = new AppConfigDao();
 
-    public Integer adminCount(String app_id, String config_category_id, String config_key, Boolean config_is_disabled) {
+    public Integer adminCount(String app_id, String config_key) {
         Cnd cnd = new Cnd();
         cnd.where(AppConfig.SYSTEM_STATUS, true);
         cnd.and(AppConfig.APP_ID, app_id);
-        cnd.andAllowEmpty(AppConfig.CONFIG_CATEGORY_ID, config_category_id);
         cnd.andAllowEmpty(AppConfig.CONFIG_KEY, config_key);
-        cnd.andAllowEmpty(AppConfig.CONFIG_IS_DISABLED, config_is_disabled);
 
         Integer count = appConfigDao.count(cnd);
         return count;
     }
 
-    public List<AppConfig> adminList(String app_id, String config_category_id, String config_key, Boolean config_is_disabled, Integer m, Integer n) {
+    public List<AppConfig> adminList(String app_id, String config_key, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(AppConfig.SYSTEM_STATUS, true);
         cnd.and(AppConfig.APP_ID, app_id);
-        cnd.andAllowEmpty(AppConfig.CONFIG_CATEGORY_ID, config_category_id);
         cnd.andAllowEmpty(AppConfig.CONFIG_KEY, config_key);
-        cnd.andAllowEmpty(AppConfig.CONFIG_IS_DISABLED, config_is_disabled);
         cnd.paginate(m, n);
 
         List<AppConfig> app_configList = appConfigDao.primaryKeyList(cnd);
@@ -48,8 +43,7 @@ public class AppConfigService extends Service {
 
         if (app_config == null) {
             app_config = appConfigDao.find(config_id);
-            AppConfigCategory app_config_category = AppConfigCategoryService.instance.find(app_config.getConfig_category_id());
-            app_config.put(AppConfigCategory.CONFIG_CATEGORY_NAME, app_config_category.getConfig_category_name());
+
             CacheUtil.put(APP_CONFIG_ITEM_CACHE, config_id, app_config);
         }
 
