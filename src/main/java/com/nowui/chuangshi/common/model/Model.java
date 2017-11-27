@@ -25,9 +25,9 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
     public Boolean getBoolean(String attr) {
         Object value = this.getAttrs().get(attr);
         if (value instanceof Integer) {
-            return (Integer)value == Integer.valueOf(1);
+            return (Integer) value == Integer.valueOf(1);
         } else {
-            return (Boolean)value;
+            return (Boolean) value;
         }
     }
 
@@ -101,7 +101,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
     private String regexVariable(ColumnType columnType, Object value) {
         if (value instanceof String) {
-            value = ((String)value).replaceAll("\"", "\\\\\"");
+            value = ((String) value).replaceAll("\"", "\\\\\"");
         }
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -141,55 +141,55 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return stringBuilder.toString();
     }
 
-    private String regexCondition(String name, String operation, Object value) {
-        boolean is_left_like = false;
-        boolean is_right_like = false;
-
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(name);
-        if (operation.equals("like")) {
-            stringBuilder.append(" LIKE ");
-
-            is_left_like = true;
-            is_right_like = true;
-        } else if (operation.equals("left_like")) {
-            stringBuilder.append(" LIKE ");
-
-            is_left_like = true;
-        } else if (operation.equals("right_like")) {
-            stringBuilder.append(" LIKE ");
-
-            is_right_like = true;
-        } else {
-            stringBuilder.append(" = ");
-        }
-
-        if (value instanceof String) {
-            stringBuilder.append("\"");
-
-            if (is_left_like) {
-                stringBuilder.append("%");
-            }
-
-            stringBuilder.append(value);
-
-            if (is_right_like) {
-                stringBuilder.append("%");
-            }
-
-            stringBuilder.append("\"");
-        } else if (value instanceof Boolean) {
-            stringBuilder.append((Boolean) value ? 1 : 0);
-        } else if (value instanceof Date) {
-            stringBuilder.append("\"");
-            stringBuilder.append(DateUtil.getDateTimeString((Date) value));
-            stringBuilder.append("\"");
-        } else {
-            stringBuilder.append(value);
-        }
-
-        return stringBuilder.toString();
-    }
+//    private String regexCondition(String name, String operation, Object value) {
+//        boolean is_left_like = false;
+//        boolean is_right_like = false;
+//
+//        StringBuilder stringBuilder = new StringBuilder();
+//        stringBuilder.append(name);
+//        if (operation.equals("like")) {
+//            stringBuilder.append(" LIKE ");
+//
+//            is_left_like = true;
+//            is_right_like = true;
+//        } else if (operation.equals("left_like")) {
+//            stringBuilder.append(" LIKE ");
+//
+//            is_left_like = true;
+//        } else if (operation.equals("right_like")) {
+//            stringBuilder.append(" LIKE ");
+//
+//            is_right_like = true;
+//        } else {
+//            stringBuilder.append(" = ");
+//        }
+//
+//        if (value instanceof String) {
+//            stringBuilder.append("\"");
+//
+//            if (is_left_like) {
+//                stringBuilder.append("%");
+//            }
+//
+//            stringBuilder.append(value);
+//
+//            if (is_right_like) {
+//                stringBuilder.append("%");
+//            }
+//
+//            stringBuilder.append("\"");
+//        } else if (value instanceof Boolean) {
+//            stringBuilder.append((Boolean) value ? 1 : 0);
+//        } else if (value instanceof Date) {
+//            stringBuilder.append("\"");
+//            stringBuilder.append(DateUtil.getDateTimeString((Date) value));
+//            stringBuilder.append("\"");
+//        } else {
+//            stringBuilder.append(value);
+//        }
+//
+//        return stringBuilder.toString();
+//    }
 
     private Boolean regexExit(String name) {
         Boolean isExit = false;
@@ -322,6 +322,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
                 String temp = "";
                 Boolean isBetween = false;
+                Boolean isIn = false;
                 switch (expression.getExpressionType()) {
                     case EQUAL:
                         temp = " = ";
@@ -356,18 +357,24 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
 
                         temp = " BETWEEN ";
                         break;
+                    case IN:
+                        isIn = true;
+
+                        temp = " IN ";
+                        break;
                 }
 
                 if (isBetween) {
                     stringBuilder.append("(");
                 }
+
                 stringBuilder.append(expression.getKey());
                 stringBuilder.append(temp);
 
-                stringBuilder.append(buildConditionVariable(expression.getValue(), isLeftLike, isRightike, false));
+                stringBuilder.append(buildConditionVariable(expression.getValue(), isLeftLike, isRightike, false, isIn));
 
                 if (isBetween) {
-                    stringBuilder.append(buildConditionVariable(expression.getValue2(), isLeftLike, isRightike, true));
+                    stringBuilder.append(buildConditionVariable(expression.getValue2(), isLeftLike, isRightike, true, false));
                 }
 
                 stringBuilder.append("\n");
@@ -380,7 +387,7 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
         return stringBuilder.toString();
     }
 
-    public String buildConditionVariable(Object value, Boolean isLeftLike, Boolean isRightike, Boolean isBetween) {
+    public String buildConditionVariable(Object value, Boolean isLeftLike, Boolean isRightike, Boolean isBetween, Boolean isIn) {
         StringBuilder stringBuilder = new StringBuilder();
 
         if (isBetween) {
@@ -407,6 +414,26 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
             stringBuilder.append("\"");
             stringBuilder.append(DateUtil.getDateTimeString((Date) value));
             stringBuilder.append("\"");
+        } else if (value instanceof String[]) {
+            if (isIn) {
+                stringBuilder.append("(");
+            }
+
+            stringBuilder.append("\"");
+
+            String[] array = (String[]) value;
+            for (int i = 0; i < array.length; i++) {
+                if (i > 0) {
+                    stringBuilder.append("\", \"");
+                }
+                stringBuilder.append(array[i]);
+            }
+
+            stringBuilder.append("\"");
+
+            if (isIn) {
+                stringBuilder.append(")");
+            }
         } else {
             stringBuilder.append(value);
         }

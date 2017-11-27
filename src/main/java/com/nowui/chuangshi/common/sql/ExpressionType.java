@@ -9,7 +9,8 @@ public enum ExpressionType {
     LESS_THAN("LESSTHAN", "LESSTHAN"),
     GREAT_THAN_EQUAL("GREAT_THAN_EQUAL", "GREAT_THAN_EQUAL"),
     LESS_THAN_EQUAL("LESS_THAN_EQUAL", "LESS_THAN_EQUAL"),
-    BETWEEN("BETWEEN", "BETWEEN");
+    BETWEEN("BETWEEN", "BETWEEN"),
+    IN("IN", "IN");
 
     private String key;
     private String value;

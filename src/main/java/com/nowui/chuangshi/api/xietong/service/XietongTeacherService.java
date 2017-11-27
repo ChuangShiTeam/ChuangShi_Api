@@ -35,11 +35,11 @@ public class XietongTeacherService extends Service {
         return count;
     }
     
-    public Integer desktopCount(String app_id, String teacher_category_id) {
+    public Integer desktopCount(String app_id, String[] teacher_category_id) {
         Cnd cnd = new Cnd();
         cnd.where(XietongTeacher.SYSTEM_STATUS, true);
         cnd.and(XietongTeacher.APP_ID, app_id);
-        cnd.andAllowEmpty(XietongTeacher.TEACHER_CATEGORY_ID, teacher_category_id);
+        cnd.andIn(XietongTeacher.TEACHER_CATEGORY_ID, teacher_category_id);
         
         Integer count = xietongTeacherDao.count(cnd);
         return count;
@@ -66,11 +66,11 @@ public class XietongTeacherService extends Service {
         return xietong_teacherList;
     }
     
-    public List<XietongTeacher> desktopList(String app_id, String teacher_category_id, Integer m, Integer n) {
+    public List<XietongTeacher> desktopList(String app_id, String[] teacher_category_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(XietongTeacher.SYSTEM_STATUS, true);
         cnd.and(XietongTeacher.APP_ID, app_id);
-        cnd.and(XietongTeacher.TEACHER_CATEGORY_ID, teacher_category_id);
+        cnd.andIn(XietongTeacher.TEACHER_CATEGORY_ID, teacher_category_id);
         cnd.asc(XietongTeacher.TEACHER_SORT);
         cnd.desc(XietongTeacher.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);

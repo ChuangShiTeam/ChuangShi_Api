@@ -106,6 +106,12 @@ public class Cnd {
         return this;
     }
 
+    public Cnd andIn(String key, String[] value) {
+        Expression expression = new Expression(key, ExpressionType.IN, value);
+        this.criteria.addCondition(new Condition(ConditionType.WHERE, expression, false));
+        return this;
+    }
+
     public Cnd andAllowEmpty(String key, Object value) {
         if (ValidateUtil.isNullOrEmpty(value)) {
             return this;
