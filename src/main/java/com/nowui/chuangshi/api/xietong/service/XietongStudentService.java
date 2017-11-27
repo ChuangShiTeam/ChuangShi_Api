@@ -136,7 +136,11 @@ public class XietongStudentService extends Service {
             cnd.and(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_ID, student_id);
             
             xietong_student = xietongStudentDao.find(cnd);
-            xietong_student.put(XietongClazz.CLAZZ_NAME, XietongClazzService.instance.find(xietong_student.getClazz_id()).getClazz_name());
+            if (ValidateUtil.isNullOrEmpty(xietong_student.getClazz_id())) {
+                xietong_student.put(XietongClazz.CLAZZ_NAME, "");
+            } else {
+                xietong_student.put(XietongClazz.CLAZZ_NAME, XietongClazzService.instance.find(xietong_student.getClazz_id()).getClazz_name());
+            }
             CacheUtil.put(XIETONG_STUDENT_ITEM_CACHE, student_id, xietong_student);
         }
 
