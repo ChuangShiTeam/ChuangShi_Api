@@ -22,13 +22,17 @@ public class XietongStudentController extends Controller {
 
     @ActionKey("/desktop/xietong/student/list")
     public void list() {
+        validateRequest(XietongStudent.STUDENT_CATEGORY_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        
+        XietongStudent xietongStudent = getModel(XietongStudent.class);
         String request_app_id = getRequest_app_id();
 
-        List<XietongStudent> resultList = XietongStudentService.instance.categoryList(request_app_id);
+        Integer resultCount = XietongStudentService.instance.desktopCount(request_app_id, xietongStudent.getStudent_category_id());
+        List<XietongStudent> resultList = XietongStudentService.instance.desktopList(request_app_id, xietongStudent.getStudent_category_id(), getM(), getN());
 
         validateResponse(XietongStudent.STUDENT_ID, XietongStudent.STUDENT_CATEGORY_ID, File.FILE_PATH, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME);
 
-        renderSuccessJson(resultList);
+        renderSuccessJson(resultCount, resultList);
     }
 
     @ActionKey("/desktop/xietong/student/find")

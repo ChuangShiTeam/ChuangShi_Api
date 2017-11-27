@@ -43,6 +43,16 @@ public class XietongStudentService extends Service {
         Integer count = xietongStudentDao.count(cnd);
         return count;
     }
+    
+    public Integer desktopCount(String app_id, String student_category_id) {
+        Cnd cnd = new Cnd();        
+        cnd.where(XietongStudent.SYSTEM_STATUS, true);
+        cnd.and(XietongStudent.APP_ID, app_id);
+        cnd.and(XietongStudent.STUDENT_CATEGORY_ID, student_category_id);
+        
+        Integer count = xietongStudentDao.count(cnd);
+        return count;
+    }
 
     public List<XietongStudent> clazzList(List<String> clazzIdList, String student_category_id, int m, int n) {
         return xietongStudentDao.clazzList(clazzIdList, student_category_id, m, n);
@@ -75,11 +85,13 @@ public class XietongStudentService extends Service {
         return xietongStudentDao.primaryKeyList(cnd);
     }
 
-    public List<XietongStudent> categoryList(String app_id) {
+    public List<XietongStudent> desktopList(String app_id, String student_category_id, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(XietongStudent.SYSTEM_STATUS, true);
-        cnd.andNot(XietongStudent.STUDENT_CATEGORY_ID, "");
+        cnd.and(XietongStudent.APP_ID, app_id);
+        cnd.and(XietongStudent.STUDENT_CATEGORY_ID, student_category_id);
         cnd.desc(XietongStudent.SYSTEM_CREATE_TIME);
+        cnd.paginate(m, n);
 
         List<XietongStudent> studentList = xietongStudentDao.primaryKeyList(cnd);
         for (XietongStudent student : studentList) {

@@ -42,6 +42,9 @@ public class XietongStudent extends Model<XietongStudent> {
 
     @Column(type = ColumnType.VARCHAR, length = 2, comment = "学生性别")
     public static final String STUDENT_SEX = "student_sex";
+    
+    @Column(type = ColumnType.LONGTEXT, length = 0, comment = "学生简介")
+    public static final String STUDENT_DESCRIPTION = "student_description";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";
@@ -132,6 +135,14 @@ public class XietongStudent extends Model<XietongStudent> {
     public void setStudent_sex(String student_sex) {
         set(STUDENT_SEX, student_sex);
     }
+    
+    public String getStudent_description() {
+        return getStr(STUDENT_DESCRIPTION);
+    }
+    
+    public void setStudent_description(String student_description) {
+        set(STUDENT_DESCRIPTION, student_description);
+    }
 
     public String getSystem_create_user_id() {
         return getStr(SYSTEM_CREATE_USER_ID);
@@ -148,7 +159,6 @@ public class XietongStudent extends Model<XietongStudent> {
     public void setSystem_create_time(Date system_create_time) {
         set(SYSTEM_CREATE_TIME, system_create_time);
     }
-
 
     public String getSystem_update_user_id() {
         return getStr(SYSTEM_UPDATE_USER_ID);

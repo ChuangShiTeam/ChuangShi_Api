@@ -42,7 +42,7 @@ public class XietongStudentController extends Controller {
 
         XietongStudent result = XietongStudentService.instance.find(model.getStudent_id());
 
-        validateResponse(XietongStudent.USER_ID, XietongStudent.CLAZZ_ID, XietongStudent.STUDENT_CATEGORY_ID, File.FILE_PATH, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX, XietongStudent.SYSTEM_VERSION);
+        validateResponse(XietongStudent.USER_ID, XietongStudent.CLAZZ_ID, XietongStudent.STUDENT_CATEGORY_ID, File.FILE_PATH, XietongClazz.CLAZZ_NAME, XietongStudent.STUDENT_NAME, XietongStudent.STUDENT_NUMBER, XietongStudent.STUDENT_SEX, XietongStudent.STUDENT_DESCRIPTION, XietongStudent.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
