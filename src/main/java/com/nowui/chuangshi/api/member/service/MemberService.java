@@ -33,6 +33,7 @@ public class MemberService extends Service {
         cnd.leftJoin(User.TABLE_USER, User.USER_ID, Member.TABLE_MEMBER, Member.USER_ID);
         cnd.where(Member.TABLE_MEMBER + "." + Member.SYSTEM_STATUS, true);
         cnd.and(Member.TABLE_MEMBER + "." + Member.APP_ID, app_id);
+        cnd.andLike(User.TABLE_USER + "." + User.USER_NAME, user_name);
 
         Integer count = memberDao.count(cnd);
         return count;
@@ -47,6 +48,7 @@ public class MemberService extends Service {
         cnd.leftJoin(File.TABLE_FILE, File.FILE_ID, User.TABLE_USER, User.USER_AVATAR);
         cnd.where(Member.TABLE_MEMBER + "." + Member.SYSTEM_STATUS, true);
         cnd.and(Member.TABLE_MEMBER + "." + Member.APP_ID, app_id);
+        cnd.andLike(User.TABLE_USER + "." + User.USER_NAME, user_name);
         cnd.desc(Member.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
