@@ -103,6 +103,7 @@ public class WebsiteMenuService extends Service {
 
         if (success) {
             CacheUtil.remove(WEB_SITE_ITEM_CACHE, website_menu_id);
+            CacheUtil.removeAll(WEB_SITE_ID_LIST_BY_APP_CACHE);
         }
 
         return success;
