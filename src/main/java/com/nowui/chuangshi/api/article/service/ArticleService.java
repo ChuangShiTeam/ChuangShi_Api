@@ -21,7 +21,7 @@ public class ArticleService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(Article.SYSTEM_STATUS, true);
         cnd.and(Article.APP_ID, app_id);
-        cnd.andAllowEmpty(Article.ARTICLE_NAME, article_name);
+        cnd.andLikeAllowEmpty(Article.ARTICLE_NAME, article_name);
 
         Integer count = articleDao.count(cnd);
         return count;
@@ -31,7 +31,7 @@ public class ArticleService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(Article.SYSTEM_STATUS, true);
         cnd.and(Article.APP_ID, app_id);
-        cnd.andAllowEmpty(Article.ARTICLE_NAME, article_name);
+        cnd.andLikeAllowEmpty(Article.ARTICLE_NAME, article_name);
         cnd.desc(Article.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
