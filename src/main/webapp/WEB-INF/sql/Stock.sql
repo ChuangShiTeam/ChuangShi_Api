@@ -120,7 +120,7 @@
     #set(user_name = "%" + user_name + "%")
     AND table_user.user_name LIKE #p(user_name)
     #end
-    ORDER BY system_create_time DESC
+    ORDER BY table_stock.system_create_time DESC
     LIMIT #p(m), #p(n)
   #end
 
