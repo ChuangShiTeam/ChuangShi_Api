@@ -48,7 +48,6 @@ public class GuangqiWonderfulShowController extends Controller {
 		
         renderSuccessJson(result);
 
-        renderSuccessJson();
     }
 
 }
