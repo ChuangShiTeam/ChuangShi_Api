@@ -132,7 +132,13 @@ public class Model<M extends Model> extends com.jfinal.plugin.activerecord.Model
             stringBuilder.append("\"");
         } else if (columnType.equals(ColumnType.DATETIME)) {
             stringBuilder.append("\"");
-            stringBuilder.append(DateUtil.getDateTimeString((Date) value));
+            if (value instanceof String) {
+                stringBuilder.append(value);
+            } else if (value instanceof Date) {
+                stringBuilder.append(DateUtil.getDateTimeString((Date) value));
+            } else {
+                throw new RuntimeException("sql regex variable wrong");
+            }
             stringBuilder.append("\"");
         } else {
             stringBuilder.append(value);
