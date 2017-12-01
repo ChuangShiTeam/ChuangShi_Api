@@ -200,35 +200,45 @@ public class Controller extends com.jfinal.core.Controller {
                 ((Model) result).keep(validateResponseKeyList);
             }
         } else if (result instanceof List) {
-            for (Object item : (List) result) {
-                if (item instanceof Model) {
-                    Set<Map.Entry<String, Object>> sets = ((Model) item)._getAttrsEntrySet();
-                    for (Map.Entry<String, Object> entry : sets) {
-                        checkResponse(index, entry);
-                    }
-
-                    if (index == 1) {
-                        ((Model) item).keep(validateResponseKeyList);
-                    }
-                } else if (item instanceof Map) {
-                    checkMap(index, (Map) item);
-
-                    for (Map.Entry<String, Object> entry : ((Map<String, Object>) item).entrySet()) {
-                        checkResponse(index, entry);
-                    }
-                }
-            }
+            checkList(index, (List) result);
         } else if (result instanceof Map) {
-            checkMap(index, (Map) result);
+            for (Map.Entry<String, Object> entry : ((Map<String, Object>) result).entrySet()) {
+                checkResponse(index, entry);
+            }
+
+            //checkMap(index, (Map) result);
         } else if (result instanceof Map.Entry) {
             if (((Map.Entry) result).getValue() instanceof String) {
                 ((Map.Entry) result).setValue(StringEscapeUtils.unescapeHtml4((String) ((Map.Entry) result).getValue()));
+            } else if (((Map.Entry) result).getValue() instanceof List) {
+                checkList(index, (List) ((Map.Entry) result).getValue());
             }
         } else if (result instanceof String) {
             result = StringEscapeUtils.unescapeHtml4((String) result);
         }
 
         return result;
+    }
+
+    private void checkList(int index, List result) {
+        for (Object item : result) {
+            if (item instanceof Model) {
+                Set<Map.Entry<String, Object>> sets = ((Model) item)._getAttrsEntrySet();
+                for (Map.Entry<String, Object> entry : sets) {
+                    checkResponse(index, entry);
+                }
+
+                if (index == 1) {
+                    ((Model) item).keep(validateResponseKeyList);
+                }
+            } else if (item instanceof Map) {
+                //checkMap(index, (Map) item);
+
+                for (Map.Entry<String, Object> entry : ((Map<String, Object>) item).entrySet()) {
+                    checkResponse(index, entry);
+                }
+            }
+        }
     }
 
     private void checkMap(int index, Map result) {
