@@ -1,12 +1,19 @@
 package com.nowui.chuangshi.api.member.service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jfinal.weixin.sdk.api.ApiConfigKit;
+import com.jfinal.weixin.sdk.api.ApiResult;
+import com.jfinal.weixin.sdk.api.QrcodeApi;
+import com.nowui.chuangshi.api.app.model.App;
+import com.nowui.chuangshi.api.app.service.AppService;
 import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.member.dao.MemberDao;
 import com.nowui.chuangshi.api.member.model.Member;
 import com.nowui.chuangshi.api.member.model.MemberLevel;
+import com.nowui.chuangshi.api.qrcode.service.QrcodeService;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.common.service.Service;
@@ -14,6 +21,7 @@ import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.FileType;
+import com.nowui.chuangshi.type.QrcodeType;
 import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.AesUtil;
 import com.nowui.chuangshi.util.CacheUtil;
@@ -190,6 +198,50 @@ public class MemberService extends Service {
 
         if (success) {
             cacheDelete(member_id);
+        }
+
+        return success;
+    }
+
+    public Boolean accountSave(String app_id, String member_parent_id, String member_level_id, String user_name, String user_account, String user_password, String system_create_user_id) {
+        String user_id = Util.getRandomUUID();
+        String member_id = Util.getRandomUUID();
+
+        Boolean success = UserService.instance.userAccountSave(user_id, app_id, member_id, UserType.MEMBER.getKey(), user_name, user_account, user_password, system_create_user_id);
+        if (success) {
+            Member parentMember = MemberService.instance.find(member_parent_id);
+
+            String from_qrcode_id = parentMember.getQrcode_id();
+
+            String qrcode_id = Util.getRandomUUID();
+
+            App app = AppService.instance.find(app_id);
+
+            String wechat_app_id = ApiConfigKit.getAppId();
+            if (!wechat_app_id.equals(app.getWechat_app_id())) {
+                ApiConfigKit.setThreadLocalAppId(app.getWechat_app_id());
+//                AccessTokenApi.refreshAccessToken();
+            }
+
+            ApiResult apiResult = QrcodeApi.createPermanent(qrcode_id);
+            Boolean qrcode_status = true;
+            String qrcode_url = QrcodeApi.getShowQrcodeUrl(apiResult.getStr("ticket"));
+
+            success = QrcodeService.instance.save(qrcode_id, app_id, member_id, QrcodeType.MEMBER.getKey(), qrcode_url, 0, 0,
+                    qrcode_status, system_create_user_id);
+
+            JSONArray jsonArray = JSON.parseArray(parentMember.getMember_parent_path());
+            jsonArray.add(member_parent_id);
+            JSONArray member_parent_path = jsonArray;
+            Boolean member_status = true;
+
+            if (success) {
+                success = save(member_id, app_id, user_id, member_parent_id, from_qrcode_id, qrcode_id, member_level_id, member_parent_path, member_status, system_create_user_id);
+            }
+        }
+
+        if (!success) {
+            throw new RuntimeException("新增不成功");
         }
 
         return success;

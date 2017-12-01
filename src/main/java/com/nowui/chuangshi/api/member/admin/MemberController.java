@@ -1,6 +1,7 @@
 package com.nowui.chuangshi.api.member.admin;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.member.model.Member;
 import com.nowui.chuangshi.api.member.service.MemberService;
@@ -46,8 +47,15 @@ public class MemberController extends Controller {
 
     @ActionKey("/admin/member/save")
     public void save() {
+        validateRequest(Member.MEMBER_PARENT_ID, Member.MEMBER_LEVEL_ID, User.USER_NAME, User.USER_ACCOUNT, User.USER_PASSWORD);
 
-        renderSuccessJson();
+        String request_app_id = getRequest_app_id();
+        JSONObject jsonObject = getParameterJSONObject();
+        String request_user_id = getRequest_user_id();
+
+        Boolean result = MemberService.instance.accountSave(request_app_id, jsonObject.getString(Member.MEMBER_PARENT_ID), jsonObject.getString(Member.MEMBER_LEVEL_ID), jsonObject.getString(User.USER_NAME), jsonObject.getString(User.USER_ACCOUNT), jsonObject.getString(User.USER_PASSWORD), request_user_id);
+
+        renderSuccessJson(result);
     }
 
     @ActionKey("/admin/member/update")

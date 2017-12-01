@@ -103,6 +103,12 @@ public class UserService extends Service {
     }
 
     public Boolean userAccountSave(String user_id, String app_id, String object_id, String user_type, String user_name, String user_account, String user_password, String system_create_user_id) {
+        User user = userAccountFind(app_id, user_account);
+
+        if (user != null) {
+            throw new RuntimeException(user_account + "已经存在");
+        }
+
         String user_avatar = "";
         String user_mobile = "";
         String user_email = "";
