@@ -82,6 +82,7 @@ public class ArticleService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(Article.SYSTEM_STATUS, true);
         cnd.and(Article.ARTICLE_CATEGORY_ID, article_category_id);
+        cnd.desc(Article.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
         List<Article> articleList = articleDao.primaryKeyList(cnd);

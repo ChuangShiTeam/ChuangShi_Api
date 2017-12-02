@@ -62,6 +62,7 @@ public class XietongStudentService extends Service {
         Cnd cnd = new Cnd(); 
         cnd.select(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_NAME);
         cnd.select(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.STUDENT_NUMBER);
+        cnd.select(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.SYSTEM_VERSION);
         cnd.select(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.CLAZZ_NAME);
         cnd.leftJoin(XietongClazz.TABLE_XIETONG_CLAZZ, XietongClazz.CLAZZ_ID, XietongStudent.TABLE_XIETONG_STUDENT, XietongStudent.CLAZZ_ID);
         cnd.where(XietongStudent.TABLE_XIETONG_STUDENT + "." + XietongStudent.SYSTEM_STATUS, true);
