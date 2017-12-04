@@ -31,7 +31,7 @@ public class XietongTeacher extends Model<XietongTeacher> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "组织机构编号")
     public static final String ORGANIZATION_ID = "organization_id";
 
-    @Column(type = ColumnType.VARCHAR, length = 10, comment = "老师姓名")
+    @Column(type = ColumnType.VARCHAR, length = 50, comment = "老师姓名")
     public static final String TEACHER_NAME = "teacher_name";
 
     @Column(type = ColumnType.VARCHAR, length = 10, comment = "老师工号")
