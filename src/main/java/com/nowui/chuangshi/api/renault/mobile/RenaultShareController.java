@@ -212,8 +212,25 @@ public class RenaultShareController extends Controller {
 
     @ActionKey("/mobile/renault/share/delete")
     public void delete() {
-
-        renderSuccessJson();
+    	validateRequest(RenaultShare.SHARE_ID);
+    	
+    	String request_user_id = getRequest_user_id();
+        
+        RenaultShare model = getModel(RenaultShare.class);
+        
+        RenaultShare renault_share = RenaultShareService.instance.find(model.getShare_id());
+        
+        if (renault_share == null) {
+        	throw new RuntimeException("分享不存在");
+        }
+        
+        if (!renault_share.getShare_user_id().equals(request_user_id)) {
+        	throw new RuntimeException("删除失败，只能删除自己的分享");
+        }
+        
+        Boolean result = RenaultShareService.instance.delete(renault_share.getShare_id(), request_user_id, renault_share.getSystem_version());
+    	
+        renderSuccessJson(result);
     }
 
 }

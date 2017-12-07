@@ -69,6 +69,8 @@ public class User extends Model<User> {
 
     @Column(type = ColumnType.TINYINT, length = 1, comment = "", updatable = false)
     public static final String SYSTEM_STATUS = "system_status";
+    
+    public static final String ORIGINAL_USER_PASSWORD = "original_user_password";
 
     public String getUser_id() {
         return getStr(USER_ID);

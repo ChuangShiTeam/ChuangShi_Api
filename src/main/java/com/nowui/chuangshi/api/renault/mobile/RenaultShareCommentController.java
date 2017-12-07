@@ -91,8 +91,25 @@ public class RenaultShareCommentController extends Controller {
 
     @ActionKey("/mobile/renault/share/comment/delete")
     public void delete() {
-
-        renderSuccessJson();
+    	validateRequest(RenaultShareComment.COMMENT_ID);
+    	
+    	String request_user_id = getRequest_user_id();
+        
+    	RenaultShareComment model = getModel(RenaultShareComment.class);
+        
+    	RenaultShareComment renault_share_comment = RenaultShareCommentService.instance.find(model.getParent_comment_id());
+        
+        if (renault_share_comment == null) {
+        	throw new RuntimeException("评论不存在");
+        }
+        
+        if (!renault_share_comment.getUser_id().equals(request_user_id)) {
+        	throw new RuntimeException("删除失败，只能删除自己的评论");
+        }
+        
+        Boolean result = RenaultShareCommentService.instance.delete(renault_share_comment.getParent_comment_id(), request_user_id, renault_share_comment.getSystem_version());
+    	
+        renderSuccessJson(result);
     }
 
     //增加点赞数量接口

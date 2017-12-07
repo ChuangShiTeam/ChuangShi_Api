@@ -207,6 +207,23 @@ public class UserService extends Service {
 
         return success;
     }
+    
+    public Boolean userAvatarUpdate(String user_id, String user_avatar, String system_update_user_id) {
+    	User user = new User();
+    	user.setUser_avatar(user_avatar);
+    	
+    	Cnd cnd = new Cnd();
+    	cnd.where(User.SYSTEM_STATUS, true);
+    	cnd.and(User.USER_ID, user_id);
+    	
+    	Boolean success = userDao.update(user, system_update_user_id, cnd);
+    	
+    	if (success) {
+    		CacheUtil.remove(USER_ITEM_CACHE, user_id);
+    	}
+    	
+    	return success;
+    }
 
     public Boolean systemUpdateTimeUpdate(String user_id, String system_update_user_id, Integer system_version) {
 

@@ -55,7 +55,7 @@ public class RenaultMemberService extends Service {
 
         return renault_member;
     }
-
+    
     public Boolean save(RenaultMember renault_member, String system_create_user_id) {
         Boolean success = renaultMemberDao.save(renault_member, system_create_user_id);
         return success;
@@ -65,8 +65,11 @@ public class RenaultMemberService extends Service {
         String user_id = Util.getRandomUUID();
         
         renault_member.setMember_id(Util.getRandomUUID());
-        renault_member.setMember_nick_name(user.getUser_name());
+        renault_member.setMember_nick_name(user.getUser_account());
         renault_member.setUser_id(user_id);
+        
+        user.setUser_name(user.getUser_account());
+        user.setUser_avatar("");
         
         Boolean success = renaultMemberDao.save(renault_member, system_create_user_id);
         
