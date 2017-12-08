@@ -81,9 +81,10 @@ public class FeijiuFastController extends Controller {
         String access_key = "Chr002BuHEQozE7cleDSJf7IofBQcY";
         String endpoint = "https://1202946.mns.cn-hangzhou.aliyuncs.com/";
         String sign_name = "久飞";
+        String template_param = "captcha_code";
         String template_code = "SMS_87765001";
 
-        CaptchaService.instance.send(request_app_id, captcha_type, captcha_mobile, captcha_ip_address, 1, access_id, access_key, endpoint, sign_name, template_code, request_app_id);
+        CaptchaService.instance.send(request_app_id, captcha_type, captcha_mobile, captcha_ip_address, 1, access_id, access_key, endpoint, sign_name, template_param, template_code, request_app_id);
 
         renderSuccessJson();
     }
