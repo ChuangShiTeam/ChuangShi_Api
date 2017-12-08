@@ -9,7 +9,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.captcha.model.Captcha;
 import com.nowui.chuangshi.api.captcha.service.CaptchaService;
-import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.renault.model.RenaultMember;
 import com.nowui.chuangshi.api.renault.service.RenaultMemberService;
