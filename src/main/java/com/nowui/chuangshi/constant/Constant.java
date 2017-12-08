@@ -81,6 +81,8 @@ public class Constant {
     public static final String PARENT_ID = "0";
 
     public static final String IS_SELECT = "is_select";
+    
+    public static final String IS_CAN_DELETE = "is_can_delete";
 
     public static final String IS_CHILDREN = "is_children";
     

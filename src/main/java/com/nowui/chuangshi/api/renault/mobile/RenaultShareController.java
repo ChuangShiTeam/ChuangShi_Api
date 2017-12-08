@@ -34,6 +34,7 @@ public class RenaultShareController extends Controller {
     public void list() {
         validateRequest(Constant.PAGE_INDEX, Constant.PAGE_SIZE);
         
+        String request_user_id = getRequest_user_id();
         String request_app_id = getRequest_app_id();
         
         List<RenaultShare> renaultsharelist = RenaultShareService.instance.mobileList(request_app_id, getM(), getN());
@@ -62,10 +63,16 @@ public class RenaultShareController extends Controller {
             
             //分享评论数
             result.put(RenaultShare.COMMENT_NUM, RenaultShareCommentService.instance.shareCount(result.getShare_id()));
-        
+            
+            boolean is_can_delete = false;
+            //判断是否是用户自己的分享，是的话删除标志是true, 否则false
+            if (result.getShare_user_id().equals(request_user_id)) {
+            	is_can_delete = true;
+            }
+            result.put(Constant.IS_CAN_DELETE, is_can_delete);
         }
 
-        validateResponse(RenaultShare.SHARE_ID, User.USER_NAME, User.USER_AVATAR, RenaultShare.SHARE_IMAGE_LIST, RenaultShare.REMARK, RenaultShare.LIKE_NUM, RenaultShare.SHARE_NUM, RenaultShare.COMMENT_NUM);
+        validateResponse(RenaultShare.SHARE_ID, User.USER_NAME, User.USER_AVATAR, RenaultShare.SHARE_IMAGE_LIST, RenaultShare.REMARK, RenaultShare.LIKE_NUM, RenaultShare.SHARE_NUM, RenaultShare.COMMENT_NUM, Constant.IS_CAN_DELETE);
 
         renderSuccessJson(renaultsharelist);
     }

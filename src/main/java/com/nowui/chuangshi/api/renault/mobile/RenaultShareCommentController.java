@@ -24,6 +24,7 @@ public class RenaultShareCommentController extends Controller {
         validateRequest(Constant.PAGE_INDEX, Constant.PAGE_SIZE, RenaultShareComment.SHARE_ID);
 
         RenaultShareComment renault_share_comment = getModel(RenaultShareComment.class);
+        String request_user_id = getRequest_user_id();
 
         List<RenaultShareComment> renaultlist = RenaultShareCommentService.instance.mobileList(renault_share_comment.getShare_id(), getM(), getN());
 
@@ -47,12 +48,19 @@ public class RenaultShareCommentController extends Controller {
                 user_avatar = "http://api.chuangshi.nowui.com" + user_avatar;
             }
             result.put(User.USER_AVATAR, user_avatar);
+            
+            boolean is_can_delete = false;
+            //判断是否是用户自己的分享，是的话删除标志是true, 否则false
+            if (result.getUser_id().equals(request_user_id)) {
+            	is_can_delete = true;
+            }
+            result.put(Constant.IS_CAN_DELETE, is_can_delete);
 
         }
 
         validateResponse(RenaultShareComment.SHARE_ID, User.USER_NAME, User.USER_AVATAR, RenaultShareComment.USER_ID,
                 RenaultShareComment.PARENT_USER_NAME, RenaultShareComment.REMARK, RenaultShareComment.LIKE_NUM, RenaultShareComment.COMMENT_ID,
-                RenaultShareComment.SYSTEM_CREATE_TIME);
+                RenaultShareComment.SYSTEM_CREATE_TIME, Constant.IS_CAN_DELETE);
 
         renderSuccessJson(renaultlist);
     }
