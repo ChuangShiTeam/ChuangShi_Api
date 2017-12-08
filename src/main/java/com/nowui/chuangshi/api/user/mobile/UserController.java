@@ -23,13 +23,13 @@ public class UserController extends Controller {
         String original_user_password = userModel.get(User.ORIGINAL_USER_PASSWORD);
         //旧密码不能为空
         if (ValidateUtil.isNullOrEmpty(original_user_password)) {
-        	throw new RuntimeException("旧密码不能为空");
+        	throw new RuntimeException("原密码不能为空");
         }
         
         //验证旧密码是否正确
         User user = UserService.instance.find(request_user_id);
         if (!Util.generatePassword(original_user_password).equals(user.getUser_password())) {
-        	throw new RuntimeException("旧密码错误");
+        	throw new RuntimeException("原密码错误");
         }
 
         Boolean result = UserService.instance.userPasswordUpdate(request_user_id, userModel.getUser_password(), request_user_id);

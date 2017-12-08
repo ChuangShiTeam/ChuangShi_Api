@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.captcha.model.Captcha;
 import com.nowui.chuangshi.api.captcha.service.CaptchaService;
+import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.renault.model.RenaultMember;
 import com.nowui.chuangshi.api.renault.service.RenaultMemberService;
@@ -80,6 +81,22 @@ public class RenaultMemberController extends Controller {
          }
 
          renderSuccessJson(result);
+    }
+    
+    /**
+     * 查找会员信息
+     */
+    @ActionKey("/mobile/renault/member/find")
+    public void find() {
+    	String request_user_id = getRequest_user_id();
+    	
+    	User result = UserService.instance.find(request_user_id);
+    	
+    	result.put(User.USER_AVATAR, FileService.instance.getFile_path(result.getUser_avatar()));
+    	
+    	validateResponse(User.USER_NAME, User.USER_AVATAR);
+
+        renderSuccessJson(result);
     }
 
     /**
