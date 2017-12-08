@@ -105,7 +105,7 @@ public class RenaultShareCommentController extends Controller {
         
     	RenaultShareComment model = getModel(RenaultShareComment.class);
         
-    	RenaultShareComment renault_share_comment = RenaultShareCommentService.instance.find(model.getParent_comment_id());
+    	RenaultShareComment renault_share_comment = RenaultShareCommentService.instance.find(model.getComment_id());
         
         if (renault_share_comment == null) {
         	throw new RuntimeException("评论不存在");
@@ -115,7 +115,7 @@ public class RenaultShareCommentController extends Controller {
         	throw new RuntimeException("删除失败，只能删除自己的评论");
         }
         
-        Boolean result = RenaultShareCommentService.instance.delete(renault_share_comment.getParent_comment_id(), request_user_id, renault_share_comment.getSystem_version());
+        Boolean result = RenaultShareCommentService.instance.delete(renault_share_comment.getComment_id(), request_user_id, renault_share_comment.getSystem_version());
     	
         renderSuccessJson(result);
     }

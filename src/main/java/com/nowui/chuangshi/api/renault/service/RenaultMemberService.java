@@ -65,10 +65,10 @@ public class RenaultMemberService extends Service {
         String user_id = Util.getRandomUUID();
         
         renault_member.setMember_id(Util.getRandomUUID());
-        renault_member.setMember_nick_name(user.getUser_account());
+        renault_member.setMember_nick_name(user.getUser_account().substring(0, 3) + "****" + user.getUser_account().substring(7, 11));
         renault_member.setUser_id(user_id);
         
-        user.setUser_name(user.getUser_account());
+        user.setUser_name(renault_member.getMember_nick_name());
         user.setUser_avatar("");
         
         Boolean success = renaultMemberDao.save(renault_member, system_create_user_id);
@@ -78,7 +78,7 @@ public class RenaultMemberService extends Service {
         }
         return user_id;
     }
-
+    
     public Boolean update(RenaultMember renault_member, String member_id, String system_update_user_id, Integer system_version) {
         Cnd cnd = new Cnd();
         cnd.where(RenaultMember.SYSTEM_STATUS, true);
