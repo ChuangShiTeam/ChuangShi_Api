@@ -96,6 +96,7 @@ public class RenaultShareService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(RenaultShare.SYSTEM_STATUS, true);
         cnd.and(RenaultShare.APP_ID, app_id);
+        cnd.desc(RenaultShare.IS_TOP);
         cnd.desc(RenaultShare.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
