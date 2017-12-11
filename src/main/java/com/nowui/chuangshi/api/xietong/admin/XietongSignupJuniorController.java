@@ -17,15 +17,15 @@ public class XietongSignupJuniorController extends Controller {
 
     @ActionKey("/admin/xietong/signup/junior/list")
     public void list() {
-        validateRequest(XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.STUDENT_CATEGORY, XietongSignupJunior.ID_NO, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.ID_NO, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         XietongSignupJunior model = getModel(XietongSignupJunior.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = XietongSignupJuniorService.instance.adminCount(request_app_id, model.getStudent_name(), model.getStudent_category(), model.getId_no());
-        List<XietongSignupJunior> resultList = XietongSignupJuniorService.instance.adminList(request_app_id, model.getStudent_name(), model.getStudent_category(), model.getId_no(), getM(), getN());
+        Integer resultCount = XietongSignupJuniorService.instance.adminCount(request_app_id, model.getStudent_name(), model.getId_no());
+        List<XietongSignupJunior> resultList = XietongSignupJuniorService.instance.adminList(request_app_id, model.getStudent_name(), model.getId_no(), getM(), getN());
 
-        validateResponse(XietongSignupJunior.SIGNUP_ID, XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.STUDENT_SEX, XietongSignupJunior.STUDENT_CATEGORY, XietongSignupJunior.STUDENT_BIRTHDAY, XietongSignupJunior.JOB, XietongSignupJunior.ID_TYPE, XietongSignupJunior.ID_NO, XietongSignupJunior.PERMANENT_ADDRESS, XietongSignupJunior.LIVE_ADDRESSS, XietongSignupJunior.SYSTEM_VERSION);
+        validateResponse(XietongSignupJunior.SIGNUP_ID, XietongSignupJunior.STUDENT_NAME, XietongSignupJunior.STUDENT_SEX, XietongSignupJunior.STUDENT_BIRTHDAY, XietongSignupJunior.JOB, XietongSignupJunior.ID_TYPE, XietongSignupJunior.ID_NO, XietongSignupJunior.PRIMARY_SCHOOL, XietongSignupJunior.LIVE_ADDRESSS, XietongSignupJunior.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }

@@ -18,15 +18,15 @@ public class XietongSignupPupilController extends Controller {
 
     @ActionKey("/admin/xietong/signup/pupil/list")
     public void list() {
-        validateRequest(XietongSignupPupil.STUDENT_NAME, XietongSignupJunior.STUDENT_CATEGORY, XietongSignupPupil.ID_NO, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(XietongSignupPupil.STUDENT_NAME, XietongSignupPupil.ID_NO, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         XietongSignupPupil model = getModel(XietongSignupPupil.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = XietongSignupPupilService.instance.adminCount(request_app_id, model.getStudent_name(), model.getStudent_category(), model.getId_no());
-        List<XietongSignupPupil> resultList = XietongSignupPupilService.instance.adminList(request_app_id, model.getStudent_name(), model.getStudent_category(), model.getId_no(), getM(), getN());
+        Integer resultCount = XietongSignupPupilService.instance.adminCount(request_app_id, model.getStudent_name(), model.getId_no());
+        List<XietongSignupPupil> resultList = XietongSignupPupilService.instance.adminList(request_app_id, model.getStudent_name(), model.getId_no(), getM(), getN());
 
-        validateResponse(XietongSignupPupil.SIGNUP_ID, XietongSignupPupil.STUDENT_NAME, XietongSignupJunior.STUDENT_CATEGORY, XietongSignupPupil.STUDENT_SEX, XietongSignupPupil.STUDENT_BIRTHDAY, XietongSignupPupil.KINDERGARTEN, XietongSignupPupil.ID_NO, XietongSignupPupil.SIGNUP_STATUS, XietongSignupPupil.SYSTEM_VERSION);
+        validateResponse(XietongSignupPupil.SIGNUP_ID, XietongSignupPupil.STUDENT_NAME, XietongSignupPupil.STUDENT_SEX, XietongSignupPupil.STUDENT_BIRTHDAY, XietongSignupPupil.KINDERGARTEN, XietongSignupPupil.ID_NO, XietongSignupPupil.SIGNUP_STATUS, XietongSignupPupil.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }

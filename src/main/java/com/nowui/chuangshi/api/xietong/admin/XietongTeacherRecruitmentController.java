@@ -17,13 +17,13 @@ public class XietongTeacherRecruitmentController extends Controller {
 
     @ActionKey("/admin/xietong/teacher/recruitment/list")
     public void list() {
-        validateRequest(XietongTeacherRecruitment.TEACHER_RECRUITMENT_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(XietongTeacherRecruitment.TEACHER_RECRUITMENT_NAME, XietongTeacherRecruitment.TEACHER_RECRUITMENT_MOBILE, XietongTeacherRecruitment.TEACHER_RECRUITMENT_FACULTY, XietongTeacherRecruitment.TEACHER_RECRUITMENT_SUBJECT, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         XietongTeacherRecruitment model = getModel(XietongTeacherRecruitment.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = XietongTeacherRecruitmentService.instance.adminCount(request_app_id, model.getTeacher_recruitment_name());
-        List<XietongTeacherRecruitment> resultList = XietongTeacherRecruitmentService.instance.adminList(request_app_id, model.getTeacher_recruitment_name(), getM(), getN());
+        Integer resultCount = XietongTeacherRecruitmentService.instance.adminCount(request_app_id, model.getTeacher_recruitment_name(), model.getTeacher_recruitment_mobile(), model.getTeacher_recruitment_faculty(), model.getTeacher_recruitment_subject());
+        List<XietongTeacherRecruitment> resultList = XietongTeacherRecruitmentService.instance.adminList(request_app_id, model.getTeacher_recruitment_name(), model.getTeacher_recruitment_mobile(), model.getTeacher_recruitment_faculty(), model.getTeacher_recruitment_subject(), getM(), getN());
 
         validateResponse(XietongTeacherRecruitment.TEACHER_RECRUITMENT_ID, XietongTeacherRecruitment.TEACHER_RECRUITMENT_NAME, XietongTeacherRecruitment.TEACHER_RECRUITMENT_SEX, XietongTeacherRecruitment.TEACHER_RECRUITMENT_MOBILE, XietongTeacherRecruitment.TEACHER_RECRUITMENT_FACULTY, XietongTeacherRecruitment.TEACHER_RECRUITMENT_SUBJECT, XietongTeacherRecruitment.SYSTEM_VERSION);
 

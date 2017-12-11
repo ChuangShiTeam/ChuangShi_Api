@@ -23,21 +23,27 @@ public class XietongTeacherRecruitmentService extends Service {
     private final String XIETONG_TEACHER_RECRUITMENT_ITEM_CACHE = "xietong_teacher_recruitment_item_cache";
     private final XietongTeacherRecruitmentDao xietongTeacherRecruitmentDao = new XietongTeacherRecruitmentDao();
 
-    public Integer adminCount(String app_id, String teacher_recruitment_name) {
+    public Integer adminCount(String app_id, String teacher_recruitment_name, String teacher_recruitment_mobile, String teacher_recruitment_faculty, String teacher_recruitment_subject) {
         Cnd cnd = new Cnd();
         cnd.where(XietongTeacherRecruitment.SYSTEM_STATUS, true);
         cnd.and(XietongTeacherRecruitment.APP_ID, app_id);
-        cnd.andAllowEmpty(XietongTeacherRecruitment.TEACHER_RECRUITMENT_NAME, teacher_recruitment_name);
+        cnd.andAllowEmpty(XietongTeacherRecruitment.TEACHER_RECRUITMENT_FACULTY, teacher_recruitment_faculty);
+        cnd.andLikeAllowEmpty(XietongTeacherRecruitment.TEACHER_RECRUITMENT_NAME, teacher_recruitment_name);
+        cnd.andLikeAllowEmpty(XietongTeacherRecruitment.TEACHER_RECRUITMENT_MOBILE, teacher_recruitment_mobile);
+        cnd.andLikeAllowEmpty(XietongTeacherRecruitment.TEACHER_RECRUITMENT_SUBJECT, teacher_recruitment_subject);
 
         Integer count = xietongTeacherRecruitmentDao.count(cnd);
         return count;
     }
 
-    public List<XietongTeacherRecruitment> adminList(String app_id, String teacher_recruitment_name, Integer m, Integer n) {
+    public List<XietongTeacherRecruitment> adminList(String app_id, String teacher_recruitment_name, String teacher_recruitment_mobile, String teacher_recruitment_faculty, String teacher_recruitment_subject, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(XietongTeacherRecruitment.SYSTEM_STATUS, true);
         cnd.and(XietongTeacherRecruitment.APP_ID, app_id);
-        cnd.andAllowEmpty(XietongTeacherRecruitment.TEACHER_RECRUITMENT_NAME, teacher_recruitment_name);
+        cnd.andAllowEmpty(XietongTeacherRecruitment.TEACHER_RECRUITMENT_FACULTY, teacher_recruitment_faculty);
+        cnd.andLikeAllowEmpty(XietongTeacherRecruitment.TEACHER_RECRUITMENT_NAME, teacher_recruitment_name);
+        cnd.andLikeAllowEmpty(XietongTeacherRecruitment.TEACHER_RECRUITMENT_MOBILE, teacher_recruitment_mobile);
+        cnd.andLikeAllowEmpty(XietongTeacherRecruitment.TEACHER_RECRUITMENT_SUBJECT, teacher_recruitment_subject);
         cnd.desc(XietongTeacherRecruitment.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 

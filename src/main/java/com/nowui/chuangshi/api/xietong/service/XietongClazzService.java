@@ -32,8 +32,8 @@ public class XietongClazzService extends Service {
         cnd.leftJoin(XietongOrganization.TABLE_XIETONG_ORGANIZATION, XietongOrganization.ORGANIZATION_ID, XietongClazz.TABLE_XIETONG_CLAZZ, XietongClazz.ORGANIZATION_ID);
         cnd.where(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.SYSTEM_STATUS, true);
         cnd.and(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.APP_ID, app_id);
-        cnd.andLikeAllowEmpty(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.CLAZZ_NAME, clazz_name);
         cnd.andAllowEmpty(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.ORGANIZATION_ID, organization_id);
+        cnd.andLikeAllowEmpty(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.CLAZZ_NAME, clazz_name);
         cnd.asc(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.CLAZZ_SORT);
         cnd.desc(XietongClazz.TABLE_XIETONG_CLAZZ + "." + XietongClazz.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);

@@ -36,24 +36,22 @@ public class XietongSignupJuniorService extends Service {
 
     private final XietongSignupJuniorDao xietongSignupJuniorDao = new XietongSignupJuniorDao();
 
-    public Integer adminCount(String app_id, String student_name, String student_category, String id_no) {
+    public Integer adminCount(String app_id, String student_name, String id_no) {
         Cnd cnd = new Cnd();
         cnd.where(XietongSignupJunior.SYSTEM_STATUS, true);
         cnd.and(XietongSignupJunior.APP_ID, app_id);
         cnd.andLikeAllowEmpty(XietongSignupJunior.STUDENT_NAME, student_name);
-        cnd.andAllowEmpty(XietongSignupJunior.STUDENT_CATEGORY, student_category);
         cnd.andLikeAllowEmpty(XietongSignupJunior.ID_NO, id_no);
 
         Integer count = xietongSignupJuniorDao.count(cnd);
         return count;
     }
 
-    public List<XietongSignupJunior> adminList(String app_id, String student_category, String student_name, String id_no, Integer m, Integer n) {
+    public List<XietongSignupJunior> adminList(String app_id, String student_name, String id_no, Integer m, Integer n) {
         Cnd cnd = new Cnd();
         cnd.where(XietongSignupJunior.SYSTEM_STATUS, true);
         cnd.and(XietongSignupJunior.APP_ID, app_id);
         cnd.andLikeAllowEmpty(XietongSignupJunior.STUDENT_NAME, student_name);
-        cnd.andAllowEmpty(XietongSignupJunior.STUDENT_CATEGORY, student_category);
         cnd.andLikeAllowEmpty(XietongSignupJunior.ID_NO, id_no);
         cnd.desc(XietongSignupJunior.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
