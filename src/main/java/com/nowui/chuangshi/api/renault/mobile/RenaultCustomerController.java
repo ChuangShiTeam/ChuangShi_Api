@@ -30,6 +30,14 @@ public class RenaultCustomerController extends Controller {
         
         String request_app_id = getRequest_app_id();
         String request_user_id = getRequest_user_id();
+        
+        //判断用户是否保存过信息
+        RenaultCustomer bean = RenaultCustomerService.instance.userFind(request_user_id);
+        
+        if (bean != null) {
+        	throw new RuntimeException("您已经提交过了，每个用户只能提交一次");
+        }
+        
         RenaultCustomer renault_customer = getModel(RenaultCustomer.class);
 
         renault_customer.setCustomer_id(Util.getRandomUUID());

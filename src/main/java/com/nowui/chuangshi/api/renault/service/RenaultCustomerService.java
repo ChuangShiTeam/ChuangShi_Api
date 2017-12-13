@@ -51,6 +51,14 @@ public class RenaultCustomerService extends Service {
 
         return renault_customer;
     }
+    
+    public RenaultCustomer userFind(String user_id) {
+    	Cnd cnd = new Cnd();
+        cnd.where(RenaultCustomer.SYSTEM_STATUS, true);
+        cnd.and(RenaultCustomer.SYSTEM_CREATE_USER_ID, user_id);
+        
+        return renaultCustomerDao.find(cnd);
+    }
 
     public Boolean save(RenaultCustomer renault_customer, String system_create_user_id) {
         Boolean success = renaultCustomerDao.save(renault_customer, system_create_user_id);
