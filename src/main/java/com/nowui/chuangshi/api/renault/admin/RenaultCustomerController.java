@@ -1,16 +1,15 @@
 package com.nowui.chuangshi.api.renault.admin;
 
 
+import java.util.List;
+
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.renault.model.RenaultCustomer;
 import com.nowui.chuangshi.api.renault.service.RenaultCustomerService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
-
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.util.Util;
-
-import java.util.List;
 
 
 @ControllerKey("/admin/renault/customer")
@@ -79,6 +78,11 @@ public class RenaultCustomerController extends Controller {
         Boolean result = RenaultCustomerService.instance.delete(model.getCustomer_id(), request_user_id, model.getSystem_version());
 
         renderSuccessJson(result);
+    }
+    
+    @ActionKey("/admin/renault/customer/all/export")
+    public void allExport() {
+        render(RenaultCustomerService.instance.allExport());
     }
 
 }

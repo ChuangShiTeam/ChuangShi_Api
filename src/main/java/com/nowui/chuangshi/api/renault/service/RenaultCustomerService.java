@@ -2,11 +2,21 @@ package com.nowui.chuangshi.api.renault.service;
 
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+
 import com.nowui.chuangshi.api.renault.dao.RenaultCustomerDao;
 import com.nowui.chuangshi.api.renault.model.RenaultCustomer;
+import com.nowui.chuangshi.api.xietong.model.XietongTeacherRecruitment;
+import com.nowui.chuangshi.common.render.ExcelRender;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
+import com.nowui.chuangshi.util.DateUtil;
 
 public class RenaultCustomerService extends Service {
 
@@ -31,6 +41,7 @@ public class RenaultCustomerService extends Service {
         cnd.and(RenaultCustomer.APP_ID, app_id);
         cnd.andAllowEmpty(RenaultCustomer.CUSTOMER_NAME, customer_name);
         cnd.andAllowEmpty(RenaultCustomer.CUSTOMER_PHONE, customer_phone);
+        cnd.desc(RenaultCustomer.SYSTEM_CREATE_TIME);
         cnd.paginate(m, n);
 
         List<RenaultCustomer> renault_customerList = renaultCustomerDao.primaryKeyList(cnd);
@@ -38,6 +49,18 @@ public class RenaultCustomerService extends Service {
             renault_customer.put(find(renault_customer.getCustomer_id()));
         }
         return renault_customerList;
+    }
+    
+    public List<RenaultCustomer> allList() {
+    	Cnd cnd = new Cnd();
+    	cnd.where(RenaultCustomer.SYSTEM_STATUS, true);
+    	cnd.desc(RenaultCustomer.SYSTEM_CREATE_TIME);
+    	
+    	List<RenaultCustomer> renault_customerList = renaultCustomerDao.primaryKeyList(cnd);
+    	for (RenaultCustomer renault_customer : renault_customerList) {
+    		renault_customer.put(find(renault_customer.getCustomer_id()));
+    	}
+    	return renault_customerList;
     }
 
     public RenaultCustomer find(String customer_id) {
@@ -93,6 +116,49 @@ public class RenaultCustomerService extends Service {
         }
 
         return success;
+    }
+    
+    /**
+     * 导出所有留资信息
+     * @return
+     */
+    public ExcelRender allExport() {
+               
+        List<RenaultCustomer> renault_customerlist = allList();
+        
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+
+        HSSFSheet sheet = wb.createSheet("留资信息汇总");
+
+        HSSFRow row = sheet.createRow(0);
+        HSSFCell cell = row.createCell(0);
+        cell.setCellValue("客户名称");
+        cell.setCellStyle(style);
+        cell = row.createCell(1);
+        cell.setCellValue("客户电话");
+        cell.setCellStyle(style);
+        cell = row.createCell(2);
+        cell.setCellValue("留资日期");
+        cell.setCellStyle(style);
+        
+        for (int i = 0; i < renault_customerlist.size(); i++) {
+        	RenaultCustomer renault_customer = renault_customerlist.get(i);
+            
+            row = sheet.createRow(i + 1);
+            cell = row.createCell(0);
+            cell.setCellValue(renault_customer.getCustomer_name());
+            cell.setCellStyle(style);
+            cell = row.createCell(1);
+            cell.setCellValue(renault_customer.getCustomer_phone());
+            cell.setCellStyle(style);
+            cell = row.createCell(2);
+            cell.setCellValue(DateUtil.getDateString(renault_customer.getSystem_create_time()));
+            cell.setCellStyle(style);
+        }
+
+        return new ExcelRender(wb, "留资信息");
     }
 
 }
