@@ -314,7 +314,7 @@ public class WebConfig extends JFinalConfig {
             String primary = "";
 
             try {
-                Object object = clazz.newInstance();
+//                Object object = clazz.newInstance();
 
                 Field[] fields = clazz.getDeclaredFields();
                 for (Field field : fields) {
@@ -332,8 +332,8 @@ public class WebConfig extends JFinalConfig {
                         }
                     }
                 }
-            } catch (InstantiationException e) {
-                e.printStackTrace();
+//            } catch (InstantiationException e) {
+//                e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }

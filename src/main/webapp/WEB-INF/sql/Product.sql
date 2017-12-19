@@ -53,7 +53,7 @@
     FROM table_product
     WHERE system_status = 1
     AND app_id = #p(app_id)
-    ORDER BY product_is_recommend DESC, product_is_hot DESC, system_create_time DESC
+    ORDER BY product_is_new DESC, product_is_recommend DESC, product_is_bargain DESC, product_is_hot DESC, system_create_time DESC
   #end
 
   #sql("listByOrApp_idOrLikeProduct_nameAndLimit")
