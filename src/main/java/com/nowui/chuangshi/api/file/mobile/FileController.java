@@ -23,8 +23,15 @@ public class FileController extends Controller {
 
     @ActionKey("/mobile/file/find")
     public void find() {
-
-        renderSuccessJson();
+        validateRequest(File.FILE_ID);
+        
+        File model = getModel(File.class);
+        
+        File file = FileService.instance.find(model.getFile_id());
+        
+        validateResponse(File.FILE_NAME, File.FILE_ORIGINAL_PATH, File.FILE_PATH);
+        
+        renderSuccessJson(file);
     }
 
     @ActionKey("/mobile/file/save")
