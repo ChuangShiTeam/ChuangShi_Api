@@ -21,7 +21,6 @@ public class RenaultShareCommentController extends Controller {
         validateRequest(RenaultShareComment.SHARE_ID, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         RenaultShareComment model = getModel(RenaultShareComment.class);
-        String request_app_id = getRequest_app_id();
 
         Integer resultCount = RenaultShareCommentService.instance.adminCount(model.getShare_id());
         List<RenaultShareComment> resultList = RenaultShareCommentService.instance.adminList(model.getShare_id(), getM(), getN());

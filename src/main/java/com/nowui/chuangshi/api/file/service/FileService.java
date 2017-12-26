@@ -324,6 +324,7 @@ public class FileService extends Service {
         result.put(File.FILE_ID, file_id);
         result.put(File.FILE_NAME, file_name);
         result.put(File.FILE_PATH, file_path);
+        result.put(File.FILE_ORIGINAL_PATH, file_original_path);
         
         return result;
     }

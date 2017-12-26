@@ -11,7 +11,6 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 import com.nowui.chuangshi.api.renault.dao.RenaultCustomerDao;
 import com.nowui.chuangshi.api.renault.model.RenaultCustomer;
-import com.nowui.chuangshi.api.xietong.model.XietongTeacherRecruitment;
 import com.nowui.chuangshi.common.render.ExcelRender;
 import com.nowui.chuangshi.common.service.Service;
 import com.nowui.chuangshi.common.sql.Cnd;

@@ -78,7 +78,8 @@ public class FileController extends Controller {
 
         Map<String, Object> result = FileService.instance.uploadBase64(dataString, request_app_id, request_user_id);
 
-        validateResponse(File.FILE_ID, File.FILE_NAME, File.FILE_PATH);
+        validateResponse(File.FILE_ID, File.FILE_NAME, File.FILE_ORIGINAL_PATH, File.FILE_PATH);
+        
         renderSuccessJson(result);
     }
 

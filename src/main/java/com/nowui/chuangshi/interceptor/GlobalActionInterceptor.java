@@ -182,7 +182,7 @@ public class GlobalActionInterceptor implements Interceptor {
             if (http_url.startsWith("/http/") || http_url.contains("/export")) {
 
             } else {
-                MQUtil.sendMessage("http", JSONObject.toJSONString(http));
+               // MQUtil.sendMessage("http", JSONObject.toJSONString(http));
             }
         }
 

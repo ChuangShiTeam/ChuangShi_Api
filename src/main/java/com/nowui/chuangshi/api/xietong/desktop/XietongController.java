@@ -55,7 +55,7 @@ public class XietongController extends Controller {
 
         List<Advertisement> advertisementList = AdvertisementService.instance.appList(request_app_id);
         for (Advertisement advertisement : advertisementList) {
-            advertisement.keep(Advertisement.ADVERTISEMENT_ID, Advertisement.ADVERTISEMENT_TITLE, Advertisement.ADVERTISEMENT_LINK, File.FILE_ORIGINAL_PATH);
+            advertisement.keep(Advertisement.ADVERTISEMENT_ID, Advertisement.ADVERTISEMENT_CATEGORY_CODE, Advertisement.ADVERTISEMENT_TITLE, Advertisement.ADVERTISEMENT_LINK, File.FILE_ORIGINAL_PATH);
         }
 
         List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);
