@@ -37,7 +37,7 @@ public class GuangqiNewYearCustomerController extends Controller {
         Integer resultCount = GuangqiNewYearCustomerService.instance.adminCount(request_app_id, model.getNew_year_customer_car_model(), model.getNew_year_customer_name(), model.getNew_year_customer_phone(), model.getNew_year_customer_province(), model.getNew_year_customer_city(), model.getNew_year_customer_dealer(), model.getNew_year_customer_from());
         List<GuangqiNewYearCustomer> resultList = GuangqiNewYearCustomerService.instance.adminList(request_app_id, model.getNew_year_customer_car_model(), model.getNew_year_customer_name(), model.getNew_year_customer_phone(), model.getNew_year_customer_province(), model.getNew_year_customer_city(), model.getNew_year_customer_dealer(), model.getNew_year_customer_from(), getM(), getN());
 
-        validateResponse(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_ID, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_ADDRESS, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM, GuangqiNewYearCustomer.SYSTEM_VERSION);
+        validateResponse(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_ID, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM, GuangqiNewYearCustomer.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -50,14 +50,14 @@ public class GuangqiNewYearCustomerController extends Controller {
 
         GuangqiNewYearCustomer result = GuangqiNewYearCustomerService.instance.find(model.getNew_year_customer_id());
 
-        validateResponse(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_ADDRESS, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM, GuangqiNewYearCustomer.SYSTEM_VERSION);
+        validateResponse(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM, GuangqiNewYearCustomer.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
 
     @ActionKey("/admin/guangqi/new/year/customer/save")
     public void save() {
-        validateRequest(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_ADDRESS, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM);
+        validateRequest(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM);
 
         GuangqiNewYearCustomer model = getModel(GuangqiNewYearCustomer.class);
         model.setNew_year_customer_id(Util.getRandomUUID());
@@ -70,7 +70,7 @@ public class GuangqiNewYearCustomerController extends Controller {
 
     @ActionKey("/admin/guangqi/new/year/customer/update")
     public void update() {
-        validateRequest(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_ID, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_ADDRESS, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM, GuangqiNewYearCustomer.SYSTEM_VERSION);
+        validateRequest(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_ID, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM, GuangqiNewYearCustomer.SYSTEM_VERSION);
 
         GuangqiNewYearCustomer model = getModel(GuangqiNewYearCustomer.class);
         String request_user_id = getRequest_user_id();

@@ -37,9 +37,6 @@ public class GuangqiNewYearCustomer extends Model<GuangqiNewYearCustomer> {
     @Column(type = ColumnType.VARCHAR, length = 30, comment = "城市")
     public static final String NEW_YEAR_CUSTOMER_CITY = "new_year_customer_city";
 
-    @Column(type = ColumnType.VARCHAR, length = 200, comment = "城市地址")
-    public static final String NEW_YEAR_CUSTOMER_ADDRESS = "new_year_customer_address";
-
     @Column(type = ColumnType.VARCHAR, length = 200, comment = "门店")
     public static final String NEW_YEAR_CUSTOMER_DEALER = "new_year_customer_dealer";
 
@@ -118,14 +115,6 @@ public class GuangqiNewYearCustomer extends Model<GuangqiNewYearCustomer> {
 
     public void setNew_year_customer_city(String new_year_customer_city) {
         set(NEW_YEAR_CUSTOMER_CITY, new_year_customer_city);
-    }
-
-    public String getNew_year_customer_address() {
-        return getStr(NEW_YEAR_CUSTOMER_ADDRESS);
-    }
-
-    public void setNew_year_customer_address(String new_year_customer_address) {
-        set(NEW_YEAR_CUSTOMER_ADDRESS, new_year_customer_address);
     }
 
     public String getNew_year_customer_dealer() {

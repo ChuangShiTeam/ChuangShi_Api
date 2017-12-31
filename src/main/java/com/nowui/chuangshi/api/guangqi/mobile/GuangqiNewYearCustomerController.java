@@ -39,7 +39,6 @@ public class GuangqiNewYearCustomerController extends Controller {
     	        GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, 
     	        GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, 
     	        GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, 
-    	        GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_ADDRESS, 
     	        GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, 
     	        GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM);
 
