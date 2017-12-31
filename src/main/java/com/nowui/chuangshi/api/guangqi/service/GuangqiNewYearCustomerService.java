@@ -18,13 +18,13 @@ public class GuangqiNewYearCustomerService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(GuangqiNewYearCustomer.SYSTEM_STATUS, true);
         cnd.and(GuangqiNewYearCustomer.APP_ID, app_id);
-        cnd.andAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, new_year_customer_car_model);
-        cnd.andAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, new_year_customer_name);
-        cnd.andAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, new_year_customer_phone);
-        cnd.andAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, new_year_customer_province);
-        cnd.andAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, new_year_customer_city);
-        cnd.andAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, new_year_customer_dealer);
-        cnd.andAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM, new_year_customer_from);
+        cnd.andLikeAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, new_year_customer_car_model);
+        cnd.andLikeAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, new_year_customer_name);
+        cnd.andLikeAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, new_year_customer_phone);
+        cnd.andLikeAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, new_year_customer_province);
+        cnd.andLikeAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, new_year_customer_city);
+        cnd.andLikeAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, new_year_customer_dealer);
+        cnd.andLikeAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM, new_year_customer_from);
 
         Integer count = guangqiNewYearCustomerDao.count(cnd);
         return count;
@@ -43,13 +43,13 @@ public class GuangqiNewYearCustomerService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(GuangqiNewYearCustomer.SYSTEM_STATUS, true);
         cnd.and(GuangqiNewYearCustomer.APP_ID, app_id);
-        cnd.andAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, new_year_customer_car_model);
-        cnd.andAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, new_year_customer_name);
-        cnd.andAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, new_year_customer_phone);
-        cnd.andAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, new_year_customer_province);
-        cnd.andAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, new_year_customer_city);
-        cnd.andAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, new_year_customer_dealer);
-        cnd.andAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM, new_year_customer_from);
+        cnd.andLikeAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, new_year_customer_car_model);
+        cnd.andLikeAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, new_year_customer_name);
+        cnd.andLikeAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, new_year_customer_phone);
+        cnd.andLikeAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, new_year_customer_province);
+        cnd.andLikeAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, new_year_customer_city);
+        cnd.andLikeAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, new_year_customer_dealer);
+        cnd.andLikeAllowEmpty(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM, new_year_customer_from);
         cnd.paginate(m, n);
 
         List<GuangqiNewYearCustomer> guangqi_new_year_customerList = guangqiNewYearCustomerDao.primaryKeyList(cnd);

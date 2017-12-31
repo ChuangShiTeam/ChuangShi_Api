@@ -18,7 +18,7 @@ public class GuangqiNewYearPrizeService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(GuangqiNewYearPrize.SYSTEM_STATUS, true);
         cnd.and(GuangqiNewYearPrize.APP_ID, app_id);
-        cnd.andAllowEmpty(GuangqiNewYearPrize.NEW_YEAR_PRIZE_NAME, new_year_prize_name);
+        cnd.andLikeAllowEmpty(GuangqiNewYearPrize.NEW_YEAR_PRIZE_NAME, new_year_prize_name);
 
         Integer count = guangqiNewYearPrizeDao.count(cnd);
         return count;
@@ -28,7 +28,7 @@ public class GuangqiNewYearPrizeService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(GuangqiNewYearPrize.SYSTEM_STATUS, true);
         cnd.and(GuangqiNewYearPrize.APP_ID, app_id);
-        cnd.andAllowEmpty(GuangqiNewYearPrize.NEW_YEAR_PRIZE_NAME, new_year_prize_name);
+        cnd.andLikeAllowEmpty(GuangqiNewYearPrize.NEW_YEAR_PRIZE_NAME, new_year_prize_name);
         cnd.paginate(m, n);
 
         List<GuangqiNewYearPrize> guangqi_new_year_prizeList = guangqiNewYearPrizeDao.primaryKeyList(cnd);
