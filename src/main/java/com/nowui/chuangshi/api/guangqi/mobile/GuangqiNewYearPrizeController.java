@@ -134,7 +134,7 @@ public class GuangqiNewYearPrizeController extends Controller {
             throw new RuntimeException("抽奖不成功");
         }
 
-        validateResponse(GuangqiNewYearPrize.NEW_YEAR_PRIZE_ID, GuangqiNewYearPrize.NEW_YEAR_PRIZE_NAME, GuangqiNewYearPrize.NEW_YEAR_PRIZE_UNIT_PRICE);
+        validateResponse(GuangqiNewYearPrize.NEW_YEAR_PRIZE_ID, GuangqiNewYearPrize.NEW_YEAR_PRIZE_NAME, GuangqiNewYearPrize.NEW_YEAR_PRIZE_UNIT_PRICE, GuangqiNewYearPrize.NEW_YEAR_PRIZE_IS_DEFAULT);
         
         renderSuccessJson(prize);
     }

@@ -32,7 +32,16 @@ public class GuangqiNewYearCustomerController extends Controller {
 
     @ActionKey("/mobile/guangqi/new/year/customer/save")
     public void save() {
-    	validateRequest(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, Captcha.CAPTCHA_CODE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_ADDRESS, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM);
+    	validateRequest(
+    	        GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, 
+    	        Captcha.CAPTCHA_CODE, 
+    	        GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, 
+    	        GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, 
+    	        GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, 
+    	        GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, 
+    	        GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_ADDRESS, 
+    	        GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, 
+    	        GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM);
 
     	JSONObject jsonObject = getParameterJSONObject();
         GuangqiNewYearCustomer model = getModel(GuangqiNewYearCustomer.class);
@@ -61,7 +70,7 @@ public class GuangqiNewYearCustomerController extends Controller {
         Boolean result = GuangqiNewYearCustomerService.instance.save(model, request_user_id);
 
         if (!result) {
-            throw new RuntimeException("留资不成功");
+            throw new RuntimeException("b0f1cf1b4705403ea4e2567c7d860f33");
         }
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -102,7 +111,7 @@ public class GuangqiNewYearCustomerController extends Controller {
 
         CaptchaService.instance.send(request_app_id, captcha_type, captcha_mobile, captcha_ip_address, 1, access_id, access_key, endpoint, sign_name, template_param, template_code, request_user_id);
 
-        renderSuccessJson();
+        renderSuccessJson(true);
     }
 
     @ActionKey("/mobile/guangqi/new/year/customer/update")

@@ -58,7 +58,7 @@ public class GuangqiNewYearCustomerService extends Service {
         }
         return guangqi_new_year_customerList;
     }
-
+    
     public GuangqiNewYearCustomer find(String new_year_customer_id) {
         GuangqiNewYearCustomer guangqi_new_year_customer = CacheUtil.get(GUANGQI_NEW_YEAR_CUSTOMER_ITEM_CACHE, new_year_customer_id);
 
