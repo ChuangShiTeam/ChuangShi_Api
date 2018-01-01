@@ -101,14 +101,9 @@ public class GuangqiNewYearCustomerController extends Controller {
 
         String captcha_type = CaptchaType.REGISTER.getKey();
         String captcha_ip_address = getIp_address();
-        String access_id = "LTAIxOU3VZn5Ldy2";
-        String access_key = "1AKfxNsiwSfEtn57WJjL18i5umEMqB";
-        String endpoint = "https://1096403310247815.mns.cn-hangzhou.aliyuncs.com/";
-        String sign_name = "诺享生活";
-        String template_param = "code";
-        String template_code = "SMS_115920175";
+        
 
-        CaptchaService.instance.send(request_app_id, captcha_type, captcha_mobile, captcha_ip_address, 1, access_id, access_key, endpoint, sign_name, template_param, template_code, request_user_id);
+        CaptchaService.instance.chuangLansend(request_app_id, captcha_type, captcha_mobile, captcha_ip_address, 1, request_user_id);
 
         renderSuccessJson(true);
     }

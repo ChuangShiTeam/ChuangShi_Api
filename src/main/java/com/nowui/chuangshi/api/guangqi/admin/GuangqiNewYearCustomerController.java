@@ -37,7 +37,14 @@ public class GuangqiNewYearCustomerController extends Controller {
         Integer resultCount = GuangqiNewYearCustomerService.instance.adminCount(request_app_id, model.getNew_year_customer_car_model(), model.getNew_year_customer_name(), model.getNew_year_customer_phone(), model.getNew_year_customer_province(), model.getNew_year_customer_city(), model.getNew_year_customer_dealer(), model.getNew_year_customer_from());
         List<GuangqiNewYearCustomer> resultList = GuangqiNewYearCustomerService.instance.adminList(request_app_id, model.getNew_year_customer_car_model(), model.getNew_year_customer_name(), model.getNew_year_customer_phone(), model.getNew_year_customer_province(), model.getNew_year_customer_city(), model.getNew_year_customer_dealer(), model.getNew_year_customer_from(), getM(), getN());
 
-        validateResponse(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_ID, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM, GuangqiNewYearCustomer.SYSTEM_VERSION);
+        for (GuangqiNewYearCustomer result : resultList) {
+        	GuangqiNewYearCustomerPrize guangqiNewYearCustomerPrize = GuangqiNewYearCustomerPrizeService.instance.customerFind(request_app_id, result.getNew_year_customer_id());
+        	
+        	if (guangqiNewYearCustomerPrize != null) {
+        		result.put(GuangqiNewYearPrize.NEW_YEAR_PRIZE_NAME, GuangqiNewYearPrizeService.instance.find(guangqiNewYearCustomerPrize.getNew_year_prize_id()).getNew_year_prize_name());
+        	}
+        }
+        validateResponse(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_ID, GuangqiNewYearPrize.NEW_YEAR_PRIZE_NAME, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CAR_MODEL, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_NAME, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PROVINCE, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_CITY, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_DEALER, GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_FROM, GuangqiNewYearCustomer.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
@@ -136,6 +143,10 @@ public class GuangqiNewYearCustomerController extends Controller {
 
             GuangqiNewYearCustomer guangqiNewYearCustomer = GuangqiNewYearCustomerService.instance.find(guangqiNewYearCustomerPrize.getNew_year_customer_id());
             GuangqiNewYearPrize guangqiNewYearPrize = GuangqiNewYearPrizeService.instance.find(guangqiNewYearCustomerPrize.getNew_year_customer_prize_id());
+            
+            if (guangqiNewYearCustomer == null || guangqiNewYearPrize == null) {
+            	continue;
+            }
 
             row = sheet.createRow(i + 1);
             cell = row.createCell(0);

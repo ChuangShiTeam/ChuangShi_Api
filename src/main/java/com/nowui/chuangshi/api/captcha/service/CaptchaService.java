@@ -1,5 +1,10 @@
 package com.nowui.chuangshi.api.captcha.service;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
@@ -11,14 +16,11 @@ import com.aliyuncs.profile.IClientProfile;
 import com.nowui.chuangshi.api.captcha.dao.CaptchaDao;
 import com.nowui.chuangshi.api.captcha.model.Captcha;
 import com.nowui.chuangshi.common.service.Service;
+import com.nowui.chuangshi.common.sms.util.ChuangLanSmsUtil;
 import com.nowui.chuangshi.common.sql.Cnd;
 import com.nowui.chuangshi.util.CacheUtil;
 import com.nowui.chuangshi.util.Util;
 import com.nowui.chuangshi.util.ValidateUtil;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 public class CaptchaService extends Service {
 
@@ -219,6 +221,67 @@ public class CaptchaService extends Service {
             System.out.println(sendSmsResponse.getMessage());
 
             throw new RuntimeException("短信发送不成功");
+        }
+    }
+    
+    public void chuangLansend(String request_app_id, String captcha_type, String captcha_mobile, String captcha_ip_address, int captcha_minute, String system_create_user_id) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, -captcha_minute);
+
+        if (ValidateUtil.isNullOrEmpty(captcha_mobile)) {
+            throw new RuntimeException(captcha_minute + "手机号码格式不正确");
+        }
+
+        Integer count = captchaMobileCount(request_app_id, captcha_type, captcha_mobile, calendar);
+
+        if (count > 0) {
+            throw new RuntimeException(captcha_minute + "分钟内不能重复申请");
+        }
+
+        count = captchaIpAddressCount(request_app_id, captcha_type, captcha_ip_address, calendar);
+
+        if (count > 0) {
+            throw new RuntimeException(captcha_minute + "分钟内不能重复申请");
+        }
+
+        String captcha_code = Util.getRandomNumber(6);
+
+        Captcha captcha = new Captcha();
+        captcha.setCaptcha_id(Util.getRandomUUID());
+        captcha.setApp_id(request_app_id);
+        captcha.setCaptcha_type(captcha_type);
+        captcha.setCaptcha_mobile(captcha_mobile);
+        captcha.setCaptcha_code(captcha_code);
+        captcha.setCaptcha_ip_address(captcha_ip_address);
+        Boolean result = save(captcha, system_create_user_id);
+
+        if (!result) {
+            throw new RuntimeException("验证码发送不成功");
+        }
+
+        try {
+	        //请求地址请登录253云通讯自助通平台查看或者询问您的商务负责人获取
+	  		String smsSingleRequestServerUrl = "http://smssh1.253.com/msg/send/json";
+	  		// 短信内容
+	  	    String msg = "【爱菱18带旺回家】亲爱的用户，您的短信验证码为" + captcha_code + "，5分钟内有效，若非本人操作请忽略。";
+	  		//状态报告
+	  		String report= "true";
+	  		
+	  		com.nowui.chuangshi.common.sms.request.SmsSendRequest smsSingleRequest = new com.nowui.chuangshi.common.sms.request.SmsSendRequest("CN2265732", "vq4NScOI7hc016", msg, captcha_mobile, report);
+	  		
+	  		String requestJson = JSONObject.toJSONString(smsSingleRequest);
+	  		
+	  		System.out.println("before request string is: " + requestJson);
+	  		
+	  		String response = ChuangLanSmsUtil.sendSmsByPost(smsSingleRequestServerUrl, requestJson);
+	  		
+	  		System.out.println("response after request result is :" + response);
+	  		
+	  		com.nowui.chuangshi.common.sms.response.SmsSendResponse smsSingleResponse = JSONObject.parseObject(response, com.nowui.chuangshi.common.sms.response.SmsSendResponse.class);
+	  		
+	  		System.out.println("response  toString is :" + smsSingleResponse);
+        } catch (Exception e) {
+        	throw new RuntimeException("验证码发送不成功");
         }
     }
     

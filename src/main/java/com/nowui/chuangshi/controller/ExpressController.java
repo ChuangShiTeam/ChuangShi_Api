@@ -1,5 +1,6 @@
 package com.nowui.chuangshi.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -361,12 +362,14 @@ public class ExpressController extends Controller {
      */
     @ActionKey(Url.EXPRESS_ADMIN_PULL)
     public void pull() {
-        List<Express> express_list = expressService.listNotComplete();
+        // List<Express> express_list = expressService.listNotComplete();
+        List<Express> express_list = new ArrayList<Express>();
+        express_list.add(expressService.findByExpress_no("264676843129"));
         for (Express express : express_list) {
             if ("SF".equals(express.getExpress_shipper_code())) {
                 String key = Kuaidi100.KUAIDI100_REAL_TIME_QUERY_KEY;
                 String customer = Kuaidi100.KUAIDI100_REAL_TIME_QUERY_CUSTOMER;
-                String url = Kuaidi100.KUAIDI100_REAL_TIME_QUESY_URL;
+                String url = Kuaidi100.KUAIDI100_REAL_TIME_QUERY_URL;
                 
                 String param = "{'com':'shunfeng','num':'" + express.getExpress_no() + "'}";
                 

@@ -92,6 +92,22 @@ public class GuangqiNewYearCustomerPrizeService extends Service {
         Integer count = guangqiNewYearCustomerPrizeDao.count(cnd);
         return count;
     }
+    
+    public GuangqiNewYearCustomerPrize customerFind(String app_id, String new_year_customer_id) {
+    	Cnd cnd = new Cnd();
+    	cnd.where(GuangqiNewYearCustomerPrize.SYSTEM_STATUS, true);
+    	cnd.and(GuangqiNewYearCustomerPrize.APP_ID, app_id);
+        cnd.and(GuangqiNewYearCustomerPrize.NEW_YEAR_CUSTOMER_ID, new_year_customer_id);
+    	
+    	List<GuangqiNewYearCustomerPrize> guangqi_new_year_customer_prizeList = guangqiNewYearCustomerPrizeDao.primaryKeyList(cnd);
+    	for (GuangqiNewYearCustomerPrize guangqi_new_year_customer_prize : guangqi_new_year_customer_prizeList) {
+    		guangqi_new_year_customer_prize.put(find(guangqi_new_year_customer_prize.getNew_year_customer_prize_id()));
+    	}
+    	if (guangqi_new_year_customer_prizeList == null || guangqi_new_year_customer_prizeList.size() == 0) {
+    		return null;
+    	}
+    	return guangqi_new_year_customer_prizeList.get(0);
+    }
 
     public GuangqiNewYearCustomerPrize find(String new_year_customer_prize_id) {
         GuangqiNewYearCustomerPrize guangqi_new_year_customer_prize = CacheUtil.get(GUANGQI_NEW_YEAR_CUSTOMER_PRIZE_ITEM_CACHE, new_year_customer_prize_id);

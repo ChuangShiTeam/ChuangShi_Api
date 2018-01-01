@@ -82,12 +82,11 @@ public class GuangqiNewYearPrizeController extends Controller {
                 total += guangqiNewYearPrize.getNew_year_prize_probability();
             }
         }
-
         Random random = new Random();
-        int number = random.nextInt(total) + 1;
+        int number = random.nextInt(100) + 1;
         int start = 0;
         int end = 0;
-        GuangqiNewYearPrize prize = null;
+        GuangqiNewYearPrize prize = defaultPrize;
         for (GuangqiNewYearPrize guangqiNewYearPrize : guangqiNewYearPrizeList) {
             if (!guangqiNewYearPrize.getNew_year_prize_is_default()) {
                 end += guangqiNewYearPrize.getNew_year_prize_probability();
@@ -124,6 +123,7 @@ public class GuangqiNewYearPrizeController extends Controller {
 
         GuangqiNewYearCustomerPrize guangqi_new_year_customer_prize = new GuangqiNewYearCustomerPrize();
         guangqi_new_year_customer_prize.setNew_year_customer_prize_id(Util.getRandomUUID());
+        guangqi_new_year_customer_prize.setApp_id(request_app_id);
         guangqi_new_year_customer_prize.setNew_year_prize_id(prize.getNew_year_prize_id());
         guangqi_new_year_customer_prize.setNew_year_customer_id(guangqiNewYearCustomer.getNew_year_customer_id());
         guangqi_new_year_customer_prize.setNew_year_customer_prize_date(DateUtil.getDateString(new Date()));
@@ -138,5 +138,6 @@ public class GuangqiNewYearPrizeController extends Controller {
         
         renderSuccessJson(prize);
     }
+    
 
 }
