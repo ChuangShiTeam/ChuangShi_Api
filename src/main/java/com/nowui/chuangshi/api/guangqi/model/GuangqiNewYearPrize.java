@@ -1,14 +1,14 @@
 package com.nowui.chuangshi.api.guangqi.model;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import com.nowui.chuangshi.common.annotation.Column;
 import com.nowui.chuangshi.common.annotation.Entity;
 import com.nowui.chuangshi.common.annotation.Primary;
 import com.nowui.chuangshi.common.annotation.Table;
 import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.type.ColumnType;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 @Entity
 public class GuangqiNewYearPrize extends Model<GuangqiNewYearPrize> {
@@ -29,7 +29,7 @@ public class GuangqiNewYearPrize extends Model<GuangqiNewYearPrize> {
     @Column(type = ColumnType.VARCHAR, length = 100, comment = "奖品名称")
     public static final String NEW_YEAR_PRIZE_NAME = "new_year_prize_name";
 
-    @Column(type = ColumnType.INT, length = 3, comment = "中奖率")
+    @Column(type = ColumnType.DECIMAL, length = 0, comment = "中奖率")
     public static final String NEW_YEAR_PRIZE_PROBABILITY = "new_year_prize_probability";
 
     @Column(type = ColumnType.INT, length = 5, comment = "奖品总数")
@@ -97,11 +97,11 @@ public class GuangqiNewYearPrize extends Model<GuangqiNewYearPrize> {
         set(NEW_YEAR_PRIZE_NAME, new_year_prize_name);
     }
 
-    public Integer getNew_year_prize_probability() {
-        return getInt(NEW_YEAR_PRIZE_PROBABILITY);
+    public BigDecimal getNew_year_prize_probability() {
+        return getBigDecimal(NEW_YEAR_PRIZE_PROBABILITY);
     }
 
-    public void setNew_year_prize_probability(Integer new_year_prize_probability) {
+    public void setNew_year_prize_probability(BigDecimal new_year_prize_probability) {
         set(NEW_YEAR_PRIZE_PROBABILITY, new_year_prize_probability);
     }
 

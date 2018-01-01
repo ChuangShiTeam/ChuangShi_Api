@@ -49,6 +49,11 @@ public class GuangqiNewYearCustomerController extends Controller {
         String request_user_id = getRequest_user_id();
         String request_app_id = getRequest_app_id();
         
+        if (ValidateUtil.isNullOrEmpty(request_app_id)) {
+    		request_app_id = "b0f1cf1b4705403ea4e2567c7d860f33";
+    		model.setApp_id(request_app_id);
+    	}
+        
         if (!ValidateUtil.isPhone(model.getNew_year_customer_phone())) {
             throw new RuntimeException("手机号码不对");
         }
@@ -69,7 +74,7 @@ public class GuangqiNewYearCustomerController extends Controller {
         Boolean result = GuangqiNewYearCustomerService.instance.save(model, request_user_id);
 
         if (!result) {
-            throw new RuntimeException("b0f1cf1b4705403ea4e2567c7d860f33");
+            throw new RuntimeException("留资失败");
         }
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -87,6 +92,9 @@ public class GuangqiNewYearCustomerController extends Controller {
 
         String request_user_id = getRequest_user_id();
         String request_app_id = getRequest_app_id();
+        if (ValidateUtil.isNullOrEmpty(request_app_id)) {
+    		request_app_id = "b0f1cf1b4705403ea4e2567c7d860f33";
+    	}
         JSONObject jsonObject = getParameterJSONObject();
         String captcha_mobile = jsonObject.getString(GuangqiNewYearCustomer.NEW_YEAR_CUSTOMER_PHONE);
         
