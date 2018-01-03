@@ -85,8 +85,8 @@ public class AdminController extends Controller {
 
         if (result) {
             Admin admin = AdminService.instance.find(model.getAdmin_id());
-            UserService.instance.userNameUpdate(admin.getUser_id(), model.getStr(User.USER_NAME), request_user_id);
-            UserService.instance.userPasswordUpdate(admin.getUser_id(), model.getStr(User.USER_NAME), request_user_id);
+            UserService.instance.userAccountAndNameUpdate(admin.getUser_id(), model.getStr(User.USER_ACCOUNT), model.getStr(User.USER_NAME), request_user_id);
+            UserService.instance.userPasswordUpdate(admin.getUser_id(), model.getStr(User.USER_PASSWORD), request_user_id);
         }
 
         renderSuccessJson(result);

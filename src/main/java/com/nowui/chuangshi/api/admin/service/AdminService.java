@@ -50,6 +50,10 @@ public class AdminService extends Service {
 
         if (admin == null) {
             admin = adminDao.find(admin_id);
+            User user = UserService.instance.find(admin.getUser_id());
+            admin.put(User.USER_ACCOUNT, user.getUser_account());
+            admin.put(User.USER_NAME, user.getUser_name());
+            CacheUtil.put(ADMIN_ITEM_CACHE, admin_id, admin);        
         }
 
         return admin;

@@ -142,7 +142,7 @@ public class GuangqiNewYearCustomerController extends Controller {
             GuangqiNewYearCustomerPrize guangqiNewYearCustomerPrize = guangqiNewYearCustomerPrizeList.get(i);
 
             GuangqiNewYearCustomer guangqiNewYearCustomer = GuangqiNewYearCustomerService.instance.find(guangqiNewYearCustomerPrize.getNew_year_customer_id());
-            GuangqiNewYearPrize guangqiNewYearPrize = GuangqiNewYearPrizeService.instance.find(guangqiNewYearCustomerPrize.getNew_year_customer_prize_id());
+            GuangqiNewYearPrize guangqiNewYearPrize = GuangqiNewYearPrizeService.instance.find(guangqiNewYearCustomerPrize.getNew_year_prize_id());
             
             if (guangqiNewYearCustomer == null || guangqiNewYearPrize == null) {
             	continue;
