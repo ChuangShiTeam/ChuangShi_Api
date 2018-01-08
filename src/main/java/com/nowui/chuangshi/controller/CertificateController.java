@@ -12,7 +12,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.jfinal.weixin.sdk.utils.HttpUtils;
-import com.nowui.chuangshi.api.app.model.App;
 import com.nowui.chuangshi.api.file.model.File;
 import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.member.model.Member;
