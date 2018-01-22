@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.advertisement.model.Advertisement;
 import com.nowui.chuangshi.api.advertisement.service.AdvertisementService;
@@ -24,6 +25,7 @@ import com.nowui.chuangshi.api.xietong.service.XietongStudentService;
 import com.nowui.chuangshi.api.xietong.service.XietongTeacherService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
+import com.nowui.chuangshi.constant.Constant;
 
 
 
@@ -45,6 +47,22 @@ public class XietongController extends Controller {
         renderSuccessJson(articleList);
     }
     
+    @ActionKey("/desktop/xietong/website/search")
+    public void search() {
+        validateRequest("keyword", Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        
+        JSONObject jsonObject = getParameterJSONObject();
+        String request_app_id = getRequest_app_id();
+
+        Integer articleCount = ArticleService.instance.searchCount(request_app_id, jsonObject.getString("keyword"));
+        
+        List<Article> articleList = ArticleService.instance.searchList(request_app_id, jsonObject.getString("keyword"), getM(), getN());
+
+        validateResponse(Article.ARTICLE_ID, Article.ARTICLE_CATEGORY_ID, File.FILE_PATH, Article.ARTICLE_NAME, Article.ARTICLE_OUTER_LINK, Article.ARTICLE_IS_OUTER_LINK, Article.ARTICLE_SUMMARY, Article.SYSTEM_CREATE_TIME);
+
+        renderSuccessJson(articleCount, articleList);
+    }
+    
     @ActionKey("/desktop/xietong/website/init")
     public void init() {
         String request_app_id = "749388e5dac3465f922c54e61d16a993";
@@ -55,7 +73,7 @@ public class XietongController extends Controller {
 
         List<Advertisement> advertisementList = AdvertisementService.instance.appList(request_app_id);
         for (Advertisement advertisement : advertisementList) {
-            advertisement.keep(Advertisement.ADVERTISEMENT_ID, Advertisement.ADVERTISEMENT_CATEGORY_CODE, Advertisement.ADVERTISEMENT_TITLE, Advertisement.ADVERTISEMENT_LINK, File.FILE_ORIGINAL_PATH);
+            advertisement.keep(Advertisement.ADVERTISEMENT_ID, Advertisement.ADVERTISEMENT_CATEGORY_CODE, Advertisement.ADVERTISEMENT_IS_FLOAT, Advertisement.ADVERTISEMENT_TITLE, Advertisement.ADVERTISEMENT_LINK, File.FILE_ORIGINAL_PATH);
         }
 
         List<ArticleCategory> articleCategoryList = ArticleCategoryService.instance.appList(request_app_id);

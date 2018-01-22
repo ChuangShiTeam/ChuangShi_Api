@@ -41,6 +41,31 @@ public class ArticleService extends Service {
         }
         return articleList;
     }
+    
+    public Integer searchCount(String app_id, String keyword) {
+        Cnd cnd = new Cnd();
+        cnd.where(Article.SYSTEM_STATUS, true);
+        cnd.and(Article.APP_ID, app_id);
+        cnd.andLikeAllowEmpty(Article.ARTICLE_NAME, keyword);
+
+        Integer count = articleDao.count(cnd);
+        return count;
+    }
+    
+    public List<Article> searchList(String app_id, String keyword, Integer m, Integer n) {
+        Cnd cnd = new Cnd();
+        cnd.where(Article.SYSTEM_STATUS, true);
+        cnd.and(Article.APP_ID, app_id);
+        cnd.andLikeAllowEmpty(Article.ARTICLE_NAME, keyword);
+        cnd.desc(Article.SYSTEM_CREATE_TIME);
+        cnd.paginate(m, n);
+
+        List<Article> articleList = articleDao.primaryKeyList(cnd);
+        for (Article article : articleList) {
+            article.put(find(article.getArticle_id()));
+        }
+        return articleList;
+    }
 
     public List<Article> appList(String app_id) {
         Cnd cnd = new Cnd();
