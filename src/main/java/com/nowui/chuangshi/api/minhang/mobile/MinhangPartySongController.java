@@ -19,8 +19,18 @@ public class MinhangPartySongController extends Controller {
 
     @ActionKey("/mobile/minhang/party/song/find")
     public void find() {
-
-        renderSuccessJson();
+        validateRequest(MinhangPartySong.PARTY_SONG_ID);
+        
+        MinhangPartySong model = getModel(MinhangPartySong.class);
+        
+        MinhangPartySong minhang_party_song = MinhangPartySongService.instance.find(model.getParty_song_id());
+        
+        MinhangTask minhangTask = MinhangTaskService.instance.find(minhang_party_song.getTask_id());
+        minhang_party_song.put(MinhangTask.TASK_QRCODE_URL, minhangTask.getTask_qrcode_url());
+        
+        validateResponse(MinhangPartySong.PARTY_SONG_ID, MinhangTask.TASK_QRCODE_URL, MinhangPartySong.TASK_ID,  MinhangPartySong.PARTY_SONG_URL, MinhangPartySong.PARTY_SONG_CONTENT, MinhangPartySong.SYSTEM_VERSION);
+        
+        renderSuccessJson(minhang_party_song);
     }
     
     /**
