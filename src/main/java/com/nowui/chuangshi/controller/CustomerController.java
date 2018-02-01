@@ -65,9 +65,7 @@ public class CustomerController extends Controller {
     @ActionKey(Url.CUSTOMER_SAVE)
     public void save() {
         validateRequest_app_id();
-        validate(Customer.CUSTOMER_NAME, Customer.CUSTOMER_SEX, Customer.CUSTOMER_BIRTHDAY, Customer.CUSTOMER_TEL,
-                Customer.CUSTOMER_MOBILE, Customer.CUSTOMER_POSTCODE, Customer.CUSTOMER_ID_CARD,
-                Customer.CUSTOMER_PROVINCE, Customer.CUSTOMER_CITY, Customer.CUSTOMER_AREA, Customer.CUSTOMER_ADDRESS);
+        validate(Customer.CUSTOMER_NAME, Customer.CUSTOMER_MOBILE);
 
         Customer model = getModel(Customer.class);
         String customer_id = Util.getRandomUUID();
@@ -77,10 +75,7 @@ public class CustomerController extends Controller {
         authenticateRequest_app_idAndRequest_user_id();
 
         Boolean result = customerService.save(customer_id, request_app_id, model.getCustomer_name(),
-                model.getCustomer_sex(), model.getCustomer_birthday(), model.getCustomer_tel(),
-                model.getCustomer_mobile(), model.getCustomer_postcode(), model.getCustomer_id_card(),
-                model.getCustomer_province(), model.getCustomer_city(), model.getCustomer_area(),
-                model.getCustomer_address(), request_user_id);
+                "", "", "", model.getCustomer_mobile(), "", "", "", "", "", "", request_user_id);
 
         renderSuccessJson(result);
     }
