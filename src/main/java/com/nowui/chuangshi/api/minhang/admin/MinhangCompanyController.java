@@ -2,7 +2,9 @@ package com.nowui.chuangshi.api.minhang.admin;
 
 
 import com.jfinal.core.ActionKey;
+import com.nowui.chuangshi.api.file.service.FileService;
 import com.nowui.chuangshi.api.minhang.model.MinhangCompany;
+import com.nowui.chuangshi.api.minhang.model.MinhangPoster;
 import com.nowui.chuangshi.api.minhang.service.MinhangCompanyService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
@@ -24,6 +26,9 @@ public class MinhangCompanyController extends Controller {
 
         Integer resultCount = MinhangCompanyService.instance.adminCount(request_app_id, model.getCompany_name());
         List<MinhangCompany> resultList = MinhangCompanyService.instance.adminList(request_app_id, model.getCompany_name(), getM(), getN());
+//        for (MinhangCompany minhangCompany : resultList) {
+//        	minhangCompany.put(MinhangCompany.COMPANY_LOGO_FILE, FileService.instance.getFile(minhangCompany.getCompany_logo()));
+//        }
 
         validateResponse(MinhangCompany.COMPANY_ID, MinhangCompany.COMPANY_NAME, MinhangCompany.COMPANY_LOGO, MinhangCompany.COMPANY_VIEW_WIDTH, MinhangCompany.COMPNAY_SORT, MinhangCompany.SYSTEM_VERSION);
 
@@ -37,6 +42,8 @@ public class MinhangCompanyController extends Controller {
         MinhangCompany model = getModel(MinhangCompany.class);
 
         MinhangCompany result = MinhangCompanyService.instance.find(model.getCompany_id());
+        
+//        result.put(MinhangCompany.COMPANY_LOGO_FILE, FileService.instance.getFile(result.getCompany_logo()));
 
         validateResponse(MinhangCompany.COMPANY_NAME, MinhangCompany.COMPANY_LOGO, MinhangCompany.COMPANY_VIEW_WIDTH, MinhangCompany.COMPNAY_DESCRIPTION, MinhangCompany.COMPNAY_SORT, MinhangCompany.SYSTEM_VERSION);
 

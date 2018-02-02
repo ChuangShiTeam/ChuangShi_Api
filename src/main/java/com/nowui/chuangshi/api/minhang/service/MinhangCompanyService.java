@@ -28,8 +28,22 @@ public class MinhangCompanyService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(MinhangCompany.SYSTEM_STATUS, true);
         cnd.and(MinhangCompany.APP_ID, app_id);
-        cnd.andAllowEmpty(MinhangCompany.COMPANY_NAME, company_name);
+        cnd.andLikeAllowEmpty(MinhangCompany.COMPANY_NAME, company_name);
+        cnd.asc(MinhangCompany.COMPNAY_SORT);
         cnd.paginate(m, n);
+
+        List<MinhangCompany> minhang_companyList = minhangCompanyDao.primaryKeyList(cnd);
+        for (MinhangCompany minhang_company : minhang_companyList) {
+            minhang_company.put(find(minhang_company.getCompany_id()));
+        }
+        return minhang_companyList;
+    }
+    
+    public List<MinhangCompany> mobileList(String app_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(MinhangCompany.SYSTEM_STATUS, true);
+        cnd.and(MinhangCompany.APP_ID, app_id);
+        cnd.asc(MinhangCompany.COMPNAY_SORT);
 
         List<MinhangCompany> minhang_companyList = minhangCompanyDao.primaryKeyList(cnd);
         for (MinhangCompany minhang_company : minhang_companyList) {
