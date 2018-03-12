@@ -86,6 +86,21 @@ public class XietongSignupJuniorService extends Service {
 
         return xietong_signup_junior;
     }
+    
+    public String findLatestSignupNumber(String app_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(XietongSignupJunior.SYSTEM_STATUS, true);
+        cnd.and(XietongSignupJunior.APP_ID, app_id);
+        cnd.desc(XietongSignupJunior.SIGNUP_NUMBER);
+        
+        XietongSignupJunior xietong_signup_junior = xietongSignupJuniorDao.find(cnd);
+        
+        if (xietong_signup_junior == null) {
+            return "01000";
+        }
+        
+        return xietong_signup_junior.getSignupNumber();
+    }
 
     public Boolean save(XietongSignupJunior xietong_signup_junior, String system_create_user_id) {
         Boolean success = xietongSignupJuniorDao.save(xietong_signup_junior, system_create_user_id);

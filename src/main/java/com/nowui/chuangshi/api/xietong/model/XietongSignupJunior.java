@@ -21,6 +21,9 @@ public class XietongSignupJunior extends Model<XietongSignupJunior> {
     
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "用户编号")
     public static final String USER_ID = "user_id";
+    
+    @Column(type = ColumnType.VARCHAR, length = 20, comment = "报名编号")
+    public static final String SIGNUP_NUMBER = "signup_number";
 
     @Column(type = ColumnType.VARCHAR, length = 20, comment = "学生姓名")
     public static final String STUDENT_NAME = "student_name";
@@ -85,7 +88,7 @@ public class XietongSignupJunior extends Model<XietongSignupJunior> {
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "评分")
     public static final String MARK = "mark";
 
-    @Column(type = ColumnType.VARCHAR, length = 200, comment = "需要说明事项")
+    @Column(type = ColumnType.VARCHAR, length = 2000, comment = "需要说明事项")
     public static final String REMARK = "remark";
 
     @Column(type = ColumnType.VARCHAR, length = 2, comment = "报名状态")
@@ -143,6 +146,14 @@ public class XietongSignupJunior extends Model<XietongSignupJunior> {
 
     public void setStudent_name(String student_name) {
         set(STUDENT_NAME, student_name);
+    }
+    
+    public String getSignupNumber() {
+        return getStr(SIGNUP_NUMBER);
+    }
+    
+    public void setSignupNumber(String signup_number) {
+        set(SIGNUP_NUMBER, signup_number);
     }
     
     public String getStudent_category() {
