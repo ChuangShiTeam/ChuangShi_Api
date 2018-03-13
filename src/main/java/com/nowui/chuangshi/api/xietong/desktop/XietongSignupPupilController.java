@@ -17,6 +17,7 @@ import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.AesUtil;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 @ControllerKey("/desktop/xietong/signup/pupil")
 public class XietongSignupPupilController extends Controller {
@@ -47,6 +48,7 @@ public class XietongSignupPupilController extends Controller {
             }
             
             bean.keep(XietongSignupPupil.SIGNUP_ID, XietongSignupPupil.USER_ID, 
+                    XietongSignupPupil.SIGNUP_NUMBER,
                     XietongSignupPupil.FATHER_NAME, XietongSignupPupil.FATHER_PHONE, 
                     XietongSignupPupil.FATHER_WORK, XietongSignupPupil.ID_NO, 
                     XietongSignupPupil.ID_TYPE, XietongSignupPupil.KINDERGARTEN, 
@@ -80,7 +82,17 @@ public class XietongSignupPupilController extends Controller {
         if (bean != null) {
             throw new RuntimeException("该证件号码已经报过名");
         }
-
+        String signup_number = XietongSignupPupilService.instance.findLatestSignupNumber(request_app_id);
+        if (ValidateUtil.isNullOrEmpty(signup_number)) {
+            xietong_signup_pupil.setSignupNumber("01000");
+        } else {
+            Integer latestSignupNumber = Integer.valueOf(signup_number) + 1;
+            if (latestSignupNumber >= 10000) {
+                xietong_signup_pupil.setSignupNumber("" + latestSignupNumber);
+            } else {
+                xietong_signup_pupil.setSignupNumber("0" + latestSignupNumber);
+            }
+        }
         xietong_signup_pupil.setSignup_status("已报名");
         xietong_signup_pupil.setApp_id(request_app_id);
         

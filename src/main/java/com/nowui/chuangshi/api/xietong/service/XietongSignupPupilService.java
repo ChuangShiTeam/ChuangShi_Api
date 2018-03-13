@@ -90,15 +90,16 @@ public class XietongSignupPupilService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(XietongSignupPupil.SYSTEM_STATUS, true);
         cnd.and(XietongSignupPupil.APP_ID, app_id);
-        cnd.desc(XietongSignupPupil.SIGNUP_NUMBER);
+        cnd.desc(XietongSignupPupil.SYSTEM_CREATE_TIME);
         
-        XietongSignupPupil xietong_signup_pupil = xietongSignupPupilDao.find(cnd);
+        List<XietongSignupPupil> xietong_signup_pupilList = xietongSignupPupilDao.list(cnd);
         
-        if (xietong_signup_pupil == null) {
+        if (xietong_signup_pupilList == null || xietong_signup_pupilList.size() == 0) {
             return null;
         }
         
-        return xietong_signup_pupil.getSignupNumber();
+        return xietong_signup_pupilList.get(0).getSignupNumber();
+        
     }
     
     /**

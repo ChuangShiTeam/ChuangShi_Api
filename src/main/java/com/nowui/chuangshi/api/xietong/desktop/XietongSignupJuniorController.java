@@ -10,6 +10,7 @@ import com.jfinal.core.ActionKey;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.api.xietong.model.XietongSignupJunior;
+import com.nowui.chuangshi.api.xietong.model.XietongSignupPupil;
 import com.nowui.chuangshi.api.xietong.service.XietongSignupJuniorService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
@@ -17,6 +18,7 @@ import com.nowui.chuangshi.constant.Config;
 import com.nowui.chuangshi.constant.Constant;
 import com.nowui.chuangshi.type.UserType;
 import com.nowui.chuangshi.util.AesUtil;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 @ControllerKey("/desktop/xietong/signup/junior")
 public class XietongSignupJuniorController extends Controller {
@@ -47,6 +49,7 @@ public class XietongSignupJuniorController extends Controller {
             }
             
             bean.keep(XietongSignupJunior.SIGNUP_ID, XietongSignupJunior.USER_ID, 
+                    XietongSignupJunior.SIGNUP_NUMBER,
                     XietongSignupJunior.FATHER_NAME, XietongSignupJunior.FATHER_PHONE, 
                     XietongSignupJunior.FATHER_WORK, XietongSignupJunior.ID_NO, 
                     XietongSignupJunior.ID_TYPE, XietongSignupJunior.JOB, 
@@ -79,6 +82,18 @@ public class XietongSignupJuniorController extends Controller {
         if (bean != null) {
             //
             throw new RuntimeException("该学生已经报名");
+        }
+        
+        String signup_number = XietongSignupJuniorService.instance.findLatestSignupNumber(request_app_id);
+        if (ValidateUtil.isNullOrEmpty(signup_number)) {
+            xietong_signup_junior.setSignupNumber("01000");
+        } else {
+            Integer latestSignupNumber = Integer.valueOf(signup_number) + 1;
+            if (latestSignupNumber >= 10000) {
+                xietong_signup_junior.setSignupNumber("" + latestSignupNumber);
+            } else {
+                xietong_signup_junior.setSignupNumber("0" + latestSignupNumber);
+            }
         }
 
         xietong_signup_junior.setSignup_status("已报名");

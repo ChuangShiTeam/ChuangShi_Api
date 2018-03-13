@@ -91,15 +91,15 @@ public class XietongSignupJuniorService extends Service {
         Cnd cnd = new Cnd();
         cnd.where(XietongSignupJunior.SYSTEM_STATUS, true);
         cnd.and(XietongSignupJunior.APP_ID, app_id);
-        cnd.desc(XietongSignupJunior.SIGNUP_NUMBER);
+        cnd.desc(XietongSignupJunior.SYSTEM_CREATE_TIME);
         
-        XietongSignupJunior xietong_signup_junior = xietongSignupJuniorDao.find(cnd);
+        List<XietongSignupJunior> xietong_signup_juniorList = xietongSignupJuniorDao.list(cnd);
         
-        if (xietong_signup_junior == null) {
+        if (xietong_signup_juniorList == null || xietong_signup_juniorList.size() == 0) {
             return null;
         }
         
-        return xietong_signup_junior.getSignupNumber();
+        return xietong_signup_juniorList.get(0).getSignupNumber();
     }
 
     public Boolean save(XietongSignupJunior xietong_signup_junior, String system_create_user_id) {
