@@ -6,6 +6,7 @@ import com.nowui.chuangshi.api.xietong.service.XietongSignupPupilService;
 import com.nowui.chuangshi.common.annotation.ControllerKey;
 import com.nowui.chuangshi.common.controller.Controller;
 import com.nowui.chuangshi.util.Util;
+import com.nowui.chuangshi.util.ValidateUtil;
 
 @ControllerKey("/mobile/xietong/signup/pupil")
 public class XietongSignupPupilController extends Controller {
@@ -54,10 +55,20 @@ public class XietongSignupPupilController extends Controller {
 
         XietongSignupPupil bean = XietongSignupPupilService.instance.idNoFind(xietong_signup_pupil.getId_no());
         if (bean != null) {
-            //
             throw new RuntimeException("该学生已经报名");
         }
-
+        String signup_number = XietongSignupPupilService.instance.findLatestSignupNumber(request_app_id);
+        if (ValidateUtil.isNullOrEmpty(signup_number)) {
+            xietong_signup_pupil.setSignupNumber("01000");
+        } else {
+            Integer latestSignupNumber = Integer.valueOf(signup_number);
+            latestSignupNumber ++;
+            if (latestSignupNumber >= 10000) {
+                xietong_signup_pupil.setSignupNumber("" + latestSignupNumber);
+            } else {
+                xietong_signup_pupil.setSignupNumber("0" + latestSignupNumber);
+            }
+        }
         xietong_signup_pupil.setSignup_status("已报名");
         xietong_signup_pupil.setSignup_id(Util.getRandomUUID());
         xietong_signup_pupil.setApp_id(request_app_id);

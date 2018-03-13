@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.nowui.chuangshi.api.user.model.User;
 import com.nowui.chuangshi.api.user.service.UserService;
 import com.nowui.chuangshi.api.xietong.dao.XietongSignupPupilDao;
+import com.nowui.chuangshi.api.xietong.model.XietongSignupJunior;
 import com.nowui.chuangshi.api.xietong.model.XietongSignupPupil;
 import com.nowui.chuangshi.common.render.ExcelRender;
 import com.nowui.chuangshi.common.service.Service;
@@ -64,7 +65,7 @@ public class XietongSignupPupilService extends Service {
     public List<XietongSignupPupil> allList() {
         Cnd cnd = new Cnd();
         cnd.where(XietongSignupPupil.SYSTEM_STATUS, true);
-        cnd.desc(XietongSignupPupil.SYSTEM_CREATE_TIME);
+        cnd.asc(XietongSignupPupil.SYSTEM_CREATE_TIME);
 
         List<XietongSignupPupil> xietong_signup_pupilList = xietongSignupPupilDao.primaryKeyList(cnd);
         for (XietongSignupPupil xietong_signup_pupil : xietong_signup_pupilList) {
@@ -83,6 +84,21 @@ public class XietongSignupPupilService extends Service {
         }
 
         return xietong_signup_pupil;
+    }
+    
+    public String findLatestSignupNumber(String app_id) {
+        Cnd cnd = new Cnd();
+        cnd.where(XietongSignupPupil.SYSTEM_STATUS, true);
+        cnd.and(XietongSignupPupil.APP_ID, app_id);
+        cnd.desc(XietongSignupPupil.SIGNUP_NUMBER);
+        
+        XietongSignupPupil xietong_signup_pupil = xietongSignupPupilDao.find(cnd);
+        
+        if (xietong_signup_pupil == null) {
+            return null;
+        }
+        
+        return xietong_signup_pupil.getSignupNumber();
     }
     
     /**
@@ -207,51 +223,54 @@ public class XietongSignupPupilService extends Service {
 
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = row.createCell(0);
-        cell.setCellValue("姓名");
+        cell.setCellValue("报名序号");
         cell.setCellStyle(style);
         cell = row.createCell(1);
-        cell.setCellValue("性别");
+        cell.setCellValue("姓名");
         cell.setCellStyle(style);
         cell = row.createCell(2);
-        cell.setCellValue("出生日期");
+        cell.setCellValue("性别");
         cell.setCellStyle(style);
         cell = row.createCell(3);
-        cell.setCellValue("原就读幼儿园");
+        cell.setCellValue("出生日期");
         cell.setCellStyle(style);
         cell = row.createCell(4);
-        cell.setCellValue("证件类型");
+        cell.setCellValue("原就读幼儿园");
         cell.setCellStyle(style);
         cell = row.createCell(5);
-        cell.setCellValue("证件号码");
+        cell.setCellValue("证件类型");
         cell.setCellStyle(style);
         cell = row.createCell(6);
-        cell.setCellValue("户籍地址");
+        cell.setCellValue("证件号码");
         cell.setCellStyle(style);
         cell = row.createCell(7);
-        cell.setCellValue("家庭住址");
+        cell.setCellValue("户籍地址");
         cell.setCellStyle(style);
         cell = row.createCell(8);
-        cell.setCellValue("父亲姓名");
+        cell.setCellValue("家庭住址");
         cell.setCellStyle(style);
         cell = row.createCell(9);
-        cell.setCellValue("父亲联系电话");
+        cell.setCellValue("父亲姓名");
         cell.setCellStyle(style);
         cell = row.createCell(10);
-        cell.setCellValue("父亲工作单位");
+        cell.setCellValue("父亲联系电话");
         cell.setCellStyle(style);
         cell = row.createCell(11);
-        cell.setCellValue("母亲姓名");
+        cell.setCellValue("父亲工作单位");
         cell.setCellStyle(style);
         cell = row.createCell(12);
-        cell.setCellValue("母亲联系电话");
+        cell.setCellValue("母亲姓名");
         cell.setCellStyle(style);
         cell = row.createCell(13);
-        cell.setCellValue("母亲工作单位");
+        cell.setCellValue("母亲联系电话");
         cell.setCellStyle(style);
         cell = row.createCell(14);
-        cell.setCellValue("需要说明事项");
+        cell.setCellValue("母亲工作单位");
         cell.setCellStyle(style);
         cell = row.createCell(15);
+        cell.setCellValue("需要说明事项");
+        cell.setCellStyle(style);
+        cell = row.createCell(16);
         cell.setCellValue("报名状态");
         cell.setCellStyle(style);
         
@@ -260,51 +279,54 @@ public class XietongSignupPupilService extends Service {
             
             row = sheet.createRow(i + 1);
             cell = row.createCell(0);
-            cell.setCellValue(xietong_signup_pupil.getStudent_name());
+            cell.setCellValue(xietong_signup_pupil.getSignupNumber());
             cell.setCellStyle(style);
             cell = row.createCell(1);
-            cell.setCellValue(xietong_signup_pupil.getStudent_sex());
+            cell.setCellValue(xietong_signup_pupil.getStudent_name());
             cell.setCellStyle(style);
             cell = row.createCell(2);
-            cell.setCellValue(DateUtil.getDateString(xietong_signup_pupil.getStudent_birthday()));
+            cell.setCellValue(xietong_signup_pupil.getStudent_sex());
             cell.setCellStyle(style);
             cell = row.createCell(3);
-            cell.setCellValue(xietong_signup_pupil.getKindergarten());
+            cell.setCellValue(DateUtil.getDateString(xietong_signup_pupil.getStudent_birthday()));
             cell.setCellStyle(style);
             cell = row.createCell(4);
-            cell.setCellValue(xietong_signup_pupil.getId_type());
+            cell.setCellValue(xietong_signup_pupil.getKindergarten());
             cell.setCellStyle(style);
             cell = row.createCell(5);
-            cell.setCellValue(xietong_signup_pupil.getId_no());
+            cell.setCellValue(xietong_signup_pupil.getId_type());
             cell.setCellStyle(style);
             cell = row.createCell(6);
-            cell.setCellValue(xietong_signup_pupil.getPermanent_address());
+            cell.setCellValue(xietong_signup_pupil.getId_no());
             cell.setCellStyle(style);
             cell = row.createCell(7);
-            cell.setCellValue(xietong_signup_pupil.getLive_addresss());
+            cell.setCellValue(xietong_signup_pupil.getPermanent_address());
             cell.setCellStyle(style);
             cell = row.createCell(8);
-            cell.setCellValue(xietong_signup_pupil.getFather_name());
+            cell.setCellValue(xietong_signup_pupil.getLive_addresss());
             cell.setCellStyle(style);
             cell = row.createCell(9);
-            cell.setCellValue(xietong_signup_pupil.getFather_phone());
+            cell.setCellValue(xietong_signup_pupil.getFather_name());
             cell.setCellStyle(style);
             cell = row.createCell(10);
-            cell.setCellValue(xietong_signup_pupil.getFather_work());
+            cell.setCellValue(xietong_signup_pupil.getFather_phone());
             cell.setCellStyle(style);
             cell = row.createCell(11);
-            cell.setCellValue(xietong_signup_pupil.getMother_name());
+            cell.setCellValue(xietong_signup_pupil.getFather_work());
             cell.setCellStyle(style);
             cell = row.createCell(12);
-            cell.setCellValue(xietong_signup_pupil.getMother_phone());
+            cell.setCellValue(xietong_signup_pupil.getMother_name());
             cell.setCellStyle(style);
             cell = row.createCell(13);
-            cell.setCellValue(xietong_signup_pupil.getMother_work());
+            cell.setCellValue(xietong_signup_pupil.getMother_phone());
             cell.setCellStyle(style);
             cell = row.createCell(14);
-            cell.setCellValue(xietong_signup_pupil.getRemark());
+            cell.setCellValue(xietong_signup_pupil.getMother_work());
             cell.setCellStyle(style);
             cell = row.createCell(15);
+            cell.setCellValue(xietong_signup_pupil.getRemark());
+            cell.setCellStyle(style);
+            cell = row.createCell(16);
             cell.setCellValue(xietong_signup_pupil.getSignup_status());
             cell.setCellStyle(style);
         }
