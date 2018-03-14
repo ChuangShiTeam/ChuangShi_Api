@@ -151,7 +151,7 @@ public class WeChatMessageController extends MsgController {
             if (app_id.equals("df2078d6c9eb46babb0df957127273ab")) {
                 OutNewsMsg outNewsMsg = new OutNewsMsg(inFollowEvent);
                 outNewsMsg.addNews("欢迎使用济颐馆健康管理平台！", "济颐馆欢迎您",
-                        "http://api.chuangshi.nowui.com/upload/df2078d6c9eb46babb0df957127273ab/6a4dbae2ac824d2fb170638d55139666/original/887c0dc8adf142169d50aac84c2d6dab.jpg",
+                        "http://api.chuangshi.nowui.com/upload/df2078d6c9eb46babb0df957127273ab/6a4dbae2ac824d2fb170638d55139666/original/1a4fdcc5e56b49f4bd9962428ace0b10.jpg",
                         "http://h5.jiyiguan.nowui.com/?#/index");
                 render(outNewsMsg);
             } else if (app_id.equals("8acc2d49ad014f418878d1a16336c16b")) {
