@@ -72,7 +72,7 @@ public class XietongSignupPupilController extends Controller {
     //2017.11.6
     @ActionKey("/desktop/xietong/signup/pupil/save")
     public void save() {
-        String request_app_id = getRequest_app_id();
+        String request_app_id = "749388e5dac3465f922c54e61d16a993";
         String request_user_id = getRequest_user_id();
         
         XietongSignupPupil xietong_signup_pupil = getModel(XietongSignupPupil.class);
@@ -144,7 +144,7 @@ public class XietongSignupPupilController extends Controller {
         validateRequest(User.USER_ACCOUNT, User.USER_PASSWORD);
         
         User userModel = getModel(User.class);
-        String request_app_id = getRequest_app_id();
+        String request_app_id = "749388e5dac3465f922c54e61d16a993";;
         
         User user = UserService.instance.userAccountFind(request_app_id, UserType.PUPIL_ADMISSIONS.getKey(), userModel.getUser_account(), userModel.getUser_password());
 
