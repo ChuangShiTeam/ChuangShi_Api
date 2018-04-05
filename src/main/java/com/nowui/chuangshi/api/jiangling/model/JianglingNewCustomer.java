@@ -10,7 +10,7 @@ import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.type.ColumnType;
 
 @Entity
-public class JianglingNewCustomer extends Model<JianglingCustomer> {
+public class JianglingNewCustomer extends Model<JianglingNewCustomer> {
 
     @Table
     public static final String TABLE_JIANGLING_NEW_CUSTOMER = "table_jiangling_new_customer";
@@ -23,13 +23,13 @@ public class JianglingNewCustomer extends Model<JianglingCustomer> {
     public static final String APP_ID = "app_id";
 
     @Column(type = ColumnType.VARCHAR, length = 20, comment = "客户名称")
-    public static final String NEW_CUSTOMER_NAME = "customer_name";
+    public static final String NEW_CUSTOMER_NAME = "new_customer_name";
 
     @Column(type = ColumnType.VARCHAR, length = 20, comment = "客户手机号")
-    public static final String NEW_CUSTOMER_MOBILE = "customer_mobile";
+    public static final String NEW_CUSTOMER_MOBILE = "new_customer_mobile";
 
     @Column(type = ColumnType.VARCHAR, length = 20, comment = "意向车型")
-    public static final String NEW_CUSTOMER_CAR = "customer_car";
+    public static final String NEW_CUSTOMER_CAR = "new_customer_car";
 
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "", updatable = false)
     public static final String SYSTEM_CREATE_USER_ID = "system_create_user_id";

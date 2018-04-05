@@ -10,10 +10,10 @@ import com.nowui.chuangshi.common.model.Model;
 import com.nowui.chuangshi.type.ColumnType;
 
 @Entity
-public class JianglingNewGameMember extends Model<JianglingGameMember> {
+public class JianglingNewGameMember extends Model<JianglingNewGameMember> {
 
     @Table
-    public static final String TABLE_JIANGLING_GAME_MEMBER = "table_jiangling_game_member";
+    public static final String TABLE_JIANGLING_NEW_GAME_MEMBER = "table_jiangling_new_game_member";
 
     @Primary
     @Column(type = ColumnType.VARCHAR, length = 32, comment = "")

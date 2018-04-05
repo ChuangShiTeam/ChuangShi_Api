@@ -18,20 +18,20 @@ public class JianglingNewCustomerController extends Controller {
 
     @ActionKey("/admin/jiangling/new/customer/list")
     public void list() {
-        validateRequest(JianglingNewCustomer.CUSTOMER_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
+        validateRequest(JianglingNewCustomer.NEW_CUSTOMER_NAME, Constant.PAGE_INDEX, Constant.PAGE_SIZE);
 
         JianglingNewCustomer model = getModel(JianglingNewCustomer.class);
         String request_app_id = getRequest_app_id();
 
-        Integer resultCount = JianglingNewCustomerService.instance.adminCount(request_app_id, model.getCustomer_name());
-        List<JianglingNewCustomer> resultList = JianglingNewCustomerService.instance.adminList(request_app_id, model.getCustomer_name(), getM(), getN());
+        Integer resultCount = JianglingNewCustomerService.instance.adminCount(request_app_id, model.getNew_customer_name());
+        List<JianglingNewCustomer> resultList = JianglingNewCustomerService.instance.adminList(request_app_id, model.getNew_customer_name(), getM(), getN());
 
-        validateResponse(JianglingNewCustomer.USER_ID, JianglingNewCustomer.CUSTOMER_NAME, JianglingNewCustomer.CUSTOMER_MOBILE, JianglingNewCustomer.CUSTOMER_DISTRIBUTOR, JianglingNewCustomer.CUSTOMER_CAR, JianglingNewCustomer.SYSTEM_VERSION);
+        validateResponse(JianglingNewCustomer.USER_ID, JianglingNewCustomer.NEW_CUSTOMER_NAME, JianglingNewCustomer.NEW_CUSTOMER_MOBILE, JianglingNewCustomer.NEW_CUSTOMER_CAR, JianglingNewCustomer.SYSTEM_VERSION);
 
         renderSuccessJson(resultCount, resultList);
     }
 
-    @ActionKey("/admin/jiangling/customer/find")
+    @ActionKey("/admin/jiangling/new/customer/find")
     public void find() {
         validateRequest(JianglingNewCustomer.USER_ID);
 
@@ -39,14 +39,14 @@ public class JianglingNewCustomerController extends Controller {
 
         JianglingNewCustomer result = JianglingNewCustomerService.instance.find(model.getUser_id());
 
-        validateResponse(JianglingNewCustomer.CUSTOMER_NAME, JianglingNewCustomer.CUSTOMER_MOBILE, JianglingNewCustomer.CUSTOMER_DISTRIBUTOR, JianglingNewCustomer.CUSTOMER_CAR, JianglingNewCustomer.SYSTEM_VERSION);
+        validateResponse(JianglingNewCustomer.NEW_CUSTOMER_NAME, JianglingNewCustomer.NEW_CUSTOMER_MOBILE, JianglingNewCustomer.NEW_CUSTOMER_CAR, JianglingNewCustomer.SYSTEM_VERSION);
 
         renderSuccessJson(result);
     }
 
-    @ActionKey("/admin/jiangling/customer/save")
+    @ActionKey("/admin/jiangling/new/customer/save")
     public void save() {
-        validateRequest(JianglingNewCustomer.CUSTOMER_NAME, JianglingNewCustomer.CUSTOMER_MOBILE, JianglingNewCustomer.CUSTOMER_DISTRIBUTOR, JianglingNewCustomer.CUSTOMER_CAR);
+        validateRequest(JianglingNewCustomer.NEW_CUSTOMER_NAME, JianglingNewCustomer.NEW_CUSTOMER_MOBILE, JianglingNewCustomer.NEW_CUSTOMER_CAR);
 
         JianglingNewCustomer model = getModel(JianglingNewCustomer.class);
         model.setUser_id(Util.getRandomUUID());
@@ -57,9 +57,9 @@ public class JianglingNewCustomerController extends Controller {
         renderSuccessJson(result);
     }
 
-    @ActionKey("/admin/jiangling/customer/update")
+    @ActionKey("/admin/jiangling/new/customer/update")
     public void update() {
-        validateRequest(JianglingNewCustomer.USER_ID, JianglingNewCustomer.CUSTOMER_NAME, JianglingNewCustomer.CUSTOMER_MOBILE, JianglingNewCustomer.CUSTOMER_DISTRIBUTOR, JianglingNewCustomer.CUSTOMER_CAR, JianglingNewCustomer.SYSTEM_VERSION);
+        validateRequest(JianglingNewCustomer.USER_ID, JianglingNewCustomer.NEW_CUSTOMER_NAME, JianglingNewCustomer.NEW_CUSTOMER_MOBILE, JianglingNewCustomer.NEW_CUSTOMER_CAR, JianglingNewCustomer.SYSTEM_VERSION);
 
         JianglingNewCustomer model = getModel(JianglingNewCustomer.class);
         String request_user_id = getRequest_user_id();
@@ -69,7 +69,7 @@ public class JianglingNewCustomerController extends Controller {
         renderSuccessJson(result);
     }
 
-    @ActionKey("/admin/jiangling/customer/delete")
+    @ActionKey("/admin/jiangling/new/customer/delete")
     public void delete() {
         validateRequest(JianglingNewCustomer.USER_ID, JianglingNewCustomer.SYSTEM_VERSION);
 
