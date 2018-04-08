@@ -25,7 +25,7 @@ public class JianglingNewCustomerController extends Controller {
 
         JianglingNewCustomer result = JianglingNewCustomerService.instance.find(request_user_id);
 
-        renderSuccessJson(result != null);
+        renderSuccessJson(result != null && result.getSystem_status());
     }
 
     @ActionKey("/mobile/jiangling/new/customer/captcha/send")
