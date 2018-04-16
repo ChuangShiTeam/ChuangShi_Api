@@ -52,7 +52,8 @@ public class MemberController extends Controller {
 
         List<Map<String, Object>> resultList = MemberService.instance.teamList(member.getMember_id());
 
-        validateResponse(Member.MEMBER_ID, User.USER_NAME, User.USER_AVATAR, MemberLevel.MEMBER_LEVEL_NAME, Constant.CHILDREN);
+        validateResponse(Member.MEMBER_ID, User.USER_NAME, User.USER_AVATAR, MemberLevel.MEMBER_LEVEL_NAME, Constant.CHILDREN, Member.SYSTEM_CREATE_TIME);
+        
         renderSuccessJson(resultList);
     }
 

@@ -93,6 +93,7 @@ public class MemberService extends Service {
             Cnd cnd = new Cnd();
             cnd.select(Member.TABLE_MEMBER + "." + Member.MEMBER_PARENT_ID);
             cnd.select(User.TABLE_USER + "." + User.USER_NAME);
+            cnd.select(Member.TABLE_MEMBER + "." + Member.SYSTEM_CREATE_TIME);
             cnd.selectIfNull(MemberLevel.TABLE_MEMBER_LEVEL + "." + MemberLevel.MEMBER_LEVEL_NAME, "", MemberLevel.MEMBER_LEVEL_NAME);
             cnd.select(Member.TABLE_MEMBER + "." + Member.MEMBER_STATUS);
             cnd.select(File.TABLE_FILE + "." + File.FILE_PATH, User.USER_AVATAR);
@@ -102,7 +103,7 @@ public class MemberService extends Service {
             cnd.where(Member.TABLE_MEMBER + "." + Member.SYSTEM_STATUS, true);
             cnd.andLike(Member.TABLE_MEMBER + "." + Member.MEMBER_PARENT_PATH, member_id);
             cnd.asc(Member.TABLE_MEMBER + "." + Member.MEMBER_STATUS);
-            cnd.asc(Member.TABLE_MEMBER + "." + Member.SYSTEM_CREATE_TIME);
+            cnd.desc(Member.TABLE_MEMBER + "." + Member.SYSTEM_CREATE_TIME);
 
             List<Member> memberList = memberDao.primaryKeyList(cnd);
 
@@ -124,6 +125,7 @@ public class MemberService extends Service {
                 map.put(User.USER_NAME, member.getStr(User.USER_NAME));
                 map.put(User.USER_AVATAR, member.getStr(User.USER_AVATAR));
                 map.put(MemberLevel.MEMBER_LEVEL_NAME, member.getStr(MemberLevel.MEMBER_LEVEL_NAME));
+                map.put(Member.SYSTEM_CREATE_TIME, member.getSystem_create_time());
 
                 for (String key : keys) {
                     map.put(key, member.get(key));
@@ -419,5 +421,24 @@ public class MemberService extends Service {
             throw new RuntimeException("登录不成功");
         }
     }
+    
+    public static void main(String[] args) {
+    	try {
+            Date date = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.YEAR, 1);
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(User.USER_ID, "6e494bb999f9484682205ef95be94f59");
+            jsonObject.put(Constant.EXPIRE_TIME, calendar.getTime());
+
+            System.out.println(AesUtil.aesEncrypt(jsonObject.toJSONString(), Config.private_key));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("登录不成功");
+        }
+    	
+	}
 
 }
